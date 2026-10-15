@@ -1,4 +1,7 @@
 ﻿Imports Microsoft.Ajax.Utilities
+Imports System.Data
+Imports System.Linq
+Imports System.Text
 Imports Telerik.Web.UI
 
 Public Class wbfCustomers
@@ -11,6 +14,8 @@ Public Class wbfCustomers
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -21,6 +26,8 @@ Public Class wbfCustomers
     ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de la page.</summary>
     Private Sub ApplyLocalization()
         SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
+        litRubrique.Text = L("rubrique")
+        litSousTitre.Text = L("sousTitre")
         btnAddCustomer.Text = L("addCustomer")
         btnExportSquare.Text = L("exportSquare")
         btnImportSquare.Text = L("importSquare")
@@ -37,6 +44,8 @@ Public Class wbfCustomers
     ''' <summary>Libellés du LayoutTemplate / EmptyDataTemplate du RadListView (via Literal).</summary>
     Private Sub rlvClients_PreRender(sender As Object, e As EventArgs) Handles rlvClients.PreRender
         SetSortHeader(rlvClients, "lnkSortName", L("colName"), "Name")
+        SetLiteral(rlvClients, "litColAdresse", L("colAdresse"))
+        SetSortHeader(rlvClients, "lnkSortDelai", L("colDelai"), "DelaiJours")
         SetSortHeader(rlvClients, "lnkSortAmount", L("colToReceive"), "ARecevoir")
         SetLiteral(rlvClients, "litColAction", L("colAction"))
         SetLiteral(rlvClients, "litEmpty", L("empty"))
@@ -113,8 +122,10 @@ Public Class wbfCustomers
         ExecuteSQL("s0316DeleteParty", p)
     End Sub
     Private Sub rlvClients_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvClients.NeedDataSource
+        ChargerPastilles()
         Dim dt As DataTable = GetData()
         rlvClients.DataSource = dt
+        litPied.Text = Server.HtmlEncode(String.Format(L("pied"), If(dt Is Nothing, 0, dt.Rows.Count), TotalClients))
 
     End Sub
 
@@ -125,10 +136,15 @@ Public Class wbfCustomers
 
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         tbSearch.Text = ""
+        FiltreCourant = ""
         rlvClients.Rebind()
     End Sub
 
     Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
+        If If(e.Argument, "").StartsWith("chip|") Then
+            ChoisirPastille(e.Argument)
+            Return
+        End If
         ' e.Argument contient "refreshgrid"
         If e.Argument = "refreshgrid" Then
             rlvClients.Rebind() ' ← recharge la liste après fermeture de la fenêtre
@@ -255,17 +271,29 @@ Public Class wbfCustomers
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Clients — 60Sec-AI", "Customers — 60Sec-AI", "Clientes — 60Sec-AI")
             Case "pageTitleShort" : Return Choose3(lang, "Clients", "Customers", "Clientes")
-            Case "addCustomer" : Return Choose3(lang, "Ajouter Client", "Add customer", "Agregar cliente")
-            Case "exportSquare" : Return Choose3(lang, "Exporter vers Square", "Export to Square", "Exportar a Square")
-            Case "importSquare" : Return Choose3(lang, "Importer depuis Square", "Import from Square", "Importar desde Square")
-            Case "searchPh" : Return Choose3(lang, "Rechercher (nom, email, téléphone…)", "Search (name, email, phone…)", "Buscar (nombre, correo, teléfono…)")
+            Case "addCustomer" : Return Choose3(lang, "+ Ajouter un client", "+ Add a customer", "+ Agregar un cliente")
+            Case "exportSquare" : Return Choose3(lang, "Envoyer vers Square", "Send to Square", "Enviar a Square")
+            Case "importSquare" : Return Choose3(lang, "Importer de Square", "Import from Square", "Importar de Square")
+            Case "searchPh" : Return Choose3(lang, "Chercher un nom, un courriel ou un téléphone", "Search a name, an email or a phone", "Buscar un nombre, un correo o un teléfono")
             Case "clear" : Return Choose3(lang, "Effacer", "Clear", "Borrar")
             Case "edit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
             Case "delete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
-            Case "colName" : Return Choose3(lang, "Nom", "Name", "Nombre")
+            Case "colName" : Return Choose3(lang, "Client", "Customer", "Cliente")
             Case "colToReceive" : Return Choose3(lang, "À recevoir", "Receivable", "Por cobrar")
             Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
-            Case "empty" : Return Choose3(lang, "Aucun client trouvé.", "No customer found.", "Ningún cliente encontrado.")
+            Case "empty" : Return Choose3(lang, "Aucun client ne correspond.", "No customer matches.", "Ningún cliente coincide.")
+            Case "rubrique" : Return Choose3(lang, "Ventes", "Sales", "Ventas")
+            Case "sousTitre" : Return Choose3(lang, "Vos clients, leurs coordonnées et ce qu'ils vous doivent.", "Your customers, their contact details and what they owe you.", "Sus clientes, sus datos de contacto y lo que le deben.")
+            Case "colAdresse" : Return Choose3(lang, "Adresse de facturation", "Billing address", "Dirección de facturación")
+            Case "colDelai" : Return Choose3(lang, "Délai", "Terms", "Plazo")
+            Case "delaiJours" : Return Choose3(lang, "{0} jours", "{0} days", "{0} días")
+            Case "delaiReception" : Return Choose3(lang, "À la réception", "On receipt", "Al recibir")
+            Case "chipTous" : Return Choose3(lang, "Tous", "All", "Todos")
+            Case "chipSolde" : Return Choose3(lang, "Avec un solde", "With a balance", "Con saldo")
+            Case "chipRetard" : Return Choose3(lang, "En retard", "Overdue", "Vencidos")
+            Case "enRetardSub" : Return Choose3(lang, "{0} en retard ({1})", "{0} overdue ({1})", "{0} vencido ({1})")
+            Case "aJour" : Return Choose3(lang, "à jour", "up to date", "al día")
+            Case "pied" : Return Choose3(lang, "{0} sur {1} clients", "{0} of {1} customers", "{0} de {1} clientes")
             Case "winTitle" : Return Choose3(lang, "Ajouter / Modifier un Client", "Add / Edit a customer", "Agregar / Editar un cliente")
             Case "addCustomerWin" : Return Choose3(lang, "Ajouter un client", "Add a customer", "Agregar un cliente")
             Case "editCustomerWin" : Return Choose3(lang, "Modifier un client", "Edit a customer", "Editar un cliente")
@@ -309,15 +337,154 @@ Public Class wbfCustomers
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlClient.SqlParameter("@Search", q))
-        Dim ds As DataSet = ExecuteSQLds("s0010GetCustomers", p)
+        Dim ds As DataSet = ExecuteSQLds("s0906GetCustomersListe", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
 
         Dim dt As DataTable = ds.Tables(0)
+        ' Le filtre de la pastille : avec un solde, ou en retard.
+        If FiltreCourant = "solde" Then
+            dt.DefaultView.RowFilter = "ARecevoir > 0"
+            dt = dt.DefaultView.ToTable()
+        ElseIf FiltreCourant = "retard" Then
+            dt.DefaultView.RowFilter = "NbRetard > 0"
+            dt = dt.DefaultView.ToTable()
+        End If
         If dt.Columns.Contains(SortCol) Then
             dt.DefaultView.Sort = "[" & SortCol & "]" & If(SortDesc, " DESC", " ASC")
             dt = dt.DefaultView.ToTable()
         End If
         Return dt
+    End Function
+
+
+    ' =====================================================================
+    ' Le filtre de la carte « recherche » : Tous / Avec un solde / En retard
+    ' (une seule pastille à la fois, conservée en session), et les décomptes,
+    ' calculés sur tous les clients de la compagnie, sans recherche.
+    ' =====================================================================
+
+    Private Property FiltreCourant As String
+        Get
+            Return If(TryCast(Session("Cust.Filtre"), String), "")
+        End Get
+        Set(value As String)
+            Session("Cust.Filtre") = value
+        End Set
+    End Property
+
+    Private TotalClients As Integer
+
+    ''' <summary>Une pastille cliquée (argument AJAX « chip|clients|valeur » ; vide = Tous).</summary>
+    Private Sub ChoisirPastille(arg As String)
+        Dim parts As String() = If(arg, "").Split("|"c)
+        Dim valeur As String = If(parts.Length >= 3, parts(2), "").Trim().ToLowerInvariant()
+        FiltreCourant = If(valeur = "solde" OrElse valeur = "retard", valeur, "")
+        rlvClients.Rebind()
+    End Sub
+
+    Private Shared Function Montant(r As DataRow, col As String) As Decimal
+        If IsDBNull(r(col)) Then Return 0D
+        Return Convert.ToDecimal(r(col))
+    End Function
+
+    Private Shared Function Entier(r As DataRow, col As String) As Integer
+        If IsDBNull(r(col)) Then Return 0
+        Return Convert.ToInt32(r(col))
+    End Function
+
+    Private Function Lire(recherche As String) As DataTable
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@Search", recherche))
+        Dim ds As DataSet = ExecuteSQLds("s0906GetCustomersListe", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
+        Return ds.Tables(0)
+    End Function
+
+    ''' <summary>Les trois pastilles avec leur décompte ; la pastille du filtre posé est blanche.</summary>
+    Private Sub ChargerPastilles()
+        Dim dt As DataTable = Lire("")
+        Dim rows As List(Of DataRow) = If(dt Is Nothing, New List(Of DataRow), dt.Rows.Cast(Of DataRow)().ToList())
+        TotalClients = rows.Count
+        Dim nSolde As Integer = rows.Where(Function(r) Montant(r, "ARecevoir") > 0D).Count()
+        Dim nRetard As Integer = rows.Where(Function(r) Entier(r, "NbRetard") > 0).Count()
+        Dim sb As New StringBuilder()
+        sb.Append(Pastille("", L("chipTous"), rows.Count))
+        sb.Append(Pastille("solde", L("chipSolde"), nSolde))
+        sb.Append(Pastille("retard", L("chipRetard"), nRetard))
+        litChips.Text = sb.ToString()
+    End Sub
+
+    Private Function Pastille(valeur As String, lab As String, n As Integer) As String
+        Dim actif As Boolean = (FiltreCourant = valeur)
+        Return "<button type=""button"" class=""fc-pill" & If(actif, " on", "") & """ aria-pressed=""" & If(actif, "true", "false") &
+               """ onclick=""fcChip('clients','" & valeur & "')"">" & Server.HtmlEncode(lab) & " <span>" & n & "</span></button>"
+    End Function
+
+    ' =====================================================================
+    ' Les cellules de la liste, au style du gabarit « Portail du client »
+    ' =====================================================================
+
+    Private Shared Function Initiales(nom As String) As String
+        Dim sb As New StringBuilder()
+        For Each mot As String In If(nom, "").Split(New Char() {" "c, "-"c}, StringSplitOptions.RemoveEmptyEntries)
+            If Char.IsLetterOrDigit(mot(0)) Then sb.Append(Char.ToUpperInvariant(mot(0)))
+            If sb.Length = 2 Then Exit For
+        Next
+        Return If(sb.Length = 0, "?", sb.ToString())
+    End Function
+
+    Private Shared Function Texte(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return ""
+        Return o.ToString().Trim()
+    End Function
+
+    ''' <summary>Le rond aux initiales, le nom en gras, puis le courriel et le téléphone.</summary>
+    Public Function ClientCell(nom As Object, courriel As Object, tel As Object) As String
+        Dim n As String = Texte(nom)
+        Dim contact As String = String.Join(" · ", New String() {Texte(courriel), Texte(tel)}.Where(Function(x) x <> ""))
+        Dim sb As New StringBuilder()
+        sb.Append("<span class=""av"" aria-hidden=""true"">").Append(Server.HtmlEncode(Initiales(n))).Append("</span>")
+        sb.Append("<span class=""txt""><b>").Append(Server.HtmlEncode(n)).Append("</b>")
+        If contact <> "" Then sb.Append("<span>").Append(Server.HtmlEncode(contact)).Append("</span>")
+        sb.Append("</span>")
+        Return sb.ToString()
+    End Function
+
+    Public Function AdresseCell(adresse As Object) As String
+        Dim a As String = Texte(adresse)
+        Return If(a = "", "—", Server.HtmlEncode(a))
+    End Function
+
+    ''' <summary>« 30 jours », ou « À la réception » quand aucun délai n'est fixé.</summary>
+    Public Function DelaiCell(jours As Object) As String
+        Dim j As Integer = 0
+        If jours IsNot Nothing AndAlso Not IsDBNull(jours) Then Integer.TryParse(jours.ToString(), j)
+        If j <= 0 Then Return Server.HtmlEncode(L("delaiReception"))
+        Return Server.HtmlEncode(String.Format(L("delaiJours"), j))
+    End Function
+
+    Public Function DuClass(nbRetard As Object) As String
+        Dim n As Integer = 0
+        If nbRetard IsNot Nothing AndAlso Not IsDBNull(nbRetard) Then Integer.TryParse(nbRetard.ToString(), n)
+        Return "c-du" & If(n > 0, " retard", "")
+    End Function
+
+    ''' <summary>Le montant à recevoir ; en dessous, ce qui est en retard (en rouge) ou « à jour ».</summary>
+    Public Function DuCell(aRecevoir As Object, enRetard As Object, nbRetard As Object) As String
+        Dim d As Decimal = If(aRecevoir Is Nothing OrElse IsDBNull(aRecevoir), 0D, Convert.ToDecimal(aRecevoir))
+        Dim r As Decimal = If(enRetard Is Nothing OrElse IsDBNull(enRetard), 0D, Convert.ToDecimal(enRetard))
+        Dim n As Integer = 0
+        If nbRetard IsNot Nothing AndAlso Not IsDBNull(nbRetard) Then Integer.TryParse(nbRetard.ToString(), n)
+        If d <= 0D AndAlso n = 0 Then Return "<b class=""rien"">—</b>"
+        Dim sb As New StringBuilder()
+        sb.Append("<b>").Append(Server.HtmlEncode(d.ToString("C2"))).Append("</b>")
+        If n > 0 Then
+            sb.Append("<span>").Append(Server.HtmlEncode(String.Format(L("enRetardSub"), r.ToString("C2"), n))).Append("</span>")
+        Else
+            sb.Append("<span>").Append(Server.HtmlEncode(L("aJour"))).Append("</span>")
+        End If
+        Return sb.ToString()
     End Function
 
     ''' <summary>Montant à recevoir : « — » discret quand il n'y a rien à réclamer.</summary>

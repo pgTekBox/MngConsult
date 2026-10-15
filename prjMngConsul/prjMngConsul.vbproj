@@ -643,6 +643,7 @@
     <Content Include="wbfBilan.aspx" />
     <Content Include="wbfCustomerEdit.aspx" />
     <Content Include="wbfCustomers.aspx" />
+    <Content Include="wbfEncaissements.aspx" />
     <Content Include="wbfEmployees.aspx" />
     <Content Include="wbfEmployeeEdit.aspx" />
     <Content Include="wbfMailboxReset.aspx" />
@@ -1302,6 +1303,13 @@
     <Compile Include="wbfMailboxReset.aspx.vb">
       <DependentUpon>wbfMailboxReset.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfEncaissements.aspx.designer.vb">
+      <DependentUpon>wbfEncaissements.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfEncaissements.aspx.vb">
+      <DependentUpon>wbfEncaissements.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfCustomers.aspx.designer.vb">
       <DependentUpon>wbfCustomers.aspx</DependentUpon>

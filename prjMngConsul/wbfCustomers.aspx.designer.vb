@@ -103,6 +103,24 @@ Partial Public Class wbfCustomers
     '''</remarks>
     Protected WithEvents rlvClients As Global.Telerik.Web.UI.RadListView
 
+    '''<summary>pnlPage control.</summary>
+    Protected WithEvents pnlPage As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litSousTitre control.</summary>
+    Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>pnlRecherche control.</summary>
+    Protected WithEvents pnlRecherche As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litChips control.</summary>
+    Protected WithEvents litChips As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litPied control.</summary>
+    Protected WithEvents litPied As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>
     '''rwCustomer control.
     '''</summary>

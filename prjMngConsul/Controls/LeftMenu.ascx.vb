@@ -133,6 +133,7 @@ Namespace Controls
             sb.Append(GroupStart(Ico("receipt"), "sales"))
             sb.Append(Child("~/wbfCustomers.aspx", "customers"))
             sb.Append(Child("~/wbfCustomersInvoices.aspx", "customerInvoices"))
+            sb.Append(Child("~/wbfEncaissements.aspx", "cashIns"))
             sb.Append(GroupEnd)
 
             ' Achats

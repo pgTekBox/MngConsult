@@ -60,7 +60,7 @@ Public NotInheritable Class clsAide
 
         Select Case nom
             Case "default" : Return "tableau-de-bord"
-            Case "wbfcustomers", "wbfcustomeredit", "wbfcustomersinvoices", "wbfinvoiceedit", "wbfcustomerpaymentlink", "wbfscannedpdf" : Return "ventes"
+            Case "wbfcustomers", "wbfcustomeredit", "wbfcustomersinvoices", "wbfencaissements", "wbfinvoiceedit", "wbfcustomerpaymentlink", "wbfscannedpdf" : Return "ventes"
             Case "wbfsuppliers", "wbfsupplieredit", "wbfsuppliersinvoices", "wbfsupplierinvoinceedit", "wbfsupplierpaymentchoice",
                  "wbfsupplierpaymentdream", "wbfsupplierpaymentinterac", "wbfsupplierpaymentsuccess", "wbfsupplierpaymentsync",
                  "wbfsupplierstripeonboarding", "wbfreceipt", "wbfreceiptedit", "wbfreceipteditpopup", "receipts" : Return "achats"

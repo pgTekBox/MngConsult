@@ -33,24 +33,27 @@
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter Client</kbd> : ouvre la fenêtre « Ajouter un client » (voir <a href="#fr-fiche-client">Fiche client</a>).</li>
-                    <li><kbd>Exporter vers Square</kbd> : envoie tous les clients à Square. Un client qui possède déjà un identifiant Square est mis à jour ; les autres sont créés, et leur identifiant Square est ensuite mémorisé sur leur fiche. Aucune confirmation n’est demandée.</li>
-                    <li><kbd>Importer depuis Square</kbd> : rapatrie tous les clients de votre compte Square. Ceux qui existent déjà sont mis à jour, les autres sont créés localement. Aucune confirmation n’est demandée.</li>
-                    <li>Bouton loupe : lance la recherche tapée dans la zone « Rechercher (nom, email, téléphone…) ».</li>
-                    <li><kbd>Effacer</kbd> : vide la zone de recherche et réaffiche la liste complète.</li>
+                    <li><kbd>+ Ajouter un client</kbd> (pastille bleue, en haut à droite) : ouvre la fenêtre « Ajouter un client » (voir <a href="#fr-fiche-client">Fiche client</a>).</li>
+                    <li><kbd>Envoyer vers Square</kbd> : envoie tous les clients à Square. Un client qui possède déjà un identifiant Square est mis à jour ; les autres sont créés, et leur identifiant Square est ensuite mémorisé sur leur fiche. Aucune confirmation n’est demandée.</li>
+                    <li><kbd>Importer de Square</kbd> : rapatrie tous les clients de votre compte Square. Ceux qui existent déjà sont mis à jour, les autres sont créés localement. Aucune confirmation n’est demandée.</li>
+                    <li>Champ « Chercher un nom, un courriel ou un téléphone », loupe ou touche Entrée : la recherche porte sur le nom, le courriel, le téléphone et l’adresse de facturation.</li>
+                    <li>Les trois pastilles du filtre, à droite du champ : <strong>Tous</strong>, <strong>Avec un solde</strong> (les clients qui vous doivent quelque chose), <strong>En retard</strong> (au moins une facture échue). Chaque pastille porte son nombre ; la pastille choisie est blanche. Le filtre est mémorisé pour la session.</li>
+                    <li><kbd>✕</kbd> (effacer) : vide la recherche <strong>et remet la pastille sur Tous</strong>.</li>
                     <li>Sur chaque ligne : <kbd>Modifier</kbd> ouvre la fenêtre « Modifier un client » ; <kbd>Supprimer</kbd> supprime le client.</li>
                 </ul>
 
                 <h3>Filtres et recherche</h3>
-                <p>La liste n’est pas paginée : tous les clients s’affichent d’un coup. Deux en-têtes de colonne permettent de trier : « Nom » et « À recevoir ». Un premier clic trie en ordre croissant, un second en ordre décroissant ; une flèche ▲ ou ▼ indique le sens. Par défaut, la liste est triée par nom croissant.</p>
+                <p>La liste n’est pas paginée : tous les clients s’affichent d’un coup, et son pied dit combien sont montrés sur le total (« 6 sur 182 clients »). Trois en-têtes de colonne permettent de trier : « Client », « Délai » et « À recevoir ». Un premier clic trie en ordre croissant, un second en ordre décroissant ; une flèche ▲ ou ▼ indique le sens. Par défaut, la liste est triée par nom croissant.</p>
                 <p>La liste se rafraîchit automatiquement quand vous fermez la fiche d’un client, et votre position de défilement est conservée.</p>
 
                 <h3>Colonnes</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>Nom</td><td>Le nom du client, puis son adresse et son courriel en gris.</td></tr>
-                        <tr><td>À recevoir</td><td>Le solde impayé, sous la forme « 1 234,56 $ », ou « — » si le client ne doit rien.</td></tr>
+                        <tr><td>Client</td><td>Un rond aux initiales, le nom en gras, puis le courriel et le téléphone en gris.</td></tr>
+                        <tr><td>Adresse de facturation</td><td>L’adresse de facturation du client (à défaut, sa première adresse) ; « — » s’il n’en a pas.</td></tr>
+                        <tr><td>Délai</td><td>Le délai de paiement de la fiche (« 30 jours »), ou « À la réception » quand aucun délai n’est fixé.</td></tr>
+                        <tr><td>À recevoir</td><td>Le solde impayé en gras (« 1 234,56 $ »), ou « — » si le client ne doit rien ; en dessous, « à jour » ou, en rouge, le montant en retard et le nombre de factures échues.</td></tr>
                         <tr><td>Action</td><td>Les boutons <kbd>Modifier</kbd> et <kbd>Supprimer</kbd>.</td></tr>
                     </tbody>
                 </table>
@@ -64,7 +67,7 @@
                     <li><span class="msg">« Aucun client à importer depuis Square. »</span> — votre compte Square ne contient aucun client.</li>
                     <li><span class="msg">« {n} client(s) créé(s) et {m} mis à jour depuis Square ({t} trouvé(s)). »</span> — l’import a réussi ; le total trouvé chez Square est indiqué entre parenthèses.</li>
                     <li><span class="msg">« Erreur lors de l’import Square : … »</span> — Square n’a pas répondu correctement ; réessayez plus tard ou vérifiez la connexion Square.</li>
-                    <li><span class="msg">« Aucun client trouvé. »</span> — la recherche ne renvoie rien, ou la liste est vide.</li>
+                    <li><span class="msg">« Aucun client ne correspond. »</span> — la recherche ou la pastille ne renvoient rien, ou la liste est vide.</li>
                 </ul>
 
                 <div class="piege" data-titre="Piège"><kbd>Supprimer</kbd> agit tout de suite, sans demander de confirmation. Seule la base de données peut refuser la suppression si le client possède déjà des factures. Vérifiez bien la ligne avant de cliquer.</div>
@@ -260,6 +263,33 @@
             </section>
 
             <!-- ---------------------------------------------------------- Édition d'une facture -->
+            <!-- ---------------------------------------------------------- Encaissements -->
+            <section id="fr-encaissements">
+                <h2>Encaissements</h2>
+                <h3>But</h3>
+                <p>L’écran <span class="chemin">Ventes › Encaissements</span> liste les paiements reçus de vos clients (chèques, comptant, virements, dépôts), du plus récent au plus ancien, et dit d’où chacun vient. C’est d’ici que vous enregistrez un paiement reçu sans passer par une facture.</p>
+
+                <h3>Indicateurs</h3>
+                <table>
+                    <thead><tr><th>Indicateur</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Reçu en {mois}</td><td>La somme des paiements reçus depuis le 1er du mois courant, et leur nombre.</td></tr>
+                        <tr><td>Rapprochés avec la banque</td><td>Le nombre de paiements rattachés à une ligne de relevé bancaire.</td></tr>
+                        <tr><td>Encore à recevoir</td><td>Le reste à payer des factures comptabilisées non soldées, et leur nombre — le même chiffre que l’indicateur « À recevoir » des factures clients.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>+ Enregistrer un paiement reçu</kbd> (pastille bleue) : ouvre la fenêtre « Enregistrer un paiement reçu » — la même fenêtre d’encaissement que le bouton <kbd>Encaissement</kbd> d’une facture, mais sans client présélectionné : choisissez le client, la date, le type, la référence, le compte de banque et le montant, puis imputez les factures ouvertes. À la fermeture, la liste et les indicateurs se rechargent.</li>
+                    <li>Champ « Chercher un client, une référence ou une facture », loupe ou touche Entrée ; <kbd>✕</kbd> vide la recherche.</li>
+                </ul>
+
+                <h3>Lignes</h3>
+                <p>Chaque ligne montre une icône verte, le <strong>client</strong> en gras, puis la <strong>date · le type</strong> (Chèque, Comptant, Virement, Virement Interac, Carte…) et le numéro de référence s’il y en a un, les <strong>factures</strong> imputées, le <strong>montant</strong>, et une pastille : <strong>« Rapproché avec la banque »</strong> (ambre) quand le paiement est rattaché à une ligne de relevé, <strong>« Saisi par vous »</strong> (bleu) sinon. Le pied dit combien de paiements sont montrés sur le total.</p>
+                <div class="note" data-titre="Bon à savoir">Un paiement enregistré ici met à jour le « Déjà reçu » et le « Reste » des factures qu’il impute, donc le statut de paiement des factures clients et le solde des clients.</div>
+            </section>
+
             <section id="fr-edition-facture">
                 <h2>Édition d’une facture</h2>
                 <h3>But</h3>
@@ -513,24 +543,27 @@
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Ajouter Client</kbd> (Add customer): opens the “Ajouter un client” window (see <a href="#en-customer-record">Customer record</a>).</li>
-                    <li><kbd>Exporter vers Square</kbd> (Export to Square): sends all customers to Square. A customer that already has a Square identifier is updated; the others are created, and their Square identifier is then stored on their record. No confirmation is asked.</li>
-                    <li><kbd>Importer depuis Square</kbd> (Import from Square): pulls all customers from your Square account. Existing ones are updated, the others are created locally. No confirmation is asked.</li>
-                    <li>Magnifier button: runs the search typed in the “Rechercher (nom, email, téléphone…)” box.</li>
-                    <li><kbd>Effacer</kbd> (Clear): empties the search box and shows the full list again.</li>
+                    <li><kbd>+ Ajouter un client</kbd> (+ Add a customer, blue pill at the top right): opens the “Ajouter un client” window (see <a href="#en-customer-record">Customer record</a>).</li>
+                    <li><kbd>Envoyer vers Square</kbd> (Send to Square): sends all customers to Square. A customer that already has a Square identifier is updated; the others are created, and their Square identifier is then stored on their record. No confirmation is asked.</li>
+                    <li><kbd>Importer de Square</kbd> (Import from Square): pulls all customers from your Square account. Existing ones are updated, the others are created locally. No confirmation is asked.</li>
+                    <li>“Chercher un nom, un courriel ou un téléphone” field, magnifier or Enter key: the search matches the name, email, phone and billing address.</li>
+                    <li>The three filter pills to the right of the field: <strong>Tous</strong> (All), <strong>Avec un solde</strong> (customers who owe you something), <strong>En retard</strong> (at least one overdue invoice). Each pill carries its count; the chosen pill is white. The filter is remembered for the session.</li>
+                    <li><kbd>✕</kbd> (clear): empties the search <strong>and puts the pill back on Tous</strong>.</li>
                     <li>On each row: <kbd>Modifier</kbd> (Edit) opens the “Modifier un client” window; <kbd>Supprimer</kbd> (Delete) deletes the customer.</li>
                 </ul>
 
                 <h3>Filters and search</h3>
-                <p>The list is not paginated: all customers appear at once. Two column headers sort the list: “Nom” (Name) and “À recevoir” (Receivable). A first click sorts ascending, a second click descending; a ▲ or ▼ arrow shows the direction. By default the list is sorted by name, ascending.</p>
+                <p>The list is not paginated: all customers appear at once, and its footer says how many are shown out of the total (“6 sur 182 clients”). Three column headers sort the list: “Client”, “Délai” (Terms) and “À recevoir” (Receivable). A first click sorts ascending, a second click descending; a ▲ or ▼ arrow shows the direction. By default the list is sorted by name, ascending.</p>
                 <p>The list refreshes automatically when you close a customer record, and your scroll position is kept.</p>
 
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Nom</td><td>The customer’s name, then the address and email in grey.</td></tr>
-                        <tr><td>À recevoir</td><td>The unpaid balance, shown as “1 234,56 $”, or “—” when the customer owes nothing.</td></tr>
+                        <tr><td>Client</td><td>A circle with the initials, the name in bold, then the email and phone in grey.</td></tr>
+                        <tr><td>Adresse de facturation</td><td>The customer’s billing address (otherwise the first address); “—” when there is none.</td></tr>
+                        <tr><td>Délai</td><td>The payment terms of the record (“30 jours”), or “À la réception” (on receipt) when no term is set.</td></tr>
+                        <tr><td>À recevoir</td><td>The unpaid balance in bold (“1 234,56 $”), or “—” when the customer owes nothing; underneath, “à jour” (up to date) or, in red, the overdue amount and the number of overdue invoices.</td></tr>
                         <tr><td>Action</td><td>The <kbd>Modifier</kbd> and <kbd>Supprimer</kbd> buttons.</td></tr>
                     </tbody>
                 </table>
@@ -740,6 +773,33 @@
             </section>
 
             <!-- ---------------------------------------------------------- Editing an invoice -->
+            <!-- ---------------------------------------------------------- Cash receipts -->
+            <section id="en-cash-receipts">
+                <h2>Cash receipts</h2>
+                <h3>Purpose</h3>
+                <p>The <span class="chemin">Sales › Cash receipts</span> screen lists the payments received from your customers (cheques, cash, transfers, deposits), newest first, and says where each one comes from. This is where you record a received payment without going through an invoice.</p>
+
+                <h3>Indicators</h3>
+                <table>
+                    <thead><tr><th>Indicator</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Received in {month}</td><td>The sum of payments received since the 1st of the current month, and their count.</td></tr>
+                        <tr><td>Matched with the bank</td><td>The number of payments attached to a bank statement line.</td></tr>
+                        <tr><td>Still to receive</td><td>The balance due of posted, unsettled invoices, and their count — the same figure as the “À recevoir” indicator of customer invoices.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>+ Enregistrer un paiement reçu</kbd> (+ Record a received payment, blue pill): opens the “Enregistrer un paiement reçu” window — the same receipt window as the <kbd>Encaissement</kbd> button of an invoice, but with no customer preselected: choose the customer, date, type, reference, bank account and amount, then apply the open invoices. When it closes, the list and the indicators reload.</li>
+                    <li>“Chercher un client, une référence ou une facture” field, magnifier or Enter key; <kbd>✕</kbd> clears the search.</li>
+                </ul>
+
+                <h3>Rows</h3>
+                <p>Each row shows a green icon, the <strong>customer</strong> in bold, then the <strong>date · type</strong> (Cheque, Cash, Transfer, Interac transfer, Card…) and the reference number if any, the <strong>invoices</strong> applied, the <strong>amount</strong>, and a pill: <strong>“Rapproché avec la banque”</strong> (amber) when the payment is attached to a statement line, <strong>“Saisi par vous”</strong> (blue) otherwise. The footer says how many payments are shown out of the total.</p>
+                <div class="note" data-titre="Good to know">A payment recorded here updates the “Déjà reçu” and “Reste” of the invoices it applies to, hence the payment status of customer invoices and the customers’ balances.</div>
+            </section>
+
             <section id="en-invoice-editing">
                 <h2>Editing an invoice</h2>
                 <h3>Purpose</h3>
@@ -993,24 +1053,27 @@
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Ajouter Client</kbd> (Añadir cliente): abre la ventana « Ajouter un client » (vea <a href="#es-ficha-cliente">Ficha de cliente</a>).</li>
-                    <li><kbd>Exporter vers Square</kbd> (Exportar a Square): envía todos los clientes a Square. Un cliente que ya tiene identificador Square se actualiza; los demás se crean y su identificador Square se guarda luego en su ficha. No se pide confirmación.</li>
-                    <li><kbd>Importer depuis Square</kbd> (Importar desde Square): trae todos los clientes de su cuenta Square. Los que ya existen se actualizan, los demás se crean localmente. No se pide confirmación.</li>
-                    <li>Botón lupa: ejecuta la búsqueda escrita en el cuadro « Rechercher (nom, email, téléphone…) ».</li>
-                    <li><kbd>Effacer</kbd> (Borrar): vacía el cuadro de búsqueda y vuelve a mostrar la lista completa.</li>
+                    <li><kbd>+ Ajouter un client</kbd> (+ Agregar un cliente, píldora azul arriba a la derecha): abre la ventana « Ajouter un client » (vea <a href="#es-ficha-cliente">Ficha de cliente</a>).</li>
+                    <li><kbd>Envoyer vers Square</kbd> (Enviar a Square): envía todos los clientes a Square. Un cliente que ya tiene identificador Square se actualiza; los demás se crean y su identificador Square se guarda luego en su ficha. No se pide confirmación.</li>
+                    <li><kbd>Importer de Square</kbd> (Importar de Square): trae todos los clientes de su cuenta Square. Los que ya existen se actualizan, los demás se crean localmente. No se pide confirmación.</li>
+                    <li>Campo « Chercher un nom, un courriel ou un téléphone », lupa o tecla Intro: la búsqueda cubre el nombre, el correo, el teléfono y la dirección de facturación.</li>
+                    <li>Las tres píldoras del filtro, a la derecha del campo: <strong>Tous</strong> (Todos), <strong>Avec un solde</strong> (clientes que le deben algo), <strong>En retard</strong> (al menos una factura vencida). Cada píldora lleva su número; la elegida es blanca. El filtro se recuerda durante la sesión.</li>
+                    <li><kbd>✕</kbd> (borrar): vacía la búsqueda <strong>y devuelve la píldora a Tous</strong>.</li>
                     <li>En cada fila: <kbd>Modifier</kbd> (Modificar) abre la ventana « Modifier un client »; <kbd>Supprimer</kbd> (Eliminar) elimina el cliente.</li>
                 </ul>
 
                 <h3>Filtros y búsqueda</h3>
-                <p>La lista no está paginada: todos los clientes aparecen a la vez. Dos encabezados de columna permiten ordenar: « Nom » (Nombre) y « À recevoir » (Por cobrar). Un primer clic ordena de forma ascendente, un segundo de forma descendente; una flecha ▲ o ▼ indica el sentido. De forma predeterminada, la lista se ordena por nombre ascendente.</p>
+                <p>La lista no está paginada: todos los clientes aparecen a la vez, y su pie dice cuántos se muestran del total (« 6 sur 182 clients »). Tres encabezados de columna permiten ordenar: « Client », « Délai » (Plazo) y « À recevoir » (Por cobrar). Un primer clic ordena de forma ascendente, un segundo de forma descendente; una flecha ▲ o ▼ indica el sentido. De forma predeterminada, la lista se ordena por nombre ascendente.</p>
                 <p>La lista se actualiza automáticamente al cerrar la ficha de un cliente, y se conserva la posición de desplazamiento.</p>
 
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Nom</td><td>El nombre del cliente, luego su dirección y correo electrónico en gris.</td></tr>
-                        <tr><td>À recevoir</td><td>El saldo pendiente, con el formato « 1 234,56 $ », o « — » si el cliente no debe nada.</td></tr>
+                        <tr><td>Client</td><td>Un círculo con las iniciales, el nombre en negrita, luego el correo y el teléfono en gris.</td></tr>
+                        <tr><td>Adresse de facturation</td><td>La dirección de facturación del cliente (si no, su primera dirección); « — » si no tiene.</td></tr>
+                        <tr><td>Délai</td><td>El plazo de pago de la ficha (« 30 jours »), o « À la réception » cuando no hay plazo fijado.</td></tr>
+                        <tr><td>À recevoir</td><td>El saldo pendiente en negrita (« 1 234,56 $ »), o « — » si el cliente no debe nada; debajo, « à jour » (al día) o, en rojo, el importe vencido y el número de facturas vencidas.</td></tr>
                         <tr><td>Action</td><td>Los botones <kbd>Modifier</kbd> y <kbd>Supprimer</kbd>.</td></tr>
                     </tbody>
                 </table>
@@ -1220,6 +1283,33 @@
             </section>
 
             <!-- ---------------------------------------------------------- Edición de una factura -->
+            <!-- ---------------------------------------------------------- Cobros -->
+            <section id="es-cobros">
+                <h2>Cobros</h2>
+                <h3>Objetivo</h3>
+                <p>La pantalla <span class="chemin">Ventas › Cobros</span> lista los pagos recibidos de sus clientes (cheques, efectivo, transferencias, depósitos), del más reciente al más antiguo, y dice de dónde viene cada uno. Desde aquí se registra un pago recibido sin pasar por una factura.</p>
+
+                <h3>Indicadores</h3>
+                <table>
+                    <thead><tr><th>Indicador</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Recibido en {mes}</td><td>La suma de los pagos recibidos desde el 1 del mes en curso, y su número.</td></tr>
+                        <tr><td>Conciliados con el banco</td><td>El número de pagos vinculados a una línea de extracto bancario.</td></tr>
+                        <tr><td>Aún por cobrar</td><td>El saldo pendiente de las facturas contabilizadas no saldadas, y su número — la misma cifra que el indicador « À recevoir » de las facturas de clientes.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>+ Enregistrer un paiement reçu</kbd> (+ Registrar un pago recibido, píldora azul): abre la ventana « Enregistrer un paiement reçu » — la misma ventana de cobro que el botón <kbd>Encaissement</kbd> de una factura, pero sin cliente preseleccionado: elija el cliente, la fecha, el tipo, la referencia, la cuenta bancaria y el importe, y luego impute las facturas abiertas. Al cerrarla, la lista y los indicadores se recargan.</li>
+                    <li>Campo « Chercher un client, une référence ou une facture », lupa o tecla Intro; <kbd>✕</kbd> vacía la búsqueda.</li>
+                </ul>
+
+                <h3>Líneas</h3>
+                <p>Cada línea muestra un icono verde, el <strong>cliente</strong> en negrita, luego la <strong>fecha · el tipo</strong> (Cheque, Efectivo, Transferencia, Transferencia Interac, Tarjeta…) y el número de referencia si lo hay, las <strong>facturas</strong> imputadas, el <strong>importe</strong>, y una píldora: <strong>« Rapproché avec la banque »</strong> (ámbar) cuando el pago está vinculado a una línea de extracto, <strong>« Saisi par vous »</strong> (azul) en caso contrario. El pie dice cuántos pagos se muestran del total.</p>
+                <div class="note" data-titre="Conviene saber">Un pago registrado aquí actualiza el « Déjà reçu » y el « Reste » de las facturas que imputa, y por tanto el estado de pago de las facturas de clientes y el saldo de los clientes.</div>
+            </section>
+
             <section id="es-edicion-factura">
                 <h2>Edición de una factura</h2>
                 <h3>Objetivo</h3>
