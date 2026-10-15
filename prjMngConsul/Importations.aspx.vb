@@ -942,25 +942,6 @@ Public Class Importations
             litAVenir.Text = ""
         End If
 
-        AfficherAvancement()
-    End Sub
-
-    ''' <summary>
-    ''' L'avancement de l'ensemble : la moyenne mentirait — un écran fini et
-    ''' neuf écrans vides donneraient une note flatteuse. On compte donc ce qui
-    ''' est réellement utilisable.
-    ''' </summary>
-    Private Sub AfficherAvancement()
-        Dim tous = New List(Of Poste)
-        tous.AddRange(Connexion)
-        tous.AddRange(Parcours)
-        tous.AddRange(Autres)
-        tous.AddRange(AVenir)
-
-        litTotal.Text = tous.Count.ToString()
-        litUtilisables.Text = tous.Where(Function(p) p.Note >= 7).Count.ToString()
-        litPartiels.Text = tous.Where(Function(p) p.Note >= 2 AndAlso p.Note < 7).Count.ToString()
-        litAFaire.Text = tous.Where(Function(p) p.Note <= 1).Count.ToString()
     End Sub
 
     Private Function Rendre(postes As List(Of Poste)) As String

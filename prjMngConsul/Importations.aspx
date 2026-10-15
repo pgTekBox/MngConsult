@@ -23,17 +23,7 @@
     .imp-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
     .imp-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
-    .imp-lede { font-size: 13.5px; color: #44536E; margin: 10px 0 0; max-width: 860px; line-height: 1.6 }
-
-    /* Le compte rendu d'ensemble */
-    .bilan { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px }
-
-    .bil { border: 0; border-radius: 20px; padding: 14px 18px; background: #fff }
-    .bil .l { font-size: 11px; color: #44536E; text-transform: uppercase; letter-spacing: .3px }
-    .bil .v { font-size: 22px; font-weight: 800; color: #0E1F3D; margin-top: 2px }
-    .bil.ok { background: #ecfdf5; border-color: #a7f3d0 } .bil.ok .v { color: #047857 }
-    .bil.mi { background: #fffbeb; border-color: #fde68a } .bil.mi .v { color: #b45309 }
-    .bil.no { background: #f8fafc } .bil.no .v { color: #44536E }
+    .imp-lede { font-size: 13.5px; color: #44536E; margin: 10px 0 0; line-height: 1.6 }
 
     h2.sect {
         font-size: 15px; font-weight: 800; color: #0E1F3D; margin: 26px 0 4px;
@@ -159,21 +149,10 @@
     </p>
     </section>
 
-    <%-- Le plan de reprise : la méthode, étape par étape, dans une fenêtre
-         par-dessus la page. Un document HTML autonome (PlanReprise.html),
-         pour qu'on puisse aussi l'ouvrir seul ou l'imprimer. --%>
+    <%-- La fenêtre par-dessus la page : « Associer un compte, un par un » depuis
+         les cartes (ouvrirFenetre). Le plan de reprise (PlanReprise.html) ne se
+         propose plus ici ; le document reste accessible tel quel. --%>
     <style>
-        .plan-lien { display: flex; align-items: center; gap: 12px; padding: 16px 20px; margin: 0 0 16px;
-            border: 0; border-radius: 24px; background: #fff }
-        .plan-lien .ico { font-size: 20px; flex: none }
-        .plan-lien .txt { flex: 1; font-size: 13px; color: #0E1F3D; line-height: 1.45 }
-        .plan-lien .txt span { display: block; color: #44536E; font-size: 12.5px }
-        .plan-lien button { padding: 9px 18px; border-radius: 999px; border: 1px solid #1B4F9C; background: #1B4F9C;
-            color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap }
-        .plan-lien button:hover { background: #143A73 }
-        .plan-lien a { font-size: 12.5px; color: #143A73; text-decoration: none; white-space: nowrap }
-        .plan-lien a:hover { text-decoration: underline }
-
         .plan-voile { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9000;
             display: none; align-items: center; justify-content: center; padding: 24px }
         .plan-voile.ouvert { display: flex }
@@ -186,16 +165,6 @@
         .plan-fen .barre button { border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 11px; color: #0E1F3D; font-weight: 700 }
         .plan-fen iframe { flex: 1; border: 0; width: 100% }
     </style>
-
-    <div class="plan-lien">
-        <span class="ico"><i class="ic ic-compass" aria-hidden="true"></i></span>
-        <div class="txt">
-            <b>Plan de reprise d'une comptabilité QuickBooks</b>
-            <span>Fermeture au 31 décembre, rejeu de toutes les transactions de 2026 — la méthode, étape par étape, et l'état du code pour chacune.</span>
-        </div>
-        <button type="button" onclick="ouvrirFenetre('PlanReprise.html', 'Plan de reprise d'une comptabilité QuickBooks')">Lire le plan</button>
-        <a href="PlanReprise.html" target="_blank">ouvrir dans un onglet</a>
-    </div>
 
     <div class="plan-voile" id="planVoile" onclick="if (event.target === this) fermerFenetre();">
         <div class="plan-fen" role="dialog" aria-modal="true" aria-label="Plan de reprise">
@@ -210,7 +179,7 @@
 
     <script type="text/javascript">
         window.fenModifie = false;
-        // Une seule fenêtre pour le plan de reprise et pour « Associer les comptes, un par un ».
+        // La fenêtre de « Associer les comptes, un par un ».
         function ouvrirFenetre(url, titre) {
             var cadre = document.getElementById('planCadre');
             cadre.setAttribute('src', url);
@@ -223,7 +192,6 @@
             document.getElementById('planVoile').classList.add('ouvert');
             document.body.style.overflow = 'hidden';
         }
-        function ouvrirPlan() { ouvrirFenetre('PlanReprise.html', 'Plan de reprise d\x27une comptabilité QuickBooks'); }
         function fermerFenetre() {
             document.getElementById('planVoile').classList.remove('ouvert');
             document.getElementById('planCadre').removeAttribute('src');
@@ -231,22 +199,9 @@
             // Une décision prise dans la fenêtre change les notes des cartes : on recharge la page.
             if (window.fenModifie) { window.fenModifie = false; window.location.href = window.location.pathname; }
         }
-        function fermerPlan() { fermerFenetre(); }
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fermerFenetre(); });
     </script>
 
-    <div class="bilan">
-        <div class="bil"><div class="l">Postes recensés</div>
-            <div class="v"><asp:Literal ID="litTotal" runat="server" Text="0" /></div></div>
-        <div class="bil ok"><div class="l">Utilisables</div>
-            <div class="v"><asp:Literal ID="litUtilisables" runat="server" Text="0" /></div></div>
-        <div class="bil mi"><div class="l">Partiels</div>
-            <div class="v"><asp:Literal ID="litPartiels" runat="server" Text="0" /></div></div>
-        <div class="bil no"><div class="l">À faire</div>
-            <div class="v"><asp:Literal ID="litAFaire" runat="server" Text="0" /></div></div>
-    </div>
-
-    <h2 class="sect">Lecture directe <span>le connecteur QuickBooks : il rapatrie les données que lisent tous les écrans ci-dessous</span></h2>
     <div class="grille tete"><asp:Literal ID="litConnexion" runat="server" /></div>
     <h2 class="sect">Obligatoires pour la comptabilité <span>dans cet ordre : sans eux, rien ne se comptabilise</span></h2>
     <div class="grille"><asp:Literal ID="litParcours" runat="server" /></div>

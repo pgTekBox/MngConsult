@@ -9,18 +9,6 @@ Option Explicit On
 
 Partial Public Class Importations
 
-    '''<summary>litTotal</summary>
-    Protected WithEvents litTotal As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>litUtilisables</summary>
-    Protected WithEvents litUtilisables As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>litPartiels</summary>
-    Protected WithEvents litPartiels As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>litAFaire</summary>
-    Protected WithEvents litAFaire As Global.System.Web.UI.WebControls.Literal
-
     '''<summary>litConnexion</summary>
     Protected WithEvents litConnexion As Global.System.Web.UI.WebControls.Literal
 
