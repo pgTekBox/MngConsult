@@ -23,8 +23,6 @@
     .imp-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
     .imp-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
-    .imp-lede { font-size: 13.5px; color: #44536E; margin: 10px 0 0; line-height: 1.6 }
-
     h2.sect {
         font-size: 15px; font-weight: 800; color: #0E1F3D; margin: 26px 0 4px;
         display: flex; align-items: baseline; gap: 10px;
@@ -139,14 +137,6 @@
             <div class="sub">Reprendre une comptabilité tenue ailleurs</div>
         </div>
     </div>
-
-    <p class="imp-lede">
-        Tous les écrans d'importation s'atteignent d'ici. Chaque poste porte une note
-        sur 10 qui décrit l'état réel du code, pas une intention : lire le fichier,
-        contrôler ce qu'il contient, le mettre en préparation, puis l'appliquer pour
-        de bon à la comptabilité. Un écran qui prépare sans jamais appliquer plafonne —
-        les données restent en attente et la reprise n'avance pas.
-    </p>
     </section>
 
     <%-- La fenêtre par-dessus la page : « Associer un compte, un par un » depuis
