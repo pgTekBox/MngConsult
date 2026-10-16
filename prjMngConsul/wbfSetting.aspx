@@ -146,46 +146,81 @@
         .mail-badge.ok{ background:rgba(22,163,74,.10); color:#166534; border:1px solid rgba(22,163,74,.20); }
         .mail-badge.pending{ background:rgba(245,158,11,.12); color:#92400e; border:1px solid rgba(245,158,11,.25); }
         .mail-badge.no{ background:rgba(220,38,38,.10); color:#991b1b; border:1px solid rgba(220,38,38,.20); }
+        /* ── La signature du gabarit « Portail du client » : le titre pose sur le fond,
+           Recharger / Enregistrer en pastilles, la progression et l'identité en cartes,
+           puis les onglets dans la carte principale. ── */
+        .fc-tete{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; margin-bottom:16px; }
+        .fc-tete .txt{ flex:1 1 260px; }
+        .fc-rubrique{ font-size:14px; font-weight:800; color:#1B4F9C; text-transform:uppercase; letter-spacing:.06em; }
+        .fc-tete h1{ margin:2px 0 0; font-size:30px; font-weight:800; line-height:1.15; color:#0E1F3D; }
+        .fc-tete p{ margin:4px 0 0; font-size:17px; color:#44536E; }
+        .fc-tete .actions .RadButton{ border-radius:999px !important; min-height:44px !important; height:auto !important; padding:0 18px !important; border:1px solid #AEBBCD !important; background:#fff !important; color:#0E1F3D !important; font-weight:700 !important; font-family:inherit !important; box-shadow:none !important; }
+        .fc-tete .actions .RadButton .rbText{ color:inherit !important; font-weight:inherit !important; }
+        .fc-tete .actions .RadButton.primary{ border-color:#1B4F9C !important; background:#1B4F9C !important; color:#fff !important; font-weight:800 !important; padding:0 20px !important; }
+        .fc-tete .actions .RadButton.primary:hover{ background:#143A73 !important; }
+        .fc-kpis{ display:grid; grid-template-columns:minmax(220px, 1fr) minmax(300px, 2fr); gap:12px; margin-bottom:16px; }
+        .fc-kpi{ padding:14px 16px; border-radius:22px; background:#fff; display:flex; flex-direction:column; gap:4px; color:#0E1F3D; }
+        .fc-kpi .lab{ display:flex; align-items:center; gap:8px; font-weight:700; color:#44536E; font-size:14px; }
+        .fc-kpi .lab i{ width:10px; height:10px; border-radius:50%; flex:none; }
+        .fc-kpi .val{ font-size:24px; font-weight:800; line-height:1.15; }
+        .fc-kpi .pp-track{ margin-top:6px; }
+        .pp-fill{ background:#1B4F9C; }
+        .fc-kpi.admin-id{ flex-direction:row; align-items:center; gap:12px; border:0; padding:14px 16px; }
+        .admin-avatar{ width:44px; height:44px; flex:0 0 44px; border-radius:50%; background:#1B4F9C; color:#fff; font-size:15px; }
+        .admin-info{ max-width:none; flex:1 1 auto; }
+        .admin-name{ font-size:16px; }
+        .admin-meta{ font-size:14px; }
+        .admin-role{ border:0; background:#E3EBF7; color:#143A73; font-size:12px; }
+        .wrap{ padding:0; }
+        .card{ border:0; border-radius:24px; box-shadow:none; }
+        .card-b{ padding:18px 20px; }
+        .field label{ font-size:13px; font-weight:800; color:#5B6B86; }
+        .logo-box, .scan-box{ border:0; border-radius:18px; background:#F2F5F9; }
+        .logo-preview{ border-radius:14px; border-color:#D5DDE8; }
+        .dropzone{ border-radius:14px; border-color:#AEBBCD; }
+        .scan-msg{ border:0; border-radius:14px; background:#F2F5F9; }
+        .status-ok{ border:0; background:#E3F3EA; color:#0F5A3A; font-weight:700; }
+        .status-err{ border:0; background:#FDECEA; color:#A3261C; font-weight:700; }
+        .empty-state{ font-size:14px; font-weight:700; }
+
     </style>
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 
-    <div class="page-head">
-        <div>
-            <div class="page-title"><%= L("pageTitleShort") %></div>
-            <div class="page-sub"><%= L("pageSub") %></div>
+    <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique, le titre,
+         le sous-titre ; à droite, Recharger et Enregistrer en pastilles (et le message d'état). --%>
+    <div class="fc-tete">
+        <div class="txt">
+            <div class="fc-rubrique"><%= L("rubrique") %></div>
+            <h1><%= L("pageTitleShort") %></h1>
+            <p><%= L("pageSub") %></p>
         </div>
+        <div class="actions">
+            <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">
+                <asp:Literal ID="litStatus" runat="server" />
+            </asp:PlaceHolder>
+            <telerik:RadButton ID="btnReload" runat="server" Text="Recharger" CssClass="btn"
+                AutoPostBack="true" OnClick="btnReload_Click" />
+            <telerik:RadButton ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary"
+                AutoPostBack="true" OnClick="btnSave_Click" />
+        </div>
+    </div>
 
-        <%-- Progression du profil + identité admin + boutons, sur la même ligne --%>
-        <div class="head-right">
-            <div class="profile-progress">
-                <div class="pp-head">
-                    <span class="pp-label"><%= L("profileLabel") %></span>
-                    <span class="pp-pct"><%= ProfilePct %>&nbsp;%</span>
-                </div>
-                <div class="pp-track"><div class="pp-fill" style="width:<%= ProfilePct %>%;"></div></div>
+    <%-- Deux cartes : la progression du profil et l'identité de l'administrateur. --%>
+    <div class="fc-kpis">
+        <div class="fc-kpi">
+            <span class="lab"><i style="background:#1B4F9C"></i><%= L("profileLabel") %></span>
+            <span class="val"><%= ProfilePct %>&nbsp;%</span>
+            <div class="pp-track"><div class="pp-fill" style="width:<%= ProfilePct %>%;"></div></div>
+        </div>
+        <div class="fc-kpi admin-id">
+            <div class="admin-avatar"><%= AdminInitials %></div>
+            <div class="admin-info">
+                <div class="admin-name"><%= AdminName %></div>
+                <div class="admin-meta"><%= AdminMeta %></div>
             </div>
-
-            <div class="admin-id">
-                <div class="admin-avatar"><%= AdminInitials %></div>
-                <div class="admin-info">
-                    <div class="admin-name"><%= AdminName %></div>
-                    <div class="admin-meta"><%= AdminMeta %></div>
-                </div>
-                <span class="admin-role"><%= AdminRole %></span>
-            </div>
-
-            <div class="actions">
-                <telerik:RadButton ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary"
-                    AutoPostBack="true" OnClick="btnSave_Click" />
-                <telerik:RadButton ID="btnReload" runat="server" Text="Recharger" CssClass="btn"
-                    AutoPostBack="true" OnClick="btnReload_Click" />
-
-                <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">
-                    <asp:Literal ID="litStatus" runat="server" />
-                </asp:PlaceHolder>
-            </div>
+            <span class="admin-role"><%= AdminRole %></span>
         </div>
     </div>
 

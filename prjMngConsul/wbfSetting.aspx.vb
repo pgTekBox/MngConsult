@@ -61,6 +61,8 @@ Partial Public Class wbfSetting
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
         If Not IsPostBack Then LoadCompanyLogo()
     End Sub
@@ -89,6 +91,7 @@ Partial Public Class wbfSetting
         Dim lang As String = CurrentLang
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Paramètres — 60Sec-AI", "Settings — 60Sec-AI", "Ajustes — 60Sec-AI")
+            Case "rubrique" : Return Choose3(lang, "Administration", "Administration", "Administración")
             Case "pageTitleShort" : Return Choose3(lang, "Paramètres", "Settings", "Ajustes")
             Case "pageSub" : Return Choose3(lang, "Entreprise, taxes, courriels, factures et comptabilité.", "Company, taxes, emails, invoices and accounting.", "Empresa, impuestos, correos, facturas y contabilidad.")
             Case "save" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
