@@ -179,14 +179,62 @@
         }
         .alert.success { background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.3); color: #047857; }
         .alert.error { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.3); color: #b91c1c; }
+        /* ── La signature du gabarit « Portail du client » : le titre pose sur le fond,
+           les trois pastilles de navigation, les compteurs, les filtres et les cartes
+           en blanc arrondi. ── */
+        .autopay-page { max-width: none; margin: 0; padding: 0; }
+        .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px; }
+        .fc-tete .txt { flex: 1 1 260px; }
+        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em; }
+        .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D; }
+        .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E; }
+        .fc-tete .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+        .fc-btn, input.fc-btn { min-height: 44px; padding: 0 16px !important; border: 1px solid #AEBBCD !important; border-radius: 999px !important; background: #fff !important; color: #0E1F3D !important; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer; }
+        .fc-btn:hover, input.fc-btn:hover { background: #F2F5F9 !important; }
+        .page-tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: #E8EDF5; border-radius: 999px; border: 0; margin-bottom: 16px; width: max-content; max-width: 100%; }
+        .page-tabs a { border: 0; border-radius: 999px; min-height: 36px; padding: 0 14px; display: inline-flex; align-items: center; gap: 6px; color: #0E1F3D; font-size: 14px; font-weight: 700; }
+        .page-tabs a:hover { background: rgba(255,255,255,.6); color: #0E1F3D; }
+        .page-tabs a.active { background: #fff; color: #0E1F3D; box-shadow: 0 1px 2px rgba(14,31,61,.12); border: 0; }
+        .stats-row { gap: 12px; margin-bottom: 16px; }
+        .stat-card { border-radius: 22px; box-shadow: none; padding: 14px 16px; }
+        .stat-card .stat-label { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 700; color: #44536E; }
+        .stat-card .stat-value { font-size: 24px; font-weight: 800; color: #0E1F3D; }
+        .stat-card.green .stat-value { color: #0F5A3A; }
+        .stat-card.amber .stat-value { color: #7A5200; }
+        .stat-card.red .stat-value { color: #A3261C; }
+        .filter-bar { padding: 16px 18px; border-radius: 24px; background: #fff; margin-bottom: 16px; gap: 10px 16px; align-items: center; }
+        .filter-bar label { font-size: 13px; font-weight: 800; color: #5B6B86; display: inline-flex; align-items: center; gap: 8px; }
+        .filter-bar select, .filter-bar input[type=date] { min-height: 40px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 12px; background: #fff; font: inherit; font-size: 14px; font-weight: 600; color: #0E1F3D; }
+        .filter-bar input[type=submit], .filter-bar input[type=button] { min-height: 40px; padding: 0 18px !important; border-radius: 999px !important; border: 1px solid #1B4F9C !important; background: #1B4F9C !important; color: #fff !important; font-weight: 800; font-size: 14px; font-family: inherit; cursor: pointer; }
+        .filter-bar input[type=submit]:hover, .filter-bar input[type=button]:hover { background: #143A73 !important; }
+        .auth-card { border-radius: 20px; box-shadow: none; border-left-width: 5px; border-left-color: #43B47A; padding: 16px 20px; }
+        .auth-card.revoked { border-left-color: #AEBBCD; }
+        .auth-meta { font-size: 13px; color: #44536E; }
+        .auth-stats { font-size: 13px; }
+        .btn-revoke, input.btn-revoke { min-height: 40px; padding: 0 14px; border-radius: 999px; background: #fff; color: #A3261C; border: 1px solid #F1B9B4; font-size: 14px; font-weight: 800; font-family: inherit; }
+        .btn-revoke:hover, input.btn-revoke:hover { background: #FDECEA; color: #A3261C; }
+        .empty-state { border-radius: 24px; font-weight: 700; }
+        .alert { border-radius: 16px; font-size: 14px; font-weight: 700; }
+        .alert.success { background: #E3F3EA; border: 0; color: #0F5A3A; }
+        .alert.error { background: #FDECEA; border: 0; color: #A3261C; }
+        .history-table { border-radius: 24px; background: #fff; padding: 6px 12px 12px; overflow-x: auto; }
+
     </style>
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="autopay-page">
 
-        <div class="page-header">
-            <h1 class="page-title"><i class="ic ic-bot" aria-hidden="true"></i> Paiements automatiques fournisseurs</h1>
+        <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique, le titre, le sous-titre. --%>
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique">Administration</div>
+                <h1>Paiements automatiques fournisseurs</h1>
+                <p>Vous autorisez une fois ; vos factures fournisseurs sont payées dans les limites que vous fixez.</p>
+            </div>
+            <div class="btns">
+                <asp:Button ID="btnRefresh" runat="server" Text="Rafraîchir" CssClass="fc-btn" CausesValidation="false" />
+            </div>
         </div>
 
         <div class="page-tabs">
@@ -230,10 +278,6 @@
         <div class="filter-bar">
             <asp:CheckBox ID="chkShowRevoked" runat="server" ClientIDMode="Static" AutoPostBack="true"
                 Text=" Inclure les autorisations révoquées" />
-            <asp:Button ID="btnRefresh" runat="server" Text="Rafraîchir"
-                CssClass="btn-revoke"
-                Style="background:#D5DDE8; color:#143A73; border-color:#bfdbfe;"
-                CausesValidation="false" />
         </div>
 
         <asp:Repeater ID="rptAuth" runat="server">
@@ -271,7 +315,7 @@
                             CommandArgument='<%# Eval("Id") %>'
                             Enabled='<%# CBool(Eval("IsActive")) %>'
                             CausesValidation="false"
-                            OnClientClick='<%# "return confirm(""Confirmer la révocation de cette autorisation ?\n\nLes paiements programmés pour ce fournisseur seront annulés."");" %>' />
+                            OnClientClick='<%# "if (!confirm(""Confirmer la révocation de cette autorisation ?\n\nLes paiements programmés pour ce fournisseur seront annulés."")) { return false; }" %>' />
                     </div>
                 </div>
             </ItemTemplate>

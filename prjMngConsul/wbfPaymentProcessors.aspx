@@ -49,14 +49,46 @@
         .pp-btn-danger:hover { background: #fef2f2; }
 
         .pp-soon { opacity: .65; }
+        /* ── La signature du gabarit « Portail du client » : le titre pose sur le fond,
+           les trois cartes (Square, Plaid, Stripe) arrondies, côte à côte sur grand écran. ── */
+        .pp-wrap { max-width: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; align-items: start; }
+        .pp-wrap > .fc-tete, .pp-wrap > .pp-msg { grid-column: 1 / -1; }
+        .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin: 0; }
+        .fc-tete .txt { flex: 1 1 260px; }
+        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em; }
+        .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D; }
+        .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E; }
+        .pp-msg { border: 0; border-radius: 16px; margin: 0; }
+        .pp-msg.ok { background: #E3F3EA; color: #0F5A3A; }
+        .pp-msg.err { background: #FDECEA; color: #A3261C; }
+        .pp-card { border: 0; border-radius: 24px; box-shadow: none; padding: 20px 22px; margin: 0; }
+        .pp-logo { font-size: 19px; }
+        .pp-logo .pp-mark { width: 40px; height: 40px; border-radius: 12px; }
+        .pp-badge { border: 0; font-size: 13px; }
+        .pp-badge.on { background: #E3F3EA; color: #0F5A3A; }
+        .pp-badge.on .dot { background: #43B47A; box-shadow: none; }
+        .pp-badge.off { background: #F2F5F9; color: #5B6B86; }
+        .pp-detail { font-size: 14px; }
+        .pp-note { font-size: 14px; }
+        .pp-btn { min-height: 44px; padding: 0 18px; border-radius: 999px; font-family: inherit; }
+        .pp-btn-primary { font-weight: 800; padding: 0 20px; }
+        .pp-btn-ghost { border-color: #AEBBCD; color: #0E1F3D; }
+        .pp-btn-ghost:hover { background: #F2F5F9; }
+        .pp-btn-danger { border-color: #F1B9B4; color: #A3261C; }
+        .pp-btn-danger:hover { background: #FDECEA; }
+
     </style>
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="pp-wrap">
-        <div class="pp-head">
-            <h1><asp:Literal ID="litHead" runat="server" /></h1>
-            <p><asp:Literal ID="litSub" runat="server" /></p>
+        <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique, le titre, le sous-titre. --%>
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+                <h1><asp:Literal ID="litHead" runat="server" /></h1>
+                <p><asp:Literal ID="litSub" runat="server" /></p>
+            </div>
         </div>
 
         <asp:Panel ID="pnlMsg" runat="server" Visible="false" CssClass="pp-msg">

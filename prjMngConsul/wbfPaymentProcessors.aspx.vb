@@ -15,6 +15,8 @@ Public Class wbfPaymentProcessors
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -175,6 +177,7 @@ Public Class wbfPaymentProcessors
     ''' <summary>Applique les libellés localisés aux contrôles serveur.</summary>
     Private Sub ApplyLocalization()
         litTitle.Text = L("pageTitle")
+        litRubrique.Text = L("rubrique")
         litHead.Text = L("head")
         litSub.Text = L("sub")
         litLblMerchant.Text = L("lblMerchant")
@@ -203,6 +206,7 @@ Public Class wbfPaymentProcessors
         Dim lang As String = CurrentLang
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Processeurs de paiement — 60Sec-AI", "Payment processors — 60Sec-AI", "Procesadores de pago — 60Sec-AI")
+            Case "rubrique" : Return Choose3(lang, "Administration", "Administration", "Administración")
             Case "head" : Return Choose3(lang, "Processeurs de paiement", "Payment processors", "Procesadores de pago")
             Case "sub" : Return Choose3(lang, "Connectez vos comptes de traitement des paiements.", "Connect your payment processing accounts.", "Conecte sus cuentas de procesamiento de pagos.")
             Case "connected" : Return Choose3(lang, "Connecté", "Connected", "Conectado")

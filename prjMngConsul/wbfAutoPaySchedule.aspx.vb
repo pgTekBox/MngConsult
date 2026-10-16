@@ -17,6 +17,9 @@ Public Class wbfAutoPaySchedule
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
+
         If Not IsPostBack Then
             tbFromDate.Text = Date.Today.ToString("yyyy-MM-dd")
             tbToDate.Text = Date.Today.AddDays(30).ToString("yyyy-MM-dd")

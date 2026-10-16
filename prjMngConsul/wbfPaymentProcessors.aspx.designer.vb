@@ -111,4 +111,7 @@ Partial Public Class wbfPaymentProcessors
     '''<summary>btnPlaidConnect control.</summary>
     Protected WithEvents btnPlaidConnect As Global.System.Web.UI.WebControls.Button
 
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
 End Class

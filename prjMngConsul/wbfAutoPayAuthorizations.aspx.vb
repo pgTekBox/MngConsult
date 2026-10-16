@@ -20,6 +20,9 @@ Public Class wbfAutoPayAuthorizations
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
+
         If Not IsPostBack Then
             LoadStats()
             LoadAuthorizations()
