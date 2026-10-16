@@ -82,6 +82,12 @@
         .nu .progress-fill { background: #1B4F9C }
         .nu .card { border: 0; border-radius: 24px; box-shadow: none }
         .nu .upload-card { border: 2px dashed #AEBBCD; background: #fff }
+        .nu .nu-haut { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(360px, 1.5fr); gap: 16px; align-items: start; margin-bottom: 18px }
+        .nu .nu-haut .progress-wrap, .nu .nu-haut .card { margin-bottom: 0 }
+        .nu .nu-haut .card-body { padding: 18px 20px }
+        .nu .nu-haut .card-sub { margin-bottom: 10px }
+        .nu .nu-haut .dropzone { padding: 14px 16px }
+        .nu .nu-haut .upload-row { margin-top: 10px }
         .nu .dropzone { border-radius: 18px; border-color: #AEBBCD; background: #F2F5F9 }
         .nu .dropzone:hover, .nu .dropzone.drag { border-color: #1B4F9C; background: #E3EBF7 }
         .nu .section-label { color: #5B6B86; font-size: 13px }
@@ -121,6 +127,9 @@
             </div>
         </div>
 
+        <%-- La progression et le remplissage automatique côte à côte. --%>
+        <div class="nu-haut">
+
         <!-- Progression -->
         <div class="progress-wrap">
             <div class="progress-head">
@@ -151,6 +160,7 @@
                     <asp:Literal ID="litUpload" runat="server" />
                 </asp:Panel>
             </div>
+        </div>
         </div>
 
         <!-- Identité -->
