@@ -405,6 +405,40 @@
             to   { transform: translateX(0); opacity: 1; }
         }
 
+        /* =========================================================
+           La signature du gabarit « Portail du client » : la tête sur le fond,
+           la barre d'outils, le filtre des employés et le calendrier en cartes.
+           ========================================================= */
+        .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+        .fc-tete .txt { flex: 1 1 260px }
+        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+        .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+        .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+        .fc-tete .btns { display: flex; flex-wrap: wrap; gap: 8px }
+        .fc-btn { min-height: 44px; padding: 0 16px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer }
+        .fc-btn.primaire { padding: 0 20px; border-color: #1B4F9C; background: #1B4F9C; color: #fff; font-weight: 800 }
+        .fc-btn.primaire:hover { background: #143A73 }
+        .ag-wrap { gap: 16px; min-height: 0 }
+        .ag-toolbar { border: 0; border-radius: 24px; background: #fff; padding: 14px 18px }
+        .ag-toolbar .ag-title { font-size: 20px; color: #0E1F3D }
+        .ag-iconbtn { width: 40px; height: 40px; border-radius: 50%; border-color: #AEBBCD; font-size: 16px }
+        .ag-iconbtn:hover { background: #F2F5F9 }
+        .ag-views { border: 0; border-radius: 999px; background: #E8EDF5; padding: 4px; gap: 4px; overflow: visible }
+        .ag-views button { border-radius: 999px; min-height: 36px; padding: 0 14px; color: #0E1F3D; font-family: inherit }
+        .ag-views button:hover { background: rgba(255,255,255,.6) }
+        .ag-views button.active { background: #fff; box-shadow: 0 1px 2px rgba(14,31,61,.12); color: #0E1F3D }
+        .ag-resources { border: 0; border-radius: 24px; background: #fff; padding: 12px 18px; align-items: center }
+        .ag-resources > span:first-child { font-size: 13px !important; font-weight: 800 !important; color: #5B6B86 !important }
+        .ag-res-pill { min-height: 36px; padding: 0 12px; border-color: #AEBBCD; font-size: 13px; color: #0E1F3D }
+        .ag-res-pill:hover { background: #F2F5F9 }
+        .ag-month, .ag-week-wrap { background: #fff; border-radius: 24px; overflow: hidden }
+        .ag-month-head, .ag-week-head, .ag-week-allday { background: transparent; border-bottom-color: #E3E9F1 }
+        .ag-month-head div { color: #5B6B86; font-size: 13px; padding: 12px 8px }
+        .ag-day { border-color: #E3E9F1 }
+        .ag-day.other { background: #FAFCFF }
+        .ag-time-col { background: #FAFCFF }
+        .ag-week-head .col, .ag-week-allday .lbl, .ag-week-allday .cell, .ag-time-col, .ag-day-col { border-right-color: #E3E9F1 }
+
     </style>
 </asp:Content>
 
@@ -441,6 +475,19 @@
         <asp:HiddenField ID="hfEmployeeFilter" runat="server" ClientIDMode="Static" />
         <asp:HiddenField ID="hfMoveData"      runat="server" ClientIDMode="Static" />
       </telerik:RadAjaxPanel>
+    <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique, le titre,
+         le sous-titre, et à droite le bouton « + Rendez-vous » en pastille bleue. --%>
+    <div class="fc-tete">
+        <div class="txt">
+            <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+            <h1><asp:Literal ID="litTitre" runat="server" /></h1>
+            <p><asp:Literal ID="litSousTitre" runat="server" /></p>
+        </div>
+        <div class="btns">
+            <button type="button" class="fc-btn primaire" onclick="agNewAppointment(); return false;">+ <asp:Literal ID="litAddAppt" runat="server" /></button>
+        </div>
+    </div>
+
     <div class="ag-wrap">
 
         <%-- Les libellés passent par des Literal et non par des <%= %> : cette
@@ -468,7 +515,6 @@
                 <button type="button" id="vDay"   onclick="agSetView('day');   return false;"><asp:Literal ID="litViewDay" runat="server" /></button>
             </div>
 
-            <button type="button" class="ag-btn-add" onclick="agNewAppointment(); return false;">+ <asp:Literal ID="litAddAppt" runat="server" /></button>
         </div>
 
         <!-- FILTRES RESSOURCES -->

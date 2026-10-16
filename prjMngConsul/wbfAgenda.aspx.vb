@@ -9,6 +9,8 @@ Public Class wbfAgenda
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         rwAppointment.Title = T("Rendez-vous", "Appointment", "Cita")
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -44,6 +46,9 @@ Public Class wbfAgenda
         litViewDay.Text = T("Jour", "Day", "Día")
 
         litAddAppt.Text = T("Rendez-vous", "Appointment", "Cita")
+        litRubrique.Text = T("Mon entreprise", "My business", "Mi empresa")
+        litTitre.Text = T("Agenda", "Agenda", "Agenda")
+        litSousTitre.Text = T("Vos rendez-vous, livraisons et commandes spéciales, par employé.", "Your appointments, deliveries and special orders, by employee.", "Sus citas, entregas y pedidos especiales, por empleado.")
         litEmployees.Text = T("Employés", "Employees", "Empleados")
 
         litDow1.Text = T("Lun", "Mon", "Lun")

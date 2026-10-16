@@ -33,29 +33,30 @@
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter</kbd> : ouvre la fenêtre « Ajouter un employé » (voir <a href="#fr-fiche-employe">Fiche employé</a>).</li>
-                    <li><kbd>🔍</kbd> (loupe) : lance la recherche saisie dans « Rechercher (nom, courriel…) ».</li>
-                    <li><kbd>Effacer</kbd> : vide la zone de recherche et réaffiche tous les employés.</li>
+                    <li><kbd>+ Ajouter un employé</kbd> (pastille bleue, en haut à droite du titre) : ouvre la fenêtre « Ajouter un employé » (voir <a href="#fr-fiche-employe">Fiche employé</a>).</li>
+                    <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>Employés actifs</strong> (« n / total »), <strong>Inactifs</strong>, <strong>Avec boîte @60sec.ca</strong> et <strong>Sans boîte</strong> (les actifs sans boîte). Un clic pose le filtre correspondant — le cadre passe en bleu — et un second clic l’enlève ; le filtre est mémorisé pour la session.</li>
+                    <li>La <kbd>loupe</kbd> ou la touche Entrée : lance la recherche saisie dans « Chercher un nom, un numéro ou un courriel ».</li>
+                    <li><kbd>✕</kbd> (effacer) : vide la recherche <strong>et enlève le filtre de l’indicateur</strong>. Le pied de la liste dit combien d’employés sont montrés sur le total.</li>
                 </ul>
                 <p>Actions disponibles sur chaque ligne :</p>
                 <ul>
                     <li><kbd>✎</kbd> (info-bulle « Modifier ») : ouvre la fiche de l’employé. La liste se rafraîchit à la fermeture de la fenêtre.</li>
                     <li><kbd>Attribuer boîte</kbd> (affiché seulement si l’employé n’a pas encore de boîte) : crée l’adresse @60sec.ca de l’employé. Message : « Boîte attribuée : {adresse} ».</li>
                     <li><kbd>Réinit. mot de passe</kbd> (affiché seulement si l’employé a une boîte) : envoie au courriel externe de l’employé un lien pour définir ou changer le mot de passe de sa boîte. Message : « Lien de réinitialisation envoyé à {courriel}. »</li>
-                    <li><kbd>🗑</kbd> (info-bulle « Supprimer ») : demande la confirmation « Supprimer cet employé ? Sa boîte @60sec.ca sera aussi libérée. » puis supprime la fiche.</li>
+                    <li><kbd>Supprimer</kbd> : demande la confirmation « Supprimer cet employé ? Sa boîte @60sec.ca sera aussi libérée. » puis supprime la fiche.</li>
                 </ul>
 
                 <h3>Filtres et recherche</h3>
-                <p>La zone « Rechercher (nom, courriel…) » filtre la liste. La recherche porte sur le nom affiché, le prénom, le nom, le numéro, le courriel externe et l’adresse @60sec.ca. Lancez-la avec la loupe ; le bouton <kbd>Effacer</kbd> la vide.</p>
+                <p>Le champ « Chercher un nom, un numéro ou un courriel » filtre la liste. La recherche porte sur le nom affiché, le prénom, le nom, le numéro, le courriel externe et l’adresse @60sec.ca. Lancez-la avec la loupe ou la touche Entrée ; <kbd>✕</kbd> la vide.</p>
 
                 <h3>Colonnes</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>Employé</td><td>Pastille de la couleur de l’employé, son nom, puis « numéro · poste ».</td></tr>
+                        <tr><td>Employé</td><td>Un rond de la couleur de l’employé, son nom en gras, puis « numéro · poste ».</td></tr>
                         <tr><td>Courriel externe</td><td>L’adresse courriel personnelle ou professionnelle de l’employé (hors 60Sec-AI), ou « — » si elle est vide.</td></tr>
                         <tr><td>Boîte @60sec.ca</td><td>L’adresse @60sec.ca attribuée, ou « aucune ». Une clé 🔑 (info-bulle « Mot de passe défini ») indique que l’employé a déjà défini un mot de passe.</td></tr>
-                        <tr><td>Actif</td><td>Badge « Actif » ou « Inactif ».</td></tr>
+                        <tr><td>Actif</td><td>Un point vert « Actif » ou gris « Inactif ».</td></tr>
                         <tr><td>Actions</td><td>Les boutons de la ligne décrits ci-dessus.</td></tr>
                     </tbody>
                 </table>
@@ -92,7 +93,7 @@
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun employé trouvé. »</span> — la liste est vide ou la recherche ne renvoie rien ; cliquez sur <kbd>Effacer</kbd> ou ajoutez un employé.</li>
+                    <li><span class="msg">« Aucun employé ne correspond. »</span> — la liste est vide, ou la recherche et l’indicateur ne renvoient rien ; cliquez sur <kbd>✕</kbd> ou ajoutez un employé.</li>
                     <li><span class="msg">« Boîte attribuée : {adresse} »</span> — la boîte @60sec.ca a été créée ; notez l’adresse.</li>
                     <li><span class="msg">« Lien de réinitialisation envoyé à {courriel}. »</span> — le courriel est parti vers le courriel externe de l’employé ; il a 24 heures pour l’utiliser.</li>
                     <li><span class="msg">« La boîte @60sec.ca et le courriel externe doivent être renseignés. »</span> — attribuez d’abord la boîte, et saisissez un courriel externe dans la fiche, avant de demander la réinitialisation.</li>
@@ -261,29 +262,30 @@
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Add</kbd>: opens the “Add an employee” window (see <a href="#en-employee-form">Employee form</a>).</li>
-                    <li><kbd>🔍</kbd> (magnifier): runs the search typed in “Search (name, email…)”.</li>
-                    <li><kbd>Clear</kbd>: empties the search box and shows all employees again.</li>
+                    <li><kbd>+ Add an employee</kbd> (blue pill, at the top right of the title): opens the “Add an employee” window (see <a href="#en-employee-form">Employee form</a>).</li>
+                    <li>The four <strong>indicators</strong> under the title: <strong>Active employees</strong> (“n / total”), <strong>Inactive</strong>, <strong>With @60sec.ca mailbox</strong> and <strong>Without mailbox</strong> (active ones without a mailbox). A click applies the matching filter — the frame turns blue — and a second click removes it; the filter is remembered for the session.</li>
+                    <li>The <kbd>magnifier</kbd> or the Enter key: runs the search typed in “Search a name, a number or an email”.</li>
+                    <li><kbd>✕</kbd> (clear): empties the search <strong>and removes the indicator filter</strong>. The list footer says how many employees are shown out of the total.</li>
                 </ul>
                 <p>Actions available on each row:</p>
                 <ul>
                     <li><kbd>✎</kbd> (tooltip “Edit”): opens the employee’s form. The list refreshes when the window closes.</li>
                     <li><kbd>Assign mailbox</kbd> (shown only if the employee has no mailbox yet): creates the employee’s @60sec.ca address. Message: “Mailbox assigned: {address}”.</li>
                     <li><kbd>Reset password</kbd> (shown only if the employee has a mailbox): sends to the employee’s external e-mail a link to set or change the mailbox password. Message: “Reset link sent to {e-mail}.”</li>
-                    <li><kbd>🗑</kbd> (tooltip “Delete”): asks for confirmation “Delete this employee? Their @60sec.ca mailbox will also be released.” and then deletes the record.</li>
+                    <li><kbd>Delete</kbd>: asks for confirmation “Delete this employee? Their @60sec.ca mailbox will also be released.” and then deletes the record.</li>
                 </ul>
 
                 <h3>Filters and search</h3>
-                <p>The “Search (name, email…)” box filters the list. The search covers the display name, first name, last name, number, external e-mail and @60sec.ca address. Run it with the magnifier; the <kbd>Clear</kbd> button clears it.</p>
+                <p>The “Search a name, a number or an email” field filters the list. The search covers the display name, first name, last name, number, external e-mail and @60sec.ca address. Run it with the magnifier or the Enter key; <kbd>✕</kbd> clears it.</p>
 
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Employee</td><td>A dot in the employee’s colour, their name, then “number · position”.</td></tr>
+                        <tr><td>Employee</td><td>A circle in the employee’s colour, their name in bold, then “number · position”.</td></tr>
                         <tr><td>External email</td><td>The employee’s personal or professional e-mail address (outside 60Sec-AI), or “—” if empty.</td></tr>
                         <tr><td>@60sec.ca mailbox</td><td>The assigned @60sec.ca address, or “aucune” (none, shown in French). A key 🔑 (tooltip “Mot de passe défini”, password set, shown in French) shows that the employee has already set a password.</td></tr>
-                        <tr><td>Active</td><td>“Active” or “Inactive” badge.</td></tr>
+                        <tr><td>Active</td><td>A green dot “Active” or a grey dot “Inactive”.</td></tr>
                         <tr><td>Actions</td><td>The row buttons described above.</td></tr>
                     </tbody>
                 </table>
@@ -320,7 +322,7 @@
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No employee found.”</span> — the list is empty or the search returns nothing; click <kbd>Clear</kbd> or add an employee.</li>
+                    <li><span class="msg">“No employee matches.”</span> — the list is empty, or the search and the indicator return nothing; click <kbd>✕</kbd> or add an employee.</li>
                     <li><span class="msg">“Mailbox assigned: {address}”</span> — the @60sec.ca mailbox has been created; note the address.</li>
                     <li><span class="msg">“Reset link sent to {e-mail}.”</span> — the e-mail went to the employee’s external address; they have 24 hours to use it.</li>
                     <li><span class="msg">“La boîte @60sec.ca et le courriel externe doivent être renseignés.”</span> — (shown in French: the @60sec.ca mailbox and the external e-mail must both be filled in) assign the mailbox first, and enter an external e-mail in the form, before requesting the reset.</li>
@@ -489,29 +491,30 @@
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Agregar</kbd>: abre la ventana «Agregar un empleado» (vea <a href="#es-ficha-empleado">Ficha de empleado</a>).</li>
-                    <li><kbd>🔍</kbd> (lupa): ejecuta la búsqueda escrita en «Buscar (nombre, correo…)».</li>
-                    <li><kbd>Borrar</kbd>: vacía el campo de búsqueda y vuelve a mostrar todos los empleados.</li>
+                    <li><kbd>+ Agregar un empleado</kbd> (píldora azul, arriba a la derecha del título): abre la ventana «Agregar un empleado» (vea <a href="#es-ficha-empleado">Ficha de empleado</a>).</li>
+                    <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>Empleados activos</strong> («n / total»), <strong>Inactivos</strong>, <strong>Con buzón @60sec.ca</strong> y <strong>Sin buzón</strong> (los activos sin buzón). Un clic aplica el filtro correspondiente — el marco se vuelve azul — y un segundo clic lo quita; el filtro se recuerda durante la sesión.</li>
+                    <li>La <kbd>lupa</kbd> o la tecla Intro: ejecuta la búsqueda escrita en «Buscar un nombre, un número o un correo».</li>
+                    <li><kbd>✕</kbd> (borrar): vacía la búsqueda <strong>y quita el filtro del indicador</strong>. El pie de la lista dice cuántos empleados se muestran del total.</li>
                 </ul>
                 <p>Acciones disponibles en cada fila:</p>
                 <ul>
                     <li><kbd>✎</kbd> (ayuda «Editar»): abre la ficha del empleado. La lista se actualiza al cerrar la ventana.</li>
                     <li><kbd>Asignar buzón</kbd> (solo se muestra si el empleado aún no tiene buzón): crea la dirección @60sec.ca del empleado. Mensaje: «Buzón asignado: {dirección}».</li>
                     <li><kbd>Restablecer contraseña</kbd> (solo se muestra si el empleado tiene buzón): envía al correo externo del empleado un enlace para definir o cambiar la contraseña de su buzón. Mensaje: «Enlace de restablecimiento enviado a {correo}.»</li>
-                    <li><kbd>🗑</kbd> (ayuda «Eliminar»): pide la confirmación «¿Eliminar este empleado? Su buzón @60sec.ca también será liberado.» y luego elimina la ficha.</li>
+                    <li><kbd>Eliminar</kbd>: pide la confirmación «¿Eliminar este empleado? Su buzón @60sec.ca también será liberado.» y luego elimina la ficha.</li>
                 </ul>
 
                 <h3>Filtros y búsqueda</h3>
-                <p>El campo «Buscar (nombre, correo…)» filtra la lista. La búsqueda abarca el nombre visible, el nombre de pila, el apellido, el número, el correo externo y la dirección @60sec.ca. Ejecútela con la lupa; el botón <kbd>Borrar</kbd> la vacía.</p>
+                <p>El campo «Buscar un nombre, un número o un correo» filtra la lista. La búsqueda abarca el nombre visible, el nombre de pila, el apellido, el número, el correo externo y la dirección @60sec.ca. Ejecútela con la lupa o la tecla Intro; <kbd>✕</kbd> la vacía.</p>
 
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Empleado</td><td>Punto del color del empleado, su nombre y luego «número · puesto».</td></tr>
+                        <tr><td>Empleado</td><td>Un círculo del color del empleado, su nombre en negrita y luego «número · puesto».</td></tr>
                         <tr><td>Correo externo</td><td>La dirección de correo personal o profesional del empleado (fuera de 60Sec-AI), o «—» si está vacía.</td></tr>
                         <tr><td>Buzón @60sec.ca</td><td>La dirección @60sec.ca asignada, o «aucune» (ninguna, se muestra en francés). Una llave 🔑 (ayuda «Mot de passe défini», contraseña definida, se muestra en francés) indica que el empleado ya definió una contraseña.</td></tr>
-                        <tr><td>Activo</td><td>Insignia «Activo» o «Inactivo».</td></tr>
+                        <tr><td>Activo</td><td>Un punto verde «Activo» o gris «Inactivo».</td></tr>
                         <tr><td>Acciones</td><td>Los botones de la fila descritos arriba.</td></tr>
                     </tbody>
                 </table>
@@ -548,7 +551,7 @@
 
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«Ningún empleado encontrado.»</span> — la lista está vacía o la búsqueda no devuelve nada; haga clic en <kbd>Borrar</kbd> o añada un empleado.</li>
+                    <li><span class="msg">«Ningún empleado coincide.»</span> — la lista está vacía, o la búsqueda y el indicador no devuelven nada; haga clic en <kbd>✕</kbd> o añada un empleado.</li>
                     <li><span class="msg">«Buzón asignado: {dirección}»</span> — el buzón @60sec.ca se ha creado; anote la dirección.</li>
                     <li><span class="msg">«Enlace de restablecimiento enviado a {correo}.»</span> — el correo se envió a la dirección externa del empleado; tiene 24 horas para usarlo.</li>
                     <li><span class="msg">«La boîte @60sec.ca et le courriel externe doivent être renseignés.»</span> — (se muestra en francés: el buzón @60sec.ca y el correo externo deben estar indicados) asigne primero el buzón e indique un correo externo en la ficha antes de pedir el restablecimiento.</li>

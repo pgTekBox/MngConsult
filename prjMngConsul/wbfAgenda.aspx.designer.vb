@@ -255,4 +255,13 @@ Partial Public Class wbfAgenda
     '''</remarks>
     Protected WithEvents rcbAgendaI18n As Global.Telerik.Web.UI.RadCodeBlock
 
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litTitre control.</summary>
+    Protected WithEvents litTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litSousTitre control.</summary>
+    Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
+
 End Class

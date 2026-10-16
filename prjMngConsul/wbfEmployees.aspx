@@ -9,37 +9,101 @@
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
     <style>
-        .listview-list-head, .listview-row {
-            display: grid;
-            grid-template-columns: minmax(220px, 1.5fr) minmax(170px, 1fr) minmax(190px, 1fr) 90px 210px;
-            gap: 16px; align-items: center; box-sizing: border-box;
-        }
-        .listview-list-head {
-            padding: 14px 16px; font-weight: 800; font-size: 13px; color: #0E1F3D;
-            background: #f8fafc; border-bottom: 1px solid var(--mc-stroke); position: sticky; top: 0; z-index: 0;
-        }
-        .listview-row { padding: 14px 16px; border-bottom: 1px solid #eef2f7; background: #fff; }
-        .colh-actions { text-align: right; }
-        .emp-id { display: flex; align-items: center; gap: 10px; }
-        .emp-dot { width: 30px; height: 30px; border-radius: 9px; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
-        .emp-name { font-weight: 800; font-size: 14px; }
-        .emp-meta { font-size: 12px; color: #44536E; }
-        .emp-mail { font-family: ui-monospace, Consolas, monospace; font-size: 13px; color: #0E1F3D; }
-        .emp-none { color: #94a3b8; font-style: italic; }
-        .pw-key { margin-left: 6px; }
-        .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; white-space: nowrap; }
-        .badge.on  { background: rgba(22,163,74,.10); color: #16a34a; border: 1px solid rgba(22,163,74,.25); }
-        .badge.off { background: rgba(100,116,139,.10); color: #44536E; border: 1px solid rgba(100,116,139,.25); }
-        .listview-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-        .btn-mini { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--mc-stroke); background: #fff; color: #0E1F3D; }
-        .btn-mini:hover { background: #f8fafc; }
-        .btn-mini.primary { background: #1B4F9C; border-color: #1B4F9C; color: #fff; }
-        .btn-mini.warn { color: #b45309; border-color: rgba(217,119,6,.35); }
-        .btn-mini.danger { color: #dc2626; border-color: rgba(220,38,38,.35); }
-        @media (max-width: 1024px) {
-            .listview-list-head, .listview-row { grid-template-columns: minmax(160px,1.4fr) 90px 200px; }
-            .col-ext, .col-box { display: none; }
-        }
+    /* ── Ventes › Factures clients : la signature du gabarit « Portail du client ».
+       Le titre pose sur le fond de la page (FondDePage), puis quatre indicateurs
+       cliquables, la carte « recherche et filtres », et la carte de la liste. ── */
+    .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+    .fc-tete .txt { flex: 1 1 260px }
+    .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+    .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+    .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+    .fc-tete .btns { display: flex; flex-wrap: wrap; gap: 8px }
+    .fc-btn, input.fc-btn { min-height: 44px; padding: 0 16px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer }
+    .fc-btn:hover, input.fc-btn:hover { background: #F2F5F9 }
+    .fc-btn.primaire, input.fc-btn.primaire { padding: 0 20px; border-color: #1B4F9C; background: #1B4F9C; color: #fff; font-weight: 800 }
+    .fc-btn.primaire:hover, input.fc-btn.primaire:hover { background: #143A73 }
+
+    .fc-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px }
+    .fc-kpi { padding: 14px 16px; border-radius: 22px; text-align: left; display: flex; flex-direction: column; gap: 2px; border: 2px solid transparent; background: #fff; color: #0E1F3D; cursor: pointer; font-family: inherit }
+    .fc-kpi:hover { border-color: #D5DDE8 }
+    .fc-kpi.on { border-color: #1B4F9C }
+    .fc-kpi .lab { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #44536E; font-size: 14px }
+    .fc-kpi .lab i { width: 10px; height: 10px; border-radius: 50%; flex: none }
+    .fc-kpi .val { font-size: 24px; font-weight: 800; line-height: 1.15 }
+    .fc-kpi .sub { font-size: 14px; color: #44536E }
+
+    .fc-filtres { padding: 16px 18px; border-radius: 24px; background: #fff; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px }
+    .fc-recherche { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 6px 0 14px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; width: 100%; max-width: 520px; box-sizing: border-box }
+    .fc-recherche:focus-within { border-color: #1B4F9C; box-shadow: 0 0 0 4px rgba(27,79,156,.14) }
+    .fc-recherche svg { flex: none }
+    .fc-recherche input[type=text] { border: 0 !important; outline: none; flex: 1 1 auto; min-width: 0; background: transparent !important; color: #0E1F3D; font: inherit; font-size: 15px; padding: 0 !important; box-shadow: none !important; width: auto !important; border-radius: 0; max-width: none !important }
+    .fc-recherche .btn-icon { width: 34px; height: 34px; border: 0; background-color: transparent !important; border-radius: 50% }
+    .fc-recherche .btn-icon-search { margin-left: auto }
+    .fc-recherche .btn-icon:hover { background-color: #F2F5F9 !important }
+    .fc-groupes { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: flex-end }
+    .fc-groupe { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 800; color: #5B6B86 }
+    .fc-chips { display: flex; flex-wrap: wrap; gap: 6px }
+    .fc-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 13px; font-family: inherit; cursor: pointer }
+    .fc-chip i { width: 8px; height: 8px; border-radius: 50%; flex: none }
+    .fc-chip b { font-weight: 700; color: #5B6B86 }
+    .fc-chip:hover { background: #F2F5F9 }
+    .fc-chip.on { background: #0E1F3D; border-color: #0E1F3D; color: #fff }
+    .fc-chip.on b { color: #AEBBCD }
+
+    /* La liste : une carte blanche ; en-tête gris-bleu sans fond, lignes à filet doux. */
+    .fc-liste.full-grid { height: auto; min-height: 0 }
+    .fc-liste .list-shell { height: auto; padding: 6px 12px 12px; border-radius: 24px; background: #fff }
+    .fc-liste .list-shell > * { flex: none; display: block }
+    .fc-liste .listview-list-body { overflow: visible }
+    .fc-liste .listview-list-head, .fc-liste .listview-row {
+        display: grid; grid-template-columns: 96px 118px minmax(0, 2fr) 120px 112px 104px 132px 210px;
+        gap: 10px; align-items: center; padding: 10px 6px; box-sizing: border-box;
+    }
+    .fc-liste .listview-list-head { position: static; background: transparent; border: 0; font-size: 14px; font-weight: 800; color: #5B6B86; z-index: auto }
+    .fc-liste .listview-row { border: 0; border-top: 1px solid #E3E9F1; background: #fff; font-size: 15px }
+    .fc-liste .listview-row:hover { background: #FAFCFF }
+    .fc-liste .sort-link, .fc-liste .sort-link:hover, .fc-liste .sort-link:visited { color: inherit; text-decoration: none; cursor: pointer; font-weight: inherit }
+    .fc-liste .sort-link:hover { text-decoration: underline }
+    .fc-liste .adroite { text-align: right }
+    .fc-liste .c-num { white-space: nowrap }
+    .fc-liste .lien { font-weight: 800 }
+    .fc-liste .c-ech { display: flex; flex-direction: column; line-height: 1.3 }
+    .fc-liste .c-ech b { font-weight: 700 }
+    .fc-liste .c-ech span { font-size: 13px; color: #44536E }
+    .fc-liste .c-client { min-width: 0 }
+    .fc-liste .c-client > div:first-child { font-weight: 800 }
+    .fc-liste .cust-email { font-size: 13px; color: #44536E; margin-top: 0 }
+    .fc-pay { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; white-space: nowrap }
+    .fc-liste .c-reste { text-align: right; font-weight: 800 }
+    .fc-liste .c-reste.retard { color: #A3261C }
+    .fc-liste .c-reste span { display: block; font-size: 12px; font-weight: 600; color: #44536E }
+    .fc-liste .c-total { text-align: right; font-weight: 700 }
+    .fc-etat { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700 }
+    .fc-etat svg { flex: none }
+    .fc-liste .listview-actions { display: flex; justify-content: flex-end; gap: 4px; flex-wrap: nowrap }
+    .fc-liste .listview-actions .btn-icon { width: 40px; height: 40px; border: 0; border-radius: 10px; background-color: transparent !important; background-size: 22px 22px !important }
+    .fc-liste .listview-actions .btn-icon:hover { background-color: #F2F5F9 !important }
+    .fc-liste .listview-actions .btn-icon-invoice-send { background-size: 26px 26px !important }
+    .fc-liste .empty-state { padding: 20px 6px; color: #44536E; font-weight: 700 }
+    .fc-pied { padding: 12px 6px 0; color: #44536E; font-size: 14px }
+    /* Les colonnes : employé, courriel externe, boîte @60sec.ca, état, actions. */
+    .fc-liste .listview-list { min-width: 1000px }
+    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr) minmax(0, 1.5fr) 120px 320px }
+    .emp-id { display: flex; align-items: center; gap: 10px; min-width: 0 }
+    .emp-dot { width: 36px; height: 36px; border-radius: 50%; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08) }
+    .emp-name { font-weight: 800; font-size: 15px; color: #0E1F3D }
+    .emp-meta { font-size: 13px; color: #44536E }
+    .emp-mail { font-family: Consolas, 'Courier New', monospace; font-size: 13px; color: #0E1F3D }
+    .emp-none { color: #94a3b8; font-style: italic }
+    .pw-key { margin-left: 6px }
+    .fc-etat .pt { width: 10px; height: 10px; border-radius: 50%; display: inline-block }
+    .fc-liste .listview-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end }
+    .btn-mini, input.btn-mini { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; border: 1px solid #AEBBCD; background: #fff; color: #0E1F3D }
+    .btn-mini:hover, input.btn-mini:hover { background: #F2F5F9 }
+    .btn-mini.primary, input.btn-mini.primary { background: #1B4F9C; border-color: #1B4F9C; color: #fff; font-weight: 800 }
+    .btn-mini.primary:hover, input.btn-mini.primary:hover { background: #143A73 }
+    .btn-mini.warn, input.btn-mini.warn { color: #7A5200; border-color: #E3B341 }
+    .btn-mini.danger, input.btn-mini.danger { color: #A3261C; border-color: #F1B9B4 }
     </style>
 </asp:Content>
 
@@ -51,30 +115,45 @@
     <telerik:RadAjaxManager ID="Ram1" runat="server" ClientIDMode="Static">
         <AjaxSettings>
             <telerik:AjaxSetting AjaxControlID="btnSearch">
-                <UpdatedControls><telerik:AjaxUpdatedControl ControlID="rlvEmployees" /></UpdatedControls>
+                <UpdatedControls><telerik:AjaxUpdatedControl ControlID="pnlPage" LoadingPanelID="RadAjaxLoadingPanel1" /></UpdatedControls>
             </telerik:AjaxSetting>
             <telerik:AjaxSetting AjaxControlID="btnClear">
-                <UpdatedControls><telerik:AjaxUpdatedControl ControlID="rlvEmployees" /></UpdatedControls>
+                <UpdatedControls><telerik:AjaxUpdatedControl ControlID="pnlPage" LoadingPanelID="RadAjaxLoadingPanel1" /></UpdatedControls>
             </telerik:AjaxSetting>
         </AjaxSettings>
     </telerik:RadAjaxManager>
 
-    <div class="page-head">
-        <div class="page-head-left">
-            <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
+    <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique,
+         le titre, le sous-titre, et à droite le bouton d'ajout en pastille bleue. --%>
+    <div class="fc-tete">
+        <div class="txt">
+            <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+            <h1><asp:Literal ID="litPageTitle" runat="server" /></h1>
+            <p><asp:Literal ID="litSousTitre" runat="server" /></p>
         </div>
-        <div class="searchbox">
-            <asp:Button ID="btnAddEmployee" runat="server" CssClass="btn btnAddRow" Text="Ajouter" CausesValidation="false"
+        <div class="btns">
+            <asp:Button ID="btnAddEmployee" runat="server" CssClass="fc-btn primaire" Text="+ Ajouter un employé" CausesValidation="false"
                 OnClientClick="openNewEmployeeWindow(); return false;" />
-            <div class="search-group">
-                <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher…" />
-                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
-                <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" ToolTip="Effacer" CausesValidation="false" />
-            </div>
         </div>
     </div>
 
-    <div class="full-grid">
+    <%-- Tout ce qui change au clic (indicateurs, recherche, liste, pied) vit dans pnlPage, la cible des envois AJAX. --%>
+    <asp:Panel ID="pnlPage" runat="server">
+
+        <%-- Les quatre indicateurs : actifs, inactifs, avec boîte, sans boîte (un clic pose le
+             filtre, un second l'enlève ; fcChip() passe par le RadAjaxManager → Ram1_AjaxRequest). --%>
+        <div class="fc-kpis"><asp:Literal ID="litKpis" runat="server" /></div>
+
+        <section class="fc-filtres">
+            <asp:Panel ID="pnlRecherche" runat="server" CssClass="fc-recherche" DefaultButton="btnSearch">
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#44536E" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+                <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" />
+                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
+                <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" CausesValidation="false" />
+            </asp:Panel>
+        </section>
+
+    <div class="fc-liste full-grid">
         <div class="list-shell">
             <telerik:RadListView ID="rlvEmployees" runat="server" Skin="Metro" DataKeyNames="Id"
                 AllowPaging="false" ItemPlaceholderID="itemPlaceholder" ClientIDMode="Static">
@@ -85,7 +164,7 @@
                             <div class="col-ext"><asp:Literal ID="litColExt" runat="server" /></div>
                             <div class="col-box"><asp:Literal ID="litColBox" runat="server" /></div>
                             <div><asp:Literal ID="litColState" runat="server" /></div>
-                            <div class="colh-actions"><asp:Literal ID="litColAction" runat="server" /></div>
+                            <div class="adroite"><asp:Literal ID="litColAction" runat="server" /></div>
                         </div>
                         <div class="listview-list-body">
                             <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
@@ -94,21 +173,12 @@
                 </LayoutTemplate>
                 <ItemTemplate>
                     <div class="listview-row">
-                        <div class="emp-id">
-                            <span class="emp-dot" style='<%# "background:" & Eval("ColorHex") %>'></span>
-                            <span>
-                                <span class="emp-name"><%# Server.HtmlEncode(Val_(Eval("FullName"))) %></span><br />
-                                <span class="emp-meta"><%# Server.HtmlEncode(Val_(Eval("EmployeeNumber"))) %><%# IIf(Val_(Eval("JobTitle"))<>"", " · " & Server.HtmlEncode(Val_(Eval("JobTitle"))), "") %></span>
-                            </span>
-                        </div>
-                        <div class="col-ext emp-meta"><%# IIf(Val_(Eval("Email"))="", "—", Server.HtmlEncode(Val_(Eval("Email")))) %></div>
-                        <div class="col-box">
-                            <span class='<%# IIf(CBool(Eval("HasMailbox")), "emp-mail", "emp-mail emp-none") %>'><%# IIf(CBool(Eval("HasMailbox")), Server.HtmlEncode(Val_(Eval("Sec60Email"))), "aucune") %></span>
-                            <%# IIf(CBool(Eval("HasPassword")), "<span class=""pw-key"" title=""Mot de passe défini""><i class='ic ic-key' aria-hidden='true'></i></span>", "") %>
-                        </div>
-                        <div>
-                            <span class='<%# "badge " & IIf(CBool(Eval("Active")), "on", "off") %>'><%# IIf(CBool(Eval("Active")), L("stActive"), L("stInactive")) %></span>
-                        </div>
+                        <%-- L'employé (rond de couleur, nom, numéro · poste), le courriel externe, la boîte
+                             @60sec.ca (et la clé si le mot de passe est défini), l'état, puis les actions. --%>
+                        <div class="emp-id"><%# EmpCell(Eval("ColorHex"), Eval("FullName"), Eval("EmployeeNumber"), Eval("JobTitle")) %></div>
+                        <div class="col-ext emp-meta"><%# ExtCell(Eval("Email")) %></div>
+                        <div class="col-box"><%# BoiteCell(Eval("HasMailbox"), Eval("Sec60Email"), Eval("HasPassword")) %></div>
+                        <div><%# EtatCell(Eval("Active")) %></div>
                         <div class="listview-actions">
                             <asp:Button ID="btnEdit" runat="server" CssClass="btn-mini" Text="✎" ToolTip='<%# L("edit") %>' CausesValidation="false"
                                 OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwEmployee"", ""wbfEmployeeEdit.aspx"", L_EDIT_EMP, L_ADD_EMP); return false;" %>' />
@@ -121,9 +191,9 @@
                                 CommandName="ResetPwd" CommandArgument='<%# Eval("Id") %>' CausesValidation="false"
                                 Visible='<%# CBool(Eval("HasMailbox")) %>' />
 
-                            <asp:Button ID="btnDelete" runat="server" CssClass="btn-mini danger" Text=""
+                            <asp:Button ID="btnDelete" runat="server" CssClass="btn-mini danger" Text='<%# L("delete") %>'
                                 ToolTip='<%# L("delete") %>' CommandName="DeleteEmployee" CommandArgument='<%# Eval("Id") %>'
-                                CausesValidation="false" OnClientClick='<%# "return confirm(L_DEL_CONFIRM);" %>' />
+                                CausesValidation="false" OnClientClick="if (!confirm(L_DEL_CONFIRM)) { return false; }" />
                         </div>
                     </div>
                 </ItemTemplate>
@@ -131,8 +201,11 @@
                     <div class="listview-empty"><asp:Literal ID="litEmpty" runat="server" /></div>
                 </EmptyDataTemplate>
             </telerik:RadListView>
+
+            <div class="fc-pied"><asp:Literal ID="litPied" runat="server" /></div>
         </div>
     </div>
+    </asp:Panel>
 
     <telerik:RadWindow ID="rwEmployee" runat="server" Modal="true" VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize" DestroyOnClose="true" Width="720px" Height="680px"
@@ -145,6 +218,11 @@
             var L_ADD_EMP = "<%= L("addEmpWin") %>";
             var L_EDIT_EMP = "<%= L("editEmpWin") %>";
             var L_DEL_CONFIRM = "<%= L("delConfirm") %>";
+            // Un indicateur cliqué : « chip|groupe|valeur » part par le RadAjaxManager
+            // au serveur (Ram1_AjaxRequest), qui recharge la liste.
+            function fcChip(g, v) {
+                var m = $find("Ram1"); if (m) { m.ajaxRequest("chip|" + g + "|" + v); }
+            }
             function openNewEmployeeWindow() {
                 openRadWindow(0, "rwEmployee", "wbfEmployeeEdit.aspx", L_ADD_EMP, L_ADD_EMP);
             }
