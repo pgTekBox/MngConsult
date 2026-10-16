@@ -6,60 +6,90 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
     <style>
-        .mail-wrap { padding: 18px 20px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #0E1F3D; }
-        .mail-head { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; flex-wrap: wrap; }
-        .mail-head h1 { font-size: 22px; font-weight: 900; margin: 0; }
-        .mail-addr { font-weight: 800; color: #1B4F9C; background: #E3EBF7; border: 1px solid #D5DDE8; padding: 5px 12px; border-radius: 999px; font-size: 14px; }
-        .mail-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
-        .mail-tab { padding: 9px 16px; border: 1px solid #D5DDE8; background: #fff; border-radius: 10px; font-weight: 800; font-size: 13px; color: #334155; text-decoration: none; cursor: pointer; }
-        .mail-tab.active { background: #1B4F9C; color: #fff; border-color: #1B4F9C; }
-        .mail-cols { display: grid; grid-template-columns: 380px 1fr; gap: 16px; align-items: start; }
-        .mail-list { border: 1px solid #D5DDE8; border-radius: 12px; overflow: hidden; background: #fff; max-height: 70vh; overflow-y: auto; }
-        .mrow { display: block; width: 100%; text-align: left; padding: 11px 14px; border: none; border-bottom: 1px solid #f1f5f9; background: #fff; cursor: pointer; text-decoration: none; color: inherit; }
-        .mrow:hover { background: #f8fafc; }
-        .mrow .r1 { display: flex; justify-content: space-between; gap: 10px; }
-        .mrow .who { font-weight: 800; font-size: 13px; color: #0E1F3D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 210px; }
-        .mrow .when { font-size: 11px; color: #94a3b8; white-space: nowrap; }
-        .mrow .subj { font-size: 13px; color: #44536E; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .mrow .tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; }
-        .tag-ok { background: rgba(16,185,129,.12); color: #059669; }
-        .tag-q { background: rgba(37,99,235,.12); color: #1B4F9C; }
-        .tag-err { background: rgba(239,68,68,.12); color: #dc2626; }
-        .mail-read { border: 1px solid #D5DDE8; border-radius: 12px; background: #fff; padding: 0; min-height: 320px; }
-        .read-head { padding: 14px 16px; border-bottom: 1px solid #eef2f7; }
-        .read-subj { font-size: 17px; font-weight: 900; margin: 0 0 8px; }
-        .read-meta { font-size: 12px; color: #44536E; line-height: 1.6; }
-        .read-meta b { color: #0E1F3D; }
-        .mailframe { width: 100%; height: 55vh; border: 0; background: #fff; }
-        .read-empty { padding: 40px; text-align: center; color: #94a3b8; font-size: 14px; }
-        .attach { margin-top: 6px; font-size: 12px; color: #b45309; }
-        .compose { max-width: 780px; border: 1px solid #D5DDE8; border-radius: 12px; background: #fff; padding: 18px 20px; }
-        .compose label { display: block; font-size: 12px; font-weight: 800; color: #334155; margin: 12px 0 4px; }
-        .compose input[type=text], .compose textarea { width: 100%; padding: 9px 11px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; box-sizing: border-box; }
-        .compose textarea { min-height: 220px; resize: vertical; }
-        .compose .from-note { font-size: 13px; color: #0E1F3D; margin-top: 2px; font-weight: 700; }
-        .compose .compose-file { margin-top: 4px; font: inherit; }
-        .btn-send { margin-top: 16px; padding: 11px 22px; background: #1B4F9C; color: #fff; border: none; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; }
-        .btn-send:hover { background: #143A73; }
-        .send-msg { margin-top: 14px; padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
-        .send-msg.ok { background: rgba(16,185,129,.12); color: #059669; border: 1px solid rgba(16,185,129,.3); }
-        .send-msg.err { background: rgba(239,68,68,.1); color: #dc2626; border: 1px solid rgba(239,68,68,.3); }
-        @media (max-width: 900px){ .mail-cols { grid-template-columns: 1fr; } }
+        /* ── Courriel : la signature du gabarit « Portail du client ». Le titre pose sur le fond,
+           l'adresse et « + Composer » à droite, quatre indicateurs, la carte des dossiers,
+           puis la liste et la lecture (ou la rédaction) en cartes blanches. ── */
+        .mail-wrap { color: #0E1F3D }
+        .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+        .fc-tete .txt { flex: 1 1 260px }
+        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+        .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+        .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+        .fc-tete .btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+        .mail-addr { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: #E3EBF7; color: #143A73; font-weight: 800; font-size: 14px }
+        .fc-btn, a.fc-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer; text-decoration: none }
+        .fc-btn.primaire, a.fc-btn.primaire { padding: 0 20px; border-color: #1B4F9C; background: #1B4F9C; color: #fff; font-weight: 800 }
+        .fc-btn.primaire:hover, a.fc-btn.primaire:hover { background: #143A73; color: #fff }
+        .fc-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px }
+        .fc-kpi { padding: 14px 16px; border-radius: 22px; display: flex; flex-direction: column; gap: 2px; background: #fff; color: #0E1F3D }
+        .fc-kpi .lab { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #44536E; font-size: 14px }
+        .fc-kpi .lab i { width: 10px; height: 10px; border-radius: 50%; flex: none }
+        .fc-kpi .val { font-size: 24px; font-weight: 800; line-height: 1.15 }
+        .fc-kpi .sub { font-size: 14px; color: #44536E }
+        .fc-filtres { padding: 16px 18px; border-radius: 24px; background: #fff; display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: flex-end; margin-bottom: 16px }
+        .fc-groupe { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 800; color: #5B6B86 }
+        .fc-pills { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: #E8EDF5; border-radius: 999px }
+        .fc-pill, a.fc-pill { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px; font-weight: 700; font-size: 14px; font-family: inherit; background: transparent; color: #0E1F3D; cursor: pointer; text-decoration: none }
+        .fc-pill:hover, a.fc-pill:hover { background: rgba(255,255,255,.6); color: #0E1F3D }
+        .fc-pill.on, a.fc-pill.on { background: #fff; box-shadow: 0 1px 2px rgba(14,31,61,.12) }
+        .mail-cols { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 16px; align-items: start }
+        .mail-list { border: 0; border-radius: 24px; background: #fff; padding: 6px 12px 12px; max-height: 70vh; overflow-y: auto }
+        .mrow { display: block; width: 100%; text-align: left; padding: 12px 6px; border: 0; border-top: 1px solid #E3E9F1; background: #fff; cursor: pointer; text-decoration: none; color: inherit; font-family: inherit }
+        .mrow:first-child { border-top: 0 }
+        .mrow:hover { background: #FAFCFF; color: inherit }
+        .mrow .r1 { display: flex; justify-content: space-between; gap: 10px }
+        .mrow .who { font-weight: 800; font-size: 15px; color: #0E1F3D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 230px }
+        .mrow .when { font-size: 13px; color: #44536E; white-space: nowrap }
+        .mrow .subj { font-size: 14px; color: #44536E; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+        .fc-pay { display: inline-block; margin-top: 4px; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; white-space: nowrap }
+        .mail-read { border: 0; border-radius: 24px; background: #fff; padding: 0; min-height: 320px; overflow: hidden }
+        .read-head { padding: 18px 20px; border-bottom: 1px solid #E3E9F1 }
+        .read-subj { font-size: 19px; font-weight: 800; margin: 0 0 8px }
+        .read-meta { font-size: 14px; color: #44536E; line-height: 1.6 }
+        .read-meta b { color: #0E1F3D }
+        .mailframe { width: 100%; height: 55vh; border: 0; background: #fff }
+        .read-empty { padding: 40px 20px; text-align: center; color: #44536E; font-size: 15px; font-weight: 700 }
+        .attach { margin-top: 6px; font-size: 14px; color: #7A5200 }
+        .compose { max-width: 820px; border: 0; border-radius: 24px; background: #fff; padding: 18px 20px }
+        .compose label { display: block; font-size: 13px; font-weight: 800; color: #5B6B86; margin: 12px 0 4px }
+        .compose input[type=text], .compose textarea { width: 100%; min-height: 44px; padding: 9px 14px; border: 1px solid #AEBBCD; border-radius: 12px; font: inherit; box-sizing: border-box }
+        .compose textarea { min-height: 220px; resize: vertical }
+        .compose .from-note { font-size: 14px; color: #0E1F3D; margin-top: 2px; font-weight: 700 }
+        .compose .compose-file { margin-top: 4px; font: inherit }
+        .btn-send { margin-top: 16px; min-height: 44px; padding: 0 22px; background: #1B4F9C; color: #fff; border: 1px solid #1B4F9C; border-radius: 999px; font-weight: 800; font-size: 14px; font-family: inherit; cursor: pointer }
+        .btn-send:hover { background: #143A73 }
+        .send-msg { margin-top: 14px; padding: 12px 16px; border-radius: 16px; font-size: 14px; font-weight: 700 }
+        .send-msg.ok { background: #E3F3EA; color: #0F5A3A }
+        .send-msg.err { background: #FDECEA; color: #A3261C }
     </style>
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="mail-wrap">
-        <div class="mail-head">
-            <h1><i class="ic ic-mail" aria-hidden="true"></i> Courriel</h1>
-            <span class="mail-addr"><asp:Literal ID="litAddr" runat="server" /></span>
+        <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique, le titre,
+             le sous-titre ; à droite l'adresse de la boîte et « + Composer » en pastille bleue. --%>
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+                <h1><asp:Literal ID="litTitre" runat="server" /></h1>
+                <p><asp:Literal ID="litSousTitre" runat="server" /></p>
+            </div>
+            <div class="btns">
+                <span class="mail-addr"><asp:Literal ID="litAddr" runat="server" /></span>
+                <asp:LinkButton ID="lbCompose" runat="server" CssClass="fc-btn primaire" OnClick="lbCompose_Click" CausesValidation="false">+ Composer</asp:LinkButton>
+            </div>
         </div>
 
-        <div class="mail-tabs">
-            <asp:LinkButton ID="lbInbox"   runat="server" CssClass="mail-tab" OnClick="lbInbox_Click"   CausesValidation="false">Réception</asp:LinkButton>
-            <asp:LinkButton ID="lbSent"    runat="server" CssClass="mail-tab" OnClick="lbSent_Click"    CausesValidation="false">Envoyés</asp:LinkButton>
-            <asp:LinkButton ID="lbCompose" runat="server" CssClass="mail-tab" OnClick="lbCompose_Click" CausesValidation="false">Composer</asp:LinkButton>
-        </div>
+        <%-- Les quatre indicateurs : reçus, envoyés, en file, non envoyés. --%>
+        <div class="fc-kpis"><asp:Literal ID="litKpis" runat="server" /></div>
+
+        <%-- Les dossiers en pastilles : Réception, Envoyés. --%>
+        <section class="fc-filtres">
+            <div class="fc-groupe"><asp:Literal ID="litDossier" runat="server" /><div class="fc-pills" role="group">
+                <asp:LinkButton ID="lbInbox" runat="server" CssClass="fc-pill on" OnClick="lbInbox_Click" CausesValidation="false">Réception</asp:LinkButton>
+                <asp:LinkButton ID="lbSent" runat="server" CssClass="fc-pill" OnClick="lbSent_Click" CausesValidation="false">Envoyés</asp:LinkButton>
+            </div></div>
+        </section>
 
         <asp:Panel ID="pnlBrowse" runat="server">
             <div class="mail-cols">
@@ -90,13 +120,13 @@
                         </ItemTemplate>
                     </asp:Repeater>
                     <asp:Panel ID="pnlListEmpty" runat="server" Visible="false">
-                        <div class="read-empty">Aucun message.</div>
+                        <div class="read-empty"><asp:Literal ID="litListEmpty" runat="server" /></div>
                     </asp:Panel>
                 </div>
 
                 <div class="mail-read">
                     <asp:Panel ID="pnlReadEmpty" runat="server">
-                        <div class="read-empty">Sélectionnez un message pour le lire.</div>
+                        <div class="read-empty"><asp:Literal ID="litReadEmpty" runat="server" /></div>
                     </asp:Panel>
                     <asp:Panel ID="pnlRead" runat="server" Visible="false">
                         <div class="read-head">

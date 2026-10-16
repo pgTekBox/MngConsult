@@ -27,6 +27,8 @@ Public Class wbfApprobations
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -37,6 +39,7 @@ Public Class wbfApprobations
 
     ''' <summary>Libellés fixes de la page (fr/en/es).</summary>
     Private Sub ApplyLocalization()
+        litRubrique.Text = T("Mon entreprise", "My business", "Mi empresa")
         litTitle.Text = T("Tâches à approuver", "Tasks awaiting approval", "Tareas por aprobar")
         litLead.Text = T("L'exécuteur de tâches dépose ici ce qu'il s'apprête à faire lorsque la tâche exige une validation. Rien ne s'exécute tant que vous n'avez pas tranché.",
                          "The task executor drops here what it is about to do whenever a task requires validation. Nothing runs until you decide.",
@@ -44,8 +47,11 @@ Public Class wbfApprobations
 
         litStatWaitLabel.Text = T("À approuver", "Awaiting approval", "Por aprobar")
         litStatLateLabel.Text = T("Échéance dépassée", "Past due", "Vencidas")
+        litStatWaitSub.Text = T("en attente de votre décision", "waiting for your decision", "en espera de su decisión")
+        litStatLateSub.Text = T("lancées dès l'approbation", "launched as soon as approved", "lanzadas en cuanto se aprueben")
+        litEtatLbl.Text = T("Afficher", "Show", "Mostrar")
 
-        btnRefresh.Text = "🔄 " & T("Rafraîchir", "Refresh", "Actualizar")
+        btnRefresh.Text = T("Rafraîchir", "Refresh", "Actualizar")
 
         litEmpty.Text = T("Aucune tâche n'attend de décision.", "No task is waiting for a decision.", "Ninguna tarea espera una decisión.")
         litEmptyHint.Text = T("Une tâche n'apparaît ici que si sa définition demande une approbation.",

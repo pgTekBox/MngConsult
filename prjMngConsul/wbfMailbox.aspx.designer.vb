@@ -42,4 +42,25 @@ Partial Public Class wbfMailbox
     Protected WithEvents pnlSendMsg As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litSendMsg As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litTitre control.</summary>
+    Protected WithEvents litTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litSousTitre control.</summary>
+    Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litKpis control.</summary>
+    Protected WithEvents litKpis As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litDossier control.</summary>
+    Protected WithEvents litDossier As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litListEmpty control.</summary>
+    Protected WithEvents litListEmpty As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litReadEmpty control.</summary>
+    Protected WithEvents litReadEmpty As Global.System.Web.UI.WebControls.Literal
+
 End Class

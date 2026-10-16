@@ -1,6 +1,8 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Web.UI.WebControls
+Imports System.Linq
+Imports System.Text
 
 ''' <summary>
 ''' Boîte courriel @60sec.ca de la compagnie courante (service MailService / SrvAI).
@@ -26,13 +28,76 @@ Public Class wbfMailbox
     End Property
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         _addr = GetMailbox()
         litAddr.Text = Server.HtmlEncode(_addr)
         litComposeFrom.Text = Server.HtmlEncode(_addr)
+        ApplyLocalization()
         If Not IsPostBack Then
             ShowMode("inbox")
         End If
     End Sub
+
+    ''' <summary>La tête, les pastilles et les textes vides (fr/en/es).</summary>
+    Private Sub ApplyLocalization()
+        litRubrique.Text = T("Mon entreprise", "My business", "Mi empresa")
+        litTitre.Text = T("Courriel", "Mail", "Correo")
+        litSousTitre.Text = T("La boîte @60sec.ca de votre entreprise : ce que vous recevez, ce que vous envoyez.", "Your company's @60sec.ca mailbox: what you receive, what you send.", "El buzón @60sec.ca de su empresa: lo que recibe, lo que envía.")
+        litDossier.Text = T("Dossier", "Folder", "Carpeta")
+        lbInbox.Text = T("Réception", "Inbox", "Recepción")
+        lbSent.Text = T("Envoyés", "Sent", "Enviados")
+        lbCompose.Text = "+ " & T("Composer", "Compose", "Redactar")
+        litListEmpty.Text = T("Aucun message.", "No message.", "Ningún mensaje.")
+        litReadEmpty.Text = T("Sélectionnez un message pour le lire.", "Select a message to read it.", "Seleccione un mensaje para leerlo.")
+        btnSend.Text = T("Envoyer", "Send", "Enviar")
+    End Sub
+
+    ''' <summary>Sélecteur de langue simple (fr/en/es) pour les libellés de la page.</summary>
+    Protected Function T(fr As String, en As String, es As String) As String
+        Select Case CurrentLang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    ''' <summary>Les quatre indicateurs : reçus, envoyés, en file, non envoyés (sur les 300 derniers).</summary>
+    Private Sub ChargerIndicateurs(dsIn As DataSet, dsOut As DataSet)
+        Dim recus As Integer = 0, envoyes As Integer = 0, enFile As Integer = 0, echecs As Integer = 0
+        If dsIn IsNot Nothing AndAlso dsIn.Tables.Count > 0 Then recus = dsIn.Tables(0).Rows.Count
+        If dsOut IsNot Nothing AndAlso dsOut.Tables.Count > 0 Then
+            For Each r As DataRow In dsOut.Tables(0).Rows
+                If Entier(r("SendWithSuccess")) = 1 Then
+                    envoyes += 1
+                ElseIf Entier(r("ToSend")) = 1 Then
+                    enFile += 1
+                Else
+                    echecs += 1
+                End If
+            Next
+        End If
+        Dim sb As New StringBuilder()
+        sb.Append(Kpi(T("Reçus", "Received", "Recibidos"), recus.ToString(), T("derniers messages", "latest messages", "últimos mensajes"), "#1B4F9C"))
+        sb.Append(Kpi(T("Envoyés", "Sent", "Enviados"), envoyes.ToString(), T("partis de la boîte", "left the mailbox", "salieron del buzón"), "#43B47A"))
+        sb.Append(Kpi(T("En file", "Queued", "En cola"), enFile.ToString(), T("en attente d'envoi", "waiting to be sent", "pendientes de envío"), "#E3B341"))
+        sb.Append(Kpi(T("Non envoyés", "Not sent", "No enviados"), echecs.ToString(), T("à vérifier", "to check", "por revisar"), If(echecs > 0, "#A3261C", "#AEBBCD")))
+        litKpis.Text = sb.ToString()
+    End Sub
+
+    Private Function Kpi(lab As String, val As String, sub_ As String, point As String) As String
+        Return "<div class=""fc-kpi""><span class=""lab""><i style=""background:" & point & """></i>" & Server.HtmlEncode(lab) & "</span>" &
+               "<span class=""val"">" & Server.HtmlEncode(val) & "</span><span class=""sub"">" & Server.HtmlEncode(sub_) & "</span></div>"
+    End Function
+
+    Private Shared Function Entier(o As Object) As Integer
+        If o Is Nothing OrElse IsDBNull(o) Then Return 0
+        Try
+            Return Convert.ToInt32(o)
+        Catch
+            Return 0
+        End Try
+    End Function
 
     ''' <summary>Adresse @60sec.ca de la compagnie ; l'attribue au besoin.</summary>
     Private Function GetMailbox() As String
@@ -75,21 +140,32 @@ Public Class wbfMailbox
         Mode = m
         ClearRead()
 
-        lbInbox.CssClass = "mail-tab" & If(m = "inbox", " active", "")
-        lbSent.CssClass = "mail-tab" & If(m = "sent", " active", "")
-        lbCompose.CssClass = "mail-tab" & If(m = "compose", " active", "")
+        lbInbox.CssClass = "fc-pill" & If(m = "inbox", " on", "")
+        lbSent.CssClass = "fc-pill" & If(m = "sent", " on", "")
+        lbCompose.CssClass = "fc-btn primaire"
 
         pnlBrowse.Visible = (m <> "compose")
         pnlCompose.Visible = (m = "compose")
         rptInbox.Visible = (m = "inbox")
         rptSent.Visible = (m = "sent")
 
+        ' Les deux dossiers sont lus pour les indicateurs ; seul celui du dossier choisi est affiché.
+        Dim dsIn As DataSet = LireDossier("s0616ListInboxForAddress")
+        Dim dsOut As DataSet = LireDossier("s0618ListSentForAddress")
+        ChargerIndicateurs(dsIn, dsOut)
         If m = "inbox" Then
-            BindInbox()
+            BindList(rptInbox, dsIn)
         ElseIf m = "sent" Then
-            BindSent()
+            BindList(rptSent, dsOut)
         End If
     End Sub
+
+    Private Function LireDossier(proc As String) As DataSet
+        Dim p As New Collection
+        p.Add(New SqlParameter("@Addr", _addr))
+        p.Add(New SqlParameter("@Top", 300))
+        Return ExecuteSQLdsMail(proc, p)
+    End Function
 
     ' ---------------------------------------------------------------- Bindings
     Private Sub BindInbox()
@@ -315,7 +391,7 @@ Public Class wbfMailbox
 
     Protected Function SubjectOr(o As Object) As String
         Dim s As String = Val_(o).Trim()
-        Return If(s = "", "(sans sujet)", s)
+        Return If(s = "", T("(sans sujet)", "(no subject)", "(sin asunto)"), s)
     End Function
 
     Protected Function FormatDate(o As Object) As String
@@ -329,11 +405,11 @@ Public Class wbfMailbox
 
     Protected Function SentStatusTag(success As Object, tosend As Object) As String
         If success IsNot Nothing AndAlso Not IsDBNull(success) AndAlso CInt(success) = 1 Then
-            Return "<span class=""tag tag-ok"">envoyé</span>"
+            Return "<span class=""fc-pay"" style=""background:#E3F3EA;color:#0F5A3A"">" & T("envoyé", "sent", "enviado") & "</span>"
         ElseIf tosend IsNot Nothing AndAlso Not IsDBNull(tosend) AndAlso CInt(tosend) = 1 Then
-            Return "<span class=""tag tag-q"">en file</span>"
+            Return "<span class=""fc-pay"" style=""background:#FBF1DC;color:#7A5200"">" & T("en file", "queued", "en cola") & "</span>"
         Else
-            Return "<span class=""tag tag-err"">non envoyé</span>"
+            Return "<span class=""fc-pay"" style=""background:#FDECEA;color:#A3261C"">" & T("non envoyé", "not sent", "no enviado") & "</span>"
         End If
     End Function
 

@@ -48,4 +48,16 @@ Partial Public Class wbfApprobations
     '''<summary>litEmptyHint</summary>
     Protected WithEvents litEmptyHint As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litStatWaitSub control.</summary>
+    Protected WithEvents litStatWaitSub As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litStatLateSub control.</summary>
+    Protected WithEvents litStatLateSub As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litEtatLbl control.</summary>
+    Protected WithEvents litEtatLbl As Global.System.Web.UI.WebControls.Literal
+
 End Class
