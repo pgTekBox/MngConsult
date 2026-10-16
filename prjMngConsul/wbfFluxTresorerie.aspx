@@ -226,6 +226,28 @@
             @page { size: letter portrait; margin: 1.5cm; }
         }
 
+        /* ═══════════════════════════════════════
+           La signature du gabarit « Portail du client » : le titre pose sur le
+           fond (rubrique Rapports, titre, sous-titre, pastilles à droite), la
+           période et le rapport lui-même en cartes blanches arrondies.
+        ═══════════════════════════════════════ */
+        .report-toolbar { padding: 0; border: 0; background: transparent; align-items: flex-end; margin-bottom: 16px }
+        .report-toolbar > div:first-child { flex: 1 1 260px }
+        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+        .report-title { font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D; margin-top: 2px }
+        .report-sub { font-size: 17px; color: #44536E; margin-top: 4px }
+        .report-actions .btn, .report-actions input.btn { min-height: 44px; padding: 0 16px; border: 1px solid #AEBBCD !important; border-radius: 999px; background: #fff !important; color: #0E1F3D !important; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer }
+        .report-actions .btn:hover, .report-actions input.btn:hover { background: #F2F5F9 !important }
+        .report-actions .btn.primaire { padding: 0 20px; border-color: #1B4F9C !important; background: #1B4F9C !important; color: #fff !important; font-weight: 800 }
+        .report-actions .btn.primaire:hover { background: #143A73 !important }
+        .filter-period { padding: 16px 18px; border: 0; border-radius: 24px; background: #fff; margin-bottom: 16px; gap: 10px 12px; align-items: center }
+        .filter-period label { font-size: 13px; font-weight: 800; color: #5B6B86 }
+        .filter-period .riTextBox { min-height: 40px; padding: 0 12px !important; border-radius: 12px !important; border-color: #AEBBCD !important }
+        .filter-period .btn, .filter-period input.btn { min-height: 40px; padding: 0 18px; border: 1px solid #1B4F9C !important; border-radius: 999px; background: #1B4F9C !important; color: #fff !important; font-weight: 800; font-size: 14px; font-family: inherit; cursor: pointer }
+        .filter-period .btn:hover, .filter-period input.btn:hover { background: #143A73 !important }
+        .report-body { background: #fff; border-radius: 24px; padding: 24px 28px }
+        @media print { .report-body { border-radius: 0; padding: 0 !important } .fc-rubrique { display: none } }
+
     </style>
 </asp:Content>
 
@@ -234,13 +256,12 @@
     <%-- Toolbar --%>
     <div class="report-toolbar">
         <div>
+            <div class="fc-rubrique">Rapports</div>
             <div class="report-title">État des flux de trésorerie</div>
             <div class="report-sub"><asp:Label ID="lblInfo" runat="server" /></div>
         </div>
         <div class="report-actions">
-            <button type="button" class="btn" onclick="window.print(); return false;"
-                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">Imprimer / PDF
-           </button>
+            <button type="button" class="btn primaire" onclick="window.print(); return false;">Imprimer / PDF</button>
         </div>
     </div>
 

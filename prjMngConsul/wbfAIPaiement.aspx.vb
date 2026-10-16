@@ -35,6 +35,9 @@ Partial Public Class wbfAIPaiement
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
+
         If Not IsPostBack Then
             PeriodeSel = "3MONTHS"
             ' La catégorie ouverte par défaut (Fournisseur) est gérée côté client via hfCategorieOpen

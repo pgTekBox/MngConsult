@@ -69,6 +69,36 @@
         .nu .btn-primary:hover { box-shadow:0 8px 16px rgba(37,99,235,.3); transform:translateY(-1px); }
 
         .nu .msg-banner { padding:12px 16px; border-radius:12px; font-size:13px; font-weight:600; margin-bottom:14px; }
+        /* ── La signature du gabarit « Portail du client » : le titre pose sur le fond,
+           la progression, le dépôt et les deux sections en cartes blanches arrondies. ── */
+        .nu { padding: 0; color: #0E1F3D }
+        .nu .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+        .nu .fc-tete .txt { flex: 1 1 260px }
+        .nu .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+        .nu .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+        .nu .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+        .nu .progress-wrap { border: 0; border-radius: 24px; box-shadow: none; padding: 16px 18px }
+        .nu .progress-head .lbl { font-size: 14px; color: #44536E }
+        .nu .progress-fill { background: #1B4F9C }
+        .nu .card { border: 0; border-radius: 24px; box-shadow: none }
+        .nu .upload-card { border: 2px dashed #AEBBCD; background: #fff }
+        .nu .dropzone { border-radius: 18px; border-color: #AEBBCD; background: #F2F5F9 }
+        .nu .dropzone:hover, .nu .dropzone.drag { border-color: #1B4F9C; background: #E3EBF7 }
+        .nu .section-label { color: #5B6B86; font-size: 13px }
+        .nu .card-title { font-size: 19px }
+        .nu .field label { font-size: 13px; font-weight: 800; color: #5B6B86 }
+        .nu .field input[type="text"], .nu .field input[type="tel"], .nu .field input[type="email"], .nu .field input[type="date"] { min-height: 44px; padding: 0 14px; border: 1px solid #AEBBCD; border-radius: 12px; font: inherit; font-size: 15px }
+        .nu .field input:focus { border-color: #1B4F9C; box-shadow: 0 0 0 4px rgba(27,79,156,.14) }
+        .nu .btn { min-height: 44px; padding: 0 20px; border-radius: 999px; font-family: inherit }
+        .nu .btn-secondary { background: #fff; border: 1px solid #AEBBCD; color: #0E1F3D }
+        .nu .btn-secondary:hover { background: #F2F5F9 }
+        .nu .btn-primary { background: #1B4F9C; border: 1px solid #1B4F9C; font-weight: 800 }
+        .nu .btn-primary:hover { background: #143A73; box-shadow: none; transform: none }
+        .nu .msg-banner { border-radius: 16px }
+        .nu .upload-msg { border-radius: 14px }
+        .nu .upload-msg.ok { background: #E3F3EA; border: 0; color: #0F5A3A }
+        .nu .upload-msg.err { background: #FDECEA; border: 0; color: #A3261C }
+
     </style>
 </asp:Content>
 
@@ -81,9 +111,14 @@
             <asp:Literal ID="litMessage" runat="server" />
         </asp:Panel>
 
-        <div class="page-title">
-            <h2><%= L("h2") %></h2>
-            <p><%= L("subtitle") %></p>
+        <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique,
+             le titre et le sous-titre. --%>
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique"><%= L("rubrique") %></div>
+                <h1><%= L("h2") %></h1>
+                <p><%= L("subtitle") %></p>
+            </div>
         </div>
 
         <!-- Progression -->

@@ -252,6 +252,26 @@
             margin-bottom: 16px; border-left: 4px solid;
             font-size: 13px;
         }
+        /* ── La signature du gabarit « Portail du client » : la tête pose sur le fond
+           (rubrique Rapports, titre, sous-titre), les cartes arrondies sans ombre. ── */
+        .ai-page { max-width: none; margin: 0; padding: 0; background: transparent; min-height: 0 }
+        .ai-header { background: transparent; border: 0; border-radius: 0; margin: 0 0 16px; padding: 0; align-items: flex-end; flex-wrap: wrap; gap: 12px }
+        .ai-header .left { align-items: flex-end }
+        .ai-header .back-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #AEBBCD; background: #fff; color: #0E1F3D; margin-bottom: 6px }
+        .ai-header .back-btn:hover { background: #F2F5F9 }
+        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+        .ai-header h1 { font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D; margin: 2px 0 0 }
+        .ai-header .subtitle { font-size: 17px; color: #44536E; margin: 4px 0 0 }
+        .ai-header .currency-box, .ai-header .bank-widget { border: 0; border-radius: 22px; background: #fff; box-shadow: none }
+        .ai-page-title h2 { font-size: 19px; font-weight: 800; color: #0E1F3D }
+        .filter-card, .detail-card { border: 0; border-radius: 24px; box-shadow: none }
+        .filter-card-header h3 { font-size: 19px; font-weight: 800; color: #0E1F3D }
+        .category-card { border: 0; border-radius: 24px; box-shadow: none }
+        .period-btn { border-radius: 18px; border-color: #D5DDE8 }
+        .period-btn.active { border-color: #1B4F9C }
+        .status-msg { border-radius: 16px }
+        .empty-state { border-radius: 24px }
+
     </style>
 
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
@@ -291,6 +311,7 @@
                     </svg>
                </button>
                 <div>
+                    <div class="fc-rubrique">Rapports</div>
                     <h1>AI Sales</h1>
                     <p class="subtitle">Gestion intelligente des ventes</p>
                 </div>

@@ -28,6 +28,8 @@ Public Class wbfNewUser
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -50,6 +52,7 @@ Public Class wbfNewUser
         Dim lang As String = CurrentLang
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Mon profil — 60Sec-AI", "My profile — 60Sec-AI", "Mi perfil — 60Sec-AI")
+            Case "rubrique" : Return Choose3(lang, "Administration", "Administration", "Administración")
             Case "h2" : Return Choose3(lang, "Complétez votre profil", "Complete your profile", "Complete su perfil")
             Case "subtitle" : Return Choose3(lang, "Ces informations servent à la facturation et aux déclarations gouvernementales.", "This information is used for billing and government filings.", "Esta información se utiliza para la facturación y las declaraciones gubernamentales.")
             Case "progress" : Return Choose3(lang, "Progression du profil", "Profile completion", "Progreso del perfil")

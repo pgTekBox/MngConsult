@@ -9,6 +9,9 @@ Public Class wbfRapportPlanComptable
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
+
         If Not IsPostBack Then
             ViewState("Filter") = "ALL"
             lblDate.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm")

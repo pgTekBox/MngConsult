@@ -39,6 +39,9 @@ Partial Public Class wbfAISale
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
+
 
         Dim js As String = "var __dispatchTarget = '" & btnDispatchAction.UniqueID & "';"
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "DispatchTarget", js, True)
