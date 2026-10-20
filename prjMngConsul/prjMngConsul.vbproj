@@ -293,6 +293,7 @@
     <Content Include="css\JsonViewer.css" />
     <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
+    <Content Include="css\cabinet-60s.css" />
     <Content Include="css\parametres-60s.css" />
     <Content Include="css\rapports-60s.css" />
     <Content Include="css\telerik-bleumarine.css" />
@@ -496,6 +497,7 @@
     <Content Include="ImportBalanceVerification.aspx" />
     <Content Include="js\JsonView.js" />
     <Content Include="js\RadWindows.js" />
+    <Content Include="js\cabinet-60s.js" />
     <Content Include="js\parametres-60s.js" />
     <Content Include="js\rapports-60s.js" />
     <Content Include="js\viewport.js" />
@@ -637,6 +639,7 @@
     <Content Include="wbfAssistant.aspx" />
     <Content Include="AssistantIA.ashx" />
     <Content Include="ApideckEtat.ashx" />
+    <Content Include="MonCabinet.ashx" />
     <Content Include="AssistantCompte.ashx" />
     <Content Include="wbfAppointmentEdit.aspx" />
     <Content Include="wbfAutoPayAuthorizations.aspx" />
@@ -1451,6 +1454,9 @@
     </Compile>
     <Compile Include="ApideckEtat.ashx.vb">
       <DependentUpon>ApideckEtat.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="MonCabinet.ashx.vb">
+      <DependentUpon>MonCabinet.ashx</DependentUpon>
     </Compile>
     <Compile Include="AssistantCompte.ashx.vb">
       <DependentUpon>AssistantCompte.ashx</DependentUpon>

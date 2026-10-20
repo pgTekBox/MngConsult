@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -122,6 +122,7 @@
                         <tr><td><span class="chemin">Employés</span></td><td>Les fiches de vos employés.</td><td><a href="employes.html">Employés</a></td></tr>
                         <tr><td><span class="chemin">Courriel</span></td><td>La boîte courriel de la compagnie (adresse @60sec.ca) : courriels envoyés et reçus.</td><td><a href="courriel.html">Courriel</a></td></tr>
                         <tr><td><span class="chemin">Tâches à approuver</span></td><td>Les éléments en attente de votre approbation. Une <strong>pastille</strong> sur l’entrée affiche le nombre de tâches en attente.</td><td><a href="approbations.html">Approbations</a></td></tr>
+                        <tr><td><span class="chemin">Mon accompagnement › Mon cabinet comptable</span></td><td>Une fenêtre par-dessus la page : votre cabinet comptable, qui fait quoi au nom de votre entreprise, et l’annuaire des cabinets certifiés.</td><td><a href="#fr-mon-cabinet">Cette page</a></td></tr>
                         <tr><td><span class="chemin">Rapports › Plan comptable</span></td><td>Le plan comptable imprimable avec les soldes.</td><td><a href="rapports.html">Rapports</a></td></tr>
                         <tr><td><span class="chemin">Rapports › État des résultats</span></td><td>Revenus, dépenses et bénéfice net d’une période.</td><td><a href="rapports.html">Rapports</a></td></tr>
                         <tr><td><span class="chemin">Rapports › Bilan</span></td><td>Actif, passif et capitaux propres à une date.</td><td><a href="rapports.html">Rapports</a></td></tr>
@@ -141,6 +142,69 @@
                 </table>
                 <div class="piege" data-titre="Piège">Si vous n’êtes pas administrateur, l’entrée <span class="chemin">Utilisateurs</span> vous renvoie au Tableau de bord sans message. Demandez à un administrateur de la compagnie de créer ou de modifier les comptes.</div>
                 <div class="note" data-titre="Bon à savoir">Toutes les données affichées dans les écrans du menu sont filtrées sur la compagnie active. Un comptable qui change de compagnie dans l’en-tête voit le menu se rafraîchir avec les données de cette compagnie.</div>
+            </section>
+
+            <section id="fr-mon-cabinet">
+                <h2>Mon cabinet comptable</h2>
+                <p>Menu <span class="chemin">Mon accompagnement › Mon cabinet comptable</span>. La fenêtre s’ouvre par-dessus la page où vous êtes ; elle se ferme par <kbd>Fermer</kbd> ou <kbd>Échap</kbd>. Titre « Mon cabinet comptable », sous-titre « Votre cabinet, ce qu’il fait au nom de votre entreprise et ce que vous gardez. »</p>
+                <h3>Les trois onglets</h3>
+                <ul>
+                    <li><strong>« Mon cabinet »</strong> : le cabinet choisi, la répartition en bref, l’accès et les garde-fous.</li>
+                    <li><strong>« Qui fait quoi »</strong> : la répartition des 24 activités. Sa pastille donne le nombre d’activités confiées au cabinet (« Mon cabinet » ou « Ensemble ») ; elle passe <strong>en rouge</strong> et donne alors le nombre de paires de tâches à séparer.</li>
+                    <li><strong>« Cabinets certifiés »</strong> : l’annuaire, avec le nombre de cabinets.</li>
+                </ul>
+                <p>Les flèches <kbd>←</kbd> et <kbd>→</kbd> passent d’un onglet à l’autre. Le dernier onglet ouvert est retenu pendant la session.</p>
+
+                <h3>Onglet « Mon cabinet »</h3>
+                <p><strong>Sans cabinet</strong> : « Vous n’avez pas encore de cabinet comptable », avec <kbd>Voir les cabinets certifiés</kbd> (ouvre l’onglet de l’annuaire) et <kbd>Inviter mon comptable</kbd>, qui ouvre votre messagerie avec un message d’invitation prêt à envoyer.</p>
+                <p><strong>Avec un cabinet</strong> :</p>
+                <ul>
+                    <li>La fiche du cabinet : ses initiales, son nom, le responsable, la ville, le téléphone, puis des pastilles — la certification, la pastille « Répartition à envoyer au cabinet » (tant que vous ne l’avez pas envoyée) ou « Répartition proposée le &lt;date&gt; », et les langues. <kbd>Écrire</kbd> ouvre votre messagerie vers le cabinet ; <kbd>Site web</kbd> ouvre son site.</li>
+                    <li>« Qui fait quoi, en bref » : trois tuiles, <strong>Vous</strong> (activités que vous gardez), <strong>Mon cabinet</strong> (faites en votre nom) et <strong>Ensemble</strong> (le cabinet prépare, vous approuvez), avec leur nombre, et une barre de couleur qui montre la proportion de chacune. Un clic sur une tuile ou sur <kbd>Modifier la répartition</kbd> ouvre l’onglet « Qui fait quoi ».</li>
+                    <li><kbd>Changer de cabinet</kbd> ouvre l’annuaire ; votre répartition est conservée.</li>
+                    <li>« Retirer ce cabinet » : un premier clic transforme le lien en « Confirmer : retirer &lt;cabinet&gt; » ; cliquez une seconde fois dans les 6 secondes pour confirmer, sinon le lien revient à son état normal.</li>
+                </ul>
+                <p><strong>« Accès et garde-fous »</strong> — ce qui protège votre entreprise quand le cabinet agit en son nom :</p>
+                <ul>
+                    <li><strong>Clé comptable</strong> : lue en lecture seule dans <span class="chemin">Paramètres › Comptable</span>. « Clé créée (••••1234) » montre ses 4 derniers caractères : le cabinet consulte vos données sans être un utilisateur de votre compte. Sinon : « Aucune clé pour l’instant. Créez-la dans Paramètres › Comptable, puis donnez-la à votre cabinet. » Le lien « Ouvrir Paramètres › Comptable » y mène. La clé ne se modifie pas ici.</li>
+                    <li><strong>Plafond par paiement</strong> : pour chaque activité de paiement confiée à « Mon cabinet », son plafond (par exemple « Payer les factures fournisseurs : 5 000 $ »). Au-delà, votre approbation est demandée. Si aucune ne l’est : « Le cabinet ne paie rien seul : chaque paiement passe par votre approbation. »</li>
+                    <li><strong>Séparation des tâches</strong> : le nombre de paires de tâches incompatibles confiées au cabinet, ou « Aucune paire de tâches incompatibles n’est confiée à une seule partie. » <kbd>Voir le détail</kbd> ouvre « Qui fait quoi ».</li>
+                    <li><strong>Vous gardez le contrôle</strong> : vous pouvez changer la répartition ou retirer votre cabinet en tout temps ; les honoraires, s’il y en a, relèvent du cabinet.</li>
+                </ul>
+
+                <h3>Onglet « Qui fait quoi »</h3>
+                <p>24 activités, en 7 domaines : <strong>Tenue de livres</strong>, <strong>Facturation et encaissements</strong>, <strong>Paiements au nom de l’entreprise</strong>, <strong>Paie et employés</strong>, <strong>Taxes et gouvernements</strong>, <strong>Fin d’exercice</strong>, <strong>Suivi et conseil</strong>. Chaque domaine indique combien de ses activités sont « avec le cabinet ».</p>
+                <ul>
+                    <li>Pour chaque activité, choisissez <strong>Vous</strong>, <strong>Mon cabinet</strong> ou <strong>Ensemble</strong>. « Ensemble » veut dire que le cabinet prépare et que vous approuvez ; une ligne précise ce que cela signifie pour l’activité (par exemple, pour « Payer les factures fournisseurs » : « Le cabinet prépare le paiement ; vous l’approuvez. »).</li>
+                    <li>Les 4 activités de « Suivi et conseil » (répondre à vos questions, vous prévenir d’un manque de liquidités, vous proposer un rendez-vous de conseil, vous envoyer des documents à signer) se choisissent entre <strong>Mon cabinet</strong> et <strong>Non merci</strong>.</li>
+                    <li>Les boutons de filtre « Tout (24) » et un par domaine n’affichent qu’une partie de la liste. <kbd>Répartition suggérée</kbd> remet toutes les activités à la répartition proposée par défaut, et les plafonds à leur valeur par défaut.</li>
+                    <li><strong>Plafond par paiement</strong> : « Payer les factures fournisseurs », « Payer les remises DAS », « Payer la TPS/TVQ due » et « Rembourser les dépenses d’employés », mis à « Mon cabinet », affichent « Le cabinet paie à votre place jusqu’à [5 000] $ par paiement ; au-delà, vous approuvez. » Changez le montant dans le champ (5 000 $ par défaut).</li>
+                    <li><strong>Séparation des tâches</strong> : quatre paires ne doivent pas être faites par la même personne — « Saisir les factures fournisseurs » et « Payer les factures fournisseurs » ; « Préparer la paie » et « Approuver la paie » ; « Émettre les factures » et « Enregistrer les encaissements » ; « Corriger une écriture » et « Rapprocher les comptes bancaires ». Si les deux sont confiées au cabinet (« Mon cabinet » ou « Ensemble »), un avertissement jaune indique que deux personnes différentes du cabinet devront s’en charger, ou que vous gardez l’une des deux.</li>
+                    <li>La barre foncée du bas résume : « N pour vous · N pour le cabinet · N ensemble · N à séparer ». <kbd>Copier</kbd> copie la répartition en texte ; <kbd>Imprimer</kbd> l’imprime ; <kbd>Envoyer à &lt;cabinet&gt;</kbd> ouvre votre messagerie vers le cabinet avec la répartition et marque la fiche « Répartition proposée le … ». Sans cabinet, le bouton devient <kbd>Choisir un cabinet</kbd>.</li>
+                </ul>
+
+                <h3>Onglet « Cabinets certifiés »</h3>
+                <ul>
+                    <li>L’annuaire des cabinets certifiés 60secondes. Le champ de recherche filtre les cartes à mesure (nom, responsable, ville, langues, spécialités, description) ; le nombre de cabinets trouvés est affiché.</li>
+                    <li>Chaque carte offre <kbd>Écrire</kbd>, <kbd>Site web</kbd> et le téléphone, ainsi que <kbd>Choisir ce cabinet</kbd>. Sur le cabinet choisi, le bouton devient « Votre cabinet » et la carte est surlignée en vert.</li>
+                    <li>En bas : « Votre comptable n’est pas dans la liste ? » avec <kbd>Inviter mon comptable</kbd>.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <p>Ils s’affichent quelques secondes en bas de la fenêtre :</p>
+                <ul>
+                    <li><span class="msg">« &lt;cabinet&gt; est maintenant votre cabinet. »</span> — premier choix d’un cabinet.</li>
+                    <li><span class="msg">« Cabinet changé. Votre répartition est conservée. »</span> — vous avez choisi un autre cabinet.</li>
+                    <li><span class="msg">« &lt;cabinet&gt; n’est plus votre cabinet. »</span> — le retrait est confirmé.</li>
+                    <li><span class="msg">« Répartition suggérée appliquée. »</span> — après <kbd>Répartition suggérée</kbd>.</li>
+                    <li><span class="msg">« Répartition copiée. »</span> — le texte est dans le presse-papiers.</li>
+                    <li><span class="msg">« Copie impossible dans cette fenêtre. »</span> — le navigateur refuse la copie ; utilisez <kbd>Imprimer</kbd> ou <kbd>Envoyer à &lt;cabinet&gt;</kbd>.</li>
+                    <li><span class="msg">« Plafond enregistré : N $. »</span> — le plafond d’un paiement est changé.</li>
+                    <li><span class="msg">« Enregistrement impossible pour l’instant. Réessayez. »</span> — le dernier changement n’a pas pu être enregistré pour la compagnie ; refaites-le dans un moment.</li>
+                </ul>
+
+                <div class="note" data-titre="Bon à savoir">Le cabinet choisi et la répartition sont <strong>enregistrés pour la compagnie</strong>, automatiquement, à chaque changement : il n’y a pas de bouton Enregistrer. Tous les utilisateurs de la compagnie voient le même choix, sur n’importe quel ordinateur, et effacer les données du navigateur ne l’efface plus.</div>
+                <div class="attention" data-titre="Attention">Rien n’est envoyé au cabinet automatiquement : il ne connaît votre répartition que si vous la lui transmettez (<kbd>Envoyer à &lt;cabinet&gt;</kbd>, <kbd>Copier</kbd> ou <kbd>Imprimer</kbd>). Choisir un cabinet ici ne lui donne <strong>aucun accès</strong> : l’accès passe par la clé comptable (<span class="chemin">Paramètres › Comptable</span>) ou par l’ajout du comptable comme utilisateur.</div>
             </section>
 
             <section id="fr-tableau-de-bord">
@@ -279,6 +343,11 @@
                 <details><summary>La tuile « Factures » du panneau Modules ouvre les factures fournisseurs. Où sont mes factures clients ?</summary><p>Dans <span class="chemin">Ventes › Factures clients</span>, ou par le bouton <kbd>Nouvelle facture</kbd> du bandeau pour en créer une.</p></details>
                 <details><summary>Je change la langue avec FR / EN / ES, mais elle revient au français à ma prochaine connexion.</summary><p>La langue est mémorisée pour la session seulement. Choisissez-la de nouveau après la connexion ; vos données et vos paramètres ne sont pas touchés.</p></details>
                 <details><summary>Je ne vois pas l’entrée « Utilisateurs » ou elle me renvoie au Tableau de bord.</summary><p>Cet écran est réservé aux administrateurs. Votre rôle est affiché sous votre nom dans l’en-tête. Demandez à un administrateur de la compagnie de gérer les comptes.</p></details>
+                <details><summary>Mon cabinet a-t-il accès à mes données quand je le choisis ?</summary><p>Non. Choisir un cabinet dans <span class="chemin">Mon cabinet comptable</span> ne lui donne aucun accès. Pour qu’il travaille dans votre dossier, remettez-lui la clé comptable (<span class="chemin">Paramètres › Comptable</span>) ou ajoutez votre comptable comme utilisateur. Le bloc « Accès et garde-fous » indique si une clé existe.</p></details>
+                <details><summary>Le cabinet est-il averti de mon choix ou de ma répartition ?</summary><p>Non, rien ne lui est envoyé automatiquement. Transmettez-lui la répartition vous-même : <kbd>Envoyer à &lt;cabinet&gt;</kbd> ouvre votre messagerie avec le texte prêt (la fiche passe alors à « Répartition proposée le … »), ou utilisez <kbd>Copier</kbd> ou <kbd>Imprimer</kbd>.</p></details>
+                <details><summary>Les autres utilisateurs de la compagnie voient-ils mon cabinet et ma répartition ?</summary><p>Oui. Le choix du cabinet et la répartition sont enregistrés pour la compagnie, automatiquement, à chaque changement. Tous ses utilisateurs voient le même choix, sur n’importe quel ordinateur, et effacer les données du navigateur ne l’efface pas. Si « Enregistrement impossible pour l’instant. Réessayez. » s’affiche, le dernier changement n’a pas été enregistré : refaites-le.</p></details>
+                <details><summary>Que veut dire « Ensemble » dans « Qui fait quoi » ?</summary><p>Le cabinet prépare et vous approuvez. Sous l’activité, une ligne précise ce que cela signifie pour elle, par exemple « Le cabinet calcule ; vous approuvez le prélèvement. »</p></details>
+                <details><summary>Pourquoi un avertissement jaune de séparation des tâches ?</summary><p>Vous avez confié au cabinet (« Mon cabinet » ou « Ensemble ») les deux tâches d’une paire incompatible, par exemple saisir et payer les factures fournisseurs. Deux personnes différentes du cabinet devront s’en charger ; sinon, gardez l’une des deux pour vous.</p></details>
             </section>
 
             <section id="fr-glossaire">
@@ -295,8 +364,10 @@
                         <tr><td>Comptabilisée (facture)</td><td>Facture passée du statut brouillon au statut définitif : elle reçoit son numéro et ses écritures sont inscrites au journal. Seules ces factures entrent dans la carte Revenus.</td></tr>
                         <tr><td>Essai</td><td>Période gratuite de 30 jours qui commence à l’enregistrement du profil de l’entreprise. Son état est affiché par la pastille sablier de l’en-tête.</td></tr>
                         <tr><td>Pastille</td><td>Petit indicateur de l’en-tête (essai, Square, Plaid, Stripe) ou du menu (nombre de tâches à approuver).</td></tr>
+                        <tr><td>Plafond par paiement</td><td>Montant jusqu’auquel le cabinet paie seul au nom de l’entreprise (5 000 $ par défaut) ; au-delà, votre approbation est demandée. Se règle dans Mon cabinet comptable › Qui fait quoi.</td></tr>
                         <tr><td>Plaid</td><td>Service de connexion bancaire qui importe vos transactions dans le Relevé bancaire.</td></tr>
                         <tr><td>Se souvenir de moi</td><td>Option de la page de connexion qui conserve votre session 7 jours grâce à un cookie sécurisé, renouvelé à chaque retour et effacé à la déconnexion.</td></tr>
+                        <tr><td>Séparation des tâches</td><td>Règle qui veut que deux tâches incompatibles (par exemple saisir et payer les factures fournisseurs) ne soient pas faites par la même personne. Mon cabinet comptable signale les paires confiées toutes deux au cabinet.</td></tr>
                         <tr><td>Square</td><td>Processeur de paiement pour encaisser vos clients par carte ou Interac et synchroniser factures et paiements.</td></tr>
                         <tr><td>Stripe</td><td>Service qui gère votre abonnement 60Sec-AI et les paiements automatiques à vos fournisseurs (carte ou débit préautorisé).</td></tr>
                         <tr><td>TPS / TVQ</td><td>Taxe sur les produits et services (5 %) et taxe de vente du Québec (9,975 %), calculées automatiquement sur les factures.</td></tr>
@@ -407,6 +478,7 @@
                         <tr><td><span class="chemin">Employees</span></td><td>Your employee records.</td><td><a href="employes.html">Employees</a></td></tr>
                         <tr><td><span class="chemin">Mail</span></td><td>The company mailbox (@60sec.ca address): sent and received e-mails.</td><td><a href="courriel.html">Mail</a></td></tr>
                         <tr><td><span class="chemin">Tasks to approve</span></td><td>Items awaiting your approval. A <strong>badge</strong> on the entry shows the number of pending tasks.</td><td><a href="approbations.html">Approvals</a></td></tr>
+                        <tr><td><span class="chemin">Mon accompagnement › Mon cabinet comptable</span> (My support › My accounting firm)</td><td>A window over the page: your accounting firm, who does what on behalf of your business, and the directory of certified firms.</td><td><a href="#en-my-firm">This page</a></td></tr>
                         <tr><td><span class="chemin">Reports › Chart of accounts</span></td><td>The printable chart of accounts with balances.</td><td><a href="rapports.html">Reports</a></td></tr>
                         <tr><td><span class="chemin">Reports › Income statement</span></td><td>Revenue, expenses and net income for a period.</td><td><a href="rapports.html">Reports</a></td></tr>
                         <tr><td><span class="chemin">Reports › Balance sheet</span></td><td>Assets, liabilities and equity at a date.</td><td><a href="rapports.html">Reports</a></td></tr>
@@ -426,6 +498,69 @@
                 </table>
                 <div class="piege" data-titre="Pitfall">If you are not an administrator, the <span class="chemin">Users</span> entry sends you back to the Dashboard without any message. Ask an administrator of the company to create or modify accounts.</div>
                 <div class="note" data-titre="Good to know">All data shown in the menu screens is filtered on the active company. An accountant who switches company in the header sees the menu refresh with that company’s data.</div>
+            </section>
+
+            <section id="en-my-firm">
+                <h2>My accounting firm (Mon cabinet comptable)</h2>
+                <p>Menu <span class="chemin">Mon accompagnement › Mon cabinet comptable</span>. The window opens over the page you are on; it closes with <kbd>Fermer</kbd> or <kbd>Esc</kbd>. Its texts are in French only: title “Mon cabinet comptable”, subtitle “Votre cabinet, ce qu’il fait au nom de votre entreprise et ce que vous gardez.” (your firm, what it does on behalf of your business and what you keep).</p>
+                <h3>The three tabs</h3>
+                <ul>
+                    <li><strong>“Mon cabinet”</strong> (my firm): the chosen firm, the split at a glance, access and safeguards.</li>
+                    <li><strong>“Qui fait quoi”</strong> (who does what): the split of the 24 activities. Its pill gives the number of activities involving the firm (“Mon cabinet” or “Ensemble”); it turns <strong>red</strong> and then gives the number of task pairs to separate.</li>
+                    <li><strong>“Cabinets certifiés”</strong> (certified firms): the directory, with the number of firms.</li>
+                </ul>
+                <p>The <kbd>←</kbd> and <kbd>→</kbd> arrow keys switch tabs. The last tab opened is remembered during the session.</p>
+
+                <h3>“Mon cabinet” tab</h3>
+                <p><strong>No firm yet</strong>: “Vous n’avez pas encore de cabinet comptable” (you do not have an accounting firm yet), with <kbd>Voir les cabinets certifiés</kbd> (see the certified firms — opens the directory tab) and <kbd>Inviter mon comptable</kbd> (invite my accountant), which opens your mail client with a ready-made invitation.</p>
+                <p><strong>With a firm</strong>:</p>
+                <ul>
+                    <li>The firm’s card: initials, name, person in charge, city, phone, then pills — the certification, the pill “Répartition à envoyer au cabinet” (split to send to the firm, until you have sent it) or “Répartition proposée le &lt;date&gt;” (split proposed on …), and the languages. <kbd>Écrire</kbd> (write) opens your mail client to the firm; <kbd>Site web</kbd> opens its website.</li>
+                    <li>“Qui fait quoi, en bref” (who does what, at a glance): three tiles, <strong>Vous</strong> (you — activities you keep), <strong>Mon cabinet</strong> (my firm — done on your behalf) and <strong>Ensemble</strong> (together — the firm prepares, you approve), with their count, and a colored bar showing the share of each. A click on a tile or on <kbd>Modifier la répartition</kbd> (change the split) opens the “Qui fait quoi” tab.</li>
+                    <li><kbd>Changer de cabinet</kbd> (change firm) opens the directory; your split is kept.</li>
+                    <li>“Retirer ce cabinet” (remove this firm): a first click turns the link into “Confirmer : retirer &lt;firm&gt;”; click a second time within 6 seconds to confirm, otherwise the link goes back to normal.</li>
+                </ul>
+                <p><strong>“Accès et garde-fous”</strong> (access and safeguards) — what protects your business when the firm acts on its behalf:</p>
+                <ul>
+                    <li><strong>Clé comptable</strong> (accountant key): read, read-only, from <span class="chemin">Paramètres › Comptable</span> (Settings › Accountant). “Clé créée (••••1234)” shows its last 4 characters: the firm views your data without being a user of your account. Otherwise: “Aucune clé pour l’instant. Créez-la dans Paramètres › Comptable, puis donnez-la à votre cabinet.” (no key yet; create it there, then give it to your firm). The link “Ouvrir Paramètres › Comptable” leads there. The key cannot be changed here.</li>
+                    <li><strong>Plafond par paiement</strong> (ceiling per payment): for each payment activity given to “Mon cabinet”, its ceiling (for example “Payer les factures fournisseurs : 5 000 $”). Beyond it, your approval is required. If there is none: “Le cabinet ne paie rien seul : chaque paiement passe par votre approbation.” (the firm pays nothing alone).</li>
+                    <li><strong>Séparation des tâches</strong> (segregation of duties): the number of incompatible task pairs given to the firm, or “Aucune paire de tâches incompatibles n’est confiée à une seule partie.” <kbd>Voir le détail</kbd> (see details) opens “Qui fait quoi”.</li>
+                    <li><strong>Vous gardez le contrôle</strong> (you stay in control): you can change the split or remove your firm at any time; fees, if any, are the firm’s business.</li>
+                </ul>
+
+                <h3>“Qui fait quoi” tab</h3>
+                <p>24 activities in 7 domains: <strong>Tenue de livres</strong> (bookkeeping), <strong>Facturation et encaissements</strong> (invoicing and receipts), <strong>Paiements au nom de l’entreprise</strong> (payments on behalf of the business), <strong>Paie et employés</strong> (payroll and employees), <strong>Taxes et gouvernements</strong> (taxes and governments), <strong>Fin d’exercice</strong> (year-end), <strong>Suivi et conseil</strong> (follow-up and advice). Each domain shows how many of its activities are “avec le cabinet” (with the firm).</p>
+                <ul>
+                    <li>For each activity, choose <strong>Vous</strong>, <strong>Mon cabinet</strong> or <strong>Ensemble</strong>. “Ensemble” means the firm prepares and you approve; a line spells out what it means for that activity (for example, for “Payer les factures fournisseurs”: “Le cabinet prépare le paiement ; vous l’approuvez.”).</li>
+                    <li>The 4 “Suivi et conseil” activities (answering your questions, warning you of a cash shortfall, proposing an advisory meeting, sending you documents to sign) are chosen between <strong>Mon cabinet</strong> and <strong>Non merci</strong> (no thanks).</li>
+                    <li>The filter buttons “Tout (24)” (all) and one per domain show only part of the list. <kbd>Répartition suggérée</kbd> (suggested split) resets every activity to the default suggested split, and the ceilings to their default value.</li>
+                    <li><strong>Ceiling per payment</strong>: “Payer les factures fournisseurs” (pay supplier invoices), “Payer les remises DAS” (pay source-deduction remittances), “Payer la TPS/TVQ due” (pay GST/QST due) and “Rembourser les dépenses d’employés” (reimburse employee expenses), when set to “Mon cabinet”, show “Le cabinet paie à votre place jusqu’à [5 000] $ par paiement ; au-delà, vous approuvez.” (the firm pays for you up to … per payment; beyond, you approve). Change the amount in the field (5,000 $ by default).</li>
+                    <li><strong>Segregation of duties</strong>: four pairs must not be done by the same person — “Saisir les factures fournisseurs” / “Payer les factures fournisseurs” (enter / pay supplier invoices); “Préparer la paie” / “Approuver la paie” (prepare / approve payroll); “Émettre les factures” / “Enregistrer les encaissements” (issue invoices / record receipts); “Corriger une écriture” / “Rapprocher les comptes bancaires” (correct an entry / reconcile bank accounts). When both are given to the firm (“Mon cabinet” or “Ensemble”), a yellow warning says two different people at the firm must handle them, or that you keep one of them.</li>
+                    <li>The dark bar at the bottom sums up: “N pour vous · N pour le cabinet · N ensemble · N à séparer” (for you, for the firm, together, to separate). <kbd>Copier</kbd> (copy) copies the split as text; <kbd>Imprimer</kbd> (print) prints it; <kbd>Envoyer à &lt;firm&gt;</kbd> (send to …) opens your mail client to the firm with the split and marks the card “Répartition proposée le …”. With no firm, the button becomes <kbd>Choisir un cabinet</kbd> (choose a firm).</li>
+                </ul>
+
+                <h3>“Cabinets certifiés” tab</h3>
+                <ul>
+                    <li>The directory of firms certified by 60secondes. The search field filters the cards as you type (name, person in charge, city, languages, specialties, description); the number of firms found is shown.</li>
+                    <li>Each card offers <kbd>Écrire</kbd>, <kbd>Site web</kbd> and the phone number, plus <kbd>Choisir ce cabinet</kbd> (choose this firm). On the chosen firm, the button becomes “Votre cabinet” (your firm) and the card is highlighted in green.</li>
+                    <li>At the bottom: “Votre comptable n’est pas dans la liste ?” (your accountant is not on the list?) with <kbd>Inviter mon comptable</kbd>.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <p>They show for a few seconds at the bottom of the window:</p>
+                <ul>
+                    <li><span class="msg">“&lt;firm&gt; est maintenant votre cabinet.”</span> — first choice of a firm (… is now your firm).</li>
+                    <li><span class="msg">“Cabinet changé. Votre répartition est conservée.”</span> — you chose another firm; your split is kept.</li>
+                    <li><span class="msg">“&lt;firm&gt; n’est plus votre cabinet.”</span> — the removal is confirmed.</li>
+                    <li><span class="msg">“Répartition suggérée appliquée.”</span> — after <kbd>Répartition suggérée</kbd>.</li>
+                    <li><span class="msg">“Répartition copiée.”</span> — the text is on the clipboard.</li>
+                    <li><span class="msg">“Copie impossible dans cette fenêtre.”</span> — the browser refuses the copy; use <kbd>Imprimer</kbd> or <kbd>Envoyer à &lt;firm&gt;</kbd>.</li>
+                    <li><span class="msg">“Plafond enregistré : N $.”</span> — a payment ceiling was changed.</li>
+                    <li><span class="msg">“Enregistrement impossible pour l’instant. Réessayez.”</span> — the last change could not be saved for the company (saving impossible for now, try again); redo it in a moment.</li>
+                </ul>
+
+                <div class="note" data-titre="Good to know">The chosen firm and the split are <strong>saved for the company</strong>, automatically, at each change: there is no Save button. Every user of the company sees the same choice, on any computer, and clearing the browser data no longer erases it.</div>
+                <div class="attention" data-titre="Caution">Nothing is sent to the firm automatically: it only knows your split if you pass it on (<kbd>Envoyer à &lt;firm&gt;</kbd>, <kbd>Copier</kbd> or <kbd>Imprimer</kbd>). Choosing a firm here gives it <strong>no access</strong>: access goes through the accountant key (<span class="chemin">Paramètres › Comptable</span>) or by adding the accountant as a user.</div>
             </section>
 
             <section id="en-dashboard">
@@ -564,6 +699,11 @@
                 <details><summary>The “Invoices” tile of the Modules panel opens supplier invoices. Where are my customer invoices?</summary><p>In <span class="chemin">Sales › Customer invoices</span>, or through the banner’s <kbd>New invoice</kbd> button to create one.</p></details>
                 <details><summary>I change the language with FR / EN / ES, but it goes back to French at my next sign-in.</summary><p>The language is remembered for the session only. Choose it again after signing in; your data and settings are not affected.</p></details>
                 <details><summary>I do not see the “Users” entry, or it sends me back to the Dashboard.</summary><p>This screen is reserved for administrators. Your role is shown under your name in the header. Ask an administrator of the company to manage accounts.</p></details>
+                <details><summary>Does my firm get access to my data when I choose it?</summary><p>No. Choosing a firm in <span class="chemin">Mon cabinet comptable</span> gives it no access. For it to work in your file, give it the accountant key (<span class="chemin">Paramètres › Comptable</span>) or add your accountant as a user. The “Accès et garde-fous” box shows whether a key exists.</p></details>
+                <details><summary>Is the firm notified of my choice or my split?</summary><p>No, nothing is sent to it automatically. Pass the split on yourself: <kbd>Envoyer à &lt;firm&gt;</kbd> opens your mail client with the text ready (the card then shows “Répartition proposée le …”), or use <kbd>Copier</kbd> or <kbd>Imprimer</kbd>.</p></details>
+                <details><summary>Do the other users of the company see my firm and my split?</summary><p>Yes. The firm choice and the split are saved for the company, automatically, at each change. All its users see the same choice, on any computer, and clearing the browser data does not erase it. If “Enregistrement impossible pour l’instant. Réessayez.” appears, the last change was not saved: redo it.</p></details>
+                <details><summary>What does “Ensemble” mean in “Qui fait quoi”?</summary><p>The firm prepares and you approve. Under the activity, a line spells out what it means for it, for example “Le cabinet calcule ; vous approuvez le prélèvement.” (the firm calculates; you approve the withdrawal).</p></details>
+                <details><summary>Why a yellow segregation-of-duties warning?</summary><p>You gave the firm (“Mon cabinet” or “Ensemble”) both tasks of an incompatible pair, for example entering and paying supplier invoices. Two different people at the firm must handle them; otherwise, keep one of the two for yourself.</p></details>
             </section>
 
             <section id="en-glossary">
@@ -580,8 +720,10 @@
                         <tr><td>Posted (invoice)</td><td>Invoice moved from draft to final status: it receives its number and its entries are recorded in the journal. Only these invoices enter the Revenue card.</td></tr>
                         <tr><td>Trial</td><td>Free 30-day period that starts when the company profile is saved. Its state is shown by the hourglass badge in the header.</td></tr>
                         <tr><td>Badge</td><td>Small indicator in the header (trial, Square, Plaid, Stripe) or in the menu (number of tasks to approve).</td></tr>
+                        <tr><td>Ceiling per payment</td><td>Amount up to which the firm pays alone on behalf of the business (5,000 $ by default); beyond it, your approval is required. Set in Mon cabinet comptable › Qui fait quoi.</td></tr>
                         <tr><td>Plaid</td><td>Bank connection service that imports your transactions into the Bank statement.</td></tr>
                         <tr><td>Remember me</td><td>Sign-in page option that keeps your session for 7 days through a secure cookie, renewed at every return and cleared at sign-out.</td></tr>
+                        <tr><td>Segregation of duties</td><td>Rule that two incompatible tasks (for example entering and paying supplier invoices) are not done by the same person. Mon cabinet comptable flags the pairs both given to the firm.</td></tr>
                         <tr><td>Square</td><td>Payment processor to collect from your customers by card or Interac and synchronise invoices and payments.</td></tr>
                         <tr><td>Stripe</td><td>Service that handles your 60Sec-AI subscription and automatic payments to your suppliers (card or pre-authorised debit).</td></tr>
                         <tr><td>GST / QST</td><td>Goods and services tax (5%) and Quebec sales tax (9.975%), calculated automatically on invoices.</td></tr>
@@ -692,6 +834,7 @@
                         <tr><td><span class="chemin">Empleados</span></td><td>Las fichas de sus empleados.</td><td><a href="employes.html">Empleados</a></td></tr>
                         <tr><td><span class="chemin">Correo</span></td><td>El buzón de correo de la empresa (dirección @60sec.ca): correos enviados y recibidos.</td><td><a href="courriel.html">Correo</a></td></tr>
                         <tr><td><span class="chemin">Tareas por aprobar</span></td><td>Los elementos en espera de su aprobación. Un <strong>indicador</strong> en la entrada muestra el número de tareas pendientes.</td><td><a href="approbations.html">Aprobaciones</a></td></tr>
+                        <tr><td><span class="chemin">Mon accompagnement › Mon cabinet comptable</span> (Mi acompañamiento › Mi despacho contable)</td><td>Una ventana sobre la página: su despacho contable, quién hace qué en nombre de su empresa, y el directorio de despachos certificados.</td><td><a href="#es-mi-despacho">Esta página</a></td></tr>
                         <tr><td><span class="chemin">Informes › Plan contable</span></td><td>El plan de cuentas imprimible con los saldos.</td><td><a href="rapports.html">Informes</a></td></tr>
                         <tr><td><span class="chemin">Informes › Estado de resultados</span></td><td>Ingresos, gastos y beneficio neto de un período.</td><td><a href="rapports.html">Informes</a></td></tr>
                         <tr><td><span class="chemin">Informes › Balance general</span></td><td>Activo, pasivo y capital propio a una fecha.</td><td><a href="rapports.html">Informes</a></td></tr>
@@ -711,6 +854,69 @@
                 </table>
                 <div class="piege" data-titre="Trampa">Si no es administrador, la entrada <span class="chemin">Usuarios</span> lo devuelve al Panel de control sin mensaje. Pida a un administrador de la empresa que cree o modifique las cuentas.</div>
                 <div class="note" data-titre="Conviene saber">Todos los datos mostrados en las pantallas del menú se filtran por la empresa activa. Un contador que cambia de empresa en la cabecera ve el menú actualizarse con los datos de esa empresa.</div>
+            </section>
+
+            <section id="es-mi-despacho">
+                <h2>Mi despacho contable (Mon cabinet comptable)</h2>
+                <p>Menú <span class="chemin">Mon accompagnement › Mon cabinet comptable</span>. La ventana se abre sobre la página en la que está; se cierra con <kbd>Fermer</kbd> o <kbd>Esc</kbd>. Sus textos están solo en francés: título « Mon cabinet comptable », subtítulo « Votre cabinet, ce qu’il fait au nom de votre entreprise et ce que vous gardez. » (su despacho, lo que hace en nombre de su empresa y lo que usted conserva).</p>
+                <h3>Las tres pestañas</h3>
+                <ul>
+                    <li><strong>« Mon cabinet »</strong> (mi despacho): el despacho elegido, el reparto en resumen, el acceso y las salvaguardas.</li>
+                    <li><strong>« Qui fait quoi »</strong> (quién hace qué): el reparto de las 24 actividades. Su píldora da el número de actividades confiadas al despacho (« Mon cabinet » o « Ensemble »); pasa a <strong>rojo</strong> y entonces da el número de pares de tareas por separar.</li>
+                    <li><strong>« Cabinets certifiés »</strong> (despachos certificados): el directorio, con el número de despachos.</li>
+                </ul>
+                <p>Las flechas <kbd>←</kbd> y <kbd>→</kbd> pasan de una pestaña a otra. La última pestaña abierta se recuerda durante la sesión.</p>
+
+                <h3>Pestaña « Mon cabinet »</h3>
+                <p><strong>Sin despacho</strong>: « Vous n’avez pas encore de cabinet comptable » (todavía no tiene despacho contable), con <kbd>Voir les cabinets certifiés</kbd> (ver los despachos certificados — abre la pestaña del directorio) e <kbd>Inviter mon comptable</kbd> (invitar a mi contador), que abre su correo con un mensaje de invitación listo para enviar.</p>
+                <p><strong>Con un despacho</strong>:</p>
+                <ul>
+                    <li>La ficha del despacho: sus iniciales, su nombre, el responsable, la ciudad, el teléfono y luego píldoras — la certificación, la píldora « Répartition à envoyer au cabinet » (reparto por enviar al despacho, mientras no lo haya enviado) o « Répartition proposée le &lt;fecha&gt; » (reparto propuesto el …), y los idiomas. <kbd>Écrire</kbd> (escribir) abre su correo hacia el despacho; <kbd>Site web</kbd> abre su sitio.</li>
+                    <li>« Qui fait quoi, en bref » (quién hace qué, en resumen): tres mosaicos, <strong>Vous</strong> (usted — actividades que conserva), <strong>Mon cabinet</strong> (mi despacho — hechas en su nombre) y <strong>Ensemble</strong> (juntos — el despacho prepara, usted aprueba), con su número, y una barra de color que muestra la proporción de cada uno. Un clic en un mosaico o en <kbd>Modifier la répartition</kbd> (modificar el reparto) abre la pestaña « Qui fait quoi ».</li>
+                    <li><kbd>Changer de cabinet</kbd> (cambiar de despacho) abre el directorio; su reparto se conserva.</li>
+                    <li>« Retirer ce cabinet » (retirar este despacho): un primer clic convierte el enlace en « Confirmer : retirer &lt;despacho&gt; »; haga clic una segunda vez en los 6 segundos para confirmar; si no, el enlace vuelve a su estado normal.</li>
+                </ul>
+                <p><strong>« Accès et garde-fous »</strong> (acceso y salvaguardas) — lo que protege a su empresa cuando el despacho actúa en su nombre:</p>
+                <ul>
+                    <li><strong>Clé comptable</strong> (clave de contador): leída, solo en lectura, en <span class="chemin">Paramètres › Comptable</span> (Ajustes › Contador). « Clé créée (••••1234) » muestra sus 4 últimos caracteres: el despacho consulta sus datos sin ser usuario de su cuenta. Si no: « Aucune clé pour l’instant. Créez-la dans Paramètres › Comptable, puis donnez-la à votre cabinet. » (todavía no hay clave; créela allí y désela a su despacho). El enlace « Ouvrir Paramètres › Comptable » lleva allí. La clave no se modifica aquí.</li>
+                    <li><strong>Plafond par paiement</strong> (tope por pago): para cada actividad de pago confiada a « Mon cabinet », su tope (por ejemplo « Payer les factures fournisseurs : 5 000 $ »). Por encima, se pide su aprobación. Si no hay ninguna: « Le cabinet ne paie rien seul : chaque paiement passe par votre approbation. » (el despacho no paga nada solo).</li>
+                    <li><strong>Séparation des tâches</strong> (separación de funciones): el número de pares de tareas incompatibles confiadas al despacho, o « Aucune paire de tâches incompatibles n’est confiée à une seule partie. » <kbd>Voir le détail</kbd> (ver el detalle) abre « Qui fait quoi ».</li>
+                    <li><strong>Vous gardez le contrôle</strong> (usted conserva el control): puede cambiar el reparto o retirar su despacho en todo momento; los honorarios, si los hay, corresponden al despacho.</li>
+                </ul>
+
+                <h3>Pestaña « Qui fait quoi »</h3>
+                <p>24 actividades en 7 ámbitos: <strong>Tenue de livres</strong> (teneduría de libros), <strong>Facturation et encaissements</strong> (facturación y cobros), <strong>Paiements au nom de l’entreprise</strong> (pagos en nombre de la empresa), <strong>Paie et employés</strong> (nómina y empleados), <strong>Taxes et gouvernements</strong> (impuestos y gobiernos), <strong>Fin d’exercice</strong> (cierre del ejercicio), <strong>Suivi et conseil</strong> (seguimiento y asesoría). Cada ámbito indica cuántas de sus actividades están « avec le cabinet » (con el despacho).</p>
+                <ul>
+                    <li>Para cada actividad, elija <strong>Vous</strong>, <strong>Mon cabinet</strong> o <strong>Ensemble</strong>. « Ensemble » quiere decir que el despacho prepara y usted aprueba; una línea precisa lo que significa para esa actividad (por ejemplo, para « Payer les factures fournisseurs »: « Le cabinet prépare le paiement ; vous l’approuvez. »).</li>
+                    <li>Las 4 actividades de « Suivi et conseil » (responder a sus preguntas, avisarle de una falta de liquidez, proponerle una cita de asesoría, enviarle documentos para firmar) se eligen entre <strong>Mon cabinet</strong> y <strong>Non merci</strong> (no, gracias).</li>
+                    <li>Los botones de filtro « Tout (24) » (todo) y uno por ámbito muestran solo una parte de la lista. <kbd>Répartition suggérée</kbd> (reparto sugerido) devuelve todas las actividades al reparto propuesto por defecto, y los topes a su valor por defecto.</li>
+                    <li><strong>Tope por pago</strong>: « Payer les factures fournisseurs » (pagar las facturas de proveedores), « Payer les remises DAS » (pagar las remesas de retenciones), « Payer la TPS/TVQ due » (pagar la TPS/TVQ adeudada) y « Rembourser les dépenses d’employés » (reembolsar los gastos de empleados), puestas en « Mon cabinet », muestran « Le cabinet paie à votre place jusqu’à [5 000] $ par paiement ; au-delà, vous approuvez. » (el despacho paga en su lugar hasta … por pago; por encima, usted aprueba). Cambie el importe en el campo (5 000 $ por defecto).</li>
+                    <li><strong>Separación de funciones</strong>: cuatro pares no deben ser hechos por la misma persona — « Saisir les factures fournisseurs » / « Payer les factures fournisseurs » (registrar / pagar las facturas de proveedores); « Préparer la paie » / « Approuver la paie » (preparar / aprobar la nómina); « Émettre les factures » / « Enregistrer les encaissements » (emitir las facturas / registrar los cobros); « Corriger une écriture » / « Rapprocher les comptes bancaires » (corregir un asiento / conciliar las cuentas bancarias). Si las dos se confían al despacho (« Mon cabinet » o « Ensemble »), un aviso amarillo indica que dos personas distintas del despacho deberán encargarse de ellas, o que usted conserve una de las dos.</li>
+                    <li>La barra oscura de abajo resume: « N pour vous · N pour le cabinet · N ensemble · N à séparer » (para usted, para el despacho, juntos, por separar). <kbd>Copier</kbd> (copiar) copia el reparto en texto; <kbd>Imprimer</kbd> (imprimir) lo imprime; <kbd>Envoyer à &lt;despacho&gt;</kbd> (enviar a …) abre su correo hacia el despacho con el reparto y marca la ficha « Répartition proposée le … ». Sin despacho, el botón pasa a ser <kbd>Choisir un cabinet</kbd> (elegir un despacho).</li>
+                </ul>
+
+                <h3>Pestaña « Cabinets certifiés »</h3>
+                <ul>
+                    <li>El directorio de despachos certificados por 60secondes. El campo de búsqueda filtra las tarjetas al escribir (nombre, responsable, ciudad, idiomas, especialidades, descripción); se muestra el número de despachos encontrados.</li>
+                    <li>Cada tarjeta ofrece <kbd>Écrire</kbd>, <kbd>Site web</kbd> y el teléfono, además de <kbd>Choisir ce cabinet</kbd> (elegir este despacho). En el despacho elegido, el botón pasa a ser « Votre cabinet » (su despacho) y la tarjeta se resalta en verde.</li>
+                    <li>Abajo: « Votre comptable n’est pas dans la liste ? » (¿su contador no está en la lista?) con <kbd>Inviter mon comptable</kbd>.</li>
+                </ul>
+
+                <h3>Mensajes</h3>
+                <p>Se muestran unos segundos al pie de la ventana:</p>
+                <ul>
+                    <li><span class="msg">« &lt;despacho&gt; est maintenant votre cabinet. »</span> — primera elección de un despacho (… es ahora su despacho).</li>
+                    <li><span class="msg">« Cabinet changé. Votre répartition est conservée. »</span> — eligió otro despacho; su reparto se conserva.</li>
+                    <li><span class="msg">« &lt;despacho&gt; n’est plus votre cabinet. »</span> — el retiro está confirmado.</li>
+                    <li><span class="msg">« Répartition suggérée appliquée. »</span> — después de <kbd>Répartition suggérée</kbd>.</li>
+                    <li><span class="msg">« Répartition copiée. »</span> — el texto está en el portapapeles.</li>
+                    <li><span class="msg">« Copie impossible dans cette fenêtre. »</span> — el navegador rechaza la copia; use <kbd>Imprimer</kbd> o <kbd>Envoyer à &lt;despacho&gt;</kbd>.</li>
+                    <li><span class="msg">« Plafond enregistré : N $. »</span> — se cambió el tope de un pago.</li>
+                    <li><span class="msg">« Enregistrement impossible pour l’instant. Réessayez. »</span> — el último cambio no pudo guardarse para la empresa (guardado imposible por ahora, reintente); vuelva a hacerlo en un momento.</li>
+                </ul>
+
+                <div class="note" data-titre="Conviene saber">El despacho elegido y el reparto se <strong>guardan para la empresa</strong>, automáticamente, en cada cambio: no hay botón Guardar. Todos los usuarios de la empresa ven la misma elección, en cualquier computadora, y borrar los datos del navegador ya no la borra.</div>
+                <div class="attention" data-titre="Atención">No se envía nada al despacho automáticamente: solo conoce su reparto si usted se lo transmite (<kbd>Envoyer à &lt;despacho&gt;</kbd>, <kbd>Copier</kbd> o <kbd>Imprimer</kbd>). Elegir un despacho aquí <strong>no le da ningún acceso</strong>: el acceso pasa por la clave de contador (<span class="chemin">Paramètres › Comptable</span>) o por añadir al contador como usuario.</div>
             </section>
 
             <section id="es-panel-de-control">
@@ -849,6 +1055,11 @@
                 <details><summary>El mosaico «Facturas» del panel Módulos abre las facturas de proveedores. ¿Dónde están mis facturas de clientes?</summary><p>En <span class="chemin">Ventas › Facturas de clientes</span>, o mediante el botón <kbd>Nueva factura</kbd> de la banda para crear una.</p></details>
                 <details><summary>Cambio el idioma con FR / EN / ES, pero vuelve al francés en mi siguiente inicio de sesión.</summary><p>El idioma se memoriza solo durante la sesión. Elíjalo de nuevo tras iniciar sesión; sus datos y su configuración no se ven afectados.</p></details>
                 <details><summary>No veo la entrada «Usuarios» o me devuelve al Panel de control.</summary><p>Esa pantalla está reservada a los administradores. Su rol se muestra bajo su nombre en la cabecera. Pida a un administrador de la empresa que gestione las cuentas.</p></details>
+                <details><summary>¿Mi despacho tiene acceso a mis datos cuando lo elijo?</summary><p>No. Elegir un despacho en <span class="chemin">Mon cabinet comptable</span> no le da ningún acceso. Para que trabaje en su expediente, entréguele la clave de contador (<span class="chemin">Paramètres › Comptable</span>) o añada a su contador como usuario. El bloque « Accès et garde-fous » indica si existe una clave.</p></details>
+                <details><summary>¿Se avisa al despacho de mi elección o de mi reparto?</summary><p>No, no se le envía nada automáticamente. Transmítale usted mismo el reparto: <kbd>Envoyer à &lt;despacho&gt;</kbd> abre su correo con el texto listo (la ficha pasa entonces a « Répartition proposée le … »), o use <kbd>Copier</kbd> o <kbd>Imprimer</kbd>.</p></details>
+                <details><summary>¿Los demás usuarios de la empresa ven mi despacho y mi reparto?</summary><p>Sí. La elección del despacho y el reparto se guardan para la empresa, automáticamente, en cada cambio. Todos sus usuarios ven la misma elección, en cualquier computadora, y borrar los datos del navegador no la borra. Si aparece « Enregistrement impossible pour l’instant. Réessayez. », el último cambio no se guardó: vuelva a hacerlo.</p></details>
+                <details><summary>¿Qué quiere decir « Ensemble » en « Qui fait quoi »?</summary><p>El despacho prepara y usted aprueba. Bajo la actividad, una línea precisa lo que significa para ella, por ejemplo « Le cabinet calcule ; vous approuvez le prélèvement. » (el despacho calcula; usted aprueba el cargo).</p></details>
+                <details><summary>¿Por qué un aviso amarillo de separación de funciones?</summary><p>Confió al despacho (« Mon cabinet » o « Ensemble ») las dos tareas de un par incompatible, por ejemplo registrar y pagar las facturas de proveedores. Dos personas distintas del despacho deberán encargarse de ellas; si no, conserve una de las dos.</p></details>
             </section>
 
             <section id="es-glosario">
@@ -865,8 +1076,10 @@
                         <tr><td>Contabilizada (factura)</td><td>Factura que pasa del estado borrador al estado definitivo: recibe su número y sus asientos se registran en el diario. Solo esas facturas entran en la tarjeta Ingresos.</td></tr>
                         <tr><td>Prueba</td><td>Período gratuito de 30 días que comienza al guardar el perfil de la empresa. Su estado se muestra con el indicador de reloj de arena de la cabecera.</td></tr>
                         <tr><td>Indicador</td><td>Pequeño distintivo de la cabecera (prueba, Square, Plaid, Stripe) o del menú (número de tareas por aprobar).</td></tr>
+                        <tr><td>Tope por pago</td><td>Importe hasta el cual el despacho paga solo en nombre de la empresa (5 000 $ por defecto); por encima, se pide su aprobación. Se ajusta en Mon cabinet comptable › Qui fait quoi.</td></tr>
                         <tr><td>Plaid</td><td>Servicio de conexión bancaria que importa sus transacciones en el Extracto bancario.</td></tr>
                         <tr><td>Recordarme</td><td>Opción de la página de inicio de sesión que conserva su sesión 7 días mediante una cookie segura, renovada en cada regreso y borrada al cerrar sesión.</td></tr>
+                        <tr><td>Separación de funciones</td><td>Regla según la cual dos tareas incompatibles (por ejemplo registrar y pagar las facturas de proveedores) no las hace la misma persona. Mon cabinet comptable señala los pares confiados ambos al despacho.</td></tr>
                         <tr><td>Square</td><td>Procesador de pago para cobrar a sus clientes con tarjeta o Interac y sincronizar facturas y pagos.</td></tr>
                         <tr><td>Stripe</td><td>Servicio que gestiona su suscripción a 60Sec-AI y los pagos automáticos a sus proveedores (tarjeta o débito preautorizado).</td></tr>
                         <tr><td>GST/TPS y QST/TVQ</td><td>Impuesto sobre bienes y servicios (5 %) e impuesto de venta de Quebec (9,975 %), calculados automáticamente en las facturas.</td></tr>

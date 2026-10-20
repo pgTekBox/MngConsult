@@ -65,10 +65,11 @@
     .cab-vide[hidden] { display: none }
 </style>
 <asp:Literal ID="litPopupCss" runat="server" />
+<link rel="stylesheet" href="css/cabinet-60s.css?v=2026102001" />
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
-<div class="cab-page">
+<div class="cab-page" data-cie="<%= Company.ToString("N") %>">
 
     <section class="boite">
         <div class="cab-head">
@@ -116,4 +117,5 @@
         });
     })();
 </script>
+<script src="js/cabinet-60s.js?v=2026102002"></script>
 </asp:Content>
