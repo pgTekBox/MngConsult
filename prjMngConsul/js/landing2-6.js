@@ -225,8 +225,10 @@ window.I18N=(function(){
       var fs=f.querySelector('fieldset'); if(fs) fs.disabled=false;
       var lg=f.querySelector('legend'); if(lg) lg.hidden=true;
       var aside=f.closest('.portal'); if(aside){var c=aside.querySelector('.chip'); if(c) c.hidden=true; var so=aside.querySelector('.soon'); if(so) so.hidden=true;}
-      f.addEventListener('submit',function(e){e.preventDefault(); var em=($('f-email')||{}).value||''; location.href='wbfLogin.aspx?lang='+encodeURIComponent(chosen)+(em?'&email='+encodeURIComponent(em):'');});
-      document.querySelectorAll('header a[href="#connexion"]').forEach(function(a){ a.addEventListener('click',function(e){e.preventDefault(); location.href='wbfLogin.aspx?lang='+encodeURIComponent(chosen);}); });
+      // La connexion s'ouvre en fenêtre par-dessus la page (wbfLogin.aspx?popup=1 dans un cadre) ;
+      // une fois connecté, la page de connexion envoie la fenêtre entière au tableau de bord.
+      f.addEventListener('submit',function(e){e.preventDefault(); var em=($('f-email')||{}).value||''; ouvrirConnexion60(chosen, em);});
+      document.querySelectorAll('header a[href="#connexion"]').forEach(function(a){ a.addEventListener('click',function(e){e.preventDefault(); ouvrirConnexion60(chosen, '');}); });
     })();
 
 
@@ -769,3 +771,54 @@ window.I18N=(function(){
   setLang(start,false);
   openHash();
 })();
+
+/* Fenêtre de connexion par-dessus la page d'accueil : un cadre vers
+   wbfLogin.aspx?popup=1, fermable (×, Échap ou clic sur le fond). */
+function ouvrirConnexion60(lang, email){
+  var ancien=document.getElementById('cx60'); if(ancien) ancien.parentNode.removeChild(ancien);
+  if(!document.getElementById('cx60-style')){
+    var st=document.createElement('style'); st.id='cx60-style';
+    st.textContent=
+      '#cx60{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;'+
+      'background:rgba(14,31,61,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}'+
+      '#cx60 .cx60-boite{position:relative;width:430px;max-width:100%}'+
+      '#cx60 iframe{display:block;width:100%;height:520px;max-height:calc(100vh - 32px);border:0;border-radius:20px;background:#fff;box-shadow:0 20px 50px rgba(15,23,42,.30)}'+
+      '#cx60 .cx60-fermer{position:absolute;top:10px;right:10px;z-index:1;width:36px;height:36px;border:0;border-radius:999px;'+
+      'background:rgba(14,31,61,.06);color:#0E1F3D;font-size:22px;line-height:36px;cursor:pointer}'+
+      '#cx60 .cx60-fermer:hover{background:rgba(14,31,61,.12)}';
+    document.head.appendChild(st);
+  }
+  var lien=document.createElement('a'); lien.href='Default.aspx';
+  var retour=lien.pathname.charAt(0)==='/'?lien.pathname:'/'+lien.pathname;
+  var url='wbfLogin.aspx?popup=1&lang='+encodeURIComponent(lang||'fr')+
+          '&ReturnUrl='+encodeURIComponent(retour)+(email?'&email='+encodeURIComponent(email):'');
+  var libelle=(lang==='en')?'Sign in':(lang==='es')?'Iniciar sesión':'Connexion';
+  var fermerTxt=(lang==='en')?'Close':(lang==='es')?'Cerrar':'Fermer';
+
+  var fond=document.createElement('div'); fond.id='cx60';
+  fond.setAttribute('role','dialog'); fond.setAttribute('aria-modal','true'); fond.setAttribute('aria-label',libelle);
+  var boite=document.createElement('div'); boite.className='cx60-boite';
+  var btn=document.createElement('button'); btn.type='button'; btn.className='cx60-fermer';
+  btn.setAttribute('aria-label',fermerTxt); btn.title=fermerTxt; btn.textContent='×';
+  var cadre=document.createElement('iframe'); cadre.title=libelle; cadre.src=url;
+  boite.appendChild(btn); boite.appendChild(cadre); fond.appendChild(boite);
+  document.body.appendChild(fond);
+
+  var debordement=document.documentElement.style.overflow;
+  document.documentElement.style.overflow='hidden';
+  function ajuster(){
+    try{ var d=cadre.contentWindow.document, c=d.querySelector('.login-card');
+         cadre.style.height=(c?c.offsetHeight:d.documentElement.scrollHeight)+'px'; }catch(x){}
+  }
+  function fermer(){
+    if(fond.parentNode) fond.parentNode.removeChild(fond);
+    document.documentElement.style.overflow=debordement;
+    document.removeEventListener('keydown',touche); window.removeEventListener('resize',ajuster);
+  }
+  function touche(e){ if(e.key==='Escape') fermer(); }
+  cadre.addEventListener('load',function(){ ajuster(); try{cadre.contentWindow.focus();}catch(x){} });
+  btn.addEventListener('click',fermer);
+  fond.addEventListener('click',function(e){ if(e.target===fond) fermer(); });
+  document.addEventListener('keydown',touche);
+  window.addEventListener('resize',ajuster);
+}

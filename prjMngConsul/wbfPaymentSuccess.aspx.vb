@@ -29,15 +29,15 @@ Public Class wbfPaymentSuccess
 
     Private Sub ApplyLocalization()
         Page.Title = L("pageTitle")
-        lnkDashboard.Text = L("fillProfile")
-        lnkDashboard.NavigateUrl = "~/wbfNewUser.aspx?lang=" & CurrentLang
+        lnkDashboard.Text = L("goDashboard")
+        lnkDashboard.NavigateUrl = "~/Default.aspx?lang=" & CurrentLang
     End Sub
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         ' Verifier que l'utilisateur est toujours connecte
         If UserId = 0 Then
-            Response.Redirect("~/wbfLogin.aspx?lang=" & CurrentLang)
+            Response.Redirect("~/Default.aspx?lang=" & CurrentLang)
             Return
         End If
 
@@ -64,7 +64,7 @@ Public Class wbfPaymentSuccess
             Case "planLabel" : Return Choose3(lang, "Forfait", "Plan", "Plan")
             Case "nextBillingLabel" : Return Choose3(lang, "Prochaine facturation", "Next billing", "Próxima facturación")
             Case "amountLabel" : Return Choose3(lang, "Montant payé", "Amount paid", "Importe pagado")
-            Case "fillProfile" : Return Choose3(lang, "Remplissez votre profil →", "Complete your profile →", "Complete su perfil →")
+            Case "goDashboard" : Return Choose3(lang, "Accéder à mon tableau de bord →", "Go to my dashboard →", "Ir a mi panel →")
             Case "footer" : Return Choose3(lang, "Un courriel de confirmation a été envoyé à votre adresse.", "A confirmation email has been sent to your address.", "Se ha enviado un correo de confirmación a su dirección.")
             Case "cardValue" : Return Choose3(lang, "Carte de crédit · via Stripe", "Credit card · via Stripe", "Tarjeta de crédito · vía Stripe")
             Case "trialEndSuffix" : Return Choose3(lang, " (fin de l'essai gratuit)", " (end of free trial)", " (fin del período de prueba)")

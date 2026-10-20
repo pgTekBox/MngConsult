@@ -76,7 +76,7 @@ Public NotInheritable Class clsAide
             Case "wbfemployees", "wbfemployeeedit", "wbfmailboxreset" : Return "employes"
             Case "wbfmailbox" : Return "courriel"
             Case "wbfapprobations" : Return "approbations"
-            Case "wbfnewuser", "wbfusers", "wbfuseredit", "wbfsetting", "wbfpaymentprocessors", "squareoauth",
+            Case "wbfusers", "wbfuseredit", "wbfsetting", "wbfpaymentprocessors", "squareoauth",
                  "wbfautopayauthorizations", "wbfautopayschedule", "wbfautopayhistory", "wbfscheduleautopay",
                  "wbfpayment", "wbfpaymentsuccess", "wbflogin", "wbfregister", "wbfforgotpassword", "wbfresetpassword",
                  "wbfactivate", "wbfverifycompanymail", "wbfassistant" : Return "administration"

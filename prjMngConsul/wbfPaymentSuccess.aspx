@@ -235,7 +235,7 @@
 
             <div class="actions">
                 <asp:HyperLink ID="lnkDashboard" runat="server"
-                    NavigateUrl="~/wbfNewUser.aspx" CssClass="btn btn-primary" />
+                    NavigateUrl="~/Default.aspx" CssClass="btn btn-primary" />
             </div>
 
             <div class="footer-info">

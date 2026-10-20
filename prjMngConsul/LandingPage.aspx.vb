@@ -4,7 +4,7 @@
 ''' js/landing2-1..5.js. Tout est côté client (trois langues, démonstrations,
 ''' calculateur) ; le serveur ne fait que versionner les fichiers liés pour
 ''' que le navigateur ne garde pas une vieille copie. Deux branchements réels :
-''' « Se connecter » mène à wbfLogin.aspx, et « Réserver ma place » enregistre
+''' « Se connecter » ouvre wbfLogin.aspx en fenêtre par-dessus la page, et « Réserver ma place » enregistre
 ''' la demande par LandingReservation.ashx.
 ''' L'ancienne page (contenu en base, page Application mobile) reste servie par
 ''' LandingPageV1.aspx.
@@ -20,7 +20,7 @@ Partial Public Class LandingPage
     Protected ReadOnly Property VersionFichiers As String
         Get
             Dim plusRecent As Long = 1
-            For Each f As String In New String() {"~/css/landing2.css", "~/js/landing2-1.js", "~/js/landing2-2.js", "~/js/landing2-3.js", "~/js/landing2-4.js", "~/js/landing2-5.js"}
+            For Each f As String In New String() {"~/css/landing2.css", "~/js/landing2-1.js", "~/js/landing2-2.js", "~/js/landing2-3.js", "~/js/landing2-4.js", "~/js/landing2-5.js", "~/js/landing2-6.js", "~/js/landing2-7.js"}
                 Dim p As String = Server.MapPath(f)
                 If IO.File.Exists(p) Then plusRecent = Math.Max(plusRecent, IO.File.GetLastWriteTimeUtc(p).Ticks)
             Next

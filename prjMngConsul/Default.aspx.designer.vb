@@ -13,25 +13,9 @@ Option Explicit On
 
 Partial Public Class _Default
 
-    Protected WithEvents litSalut As Global.System.Web.UI.WebControls.Literal
+    '''<summary>rwInvoice control.</summary>
+    Protected WithEvents rwInvoice As Global.Telerik.Web.UI.RadWindow
 
-    Protected WithEvents litSalutSous As Global.System.Web.UI.WebControls.Literal
-
-    Protected WithEvents litAttention As Global.System.Web.UI.WebControls.Literal
-
-    Protected WithEvents litMois As Global.System.Web.UI.WebControls.Literal
-
-    Protected WithEvents litCabinet As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>litKpiCustomers control.</summary>
-    Protected WithEvents litKpiCustomers As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>litKpiSupplierInvoices control.</summary>
-    Protected WithEvents litKpiSupplierInvoices As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>litKpiProducts control.</summary>
-    Protected WithEvents litKpiProducts As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>litKpiRevenue control.</summary>
-    Protected WithEvents litKpiRevenue As Global.System.Web.UI.WebControls.Literal
+    '''<summary>rwRdv control.</summary>
+    Protected WithEvents rwRdv As Global.Telerik.Web.UI.RadWindow
 End Class

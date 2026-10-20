@@ -5,13 +5,51 @@ Imports BCrypt.Net
 Public Class wbfLogin
     Inherits clsData
 
+    ''' <summary>
+    ''' Vrai quand la page s'ouvre en fenêtre par-dessus le tableau de bord
+    ''' (Default.aspx l'affiche dans un iframe avec ?popup=1).
+    ''' </summary>
+    Protected ReadOnly Property EnFenetre As Boolean
+        Get
+            Return Request.QueryString("popup") = "1"
+        End Get
+    End Property
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         ApplyLocalization()
 
         ' Si déjà connecté, rediriger vers la page d'accueil
         If Not IsPostBack AndAlso Not UserId = 0 Then
-            Response.Redirect("~/Default.aspx")
+            Aller("~/Default.aspx")
         End If
+
+        ' Courriel déjà saisi sur la page d'accueil (?email=) : on le reprend.
+        If Not IsPostBack Then
+            Dim em As String = If(Request.QueryString("email"), "").Trim()
+            If em <> "" AndAlso em.Length <= 256 Then
+                tbEmail.Text = em
+                tbPassword.Attributes("autofocus") = "autofocus"
+                tbEmail.Attributes.Remove("autofocus")
+            End If
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Redirige. En fenêtre, c'est la page entière (le tableau de bord autour du
+    ''' cadre) qui change d'adresse, pas seulement le contenu de l'iframe.
+    ''' </summary>
+    Private Sub Aller(url As String)
+        If Not EnFenetre Then
+            Response.Redirect(url)
+            Return
+        End If
+        Dim cible As String = ResolveUrl(url)
+        Response.Clear()
+        Response.ContentType = "text/html"
+        Response.Write("<!DOCTYPE html><html><head><meta charset=""utf-8"" /></head><body><script>" &
+                       "window.top.location.replace(" & HttpUtility.JavaScriptStringEncode(cible, True) & ");" &
+                       "</script></body></html>")
+        Response.End()
     End Sub
 
     ''' <summary>
@@ -107,7 +145,7 @@ Public Class wbfLogin
 
         ' Vérifier qu'il est actif
         If Not CBool(userRow("IsActive")) Then
-            Response.Redirect("~/wbfRegister.aspx?ac=" & userRow("ActivationToken").ToString() & "&lang=" & CurrentLang)
+            Aller("~/wbfRegister.aspx?ac=" & userRow("ActivationToken").ToString() & "&lang=" & CurrentLang)
             Return
         End If
 
@@ -123,14 +161,13 @@ Public Class wbfLogin
         pa.Add(New SqlParameter("@CompanyGUID", CType(userRow("CompanyGUID"), Guid)))
         Dim dsa As DataSet = ExecuteSQLds("s0313GetSubscriptionForPaiement", pa)
         If dsa.Tables(0).Rows.Count = 1 Then
-            Response.Redirect("~/wbfPayment.aspx?lang=" & CurrentLang)
+            Aller("~/wbfPayment.aspx?lang=" & CurrentLang)
             Return
         End If
 
-        ' Note : l'onboarding (wbfNewUser) fait partie du parcours d'inscription
-        ' (wbfPaymentSuccess → « Remplir mon profil »), pas de la connexion.
-        ' À la connexion, l'utilisateur va directement au tableau de bord (Default),
-        ' qui intègre désormais la boîte de bienvenue/onboarding.
+        ' Note : après l'inscription, wbfPaymentSuccess mène au tableau de bord (Default),
+        ' qui intègre la boîte de bienvenue/onboarding.
+        ' À la connexion, l'utilisateur va aussi directement au tableau de bord.
 
 
 
@@ -143,11 +180,13 @@ Public Class wbfLogin
         UpdateLastLogin(userId)
 
         ' Redirection
+        ' (« //site » ou « /\site » mèneraient hors du site : refusés.)
         Dim returnUrl As String = Request.QueryString("ReturnUrl")
-        If Not String.IsNullOrEmpty(returnUrl) AndAlso returnUrl.StartsWith("/") Then
-            Response.Redirect(returnUrl)
+        If Not String.IsNullOrEmpty(returnUrl) AndAlso returnUrl.StartsWith("/") AndAlso
+           Not returnUrl.StartsWith("//") AndAlso Not returnUrl.StartsWith("/\") Then
+            Aller(returnUrl)
         Else
-            Response.Redirect("~/Default.aspx")
+            Aller("~/Default.aspx")
         End If
     End Sub
 

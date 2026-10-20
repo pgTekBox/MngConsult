@@ -2,7 +2,7 @@
     CodeBehind="wbfLogin.aspx.vb" Inherits="MngConsul.wbfLogin" %>
 
 <!DOCTYPE html>
-<html lang="<%= CurrentLang %>">
+<html lang="<%= CurrentLang %>" class="<%= If(EnFenetre, "en-fenetre", "") %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -171,6 +171,12 @@
             margin-bottom: 14px;
         }
 
+        /* En fenêtre (iframe du tableau de bord) : seule la carte, sans fond ni ombre ;
+           le cadre de Default porte l'arrondi et l'ombre. */
+        html.en-fenetre, html.en-fenetre body { height: auto; min-height: 0; background: #fff; }
+        html.en-fenetre body { display: block; padding: 0; }
+        html.en-fenetre .login-card { width: 100%; max-width: none; border-radius: 0; box-shadow: none; }
+
         .login-footer {
             padding: 16px;
             text-align: center;
@@ -186,7 +192,7 @@
         <div class="login-card">
 
             <div class="login-header">
-                <a class="login-brand" href="LandingPage.aspx?lang=<%= CurrentLang %>">
+                <a class="login-brand" href="LandingPage.aspx?lang=<%= CurrentLang %>" target="<%= If(EnFenetre, "_top", "_self") %>">
                     <img src="Images/logo.svg" alt="60Sec-AI" />
                     <span class="brand-name">60Sec-AI</span>
                 </a>
@@ -216,7 +222,7 @@
                         <asp:CheckBox ID="cbRemember" runat="server" />
                         <span><%= L("remember") %></span>
                     </label>
-                    <a href="wbfForgotPassword.aspx?lang=<%= CurrentLang %>"><%= L("forgot") %></a>
+                    <a href="wbfForgotPassword.aspx?lang=<%= CurrentLang %>" target="<%= If(EnFenetre, "_top", "_self") %>"><%= L("forgot") %></a>
                 </div>
 
                 <asp:Button ID="btnLogin" runat="server"

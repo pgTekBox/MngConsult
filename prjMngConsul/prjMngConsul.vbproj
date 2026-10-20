@@ -674,7 +674,6 @@
     <Content Include="wbfResetPassword.aspx" />
     <Content Include="wbfLogin.aspx" />
     <Content Include="wbflogout.aspx" />
-    <Content Include="wbfNewUser.aspx" />
     <Content Include="wbfPayment.aspx" />
     <Content Include="wbfPaymentSuccess.aspx" />
     <Content Include="wbfPlanComptable.aspx" />
@@ -1433,13 +1432,6 @@
     </Compile>
     <Compile Include="wbflogout.aspx.vb">
       <DependentUpon>wbflogout.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="wbfNewUser.aspx.designer.vb">
-      <DependentUpon>wbfNewUser.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfNewUser.aspx.vb">
-      <DependentUpon>wbfNewUser.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfAssistant.aspx.vb">
