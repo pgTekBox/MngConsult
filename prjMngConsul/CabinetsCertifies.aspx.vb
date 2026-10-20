@@ -3,12 +3,12 @@ Imports System.Globalization
 Imports System.Text
 
 ''' <summary>
-''' L'annuaire des cabinets comptables certifiés 60secondes (T319, s0900) : le
-''' même pour toutes les compagnies. Ouvert depuis l'en-tête (bouton « Cabinets
-''' certifiés », à côté d'Entreprise) dans une fenêtre par-dessus la page
-''' (?popup=1 : ni menu ni en-tête, un bouton Fermer qui ferme la fenêtre du
-''' parent) ; la page se visite aussi telle quelle. La recherche filtre les
-''' cartes sur place, sans renvoi au serveur.
+''' Mon cabinet comptable : l'écran du menu (Mon accompagnement › Mon cabinet
+''' comptable), avec l'annuaire des cabinets comptables certifiés 60secondes
+''' (T319, s0900), le même pour toutes les compagnies. Les onglets Mon cabinet,
+''' Qui fait quoi et Cabinets certifiés viennent de js/cabinet-60s.js. Le mode
+''' fenêtre (?popup=1 : ni menu ni en-tête, un bouton Fermer) reste disponible.
+''' La recherche filtre les cartes sur place, sans renvoi au serveur.
 ''' </summary>
 Public Class CabinetsCertifies
     Inherits clsData

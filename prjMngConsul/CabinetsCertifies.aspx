@@ -2,7 +2,7 @@
     CodeBehind="CabinetsCertifies.aspx.vb" Inherits="MngConsul.CabinetsCertifies" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Cabinets certifiés — 60Sec-AI
+    Mon cabinet comptable — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -65,7 +65,7 @@
     .cab-vide[hidden] { display: none }
 </style>
 <asp:Literal ID="litPopupCss" runat="server" />
-<link rel="stylesheet" href="css/cabinet-60s.css?v=2026102003" />
+<link rel="stylesheet" href="css/cabinet-60s.css?v=2026102004" />
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
@@ -117,5 +117,5 @@
         });
     })();
 </script>
-<script src="js/cabinet-60s.js?v=2026102005"></script>
+<script src="js/cabinet-60s.js?v=2026102006"></script>
 </asp:Content>

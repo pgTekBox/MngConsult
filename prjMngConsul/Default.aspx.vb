@@ -234,7 +234,7 @@ Public Class _Default
             Nav(L("reports"), "wbfEtatResultats.aspx"), Nav(L("agenda"), "wbfAgenda.aspx"),
             Nav(L("employees"), "wbfEmployees.aspx"), Nav(L("accounting"), "wbfJournal.aspx"),
             Nav(L("products"), "wbfProducts.aspx"), Nav(L("approvals"), "wbfApprobations.aspx"),
-            Nav(L("myFirm"), "CabinetsCertifies.aspx?popup=1", True), Nav(L("settings"), "wbfSetting.aspx")
+            Nav(L("myFirm"), "CabinetsCertifies.aspx"), Nav(L("settings"), "wbfSetting.aspx")
         }
 
         Dim prenom As String = ""

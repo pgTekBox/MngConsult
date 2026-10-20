@@ -52,7 +52,7 @@
       else if (local && typeof local === 'object' && (local.cabinet || (local.rep && Object.keys(local.rep).length)) && modifiable) { S = normal(local); sauver(); }
       if (modifiable) { try { localStorage.removeItem(CLE); } catch (e) {} }
       page.removeAttribute('aria-busy'); toutRendre();
-    }).catch(function () { page.removeAttribute('aria-busy'); avis('Lecture impossible pour l\'instant. Rechargez la fenêtre.'); });
+    }).catch(function () { page.removeAttribute('aria-busy'); avis('Lecture impossible pour l\'instant. Rechargez la page.'); });
   }
   window.S60MonCabinet = { lire: function () { return JSON.parse(JSON.stringify(S)); }, ecrire: function (e) { S = normal(e); sauver(); toutRendre(); } };
 

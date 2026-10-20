@@ -81,17 +81,6 @@ Namespace Controls
             Return "<div class=""nav-sec"">" & L(labelKey) & "</div>"
         End Function
 
-        ''' <summary>
-        ''' Mon cabinet comptable : l'annuaire des cabinets certifiés s'ouvre en
-        ''' fenêtre par-dessus la page (ouvrirFenetreApp du master), comme le
-        ''' bouton « Cabinets certifiés » de l'en-tête.
-        ''' </summary>
-        Private Function ItemFenetre(url As String, icon As String, labelKey As String) As String
-            Dim cible As String = ResolveUrl(url)
-            Return "<button type=""button"" class=""nav-item"" data-navlink onclick=""ouvrirFenetreApp('" & cible & "', this.querySelector('.nav-txt').textContent)"">" &
-                   "<span class=""nav-ico"" aria-hidden=""true"">" & icon & "</span>" &
-                   "<span class=""nav-txt"">" & L(labelKey) & "</span></button>"
-        End Function
 
         Private Function Child(url As String, labelKey As String) As String
             Dim ici As String = If(EstPageCourante(url), " ici"" aria-current=""page", "")
@@ -215,7 +204,7 @@ Namespace Controls
 
             ' ---------- Mon accompagnement ----------
             sb.Append(Section("secSupport"))
-            sb.Append(ItemFenetre("~/CabinetsCertifies.aspx?popup=1", Ico("firm"), "myFirm"))
+            sb.Append(Item("~/CabinetsCertifies.aspx", Ico("firm"), "myFirm"))
 
             ' ---------- Administration ----------
             sb.Append(Section("secAdmin"))

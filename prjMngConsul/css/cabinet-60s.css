@@ -16,7 +16,7 @@
   --q-cab: #0F6E5D; --q-cab-50: #E3F1ED;
   --q-ens: #B07A1E; --q-ens-50: #FBF3E2;
 }
-#divMain .cab-page { max-width: 1040px; color: var(--p-text); }
+#divMain .cab-page { max-width: none; color: var(--p-text); }
 
 /* ---------- En-tête ---------- */
 #divMain .cab-page > section.boite { background: #fff; border: 1px solid var(--p-line); border-radius: 22px; box-shadow: var(--p-shadow); padding: 20px 22px 0; margin: 0 0 16px; }
