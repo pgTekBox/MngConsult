@@ -10,8 +10,8 @@ Imports System.Web.SessionState
 ''' comptable » (js/cabinet-60s.js), enregistrés par compagnie (T323MonCabinet).
 ''' Toujours la compagnie de la session : aucun identifiant n'est lu de la requête.
 '''
-'''   GET  MonCabinet.ashx   → { etat: {…} | null, maj: "aaaa-mm-jjThh:mm:ssZ" | null }
-'''   POST MonCabinet.ashx   (corps JSON = l'état)  → { ok: true, maj: … }
+'''   GET  MonCabinet.ashx   → { etat: {…} | null, maj: "aaaa-mm-jjThh:mm:ssZ" | null, modifiable: bool }
+'''   POST MonCabinet.ashx   (corps JSON = l'état)  → { ok: true, maj: … }   (administrateurs seulement : 403 sinon)
 ''' </summary>
 Public Class MonCabinetHandler
     Implements IHttpHandler, IReadOnlySessionState
@@ -42,7 +42,7 @@ Public Class MonCabinetHandler
             If context.Request.HttpMethod = "POST" Then
                 Enregistrer(context, js, hote, company, userId)
             Else
-                Lire(context, js, hote, company)
+                Lire(context, js, hote, company, EstAdmin(hote, userId))
             End If
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("MonCabinet : " & ex.Message)
@@ -51,21 +51,39 @@ Public Class MonCabinetHandler
         End Try
     End Sub
 
-    Private Sub Lire(context As HttpContext, js As JavaScriptSerializer, hote As ApideckExtraction.HoteFond, company As Guid)
+    ''' <summary>Administrateur actif, lu en base à chaque appel (comme clsData.isAdmin, sans le cache de session).</summary>
+    Private Shared Function EstAdmin(hote As ApideckExtraction.HoteFond, userId As Integer) As Boolean
+        Dim p As New Collection
+        p.Add(New SqlParameter("@Id", userId))
+        Dim ds As DataSet = hote.ExecuteSQLds("s0314GetUserByUserId", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return False
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Return Not IsDBNull(r("IsAdmin")) AndAlso CBool(r("IsAdmin")) AndAlso
+               Not IsDBNull(r("IsActive")) AndAlso CBool(r("IsActive"))
+    End Function
+
+    Private Sub Lire(context As HttpContext, js As JavaScriptSerializer, hote As ApideckExtraction.HoteFond, company As Guid, modifiable As Boolean)
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", company))
         Dim ds As DataSet = hote.ExecuteSQLds("s0908GetMonCabinet", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
-            context.Response.Write("{""etat"":null,""maj"":null}")
+            context.Response.Write("{""etat"":null,""maj"":null,""modifiable"":" & js.Serialize(modifiable) & "}")
             Return
         End If
         Dim r As DataRow = ds.Tables(0).Rows(0)
         ' L'état est déjà du JSON validé par la base : on l'insère tel quel.
         Dim maj As String = CDate(r("MajUtc")).ToString("yyyy-MM-ddTHH:mm:ssZ")
-        context.Response.Write("{""etat"":" & Convert.ToString(r("Etat")) & ",""maj"":" & js.Serialize(maj) & "}")
+        context.Response.Write("{""etat"":" & Convert.ToString(r("Etat")) & ",""maj"":" & js.Serialize(maj) & ",""modifiable"":" & js.Serialize(modifiable) & "}")
     End Sub
 
     Private Sub Enregistrer(context As HttpContext, js As JavaScriptSerializer, hote As ApideckExtraction.HoteFond, company As Guid, userId As Integer)
+        ' Seuls les administrateurs de la compagnie modifient le cabinet et la répartition.
+        If Not EstAdmin(hote, userId) Then
+            context.Response.StatusCode = 403
+            context.Response.Write(js.Serialize(New With {.erreur = "Seul un administrateur peut modifier le cabinet et la répartition."}))
+            Return
+        End If
+
         ' Même origine seulement : un autre site ne peut pas écrire à la place de l'utilisateur.
         Dim origine As String = context.Request.Headers("Origin")
         If Not String.IsNullOrEmpty(origine) Then

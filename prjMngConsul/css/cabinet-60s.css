@@ -161,6 +161,12 @@
 .s60c-avis { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 9000; background: #0E1F3D; color: #fff; padding: 10px 18px; border-radius: 999px; font: 700 14px Nunito, "Segoe UI", sans-serif; box-shadow: 0 12px 30px rgba(14,31,61,.3); max-width: calc(100vw - 32px); }
 .s60c-avis[hidden] { display: none; }
 
+/* ---------- Consultation seulement (utilisateur non administrateur) ---------- */
+#divMain .s60c-lecture { display: flex; align-items: center; gap: 8px; margin: 0 0 16px; padding: 12px 16px; border-radius: 14px; background: var(--p-blue-50); color: var(--p-blue-d); font-size: 13.5px; font-weight: 700; }
+#divMain .s60c-ro .s60c-seg label { cursor: not-allowed; }
+#divMain .s60c-ro .s60c-seg label:not(.on) { opacity: .55; }
+#divMain .s60c-ro .s60c-plafond input, #divMain .s60c-ro .cab-actions .s60c-choisir[disabled] { opacity: .6; cursor: not-allowed; }
+#divMain .s60c-ro .s60c-filtres button[disabled] { opacity: .5; cursor: not-allowed; }
 @media print {
   #divMain .s60c-onglets, #divMain .s60c-pied, #divMain .cab-fermer, #divMain .s60c-filtres { display: none !important; }
   #divMain .s60c-vue[hidden] { display: none !important; }

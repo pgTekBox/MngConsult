@@ -73,6 +73,9 @@
   function vierge() { return { cabinet: null, rep: {}, plafonds: {}, envoye: '', maj: '' }; }
   function normal(v) { v = v && typeof v === 'object' ? v : vierge(); if (!v.rep || typeof v.rep !== 'object') v.rep = {}; if (!v.plafonds || typeof v.plafonds !== 'object') v.plafonds = {}; if (v.cabinet === undefined) v.cabinet = null; return v; }
   var S = vierge();
+  /* Seuls les administrateurs modifient (le serveur refuse les autres) ; faux tant que le serveur n'a pas répondu. */
+  var modifiable = false, charge = false;
+  function lectureSeule() { if (modifiable) return false; avis('Seul un administrateur peut modifier le cabinet et la répartition.'); return true; }
   var URL_ETAT = 'MonCabinet.ashx', tEnvoi = null;
   function envoyer() {
     tEnvoi = null;
@@ -81,6 +84,7 @@
       .catch(function () { avis('Enregistrement impossible pour l\'instant. Réessayez.'); });
   }
   function sauver() {
+    if (!modifiable) return;
     S.maj = new Date().toISOString();
     clearTimeout(tEnvoi); tEnvoi = setTimeout(envoyer, 400);
     try { document.dispatchEvent(new CustomEvent('s60:mon-cabinet', { detail: JSON.parse(JSON.stringify(S)) })); } catch (e) {}
@@ -89,9 +93,10 @@
   function charger() {
     fetch(URL_ETAT, { credentials: 'same-origin', cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
       var local = null; try { local = JSON.parse(localStorage.getItem(CLE) || 'null'); } catch (e) {}
+      modifiable = !!(d && d.modifiable); charge = true;
       if (d && d.etat) S = normal(d.etat);
-      else if (local && typeof local === 'object' && (local.cabinet || (local.rep && Object.keys(local.rep).length))) { S = normal(local); sauver(); }
-      try { localStorage.removeItem(CLE); } catch (e) {}
+      else if (local && typeof local === 'object' && (local.cabinet || (local.rep && Object.keys(local.rep).length)) && modifiable) { S = normal(local); sauver(); }
+      if (modifiable) { try { localStorage.removeItem(CLE); } catch (e) {} }
       page.removeAttribute('aria-busy'); toutRendre();
     }).catch(function () { page.removeAttribute('aria-busy'); avis('Lecture impossible pour l\'instant. Rechargez la fenêtre.'); });
   }
@@ -171,6 +176,7 @@
   CARTES.forEach(function (c) {
     var b = document.createElement('button'); b.type = 'button'; b.className = 's60c-choisir';
     b.addEventListener('click', function () {
+      if (lectureSeule()) return;
       var d = lireCarte(c); if (S.cabinet && S.cabinet.nom === d.nom) return;
       var avant = S.cabinet; S.cabinet = d; S.envoye = ''; sauver(); toutRendre(); montrer('moncab');
       avis(avant ? 'Cabinet changé. Votre répartition est conservée.' : d.nom + ' est maintenant votre cabinet.');
@@ -204,6 +210,7 @@
   var retraitArme = false;
   function rendreMon() {
     var c = compte(), conf = conflits(), cab = S.cabinet, h = '';
+    if (charge && !modifiable) h += '<p class="s60c-lecture">' + ic('lock') + 'Consultation seulement : seul un administrateur de votre compagnie peut choisir le cabinet et modifier la répartition.</p>';
     if (!cab) {
       h += '<section class="s60c-boite"><div class="s60c-vide"><div class="ill">' + ic('handshake') + '</div><div class="t">' +
         '<h2>Vous n\'avez pas encore de cabinet comptable</h2><p class="aide">Choisissez un cabinet certifié ou invitez votre propre comptable. Vous décidez ensuite, activité par activité, ce qu\'il fait au nom de votre entreprise.</p></div>' +
@@ -271,7 +278,7 @@
       '<button type="button" class="s60c-btn" data-s60c="copier">' + ic('clipboard') + 'Copier</button>' +
       '<button type="button" class="s60c-btn" data-s60c="imprimer">' + ic('printer') + 'Imprimer</button>' +
       (cab && cab.courriel ? '<a class="s60c-btn p" data-s60c="envoyer" href="' + esc(mailto()) + '">' + ic('mail') + 'Envoyer à ' + esc(cab.nom) + '</a>' : '<button type="button" class="s60c-btn p" data-s60c="voir-ann">' + ic('search') + 'Choisir un cabinet</button>') + '</div></section>';
-    vQfq.innerHTML = h;
+    vQfq.innerHTML = h; droits();
     var n = $('#s60c-n-qfq'); n.textContent = conf.length ? conf.length : c.cabinet + c.partage; n.classList.toggle('warn', !!conf.length);
     n.title = conf.length ? 'Paires de tâches à séparer' : 'Activités avec le cabinet';
   }
@@ -308,12 +315,14 @@
   /* ---------- Événements ---------- */
   page.addEventListener('change', function (e) {
     var r = e.target; if (!r.matches || !r.matches('.s60c-seg input')) return;
+    if (lectureSeule()) { rendreQfq(); droits(); return; }
     var id = r.name.replace('s60c-', ''); S.rep[id] = r.value; sauver();
     var y = window.scrollY; rendreQfq(); rendreMon(); window.scrollTo(0, y);
     var ri = $('input[name="s60c-' + id + '"][value="' + r.value + '"]', vQfq); if (ri) ri.focus();
   });
   page.addEventListener('change', function (e) {
     var p = e.target; if (!p.matches || !p.matches('input[data-plafond]')) return;
+    if (lectureSeule()) { rendreQfq(); droits(); return; }
     var n = parseInt(String(p.value).replace(/[^\d]/g, ''), 10); if (isNaN(n) || n < 0) n = PLAFOND_DEF;
     S.plafonds[p.getAttribute('data-plafond')] = n; p.value = n.toLocaleString('fr-CA'); sauver(); rendreMon(); avis('Plafond enregistré : ' + argent(n) + '.');
   });
@@ -325,6 +334,7 @@
     if (k === 'voir-ann') { montrer('annuaire'); var champ = $('#cabRecherche'); if (champ) champ.focus(); }
     else if (k === 'voir-qfq') montrer('qfq');
     else if (k === 'inviter') { b.setAttribute('href', mailInvitation()); }
+    else if (k === 'suggere' && lectureSeule()) { return; }
     else if (k === 'suggere') { S.rep = {}; S.plafonds = {}; sauver(); rendreQfq(); rendreMon(); avis('Répartition suggérée appliquée.'); }
     else if (k === 'imprimer') { montrer('qfq'); window.print(); }
     else if (k === 'copier') {
@@ -332,14 +342,20 @@
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { avis('Répartition copiée.'); }, function () { avis('Copie impossible dans cette fenêtre.'); });
       else avis('Copie impossible dans cette fenêtre.');
     }
-    else if (k === 'envoyer') { b.setAttribute('href', mailto()); S.envoye = new Date().toISOString(); sauver(); setTimeout(function () { rendreMon(); }, 50); }
+    else if (k === 'envoyer') { b.setAttribute('href', mailto()); if (modifiable) S.envoye = new Date().toISOString(); sauver(); setTimeout(function () { rendreMon(); }, 50); }
+    else if (k === 'retirer' && lectureSeule()) { return; }
     else if (k === 'retirer') {
       if (!retraitArme) { retraitArme = true; rendreMon(); var bt = $('[data-s60c="retirer"]', vMon); if (bt) bt.focus(); setTimeout(function () { if (retraitArme) { retraitArme = false; rendreMon(); } }, 6000); return; }
       retraitArme = false; var nom = S.cabinet && S.cabinet.nom; S.cabinet = null; S.envoye = ''; sauver(); toutRendre(); avis(nom + ' n\'est plus votre cabinet.');
     }
   });
 
-  function toutRendre() { rendreMon(); rendreQfq(); rendreCartes(); }
+  function toutRendre() { rendreMon(); rendreQfq(); rendreCartes(); droits(); }
+  /* Lecture seule : les contrôles de modification sont désactivés (le serveur refuse de toute façon). */
+  function droits() {
+    page.classList.toggle('s60c-ro', charge && !modifiable);
+    $$('.s60c-seg input, input[data-plafond], .s60c-choisir, [data-s60c="suggere"], [data-s60c="retirer"]', page).forEach(function (el) { el.disabled = charge && !modifiable; });
+  }
   page.setAttribute('aria-busy', 'true'); toutRendre(); lireCle(); charger();
   var dep = ''; try { dep = sessionStorage.getItem(CLE + '-onglet') || ''; } catch (e) {}
   montrer(dep || (S.cabinet ? 'moncab' : 'moncab'));
