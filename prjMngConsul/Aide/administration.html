@@ -169,9 +169,14 @@
                         <tr><td>Province</td><td>Liste des 13 provinces et territoires, Québec en premier.</td></tr>
                         <tr><td>Date de fin d’année fiscale, Date de constitution</td><td>Dates AAAA-MM-JJ.</td></tr>
                         <tr><td>Numéro d’entreprise fédéral (BN), NAS, Code d’activité économique (CAE), Structure juridique</td><td>Renseignements fiscaux.</td></tr>
+                        <tr><td>Profil de l’entreprise</td><td>Juste après « Structure juridique » (section 1 Identité de l’entreprise). Liste : « — Choisir — », « Travailleur autonome », « Société sans employé », « Société avec employés ». Ligne d’aide : « Sert à « Qui fait quoi » (Mon cabinet comptable) pour vous proposer les actions qui vous concernent. »</td></tr>
+                        <tr><td>Métier</td><td>Liste des 201 métiers de l’inventaire « Qui fait quoi » ; tapez quelques lettres pour chercher. Ligne d’aide : « Tapez quelques lettres pour chercher dans la liste. Sert aussi à « Qui fait quoi ». »</td></tr>
                     </tbody>
                 </table>
                 <p>Le <strong>NAS</strong> est masqué (points) et porte un badge « Confidentiel » ; le bouton en forme d’œil à côté du champ l’affiche ou le masque.</p>
+                <ul>
+                    <li><strong>Profil et métier</strong> : enregistrés par <kbd>Enregistrer</kbd> comme les autres champs ; ils comptent dans « Progression du profil ». Ils servent à la page <a href="tableau-de-bord.html#fr-mon-cabinet">Qui fait quoi</a>. Si le métier choisi n’est pas prévu pour le profil choisi, un avertissement apparaît sous le champ : « Ce métier n’est pas prévu pour le profil choisi : « Qui fait quoi » ne pourra pas proposer vos actions. »</li>
+                </ul>
                 <h3>Onglet Taxes</h3>
                 <p>Sections : <strong>1 Inscription</strong>, <strong>2 Calcul des taxes</strong>, <strong>3 Remises</strong>.</p>
                 <table>
@@ -236,6 +241,7 @@
                     <li>Champ en rouge avec un message sous le champ — la valeur ne respecte pas le format attendu (voir <em>Vérification des champs</em>). Corrigez-la ; l’enregistrement reste possible.</li>
                     <li>Avertissement sous un numéro de compte — le numéro n’existe pas dans le plan comptable ; vérifiez-le dans <a href="comptabilite.html">Comptabilité</a>.</li>
                     <li>Avertissement dans l’onglet Bancaire ou Comptable — aucun compte bancaire par défaut n’est choisi, ou aucune clé comptable n’existe encore.</li>
+                    <li><span class="msg">« Ce métier n’est pas prévu pour le profil choisi : « Qui fait quoi » ne pourra pas proposer vos actions. »</span> — sous le champ « Métier » de l’onglet Entreprise : choisissez un autre métier ou un autre profil, puis <kbd>Enregistrer</kbd>.</li>
                     <li>Avertissement du navigateur en quittant la page — des modifications ne sont pas enregistrées ; restez sur la page pour les enregistrer, ou quittez pour les abandonner.</li>
                 </ul>
                 <div class="astuce" data-titre="Astuce">Pour retrouver le code technique d’un paramètre (utile quand le soutien vous le demande, par exemple « COMPTE_BANQUE »), passez la souris sur son libellé.</div>
@@ -545,6 +551,7 @@
                 <details><summary>Un champ des Paramètres est devenu rouge. Puis-je quand même enregistrer ?</summary><p>Oui. La vérification est indicative : elle signale un format inattendu (NEQ, numéro de TPS ou de TVQ, NAS, code postal…) sans bloquer <kbd>Enregistrer</kbd>. Corrigez la valeur dès que possible.</p></details>
                 <details><summary>Où sont passés les codes comme « NEQ » ou « FED_BN » ?</summary><p>Ils ne sont plus écrits à l’écran. Passez la souris sur le libellé du champ : le code apparaît dans l’info-bulle.</p></details>
                 <details><summary>Une barre foncée « modification(s) non enregistrée(s) » reste au bas de l’écran.</summary><p>Vous avez changé au moins un champ sans enregistrer. Cliquez <kbd>Enregistrer</kbd> dans la barre pour garder les changements, ou <kbd>Annuler</kbd> pour revenir aux valeurs enregistrées.</p></details>
+                <details><summary>À quoi servent le profil et le métier ?</summary><p>« Profil de l’entreprise » et « Métier » (onglet Entreprise des Paramètres) permettent à la page « Qui fait quoi » de <span class="chemin">Mon cabinet comptable</span> de vous proposer les actions qui vous concernent. Choisissez un métier prévu pour votre profil, puis <kbd>Enregistrer</kbd>.</p></details>
                 <details><summary>Comment voir mon NAS dans les Paramètres ?</summary><p>Le champ est masqué par confidentialité (badge « Confidentiel »). Cliquez le bouton en forme d’œil à côté du champ pour l’afficher, puis de nouveau pour le masquer.</p></details>
                 <details><summary>Comment annuler un paiement automatique programmé ?</summary><p>Onglet Calendrier, bouton <kbd>🚫 Annuler</kbd> sur les statuts Planifié ou 3DS. Pour tout arrêter avec un fournisseur, révoquez l’autorisation.</p></details>
                 <details><summary>Je n’ai pas reçu le courriel d’activation.</summary><p>Cliquez « renvoyer le lien » sur la page « Vérifiez votre courriel » (une fois par minute). Le lien vaut 24 h.</p></details>
@@ -723,9 +730,14 @@
                         <tr><td>Province</td><td>List of the 13 provinces and territories, Quebec first.</td></tr>
                         <tr><td>Fiscal year end date, Incorporation date</td><td>Dates YYYY-MM-DD.</td></tr>
                         <tr><td>Federal business number (BN), SIN, Economic activity code (CAE), Legal structure</td><td>Tax information.</td></tr>
+                        <tr><td>Business profile</td><td>Right after “Legal structure” (section 1 Company identity). List: “— Choisir —” (Choose), “Self-employed”, “Corporation without employees”, “Corporation with employees”. Help line: “Sert à « Qui fait quoi » (Mon cabinet comptable) pour vous proposer les actions qui vous concernent.” (Used by “Qui fait quoi” to suggest the actions that concern you.)</td></tr>
+                        <tr><td>Trade</td><td>List of the 201 trades of the “Qui fait quoi” inventory (French names); type a few letters to search. Help line: “Tapez quelques lettres pour chercher dans la liste. Sert aussi à « Qui fait quoi ».” (Type a few letters to search the list. Also used by “Qui fait quoi”.)</td></tr>
                     </tbody>
                 </table>
                 <p>The <strong>SIN</strong> is masked (dots) and carries a “Confidential” badge; the eye button next to the field shows or hides it.</p>
+                <ul>
+                    <li><strong>Profile and trade</strong>: saved by <kbd>Save</kbd> like the other fields; they count in “Progression du profil” (Profile progress). They are used by the <a href="tableau-de-bord.html#en-my-firm">Qui fait quoi</a> page. If the chosen trade is not offered for the chosen profile, a warning appears under the field: “Ce métier n’est pas prévu pour le profil choisi : « Qui fait quoi » ne pourra pas proposer vos actions.” (This trade is not offered for the chosen profile: “Qui fait quoi” will not be able to suggest your actions.)</li>
+                </ul>
                 <h3>Taxes tab</h3>
                 <p>Sections: <strong>1 Registration</strong>, <strong>2 Tax calculation</strong>, <strong>3 Remittances</strong>.</p>
                 <table>
@@ -790,6 +802,7 @@
                     <li>Field in red with a message under it — the value does not match the expected format (see <em>Field checks</em>). Correct it; saving is still possible.</li>
                     <li>Warning under an account number — the number does not exist in the chart of accounts; check it in <a href="comptabilite.html">Accounting</a>.</li>
                     <li>Warning in the Banking or Accountant tab — no default bank account is chosen, or no accountant key exists yet.</li>
+                    <li><span class="msg">“Ce métier n’est pas prévu pour le profil choisi : « Qui fait quoi » ne pourra pas proposer vos actions.”</span> — under the “Trade” field of the Company tab: the trade is not offered for the chosen profile. Choose another trade or profile, then <kbd>Save</kbd>.</li>
                     <li>Browser warning when leaving the page — some changes are not saved; stay on the page to save them, or leave to discard them.</li>
                 </ul>
                 <div class="astuce" data-titre="Tip">To find a setting’s technical code (useful when support asks for it, for example “COMPTE_BANQUE”), hover over its label.</div>
@@ -1099,6 +1112,7 @@
                 <details><summary>A field in Settings turned red. Can I still save?</summary><p>Yes. The check is only a guide: it flags an unexpected format (NEQ, GST or QST number, SIN, postal code…) without blocking <kbd>Save</kbd>. Correct the value as soon as possible.</p></details>
                 <details><summary>Where did codes like “NEQ” or “FED_BN” go?</summary><p>They are no longer written on screen. Hover over the field’s label: the code appears in the tooltip.</p></details>
                 <details><summary>A dark “modification(s) non enregistrée(s)” bar stays at the bottom of the screen.</summary><p>You changed at least one field without saving. Click <kbd>Enregistrer</kbd> in the bar to keep the changes, or <kbd>Annuler</kbd> to go back to the saved values.</p></details>
+                <details><summary>What are the profile and trade for?</summary><p>“Business profile” and “Trade” (Company tab of Settings) let the “Qui fait quoi” page of <span class="chemin">Mon cabinet comptable</span> (My accounting firm) suggest the actions that concern you. Choose a trade offered for your profile, then <kbd>Save</kbd>.</p></details>
                 <details><summary>How do I see my SIN in Settings?</summary><p>The field is masked for privacy (“Confidential” badge). Click the eye button next to the field to show it, and again to hide it.</p></details>
                 <details><summary>How do I cancel a scheduled automatic payment?</summary><p>Calendar tab, <kbd>🚫 Cancel</kbd> button on Scheduled or 3DS statuses. To stop everything with a supplier, revoke the authorization.</p></details>
                 <details><summary>I did not receive the activation email.</summary><p>Click “resend the link” on the “Check your email” page (once a minute). The link is valid 24 h.</p></details>
@@ -1277,9 +1291,14 @@
                         <tr><td>Provincia</td><td>Lista de las 13 provincias y territorios, Quebec primero.</td></tr>
                         <tr><td>Fecha de fin de año fiscal, Fecha de constitución</td><td>Fechas AAAA-MM-DD.</td></tr>
                         <tr><td>Número de empresa federal (BN), NAS, Código de actividad económica (CAE), Estructura jurídica</td><td>Información fiscal.</td></tr>
+                        <tr><td>Perfil de la empresa</td><td>Justo después de «Estructura jurídica» (sección 1 Identidad de la empresa). Lista: «— Choisir —» (Elegir), «Trabajador autónomo», «Sociedad sin empleados», «Sociedad con empleados». Línea de ayuda: «Sert à « Qui fait quoi » (Mon cabinet comptable) pour vous proposer les actions qui vous concernent.» (Sirve a «Qui fait quoi» para proponerle las acciones que le conciernen.)</td></tr>
+                        <tr><td>Oficio</td><td>Lista de los 201 oficios del inventario «Qui fait quoi» (nombres en francés); escriba unas letras para buscar. Línea de ayuda: «Tapez quelques lettres pour chercher dans la liste. Sert aussi à « Qui fait quoi ».» (Escriba unas letras para buscar en la lista. También sirve a «Qui fait quoi».)</td></tr>
                     </tbody>
                 </table>
                 <p>El <strong>NAS</strong> está oculto (puntos) y lleva una insignia «Confidencial»; el botón en forma de ojo junto al campo lo muestra u oculta.</p>
+                <ul>
+                    <li><strong>Perfil y oficio</strong>: se guardan con <kbd>Guardar</kbd> como los demás campos; cuentan en «Progression du profil» (Progreso del perfil). Los usa la página <a href="tableau-de-bord.html#es-mi-despacho">Qui fait quoi</a>. Si el oficio elegido no está previsto para el perfil elegido, aparece una advertencia bajo el campo: «Ce métier n’est pas prévu pour le profil choisi : « Qui fait quoi » ne pourra pas proposer vos actions.» (Este oficio no está previsto para el perfil elegido: «Qui fait quoi» no podrá proponer sus acciones.)</li>
+                </ul>
                 <h3>Pestaña Impuestos</h3>
                 <p>Secciones: <strong>1 Inscripción</strong>, <strong>2 Cálculo de impuestos</strong>, <strong>3 Remesas</strong>.</p>
                 <table>
@@ -1344,6 +1363,7 @@
                     <li>Campo en rojo con un mensaje debajo — el valor no respeta el formato esperado (vea <em>Verificación de los campos</em>). Corríjalo; se puede guardar de todos modos.</li>
                     <li>Advertencia bajo un número de cuenta — el número no existe en el plan contable; verifíquelo en <a href="comptabilite.html">Contabilidad</a>.</li>
                     <li>Advertencia en la pestaña Bancario o Contador — no se ha elegido ninguna cuenta bancaria por defecto, o aún no existe ninguna clave contable.</li>
+                    <li><span class="msg">«Ce métier n’est pas prévu pour le profil choisi : « Qui fait quoi » ne pourra pas proposer vos actions.»</span> — bajo el campo «Oficio» de la pestaña Empresa: el oficio no está previsto para el perfil elegido. Elija otro oficio u otro perfil y luego <kbd>Guardar</kbd>.</li>
                     <li>Aviso del navegador al salir de la página — hay cambios sin guardar; quédese en la página para guardarlos, o salga para abandonarlos.</li>
                 </ul>
                 <div class="astuce" data-titre="Consejo">Para encontrar el código técnico de un parámetro (útil cuando el soporte se lo pide, por ejemplo «COMPTE_BANQUE»), pase el ratón sobre su etiqueta.</div>
@@ -1653,6 +1673,7 @@
                 <details><summary>Un campo de Ajustes se puso en rojo. ¿Puedo guardar de todos modos?</summary><p>Sí. La verificación es solo orientativa: señala un formato inesperado (NEQ, número de TPS o TVQ, NAS, código postal…) sin bloquear <kbd>Guardar</kbd>. Corrija el valor lo antes posible.</p></details>
                 <details><summary>¿Dónde están los códigos como «NEQ» o «FED_BN»?</summary><p>Ya no se escriben en pantalla. Pase el ratón sobre la etiqueta del campo: el código aparece en la información emergente.</p></details>
                 <details><summary>Una barra oscura «modification(s) non enregistrée(s)» permanece al pie de la pantalla.</summary><p>Ha cambiado al menos un campo sin guardar. Haga clic en <kbd>Enregistrer</kbd> en la barra para conservar los cambios, o en <kbd>Annuler</kbd> para volver a los valores guardados.</p></details>
+                <details><summary>¿Para qué sirven el perfil y el oficio?</summary><p>«Perfil de la empresa» y «Oficio» (pestaña Empresa de Ajustes) permiten que la página «Qui fait quoi» de <span class="chemin">Mon cabinet comptable</span> (Mi despacho contable) le proponga las acciones que le conciernen. Elija un oficio previsto para su perfil y luego <kbd>Guardar</kbd>.</p></details>
                 <details><summary>¿Cómo veo mi NAS en Ajustes?</summary><p>El campo está oculto por confidencialidad (insignia «Confidencial»). Haga clic en el botón en forma de ojo junto al campo para mostrarlo, y otra vez para ocultarlo.</p></details>
                 <details><summary>¿Cómo anulo un pago automático programado?</summary><p>Pestaña Calendario, botón <kbd>🚫 Anular</kbd> en los estados Planificado o 3DS. Para detener todo con un proveedor, revoque la autorización.</p></details>
                 <details><summary>No recibí el correo de activación.</summary><p>Haga clic en «reenviar el enlace» en la página «Revise su correo» (una vez por minuto). El enlace vale 24 h.</p></details>

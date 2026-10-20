@@ -517,5 +517,5 @@
         })();
     </script>
 
-    <script src="js/parametres-60s.js?v=2026102001"></script>
+    <script src="js/parametres-60s.js?v=2026102002"></script>
 </asp:Content>

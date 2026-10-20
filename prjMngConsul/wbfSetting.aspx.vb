@@ -134,6 +134,7 @@ Partial Public Class wbfSetting
             Case "roundCent" : Return Choose3(lang, "2 décimales (cent)", "2 decimals (cent)", "2 decimales (centavo)")
             Case "roundInternal" : Return Choose3(lang, "4 décimales (interne)", "4 decimals (internal)", "4 decimales (interno)")
             Case "roundTrunc" : Return Choose3(lang, "Tronquer (2 décimales)", "Truncate (2 decimals)", "Truncar (2 decimales)")
+            Case "pickChoose" : Return Choose3(lang, "— Choisir —", "— Choose —", "— Elegir —")
             Case "taxExclusive" : Return Choose3(lang, "Taxes en sus", "Taxes added", "Impuestos aparte")
             Case "taxInclusive" : Return Choose3(lang, "Taxes incluses", "Taxes included", "Impuestos incluidos")
             Case "freqMonthly" : Return Choose3(lang, "Mensuelle", "Monthly", "Mensual")
@@ -271,6 +272,12 @@ Partial Public Class wbfSetting
                 Return
             Case "TAX_MODE"
                 phControl.Controls.Add(BuildTaxModeCombo(sVal))
+                Return
+            Case "PROFIL"
+                phControl.Controls.Add(BuildProfilCombo(sVal))
+                Return
+            Case "METIER"
+                phControl.Controls.Add(BuildMetierCombo(sVal))
                 Return
             Case "TAX_FREQ"
                 phControl.Controls.Add(BuildTaxFreqCombo(sVal))
@@ -435,6 +442,43 @@ Partial Public Class wbfSetting
         cb.Items.Add(New RadComboBoxItem(L("roundInternal"), "4"))
         cb.Items.Add(New RadComboBoxItem(L("roundTrunc"), "TRUNC2"))
         If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value Else cb.SelectedValue = "2"
+        Return cb
+    End Function
+
+    ''' <summary>Profil de l'entreprise (« Qui fait quoi ») : TA, Cie 0 ou Cie 1-4.</summary>
+    Private Function BuildProfilCombo(value As String) As RadComboBox
+        Dim cb As New RadComboBox()
+        cb.ID = "txtValue"
+        cb.Width = Unit.Percentage(100)
+        Dim col As Integer = If(CurrentLang = "en", 2, If(CurrentLang = "es", 3, 1))
+        cb.Items.Add(New RadComboBoxItem(L("pickChoose"), ""))
+        For Each p In clsQuiFaitQuoiData.Profils
+            cb.Items.Add(New RadComboBoxItem(p(col), p(0)))
+        Next
+        If cb.FindItemByValue(If(value, "")) IsNot Nothing Then cb.SelectedValue = value
+        Return cb
+    End Function
+
+    ''' <summary>
+    ''' Métier (« Qui fait quoi ») : les métiers de l'inventaire, avec recherche dans la liste.
+    ''' Chaque élément porte les profils pour lesquels le métier existe (data-profils).
+    ''' </summary>
+    Private Function BuildMetierCombo(value As String) As RadComboBox
+        Dim cb As New RadComboBox()
+        cb.ID = "txtValue"
+        cb.Width = Unit.Percentage(100)
+        cb.Filter = RadComboBoxFilter.Contains
+        cb.MarkFirstMatch = True
+        cb.MaxHeight = Unit.Pixel(320)
+        cb.Items.Add(New RadComboBoxItem(L("pickChoose"), ""))
+        For Each kv In clsQuiFaitQuoiData.Metiers()
+            Dim it As New RadComboBoxItem(kv.Key, kv.Key)
+            it.Attributes("data-profils") = String.Join("|", kv.Value)
+            cb.Items.Add(it)
+        Next
+        ' Une valeur enregistrée absente de l'inventaire reste affichée telle quelle.
+        If Not String.IsNullOrEmpty(value) AndAlso cb.FindItemByValue(value) Is Nothing Then cb.Items.Add(New RadComboBoxItem(value, value))
+        If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value
         Return cb
     End Function
 

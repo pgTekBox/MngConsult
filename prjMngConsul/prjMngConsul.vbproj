@@ -743,6 +743,7 @@
     <Compile Include="App_Code\clsMime.vb" />
     <Compile Include="MyClass\clsAide.vb" />
     <Compile Include="MyClass\clsAssistantIA.vb" />
+    <Compile Include="MyClass\clsQuiFaitQuoiData.vb" />
     <Compile Include="App_Code\clsData.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

@@ -13,15 +13,12 @@ Imports System.Web.Script.Serialization
 '''   POST : (JSON, même origine, administrateurs seulement) enregistre les choix
 '''          dans le paramètre de compagnie QFQ_CHOIX (s0150 / s0151).
 '''
-''' Profil et métier ne sont pas encore des données de l'entreprise : en
-''' attendant, ceux de la démonstration du modèle.
+''' Profil et métier : paramètres PROFIL et METIER de Paramètres › Entreprise. S'ils
+''' manquent, la page invite à les choisir.
 ''' </summary>
 Public Class QuiFaitQuoi
     Inherits clsData
 
-    ' À remplacer quand le profil et le métier de l'entreprise seront enregistrés.
-    Private Const ProfilDemo As String = "TA"
-    Private Const MetierDemo As String = "Massothérapeute"
 
     Private Const Categorie As String = "QUIFAITQUOI"
     Private Const Cle As String = "QFQ_CHOIX"
@@ -48,8 +45,8 @@ Public Class QuiFaitQuoi
         Dim param As DataRow = LireParam()
         Dim ctx As New Dictionary(Of String, Object) From {
             {"entreprise", CompanyName},
-            {"profil", ProfilDemo},
-            {"metier", MetierDemo},
+            {"profil", ParamEntreprise("PROFIL")},
+            {"metier", ParamEntreprise("METIER")},
             {"cabinet", LireCabinet(js)},
             {"choix", ChoixEnregistres(js, param)},
             {"urlEnregistrer", ResolveUrl("~/QuiFaitQuoi")},
@@ -72,6 +69,25 @@ Public Class QuiFaitQuoi
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
         For Each r As DataRow In ds.Tables(0).Rows
             If String.Equals(Convert.ToString(r("ShortName")), Cle, StringComparison.OrdinalIgnoreCase) Then Return r
+        Next
+        Return Nothing
+    End Function
+
+    ''' <summary>Valeur texte d'un paramètre de Paramètres › Entreprise (Nothing si vide).</summary>
+    Private _entreprise As DataTable
+    Private Function ParamEntreprise(cle As String) As String
+        If _entreprise Is Nothing Then
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@Categorie", "ENTREPRISE"))
+            Dim ds As DataSet = ExecuteSQLds("s0150GetParamsForCompany", p)
+            _entreprise = If(ds IsNot Nothing AndAlso ds.Tables.Count > 0, ds.Tables(0), New DataTable())
+        End If
+        For Each r As DataRow In _entreprise.Rows
+            If String.Equals(Convert.ToString(r("ShortName")), cle, StringComparison.OrdinalIgnoreCase) Then
+                Dim v As String = If(IsDBNull(r("sVal")), "", Convert.ToString(r("sVal")).Trim())
+                Return If(v = "", Nothing, v)
+            End If
         Next
         Return Nothing
     End Function

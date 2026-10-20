@@ -150,7 +150,14 @@ function dessiner(){
   $("ctxProfil").textContent = NOM_PROFIL[etat.profil] || (etat.profil||"Profil inconnu");
   $("ctxMetier").textContent = etat.metier || "Métier inconnu";
   $("cabNom").textContent = etat.cabinet==="aucun" ? "Aucun cabinet" : etat.cabNom;
-  if(!c){ $("liste").innerHTML='<div class="empty">Le profil « '+esc(etat.profil||"")+' » et le métier « '+esc(etat.metier||"")+' » ne sont pas reconnus. Vérifiez les valeurs transmises par la plateforme.</div>'; $("resStats").innerHTML=""; $("resTot").textContent="—"; return; }
+  if(!c){
+    /* ERP : profil et métier viennent de Paramètres › Entreprise */
+    var lienParam=' <a href="wbfSetting" target="_top">Ouvrir Paramètres › Entreprise</a>';
+    var msg = (!etat.profil || !etat.metier)
+      ? 'Choisissez d\'abord le profil et le métier de votre entreprise dans Paramètres › Entreprise : 60 s\'en sert pour vous proposer les actions qui vous concernent.'+lienParam
+      : 'Le métier « '+esc(etat.metier)+' » n\'est pas prévu pour le profil « '+esc(NOM_PROFIL[etat.profil]||etat.profil)+' ». Vérifiez le profil et le métier dans Paramètres › Entreprise.'+lienParam;
+    $("liste").innerHTML='<div class="empty">'+msg+'</div>'; $("resStats").innerHTML=""; $("resTot").textContent="—"; $("btnSave").disabled=true; return;
+  }
   liste.forEach(function(a){ var s=statut(a); if(n[s]!==undefined) n[s]++; });
   var cel=function(cls,nv,lab){ return '<span class="st '+cls+(nv?'':' zero')+'"><b>'+nv+'</b><span>'+lab+'</span></span>'; };
   $("resStats").innerHTML = cel("st-moi",n.moi,"Moi")+cel("st-par",n.par,n.par>1?"Partagées":"Partagée")+cel("st-cab",n.cab,"Cabinet")+cel("st-60",n["60"],"Par 60");

@@ -14,7 +14,7 @@
      Une clé ajoutée plus tard en base s'affiche quand même, à la fin. */
   var SECTIONS = {
     rpEntreprise: [
-      ['Identité de l\'entreprise', 'Tel qu\'inscrit au Registraire des entreprises et à l\'ARC.', ['LEGAL_NAME', 'TRADE_NAME', 'STRUCTURE', 'INCORP_DATE', 'NEQ', 'FED_BN', 'CAE', 'SIN']],
+      ['Identité de l\'entreprise', 'Tel qu\'inscrit au Registraire des entreprises et à l\'ARC.', ['LEGAL_NAME', 'TRADE_NAME', 'STRUCTURE', 'PROFIL', 'METIER', 'INCORP_DATE', 'NEQ', 'FED_BN', 'CAE', 'SIN']],
       ['Coordonnées', 'L\'adresse et le téléphone qui paraissent sur vos documents.', ['PHONE', 'ADDR1', 'ADDR2', 'CITY', 'PROVINCE', 'POSTAL', 'COUNTRY']],
       ['Exercice financier', 'Sert aux rapports, à la fermeture d\'année et aux échéances fiscales.', ['FISCAL_YEAR_END']]
     ],
@@ -44,6 +44,8 @@
     CAE: 'Code SCIAN de 6 chiffres qui décrit votre activité principale.',
     SIN: 'Masqué à l\'écran. Requis seulement pour une entreprise individuelle.',
     STRUCTURE: 'Ex. entreprise individuelle, société par actions, SENC.',
+    PROFIL: 'Sert à « Qui fait quoi » (Mon cabinet comptable) pour vous proposer les actions qui vous concernent.',
+    METIER: 'Tapez quelques lettres pour chercher dans la liste. Sert aussi à « Qui fait quoi ».',
     GST_NO: '9 chiffres, puis RT0001.', QST_NO: '10 chiffres, puis TQ0001.', HST_NO: 'Seulement si vous êtes inscrit à la TVH (provinces harmonisées).',
     TAX_MODE: 'Taxes en sus : les prix de vos produits sont avant taxes.',
     TAX_ROUNDING: 'Recommandé : 2 décimales (au cent).',
@@ -171,7 +173,19 @@
   function etatBancaire() { if (!champs.COMPTE_BANQUE) return; var v = valeur('COMPTE_BANQUE');
     if (!v || /sélectionnez|aucun/i.test(v)) note('COMPTE_BANQUE', 'Aucun compte par défaut choisi : choisissez celui qui reçoit vos encaissements.', 's60-warn'); else note('COMPTE_BANQUE', NOTES.COMPTE_BANQUE); }
   function etatComptable() { if (!champs.COMPTABLE) return; if (!valeur('COMPTABLE')) note('COMPTABLE', 'Aucune clé pour l\'instant. ' + NOTES.COMPTABLE, 's60-warn'); else note('COMPTABLE', NOTES.COMPTABLE); }
-  function majCalculs() { exempleTaxes(); numeroFacture(); etatBancaire(); etatComptable(); }
+  /* Métier prévu pour le profil choisi ? (profils du métier dans data-profils de l'élément de la liste) */
+  function etatMetier() {
+    if (!champs.METIER || !champs.PROFIL) return;
+    var cbM = saisie('METIER'), cbP = saisie('PROFIL');
+    var cM = cbM && window.$find && $find(cbM.id.replace(/_Input$/, '')), cP = cbP && window.$find && $find(cbP.id.replace(/_Input$/, ''));
+    if (!cM || !cP) return;
+    var it = cM.get_selectedItem && cM.get_selectedItem(), prof = cP.get_value && cP.get_value();
+    var liste = it && it.get_attributes && it.get_attributes().getAttribute('data-profils');
+    if (!it || !it.get_value() || !prof || !liste) { note('METIER', NOTES.METIER); return; }
+    if (liste.split('|').indexOf(prof) < 0) note('METIER', 'Ce métier n\'est pas prévu pour le profil choisi : « Qui fait quoi » ne pourra pas proposer vos actions.', 's60-warn');
+    else note('METIER', NOTES.METIER, 's60-ok');
+  }
+  function majCalculs() { exempleTaxes(); numeroFacture(); etatBancaire(); etatComptable(); etatMetier(); }
   majCalculs();
 
   /* ---------- Barre « modifications non enregistrées » ---------- */
