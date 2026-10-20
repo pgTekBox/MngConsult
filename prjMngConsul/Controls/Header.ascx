@@ -9,6 +9,14 @@
     <div class="app-header-inner">
         <!-- Left -->
         <div class="header-left">
+            <%-- ☰ : affiche ou masque le menu de gauche (la logique est dans LeftMenu.ascx) --%>
+            <button type="button" class="burger60" data-menu-burger
+                data-lbl-ouvrir="<%= MenuLbl(False) %>" data-lbl-fermer="<%= MenuLbl(True) %>"
+                aria-label="<%= MenuLbl(True) %>" title="<%= MenuLbl(True) %>" aria-controls="appSidebar" aria-expanded="true">
+                <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                    <path class="i-b" d="M4 7h16M4 12h16M4 17h16" /><path class="i-x" d="M6 6l12 12M18 6L6 18" />
+                </svg>
+            </button>
             <a class="logo" href="~/Default.aspx" runat="server" id="lnkLogo">
                 <svg class="logo-visage" aria-hidden="true" width="46" height="46" viewBox="0 0 256 256">
                     <defs><radialGradient id="hdrAv" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#C8F7F1" /><stop offset="1" stop-color="#3DDCCB" /></radialGradient></defs>

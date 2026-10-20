@@ -1,36 +1,38 @@
 ﻿<%@ Control Language="VB" AutoEventWireup="false" CodeBehind="LeftMenu.ascx.vb" Inherits="MngConsul.Controls.LeftMenu" %>
-
+<%-- Le menu de l'ERP au modèle de l'accueil 60secondes (accueil-60secondes-complet.html) :
+     une carte blanche arrondie, des titres de section en petites capitales
+     (Mon argent, Mon entreprise, Mon accompagnement, Administration), des
+     éléments en pilule avec l'icône dans un rond, la page courante en bleu pâle
+     et les pastilles de couleur (jaune = à faire). Le bouton ☰ de l'en-tête
+     (Header.ascx) affiche ou masque le menu ; le choix est gardé par navigateur
+     (localStorage « 60s-menu »). Sur téléphone, l'en-tête est masqué : la barre
+     du haut ci-dessous porte un second ☰ et le menu glisse depuis la gauche. --%>
 
 <div class="app-shell" id="appShell" runat="server">
 
-    <!-- Topbar -->
+    <!-- Barre du haut : téléphone seulement (l'en-tête complet y est masqué) -->
     <header class="topbar">
-        <button type="button" class="hamburger" id="btnMenu" aria-label="Ouvrir le menu" aria-controls="appSidebar" aria-expanded="false">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <button type="button" class="burger60" data-menu-burger
+            data-lbl-ouvrir="<%= L("menuShow") %>" data-lbl-fermer="<%= L("menuHide") %>"
+            aria-label="<%= L("menuShow") %>" title="<%= L("menuShow") %>" aria-controls="appSidebar" aria-expanded="false">
+            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                <path class="i-b" d="M4 7h16M4 12h16M4 17h16" /><path class="i-x" d="M6 6l12 12M18 6L6 18" />
             </svg>
-       </button>
-
+        </button>
         <div class="brand">
-            <span class="brand-dot" aria-hidden="true"></span>
-            <span class="brand-title">
-                <asp:Literal runat="server" ID="litAppName" Text="60Sec-AI"></asp:Literal></span>
-            <span class="brand-sub">ERP</span>
+            <span class="brand-title"><asp:Literal runat="server" ID="litAppName" Text="60secondes"></asp:Literal></span>
         </div>
-
     </header>
 
-    <!-- Backdrop mobile -->
-    <button type="button" class="backdrop" id="menuBackdrop" aria-label="Fermer le menu" tabindex="-1"></button>
+    <!-- Voile (téléphone) -->
+    <button type="button" class="backdrop" id="menuBackdrop" aria-label="<%= L("menuHide") %>" tabindex="-1"></button>
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="appSidebar" aria-label="Navigation principale">
+    <!-- Le menu -->
+    <nav class="sidebar" id="appSidebar" aria-label="<%= L("menu") %>">
         <div class="sidebar-inner">
             <asp:Literal ID="litMenu" runat="server" />
         </div>
-    </aside>
-
-
+    </nav>
 
 </div>
 
@@ -51,420 +53,220 @@
         --font: Nunito, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
-    .app-shell {
-        /* min-height:100vh; */
-        background: var(--bg);
-        color: var(--text);
-        font-family: var(--font);
+    .app-shell { color: var(--text); font-family: var(--font); }
+
+    /* Le bouton ☰ (aussi dans l'en-tête) : 44 px, coins de 14 px, bleu pâle quand le menu est ouvert ;
+       l'icône devient × pour le refermer. */
+    .burger60 {
+        width: 44px; height: 44px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        border: 1px solid #D5DDE8; border-radius: 14px;
+        background: #FFFFFF; color: #0E1F3D; cursor: pointer; padding: 0;
     }
+    .burger60:hover { background: #F2F5F9; }
+    .burger60:focus-visible { outline: none; box-shadow: var(--ring); }
+    .burger60 .i-x { display: none; }
+    .burger60.ouvert { background: #E3EBF7; }
+    .burger60.ouvert .i-b { display: none; }
+    .burger60.ouvert .i-x { display: inline; }
 
-    /* Topbar */
-    .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 30;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 14px;
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--border);
-        background: rgba(255,255,255,.85);
-        backdrop-filter: blur(10px);
-    }
+    /* Barre du haut : seulement sur téléphone */
+    .topbar { display: none; }
+    .brand-title { font-weight: 800; font-size: 20px; letter-spacing: -.01em; color: #0E1F3D; }
 
-    .hamburger {
-        width: 44px;
-        height: 44px;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--border);
-        background: #fff;
-        border-radius: 12px;
-        color: var(--text);
-        cursor: pointer;
-        box-shadow: 0 2px 10px rgba(2,6,23,.06);
-    }
-
-        .hamburger:focus {
-            outline: none;
-            box-shadow: var(--ring);
-        }
-
-    .brand {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-        min-width: 180px;
-        margin-right: auto;
-    }
-
-
-    .brand-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 999px;
-        background: var(--primary);
-        box-shadow: 0 0 0 6px rgba(37,99,235,.12);
-        display: inline-block;
-    }
-
-    .brand-title {
-        font-weight: 800;
-        letter-spacing: .2px;
-    }
-
-    .brand-sub {
-        font-size: 12px;
-        color: var(--muted);
-        font-weight: 600;
-    }
-
-    .user-pill {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: #fff;
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 8px 10px;
-        box-shadow: 0 2px 12px rgba(2,6,23,.05);
-    }
-
-    .user-avatar {
-        width: 30px;
-        height: 30px;
-        border-radius: 10px;
-        background: var(--primary-weak);
-        color: var(--primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        font-size: 12px;
-    }
-
-    .user-name {
-        font-size: 14px;
-        font-weight: 700;
-    }
-
-    /* Sidebar */
-    /* Le menu : une carte blanche arrondie posée sur le fond, sous l'en-tête de 71 px,
-       comme dans le gabarit « Doux bleu marine ». */
+    /* Le menu : une carte blanche de 24 px d'arrondi posée sur le fond, sous l'en-tête. */
     .sidebar {
         position: fixed;
         top: 87px;
         left: 16px;
-        height: auto;
-        max-height: calc(100vh - 103px);
         width: 270px;
-        background: #fff;
+        max-height: calc(100vh - 103px);
+        box-sizing: border-box;
+        background: #FFFFFF;
         border-radius: 24px;
         overflow: auto;
         scrollbar-width: thin;
-        scrollbar-color: var(--mc-line2, #AEBBCD) transparent;
+        scrollbar-color: #AEBBCD transparent;
         z-index: 40;
     }
-
     .sidebar-inner {
-        height: 100%;
         display: flex;
         flex-direction: column;
-        padding: 12px;
         gap: 2px;
-        font-family: var(--mc-font-titre, Nunito, system-ui, sans-serif);
+        padding: 10px;
+        font-family: Nunito, system-ui, sans-serif;
     }
 
-    /* Items */
+    /* Titres de section : Mon argent, Mon entreprise… */
+    .nav-sec {
+        padding: 12px 10px 4px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: #5B6B86;
+    }
+
+    /* Éléments : pilule de 44 px, icône dans un rond de 30 px */
     .nav-item, .nav-parent {
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 12px;
-        min-height: 42px;
+        gap: 10px;
+        min-height: 44px;
         padding: 0 8px;
-        border-radius: 999px;
-        text-decoration: none;
-        color: var(--mc-navy, #0E1F3D);
         border: 0;
+        border-radius: 999px;
         background: transparent;
-        cursor: pointer;
+        color: #0E1F3D;
+        text-decoration: none;
         font: inherit;
+        font-weight: 700;
         text-align: left;
+        cursor: pointer;
+        box-sizing: border-box;
     }
-        .nav-item:hover, .nav-parent:hover {
-            background: var(--mc-page, #F2F5F9);
-        }
-        /* La page où l'on est : fond bleu pâle, icône sur rond bleu marine. */
-        .nav-item.ici, .nav-parent.ici {
-            background: var(--mc-soft2, #E3EBF7);
-            color: var(--mc-primary-dark, #143A73);
-        }
-        .nav-item.ici .nav-txt { font-weight: 800; }
-        .nav-item.ici .nav-ico, .nav-parent.ici .nav-ico {
-            background: var(--mc-primary, #1B4F9C);
-            color: #fff;
-        }
-
-        .nav-item:focus, .nav-parent:focus {
-            outline: none;
-            box-shadow: var(--ring);
-        }
-
+    .nav-item:hover, .nav-parent:hover { background: #F2F5F9; }
+    .nav-item:focus-visible, .nav-parent:focus-visible { outline: none; box-shadow: var(--ring); }
     .nav-ico {
-        width: 36px;
-        height: 36px;
-        flex: 0 0 36px;
+        width: 30px; height: 30px; flex: 0 0 30px;
         border-radius: 50%;
-        background: var(--mc-page, #F2F5F9);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 17px;
-        line-height: 1;
-        color: var(--mc-primary, #1B4F9C);
+        background: #F2F5F9;
+        color: #1B4F9C;
+        display: flex; align-items: center; justify-content: center;
     }
     .nav-ico svg { display: block; }
-    .nav-txt {
-        font-weight: 700;
-        font-size: 15px;
-    }
+    .nav-txt { flex-grow: 1; font-size: 15px; }
 
-    .nav-meta {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+    /* La page où l'on est : fond bleu pâle, icône blanche sur rond bleu */
+    .nav-item.ici, .nav-parent.ici { background: #E3EBF7; color: #143A73; }
+    .nav-item.ici .nav-ico, .nav-parent.ici .nav-ico { background: #1B4F9C; color: #FFFFFF; }
 
+    /* Pastilles : jaune = à faire, rouge = en retard, bleu pâle = information */
     .nav-badge {
-        background: var(--mc-soft, #E8EDF5);
-        color: var(--mc-primary, #1B4F9C);
-        border: 1px solid transparent;
-        font-size: 12px;
-        font-weight: 800;
-        padding: 2px 8px;
-        border-radius: 999px;
+        min-width: 22px; height: 22px; box-sizing: border-box;
+        padding: 0 7px; border-radius: 11px;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 800;
+        background: #E8EDF5; color: #143A73;
     }
+    .nav-badge.y { background: #E3B341; color: #3D2A00; }
+    .nav-badge.r { background: #A3261C; color: #FFFFFF; }
 
-        /* Pastille d'alerte : ce qui attend une décision de l'utilisateur. */
-        .nav-badge.alert {
-            background: #fef3c7;
-            color: #b45309;
-            border-color: #fcd34d;
-        }
-
-    .chev {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        color: var(--mc-muted2, #44536E);
-    }
-    /* Accordion */
-    .nav-group {
-        padding: 0;
-    }
-
-    .nav-children {
-        display: block;
-        padding: 0 4px 6px 26px;
-    }
+    /* Groupes dépliables (les écrans d'un même élément) */
+    .chev { display: flex; color: #5B6B86; }
+    .chev svg { transition: transform .18s ease; }
+    .nav-parent[aria-expanded="true"] .chev svg { transform: rotate(90deg); }
+    .nav-parent[aria-expanded="false"] + .nav-children { display: none; }
+    .nav-children { display: flex; flex-direction: column; gap: 1px; padding: 2px 0 6px 48px; }
     .nav-child {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        min-height: 34px;
-        padding: 0 14px;
+        display: flex; align-items: center;
+        min-height: 34px; padding: 0 12px;
         border-radius: 999px;
-        color: var(--mc-muted2, #44536E);
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 13.5px;
+        color: #44536E; text-decoration: none;
+        font-weight: 700; font-size: 14px;
     }
-        .nav-child:hover {
-            background: var(--mc-page, #F2F5F9);
-            color: var(--mc-navy, #0E1F3D);
-        }
-        .nav-child.ici {
-            background: var(--mc-soft2, #E3EBF7);
-            color: var(--mc-primary-dark, #143A73);
-            font-weight: 800;
-        }
-        .nav-child.ici .dot { background: var(--mc-primary, #1B4F9C); box-shadow: none; }
-    .dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 999px;
-        background: var(--mc-line2, #AEBBCD);
+    .nav-child:hover { background: #F2F5F9; color: #0E1F3D; }
+    .nav-child.ici { background: #E3EBF7; color: #143A73; font-weight: 800; }
+
+    /* Voile (téléphone) */
+    .backdrop { display: none; position: fixed; inset: 0; background: rgba(14, 31, 61, .42); z-index: 35; border: none; }
+
+    /* Ordinateur : le menu masqué par ☰ libère sa colonne */
+    @media (min-width: 769px) {
+        html.menu-ferme .mc-shell { grid-template-columns: minmax(0, 1fr); }
+        html.menu-ferme .mc-sidebar { display: none; }
     }
 
-    /* Closed state */
-    .nav-parent[aria-expanded="false"] + .nav-children {
-        display: none;
-    }
-
-    .nav-parent[aria-expanded="true"] .chev svg {
-        transform: rotate(90deg);
-    }
-
-    .nav-parent .chev svg {
-        transition: transform .18s ease;
-    }
-
-    /* Footer */
-    .sidebar-footer {
-        margin-top: auto;
-        padding: 8px 0 0;
-        border-top: 1px solid var(--mc-soft, #E8EDF5);
-    }
-    .subtle {
-        color: var(--mc-navy, #0E1F3D);
-    }
-
-    /* Content */
-    .content {
-        margin-left: var(--sidebarW);
-        padding: 18px;
-    }
-
-    /* Backdrop */
-    .backdrop {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(2, 6, 23, .42);
-        z-index: 35;
-        border: none;
-    }
-
-    /* =========================
-            TABLETTE — 769px à 1024px
-         ========================= */
-    @media (max-width: 1024px) {
-    }
-
-    /* =========================
-             MOBILE LARGE  grands smartphones en portrait
-         ========================= */
+    /* Téléphone : barre du haut avec ☰, le menu glisse depuis la gauche */
     @media (max-width: 768px) {
-
-        .hamburger {
-            display: flex;
+        .topbar {
+            display: flex; align-items: center; gap: 12px;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+            height: 64px; padding: 10px 16px; box-sizing: border-box;
+            background: #FFFFFF; border-bottom: 1px solid #D5DDE8;
         }
-
+        .mc-shell { padding-top: 64px; grid-template-columns: minmax(0, 1fr); }
         .sidebar {
-            top: 64px; left: 0; width: var(--sidebarW); height: 100%; max-height: none; border-radius: 0;
+            top: 64px; left: 0; width: var(--sidebarW);
+            height: calc(100% - 64px); max-height: none; border-radius: 0 24px 24px 0;
             transform: translateX(-110%);
             transition: transform .22s ease;
         }
-
-        .content {
-            margin-left: 0;
-            padding: 14px;
-        }
-
-        .app-shell.menu-open .sidebar {
-            transform: translateX(0);
-        }
-
-        .app-shell.menu-open .backdrop {
-            display: block;
-        }
-
-        .topbar {
-            position: fixed; /* ← au lieu de sticky */
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            height: 64px;
-        }
-
-        /* Compense la hauteur du topbar fixe */
-        .mc-shell {
-            padding-top: 64px;
-        }
-    }
-    /* =========================
-         PETIT MOBILE — max 480px
-           ========================= */
-    @media (max-width: 480px) {
+        .app-shell.menu-open .sidebar { transform: translateX(0); }
+        .app-shell.menu-open .backdrop { display: block; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .sidebar, .nav-parent .chev svg {
-            transition: none;
-        }
+        .sidebar, .chev svg { transition: none; }
     }
 </style>
 
 <script>
     (function () {
+        var CLE = '60s-menu';
+        var html = document.documentElement;
         var shell = document.getElementById('<%= appShell.ClientID %>');
-        var btn = document.getElementById('btnMenu');
         var backdrop = document.getElementById('menuBackdrop');
-
         if (!shell) return;
+        // Les deux ☰ : celui de l'en-tête (ordinateur) et celui de la barre du haut (téléphone)
+        var boutons = Array.prototype.slice.call(document.querySelectorAll('[data-menu-burger]'));
 
-        // --- Mobile open/close ---
-        function setMenuOpen(isOpen) {
-            if (!btn || !backdrop) return;
-            if (isOpen) {
-                shell.classList.add('menu-open');
-                btn.setAttribute('aria-expanded', 'true');
-                document.body.style.overflow = 'hidden';
-            } else {
-                shell.classList.remove('menu-open');
-                btn.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
+        function telephone() { return window.innerWidth <= 768; }
+        function estOuvert() {
+            return telephone() ? shell.classList.contains('menu-open') : !html.classList.contains('menu-ferme');
         }
-
-        if (btn) {
-            btn.addEventListener('click', function () {
-                setMenuOpen(!shell.classList.contains('menu-open'));
+        function peindre() {
+            var o = estOuvert();
+            boutons.forEach(function (b) {
+                var lbl = o ? b.getAttribute('data-lbl-fermer') : b.getAttribute('data-lbl-ouvrir');
+                b.classList.toggle('ouvert', o);
+                b.setAttribute('aria-expanded', String(o));
+                if (lbl) { b.setAttribute('aria-label', lbl); b.title = lbl; }
             });
         }
-        if (backdrop) {
-            backdrop.addEventListener('click', function () { setMenuOpen(false); });
+        function ouvrirTiroir(o) {
+            shell.classList.toggle('menu-open', o);
+            document.body.style.overflow = o ? 'hidden' : '';
+            peindre();
         }
+        function basculer() {
+            if (telephone()) { ouvrirTiroir(!shell.classList.contains('menu-open')); return; }
+            var ferme = !html.classList.contains('menu-ferme');
+            html.classList.toggle('menu-ferme', ferme);
+            try { window.localStorage.setItem(CLE, ferme ? '0' : '1'); } catch (e) { }
+            peindre();
+        }
+
+        boutons.forEach(function (b) { b.addEventListener('click', basculer); });
+        if (backdrop) backdrop.addEventListener('click', function () { ouvrirTiroir(false); });
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') setMenuOpen(false);
+            if (e.key === 'Escape' && telephone() && shell.classList.contains('menu-open')) ouvrirTiroir(false);
         });
         window.addEventListener('resize', function () {
-            if (window.innerWidth > 820) setMenuOpen(false);
+            if (!telephone() && shell.classList.contains('menu-open')) ouvrirTiroir(false); else peindre();
         });
 
-        // --- Accordion behavior ---
-        var groups = shell.querySelectorAll('[data-accordion] .nav-parent');
-        groups.forEach(function (btnParent) {
-            btnParent.addEventListener('click', function () {
-                var isOpen = btnParent.getAttribute('aria-expanded') === 'true';
-                btnParent.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        // Groupes dépliables
+        Array.prototype.forEach.call(shell.querySelectorAll('.nav-parent'), function (p) {
+            p.addEventListener('click', function () {
+                p.setAttribute('aria-expanded', p.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
             });
         });
 
-        // --- La page courante (marquée par le serveur) : son groupe s'ouvre ---
+        // La page courante (marquée par le serveur) : son groupe s'ouvre et prend la couleur « ici »
         var courant = shell.querySelector('.nav-child.ici');
         if (courant) {
             var groupe = courant.closest('.nav-group');
             var parent = groupe ? groupe.querySelector('.nav-parent') : null;
             if (parent) { parent.setAttribute('aria-expanded', 'true'); parent.classList.add('ici'); }
         }
-        // --- Close mobile menu after click on any link ---
-var links = shell.querySelectorAll('[data-navlink]');
-        links.forEach(function (a) {
-            a.addEventListener('click', function () {
-                if (window.innerWidth <= 820) {
-                    setMenuOpen(false);
-                }
-            });
+
+        // Téléphone : un lien choisi referme le tiroir
+        Array.prototype.forEach.call(shell.querySelectorAll('[data-navlink]'), function (a) {
+            a.addEventListener('click', function () { if (telephone()) ouvrirTiroir(false); });
         });
 
+        peindre();
     })();
 </script>

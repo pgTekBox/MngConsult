@@ -221,6 +221,8 @@ a{
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<%-- Menu masqué par ☰ (choix gardé par navigateur) : appliqué avant l'affichage, sans clignement --%>
+<script>try { if (window.localStorage.getItem('60s-menu') === '0') document.documentElement.classList.add('menu-ferme'); } catch (e) { }</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />

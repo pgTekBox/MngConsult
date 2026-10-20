@@ -48,6 +48,12 @@ Namespace Controls
             sb.Append("<a href=""").Append(Server.HtmlEncode(url.Trim())).Append(""">").Append(Server.HtmlEncode(libelle)).Append("</a>")
         End Sub
 
+        ''' <summary>Libellé du bouton ☰ : « Masquer le menu » (fermer = True) ou « Afficher le menu ».</summary>
+        Protected Function MenuLbl(fermer As Boolean) As String
+            If fermer Then Return Mot(CurrentLang, "Masquer le menu", "Hide menu", "Ocultar el menú")
+            Return Mot(CurrentLang, "Afficher le menu", "Show menu", "Mostrar el menú")
+        End Function
+
         Private Shared Function Mot(lang As String, fr As String, en As String, es As String) As String
             Select Case lang
                 Case "en" : Return en
