@@ -12,7 +12,7 @@ Public Class wbfUsers
         ' Vérifier que l'utilisateur est connecté ET admin
         ' (UserId est un entier : 0 = non authentifié)
         If UserId = 0 Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
 

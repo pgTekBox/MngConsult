@@ -21,7 +21,7 @@ Public Class wbfRegister
         btnFerme.Text = L("closeBtn")
         lnkResend.Text = L("resendLink")
         lnkLogin.Text = L("signin")
-        lnkLogin.NavigateUrl = "~/wbfLogin.aspx?lang=" & CurrentLang
+        lnkLogin.NavigateUrl = "~/Default.aspx?lang=" & CurrentLang
     End Sub
 
     ''' <summary>Traductions de la page d'inscription (fr/en/es).</summary>

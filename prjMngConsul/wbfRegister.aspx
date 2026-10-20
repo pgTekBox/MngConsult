@@ -320,7 +320,7 @@
 
             <div class="card-footer">
                 <%= L("already") %>
-                <asp:HyperLink ID="lnkLogin" runat="server" NavigateUrl="~/wbfLogin.aspx" />
+                <asp:HyperLink ID="lnkLogin" runat="server" NavigateUrl="~/Default.aspx" />
             </div>
 
         </asp:Panel>

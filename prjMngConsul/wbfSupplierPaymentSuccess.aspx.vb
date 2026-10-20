@@ -19,7 +19,7 @@ Public Class wbfSupplierPaymentSuccess
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         If UserId = 0 Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
 

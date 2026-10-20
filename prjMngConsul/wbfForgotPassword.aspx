@@ -212,7 +212,7 @@
                 </asp:Panel>
 
                 <div class="login-links">
-                    <a href="wbfLogin.aspx?lang=<%= CurrentLang %>"><%= L("backToLogin") %></a>
+                    <a href="Default.aspx?lang=<%= CurrentLang %>"><%= L("backToLogin") %></a>
                 </div>
             </div>
 

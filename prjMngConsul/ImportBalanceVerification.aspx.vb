@@ -29,7 +29,7 @@ Public Class ImportBalanceVerification
         ' L'écran écrit dans la base et peut supprimer une balance : il n'est
         ' pas ouvert à qui n'est pas connecté.
         If Not isAuthenticated Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
 

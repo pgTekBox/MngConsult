@@ -8,7 +8,7 @@ Public Class ImportFournisseurs
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not isAuthenticated Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
         End If
     End Sub
 

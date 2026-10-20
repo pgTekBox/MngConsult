@@ -44,7 +44,7 @@ Public Class CorrespondanceComptes
         DirectCast(Master, SiteMaster).FondDePage = True
 
         If Not isAuthenticated Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
 

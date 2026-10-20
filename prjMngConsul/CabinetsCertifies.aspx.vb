@@ -24,7 +24,7 @@ Public Class CabinetsCertifies
         ' Les boîtes posent sur le fond de la page, sans cadre blanc autour (aussi dans la fenêtre).
         DirectCast(Master, SiteMaster).FondDePage = True
         If Not isAuthenticated Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
         If EnFenetre Then

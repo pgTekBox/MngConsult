@@ -220,7 +220,7 @@
                 <asp:Panel ID="pnlSuccess" runat="server" Visible="false">
                     <div class="login-note"><%= L("success") %></div>
                     <div class="login-links">
-                        <a href="wbfLogin.aspx?lang=<%= CurrentLang %>"><%= L("goToLogin") %></a>
+                        <a href="Default.aspx?lang=<%= CurrentLang %>"><%= L("goToLogin") %></a>
                     </div>
                 </asp:Panel>
 

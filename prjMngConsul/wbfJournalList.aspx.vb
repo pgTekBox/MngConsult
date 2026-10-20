@@ -13,7 +13,7 @@ Public Class wbfJournalList
 
 
             If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
+                Response.Redirect("~/Default.aspx")
                 Return
             End If
             ' Période par défaut : mois en cours

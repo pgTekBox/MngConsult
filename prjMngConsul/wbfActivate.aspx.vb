@@ -12,11 +12,11 @@ Public Class wbfActivate
         lnkResend.Text = L("restartBtn")
         lnkResend.NavigateUrl = "~/wbfRegister.aspx?lang=" & CurrentLang
         lnkLoginInvalid.Text = L("signinBtn")
-        lnkLoginInvalid.NavigateUrl = "~/wbfLogin.aspx?lang=" & CurrentLang
+        lnkLoginInvalid.NavigateUrl = "~/Default.aspx?lang=" & CurrentLang
         lnkRegInvalid.Text = L("registerBtn")
         lnkRegInvalid.NavigateUrl = "~/wbfRegister.aspx?lang=" & CurrentLang
         lnkLoginAlready.Text = L("signinBtn")
-        lnkLoginAlready.NavigateUrl = "~/wbfLogin.aspx?lang=" & CurrentLang
+        lnkLoginAlready.NavigateUrl = "~/Default.aspx?lang=" & CurrentLang
     End Sub
 
     ''' <summary>Traductions de la page d'activation (fr/en/es).</summary>

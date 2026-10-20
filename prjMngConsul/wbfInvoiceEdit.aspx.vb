@@ -67,7 +67,7 @@ Public Class wbfInvoiceEdit
         ' Cet écran n'exigeait aucune connexion : un visiteur pouvait ouvrir la
         ' facture de n'importe quelle compagnie par son numéro (T306).
         If Not isAuthenticated Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
 

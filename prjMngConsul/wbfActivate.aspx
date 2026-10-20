@@ -158,7 +158,7 @@
                 </p>
                 <div class="actions">
                     <asp:HyperLink ID="lnkLoginInvalid" runat="server"
-                        NavigateUrl="~/wbfLogin.aspx" CssClass="btn" />
+                        NavigateUrl="~/Default.aspx" CssClass="btn" />
                     <asp:HyperLink ID="lnkRegInvalid" runat="server"
                         NavigateUrl="~/wbfRegister.aspx" CssClass="btn btn-secondary" />
                 </div>
@@ -178,7 +178,7 @@
                 </p>
                 <div class="actions">
                     <asp:HyperLink ID="lnkLoginAlready" runat="server"
-                        NavigateUrl="~/wbfLogin.aspx" CssClass="btn" />
+                        NavigateUrl="~/Default.aspx" CssClass="btn" />
                 </div>
             </asp:Panel>
 

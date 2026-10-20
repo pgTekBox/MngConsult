@@ -23,7 +23,7 @@ Public Class wbfPayment
 
         ' Vérifier que l'utilisateur est connecté
         If UserId = 0 Then
-            Response.Redirect("~/wbfLogin.aspx?lang=" & CurrentLang)
+            Response.Redirect("~/Default.aspx?lang=" & CurrentLang)
             Return
         End If
 

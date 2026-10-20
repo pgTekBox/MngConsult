@@ -11,7 +11,7 @@ Public Class wbfAppointmentEdit
         ApplyLocalization()
 
         If Not isAuthenticated Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
 

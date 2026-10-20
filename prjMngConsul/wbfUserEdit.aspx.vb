@@ -10,7 +10,7 @@ Public Class wbfUserEdit
 
         ' Vérification : connecté + admin
         If Not isAuthenticated Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
         If Not isAdmin Then

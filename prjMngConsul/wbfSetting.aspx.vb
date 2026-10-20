@@ -58,7 +58,7 @@ Partial Public Class wbfSetting
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not isAuthenticated Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/Default.aspx")
             Return
         End If
         ' Les boîtes posent sur le fond de la page, comme dans le gabarit.

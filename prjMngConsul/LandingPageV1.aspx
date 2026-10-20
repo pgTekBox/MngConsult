@@ -287,7 +287,7 @@
                 </div>
                 <div class="hidden md:flex items-center gap-4">
                     <asp:Literal ID="litLang" runat="server"></asp:Literal>
-                    <a href="wbfLogin.aspx?lang=<%= CurrentLang %>" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Connexion</a>
+                    <a href="Default.aspx?lang=<%= CurrentLang %>" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Connexion</a>
                     <a data-nav="accueil" href="#plans" class="bg-blue-700 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-700/25">Inscription</a>
                 </div>
                 <button type="button" data-mobile-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="md:hidden text-slate-700 p-2">
@@ -307,7 +307,7 @@
                 <a data-nav="mobile" href="#" class="flex items-center gap-2 py-3 text-slate-700 hover:text-slate-900 text-base font-medium transition-colors"><i data-lucide="smartphone" class="w-4 h-4"></i>Application mobile</a>
                 <div class="flex items-center justify-between pt-4 mt-2 border-t border-slate-100">
                     <asp:Literal ID="litLangMobile" runat="server"></asp:Literal>
-                    <a href="wbfLogin.aspx?lang=<%= CurrentLang %>" class="text-slate-700 hover:text-slate-900 text-base font-medium transition-colors">Connexion</a>
+                    <a href="Default.aspx?lang=<%= CurrentLang %>" class="text-slate-700 hover:text-slate-900 text-base font-medium transition-colors">Connexion</a>
                 </div>
                 <a data-nav="accueil" href="#plans" class="block text-center bg-blue-700 hover:bg-blue-600 text-white text-base font-semibold px-5 py-3 rounded-lg mt-6 transition-all duration-200">Inscription</a>
             </div>

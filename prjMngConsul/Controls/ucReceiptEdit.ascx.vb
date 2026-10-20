@@ -99,7 +99,7 @@ Public Class ucReceiptEdit
 
         If Not IsPostBack Then
             If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
+                Response.Redirect("~/Default.aspx")
                 Return
             End If
             ' Récupérer le sens depuis la querystring (ENCAISSEMENT par défaut)

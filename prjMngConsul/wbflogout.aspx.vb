@@ -6,7 +6,7 @@
         clsRememberMe.Clear(Context)
         Session.Clear()
         Session.Abandon()
-        Response.Redirect("~/wbfLogin.aspx")
+        Response.Redirect("~/Default.aspx")
 
     End Sub
 

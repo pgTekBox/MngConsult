@@ -16,7 +16,7 @@ Public Class wbfAgenda
         If Not IsPostBack Then
 
             If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
+                Response.Redirect("~/Default.aspx")
                 Return
             End If
             ' Date courante par défaut
