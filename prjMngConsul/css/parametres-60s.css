@@ -1,0 +1,144 @@
+﻿/* =====================================================================
+   60secondes · Paramètres (wbfsetting.aspx) — couche de présentation v1 (2026-10-20)
+   Habille le balisage existant : fc-tete, fc-kpis, RadTabStrip tsSettings,
+   RadMultiPage mpSettings, répétiteurs rpEntreprise / rpTaxes / rpEmail / rpPdf /
+   rpTraitement / rpComptabilite / rpBancaire / rpComptable (.form-grid > .field).
+   Aucun contrôle, aucun nom de champ, aucune clé (hidShortName) n'est modifié.
+   ===================================================================== */
+#divMain {
+  --p-navy: #0E1F3D; --p-blue: #1B4F9C; --p-blue-d: #143A73; --p-blue-50: #EEF3FB; --p-blue-100: #DCE6F6;
+  --p-gold: #D9A03C; --p-gold-50: #FBF3E2; --p-green: #17784B; --p-green-50: #E7F5EE; --p-green-200: #B9E3CC;
+  --p-red: #B8392A; --p-red-50: #FCEDEA; --p-red-200: #F3C3BB;
+  --p-ink: #0E1F3D; --p-text: #24324D; --p-muted: #5B6B86; --p-faint: #98A5BA; --p-line: #E6EBF2; --p-line-2: #D5DDE8; --p-bg: #F4F6FA;
+  --p-shadow: 0 1px 2px rgba(14,31,61,.05), 0 8px 24px rgba(14,31,61,.06);
+}
+
+/* ---------- En-tête ---------- */
+#divMain .fc-tete { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 0 0 18px; padding: 0; background: transparent; border: 0; }
+#divMain .fc-tete .fc-rubrique { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--p-blue); }
+#divMain .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; color: var(--p-ink); line-height: 1.15; }
+#divMain .fc-tete p { margin: 6px 0 0; font-size: 15px; color: var(--p-muted); }
+#divMain .fc-tete .actions { display: flex; gap: 8px; }
+#divMain .RadButton.btn, #divMain input.btn, #divMain .btn { min-height: 42px !important; padding: 0 20px !important; border-radius: 999px !important; border: 1px solid var(--p-line-2) !important; background: #fff !important; color: var(--p-text) !important; font-family: inherit !important; font-weight: 800 !important; font-size: 14px !important; box-shadow: none !important; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: auto !important; line-height: 1 !important; }
+#divMain .RadButton.btn:hover, #divMain input.btn:hover, #divMain .btn:hover { background: var(--p-blue-50) !important; border-color: var(--p-blue-100) !important; }
+#divMain .RadButton.btn.primary, #divMain .btn.btn-primary, #divMain .btn.primary { background: var(--p-blue) !important; border-color: var(--p-blue) !important; color: #fff !important; }
+#divMain .RadButton.btn.primary:hover, #divMain .btn.btn-primary:hover { background: var(--p-blue-d) !important; }
+#divMain .RadButton .rbText { padding: 0 !important; font: inherit !important; color: inherit !important; }
+
+/* ---------- Résumé : progression + administrateur ---------- */
+#divMain .fc-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin: 0 0 18px; }
+#divMain .fc-kpi { background: #fff; border: 1px solid var(--p-line); border-radius: 20px; box-shadow: var(--p-shadow); padding: 16px 20px; }
+#divMain .fc-kpi .lab { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--p-muted); }
+#divMain .fc-kpi .lab i { width: 8px; height: 8px; border-radius: 50%; }
+#divMain .fc-kpi .val { display: block; margin-top: 4px; font-size: 26px; font-weight: 900; color: var(--p-ink); white-space: nowrap; }
+#divMain .pp-track { height: 8px; border-radius: 999px; background: var(--p-blue-50); margin-top: 10px; overflow: hidden; }
+#divMain .pp-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--p-blue), #3F7FD1); }
+#divMain .admin-id { display: flex; align-items: center; gap: 14px; }
+#divMain .admin-avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--p-blue); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; flex: none; }
+#divMain .admin-name { font-weight: 800; color: var(--p-ink); font-size: 16px; }
+#divMain .admin-meta { font-size: 13.5px; color: var(--p-muted); }
+#divMain .admin-role { margin-left: auto; padding: 5px 12px; border-radius: 999px; background: var(--p-blue-50); color: var(--p-blue); font-size: 12px; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+
+/* ---------- Conteneur et onglets ---------- */
+#divMain .wrap, #divMain .wrap > .card, #divMain .wrap .card-b { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+#divMain .RadTabStrip::-webkit-scrollbar { display: none; }
+#divMain .RadTabStrip { margin: 0 0 18px; background: transparent !important; border: 0 !important; overflow-x: auto; scrollbar-width: none; }
+#divMain .RadTabStrip .rtsLevel1, #divMain .RadTabStrip .rtsUL { border: 0 !important; background: transparent !important; }
+#divMain .RadTabStrip .rtsUL { display: flex !important; gap: 6px; padding: 6px !important; margin: 0 !important; width: max-content; }
+#divMain .RadTabStrip .rtsUL, #divMain .RadTabStrip .rtsLI { list-style: none !important; }
+#divMain .RadTabStrip .rtsLI { float: none !important; border: 0 !important; background: transparent !important; margin: 0 !important; padding: 0 !important; }
+#divMain .RadTabStrip .rtsLink { display: block !important; padding: 10px 16px !important; border: 0 !important; border-radius: 999px !important; background: transparent !important; color: var(--p-muted) !important; font-family: inherit !important; font-weight: 800 !important; font-size: 14px !important; cursor: pointer; box-shadow: none !important; }
+#divMain .RadTabStrip .rtsLink:hover { background: #fff !important; color: var(--p-ink) !important; }
+#divMain .RadTabStrip .rtsSelected .rtsLink, #divMain .RadTabStrip .rtsLink.rtsSelected { background: var(--p-navy) !important; color: #fff !important; }
+#divMain .RadTabStrip .rtsTxt { font: inherit !important; color: inherit !important; }
+#divMain .RadMultiPage { background: transparent !important; border: 0 !important; }
+#divMain .rmpView > div[style*="margin-bottom:12px"] { margin: 0 0 14px !important; padding: 12px 16px; border-radius: 14px; background: var(--p-blue-50); color: var(--p-blue) !important; font-size: 14px !important; font-weight: 700; }
+
+/* ---------- Logo et document à analyser ---------- */
+#divMain .logo-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin: 0 0 14px; }
+#divMain .logo-box, #divMain .scan-box { background: #fff; border: 1px solid var(--p-line); border-radius: 20px; box-shadow: var(--p-shadow); padding: 20px 22px; }
+#divMain .logo-box { display: flex; align-items: center; gap: 18px; }
+#divMain .logo-preview { width: 96px; height: 96px; border-radius: 20px; border: 1px solid var(--p-line); background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; flex: none; }
+#divMain .logo-preview img { max-width: 80%; max-height: 80%; }
+#divMain .logo-info { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#divMain .logo-info > label, #divMain .logo-info > input[type="file"], #divMain .logo-info > .hint { flex-basis: 100%; }
+#divMain .logo-info > label { font-size: 16px; font-weight: 800; color: var(--p-ink); }
+#divMain .logo-info input[type="file"] { font: inherit; font-size: 13.5px; color: var(--p-muted); }
+#divMain .logo-info input[type="file"]::file-selector-button { margin-right: 10px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--p-line-2); background: #fff; color: var(--p-text); font: inherit; font-weight: 800; cursor: pointer; }
+#divMain .logo-info input[type="file"]::file-selector-button:hover { background: var(--p-blue-50); }
+#divMain .logo-info .hint { font-size: 12.5px; color: var(--p-muted); }
+#divMain .logo-info input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--p-red); vertical-align: -3px; margin-right: 6px; }
+#divMain .logo-info input[type="checkbox"] + span { font-size: 13.5px !important; font-weight: 700; color: var(--p-text) !important; }
+#divMain .scan-title { font-size: 16px; font-weight: 800; color: var(--p-ink); }
+#divMain .scan-title::after { content: "✦ IA"; margin-left: 8px; padding: 3px 9px; border-radius: 999px; background: var(--p-gold-50); color: #8A5E10; font-size: 11.5px; font-weight: 800; vertical-align: 2px; }
+#divMain .scan-hint { margin-top: 4px; font-size: 13.5px; color: var(--p-muted); }
+#divMain .dropzone { margin-top: 12px; padding: 20px 16px; border: 2px dashed var(--p-line-2) !important; border-radius: 16px; background: var(--p-bg) !important; text-align: center; cursor: pointer; position: relative; transition: border-color .15s, background .15s; }
+#divMain .dropzone:hover, #divMain .dropzone.dragover, #divMain .dropzone.over { border-color: var(--p-blue) !important; background: var(--p-blue-50) !important; }
+#divMain .dz-ico { width: 42px; height: 42px; margin: 0 auto 8px; border-radius: 12px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 0 !important; }
+#divMain .dz-ico::before { content: ""; width: 20px; height: 20px; background: var(--p-blue); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M12 16V4M6 10l6-6 6 6M4 20h16'/%3E%3C/svg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M12 16V4M6 10l6-6 6 6M4 20h16'/%3E%3C/svg%3E") center/contain no-repeat; }
+#divMain .dz-text { font-weight: 800; color: var(--p-ink); font-size: 14px; }
+#divMain .dz-file { margin-top: 4px; font-size: 13px; font-weight: 700; color: var(--p-blue); }
+#divMain .scan-actions { margin-top: 12px; display: flex; justify-content: flex-end; }
+
+/* ---------- Grille de champs ---------- */
+#divMain .rmpView .form-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 16px; background: #fff; border: 1px solid var(--p-line); border-radius: 22px; box-shadow: var(--p-shadow); padding: 6px 22px 8px; margin: 0 0 14px; }
+#divMain .form-grid .field { margin: 0 0 14px; min-width: 0; }
+#divMain .form-grid .field-fullwidth, #divMain .form-grid .s60-sec, #divMain .form-grid .s60-large { grid-column: 1 / -1; }
+#divMain .form-grid .field > label { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 0 0 6px; font-size: 13px !important; font-weight: 800 !important; color: var(--p-text) !important; }
+#divMain .form-grid .field-shortname { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#divMain .form-grid .field > label strong { padding: 2px 8px; border-radius: 6px; background: var(--p-blue-50); color: var(--p-blue) !important; font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+/* Sections ajoutées par le script */
+#divMain .s60-sec { margin: 14px 0 10px; padding-top: 14px; border-top: 1px solid var(--p-line); }
+#divMain .s60-sec:first-child, #divMain .s60-sec.premier { border-top: 0; padding-top: 6px; margin-top: 8px; }
+#divMain .s60-sec h3 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; color: var(--p-ink); }
+#divMain .s60-sec h3 .n { width: 26px; height: 26px; border-radius: 8px; background: var(--p-blue-50); color: var(--p-blue); font-size: 13px; display: inline-flex; align-items: center; justify-content: center; }
+#divMain .s60-sec p { margin: 4px 0 0; font-size: 13.5px; color: var(--p-muted); }
+
+/* Contrôles Telerik */
+#divMain .form-grid .RadInput, #divMain .form-grid .RadPicker, #divMain .form-grid .RadComboBox { width: 100% !important; font-family: inherit !important; }
+#divMain .form-grid .RadPicker .RadInput { position: relative; }
+#divMain .form-grid .riTextBox, #divMain .form-grid .rcbInner { box-sizing: border-box !important; width: 100% !important; min-height: 44px !important; height: 44px; padding: 0 14px !important; border: 1px solid var(--p-line-2) !important; border-radius: 12px !important; background: #fff !important; font-family: inherit !important; font-size: 15px !important; font-weight: 600 !important; color: var(--p-ink) !important; box-shadow: none !important; transition: border-color .15s, box-shadow .15s; }
+#divMain .form-grid textarea.riTextBox { height: auto; min-height: 96px !important; padding: 12px 14px !important; line-height: 1.45; resize: vertical; }
+#divMain .form-grid .riTextBox:focus, #divMain .form-grid .riFocused, #divMain .form-grid .rcbFocused .rcbInner { border-color: var(--p-blue) !important; box-shadow: 0 0 0 3px var(--p-blue-100) !important; outline: none !important; }
+#divMain .form-grid .riTextBox:placeholder-shown, #divMain .form-grid .riEmpty { background: #FAFBFD !important; }
+#divMain .form-grid .RadPicker .riTextBox { padding-right: 44px !important; }
+#divMain .form-grid .RadPicker .rcSelect { position: absolute !important; right: 6px; top: 6px; bottom: auto !important; width: 32px; height: 32px; border: 0 !important; background: transparent !important; }
+#divMain .form-grid .RadPicker .rcCalPopup { display: block !important; width: 32px !important; height: 32px !important; border-radius: 9px; background: center/18px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231B4F9C' stroke-width='2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M16 3v4M8 3v4M3 10h18'/%3E%3C/svg%3E") !important; text-indent: -999px; overflow: hidden; }
+#divMain .form-grid .RadPicker .rcCalPopup:hover { background-color: var(--p-blue-50) !important; }
+#divMain .form-grid .rcbInner { display: flex !important; align-items: center; padding-right: 40px !important; position: relative; }
+#divMain .form-grid .rcbInput { border: 0 !important; background: transparent !important; font: inherit !important; color: inherit !important; width: 100% !important; padding: 0 !important; height: 42px; cursor: pointer; }
+#divMain .form-grid .rcbActionButton { position: absolute !important; right: 6px; top: 6px; width: 32px; height: 30px; border: 0 !important; border-radius: 9px; background: center/16px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6B86' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important; }
+#divMain .form-grid .rcbActionButton > * { display: none !important; }
+#divMain .form-grid .rcbHovered .rcbInner { border-color: var(--p-blue-100) !important; }
+.RadComboBoxDropDown_Metro { border-radius: 12px !important; border: 1px solid #D5DDE8 !important; box-shadow: 0 12px 30px rgba(14,31,61,.15) !important; font-family: inherit !important; overflow: hidden; }
+.RadComboBoxDropDown_Metro .rcbItem, .RadComboBoxDropDown_Metro .rcbHovered { padding: 8px 14px !important; font-size: 14px !important; }
+.RadComboBoxDropDown_Metro .rcbHovered { background: #EEF3FB !important; color: #0E1F3D !important; }
+.RadComboBoxDropDown_Metro .rcbSelected { background: #1B4F9C !important; color: #fff !important; }
+
+/* Notes, validation, aides ajoutées par le script */
+#divMain .s60-note { margin-top: 5px; font-size: 12.5px; color: var(--p-muted); }
+#divMain .s60-note b { color: var(--p-ink); }
+#divMain .field.s60-err .riTextBox { border-color: var(--p-red) !important; box-shadow: 0 0 0 3px var(--p-red-50) !important; }
+#divMain .field.s60-err .s60-note { color: var(--p-red); font-weight: 700; }
+#divMain .field.s60-ok .riTextBox { border-color: #9BD3B5 !important; }
+#divMain .field.s60-warn .s60-note { color: #8A5E10; font-weight: 700; }
+#divMain .s60-sensible { display: inline-flex; padding: 2px 8px; border-radius: 999px; background: var(--p-red-50); color: var(--p-red); font-size: 11px; font-weight: 800; }
+#divMain .s60-masque .riTextBox { -webkit-text-security: disc; }
+#divMain .s60-oeil { position: absolute; right: 6px; top: 6px; width: 32px; height: 32px; border: 0; border-radius: 9px; background: var(--p-bg) center/18px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6B86' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E"); cursor: pointer; }
+#divMain .s60-avec-btn { position: relative; display: block; }
+#divMain .s60-avec-btn .riTextBox { padding-right: 46px !important; }
+#divMain .s60-encart { grid-column: 1 / -1; margin: 0 0 14px; padding: 14px 16px; border-radius: 14px; background: var(--p-gold-50); color: #6B4A0E; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+#divMain .s60-encart b { color: var(--p-ink); font-size: 16px; }
+#divMain .s60-encart.bleu { background: var(--p-blue-50); color: var(--p-blue); }
+#divMain .mail-verify-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+#divMain .mail-verify-row .btn { min-height: 36px !important; padding: 0 14px !important; font-size: 13px !important; }
+#divMain .mail-badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+#divMain .mail-badge.no { background: var(--p-red-50); color: var(--p-red); }
+#divMain .mail-badge.yes, #divMain .mail-badge.ok { background: var(--p-green-50); color: var(--p-green); }
+
+/* Barre d'enregistrement */
+.s60-barre { position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, 160%); z-index: 9000; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 18px; border-radius: 999px; background: #0E1F3D; color: #fff; box-shadow: 0 12px 30px rgba(14,31,61,.3); font: 700 14px Nunito, "Segoe UI", sans-serif; transition: transform .25s; visibility: hidden; }
+.s60-barre.on { transform: translate(-50%, 0); visibility: visible; }
+.s60-barre button { min-height: 38px; padding: 0 18px; border-radius: 999px; font: inherit; font-weight: 800; cursor: pointer; border: 1px solid rgba(255,255,255,.25); background: transparent; color: #C9D5E8; }
+.s60-barre button.p { background: #1B4F9C; border-color: #1B4F9C; color: #fff; }
+

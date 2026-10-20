@@ -12,6 +12,9 @@ Public Class wbfBalanceVerification
         ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
         DirectCast(Master, SiteMaster).FondDePage = True
 
+        ' Nom de l'entreprise dans l'en-tête du rapport (« Mon entreprise » si inconnu).
+        If Not String.IsNullOrWhiteSpace(CompanyName) Then lblCompanyName.Text = Server.HtmlEncode(CompanyName)
+
         If Not IsPostBack Then
 
 
@@ -176,7 +179,7 @@ Public Class wbfBalanceVerification
 
         lblNbComptes.Text = If(hideZero, nbComptesAffichés & " / " & nbComptes, nbComptes.ToString())
 
-        lblInfo.Text = String.Format("Au {0} · {1} compte(s)", dateBV.ToString("yyyy-MM-dd"), nbComptesAffichés)
+        lblInfo.Text = String.Format("{0} compte(s)", nbComptesAffichés)
     End Sub
 
     ' ── Formatage ──

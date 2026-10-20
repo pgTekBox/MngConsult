@@ -184,6 +184,7 @@
         .empty-state{ font-size:14px; font-weight:700; }
 
     </style>
+    <link rel="stylesheet" href="css/parametres-60s.css?v=2026102001" />
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
@@ -516,4 +517,5 @@
         })();
     </script>
 
+    <script src="js/parametres-60s.js?v=2026102001"></script>
 </asp:Content>

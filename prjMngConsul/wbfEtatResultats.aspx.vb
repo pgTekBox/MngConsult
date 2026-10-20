@@ -12,6 +12,9 @@ Public Class wbfEtatResultats
         ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
         DirectCast(Master, SiteMaster).FondDePage = True
 
+        ' Nom de l'entreprise dans l'en-tête du rapport (« Mon entreprise » si inconnu).
+        If Not String.IsNullOrWhiteSpace(CompanyName) Then lblCompanyName.Text = Server.HtmlEncode(CompanyName)
+
         If Not IsPostBack Then
             ' Par défaut : exercice courant (1er janvier au aujourd'hui)
             dpDateDebut.SelectedDate = New DateTime(DateTime.Now.Year, 1, 1)

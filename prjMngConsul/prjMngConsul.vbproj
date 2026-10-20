@@ -293,6 +293,8 @@
     <Content Include="css\JsonViewer.css" />
     <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
+    <Content Include="css\parametres-60s.css" />
+    <Content Include="css\rapports-60s.css" />
     <Content Include="css\telerik-bleumarine.css" />
     <Content Include="css\icones-trait.css" />
     <Content Include="css\assistant.css" />
@@ -494,6 +496,8 @@
     <Content Include="ImportBalanceVerification.aspx" />
     <Content Include="js\JsonView.js" />
     <Content Include="js\RadWindows.js" />
+    <Content Include="js\parametres-60s.js" />
+    <Content Include="js\rapports-60s.js" />
     <Content Include="js\viewport.js" />
     <Content Include="LandingPage.aspx" />
     <Content Include="LandingPageV1.aspx" />

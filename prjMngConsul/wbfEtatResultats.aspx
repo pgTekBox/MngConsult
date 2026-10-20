@@ -317,6 +317,7 @@
         @media print { .report-body { border-radius: 0; padding: 0 !important } .fc-rubrique { display: none } }
 
     </style>
+    <link rel="stylesheet" href="css/rapports-60s.css?v=2026102006" />
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
@@ -325,8 +326,6 @@
     <div class="report-toolbar">
         <div>
             <div class="fc-rubrique">Rapports</div>
-            <div class="report-title">État des résultats</div>
-            <div class="report-sub"><asp:Label ID="lblInfo" runat="server" /></div>
         </div>
         <div class="report-actions">
             <button type="button" class="btn primaire" onclick="window.print(); return false;">Imprimer / PDF</button>
@@ -350,8 +349,11 @@
         <div class="report-header">
             <div class="company-name"><asp:Label ID="lblCompanyName" runat="server" Text="Mon entreprise" /></div>
             <h1>État des résultats</h1>
-            <div class="report-date">
-                Période du <asp:Label ID="lblPeriodeDebut" runat="server" /> au <asp:Label ID="lblPeriodeFin" runat="server" />
+            <div class="report-meta">
+                <asp:Label ID="lblInfo" runat="server" CssClass="report-info" Visible="false" />
+                <div class="report-date">
+                    Période du <asp:Label ID="lblPeriodeDebut" runat="server" /> au <asp:Label ID="lblPeriodeFin" runat="server" />
+                </div>
             </div>
         </div>
 
@@ -360,4 +362,5 @@
 
     </div>
 
+    <script src="js/rapports-60s.js?v=20261020"></script>
 </asp:Content>

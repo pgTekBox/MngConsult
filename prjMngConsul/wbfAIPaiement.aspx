@@ -291,6 +291,7 @@
         .empty-state { border-radius: 24px }
 
     </style>
+    <link rel="stylesheet" href="css/rapports-60s.css?v=2026102006" />
 
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         <AjaxSettings>
@@ -332,8 +333,6 @@
                </button>
                 <div>
                     <div class="fc-rubrique">Rapports</div>
-                    <h1>AI Payment</h1>
-                    <p class="subtitle">Gestion en temps réel avec AI</p>
                 </div>
             </div>
             <div class="currency-box">
@@ -343,6 +342,16 @@
         </div>
 
       
+
+        <%-- Titre du rapport (toujours visible) --%>
+        <div class="filter-card ai-title-card">
+            <div class="report-header">
+                <h1>AI Payment</h1>
+                <div class="report-meta">
+                    <span class="report-info">Gestion en temps réel avec AI</span>
+                </div>
+            </div>
+        </div>
 
         <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">
             <div id="divStatus" runat="server" class="status-msg">
@@ -648,4 +657,5 @@
         }
     </script>
 
+    <script src="js/rapports-60s.js?v=20261020"></script>
 </asp:Content>

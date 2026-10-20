@@ -265,6 +265,7 @@
         @media print { .report-body { border-radius: 0; padding: 0 !important } .fc-rubrique { display: none } }
 
     </style>
+    <link rel="stylesheet" href="css/rapports-60s.css?v=2026102006" />
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
@@ -273,8 +274,6 @@
     <div class="report-toolbar">
         <div>
             <div class="fc-rubrique">Rapports</div>
-            <div class="report-title">Balance de vérification</div>
-            <div class="report-sub"><asp:Label ID="lblInfo" runat="server" /></div>
         </div>
         <div class="report-actions">
             <button type="button" class="btn primaire" onclick="window.print(); return false;">Imprimer / PDF</button>
@@ -300,7 +299,10 @@
         <div class="report-header">
             <div class="company-name"><asp:Label ID="lblCompanyName" runat="server" Text="Mon entreprise" /></div>
             <h1>Balance de vérification</h1>
-            <div class="report-date">Au <asp:Label ID="lblDate" runat="server" /></div>
+            <div class="report-meta">
+                <asp:Label ID="lblInfo" runat="server" CssClass="report-info" />
+                <div class="report-date">Au <asp:Label ID="lblDate" runat="server" /></div>
+            </div>
         </div>
 
         <%-- Stats rapides --%>
@@ -328,4 +330,5 @@
 
     </div>
 
+    <script src="js/rapports-60s.js?v=20261020"></script>
 </asp:Content>
