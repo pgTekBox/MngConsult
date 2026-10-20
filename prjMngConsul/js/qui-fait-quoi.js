@@ -80,6 +80,7 @@ function lireContexte(){
   if(src.cabinet && src.cabinet.nom){ etat.cabNom=src.cabinet.nom; etat.cabinet = src.cabinet.certifie ? "certifie" : "invite"; }
   else { etat.cabNom=""; etat.cabinet="aucun"; }
   etat.urlEnregistrer = src.urlEnregistrer || null;
+  etat.lecture = !!src.lectureSeule;      /* ERP : seuls les administrateurs modifient (le serveur refuse les autres) */
   (src.choix||[]).forEach(function(x){ if(x && x.id) etat.resp[x.id]={moi:!!x.moi, cab:!!(x.cabinet||x.cab)}; });
   etat.sauve = JSON.stringify(etat.resp);
 }
@@ -126,8 +127,8 @@ function activites(){
 }
 function duo(attr, moi, cab, dMoi, dCab, label){
   return '<div class="duo" role="group" aria-label="'+esc(label)+'">'+
-    '<button class="choix" '+attr+' data-qui="moi" aria-pressed="'+moi+'"'+(dMoi?' disabled':'')+'>Moi</button>'+
-    '<button class="choix" '+attr+' data-qui="cab" aria-pressed="'+cab+'"'+(dCab?' disabled':'')+'>Mon cabinet</button></div>';
+    '<button class="choix" '+attr+' data-qui="moi" aria-pressed="'+moi+'"'+(dMoi||etat.lecture?' disabled':'')+'>Moi</button>'+
+    '<button class="choix" '+attr+' data-qui="cab" aria-pressed="'+cab+'"'+(dCab||etat.lecture?' disabled':'')+'>Mon cabinet</button></div>';
 }
 function cellule(a){
   var r=regle(a);
@@ -159,8 +160,9 @@ function dessiner(){
   var diff=0, avant=JSON.parse(etat.sauve);
   Object.keys(etat.resp).forEach(function(k){ if(JSON.stringify(etat.resp[k])!==JSON.stringify(avant[k])) diff++; });
   Object.keys(avant).forEach(function(k){ if(!etat.resp[k]) diff++; });
-  $("btnSave").disabled = diff===0;
-  $("btnSave").textContent = diff ? "Enregistrer ("+diff+")" : "Enregistré";
+  $("btnSave").disabled = diff===0 || etat.lecture;
+  $("btnSave").textContent = etat.lecture ? "Consultation seulement" : diff ? "Enregistrer ("+diff+")" : "Enregistré";
+  $("btnSave").title = etat.lecture ? "Seul un administrateur de votre compagnie peut modifier la répartition." : "";
   $("cabEtat").innerHTML = etat.cabinet==="aucun" ? '<span style="color:#44536E">Tout vous revient. Invitez votre cabinet pour partager.</span>'
     : etat.cabinet==="certifie" ? '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Cabinet certifié 60secondes'
     : '<span style="color:#7A5200">Cabinet invité, pas encore certifié</span>';
@@ -243,14 +245,14 @@ function choix(){
       return { id:a.id, bloc:blocDe(a), activite:a.a, statut:s, moi: c?c.moi:false, cabinet: c?c.cab:false, partagee: s==="par" }; }) };
 }
 $("btnSave").addEventListener("click",function(){
-  var p=choix(); document.dispatchEvent(new CustomEvent("qfq:enregistrer",{detail:p}));
-  etat.sauve=JSON.stringify(etat.resp); dessiner();
-  if(etat.urlEnregistrer && window.fetch){
-    fetch(etat.urlEnregistrer,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"same-origin",body:JSON.stringify(p)})
-      .then(function(r){ if(!r.ok) throw 0; }).catch(function(){ montrer("L'enregistrement n'a pas pu être envoyé. Réessayez dans un instant."); });
-  }
-  montrer("C'est enregistré : "+p.activites.length+" actions réparties. Vous pourrez changer d'avis en tout temps.");
-});
-window.QuiFaitQuoi = { choix: choix };
+  if(etat.lecture) return;
+  var p=choix(), envoye=JSON.stringify(etat.resp); document.dispatchEvent(new CustomEvent("qfq:enregistrer",{detail:p}));
+  if(!etat.urlEnregistrer || !window.fetch){ etat.sauve=envoye; dessiner(); montrer("C'est enregistré : "+p.activites.length+" actions réparties. Vous pourrez changer d'avis en tout temps."); return; }
+  /* ERP : enregistré dans les paramètres de la compagnie ; « Enregistré » seulement quand le serveur l'a confirmé. */
+  $("btnSave").disabled=true;
+  fetch(etat.urlEnregistrer,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"same-origin",body:JSON.stringify(p)})
+    .then(function(r){ if(!r.ok) throw 0; etat.sauve=envoye; dessiner(); montrer("C'est enregistré : "+p.activites.length+" actions réparties. Vous pourrez changer d'avis en tout temps."); })
+    .catch(function(){ dessiner(); montrer("L'enregistrement n'a pas pu être envoyé. Réessayez dans un instant."); });
+});window.QuiFaitQuoi = { choix: choix };
 
 lireContexte(); hauteurBarre(); dessiner();

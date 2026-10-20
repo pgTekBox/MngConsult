@@ -8,8 +8,8 @@
 <%-- Page « Qui fait quoi » (modèle 60secondes-qui-fait-quoi.html, inventaire v5.2), affichée dans
      l'onglet « Qui fait quoi » de la fenêtre Mon cabinet comptable (js/cabinet-60s.js, dans un cadre).
      Le contexte (entreprise, cabinet choisi) vient du serveur. Profil et métier ne sont pas encore
-     branchés : la page part de ceux de la démonstration du modèle. L'enregistrement n'est pas encore
-     relié au serveur (événement « qfq:enregistrer » seulement). --%>
+     branchés : la page part de ceux de la démonstration du modèle. Les choix sont enregistrés dans le
+     paramètre de compagnie QFQ_CHOIX (POST vers cette page, administrateurs seulement). --%>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/qui-fait-quoi.css?v=2026102001">
@@ -80,6 +80,6 @@
 <div class="toast" id="toast" role="status" hidden></div>
 <script>window.QFQ_CONTEXTE = <%= ContexteJson %>;</script>
 <script src="js/qui-fait-quoi-data.js?v=2026102001"></script>
-<script src="js/qui-fait-quoi.js?v=2026102001"></script>
+<script src="js/qui-fait-quoi.js?v=2026102002"></script>
 </body>
 </html>
