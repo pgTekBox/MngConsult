@@ -24,8 +24,8 @@ Namespace Controls
         Private Sub LoadPortails()
             Dim lang As String = CurrentLang
             Dim sb As New StringBuilder()
-            sb.Append("<span class=""ici"" aria-current=""page"">").Append(Server.HtmlEncode(Mot(lang, "Entreprise", "Business", "Empresa"))).Append("</span>")
-            AjouterBoutonCabinets(sb, Mot(lang, "Cabinets certifiés", "Certified firms", "Despachos certificados"))
+            ' « Entreprise » et « Cabinets certifiés » retirés de l'en-tête (l'annuaire des
+            ' cabinets reste accessible par le menu : Mon cabinet comptable).
             AjouterPortail(sb, "Portail.Paie.Url", Mot(lang, "Paie", "Payroll", "Nómina"))
             AjouterPortail(sb, "Portail.Paiements.Url", Mot(lang, "Paiements", "Payments", "Pagos"))
             litPortails.Text = sb.ToString()
