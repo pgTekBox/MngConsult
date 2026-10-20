@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -27,7 +27,8 @@
             <section id="fr-regles">
                 <h2>Règles communes aux rapports comptables</h2>
                 <p>Les six rapports comptables partagent le même fonctionnement. Ce qui suit s’applique à chacun d’eux, sauf mention contraire dans la section de l’écran.</p>
-                <p>Même présentation partout : le titre du rapport pose sur le fond de la page, sous la rubrique « Rapports », avec <kbd>Imprimer / PDF</kbd> en pastille bleue à droite ; la période (ou la date) et son bouton <kbd>Générer</kbd> occupent une carte blanche ; le rapport lui-même, avec son en-tête imprimable, occupe la carte suivante. Les écrans « IA Paiement » et « IA Ventes » suivent la même tête, avec leurs propres cartes.</p>
+                <p>Même présentation partout : en haut de la page, seule la rubrique « Rapports » apparaît à gauche, avec les boutons d’action à droite (<kbd>Imprimer / PDF</kbd> en pastille bleue ; le Plan comptable y ajoute <kbd>Tous</kbd>, <kbd>Bilan</kbd> et <kbd>Résultats</kbd> ; l’État des résultats, le Bilan et l’État des flux de trésorerie y ajoutent <kbd>Masquer les comptes à zéro</kbd>). Il n’y a plus de grand titre au-dessus du rapport. La période (ou la date) et son bouton <kbd>Générer</kbd> occupent une carte blanche ; le rapport lui-même occupe la carte suivante.</p>
+                <p><strong>En-tête de la carte du rapport</strong> : le nom réel de votre compagnie (le nom légal inscrit dans le profil de l’entreprise), puis le titre du rapport, et à droite une ou deux pastilles : la date ou la période du rapport, plus un compteur pour deux rapports (« N classe(s) · N compte(s) » pour le Plan comptable, « N compte(s) » pour la Balance de vérification). Les écrans « IA Paiement » et « IA Ventes » suivent la même tête : leur titre et leur sous-titre occupent une carte blanche juste sous la rubrique « Rapports ».</p>
                 <h3>Accès et compagnie</h3>
                 <ul>
                     <li>Un utilisateur qui n’est pas connecté est renvoyé à la page de connexion.</li>
@@ -40,22 +41,39 @@
                     <li><kbd>Imprimer / PDF</kbd> : ouvre la fenêtre d’impression du navigateur. C’est le seul bouton de sortie. Pour obtenir un fichier, choisissez « Enregistrer en PDF » comme imprimante. Aucun rapport n’offre d’export Excel ou CSV.</li>
                 </ul>
                 <p>Pour obtenir un rapport en PDF : 1. Réglez les dates. 2. Cliquez sur <kbd>Générer</kbd>. 3. Cliquez sur <kbd>Imprimer / PDF</kbd>. 4. Dans la fenêtre du navigateur, choisissez « Enregistrer en PDF » puis confirmez.</p>
+                <h3>Tuiles de synthèse</h3>
+                <p>L’État des résultats, le Bilan et l’État des flux de trésorerie affichent des tuiles de synthèse en haut de la carte du rapport, pour lire les grands chiffres d’un coup d’œil. Leur contenu est décrit dans la section de chaque rapport.</p>
+                <h3>Masquer les comptes à zéro</h3>
+                <p>L’État des résultats, le Bilan et l’État des flux de trésorerie offrent, dans la zone d’action en haut à droite, le bouton <kbd>Masquer les comptes à zéro</kbd>. Une pastille sur le bouton indique combien de lignes ont un montant nul.</p>
+                <ul>
+                    <li>Un clic masque les lignes dont le montant est nul, ainsi que tout sous-groupe dont toutes les lignes sont nulles. Le bouton devient alors <kbd>Afficher les comptes à zéro</kbd> ; un nouveau clic les fait réapparaître.</li>
+                    <li>Le choix est mémorisé dans ce navigateur : vous le retrouvez à la prochaine ouverture du rapport.</li>
+                    <li>C’est un simple affichage : les totaux ne changent pas et rien n’est recalculé.</li>
+                    <li>Ce qui est masqué à l’écran l’est aussi à l’impression.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">Ne confondez pas ce bouton avec la case « Masquer les comptes à solde zéro » de la <a href="#fr-balance">Balance de vérification</a> : la case régénère le rapport sur le serveur, alors que le bouton ne fait que masquer des lignes déjà affichées.</div>
                 <h3>Mise en page à l’impression</h3>
                 <ul>
                     <li>Format lettre, orientation portrait, marges de 1,5 cm.</li>
                     <li>La barre d’outils, les filtres et le menu disparaissent à l’impression. Seuls l’en-tête et le corps du rapport sont imprimés.</li>
+                    <li>Le nom de la compagnie est imprimé en entier dans l’en-tête, sans être coupé.</li>
+                    <li>Une classe ou une section trop longue se poursuit sur la page suivante, au lieu de laisser son en-tête seul sur la première page.</li>
+                    <li>Les titres de section et de sous-groupe restent avec leurs lignes, et un total ne se retrouve pas seul en haut d’une page.</li>
+                    <li>Pour le Plan comptable et la Balance de vérification, les en-têtes de colonnes se répètent sur chaque page.</li>
+                    <li>Les lignes masquées par <kbd>Masquer les comptes à zéro</kbd> ne sont pas imprimées.</li>
                 </ul>
                 <h3>Présentation des dates et des montants</h3>
                 <table>
                     <thead><tr><th>Élément</th><th>Affichage</th></tr></thead>
                     <tbody>
                         <tr><td>Dates</td><td>Format AAAA-MM-JJ, par exemple 2026-09-25.</td></tr>
+                        <tr><td>Montants</td><td>Format québécois : espace comme séparateur des milliers, virgule pour les décimales, symbole $ après le montant, par exemple « 2 955,45 $ ».</td></tr>
                         <tr><td>Montant nul</td><td>« — » (tiret). Exception : la Balance de vérification affiche « 0,00 $ » dans ses cartes du haut.</td></tr>
                         <tr><td>Montant négatif</td><td>Entre parenthèses et en rouge, par exemple « (1 234,56 $) ».</td></tr>
                         <tr><td>Montant positif</td><td>En vert.</td></tr>
                     </tbody>
                 </table>
-                <div class="piege" data-titre="Piège">L’en-tête imprimé affiche toujours « Mon entreprise ». Le nom de votre compagnie n’est jamais inscrit dans cette étiquette. Si vous transmettez un PDF à un tiers (banquier, comptable), ajoutez le nom de la compagnie dans le nom du fichier ou dans le courriel.</div>
+                <div class="note" data-titre="Bon à savoir">L’en-tête du rapport, à l’écran comme à l’impression, affiche le nom légal inscrit dans le <a href="administration.html#fr-profil">profil de l’entreprise</a>. Si aucun nom n’y est inscrit, il affiche « Mon entreprise » : complétez le profil avant de transmettre un PDF à un tiers (banquier, comptable).</div>
                 <div class="note" data-titre="Bon à savoir">Les rapports lisent les écritures comptabilisées dans le grand livre. Une facture en brouillon ou une écriture non comptabilisée n’y apparaît pas. Voyez la section <a href="comptabilite.html">Comptabilité</a> pour la saisie des écritures.</div>
             </section>
 
@@ -75,7 +93,8 @@
                 <p>Il n’y a aucune date à saisir. Les trois boutons de filtre (<kbd>Tous</kbd>, <kbd>Bilan</kbd>, <kbd>Résultats</kbd>) sont les seuls paramètres.</p>
                 <h3>Présentation</h3>
                 <ul>
-                    <li>Sous le titre : « X classe(s) · Y compte(s) ». L’en-tête indique « Généré le AAAA-MM-JJ HH:mm ».</li>
+                    <li><strong>En-tête de la carte</strong> : nom de la compagnie, titre « Plan comptable » et, à droite, la pastille de date (« Généré le AAAA-MM-JJ HH:mm ») et la pastille « N classe(s) · N compte(s) ».</li>
+                    <li>À l’impression, les en-têtes de colonnes se répètent sur chaque page, et une classe longue se poursuit sur la page suivante.</li>
                     <li><strong>Bandeau de classe</strong> : code et description de la classe, plage de numéros « (début à fin) » et un badge BILAN ou RESULTAT.</li>
                     <li><strong>Sous-classes</strong> : code, description et plage « début – fin ».</li>
                     <li><strong>Pied de chaque classe</strong> : « N compte(s) ».</li>
@@ -121,9 +140,11 @@
                 <h3>Boutons et actions</h3>
                 <ul>
                     <li><kbd>Générer</kbd> : reconstruit le rapport pour la période saisie.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (en haut à droite, avec le nombre de lignes à zéro) : masque ou réaffiche les lignes dont le montant est nul. Affichage seulement : les totaux ne changent pas. Voyez <a href="#fr-regles">Règles communes</a>.</li>
                     <li><kbd>Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
                 </ul>
                 <h3>Structure du rapport</h3>
+                <p>En haut de la carte du rapport, quatre <strong>tuiles de synthèse</strong> : « Revenus », « Bénéfice brut », « Bénéfice net » et « Marge nette » (en %).</p>
                 <p>L’en-tête indique « Période du … au … ». Le rapport a trois colonnes : numéro de compte, nom du compte, montant. Pour chaque section : un bandeau de section, puis les sous-classes avec leurs comptes, puis une ligne « Total — [sous-classe] », puis le total de la section. Dans l’ordre :</p>
                 <ol>
                     <li>« Revenus », puis « Total des revenus » ;</li>
@@ -150,6 +171,7 @@
                 <div class="piege" data-titre="Piège">La date « Au : » doit être postérieure à la date « Du : ». L’écran ne vérifie pas ce point : une période inversée donne un rapport vide ou incohérent sans message d’erreur.</div>
                 <div class="note" data-titre="Bon à savoir">Un bénéfice net négatif (une perte) s’affiche entre parenthèses sur la ligne finale, mais pas en rouge, contrairement aux autres montants négatifs.</div>
                 <div class="astuce" data-titre="Astuce">Pour un état des résultats mensuel, saisissez le premier et le dernier jour du mois, puis cliquez sur <kbd>Générer</kbd>. Pour l’année complète, laissez les deux champs vides : le rapport reprend le 1er janvier et aujourd’hui.</div>
+                <div class="astuce" data-titre="Astuce">Avant d’imprimer, cliquez sur <kbd>Masquer les comptes à zéro</kbd> pour obtenir un document plus court : les totaux et le bénéfice net restent identiques.</div>
             </section>
 
             <section id="fr-bilan">
@@ -167,9 +189,11 @@
                 <h3>Boutons et actions</h3>
                 <ul>
                     <li><kbd>Générer</kbd> : reconstruit le bilan à la date saisie.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (en haut à droite, avec le nombre de lignes à zéro) : masque ou réaffiche les comptes dont le solde est nul. Affichage seulement : les totaux et le contrôle d’équilibre ne changent pas.</li>
                     <li><kbd>Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
                 </ul>
                 <h3>Structure du rapport</h3>
+                <p>En haut de la carte du rapport, jusqu’à trois <strong>tuiles de synthèse</strong> reprennent les grands totaux (par exemple total de l’actif, total du passif, total des capitaux propres).</p>
                 <p>L’en-tête indique « Au AAAA-MM-JJ ». Trois grands blocs :</p>
                 <ul>
                     <li><strong>ACTIF</strong>
@@ -229,9 +253,11 @@
                 <h3>Boutons et actions</h3>
                 <ul>
                     <li><kbd>Générer</kbd> : reconstruit l’état pour la période saisie.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (en haut à droite, avec le nombre de lignes à zéro) : masque ou réaffiche les lignes dont le montant est nul. Affichage seulement : les totaux ne changent pas.</li>
                     <li><kbd>Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
                 </ul>
                 <h3>Structure du rapport</h3>
+                <p>En haut de la carte du rapport, quatre <strong>tuiles de synthèse</strong> : « Exploitation », « Investissement », « Financement » et « Trésorerie de fin », en vert si le montant est positif, en rouge s’il est négatif.</p>
                 <p><strong>A. « Activités d’exploitation »</strong></p>
                 <ul>
                     <li>Bénéfice net.</li>
@@ -255,7 +281,7 @@
                     <li><strong>Méthode indirecte</strong>, confirmée par la note au bas du rapport : on part du bénéfice net, on ajoute les éléments sans effet sur la trésorerie (par exemple l’amortissement, qui est une charge sans sortie d’argent), puis on applique les variations du fonds de roulement (une hausse des comptes clients réduit la trésorerie ; une hausse des comptes fournisseurs l’augmente).</li>
                     <li>Variation nette = Exploitation + Investissement + Financement.</li>
                     <li>Trésorerie de fin = Trésorerie de début + Variation nette.</li>
-                    <li>Toutes les lignes sont affichées, même quand leur montant est nul (« — »).</li>
+                    <li>Par défaut, toutes les lignes sont affichées, même quand leur montant est nul (« — »). Le bouton <kbd>Masquer les comptes à zéro</kbd> les retire de l’affichage (et de l’impression), sans changer les totaux.</li>
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
@@ -335,7 +361,8 @@
                 <h3>Structure du rapport</h3>
                 <ul>
                     <li><strong>Quatre cartes en haut</strong> : « Total débits », « Total crédits », « Écart » (en vert si nul, sinon signalé comme déséquilibré) et « Comptes ». Quand le filtre « Masquer les comptes à solde zéro » est actif, la carte « Comptes » affiche « affichés / total ».</li>
-                    <li>Sous le titre : « Au [date] · N compte(s) ».</li>
+                    <li><strong>En-tête de la carte</strong> : nom de la compagnie, titre « Balance de vérification » et, à droite, la pastille de date et la pastille « N compte(s) ».</li>
+                    <li>À l’impression, les en-têtes de colonnes se répètent sur chaque page.</li>
                     <li><strong>Regroupement par classe parente</strong> : bandeau de la classe, lignes des comptes, puis « Total — [classe] ». Une classe sans ligne affichée est omise.</li>
                     <li><strong>Dernière ligne</strong> : « TOTAL ».</li>
                 </ul>
@@ -365,6 +392,7 @@
                 </ul>
                 <h3>Trucs et pièges</h3>
                 <div class="astuce" data-titre="Astuce">Cochez « Masquer les comptes à solde zéro » avant d’imprimer pour obtenir un document plus court. Les totaux restent identiques.</div>
+                <div class="note" data-titre="Bon à savoir">Cette case est propre à la Balance de vérification : elle régénère le rapport. Elle n’a rien à voir avec le bouton <kbd>Masquer les comptes à zéro</kbd> de l’État des résultats, du Bilan et de l’État des flux de trésorerie, qui masque seulement des lignes à l’affichage.</div>
                 <div class="astuce" data-titre="Astuce">Pour trouver l’origine d’un écart, générez la balance à plusieurs dates (fin de chaque mois) : le mois où l’écart apparaît contient l’écriture fautive.</div>
             </section>
 
@@ -385,6 +413,7 @@
                 </ul>
                 <h3>Présentation</h3>
                 <ul>
+                    <li><strong>Carte de titre</strong> : juste sous la rubrique « Rapports », une carte blanche affiche le titre et le sous-titre de l’écran. Elle reste visible même quand seul un message d’état est affiché (par exemple un message d’erreur). La case « Devise : CAD $ » reste en haut à droite.</li>
                     <li><strong>Carte « Période de paiement »</strong> : totaux « Transactions » et « Montant total » pour la période choisie.</li>
                     <li><strong>Une carte par catégorie</strong> (Gouvernemental, Fournisseur, Employé) : « N paiement(s) en attente », « Total à payer » et le badge « N à traiter ». Une fois dépliée : « N transaction(s) — [période] », le bouton <kbd>Payer tout</kbd> et le tableau des paiements.</li>
                 </ul>
@@ -437,7 +466,7 @@
                 </ul>
                 <h3>Présentation</h3>
                 <ul>
-                    <li><strong>En-tête</strong> : « AI Sales — Gestion intelligente des ventes » et le widget « Solde bancaire ». Le solde est affiché avec deux décimales, suivi de « US$ » si le compte est en dollars américains. Il est lu sur le compte bancaire désigné dans les paramètres de la compagnie (paramètre « COMPTE_BANQUE » de la catégorie « BANCAIRE », voyez <a href="administration.html">Administration</a>).</li>
+                    <li><strong>Carte de titre</strong> : juste sous la rubrique « Rapports », une carte blanche affiche le titre et le sous-titre « AI Sales — Gestion intelligente des ventes ». Elle reste visible même quand seul un message d’état est affiché. Le widget « Solde bancaire » reste en haut à droite. Le solde est affiché avec deux décimales, suivi de « US$ » si le compte est en dollars américains. Il est lu sur le compte bancaire désigné dans les paramètres de la compagnie (paramètre « COMPTE_BANQUE » de la catégorie « BANCAIRE », voyez <a href="administration.html">Administration</a>).</li>
                     <li><strong>Carte « Période de vente »</strong> : pour chaque période, « N ventes » et trois montants : « Collecté », « À recevoir », « En retard ».</li>
                     <li><strong>Section « Détail — [période] »</strong> : une ligne par facture, triée de l’échéance la plus récente à la plus ancienne.</li>
                 </ul>
@@ -479,7 +508,10 @@
                 <h2>Questions fréquentes</h2>
                 <details><summary>Comment obtenir un rapport en Excel ou en CSV ?</summary><p>Ce n’est pas possible : le seul bouton de sortie est <kbd>Imprimer / PDF</kbd>. Choisissez « Enregistrer en PDF » dans la fenêtre d’impression du navigateur pour obtenir un fichier.</p></details>
                 <details><summary>J’ai changé la date, mais le rapport n’a pas bougé.</summary><p>Après un changement de date, il faut cliquer sur <kbd>Générer</kbd>. Seule la case « Masquer les comptes à solde zéro » de la Balance de vérification régénère le rapport immédiatement.</p></details>
-                <details><summary>Pourquoi l’en-tête imprimé indique-t-il « Mon entreprise » ?</summary><p>Cette étiquette est fixe et n’affiche jamais le nom de votre compagnie. Ajoutez le nom de la compagnie dans le nom du fichier PDF ou dans le message qui l’accompagne.</p></details>
+                <details><summary>Pourquoi l’en-tête du rapport indique-t-il « Mon entreprise » ?</summary><p>L’en-tête affiche le nom légal inscrit dans le profil de l’entreprise. « Mon entreprise » n’apparaît que si aucun nom n’y est inscrit : complétez le <a href="administration.html#fr-profil">profil de l’entreprise</a>, puis rouvrez le rapport.</p></details>
+                <details><summary>J’ai cliqué sur « Masquer les comptes à zéro ». Mes totaux sont-ils encore justes ?</summary><p>Oui. Le bouton ne fait que cacher les lignes dont le montant est nul (et les sous-groupes entièrement à zéro) ; rien n’est recalculé et les totaux restent identiques. Les lignes cachées le sont aussi à l’impression.</p></details>
+                <details><summary>Les comptes à zéro restent cachés quand je reviens sur le rapport.</summary><p>Le choix est mémorisé dans votre navigateur. Cliquez sur <kbd>Afficher les comptes à zéro</kbd> pour les faire réapparaître.</p></details>
+                <details><summary>À l’impression, une classe commence sur une page et se termine sur la suivante. Est-ce normal ?</summary><p>Oui. Une classe ou une section longue se poursuit sur la page suivante plutôt que de laisser son en-tête seul en bas de page. Les titres restent avec leurs lignes et, pour le Plan comptable et la Balance de vérification, les en-têtes de colonnes sont répétés sur chaque page.</p></details>
                 <details><summary>Le bilan affiche « ✗ Écart de … — Le bilan n’est pas en équilibre ». Que faire ?</summary><p>Générez la Balance de vérification à la même date. Si elle affiche aussi un écart, une écriture est déséquilibrée : retrouvez-la dans le journal. Si elle est en équilibre, un compte est rattaché à la mauvaise classe (par exemple un compte de charges dans la plage de l’actif) : corrigez son classement dans le plan comptable.</p></details>
                 <details><summary>L’état des bénéfices non répartis signale un écart avec le compte 3300. Est-ce grave ?</summary><p>Avant la clôture de l’exercice, non : le bénéfice de l’année n’a pas encore été reporté dans le compte 3300, et l’écart correspond au bénéfice net moins les distributions. Après la clôture, cherchez une écriture passée directement au compte 3300.</p></details>
                 <details><summary>Mon état des résultats montre un bénéfice, mais je n’ai pas cet argent en banque. Pourquoi ?</summary><p>Le bénéfice comprend les factures émises et non encore encaissées, et exclut certains décaissements (achats d’équipement, remboursements d’emprunts, retraits). Consultez l’État des flux de trésorerie : il part du bénéfice net et explique où l’argent est allé.</p></details>
@@ -502,6 +534,7 @@
                         <tr><td>Bénéfices non répartis (BNR)</td><td>Profits accumulés et laissés dans l’entreprise, après dividendes et retraits. Compte 3300.</td></tr>
                         <tr><td>Bénéfice brut</td><td>Revenus moins coût des ventes.</td></tr>
                         <tr><td>Bénéfice net</td><td>Ce qui reste après toutes les charges et les impôts. Négatif, on parle de perte nette.</td></tr>
+                        <tr><td>Marge nette</td><td>Bénéfice net exprimé en pourcentage des revenus. Affichée dans une tuile de l’état des résultats.</td></tr>
                         <tr><td>Balance de vérification</td><td>Liste des soldes de tous les comptes, dont le total des débits doit égaler le total des crédits.</td></tr>
                         <tr><td>Débit / Crédit (D / C)</td><td>Les deux côtés d’une écriture. L’actif et les charges augmentent au débit ; le passif, les capitaux propres et les revenus augmentent au crédit.</td></tr>
                         <tr><td>Classe / Sous-classe</td><td>Les deux niveaux de regroupement des comptes dans le plan comptable, chacun avec une plage de numéros.</td></tr>
@@ -523,7 +556,8 @@
             <section id="en-common-rules">
                 <h2>Rules common to the accounting reports</h2>
                 <p>The six accounting reports work the same way. Everything below applies to each of them, unless the screen’s own section says otherwise.</p>
-                <p>Same layout everywhere: the report title sits on the page background under the “Rapports” heading, with <kbd>Imprimer / PDF</kbd> as a blue pill on the right; the period (or date) and its <kbd>Générer</kbd> button take a white card; the report itself, with its printable header, takes the next card. The “AI Payment” and “AI Sales” screens share the same header, with their own cards.</p>
+                <p>Same layout everywhere: at the top of the page, only the “Rapports” heading appears on the left, with the action buttons on the right (<kbd>Imprimer / PDF</kbd> as a blue pill; the Chart of Accounts adds <kbd>Tous</kbd>, <kbd>Bilan</kbd> and <kbd>Résultats</kbd>; the Income Statement, Balance Sheet and Cash Flow Statement add <kbd>Masquer les comptes à zéro</kbd>). There is no longer a large title above the report. The period (or date) and its <kbd>Générer</kbd> button take a white card; the report itself takes the next card.</p>
+                <p><strong>Report card header</strong>: your company’s real name (the legal name entered in the company profile), then the report title, and on the right one or two pills: the report’s date or period, plus a counter for two reports (“N classe(s) · N compte(s)” for the Chart of Accounts, “N compte(s)” for the Trial Balance). The “AI Payment” and “AI Sales” screens share the same header: their title and subtitle take a white card right under the “Rapports” heading.</p>
                 <h3>Access and company</h3>
                 <ul>
                     <li>A user who is not signed in is sent back to the login page.</li>
@@ -536,22 +570,39 @@
                     <li><kbd>Imprimer / PDF</kbd> (Print / PDF): opens the browser’s print window. It is the only output button. To get a file, choose “Save as PDF” as the printer. No report offers an Excel or CSV export.</li>
                 </ul>
                 <p>To get a report as a PDF: 1. Set the dates. 2. Click <kbd>Générer</kbd>. 3. Click <kbd>Imprimer / PDF</kbd>. 4. In the browser window, choose “Save as PDF” and confirm.</p>
+                <h3>Summary tiles</h3>
+                <p>The Income Statement, Balance Sheet and Cash Flow Statement show summary tiles at the top of the report card, so the key figures can be read at a glance. Their content is described in each report’s section.</p>
+                <h3>Hide zero accounts</h3>
+                <p>The Income Statement, Balance Sheet and Cash Flow Statement offer, in the action area at the top right, the <kbd>Masquer les comptes à zéro</kbd> (Hide zero accounts) button. A pill on the button shows how many lines have a zero amount.</p>
+                <ul>
+                    <li>One click hides the lines whose amount is zero, as well as any sub-group whose lines are all zero. The button then becomes <kbd>Afficher les comptes à zéro</kbd> (Show zero accounts); another click brings them back.</li>
+                    <li>The choice is remembered in this browser: you find it again the next time you open the report.</li>
+                    <li>It is display only: totals do not change and nothing is recalculated.</li>
+                    <li>What is hidden on screen is also hidden when printing.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">Do not confuse this button with the “Masquer les comptes à solde zéro” checkbox of the <a href="#en-trial-balance">Trial Balance</a>: the checkbox regenerates the report on the server, whereas the button only hides lines already displayed.</div>
                 <h3>Print layout</h3>
                 <ul>
                     <li>Letter format, portrait orientation, 1.5 cm margins.</li>
                     <li>The toolbar, the filters and the menu disappear when printing. Only the header and the body of the report are printed.</li>
+                    <li>The company name is printed in full in the header, without being cut off.</li>
+                    <li>A long class or section continues onto the next page, instead of leaving its header alone on the first page.</li>
+                    <li>Section and sub-group titles stay with their lines, and a total does not end up alone at the top of a page.</li>
+                    <li>For the Chart of Accounts and the Trial Balance, column headers repeat on every page.</li>
+                    <li>Lines hidden with <kbd>Masquer les comptes à zéro</kbd> are not printed.</li>
                 </ul>
                 <h3>How dates and amounts are shown</h3>
                 <table>
                     <thead><tr><th>Item</th><th>Display</th></tr></thead>
                     <tbody>
                         <tr><td>Dates</td><td>YYYY-MM-DD format, for example 2026-09-25.</td></tr>
+                        <tr><td>Amounts</td><td>Quebec format: space as the thousands separator, comma for decimals, $ sign after the amount, for example “2 955,45 $”.</td></tr>
                         <tr><td>Zero amount</td><td>“—” (dash). Exception: the Trial Balance shows “0,00 $” in its top cards.</td></tr>
                         <tr><td>Negative amount</td><td>In parentheses and in red, for example “(1 234,56 $)”.</td></tr>
                         <tr><td>Positive amount</td><td>In green.</td></tr>
                     </tbody>
                 </table>
-                <div class="piege" data-titre="Pitfall">The printed header always reads “Mon entreprise”. Your company’s name is never written in that label. If you send a PDF to a third party (banker, accountant), put the company name in the file name or in the e-mail.</div>
+                <div class="note" data-titre="Good to know">The report header, on screen and in print, shows the legal name entered in the <a href="administration.html#en-company-profile">company profile</a>. If no name is entered there, it shows “Mon entreprise”: complete the profile before sending a PDF to a third party (banker, accountant).</div>
                 <div class="note" data-titre="Good to know">The reports read the entries posted to the general ledger. A draft invoice or an unposted entry does not appear in them. See the <a href="comptabilite.html">Accounting</a> section for entering journal entries.</div>
             </section>
 
@@ -571,7 +622,8 @@
                 <p>There is no date to enter. The three filter buttons (<kbd>Tous</kbd>, <kbd>Bilan</kbd>, <kbd>Résultats</kbd>) are the only parameters.</p>
                 <h3>Layout</h3>
                 <ul>
-                    <li>Under the title: “X classe(s) · Y compte(s)” (classes and accounts). The header shows “Généré le YYYY-MM-DD HH:mm” (generated on).</li>
+                    <li><strong>Card header</strong>: company name, title “Plan comptable” and, on the right, the date pill (“Généré le YYYY-MM-DD HH:mm”, generated on) and the “N classe(s) · N compte(s)” pill (classes and accounts).</li>
+                    <li>When printing, column headers repeat on every page, and a long class continues onto the next page.</li>
                     <li><strong>Class banner</strong>: class code and description, number range “(start à end)” and a BILAN or RESULTAT badge.</li>
                     <li><strong>Sub-classes</strong>: code, description and range “start – end”.</li>
                     <li><strong>Footer of each class</strong>: “N compte(s)”.</li>
@@ -617,9 +669,11 @@
                 <h3>Buttons and actions</h3>
                 <ul>
                     <li><kbd>Générer</kbd>: rebuilds the report for the period entered.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (top right, with the number of zero lines): hides or shows again the lines whose amount is zero. Display only: totals do not change. See <a href="#en-common-rules">Common rules</a>.</li>
                     <li><kbd>Imprimer / PDF</kbd>: print or save as PDF.</li>
                 </ul>
                 <h3>Report structure</h3>
+                <p>At the top of the report card, four <strong>summary tiles</strong>: “Revenus” (Revenues), “Bénéfice brut” (Gross profit), “Bénéfice net” (Net income) and “Marge nette” (Net margin, in %).</p>
                 <p>The header reads “Période du … au …” (period from … to …). The report has three columns: account number, account name, amount. For each section: a section banner, then the sub-classes with their accounts, then a “Total — [sub-class]” line, then the section total. In order:</p>
                 <ol>
                     <li>“Revenus” (Revenues), then “Total des revenus”;</li>
@@ -646,6 +700,7 @@
                 <div class="piege" data-titre="Pitfall">The “Au :” date must be later than the “Du :” date. The screen does not check this: a reversed period gives an empty or inconsistent report with no error message.</div>
                 <div class="note" data-titre="Good to know">A negative net income (a loss) is shown in parentheses on the final line, but not in red, unlike the other negative amounts.</div>
                 <div class="astuce" data-titre="Tip">For a monthly income statement, enter the first and last day of the month, then click <kbd>Générer</kbd>. For the full year, leave both fields empty: the report falls back to January 1 and today.</div>
+                <div class="astuce" data-titre="Tip">Before printing, click <kbd>Masquer les comptes à zéro</kbd> to get a shorter document: totals and net income stay the same.</div>
             </section>
 
             <section id="en-balance-sheet">
@@ -663,9 +718,11 @@
                 <h3>Buttons and actions</h3>
                 <ul>
                     <li><kbd>Générer</kbd>: rebuilds the balance sheet at the date entered.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (top right, with the number of zero lines): hides or shows again the accounts whose balance is zero. Display only: totals and the balance check do not change.</li>
                     <li><kbd>Imprimer / PDF</kbd>: print or save as PDF.</li>
                 </ul>
                 <h3>Report structure</h3>
+                <p>At the top of the report card, up to three <strong>summary tiles</strong> repeat the grand totals (for example total assets, total liabilities, total equity).</p>
                 <p>The header reads “Au YYYY-MM-DD” (as at). Three main blocks:</p>
                 <ul>
                     <li><strong>ACTIF</strong> (Assets)
@@ -725,9 +782,11 @@
                 <h3>Buttons and actions</h3>
                 <ul>
                     <li><kbd>Générer</kbd>: rebuilds the statement for the period entered.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (top right, with the number of zero lines): hides or shows again the lines whose amount is zero. Display only: totals do not change.</li>
                     <li><kbd>Imprimer / PDF</kbd>: print or save as PDF.</li>
                 </ul>
                 <h3>Report structure</h3>
+                <p>At the top of the report card, four <strong>summary tiles</strong>: “Exploitation” (Operating), “Investissement” (Investing), “Financement” (Financing) and “Trésorerie de fin” (Ending cash), in green when the amount is positive, in red when it is negative.</p>
                 <p><strong>A. “Activités d’exploitation”</strong> (Operating activities)</p>
                 <ul>
                     <li>Net income.</li>
@@ -751,7 +810,7 @@
                     <li><strong>Indirect method</strong>, confirmed by the note at the bottom of the report: start from net income, add back the non-cash items (for example depreciation, an expense with no cash outflow), then apply the changes in working capital (an increase in receivables reduces cash; an increase in payables increases it).</li>
                     <li>Net change = Operating + Investing + Financing.</li>
                     <li>Ending cash = Beginning cash + Net change.</li>
-                    <li>All lines are shown, even when their amount is zero (“—”).</li>
+                    <li>By default, all lines are shown, even when their amount is zero (“—”). The <kbd>Masquer les comptes à zéro</kbd> button removes them from the display (and from printing), without changing the totals.</li>
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
@@ -831,7 +890,8 @@
                 <h3>Report structure</h3>
                 <ul>
                     <li><strong>Four cards at the top</strong>: “Total débits”, “Total crédits”, “Écart” (difference; green when zero, otherwise flagged as unbalanced) and “Comptes” (accounts). When the “Masquer les comptes à solde zéro” filter is active, the “Comptes” card shows “shown / total”.</li>
-                    <li>Under the title: “Au [date] · N compte(s)”.</li>
+                    <li><strong>Card header</strong>: company name, title “Balance de vérification” and, on the right, the date pill and the “N compte(s)” pill.</li>
+                    <li>When printing, column headers repeat on every page.</li>
                     <li><strong>Grouping by parent class</strong>: class banner, account lines, then “Total — [class]”. A class with no line shown is omitted.</li>
                     <li><strong>Last line</strong>: “TOTAL”.</li>
                 </ul>
@@ -861,6 +921,7 @@
                 </ul>
                 <h3>Tips and pitfalls</h3>
                 <div class="astuce" data-titre="Tip">Check “Masquer les comptes à solde zéro” before printing to get a shorter document. The totals stay the same.</div>
+                <div class="note" data-titre="Good to know">This checkbox belongs to the Trial Balance only: it regenerates the report. It has nothing to do with the <kbd>Masquer les comptes à zéro</kbd> button of the Income Statement, Balance Sheet and Cash Flow Statement, which only hides lines on display.</div>
                 <div class="astuce" data-titre="Tip">To find the origin of a difference, generate the trial balance at several dates (end of each month): the month where the difference first appears contains the faulty entry.</div>
             </section>
 
@@ -881,7 +942,8 @@
                 </ul>
                 <h3>Layout</h3>
                 <ul>
-                    <li><strong>“Période de paiement” card</strong>: “Transactions” and “Montant total” totals for the chosen period.</li>
+                    <li><strong>Title card</strong>: right under the “Rapports” heading, a white card shows the screen’s title and subtitle. It stays visible even when only a status message is shown (for example an error message). The “Devise : CAD $” box stays at the top right.</li>
+                    <li><strong>“Période de paiement” card</strong>:“Transactions” and “Montant total” totals for the chosen period.</li>
                     <li><strong>One card per category</strong> (Gouvernemental, Fournisseur, Employé): “N paiement(s) en attente” (pending payments), “Total à payer” (total to pay) and the “N à traiter” (to process) badge. Once expanded: “N transaction(s) — [period]”, the <kbd>Payer tout</kbd> button and the payments table.</li>
                 </ul>
                 <h3>Columns</h3>
@@ -933,7 +995,7 @@
                 </ul>
                 <h3>Layout</h3>
                 <ul>
-                    <li><strong>Header</strong>: “AI Sales — Gestion intelligente des ventes” and the “Solde bancaire” widget. The balance is shown with two decimals, followed by “US$” if the account is in US dollars. It is read from the bank account designated in the company settings (“COMPTE_BANQUE” parameter, “BANCAIRE” category, see <a href="administration.html">Administration</a>).</li>
+                    <li><strong>Title card</strong>: right under the “Rapports” heading, a white card shows the title and subtitle “AI Sales — Gestion intelligente des ventes”. It stays visible even when only a status message is shown. The “Solde bancaire” widget stays at the top right. The balance is shown with two decimals, followed by “US$” if the account is in US dollars. It is read from the bank account designated in the company settings (“COMPTE_BANQUE” parameter, “BANCAIRE” category, see <a href="administration.html">Administration</a>).</li>
                     <li><strong>“Période de vente” card</strong>: for each period, “N ventes” (sales) and three amounts: “Collecté”, “À recevoir”, “En retard”.</li>
                     <li><strong>“Détail — [period]” section</strong>: one line per invoice, sorted from the most recent due date to the oldest.</li>
                 </ul>
@@ -975,7 +1037,10 @@
                 <h2>Frequently asked questions</h2>
                 <details><summary>How do I get a report in Excel or CSV?</summary><p>You cannot: the only output button is <kbd>Imprimer / PDF</kbd>. Choose “Save as PDF” in the browser’s print window to get a file.</p></details>
                 <details><summary>I changed the date, but the report did not change.</summary><p>After changing a date, you must click <kbd>Générer</kbd>. Only the “Masquer les comptes à solde zéro” checkbox of the Trial Balance regenerates the report immediately.</p></details>
-                <details><summary>Why does the printed header say “Mon entreprise”?</summary><p>That label is fixed and never shows your company’s name. Put the company name in the PDF file name or in the message that goes with it.</p></details>
+                <details><summary>Why does the report header say “Mon entreprise”?</summary><p>The header shows the legal name entered in the company profile. “Mon entreprise” appears only if no name is entered there: complete the <a href="administration.html#en-company-profile">company profile</a>, then open the report again.</p></details>
+                <details><summary>I clicked “Masquer les comptes à zéro”. Are my totals still right?</summary><p>Yes. The button only hides the lines whose amount is zero (and sub-groups that are entirely zero); nothing is recalculated and the totals stay the same. Hidden lines are also hidden when printing.</p></details>
+                <details><summary>Zero accounts stay hidden when I come back to the report.</summary><p>The choice is remembered in your browser. Click <kbd>Afficher les comptes à zéro</kbd> to bring them back.</p></details>
+                <details><summary>When printing, a class starts on one page and ends on the next. Is that normal?</summary><p>Yes. A long class or section continues onto the next page rather than leaving its header alone at the bottom of a page. Titles stay with their lines and, for the Chart of Accounts and the Trial Balance, column headers are repeated on every page.</p></details>
                 <details><summary>The balance sheet shows “✗ Écart de … — Le bilan n’est pas en équilibre”. What should I do?</summary><p>Generate the Trial Balance at the same date. If it also shows a difference, an entry is unbalanced: find it in the journal. If it balances, an account is attached to the wrong class (for example an expense account in the assets range): fix its filing in the chart of accounts.</p></details>
                 <details><summary>The statement of retained earnings flags a difference with account 3300. Is it serious?</summary><p>Before the year-end closing, no: the year’s income has not been transferred to account 3300 yet, and the difference equals net income minus distributions. After the closing, look for an entry posted directly to account 3300.</p></details>
                 <details><summary>My income statement shows a profit, but I do not have that money in the bank. Why?</summary><p>Profit includes invoices issued but not yet collected, and excludes some cash outflows (equipment purchases, loan repayments, withdrawals). Check the Cash Flow Statement: it starts from net income and explains where the money went.</p></details>
@@ -998,6 +1063,7 @@
                         <tr><td>Retained earnings (Bénéfices non répartis)</td><td>Accumulated profits left in the business, after dividends and withdrawals. Account 3300.</td></tr>
                         <tr><td>Gross profit (Bénéfice brut)</td><td>Revenues minus cost of sales.</td></tr>
                         <tr><td>Net income (Bénéfice net)</td><td>What is left after all expenses and taxes. When negative, it is a net loss.</td></tr>
+                        <tr><td>Net margin (Marge nette)</td><td>Net income expressed as a percentage of revenues. Shown in a tile of the income statement.</td></tr>
                         <tr><td>Trial balance (Balance de vérification)</td><td>List of the balances of all accounts, whose total debits must equal total credits.</td></tr>
                         <tr><td>Debit / Credit (D / C)</td><td>The two sides of an entry. Assets and expenses increase on the debit side; liabilities, equity and revenues increase on the credit side.</td></tr>
                         <tr><td>Class / Sub-class</td><td>The two grouping levels of accounts in the chart of accounts, each with a number range.</td></tr>
@@ -1019,7 +1085,8 @@
             <section id="es-reglas">
                 <h2>Reglas comunes a los informes contables</h2>
                 <p>Los seis informes contables funcionan de la misma manera. Lo que sigue se aplica a cada uno de ellos, salvo indicación contraria en la sección de la pantalla.</p>
-                <p>Misma presentación en todas partes: el título del informe se apoya en el fondo de la página, bajo la rúbrica «Rapports», con <kbd>Imprimer / PDF</kbd> como píldora azul a la derecha; el periodo (o la fecha) y su botón <kbd>Générer</kbd> ocupan una tarjeta blanca; el informe en sí, con su encabezado imprimible, ocupa la tarjeta siguiente. Las pantallas «IA Pagos» e «IA Ventas» comparten la misma cabecera, con sus propias tarjetas.</p>
+                <p>Misma presentación en todas partes: en la parte superior de la página solo aparece la rúbrica «Rapports» a la izquierda, con los botones de acción a la derecha (<kbd>Imprimer / PDF</kbd> como píldora azul; el Plan contable añade <kbd>Tous</kbd>, <kbd>Bilan</kbd> y <kbd>Résultats</kbd>; el Estado de resultados, el Balance general y el Estado de flujos de efectivo añaden <kbd>Masquer les comptes à zéro</kbd>). Ya no hay un título grande encima del informe. El periodo (o la fecha) y su botón <kbd>Générer</kbd> ocupan una tarjeta blanca; el informe en sí ocupa la tarjeta siguiente.</p>
+                <p><strong>Encabezado de la tarjeta del informe</strong>: el nombre real de su empresa (el nombre legal registrado en el perfil de la empresa), luego el título del informe, y a la derecha una o dos píldoras: la fecha o el período del informe, más un contador en dos informes («N classe(s) · N compte(s)» para el Plan contable, «N compte(s)» para el Balance de comprobación). Las pantallas «Pago con IA» y «Ventas con IA» comparten la misma cabecera: su título y subtítulo ocupan una tarjeta blanca justo debajo de la rúbrica «Rapports».</p>
                 <h3>Acceso y empresa</h3>
                 <ul>
                     <li>Un usuario que no ha iniciado sesión es devuelto a la página de inicio de sesión.</li>
@@ -1032,22 +1099,39 @@
                     <li><kbd>Imprimer / PDF</kbd> (Imprimir / PDF): abre la ventana de impresión del navegador. Es el único botón de salida. Para obtener un archivo, elija «Guardar como PDF» como impresora. Ningún informe ofrece exportación a Excel o CSV.</li>
                 </ul>
                 <p>Para obtener un informe en PDF: 1. Ajuste las fechas. 2. Haga clic en <kbd>Générer</kbd>. 3. Haga clic en <kbd>Imprimer / PDF</kbd>. 4. En la ventana del navegador, elija «Guardar como PDF» y confirme.</p>
+                <h3>Mosaicos de síntesis</h3>
+                <p>El Estado de resultados, el Balance general y el Estado de flujos de efectivo muestran mosaicos de síntesis en la parte superior de la tarjeta del informe, para leer las grandes cifras de un vistazo. Su contenido se describe en la sección de cada informe.</p>
+                <h3>Ocultar las cuentas en cero</h3>
+                <p>El Estado de resultados, el Balance general y el Estado de flujos de efectivo ofrecen, en la zona de acciones arriba a la derecha, el botón <kbd>Masquer les comptes à zéro</kbd> (Ocultar las cuentas en cero). Una píldora en el botón indica cuántas líneas tienen un importe nulo.</p>
+                <ul>
+                    <li>Un clic oculta las líneas cuyo importe es nulo, así como todo subgrupo cuyas líneas son todas nulas. El botón pasa entonces a <kbd>Afficher les comptes à zéro</kbd> (Mostrar las cuentas en cero); un nuevo clic las hace reaparecer.</li>
+                    <li>La elección se memoriza en este navegador: la encontrará la próxima vez que abra el informe.</li>
+                    <li>Es solo de visualización: los totales no cambian y no se recalcula nada.</li>
+                    <li>Lo que se oculta en pantalla también se oculta al imprimir.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">No confunda este botón con la casilla «Masquer les comptes à solde zéro» del <a href="#es-balance-de-comprobacion">Balance de comprobación</a>: la casilla regenera el informe en el servidor, mientras que el botón solo oculta líneas ya mostradas.</div>
                 <h3>Diseño de impresión</h3>
                 <ul>
                     <li>Formato carta, orientación vertical, márgenes de 1,5 cm.</li>
                     <li>La barra de herramientas, los filtros y el menú desaparecen al imprimir. Solo se imprimen el encabezado y el cuerpo del informe.</li>
+                    <li>El nombre de la empresa se imprime completo en el encabezado, sin cortarse.</li>
+                    <li>Una clase o sección larga continúa en la página siguiente, en lugar de dejar su encabezado solo en la primera página.</li>
+                    <li>Los títulos de sección y de subgrupo permanecen con sus líneas, y un total no queda solo al principio de una página.</li>
+                    <li>Para el Plan contable y el Balance de comprobación, los encabezados de columna se repiten en cada página.</li>
+                    <li>Las líneas ocultas con <kbd>Masquer les comptes à zéro</kbd> no se imprimen.</li>
                 </ul>
                 <h3>Presentación de fechas e importes</h3>
                 <table>
                     <thead><tr><th>Elemento</th><th>Visualización</th></tr></thead>
                     <tbody>
                         <tr><td>Fechas</td><td>Formato AAAA-MM-DD, por ejemplo 2026-09-25.</td></tr>
+                        <tr><td>Importes</td><td>Formato quebequense: espacio como separador de miles, coma para los decimales, símbolo $ después del importe, por ejemplo «2 955,45 $».</td></tr>
                         <tr><td>Importe nulo</td><td>«—» (guion). Excepción: el Balance de comprobación muestra «0,00 $» en sus tarjetas superiores.</td></tr>
                         <tr><td>Importe negativo</td><td>Entre paréntesis y en rojo, por ejemplo «(1 234,56 $)».</td></tr>
                         <tr><td>Importe positivo</td><td>En verde.</td></tr>
                     </tbody>
                 </table>
-                <div class="piege" data-titre="Trampa">El encabezado impreso siempre indica «Mon entreprise». El nombre de su empresa nunca se escribe en esa etiqueta. Si envía un PDF a un tercero (banquero, contador), añada el nombre de la empresa al nombre del archivo o al correo.</div>
+                <div class="note" data-titre="Conviene saber">El encabezado del informe, en pantalla y al imprimir, muestra el nombre legal registrado en el <a href="administration.html#es-perfil-empresa">perfil de la empresa</a>. Si no hay ningún nombre registrado, muestra «Mon entreprise»: complete el perfil antes de enviar un PDF a un tercero (banquero, contador).</div>
                 <div class="note" data-titre="Conviene saber">Los informes leen los asientos contabilizados en el libro mayor. Una factura en borrador o un asiento no contabilizado no aparece en ellos. Consulte la sección <a href="comptabilite.html">Contabilidad</a> para el registro de asientos.</div>
             </section>
 
@@ -1067,7 +1151,8 @@
                 <p>No hay ninguna fecha que introducir. Los tres botones de filtro (<kbd>Tous</kbd>, <kbd>Bilan</kbd>, <kbd>Résultats</kbd>) son los únicos parámetros.</p>
                 <h3>Presentación</h3>
                 <ul>
-                    <li>Bajo el título: «X classe(s) · Y compte(s)» (clases y cuentas). El encabezado indica «Généré le AAAA-MM-DD HH:mm» (generado el).</li>
+                    <li><strong>Encabezado de la tarjeta</strong>: nombre de la empresa, título «Plan comptable» y, a la derecha, la píldora de fecha («Généré le AAAA-MM-DD HH:mm», generado el) y la píldora «N classe(s) · N compte(s)» (clases y cuentas).</li>
+                    <li>Al imprimir, los encabezados de columna se repiten en cada página, y una clase larga continúa en la página siguiente.</li>
                     <li><strong>Banda de clase</strong>: código y descripción de la clase, rango de números «(inicio à fin)» y una insignia BILAN o RESULTAT.</li>
                     <li><strong>Subclases</strong>: código, descripción y rango «inicio – fin».</li>
                     <li><strong>Pie de cada clase</strong>: «N compte(s)».</li>
@@ -1113,9 +1198,11 @@
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>Générer</kbd>: reconstruye el informe para el período introducido.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (arriba a la derecha, con el número de líneas en cero): oculta o vuelve a mostrar las líneas cuyo importe es nulo. Solo visualización: los totales no cambian. Véase <a href="#es-reglas">Reglas comunes</a>.</li>
                     <li><kbd>Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
                 </ul>
                 <h3>Estructura del informe</h3>
+                <p>En la parte superior de la tarjeta del informe, cuatro <strong>mosaicos de síntesis</strong>: «Revenus» (Ingresos), «Bénéfice brut» (Utilidad bruta), «Bénéfice net» (Utilidad neta) y «Marge nette» (Margen neto, en %).</p>
                 <p>El encabezado indica «Période du … au …» (período del … al …). El informe tiene tres columnas: número de cuenta, nombre de la cuenta, importe. Para cada sección: una banda de sección, luego las subclases con sus cuentas, luego una línea «Total — [subclase]», luego el total de la sección. En este orden:</p>
                 <ol>
                     <li>«Revenus» (Ingresos), luego «Total des revenus»;</li>
@@ -1142,6 +1229,7 @@
                 <div class="piege" data-titre="Trampa">La fecha «Au :» debe ser posterior a la fecha «Du :». La pantalla no lo comprueba: un período invertido produce un informe vacío o incoherente sin mensaje de error.</div>
                 <div class="note" data-titre="Conviene saber">Una utilidad neta negativa (una pérdida) se muestra entre paréntesis en la línea final, pero no en rojo, a diferencia de los demás importes negativos.</div>
                 <div class="astuce" data-titre="Consejo">Para un estado de resultados mensual, introduzca el primer y el último día del mes y haga clic en <kbd>Générer</kbd>. Para el año completo, deje los dos campos vacíos: el informe retoma el 1 de enero y hoy.</div>
+                <div class="astuce" data-titre="Consejo">Antes de imprimir, haga clic en <kbd>Masquer les comptes à zéro</kbd> para obtener un documento más corto: los totales y la utilidad neta siguen siendo los mismos.</div>
             </section>
 
             <section id="es-balance">
@@ -1159,9 +1247,11 @@
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>Générer</kbd>: reconstruye el balance en la fecha introducida.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (arriba a la derecha, con el número de líneas en cero): oculta o vuelve a mostrar las cuentas cuyo saldo es nulo. Solo visualización: los totales y el control de equilibrio no cambian.</li>
                     <li><kbd>Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
                 </ul>
                 <h3>Estructura del informe</h3>
+                <p>En la parte superior de la tarjeta del informe, hasta tres <strong>mosaicos de síntesis</strong> retoman los grandes totales (por ejemplo total del activo, total del pasivo, total del patrimonio).</p>
                 <p>El encabezado indica «Au AAAA-MM-DD» (al). Tres grandes bloques:</p>
                 <ul>
                     <li><strong>ACTIF</strong> (Activo)
@@ -1221,9 +1311,11 @@
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>Générer</kbd>: reconstruye el estado para el período introducido.</li>
+                    <li><kbd>Masquer les comptes à zéro</kbd> / <kbd>Afficher les comptes à zéro</kbd> (arriba a la derecha, con el número de líneas en cero): oculta o vuelve a mostrar las líneas cuyo importe es nulo. Solo visualización: los totales no cambian.</li>
                     <li><kbd>Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
                 </ul>
                 <h3>Estructura del informe</h3>
+                <p>En la parte superior de la tarjeta del informe, cuatro <strong>mosaicos de síntesis</strong>: «Exploitation» (Operación), «Investissement» (Inversión), «Financement» (Financiación) y «Trésorerie de fin» (Efectivo final), en verde si el importe es positivo, en rojo si es negativo.</p>
                 <p><strong>A. «Activités d’exploitation»</strong> (Actividades de operación)</p>
                 <ul>
                     <li>Utilidad neta.</li>
@@ -1247,7 +1339,7 @@
                     <li><strong>Método indirecto</strong>, confirmado por la nota al pie del informe: se parte de la utilidad neta, se añaden las partidas sin efecto en el efectivo (por ejemplo la depreciación, un gasto sin salida de dinero) y luego se aplican las variaciones del capital de trabajo (un aumento de las cuentas por cobrar reduce el efectivo; un aumento de las cuentas por pagar lo aumenta).</li>
                     <li>Variación neta = Operación + Inversión + Financiación.</li>
                     <li>Efectivo final = Efectivo inicial + Variación neta.</li>
-                    <li>Todas las líneas se muestran, incluso cuando su importe es nulo («—»).</li>
+                    <li>Por defecto, todas las líneas se muestran, incluso cuando su importe es nulo («—»). El botón <kbd>Masquer les comptes à zéro</kbd> las retira de la visualización (y de la impresión), sin cambiar los totales.</li>
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
@@ -1327,7 +1419,8 @@
                 <h3>Estructura del informe</h3>
                 <ul>
                     <li><strong>Cuatro tarjetas arriba</strong>: «Total débits», «Total crédits», «Écart» (diferencia; en verde si es nula, si no señalada como descuadrada) y «Comptes» (cuentas). Cuando el filtro «Masquer les comptes à solde zéro» está activo, la tarjeta «Comptes» muestra «mostradas / total».</li>
-                    <li>Bajo el título: «Au [fecha] · N compte(s)».</li>
+                    <li><strong>Encabezado de la tarjeta</strong>: nombre de la empresa, título «Balance de vérification» y, a la derecha, la píldora de fecha y la píldora «N compte(s)».</li>
+                    <li>Al imprimir, los encabezados de columna se repiten en cada página.</li>
                     <li><strong>Agrupación por clase principal</strong>: banda de la clase, líneas de las cuentas, luego «Total — [clase]». Una clase sin línea mostrada se omite.</li>
                     <li><strong>Última línea</strong>: «TOTAL».</li>
                 </ul>
@@ -1357,6 +1450,7 @@
                 </ul>
                 <h3>Consejos y trampas</h3>
                 <div class="astuce" data-titre="Consejo">Marque «Masquer les comptes à solde zéro» antes de imprimir para obtener un documento más corto. Los totales siguen siendo los mismos.</div>
+                <div class="note" data-titre="Conviene saber">Esta casilla es propia del Balance de comprobación: regenera el informe. No tiene nada que ver con el botón <kbd>Masquer les comptes à zéro</kbd> del Estado de resultados, del Balance general y del Estado de flujos de efectivo, que solo oculta líneas en la visualización.</div>
                 <div class="astuce" data-titre="Consejo">Para encontrar el origen de una diferencia, genere el balance de comprobación en varias fechas (fin de cada mes): el mes en que aparece la diferencia contiene el asiento erróneo.</div>
             </section>
 
@@ -1377,7 +1471,8 @@
                 </ul>
                 <h3>Presentación</h3>
                 <ul>
-                    <li><strong>Tarjeta «Période de paiement»</strong>: totales «Transactions» y «Montant total» para el período elegido.</li>
+                    <li><strong>Tarjeta de título</strong>: justo debajo de la rúbrica «Rapports», una tarjeta blanca muestra el título y el subtítulo de la pantalla. Permanece visible incluso cuando solo se muestra un mensaje de estado (por ejemplo un mensaje de error). La casilla «Devise : CAD $» permanece arriba a la derecha.</li>
+                    <li><strong>Tarjeta «Période de paiement»</strong>:totales «Transactions» y «Montant total» para el período elegido.</li>
                     <li><strong>Una tarjeta por categoría</strong> (Gouvernemental, Fournisseur, Employé): «N paiement(s) en attente» (pagos pendientes), «Total à payer» (total a pagar) y la insignia «N à traiter» (por procesar). Una vez desplegada: «N transaction(s) — [período]», el botón <kbd>Payer tout</kbd> y la tabla de pagos.</li>
                 </ul>
                 <h3>Columnas</h3>
@@ -1429,7 +1524,7 @@
                 </ul>
                 <h3>Presentación</h3>
                 <ul>
-                    <li><strong>Encabezado</strong>: «AI Sales — Gestion intelligente des ventes» y el widget «Solde bancaire». El saldo se muestra con dos decimales, seguido de «US$» si la cuenta está en dólares estadounidenses. Se lee en la cuenta bancaria designada en los parámetros de la empresa (parámetro «COMPTE_BANQUE» de la categoría «BANCAIRE», véase <a href="administration.html">Administración</a>).</li>
+                    <li><strong>Tarjeta de título</strong>: justo debajo de la rúbrica «Rapports», una tarjeta blanca muestra el título y el subtítulo «AI Sales — Gestion intelligente des ventes». Permanece visible incluso cuando solo se muestra un mensaje de estado. El widget «Solde bancaire» permanece arriba a la derecha. El saldo se muestra con dos decimales, seguido de «US$» si la cuenta está en dólares estadounidenses. Se lee en la cuenta bancaria designada en los parámetros de la empresa (parámetro «COMPTE_BANQUE» de la categoría «BANCAIRE», véase <a href="administration.html">Administración</a>).</li>
                     <li><strong>Tarjeta «Période de vente»</strong>: para cada período, «N ventes» (ventas) y tres importes: «Collecté», «À recevoir», «En retard».</li>
                     <li><strong>Sección «Détail — [período]»</strong>: una línea por factura, ordenada del vencimiento más reciente al más antiguo.</li>
                 </ul>
@@ -1471,7 +1566,10 @@
                 <h2>Preguntas frecuentes</h2>
                 <details><summary>¿Cómo obtener un informe en Excel o CSV?</summary><p>No es posible: el único botón de salida es <kbd>Imprimer / PDF</kbd>. Elija «Guardar como PDF» en la ventana de impresión del navegador para obtener un archivo.</p></details>
                 <details><summary>Cambié la fecha, pero el informe no cambió.</summary><p>Después de cambiar una fecha, hay que hacer clic en <kbd>Générer</kbd>. Solo la casilla «Masquer les comptes à solde zéro» del Balance de comprobación regenera el informe inmediatamente.</p></details>
-                <details><summary>¿Por qué el encabezado impreso indica «Mon entreprise»?</summary><p>Esa etiqueta es fija y nunca muestra el nombre de su empresa. Añada el nombre de la empresa al nombre del archivo PDF o al mensaje que lo acompaña.</p></details>
+                <details><summary>¿Por qué el encabezado del informe indica «Mon entreprise»?</summary><p>El encabezado muestra el nombre legal registrado en el perfil de la empresa. «Mon entreprise» solo aparece si no hay ningún nombre registrado: complete el <a href="administration.html#es-perfil-empresa">perfil de la empresa</a> y vuelva a abrir el informe.</p></details>
+                <details><summary>Hice clic en «Masquer les comptes à zéro». ¿Mis totales siguen siendo correctos?</summary><p>Sí. El botón solo oculta las líneas cuyo importe es nulo (y los subgrupos enteramente en cero); no se recalcula nada y los totales siguen siendo los mismos. Las líneas ocultas también se ocultan al imprimir.</p></details>
+                <details><summary>Las cuentas en cero siguen ocultas cuando vuelvo al informe.</summary><p>La elección se memoriza en su navegador. Haga clic en <kbd>Afficher les comptes à zéro</kbd> para que reaparezcan.</p></details>
+                <details><summary>Al imprimir, una clase empieza en una página y termina en la siguiente. ¿Es normal?</summary><p>Sí. Una clase o sección larga continúa en la página siguiente en lugar de dejar su encabezado solo al pie de una página. Los títulos permanecen con sus líneas y, para el Plan contable y el Balance de comprobación, los encabezados de columna se repiten en cada página.</p></details>
                 <details><summary>El balance muestra «✗ Écart de … — Le bilan n’est pas en équilibre». ¿Qué hacer?</summary><p>Genere el Balance de comprobación en la misma fecha. Si también muestra una diferencia, un asiento está descuadrado: encuéntrelo en el diario. Si está cuadrado, una cuenta está vinculada a la clase equivocada (por ejemplo una cuenta de gastos en el rango del activo): corrija su clasificación en el plan de cuentas.</p></details>
                 <details><summary>El estado de resultados acumulados señala una diferencia con la cuenta 3300. ¿Es grave?</summary><p>Antes del cierre del ejercicio, no: la utilidad del año aún no se ha trasladado a la cuenta 3300, y la diferencia corresponde a la utilidad neta menos las distribuciones. Después del cierre, busque un asiento registrado directamente en la cuenta 3300.</p></details>
                 <details><summary>Mi estado de resultados muestra una utilidad, pero no tengo ese dinero en el banco. ¿Por qué?</summary><p>La utilidad incluye las facturas emitidas y aún no cobradas, y excluye ciertos desembolsos (compras de equipos, reembolsos de préstamos, retiros). Consulte el Estado de flujos de efectivo: parte de la utilidad neta y explica adónde fue el dinero.</p></details>
@@ -1494,6 +1592,7 @@
                         <tr><td>Resultados acumulados (Bénéfices non répartis)</td><td>Utilidades acumuladas y dejadas en la empresa, después de dividendos y retiros. Cuenta 3300.</td></tr>
                         <tr><td>Utilidad bruta (Bénéfice brut)</td><td>Ingresos menos costo de ventas.</td></tr>
                         <tr><td>Utilidad neta (Bénéfice net)</td><td>Lo que queda después de todos los gastos e impuestos. Si es negativa, se habla de pérdida neta.</td></tr>
+                        <tr><td>Margen neto (Marge nette)</td><td>Utilidad neta expresada como porcentaje de los ingresos. Se muestra en un mosaico del estado de resultados.</td></tr>
                         <tr><td>Balance de comprobación (Balance de vérification)</td><td>Lista de los saldos de todas las cuentas, cuyo total de débitos debe ser igual al total de créditos.</td></tr>
                         <tr><td>Débito / Crédito (D / C)</td><td>Los dos lados de un asiento. El activo y los gastos aumentan por el débito; el pasivo, el patrimonio y los ingresos aumentan por el crédito.</td></tr>
                         <tr><td>Clase / Subclase</td><td>Los dos niveles de agrupación de las cuentas en el plan de cuentas, cada uno con un rango de números.</td></tr>

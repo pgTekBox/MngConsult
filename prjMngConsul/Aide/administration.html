@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -133,10 +133,29 @@
                 <ul>
                     <li><kbd>Enregistrer</kbd> : sauvegarde le logo puis les onglets Entreprise à Bancaire (l’onglet Comptable n’est pas enregistré). Initialise aussi les données de la compagnie et lui attribue sa boîte courriel @60sec.ca dès que le nom commercial est connu. Messages : « ✔ Paramètres enregistrés. » ou « ✖ Erreur lors de la sauvegarde : … ».</li>
                     <li><kbd>Recharger</kbd> : abandonne les modifications non enregistrées. « ✔ Paramètres rechargés. »</li>
+                    <li><strong>Barre des modifications</strong> : dès qu’un champ est modifié, une barre foncée apparaît au bas de l’écran : « N modification(s) non enregistrée(s) », avec <kbd>Annuler</kbd> (même effet que <kbd>Recharger</kbd> : les valeurs enregistrées sont rechargées) et <kbd>Enregistrer</kbd> (même effet que le bouton <kbd>Enregistrer</kbd> du haut).</li>
+                    <li>Si vous quittez la page avec des modifications non enregistrées, le navigateur vous avertit avant de partir.</li>
                 </ul>
                 <h3>Présentation</h3>
-                <p>Chaque champ affiche son libellé et son code court (ex. « NEQ »). Types : Oui/Non ; numérique (entier ou 3 décimales) ; date AAAA-MM-JJ ; mot de passe masqué ; texte libre de <strong>300 caractères au maximum</strong>. Onglet sans paramètre : « Aucun paramètre configuré pour cet onglet. » La liste des paramètres provient de la configuration et peut varier.</p>
+                <p>Dans chaque onglet, les champs sont regroupés en <strong>sections numérotées</strong>, chacune avec un titre et une courte description (voyez la liste sous chaque onglet ci-dessous). Chaque champ affiche son libellé ; le code technique court (ex. « NEQ », « FED_BN ») n’est plus écrit à l’écran : il apparaît dans une info-bulle quand vous passez la souris sur le libellé. Sous de nombreux champs, une <strong>ligne d’aide</strong> rappelle le format attendu (par exemple NEQ : « 10 chiffres… » ; TPS : « 9 chiffres, puis RT0001 » ; TVQ : « 10 chiffres, puis TQ0001 »). Types : Oui/Non ; numérique (entier ou 3 décimales) ; date AAAA-MM-JJ ; mot de passe masqué ; texte libre de <strong>300 caractères au maximum</strong>. Onglet sans paramètre : « Aucun paramètre configuré pour cet onglet. » La liste des paramètres provient de la configuration et peut varier.</p>
+                <h3>Vérification des champs</h3>
+                <p>Quand vous quittez un champ, sa valeur est vérifiée en douceur. Une valeur invalide fait passer le champ en rouge avec un message explicatif ; elle <strong>n’empêche pas</strong> l’enregistrement.</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Format vérifié</th></tr></thead>
+                    <tbody>
+                        <tr><td>NEQ</td><td>10 chiffres.</td></tr>
+                        <tr><td>Numéro d’entreprise fédéral (NE / BN)</td><td>123456789RC0001.</td></tr>
+                        <tr><td>Numéro de TPS</td><td>123456789RT0001.</td></tr>
+                        <tr><td>Numéro de TVQ</td><td>1234567890TQ0001.</td></tr>
+                        <tr><td>Code postal</td><td>Remis en forme automatiquement : A1A 1A1.</td></tr>
+                        <tr><td>Téléphone</td><td>Remis en forme automatiquement : 514-555-1234.</td></tr>
+                        <tr><td>CAE / SCIAN</td><td>4 à 6 chiffres.</td></tr>
+                        <tr><td>NAS</td><td>9 chiffres, avec contrôle de validité du numéro.</td></tr>
+                        <tr><td>Courriel d’expéditeur</td><td>Adresse courriel valide.</td></tr>
+                    </tbody>
+                </table>
                 <h3>Onglet Entreprise</h3>
+                <p>Sections : <strong>1 Identité de l’entreprise</strong>, <strong>2 Coordonnées</strong>, <strong>3 Exercice financier</strong>.</p>
                 <ul>
                     <li><strong>Logo</strong> : PNG, JPG ou SVG, 1 Mo au maximum (« Enregistrez pour appliquer. »). Case « Retirer le logo » (prioritaire sur un nouveau fichier). Aperçu ou « Aucun logo ». Erreurs : « Le logo dépasse 1 Mo. », « Format non supporté (PNG, JPG ou SVG). »</li>
                     <li><strong>Remplissage automatique par document</strong> : l’IA remplit <strong>uniquement les champs vides</strong> des onglets Entreprise et Taxes. Messages : « Veuillez d’abord choisir un fichier. » ; « Le fichier est vide. » ; « Clé OpenAI absente. Contactez l’administrateur. » ; « Format non pris en charge (PDF, JPG ou PNG uniquement). » ; « {n} champ(s) rempli(s) automatiquement. Vérifiez, puis cliquez Enregistrer. » ; « Aucune information exploitable trouvée (ou champs déjà remplis). » ; « Erreur lors de l’analyse du document. »</li>
@@ -152,7 +171,9 @@
                         <tr><td>Numéro d’entreprise fédéral (BN), NAS, Code d’activité économique (CAE), Structure juridique</td><td>Renseignements fiscaux.</td></tr>
                     </tbody>
                 </table>
+                <p>Le <strong>NAS</strong> est masqué (points) et porte un badge « Confidentiel » ; le bouton en forme d’œil à côté du champ l’affiche ou le masque.</p>
                 <h3>Onglet Taxes</h3>
+                <p>Sections : <strong>1 Inscription</strong>, <strong>2 Calcul des taxes</strong>, <strong>3 Remises</strong>.</p>
                 <table>
                     <thead><tr><th>Paramètre</th><th>Détails</th></tr></thead>
                     <tbody>
@@ -165,7 +186,12 @@
                         <tr><td>Date d’inscription TPS, Date d’inscription TVQ</td><td>Dates d’inscription aux fichiers de taxes.</td></tr>
                     </tbody>
                 </table>
+                <ul>
+                    <li><strong>Exemple calculé</strong> : l’onglet affiche un exemple avec vos taux, par exemple « Exemple : un service de 100,00 $ + TPS … + TVQ … = … ». Si le mode est « Taxes incluses », l’exemple montre plutôt la décomposition d’un prix taxes incluses.</li>
+                    <li>Sous le compte banque pour la remise de taxes, le nom du compte est affiché d’après le plan comptable ; un avertissement apparaît si le numéro n’existe pas dans le plan comptable.</li>
+                </ul>
                 <h3>Onglet Email</h3>
+                <p>Section : <strong>Expéditeur</strong>.</p>
                 <ul>
                     <li><strong>Courriel d’expéditeur</strong> et bouton <kbd>Vérifier cette adresse</kbd> (devient <kbd>Renvoyer le lien</kbd> une fois vérifiée). Badges : « ✔ Adresse vérifiée le [date] », « ⏳ Lien envoyé — en attente de confirmation », « ✖ Adresse non vérifiée ».</li>
                     <li>Le courriel reçu a pour objet « Vérifiez l’adresse courriel de votre entreprise » et un bouton « Confirmer mon adresse » (lien valide 24 h). Une adresse vérifiée devient l’adresse de réponse des courriels envoyés au nom de la compagnie.</li>
@@ -178,6 +204,7 @@
                 </ul>
                 <div class="piege" data-titre="Piège"><kbd>Vérifier cette adresse</kbd> enregistre le courriel immédiatement, sans passer par <kbd>Enregistrer</kbd>. Changer ensuite l’adresse annule la vérification.</div>
                 <h3>Onglet Facture</h3>
+                <p>Sections : <strong>1 Numérotation des factures</strong>, <strong>2 Document PDF</strong>.</p>
                 <table>
                     <thead><tr><th>Paramètre</th><th>Détails</th></tr></thead>
                     <tbody>
@@ -192,14 +219,26 @@
                         <tr><td>Préfixe de brouillon</td><td>Défaut « BRO » : une facture non comptabilisée s’affiche BRO-… jusqu’à sa comptabilisation.</td></tr>
                     </tbody>
                 </table>
+                <p><strong>Aperçu du numéro</strong> : selon le préfixe, le format, le nombre de chiffres et le début du numéro, l’onglet affiche le premier numéro de facture qui sera attribué, l’allure d’un brouillon (préfixe de brouillon) et indique si le compteur repart chaque année.</p>
                 <h3>Onglet Traitement</h3>
+                <p>Section : <strong>Traitement automatique</strong>.</p>
                 <p>« Reçu comptabilisé automatiquement » (Oui/Non, défaut Non) : à Oui, un reçu lu par l’IA est comptabilisé sans validation manuelle.</p>
                 <h3>Onglet Comptabilité</h3>
                 <p>« Comptes par défaut utilisés par les modules de comptabilisation automatique. » Comptes : VP Vente de produit ; AP Achat produits ; CC Crédit client ; CF Crédit fournisseur ; DP Dépense payée perso ; BNR Bénéfices non répartis ; BNE Bénéfice net de l’exercice. « JOURNAL_OD » : code du journal d’opérations diverses. Voir <a href="comptabilite.html">Comptabilité</a>.</p>
+                <p>Sections : <strong>1 Ventes et achats</strong>, <strong>2 Capitaux propres</strong>, <strong>3 Journal</strong>. Sous chaque numéro de compte, le nom du compte est lu dans le plan comptable et affiché (par exemple « 4000 · Ventes de produits »). Si le numéro saisi n’existe pas dans le plan comptable, un avertissement l’indique : vérifiez le numéro.</p>
                 <h3>Onglet Bancaire</h3>
-                <p>« Compte bancaire par défaut » : liste des comptes Plaid actifs (« Nom — Banque ••1234 ») ou « (Aucun compte) ». Onglet sans paramètre : « Aucun paramètre bancaire configuré pour cet onglet. »</p>
+                <p>Section : <strong>Compte par défaut</strong>. « Compte bancaire par défaut » : liste des comptes Plaid actifs (« Nom — Banque ••1234 ») ou « (Aucun compte) ». Un avertissement s’affiche tant qu’aucun compte par défaut n’est choisi. Onglet sans paramètre : « Aucun paramètre bancaire configuré pour cet onglet. »</p>
                 <h3>Onglet Comptable</h3>
-                <p>« Clé comptable » : clé qui permet à votre comptable d’accéder aux données de la compagnie sans être un utilisateur du compte. Communiquez-la à lui seul. Une modification tapée dans ce champ n’est pas conservée : <kbd>Enregistrer</kbd> ne sauvegarde pas cet onglet.</p>
+                <p>Section : <strong>Accès de votre comptable</strong>. « Clé comptable » : clé qui permet à votre comptable d’accéder aux données de la compagnie sans être un utilisateur du compte. Communiquez-la à lui seul. Un avertissement s’affiche tant qu’aucune clé comptable n’existe. Une modification tapée dans ce champ n’est pas conservée : <kbd>Enregistrer</kbd> ne sauvegarde pas cet onglet.</p>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« N modification(s) non enregistrée(s) »</span> — barre foncée au bas de l’écran : des changements attendent. Cliquez <kbd>Enregistrer</kbd> pour les garder ou <kbd>Annuler</kbd> pour revenir aux valeurs enregistrées.</li>
+                    <li>Champ en rouge avec un message sous le champ — la valeur ne respecte pas le format attendu (voir <em>Vérification des champs</em>). Corrigez-la ; l’enregistrement reste possible.</li>
+                    <li>Avertissement sous un numéro de compte — le numéro n’existe pas dans le plan comptable ; vérifiez-le dans <a href="comptabilite.html">Comptabilité</a>.</li>
+                    <li>Avertissement dans l’onglet Bancaire ou Comptable — aucun compte bancaire par défaut n’est choisi, ou aucune clé comptable n’existe encore.</li>
+                    <li>Avertissement du navigateur en quittant la page — des modifications ne sont pas enregistrées ; restez sur la page pour les enregistrer, ou quittez pour les abandonner.</li>
+                </ul>
+                <div class="astuce" data-titre="Astuce">Pour retrouver le code technique d’un paramètre (utile quand le soutien vous le demande, par exemple « COMPTE_BANQUE »), passez la souris sur son libellé.</div>
                 <div class="astuce" data-titre="Astuce">Pour démarrer vite : 1. déposez votre lettre de l’ARC ou votre immatriculation dans « Remplissage automatique » ; 2. vérifiez Entreprise et Taxes ; 3. choisissez le format de numéro de facture ; 4. cliquez <kbd>Enregistrer</kbd>.</div>
             </section>
 
@@ -502,7 +541,11 @@
                 <details><summary>Comment donner accès à mon comptable ?</summary><p>Remettez-lui la « Clé comptable » de l’onglet Comptable des Paramètres. Le rôle Comptable ne se crée pas dans Utilisateurs.</p></details>
                 <details><summary>L’analyse IA a remplacé mes valeurs, pourquoi ?</summary><p>Dans Profil de l’entreprise, l’analyse écrase les champs remplis. Utilisez plutôt le remplissage automatique des Paramètres, qui ne touche que les champs vides.</p></details>
                 <details><summary>Le badge du courriel d’expéditeur reste « en attente », que faire ?</summary><p>Ouvrez le courriel « Vérifiez l’adresse courriel de votre entreprise » et cliquez « Confirmer mon adresse » dans les 24 h ; sinon <kbd>Renvoyer le lien</kbd>.</p></details>
-                <details><summary>Mes factures commencent par BRO-, est-ce normal ?</summary><p>Oui : c’est le préfixe de brouillon. Le vrai numéro est attribué à la comptabilisation, selon le format choisi dans l’onglet Facture.</p></details>
+                <details><summary>Mes factures commencent par BRO-, est-ce normal ?</summary><p>Oui : c’est le préfixe de brouillon. Le vrai numéro est attribué à la comptabilisation, selon le format choisi dans l’onglet Facture. L’aperçu de l’onglet Facture montre à la fois le premier numéro et l’allure d’un brouillon.</p></details>
+                <details><summary>Un champ des Paramètres est devenu rouge. Puis-je quand même enregistrer ?</summary><p>Oui. La vérification est indicative : elle signale un format inattendu (NEQ, numéro de TPS ou de TVQ, NAS, code postal…) sans bloquer <kbd>Enregistrer</kbd>. Corrigez la valeur dès que possible.</p></details>
+                <details><summary>Où sont passés les codes comme « NEQ » ou « FED_BN » ?</summary><p>Ils ne sont plus écrits à l’écran. Passez la souris sur le libellé du champ : le code apparaît dans l’info-bulle.</p></details>
+                <details><summary>Une barre foncée « modification(s) non enregistrée(s) » reste au bas de l’écran.</summary><p>Vous avez changé au moins un champ sans enregistrer. Cliquez <kbd>Enregistrer</kbd> dans la barre pour garder les changements, ou <kbd>Annuler</kbd> pour revenir aux valeurs enregistrées.</p></details>
+                <details><summary>Comment voir mon NAS dans les Paramètres ?</summary><p>Le champ est masqué par confidentialité (badge « Confidentiel »). Cliquez le bouton en forme d’œil à côté du champ pour l’afficher, puis de nouveau pour le masquer.</p></details>
                 <details><summary>Comment annuler un paiement automatique programmé ?</summary><p>Onglet Calendrier, bouton <kbd>🚫 Annuler</kbd> sur les statuts Planifié ou 3DS. Pour tout arrêter avec un fournisseur, révoquez l’autorisation.</p></details>
                 <details><summary>Je n’ai pas reçu le courriel d’activation.</summary><p>Cliquez « renvoyer le lien » sur la page « Vérifiez votre courriel » (une fois par minute). Le lien vaut 24 h.</p></details>
                 <details><summary>Que fait « Se souvenir de moi » ?</summary><p>Il conserve votre session 7 jours sur cet appareil, renouvelés à chaque visite. La Déconnexion efface ce cookie.</p></details>
@@ -644,10 +687,29 @@
                 <ul>
                     <li><kbd>Save</kbd>: saves the logo then the Company to Banking tabs (the Accountant tab is not saved). Also initializes the company data and assigns its @60sec.ca mailbox as soon as the trade name is known. Messages: “✔ Settings saved.” or “✖ Error while saving: …”.</li>
                     <li><kbd>Reload</kbd>: discards unsaved changes. “✔ Settings reloaded.”</li>
+                    <li><strong>Changes bar</strong>: as soon as a field is changed, a dark bar appears at the bottom of the screen: “N modification(s) non enregistrée(s)” (shown in French), with <kbd>Annuler</kbd> (same as <kbd>Reload</kbd>: the saved values are reloaded) and <kbd>Enregistrer</kbd> (same as the <kbd>Save</kbd> button at the top).</li>
+                    <li>If you leave the page with unsaved changes, the browser warns you before leaving.</li>
                 </ul>
                 <h3>Layout</h3>
-                <p>Each field shows its label and short code (e.g. “NEQ”). Types: Yes/No; numeric (integer or 3 decimals); date YYYY-MM-DD; masked password; free text of <strong>300 characters max</strong>. Tab without settings: “No parameter configured for this tab.” The list of settings comes from the configuration and may vary.</p>
+                <p>In each tab, fields are grouped into <strong>numbered sections</strong>, each with a title and a short description (see the list under each tab below). Each field shows its label; the short technical code (e.g. “NEQ”, “FED_BN”) is no longer written on screen: it appears in a tooltip when you hover over the label. Under many fields, a <strong>help line</strong> recalls the expected format (for example NEQ: “10 digits…”; GST: “9 digits, then RT0001”; QST: “10 digits, then TQ0001”). Types: Yes/No; numeric (integer or 3 decimals); date YYYY-MM-DD; masked password; free text of <strong>300 characters max</strong>. Tab without settings: “No parameter configured for this tab.” The list of settings comes from the configuration and may vary.</p>
+                <h3>Field checks</h3>
+                <p>When you leave a field, its value is gently checked. An invalid value turns the field red with an explanatory message; it does <strong>not block</strong> saving.</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Format checked</th></tr></thead>
+                    <tbody>
+                        <tr><td>NEQ</td><td>10 digits.</td></tr>
+                        <tr><td>Federal business number (BN)</td><td>123456789RC0001.</td></tr>
+                        <tr><td>GST number</td><td>123456789RT0001.</td></tr>
+                        <tr><td>QST number</td><td>1234567890TQ0001.</td></tr>
+                        <tr><td>Postal code</td><td>Reformatted automatically: A1A 1A1.</td></tr>
+                        <tr><td>Phone</td><td>Reformatted automatically: 514-555-1234.</td></tr>
+                        <tr><td>CAE / NAICS</td><td>4 to 6 digits.</td></tr>
+                        <tr><td>SIN</td><td>9 digits, with a validity check of the number.</td></tr>
+                        <tr><td>Sender email</td><td>Valid email address.</td></tr>
+                    </tbody>
+                </table>
                 <h3>Company tab</h3>
+                <p>Sections: <strong>1 Company identity</strong>, <strong>2 Contact details</strong>, <strong>3 Fiscal year</strong>.</p>
                 <ul>
                     <li><strong>Logo</strong>: PNG, JPG or SVG, 1 MB max (“Save to apply.”). “Remove logo” box (takes priority over a new file). Preview or “No logo”. Errors: “The logo exceeds 1 MB.”, “Unsupported format (PNG, JPG or SVG).”</li>
                     <li><strong>Automatic fill from a document</strong>: the AI fills <strong>only empty fields</strong> of the Company and Taxes tabs. Messages: “Please choose a file first.”; “The file is empty.”; “OpenAI key missing. Contact the administrator.”; “Unsupported format (PDF, JPG or PNG only).”; “{n} field(s) filled automatically. Review, then click Save.”; “No usable information found (or fields already filled).”; “Error while analyzing the document.”</li>
@@ -663,7 +725,9 @@
                         <tr><td>Federal business number (BN), SIN, Economic activity code (CAE), Legal structure</td><td>Tax information.</td></tr>
                     </tbody>
                 </table>
+                <p>The <strong>SIN</strong> is masked (dots) and carries a “Confidential” badge; the eye button next to the field shows or hides it.</p>
                 <h3>Taxes tab</h3>
+                <p>Sections: <strong>1 Registration</strong>, <strong>2 Tax calculation</strong>, <strong>3 Remittances</strong>.</p>
                 <table>
                     <thead><tr><th>Setting</th><th>Details</th></tr></thead>
                     <tbody>
@@ -676,7 +740,12 @@
                         <tr><td>GST registration date, QST registration date</td><td>Dates of registration.</td></tr>
                     </tbody>
                 </table>
+                <ul>
+                    <li><strong>Computed example</strong>: the tab shows an example with your rates, for example “Example: a $100.00 service + GST … + QST … = …”. If the mode is “Taxes included”, the example shows instead the breakdown of a tax-included price.</li>
+                    <li>Under the bank account for tax remittance, the account name is shown from the chart of accounts; a warning appears if the number does not exist in the chart of accounts.</li>
+                </ul>
                 <h3>Email tab</h3>
+                <p>Section: <strong>Sender</strong>.</p>
                 <ul>
                     <li><strong>Sender email</strong> and <kbd>Verify this address</kbd> button (becomes <kbd>Resend the link</kbd> once verified). Badges: “✔ Address verified on [date]”, “⏳ Link sent — awaiting confirmation”, “✖ Address not verified”.</li>
                     <li>The email received is titled “Verify your company email address” with a “Confirm my address” button (link valid 24 h). A verified address becomes the reply-to address of emails sent on behalf of the company.</li>
@@ -689,6 +758,7 @@
                 </ul>
                 <div class="piege" data-titre="Pitfall"><kbd>Verify this address</kbd> saves the email immediately, without <kbd>Save</kbd>. Changing the address afterwards cancels the verification.</div>
                 <h3>Invoice tab</h3>
+                <p>Sections: <strong>1 Invoice numbering</strong>, <strong>2 PDF document</strong>.</p>
                 <table>
                     <thead><tr><th>Setting</th><th>Details</th></tr></thead>
                     <tbody>
@@ -703,14 +773,26 @@
                         <tr><td>Draft prefix</td><td>Default “BRO”: an unposted invoice shows BRO-… until it is posted.</td></tr>
                     </tbody>
                 </table>
+                <p><strong>Number preview</strong>: based on the prefix, format, number of digits and starting number, the tab shows the first invoice number that will be assigned, what a draft looks like (draft prefix) and whether the counter restarts every year.</p>
                 <h3>Processing tab</h3>
+                <p>Section: <strong>Automatic processing</strong>.</p>
                 <p>“Receipt posted automatically” (Yes/No, default No): when Yes, a receipt read by the AI is posted without manual validation.</p>
                 <h3>Accounting tab</h3>
                 <p>“Default accounts used by the automatic bookkeeping modules.” Accounts: VP Product sales; AP Product purchases; CC Customer credit; CF Supplier credit; DP Expense paid personally; BNR Retained earnings; BNE Net income for the year. “JOURNAL_OD”: code of the general journal. See <a href="comptabilite.html">Accounting</a>.</p>
+                <p>Sections: <strong>1 Sales and purchases</strong>, <strong>2 Equity</strong>, <strong>3 Journal</strong>. Under each account number, the account name is read from the chart of accounts and shown (for example “4000 · Ventes de produits”). If the number entered does not exist in the chart of accounts, a warning says so: check the number.</p>
                 <h3>Banking tab</h3>
-                <p>“Default bank account”: list of active Plaid accounts (“Name — Bank ••1234”) or “(No account)”. Tab without settings: “No banking setting configured for this tab.”</p>
+                <p>Section: <strong>Default account</strong>. “Default bank account”: list of active Plaid accounts (“Name — Bank ••1234”) or “(No account)”. A warning is shown as long as no default account is chosen. Tab without settings: “No banking setting configured for this tab.”</p>
                 <h3>Accountant tab</h3>
-                <p>“Accountant key”: key that lets your accountant access the company’s data without being an account user. Share it with them only. A change typed in this field is not kept: <kbd>Save</kbd> does not save this tab.</p>
+                <p>Section: <strong>Your accountant’s access</strong>. “Accountant key”: key that lets your accountant access the company’s data without being an account user. Share it with them only. A warning is shown as long as no accountant key exists. A change typed in this field is not kept: <kbd>Save</kbd> does not save this tab.</p>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“N modification(s) non enregistrée(s)”</span> — dark bar at the bottom of the screen: changes are pending. Click <kbd>Enregistrer</kbd> to keep them or <kbd>Annuler</kbd> to go back to the saved values.</li>
+                    <li>Field in red with a message under it — the value does not match the expected format (see <em>Field checks</em>). Correct it; saving is still possible.</li>
+                    <li>Warning under an account number — the number does not exist in the chart of accounts; check it in <a href="comptabilite.html">Accounting</a>.</li>
+                    <li>Warning in the Banking or Accountant tab — no default bank account is chosen, or no accountant key exists yet.</li>
+                    <li>Browser warning when leaving the page — some changes are not saved; stay on the page to save them, or leave to discard them.</li>
+                </ul>
+                <div class="astuce" data-titre="Tip">To find a setting’s technical code (useful when support asks for it, for example “COMPTE_BANQUE”), hover over its label.</div>
                 <div class="astuce" data-titre="Tip">Quick start: 1. drop your CRA letter or registration in “Automatic fill”; 2. check Company and Taxes; 3. choose the invoice number format; 4. click <kbd>Save</kbd>.</div>
             </section>
 
@@ -1013,7 +1095,11 @@
                 <details><summary>How do I give my accountant access?</summary><p>Hand them the “Accountant key” from the Accountant tab of Settings. The Accountant role is not created in Users.</p></details>
                 <details><summary>Why did the AI analysis replace my values?</summary><p>In Company profile, the analysis overwrites filled fields. Use the automatic fill in Settings instead, which only touches empty fields.</p></details>
                 <details><summary>The sender email badge stays “awaiting”, what now?</summary><p>Open the “Verify your company email address” email and click “Confirm my address” within 24 h; otherwise <kbd>Resend the link</kbd>.</p></details>
-                <details><summary>My invoices start with BRO-, is that normal?</summary><p>Yes: it is the draft prefix. The real number is assigned when posting, following the format chosen in the Invoice tab.</p></details>
+                <details><summary>My invoices start with BRO-, is that normal?</summary><p>Yes: it is the draft prefix. The real number is assigned when posting, following the format chosen in the Invoice tab. The Invoice tab preview shows both the first number and what a draft looks like.</p></details>
+                <details><summary>A field in Settings turned red. Can I still save?</summary><p>Yes. The check is only a guide: it flags an unexpected format (NEQ, GST or QST number, SIN, postal code…) without blocking <kbd>Save</kbd>. Correct the value as soon as possible.</p></details>
+                <details><summary>Where did codes like “NEQ” or “FED_BN” go?</summary><p>They are no longer written on screen. Hover over the field’s label: the code appears in the tooltip.</p></details>
+                <details><summary>A dark “modification(s) non enregistrée(s)” bar stays at the bottom of the screen.</summary><p>You changed at least one field without saving. Click <kbd>Enregistrer</kbd> in the bar to keep the changes, or <kbd>Annuler</kbd> to go back to the saved values.</p></details>
+                <details><summary>How do I see my SIN in Settings?</summary><p>The field is masked for privacy (“Confidential” badge). Click the eye button next to the field to show it, and again to hide it.</p></details>
                 <details><summary>How do I cancel a scheduled automatic payment?</summary><p>Calendar tab, <kbd>🚫 Cancel</kbd> button on Scheduled or 3DS statuses. To stop everything with a supplier, revoke the authorization.</p></details>
                 <details><summary>I did not receive the activation email.</summary><p>Click “resend the link” on the “Check your email” page (once a minute). The link is valid 24 h.</p></details>
                 <details><summary>What does “Remember me” do?</summary><p>It keeps your session 7 days on this device, renewed at each visit. Sign out erases the cookie.</p></details>
@@ -1155,10 +1241,29 @@
                 <ul>
                     <li><kbd>Guardar</kbd>: guarda el logotipo y luego las pestañas Empresa a Bancario (la pestaña Contador no se guarda). También inicializa los datos de la compañía y le asigna su buzón @60sec.ca en cuanto se conoce el nombre comercial. Mensajes: «✔ Ajustes guardados.» o «✖ Error al guardar: …».</li>
                     <li><kbd>Recargar</kbd>: abandona los cambios no guardados. «✔ Ajustes recargados.»</li>
+                    <li><strong>Barra de cambios</strong>: en cuanto se modifica un campo, aparece una barra oscura al pie de la pantalla: «N modification(s) non enregistrée(s)» (en francés), con <kbd>Annuler</kbd> (mismo efecto que <kbd>Recargar</kbd>: se recargan los valores guardados) y <kbd>Enregistrer</kbd> (mismo efecto que el botón <kbd>Guardar</kbd> de arriba).</li>
+                    <li>Si sale de la página con cambios sin guardar, el navegador le avisa antes de salir.</li>
                 </ul>
                 <h3>Presentación</h3>
-                <p>Cada campo muestra su etiqueta y su código corto (p. ej. «NEQ»). Tipos: Sí/No; numérico (entero o 3 decimales); fecha AAAA-MM-DD; contraseña oculta; texto libre de <strong>300 caracteres máximo</strong>. Pestaña sin parámetros: «Ningún parámetro configurado para esta pestaña.» La lista de parámetros viene de la configuración y puede variar.</p>
+                <p>En cada pestaña, los campos se agrupan en <strong>secciones numeradas</strong>, cada una con un título y una breve descripción (vea la lista bajo cada pestaña más abajo). Cada campo muestra su etiqueta; el código técnico corto (p. ej. «NEQ», «FED_BN») ya no se escribe en pantalla: aparece en una información emergente al pasar el ratón sobre la etiqueta. Bajo muchos campos, una <strong>línea de ayuda</strong> recuerda el formato esperado (por ejemplo NEQ: «10 dígitos…»; TPS: «9 dígitos, luego RT0001»; TVQ: «10 dígitos, luego TQ0001»). Tipos: Sí/No; numérico (entero o 3 decimales); fecha AAAA-MM-DD; contraseña oculta; texto libre de <strong>300 caracteres máximo</strong>. Pestaña sin parámetros: «Ningún parámetro configurado para esta pestaña.» La lista de parámetros viene de la configuración y puede variar.</p>
+                <h3>Verificación de los campos</h3>
+                <p>Al salir de un campo, su valor se verifica con suavidad. Un valor no válido pone el campo en rojo con un mensaje explicativo; <strong>no impide</strong> guardar.</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Formato verificado</th></tr></thead>
+                    <tbody>
+                        <tr><td>NEQ</td><td>10 dígitos.</td></tr>
+                        <tr><td>Número de empresa federal (BN)</td><td>123456789RC0001.</td></tr>
+                        <tr><td>Número de TPS</td><td>123456789RT0001.</td></tr>
+                        <tr><td>Número de TVQ</td><td>1234567890TQ0001.</td></tr>
+                        <tr><td>Código postal</td><td>Se reformatea automáticamente: A1A 1A1.</td></tr>
+                        <tr><td>Teléfono</td><td>Se reformatea automáticamente: 514-555-1234.</td></tr>
+                        <tr><td>CAE / SCIAN</td><td>De 4 a 6 dígitos.</td></tr>
+                        <tr><td>NAS</td><td>9 dígitos, con control de validez del número.</td></tr>
+                        <tr><td>Correo remitente</td><td>Dirección de correo válida.</td></tr>
+                    </tbody>
+                </table>
                 <h3>Pestaña Empresa</h3>
+                <p>Secciones: <strong>1 Identidad de la empresa</strong>, <strong>2 Datos de contacto</strong>, <strong>3 Ejercicio financiero</strong>.</p>
                 <ul>
                     <li><strong>Logotipo</strong>: PNG, JPG o SVG, 1 MB máximo («Guarde para aplicar.»). Casilla «Quitar el logotipo» (prioritaria sobre un archivo nuevo). Vista previa o «Sin logotipo». Errores: «El logotipo supera 1 MB.», «Formato no soportado (PNG, JPG o SVG).»</li>
                     <li><strong>Relleno automático por documento</strong>: la IA rellena <strong>únicamente los campos vacíos</strong> de las pestañas Empresa e Impuestos. Mensajes: «Elija un archivo primero.»; «El archivo está vacío.»; «Falta la clave de OpenAI. Contacte al administrador.»; «Formato no admitido (solo PDF, JPG o PNG).»; «{n} campo(s) rellenado(s) automáticamente. Revise y haga clic en Guardar.»; «No se encontró información utilizable (o los campos ya están llenos).»; «Error al analizar el documento.»</li>
@@ -1174,7 +1279,9 @@
                         <tr><td>Número de empresa federal (BN), NAS, Código de actividad económica (CAE), Estructura jurídica</td><td>Información fiscal.</td></tr>
                     </tbody>
                 </table>
+                <p>El <strong>NAS</strong> está oculto (puntos) y lleva una insignia «Confidencial»; el botón en forma de ojo junto al campo lo muestra u oculta.</p>
                 <h3>Pestaña Impuestos</h3>
+                <p>Secciones: <strong>1 Inscripción</strong>, <strong>2 Cálculo de impuestos</strong>, <strong>3 Remesas</strong>.</p>
                 <table>
                     <thead><tr><th>Parámetro</th><th>Detalles</th></tr></thead>
                     <tbody>
@@ -1187,7 +1294,12 @@
                         <tr><td>Fecha de inscripción TPS, Fecha de inscripción TVQ</td><td>Fechas de inscripción.</td></tr>
                     </tbody>
                 </table>
+                <ul>
+                    <li><strong>Ejemplo calculado</strong>: la pestaña muestra un ejemplo con sus tasas, por ejemplo «Ejemplo: un servicio de 100,00 $ + TPS … + TVQ … = …». Si el modo es «Impuestos incluidos», el ejemplo muestra en su lugar el desglose de un precio con impuestos incluidos.</li>
+                    <li>Bajo la cuenta bancaria para la remesa de impuestos se muestra el nombre de la cuenta según el plan contable; aparece una advertencia si el número no existe en el plan contable.</li>
+                </ul>
                 <h3>Pestaña Correo</h3>
+                <p>Sección: <strong>Remitente</strong>.</p>
                 <ul>
                     <li><strong>Correo remitente</strong> y botón <kbd>Verificar esta dirección</kbd> (pasa a <kbd>Reenviar el enlace</kbd> una vez verificada). Insignias: «✔ Dirección verificada el [fecha]», «⏳ Enlace enviado — esperando confirmación», «✖ Dirección no verificada».</li>
                     <li>El correo recibido tiene por asunto «Verifique la dirección de correo de su empresa» y un botón «Confirmar mi dirección» (enlace válido 24 h). Una dirección verificada se convierte en la dirección de respuesta de los correos enviados en nombre de la compañía.</li>
@@ -1200,6 +1312,7 @@
                 </ul>
                 <div class="piege" data-titre="Trampa"><kbd>Verificar esta dirección</kbd> guarda el correo de inmediato, sin pasar por <kbd>Guardar</kbd>. Cambiar luego la dirección anula la verificación.</div>
                 <h3>Pestaña Factura</h3>
+                <p>Secciones: <strong>1 Numeración de las facturas</strong>, <strong>2 Documento PDF</strong>.</p>
                 <table>
                     <thead><tr><th>Parámetro</th><th>Detalles</th></tr></thead>
                     <tbody>
@@ -1214,14 +1327,26 @@
                         <tr><td>Prefijo de borrador</td><td>Por defecto «BRO»: una factura no contabilizada se muestra BRO-… hasta su contabilización.</td></tr>
                     </tbody>
                 </table>
+                <p><strong>Vista previa del número</strong>: según el prefijo, el formato, la cantidad de dígitos y el inicio del número, la pestaña muestra el primer número de factura que se asignará, el aspecto de un borrador (prefijo de borrador) e indica si el contador se reinicia cada año.</p>
                 <h3>Pestaña Procesamiento</h3>
+                <p>Sección: <strong>Procesamiento automático</strong>.</p>
                 <p>«Recibo contabilizado automáticamente» (Sí/No, por defecto No): en Sí, un recibo leído por la IA se contabiliza sin validación manual.</p>
                 <h3>Pestaña Contabilidad</h3>
                 <p>«Cuentas predeterminadas usadas por los módulos de contabilización automática.» Cuentas: VP Venta de producto; AP Compra de productos; CC Crédito cliente; CF Crédito proveedor; DP Gasto pagado personalmente; BNR Beneficios no distribuidos; BNE Beneficio neto del ejercicio. «JOURNAL_OD»: código del diario de operaciones diversas. Vea <a href="comptabilite.html">Contabilidad</a>.</p>
+                <p>Secciones: <strong>1 Ventas y compras</strong>, <strong>2 Patrimonio</strong>, <strong>3 Diario</strong>. Bajo cada número de cuenta se lee en el plan contable y se muestra el nombre de la cuenta (por ejemplo «4000 · Ventes de produits»). Si el número introducido no existe en el plan contable, una advertencia lo indica: verifique el número.</p>
                 <h3>Pestaña Bancario</h3>
-                <p>«Cuenta bancaria por defecto»: lista de las cuentas Plaid activas («Nombre — Banco ••1234») o «(Sin cuenta)». Pestaña sin parámetros: «Ningún parámetro bancario configurado para esta pestaña.»</p>
+                <p>Sección: <strong>Cuenta por defecto</strong>. «Cuenta bancaria por defecto»: lista de las cuentas Plaid activas («Nombre — Banco ••1234») o «(Sin cuenta)». Se muestra una advertencia mientras no se elija ninguna cuenta por defecto. Pestaña sin parámetros: «Ningún parámetro bancario configurado para esta pestaña.»</p>
                 <h3>Pestaña Contador</h3>
-                <p>«Clave contable»: clave que permite a su contador acceder a los datos de la compañía sin ser usuario de la cuenta. Compártala solo con él. Un cambio escrito en este campo no se conserva: <kbd>Guardar</kbd> no guarda esta pestaña.</p>
+                <p>Sección: <strong>Acceso de su contador</strong>. «Clave contable»: clave que permite a su contador acceder a los datos de la compañía sin ser usuario de la cuenta. Compártala solo con él. Se muestra una advertencia mientras no exista ninguna clave contable. Un cambio escrito en este campo no se conserva: <kbd>Guardar</kbd> no guarda esta pestaña.</p>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«N modification(s) non enregistrée(s)»</span> — barra oscura al pie de la pantalla: hay cambios pendientes. Haga clic en <kbd>Enregistrer</kbd> para conservarlos o en <kbd>Annuler</kbd> para volver a los valores guardados.</li>
+                    <li>Campo en rojo con un mensaje debajo — el valor no respeta el formato esperado (vea <em>Verificación de los campos</em>). Corríjalo; se puede guardar de todos modos.</li>
+                    <li>Advertencia bajo un número de cuenta — el número no existe en el plan contable; verifíquelo en <a href="comptabilite.html">Contabilidad</a>.</li>
+                    <li>Advertencia en la pestaña Bancario o Contador — no se ha elegido ninguna cuenta bancaria por defecto, o aún no existe ninguna clave contable.</li>
+                    <li>Aviso del navegador al salir de la página — hay cambios sin guardar; quédese en la página para guardarlos, o salga para abandonarlos.</li>
+                </ul>
+                <div class="astuce" data-titre="Consejo">Para encontrar el código técnico de un parámetro (útil cuando el soporte se lo pide, por ejemplo «COMPTE_BANQUE»), pase el ratón sobre su etiqueta.</div>
                 <div class="astuce" data-titre="Consejo">Para empezar rápido: 1. deposite su carta de la ARC o su matrícula en «Relleno automático»; 2. verifique Empresa e Impuestos; 3. elija el formato del número de factura; 4. haga clic en <kbd>Guardar</kbd>.</div>
             </section>
 
@@ -1524,7 +1649,11 @@
                 <details><summary>¿Cómo doy acceso a mi contador?</summary><p>Entréguele la «Clave contable» de la pestaña Contador de Ajustes. El rol Contador no se crea en Usuarios.</p></details>
                 <details><summary>¿Por qué el análisis IA reemplazó mis valores?</summary><p>En Perfil de la empresa, el análisis sobrescribe los campos rellenados. Use mejor el relleno automático de Ajustes, que solo toca los campos vacíos.</p></details>
                 <details><summary>La insignia del correo remitente sigue «en espera», ¿qué hago?</summary><p>Abra el correo «Verifique la dirección de correo de su empresa» y haga clic en «Confirmar mi dirección» dentro de las 24 h; si no, <kbd>Reenviar el enlace</kbd>.</p></details>
-                <details><summary>Mis facturas empiezan por BRO-, ¿es normal?</summary><p>Sí: es el prefijo de borrador. El número real se asigna al contabilizar, según el formato elegido en la pestaña Factura.</p></details>
+                <details><summary>Mis facturas empiezan por BRO-, ¿es normal?</summary><p>Sí: es el prefijo de borrador. El número real se asigna al contabilizar, según el formato elegido en la pestaña Factura. La vista previa de la pestaña Factura muestra a la vez el primer número y el aspecto de un borrador.</p></details>
+                <details><summary>Un campo de Ajustes se puso en rojo. ¿Puedo guardar de todos modos?</summary><p>Sí. La verificación es solo orientativa: señala un formato inesperado (NEQ, número de TPS o TVQ, NAS, código postal…) sin bloquear <kbd>Guardar</kbd>. Corrija el valor lo antes posible.</p></details>
+                <details><summary>¿Dónde están los códigos como «NEQ» o «FED_BN»?</summary><p>Ya no se escriben en pantalla. Pase el ratón sobre la etiqueta del campo: el código aparece en la información emergente.</p></details>
+                <details><summary>Una barra oscura «modification(s) non enregistrée(s)» permanece al pie de la pantalla.</summary><p>Ha cambiado al menos un campo sin guardar. Haga clic en <kbd>Enregistrer</kbd> en la barra para conservar los cambios, o en <kbd>Annuler</kbd> para volver a los valores guardados.</p></details>
+                <details><summary>¿Cómo veo mi NAS en Ajustes?</summary><p>El campo está oculto por confidencialidad (insignia «Confidencial»). Haga clic en el botón en forma de ojo junto al campo para mostrarlo, y otra vez para ocultarlo.</p></details>
                 <details><summary>¿Cómo anulo un pago automático programado?</summary><p>Pestaña Calendario, botón <kbd>🚫 Anular</kbd> en los estados Planificado o 3DS. Para detener todo con un proveedor, revoque la autorización.</p></details>
                 <details><summary>No recibí el correo de activación.</summary><p>Haga clic en «reenviar el enlace» en la página «Revise su correo» (una vez por minuto). El enlace vale 24 h.</p></details>
                 <details><summary>¿Qué hace «Recordarme»?</summary><p>Conserva su sesión 7 días en este dispositivo, renovados en cada visita. Cerrar sesión borra la cookie.</p></details>
