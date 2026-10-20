@@ -26,7 +26,7 @@
 
             <section id="fr-reperer">
                 <h2>Se repérer dans 60Sec-AI</h2>
-                <p>Toutes les pages internes de 60Sec-AI partagent la même structure : un en-tête en haut de l’écran, un menu à gauche et le contenu de l’écran au centre. L’en-tête donne l’état de votre compte et de vos connexions, permet de changer de langue ou de compagnie, et ouvre l’aide ou l’assistant IA.</p>
+                <p>Toutes les pages internes de 60Sec-AI partagent la même structure : un en-tête en haut de l’écran, un menu à gauche et le contenu de l’écran au centre. L’en-tête donne l’état de votre compte et de vos connexions, permet de changer de langue ou de compagnie, et ouvre l’aide ou l’assistant IA. Tout à gauche de l’en-tête, le bouton <kbd>☰</kbd> masque ou affiche le menu de gauche (voir <a href="#fr-menu">Menu de gauche</a>).</p>
 
                 <h3>Pastilles d’état de l’en-tête</h3>
                 <p>Les pastilles d’essai et de Square n’apparaissent que lorsqu’elles ont quelque chose à dire ; celles de Plaid et de Stripe sont toujours affichées. Elles renseignent, mais ne se cliquent pas.</p>
@@ -99,30 +99,39 @@
 
             <section id="fr-menu">
                 <h2>Menu de gauche</h2>
-                <p>Le menu de gauche liste tous les écrans de 60Sec-AI, regroupés par domaine. Le Tableau de bord (icône de maison) est en haut ; les écrans d’administration et la déconnexion sont au bas de la barre. Un clic sur un groupe déplie ses entrées.</p>
+                <p>Le menu de gauche liste tous les écrans de 60Sec-AI, rangés comme l’accueil 60secondes : le <span class="chemin">Tableau de bord</span> (icône de maison) en haut, puis quatre sections — <strong>Mon argent</strong>, <strong>Mon entreprise</strong>, <strong>Mon accompagnement</strong> et <strong>Administration</strong>. La déconnexion est la dernière entrée.</p>
+                <ul>
+                    <li>Les <strong>titres de section</strong> sont écrits en petites capitales ; ils servent de repères et ne se cliquent pas.</li>
+                    <li>Chaque entrée est une <strong>pilule</strong>, avec son icône dans un rond. La page où vous êtes est sur fond <strong>bleu pâle</strong>, son icône sur rond bleu marine.</li>
+                    <li>Les <strong>groupes</strong> (Ventes, Achats, Paiements, Rapports, Comptabilité, Produits et services) se déplient d’un clic : le chevron pivote et les écrans du groupe apparaissent. Le groupe de la page courante s’ouvre de lui-même.</li>
+                    <li>Les <strong>pastilles</strong> de couleur au bout d’une entrée signalent : <strong>jaune</strong> = à faire, <strong>rouge</strong> = en retard, <strong>bleu pâle</strong> = information. Une pastille à zéro n’est jamais affichée. La pastille jaune de <span class="chemin">Tâches à approuver</span> donne le nombre de tâches qui attendent votre décision.</li>
+                    <li><span class="chemin">Mon cabinet comptable</span> ne change pas de page : il s’ouvre dans une <strong>fenêtre par-dessus la page</strong> (voir <a href="#fr-mon-cabinet">Mon cabinet comptable</a>).</li>
+                    <li>Si la fenêtre du navigateur est basse, le menu défile.</li>
+                </ul>
+
+                <h3>Bouton ☰ : masquer ou afficher le menu</h3>
+                <ul>
+                    <li>Sur ordinateur, le bouton <kbd>☰</kbd> est tout à gauche de l’en-tête, avant le logo. Un clic <strong>masque le menu</strong> : l’écran de travail prend alors toute la largeur. Un nouveau clic le réaffiche.</li>
+                    <li>Quand le menu est visible, le bouton montre un <kbd>✕</kbd> sur fond bleu pâle ; quand il est masqué, il montre <kbd>☰</kbd>. Son info-bulle dit ce qu’il va faire : « Masquer le menu » ou « Afficher le menu ».</li>
+                    <li>Le choix est <strong>gardé dans ce navigateur</strong> : à la page suivante comme à votre prochaine visite, le menu revient tel que vous l’avez laissé, sans clignoter. Un autre navigateur ou un autre ordinateur garde son propre choix.</li>
+                    <li>Sur <strong>téléphone</strong> (écran étroit), l’en-tête complet est masqué : une barre en haut de l’écran porte un second <kbd>☰</kbd>. Le menu glisse alors depuis la gauche, par-dessus la page assombrie. Touchez le fond assombri ou le <kbd>✕</kbd>, ou appuyez sur <kbd>Échap</kbd>, pour le refermer.</li>
+                </ul>
+                <div class="astuce" data-titre="Astuce">Pour un grand tableau (grand livre, liste de factures, rapport), masquez le menu par <kbd>☰</kbd> : les colonnes gagnent toute la largeur de l’écran. Réaffichez-le du même bouton quand vous voulez changer d’écran.</div>
+
+                <h3>Les entrées du menu</h3>
                 <table>
                     <thead><tr><th>Entrée du menu</th><th>Ce qu’elle ouvre</th><th>Aide</th></tr></thead>
                     <tbody>
                         <tr><td><span class="chemin">Tableau de bord</span></td><td>La page d’accueil : bienvenue, indicateurs, accès rapides (voir plus bas).</td><td>Cette page</td></tr>
+                        <tr><td colspan="3"><strong>Mon argent</strong></td></tr>
                         <tr><td><span class="chemin">Ventes › Clients</span></td><td>La liste de vos clients et leurs fiches (adresse, courriel de facturation, coordonnées).</td><td><a href="ventes.html#fr-clients">Ventes</a></td></tr>
-                        <tr><td><span class="chemin">Ventes › Factures clients</span></td><td>Les factures que vous émettez : brouillons, factures comptabilisées, encaissements, PDF, liens de paiement Square.</td><td><a href="ventes.html">Ventes</a></td></tr>
+                        <tr><td><span class="chemin">Ventes › Factures clients</span></td><td>Les factures que vous émettez : brouillons, factures comptabilisées, encaissements, PDF, liens de paiement Square.</td><td><a href="ventes.html#fr-factures">Ventes</a></td></tr>
+                        <tr><td><span class="chemin">Ventes › Encaissements</span></td><td>Les paiements reçus de vos clients.</td><td><a href="ventes.html#fr-encaissements">Ventes</a></td></tr>
                         <tr><td><span class="chemin">Achats › Fournisseurs</span></td><td>La liste de vos fournisseurs et leurs fiches, dont le paiement par Stripe.</td><td><a href="achats.html">Achats</a></td></tr>
                         <tr><td><span class="chemin">Achats › Factures fournisseurs</span></td><td>Les factures reçues de vos fournisseurs, leur comptabilisation et leur paiement.</td><td><a href="achats.html">Achats</a></td></tr>
                         <tr><td><span class="chemin">Achats › Reçus</span></td><td>Les reçus de dépenses (photo ou PDF lus par l’IA) et leur comptabilisation.</td><td><a href="achats.html">Achats</a></td></tr>
-                        <tr><td><span class="chemin">Produits et services › Produits</span></td><td>Le catalogue de vos produits et services (prix, taxes, compte de vente).</td><td><a href="produits.html">Produits</a></td></tr>
-                        <tr><td><span class="chemin">Produits et services › Catégorie de produit</span></td><td>Les catégories qui regroupent vos produits.</td><td><a href="produits.html">Produits</a></td></tr>
-                        <tr><td><span class="chemin">Comptabilité › Journaux</span></td><td>Les écritures comptables (journal d’opérations diverses et journaux spécialisés).</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
-                        <tr><td><span class="chemin">Comptabilité › Modèles de journaux</span></td><td>Des écritures types réutilisables (loyer, salaires, amortissement).</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
-                        <tr><td><span class="chemin">Comptabilité › Comptes bancaires</span></td><td>Vos comptes de banque et de carte de crédit.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
-                        <tr><td><span class="chemin">Comptabilité › Relevé bancaire</span></td><td>Les transactions bancaires importées (connexion Plaid ou fichier) et leur rapprochement.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
-                        <tr><td><span class="chemin">Comptabilité › Rapport de taxes</span></td><td>La déclaration de TPS et de TVQ pour une période de remise.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
-                        <tr><td><span class="chemin">Comptabilité › Fermeture d’année fiscale</span></td><td>La clôture d’un exercice et le report du bénéfice net aux bénéfices non répartis.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
-                        <tr><td><span class="chemin">Comptabilité › Plan comptable</span></td><td>La liste de vos comptes (actif, passif, capitaux, revenus, dépenses) et leur entretien.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
-                        <tr><td><span class="chemin">Agenda</span></td><td>Vos rendez-vous et la planification de vos services.</td><td><a href="agenda.html">Agenda</a></td></tr>
-                        <tr><td><span class="chemin">Employés</span></td><td>Les fiches de vos employés.</td><td><a href="employes.html">Employés</a></td></tr>
-                        <tr><td><span class="chemin">Courriel</span></td><td>La boîte courriel de la compagnie (adresse @60sec.ca) : courriels envoyés et reçus.</td><td><a href="courriel.html">Courriel</a></td></tr>
-                        <tr><td><span class="chemin">Tâches à approuver</span></td><td>Les éléments en attente de votre approbation. Une <strong>pastille</strong> sur l’entrée affiche le nombre de tâches en attente.</td><td><a href="approbations.html">Approbations</a></td></tr>
-                        <tr><td><span class="chemin">Mon accompagnement › Mon cabinet comptable</span></td><td>Une fenêtre par-dessus la page : votre cabinet comptable, qui fait quoi au nom de votre entreprise, et l’annuaire des cabinets certifiés.</td><td><a href="#fr-mon-cabinet">Cette page</a></td></tr>
+                        <tr><td><span class="chemin">Paiements › Processeur de paiement</span></td><td>La connexion de Square, de Plaid et de Stripe.</td><td><a href="administration.html#fr-processeurs">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Paiements › Paiements automatiques</span></td><td>Les autorisations, le calendrier et l’historique des paiements automatiques aux fournisseurs.</td><td><a href="administration.html#fr-paiements-automatiques">Administration</a></td></tr>
                         <tr><td><span class="chemin">Rapports › Plan comptable</span></td><td>Le plan comptable imprimable avec les soldes.</td><td><a href="rapports.html">Rapports</a></td></tr>
                         <tr><td><span class="chemin">Rapports › État des résultats</span></td><td>Revenus, dépenses et bénéfice net d’une période.</td><td><a href="rapports.html">Rapports</a></td></tr>
                         <tr><td><span class="chemin">Rapports › Bilan</span></td><td>Actif, passif et capitaux propres à une date.</td><td><a href="rapports.html">Rapports</a></td></tr>
@@ -131,12 +140,26 @@
                         <tr><td><span class="chemin">Rapports › Balance de vérification</span></td><td>Les soldes débiteurs et créditeurs de tous les comptes.</td><td><a href="rapports.html">Rapports</a></td></tr>
                         <tr><td><span class="chemin">Rapports › IA Paiement</span></td><td>Analyse par l’IA de vos paiements et de vos comptes à payer.</td><td><a href="rapports.html">Rapports</a></td></tr>
                         <tr><td><span class="chemin">Rapports › IA Ventes</span></td><td>Analyse par l’IA de vos ventes et de vos clients.</td><td><a href="rapports.html">Rapports</a></td></tr>
-                        <tr><td><span class="chemin">Importation › Importation des données</span></td><td>La page d’accueil des importations, seule entrée du groupe : l’import de vos données depuis un fichier ou depuis votre ancien logiciel comptable (QuickBooks et autres). Les écrans d’importation s’ouvrent à partir de cette page.</td><td><a href="importation.html">Importation</a></td></tr>
-                        <tr><td><span class="chemin">Profil de l’entreprise</span></td><td>L’identité de l’administrateur et les numéros fiscaux de l’entreprise (NEQ, BN, TPS, TVQ) ; remplissage automatique par document.</td><td><a href="administration.html">Administration</a></td></tr>
-                        <tr><td><span class="chemin">Utilisateurs</span></td><td>La gestion des comptes de la compagnie (<strong>administrateurs seulement</strong>).</td><td><a href="administration.html">Administration</a></td></tr>
-                        <tr><td><span class="chemin">Paramètres</span></td><td>Les onglets Entreprise, Taxes, Email, Facture, Traitement, Comptabilité, Bancaire et Comptable.</td><td><a href="administration.html">Administration</a></td></tr>
-                        <tr><td><span class="chemin">Processeur de paiement</span></td><td>La connexion de Square, de Plaid et de Stripe.</td><td><a href="administration.html">Administration</a></td></tr>
-                        <tr><td><span class="chemin">Paiements automatiques</span></td><td>Les autorisations, le calendrier et l’historique des paiements automatiques aux fournisseurs.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td colspan="3"><strong>Mon entreprise</strong></td></tr>
+                        <tr><td><span class="chemin">Agenda</span></td><td>Vos rendez-vous et la planification de vos services.</td><td><a href="agenda.html">Agenda</a></td></tr>
+                        <tr><td><span class="chemin">Employés</span></td><td>Les fiches de vos employés.</td><td><a href="employes.html">Employés</a></td></tr>
+                        <tr><td><span class="chemin">Courriel</span></td><td>La boîte courriel de la compagnie (adresse @60sec.ca) : courriels envoyés et reçus.</td><td><a href="courriel.html">Courriel</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Journaux</span></td><td>Les écritures comptables (journal d’opérations diverses et journaux spécialisés).</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Modèles de journaux</span></td><td>Des écritures types réutilisables (loyer, salaires, amortissement).</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Comptes bancaires</span></td><td>Vos comptes de banque et de carte de crédit.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Relevé bancaire</span></td><td>Les transactions bancaires importées (connexion Plaid ou fichier) et leur rapprochement.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Rapport de taxes</span></td><td>La déclaration de TPS et de TVQ pour une période de remise.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Fermeture d’année fiscale</span></td><td>La clôture d’un exercice et le report du bénéfice net aux bénéfices non répartis.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Plan comptable</span></td><td>La liste de vos comptes (actif, passif, capitaux, revenus, dépenses) et leur entretien.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Produits et services › Produits</span></td><td>Le catalogue de vos produits et services (prix, taxes, compte de vente).</td><td><a href="produits.html">Produits</a></td></tr>
+                        <tr><td><span class="chemin">Produits et services › Catégorie de produit</span></td><td>Les catégories qui regroupent vos produits.</td><td><a href="produits.html">Produits</a></td></tr>
+                        <tr><td><span class="chemin">Tâches à approuver</span></td><td>Les tâches planifiées en attente de votre approbation. Une <strong>pastille jaune</strong> sur l’entrée affiche le nombre de tâches en attente.</td><td><a href="approbations.html">Approbations</a></td></tr>
+                        <tr><td colspan="3"><strong>Mon accompagnement</strong></td></tr>
+                        <tr><td><span class="chemin">Mon cabinet comptable</span></td><td>Une fenêtre par-dessus la page : votre cabinet comptable, qui fait quoi au nom de votre entreprise, et l’annuaire des cabinets certifiés.</td><td><a href="#fr-mon-cabinet">Cette page</a></td></tr>
+                        <tr><td colspan="3"><strong>Administration</strong></td></tr>
+                        <tr><td><span class="chemin">Paramètres</span></td><td>Les onglets Entreprise, Taxes, Email, Facture, Traitement, Comptabilité, Bancaire et Comptable.</td><td><a href="administration.html#fr-parametres">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Utilisateurs</span></td><td>La gestion des comptes de la compagnie (<strong>administrateurs seulement</strong>).</td><td><a href="administration.html#fr-utilisateurs">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Importation des données</span></td><td>La page d’accueil des importations : l’import de vos données depuis un fichier ou depuis votre ancien logiciel comptable (QuickBooks et autres), et où chacun en est. Les écrans d’importation s’ouvrent à partir de cette page.</td><td><a href="importation.html">Importation</a></td></tr>
                         <tr><td><span class="chemin">Déconnexion</span></td><td>Ferme la session et efface le cookie « Se souvenir de moi ».</td><td>Cette page</td></tr>
                     </tbody>
                 </table>
@@ -344,6 +367,9 @@
                 <details><summary>La tuile « Factures » du panneau Modules ouvre les factures fournisseurs. Où sont mes factures clients ?</summary><p>Dans <span class="chemin">Ventes › Factures clients</span>, ou par le bouton <kbd>Nouvelle facture</kbd> du bandeau pour en créer une.</p></details>
                 <details><summary>Je change la langue avec FR / EN / ES, mais elle revient au français à ma prochaine connexion.</summary><p>La langue est mémorisée pour la session seulement. Choisissez-la de nouveau après la connexion ; vos données et vos paramètres ne sont pas touchés.</p></details>
                 <details><summary>Je ne vois pas l’entrée « Utilisateurs » ou elle me renvoie au Tableau de bord.</summary><p>Cet écran est réservé aux administrateurs. Votre rôle est affiché sous votre nom dans l’en-tête. Demandez à un administrateur de la compagnie de gérer les comptes.</p></details>
+                <details><summary>Le menu de gauche a disparu : comment le retrouver ?</summary><p>Il a été masqué par le bouton <kbd>☰</kbd>. Cliquez sur <kbd>☰</kbd>, tout à gauche de l’en-tête (son info-bulle dit « Afficher le menu ») : le menu revient. Sur téléphone, touchez le <kbd>☰</kbd> de la barre du haut.</p></details>
+                <details><summary>Pourquoi le menu reste-t-il masqué quand je reviens ?</summary><p>Votre choix est gardé dans ce navigateur : le menu revient tel que vous l’avez laissé, à chaque page et à chaque visite. Cliquez sur <kbd>☰</kbd> pour le réafficher ; ce nouveau choix est gardé à son tour. Sur un autre navigateur ou un autre ordinateur, le menu est affiché tant que vous ne l’y avez pas masqué.</p></details>
+                <details><summary>Où sont passés Produits et services, Processeur de paiement, Importation et Mon cabinet ?</summary><p>Le menu est maintenant rangé par sections. <span class="chemin">Produits et services</span> est un groupe de la section Mon entreprise, après Comptabilité. <span class="chemin">Processeur de paiement</span> et <span class="chemin">Paiements automatiques</span> sont dans le groupe <span class="chemin">Paiements</span> de la section Mon argent. <span class="chemin">Importation des données</span> est dans la section Administration. <span class="chemin">Mon cabinet comptable</span> est dans la section Mon accompagnement : il s’ouvre en fenêtre par-dessus la page, avec l’annuaire des cabinets certifiés qui était auparavant un bouton de l’en-tête.</p></details>
                 <details><summary>Mon cabinet a-t-il accès à mes données quand je le choisis ?</summary><p>Non. Choisir un cabinet dans <span class="chemin">Mon cabinet comptable</span> ne lui donne aucun accès. Pour qu’il travaille dans votre dossier, remettez-lui la clé comptable (<span class="chemin">Paramètres › Comptable</span>) ou ajoutez votre comptable comme utilisateur. Le bloc « Accès et garde-fous » indique si une clé existe.</p></details>
                 <details><summary>Le cabinet est-il averti de mon choix ou de ma répartition ?</summary><p>Non, rien ne lui est envoyé automatiquement. Transmettez-lui la répartition vous-même : <kbd>Envoyer à &lt;cabinet&gt;</kbd> ouvre votre messagerie avec le texte prêt (la fiche passe alors à « Répartition proposée le … »), ou utilisez <kbd>Copier</kbd> ou <kbd>Imprimer</kbd>.</p></details>
                 <details><summary>Les autres utilisateurs de la compagnie voient-ils mon cabinet et ma répartition ?</summary><p>Oui. Le choix du cabinet et la répartition sont enregistrés pour la compagnie, automatiquement, à chaque changement. Tous ses utilisateurs voient le même choix, sur n’importe quel ordinateur, et effacer les données du navigateur ne l’efface pas. Si « Enregistrement impossible pour l’instant. Réessayez. » s’affiche, le dernier changement n’a pas été enregistré : refaites-le.</p></details>
@@ -383,7 +409,7 @@
 
             <section id="en-getting-around">
                 <h2>Getting around 60Sec-AI</h2>
-                <p>Every internal page of 60Sec-AI shares the same layout: a header at the top, a menu on the left and the screen content in the centre. The header shows the state of your account and connections, lets you switch language or company, and opens the help or the AI assistant.</p>
+                <p>Every internal page of 60Sec-AI shares the same layout: a header at the top, a menu on the left and the screen content in the centre. The header shows the state of your account and connections, lets you switch language or company, and opens the help or the AI assistant. At the far left of the header, the <kbd>☰</kbd> button hides or shows the left menu (see <a href="#en-left-menu">Left menu</a>).</p>
 
                 <h3>Header status badges</h3>
                 <p>The trial and Square badges only appear when they have something to say; the Plaid and Stripe badges are always shown. They inform you; they cannot be clicked.</p>
@@ -456,30 +482,39 @@
 
             <section id="en-left-menu">
                 <h2>Left menu</h2>
-                <p>The left menu lists every screen of 60Sec-AI, grouped by area. The Dashboard (house icon) is at the top; the administration screens and sign-out are at the bottom of the bar. Clicking a group expands its entries.</p>
+                <p>The left menu lists every screen of 60Sec-AI, arranged like the 60secondes home page: the <span class="chemin">Dashboard</span> (house icon) at the top, then four sections — <strong>My money</strong>, <strong>My business</strong>, <strong>My support</strong> and <strong>Administration</strong>. Log out is the last entry.</p>
+                <ul>
+                    <li><strong>Section titles</strong> are written in small capitals; they are landmarks and cannot be clicked.</li>
+                    <li>Each entry is a <strong>pill</strong>, with its icon in a circle. The page you are on has a <strong>pale blue</strong> background, its icon on a navy circle.</li>
+                    <li><strong>Groups</strong> (Sales, Purchases, Payments, Reports, Accounting, Products and services) unfold with a click: the chevron turns and the group’s screens appear. The group of the current page opens by itself.</li>
+                    <li>Coloured <strong>badges</strong> at the end of an entry mean: <strong>yellow</strong> = to do, <strong>red</strong> = late, <strong>pale blue</strong> = information. A badge at zero is never shown. The yellow badge on <span class="chemin">Tasks to approve</span> gives the number of tasks awaiting your decision.</li>
+                    <li><span class="chemin">My accounting firm</span> does not change page: it opens in a <strong>window over the page</strong> (see <a href="#en-my-firm">My accounting firm</a>).</li>
+                    <li>If the browser window is short, the menu scrolls.</li>
+                </ul>
+
+                <h3>☰ button: hide or show the menu</h3>
+                <ul>
+                    <li>On a computer, the <kbd>☰</kbd> button is at the far left of the header, before the logo. A click <strong>hides the menu</strong>: the work screen then uses the full width. Another click shows it again.</li>
+                    <li>While the menu is visible, the button shows an <kbd>✕</kbd> on a pale blue background; while it is hidden, it shows <kbd>☰</kbd>. Its tooltip says what it will do: “Hide menu” or “Show menu”.</li>
+                    <li>The choice is <strong>remembered in this browser</strong>: on the next page and on your next visit, the menu comes back as you left it, without flickering. Another browser or another computer keeps its own choice.</li>
+                    <li>On a <strong>phone</strong> (narrow screen), the full header is hidden: a bar at the top of the screen carries a second <kbd>☰</kbd>. The menu then slides in from the left, over the dimmed page. Tap the dimmed background or the <kbd>✕</kbd>, or press <kbd>Esc</kbd>, to close it.</li>
+                </ul>
+                <div class="astuce" data-titre="Tip">For a large table (general ledger, invoice list, report), hide the menu with <kbd>☰</kbd>: the columns get the full width of the screen. Show it again with the same button when you want to change screens.</div>
+
+                <h3>Menu entries</h3>
                 <table>
                     <thead><tr><th>Menu entry</th><th>What it opens</th><th>Help</th></tr></thead>
                     <tbody>
                         <tr><td><span class="chemin">Dashboard</span></td><td>The home page: welcome, indicators, shortcuts (see below).</td><td>This page</td></tr>
+                        <tr><td colspan="3"><strong>My money</strong></td></tr>
                         <tr><td><span class="chemin">Sales › Customers</span></td><td>The list of your customers and their records (address, billing e-mail, contact details).</td><td><a href="ventes.html#en-customers">Sales</a></td></tr>
-                        <tr><td><span class="chemin">Sales › Customer invoices</span></td><td>The invoices you issue: drafts, posted invoices, receipts, PDFs, Square payment links.</td><td><a href="ventes.html">Sales</a></td></tr>
+                        <tr><td><span class="chemin">Sales › Customer invoices</span></td><td>The invoices you issue: drafts, posted invoices, receipts, PDFs, Square payment links.</td><td><a href="ventes.html#en-invoices">Sales</a></td></tr>
+                        <tr><td><span class="chemin">Sales › Cash receipts</span></td><td>The payments received from your customers.</td><td><a href="ventes.html#en-cash-receipts">Sales</a></td></tr>
                         <tr><td><span class="chemin">Purchases › Suppliers</span></td><td>The list of your suppliers and their records, including payment through Stripe.</td><td><a href="achats.html">Purchases</a></td></tr>
                         <tr><td><span class="chemin">Purchases › Supplier invoices</span></td><td>The invoices received from your suppliers, their posting and their payment.</td><td><a href="achats.html">Purchases</a></td></tr>
                         <tr><td><span class="chemin">Purchases › Receipts</span></td><td>Expense receipts (photo or PDF read by the AI) and their posting.</td><td><a href="achats.html">Purchases</a></td></tr>
-                        <tr><td><span class="chemin">Products and services › Products</span></td><td>Your catalogue of products and services (price, taxes, sales account).</td><td><a href="produits.html">Products</a></td></tr>
-                        <tr><td><span class="chemin">Products and services › Product category</span></td><td>The categories that group your products.</td><td><a href="produits.html">Products</a></td></tr>
-                        <tr><td><span class="chemin">Accounting › Journals</span></td><td>Accounting entries (general journal and specialised journals).</td><td><a href="comptabilite.html">Accounting</a></td></tr>
-                        <tr><td><span class="chemin">Accounting › Journal templates</span></td><td>Reusable standard entries (rent, salaries, depreciation).</td><td><a href="comptabilite.html">Accounting</a></td></tr>
-                        <tr><td><span class="chemin">Accounting › Bank accounts</span></td><td>Your bank and credit-card accounts.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
-                        <tr><td><span class="chemin">Accounting › Bank statement</span></td><td>Imported bank transactions (Plaid connection or file) and their reconciliation.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
-                        <tr><td><span class="chemin">Accounting › Tax report</span></td><td>The GST and QST return for a remittance period.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
-                        <tr><td><span class="chemin">Accounting › Fiscal year-end close</span></td><td>Closing a fiscal year and carrying net income to retained earnings.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
-                        <tr><td><span class="chemin">Accounting › Chart of accounts</span></td><td>The list of your accounts (assets, liabilities, equity, revenue, expenses) and their upkeep.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
-                        <tr><td><span class="chemin">Agenda</span></td><td>Your appointments and the scheduling of your services.</td><td><a href="agenda.html">Agenda</a></td></tr>
-                        <tr><td><span class="chemin">Employees</span></td><td>Your employee records.</td><td><a href="employes.html">Employees</a></td></tr>
-                        <tr><td><span class="chemin">Mail</span></td><td>The company mailbox (@60sec.ca address): sent and received e-mails.</td><td><a href="courriel.html">Mail</a></td></tr>
-                        <tr><td><span class="chemin">Tasks to approve</span></td><td>Items awaiting your approval. A <strong>badge</strong> on the entry shows the number of pending tasks.</td><td><a href="approbations.html">Approvals</a></td></tr>
-                        <tr><td><span class="chemin">Mon accompagnement › Mon cabinet comptable</span> (My support › My accounting firm)</td><td>A window over the page: your accounting firm, who does what on behalf of your business, and the directory of certified firms.</td><td><a href="#en-my-firm">This page</a></td></tr>
+                        <tr><td><span class="chemin">Payments › Payment processor</span></td><td>Connecting Square, Plaid and Stripe.</td><td><a href="administration.html#en-payment-processors">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Payments › Automatic payments</span></td><td>Authorisations, calendar and history of automatic payments to suppliers.</td><td><a href="administration.html#en-automatic-payments">Administration</a></td></tr>
                         <tr><td><span class="chemin">Reports › Chart of accounts</span></td><td>The printable chart of accounts with balances.</td><td><a href="rapports.html">Reports</a></td></tr>
                         <tr><td><span class="chemin">Reports › Income statement</span></td><td>Revenue, expenses and net income for a period.</td><td><a href="rapports.html">Reports</a></td></tr>
                         <tr><td><span class="chemin">Reports › Balance sheet</span></td><td>Assets, liabilities and equity at a date.</td><td><a href="rapports.html">Reports</a></td></tr>
@@ -488,12 +523,26 @@
                         <tr><td><span class="chemin">Reports › Trial balance</span></td><td>Debit and credit balances of all accounts.</td><td><a href="rapports.html">Reports</a></td></tr>
                         <tr><td><span class="chemin">Reports › AI Payment</span></td><td>AI analysis of your payments and accounts payable.</td><td><a href="rapports.html">Reports</a></td></tr>
                         <tr><td><span class="chemin">Reports › AI Sales</span></td><td>AI analysis of your sales and customers.</td><td><a href="rapports.html">Reports</a></td></tr>
-                        <tr><td><span class="chemin">Import › Data import</span></td><td>The import home page, the only entry of the group: importing your data from a file or from your former accounting software (QuickBooks and others). The import screens are opened from this page.</td><td><a href="importation.html">Import</a></td></tr>
-                        <tr><td><span class="chemin">Company profile</span></td><td>The administrator’s identity and the company’s tax numbers (NEQ, BN, GST, QST); automatic fill from a document.</td><td><a href="administration.html">Administration</a></td></tr>
-                        <tr><td><span class="chemin">Users</span></td><td>Management of the company’s accounts (<strong>administrators only</strong>).</td><td><a href="administration.html">Administration</a></td></tr>
-                        <tr><td><span class="chemin">Settings</span></td><td>The Company, Taxes, Email, Invoice, Processing, Accounting, Banking and Accountant tabs.</td><td><a href="administration.html">Administration</a></td></tr>
-                        <tr><td><span class="chemin">Payment processor</span></td><td>Connecting Square, Plaid and Stripe.</td><td><a href="administration.html">Administration</a></td></tr>
-                        <tr><td><span class="chemin">Automatic payments</span></td><td>Authorisations, calendar and history of automatic payments to suppliers.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td colspan="3"><strong>My business</strong></td></tr>
+                        <tr><td><span class="chemin">Agenda</span></td><td>Your appointments and the scheduling of your services.</td><td><a href="agenda.html">Agenda</a></td></tr>
+                        <tr><td><span class="chemin">Employees</span></td><td>Your employee records.</td><td><a href="employes.html">Employees</a></td></tr>
+                        <tr><td><span class="chemin">Mail</span></td><td>The company mailbox (@60sec.ca address): sent and received e-mails.</td><td><a href="courriel.html">Mail</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Journals</span></td><td>Accounting entries (general journal and specialised journals).</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Journal templates</span></td><td>Reusable standard entries (rent, salaries, depreciation).</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Bank accounts</span></td><td>Your bank and credit-card accounts.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Bank statement</span></td><td>Imported bank transactions (Plaid connection or file) and their reconciliation.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Tax report</span></td><td>The GST and QST return for a remittance period.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Fiscal year-end close</span></td><td>Closing a fiscal year and carrying net income to retained earnings.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Chart of accounts</span></td><td>The list of your accounts (assets, liabilities, equity, revenue, expenses) and their upkeep.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Products and services › Products</span></td><td>Your catalogue of products and services (price, taxes, sales account).</td><td><a href="produits.html">Products</a></td></tr>
+                        <tr><td><span class="chemin">Products and services › Product category</span></td><td>The categories that group your products.</td><td><a href="produits.html">Products</a></td></tr>
+                        <tr><td><span class="chemin">Tasks to approve</span></td><td>Scheduled tasks awaiting your approval. A <strong>yellow badge</strong> on the entry shows the number of pending tasks.</td><td><a href="approbations.html">Approvals</a></td></tr>
+                        <tr><td colspan="3"><strong>My support</strong></td></tr>
+                        <tr><td><span class="chemin">My accounting firm</span></td><td>A window over the page: your accounting firm, who does what on behalf of your business, and the directory of certified firms.</td><td><a href="#en-my-firm">This page</a></td></tr>
+                        <tr><td colspan="3"><strong>Administration</strong></td></tr>
+                        <tr><td><span class="chemin">Settings</span></td><td>The Company, Taxes, Email, Invoice, Processing, Accounting, Banking and Accountant tabs.</td><td><a href="administration.html#en-settings">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Users</span></td><td>Management of the company’s accounts (<strong>administrators only</strong>).</td><td><a href="administration.html#en-users">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Data import</span></td><td>The import home page: importing your data from a file or from your former accounting software (QuickBooks and others), and where each import stands. The import screens are opened from this page.</td><td><a href="importation.html">Import</a></td></tr>
                         <tr><td><span class="chemin">Log out</span></td><td>Closes the session and clears the “Remember me” cookie.</td><td>This page</td></tr>
                     </tbody>
                 </table>
@@ -701,6 +750,9 @@
                 <details><summary>The “Invoices” tile of the Modules panel opens supplier invoices. Where are my customer invoices?</summary><p>In <span class="chemin">Sales › Customer invoices</span>, or through the banner’s <kbd>New invoice</kbd> button to create one.</p></details>
                 <details><summary>I change the language with FR / EN / ES, but it goes back to French at my next sign-in.</summary><p>The language is remembered for the session only. Choose it again after signing in; your data and settings are not affected.</p></details>
                 <details><summary>I do not see the “Users” entry, or it sends me back to the Dashboard.</summary><p>This screen is reserved for administrators. Your role is shown under your name in the header. Ask an administrator of the company to manage accounts.</p></details>
+                <details><summary>The left menu has disappeared: how do I get it back?</summary><p>It was hidden with the <kbd>☰</kbd> button. Click <kbd>☰</kbd> at the far left of the header (its tooltip says “Show menu”): the menu comes back. On a phone, tap the <kbd>☰</kbd> in the top bar.</p></details>
+                <details><summary>Why does the menu stay hidden when I come back?</summary><p>Your choice is remembered in this browser: the menu comes back as you left it, on every page and at every visit. Click <kbd>☰</kbd> to show it again; that new choice is remembered in turn. In another browser or on another computer, the menu is shown until you hide it there.</p></details>
+                <details><summary>Where did Products and services, Payment processor, Import and My accounting firm go?</summary><p>The menu is now arranged in sections. <span class="chemin">Products and services</span> is a group in the My business section, after Accounting. <span class="chemin">Payment processor</span> and <span class="chemin">Automatic payments</span> are in the <span class="chemin">Payments</span> group of the My money section. <span class="chemin">Data import</span> is in the Administration section. <span class="chemin">My accounting firm</span> is in the My support section: it opens in a window over the page, with the directory of certified firms that used to be a button in the header.</p></details>
                 <details><summary>Does my firm get access to my data when I choose it?</summary><p>No. Choosing a firm in <span class="chemin">Mon cabinet comptable</span> gives it no access. For it to work in your file, give it the accountant key (<span class="chemin">Paramètres › Comptable</span>) or add your accountant as a user. The “Accès et garde-fous” box shows whether a key exists.</p></details>
                 <details><summary>Is the firm notified of my choice or my split?</summary><p>No, nothing is sent to it automatically. Pass the split on yourself: <kbd>Envoyer à &lt;firm&gt;</kbd> opens your mail client with the text ready (the card then shows “Répartition proposée le …”), or use <kbd>Copier</kbd> or <kbd>Imprimer</kbd>.</p></details>
                 <details><summary>Do the other users of the company see my firm and my split?</summary><p>Yes. The firm choice and the split are saved for the company, automatically, at each change. All its users see the same choice, on any computer, and clearing the browser data does not erase it. If “Enregistrement impossible pour l’instant. Réessayez.” appears, the last change was not saved: redo it.</p></details>
@@ -740,7 +792,7 @@
 
             <section id="es-orientarse">
                 <h2>Orientarse en 60Sec-AI</h2>
-                <p>Todas las páginas internas de 60Sec-AI comparten la misma estructura: una cabecera en la parte superior, un menú a la izquierda y el contenido de la pantalla en el centro. La cabecera muestra el estado de su cuenta y de sus conexiones, permite cambiar de idioma o de empresa, y abre la ayuda o el asistente IA.</p>
+                <p>Todas las páginas internas de 60Sec-AI comparten la misma estructura: una cabecera en la parte superior, un menú a la izquierda y el contenido de la pantalla en el centro. La cabecera muestra el estado de su cuenta y de sus conexiones, permite cambiar de idioma o de empresa, y abre la ayuda o el asistente IA. En el extremo izquierdo de la cabecera, el botón <kbd>☰</kbd> oculta o muestra el menú de la izquierda (vea <a href="#es-menu-izquierdo">Menú de la izquierda</a>).</p>
 
                 <h3>Indicadores de estado de la cabecera</h3>
                 <p>Los indicadores de prueba y de Square solo aparecen cuando tienen algo que decir; los de Plaid y de Stripe se muestran siempre. Informan, pero no se pueden pulsar.</p>
@@ -813,30 +865,39 @@
 
             <section id="es-menu-izquierdo">
                 <h2>Menú de la izquierda</h2>
-                <p>El menú de la izquierda enumera todas las pantallas de 60Sec-AI, agrupadas por área. El Panel de control (icono de casa) está arriba; las pantallas de administración y el cierre de sesión están al pie de la barra. Un clic en un grupo despliega sus entradas.</p>
+                <p>El menú de la izquierda enumera todas las pantallas de 60Sec-AI, ordenadas como la página de inicio de 60secondes: el <span class="chemin">Panel de control</span> (icono de casa) arriba, luego cuatro secciones — <strong>Mi dinero</strong>, <strong>Mi empresa</strong>, <strong>Mi acompañamiento</strong> y <strong>Administración</strong>. Cerrar sesión es la última entrada.</p>
+                <ul>
+                    <li>Los <strong>títulos de sección</strong> están escritos en versalitas; sirven de referencia y no se pueden pulsar.</li>
+                    <li>Cada entrada es una <strong>píldora</strong>, con su icono dentro de un círculo. La página en la que está tiene fondo <strong>azul pálido</strong>, con su icono sobre un círculo azul marino.</li>
+                    <li>Los <strong>grupos</strong> (Ventas, Compras, Pagos, Informes, Contabilidad, Productos y servicios) se despliegan con un clic: el chevrón gira y aparecen las pantallas del grupo. El grupo de la página actual se abre solo.</li>
+                    <li>Los <strong>indicadores</strong> de color al final de una entrada señalan: <strong>amarillo</strong> = por hacer, <strong>rojo</strong> = atrasado, <strong>azul pálido</strong> = información. Un indicador en cero nunca se muestra. El indicador amarillo de <span class="chemin">Tareas por aprobar</span> da el número de tareas que esperan su decisión.</li>
+                    <li><span class="chemin">Mi despacho contable</span> no cambia de página: se abre en una <strong>ventana sobre la página</strong> (vea <a href="#es-mi-despacho">Mi despacho contable</a>).</li>
+                    <li>Si la ventana del navegador es baja, el menú se desplaza.</li>
+                </ul>
+
+                <h3>Botón ☰: ocultar o mostrar el menú</h3>
+                <ul>
+                    <li>En una computadora, el botón <kbd>☰</kbd> está en el extremo izquierdo de la cabecera, antes del logotipo. Un clic <strong>oculta el menú</strong>: la pantalla de trabajo ocupa entonces todo el ancho. Otro clic lo vuelve a mostrar.</li>
+                    <li>Cuando el menú está visible, el botón muestra una <kbd>✕</kbd> sobre fondo azul pálido; cuando está oculto, muestra <kbd>☰</kbd>. Su información sobre herramientas dice lo que hará: «Ocultar el menú» o «Mostrar el menú».</li>
+                    <li>La elección se <strong>guarda en este navegador</strong>: en la página siguiente y en su próxima visita, el menú vuelve tal como lo dejó, sin parpadeo. Otro navegador u otra computadora conserva su propia elección.</li>
+                    <li>En un <strong>teléfono</strong> (pantalla estrecha), la cabecera completa está oculta: una barra en la parte superior de la pantalla lleva un segundo <kbd>☰</kbd>. El menú se desliza entonces desde la izquierda, sobre la página oscurecida. Toque el fondo oscurecido o la <kbd>✕</kbd>, o pulse <kbd>Esc</kbd>, para cerrarlo.</li>
+                </ul>
+                <div class="astuce" data-titre="Consejo">Para una tabla grande (libro mayor, lista de facturas, informe), oculte el menú con <kbd>☰</kbd>: las columnas ganan todo el ancho de la pantalla. Vuelva a mostrarlo con el mismo botón cuando quiera cambiar de pantalla.</div>
+
+                <h3>Las entradas del menú</h3>
                 <table>
                     <thead><tr><th>Entrada del menú</th><th>Qué abre</th><th>Ayuda</th></tr></thead>
                     <tbody>
                         <tr><td><span class="chemin">Panel de control</span></td><td>La página de inicio: bienvenida, indicadores, accesos rápidos (vea más abajo).</td><td>Esta página</td></tr>
+                        <tr><td colspan="3"><strong>Mi dinero</strong></td></tr>
                         <tr><td><span class="chemin">Ventas › Clientes</span></td><td>La lista de sus clientes y sus fichas (dirección, correo de facturación, datos de contacto).</td><td><a href="ventes.html#es-clientes">Ventas</a></td></tr>
-                        <tr><td><span class="chemin">Ventas › Facturas de clientes</span></td><td>Las facturas que emite: borradores, facturas contabilizadas, cobros, PDF, enlaces de pago Square.</td><td><a href="ventes.html">Ventas</a></td></tr>
+                        <tr><td><span class="chemin">Ventas › Facturas de clientes</span></td><td>Las facturas que emite: borradores, facturas contabilizadas, cobros, PDF, enlaces de pago Square.</td><td><a href="ventes.html#es-facturas">Ventas</a></td></tr>
+                        <tr><td><span class="chemin">Ventas › Cobros</span></td><td>Los pagos recibidos de sus clientes.</td><td><a href="ventes.html#es-cobros">Ventas</a></td></tr>
                         <tr><td><span class="chemin">Compras › Proveedores</span></td><td>La lista de sus proveedores y sus fichas, incluido el pago por Stripe.</td><td><a href="achats.html">Compras</a></td></tr>
                         <tr><td><span class="chemin">Compras › Facturas de proveedores</span></td><td>Las facturas recibidas de sus proveedores, su contabilización y su pago.</td><td><a href="achats.html">Compras</a></td></tr>
                         <tr><td><span class="chemin">Compras › Recibos</span></td><td>Los recibos de gastos (foto o PDF leídos por la IA) y su contabilización.</td><td><a href="achats.html">Compras</a></td></tr>
-                        <tr><td><span class="chemin">Productos y servicios › Productos</span></td><td>El catálogo de sus productos y servicios (precio, impuestos, cuenta de ventas).</td><td><a href="produits.html">Productos</a></td></tr>
-                        <tr><td><span class="chemin">Productos y servicios › Categoría de producto</span></td><td>Las categorías que agrupan sus productos.</td><td><a href="produits.html">Productos</a></td></tr>
-                        <tr><td><span class="chemin">Contabilidad › Diarios</span></td><td>Los asientos contables (diario general y diarios especializados).</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
-                        <tr><td><span class="chemin">Contabilidad › Plantillas de diarios</span></td><td>Asientos tipo reutilizables (alquiler, sueldos, amortización).</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
-                        <tr><td><span class="chemin">Contabilidad › Cuentas bancarias</span></td><td>Sus cuentas bancarias y de tarjeta de crédito.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
-                        <tr><td><span class="chemin">Contabilidad › Extracto bancario</span></td><td>Las transacciones bancarias importadas (conexión Plaid o archivo) y su conciliación.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
-                        <tr><td><span class="chemin">Contabilidad › Informe de impuestos</span></td><td>La declaración de GST/TPS y QST/TVQ para un período de remisión.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
-                        <tr><td><span class="chemin">Contabilidad › Cierre del ejercicio fiscal</span></td><td>El cierre de un ejercicio y el traspaso del beneficio neto a beneficios no distribuidos.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
-                        <tr><td><span class="chemin">Contabilidad › Plan contable</span></td><td>La lista de sus cuentas (activo, pasivo, capital, ingresos, gastos) y su mantenimiento.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
-                        <tr><td><span class="chemin">Agenda</span></td><td>Sus citas y la planificación de sus servicios.</td><td><a href="agenda.html">Agenda</a></td></tr>
-                        <tr><td><span class="chemin">Empleados</span></td><td>Las fichas de sus empleados.</td><td><a href="employes.html">Empleados</a></td></tr>
-                        <tr><td><span class="chemin">Correo</span></td><td>El buzón de correo de la empresa (dirección @60sec.ca): correos enviados y recibidos.</td><td><a href="courriel.html">Correo</a></td></tr>
-                        <tr><td><span class="chemin">Tareas por aprobar</span></td><td>Los elementos en espera de su aprobación. Un <strong>indicador</strong> en la entrada muestra el número de tareas pendientes.</td><td><a href="approbations.html">Aprobaciones</a></td></tr>
-                        <tr><td><span class="chemin">Mon accompagnement › Mon cabinet comptable</span> (Mi acompañamiento › Mi despacho contable)</td><td>Una ventana sobre la página: su despacho contable, quién hace qué en nombre de su empresa, y el directorio de despachos certificados.</td><td><a href="#es-mi-despacho">Esta página</a></td></tr>
+                        <tr><td><span class="chemin">Pagos › Procesador de pago</span></td><td>La conexión de Square, Plaid y Stripe.</td><td><a href="administration.html#es-procesadores-pago">Administración</a></td></tr>
+                        <tr><td><span class="chemin">Pagos › Pagos automáticos</span></td><td>Las autorizaciones, el calendario y el historial de los pagos automáticos a proveedores.</td><td><a href="administration.html#es-pagos-automaticos">Administración</a></td></tr>
                         <tr><td><span class="chemin">Informes › Plan contable</span></td><td>El plan de cuentas imprimible con los saldos.</td><td><a href="rapports.html">Informes</a></td></tr>
                         <tr><td><span class="chemin">Informes › Estado de resultados</span></td><td>Ingresos, gastos y beneficio neto de un período.</td><td><a href="rapports.html">Informes</a></td></tr>
                         <tr><td><span class="chemin">Informes › Balance general</span></td><td>Activo, pasivo y capital propio a una fecha.</td><td><a href="rapports.html">Informes</a></td></tr>
@@ -845,12 +906,26 @@
                         <tr><td><span class="chemin">Informes › Balance de comprobación</span></td><td>Los saldos deudores y acreedores de todas las cuentas.</td><td><a href="rapports.html">Informes</a></td></tr>
                         <tr><td><span class="chemin">Informes › Pago con IA</span></td><td>Análisis por IA de sus pagos y de sus cuentas por pagar.</td><td><a href="rapports.html">Informes</a></td></tr>
                         <tr><td><span class="chemin">Informes › Ventas con IA</span></td><td>Análisis por IA de sus ventas y de sus clientes.</td><td><a href="rapports.html">Informes</a></td></tr>
-                        <tr><td><span class="chemin">Importación › Importación de datos</span></td><td>La página de inicio de las importaciones, única entrada del grupo: la importación de sus datos desde un archivo o desde su antiguo programa contable (QuickBooks y otros). Las pantallas de importación se abren desde esa página.</td><td><a href="importation.html">Importación</a></td></tr>
-                        <tr><td><span class="chemin">Perfil de la empresa</span></td><td>La identidad del administrador y los números fiscales de la empresa (NEQ, BN, GST/TPS, QST/TVQ); relleno automático a partir de un documento.</td><td><a href="administration.html">Administración</a></td></tr>
-                        <tr><td><span class="chemin">Usuarios</span></td><td>La gestión de las cuentas de la empresa (<strong>solo administradores</strong>).</td><td><a href="administration.html">Administración</a></td></tr>
-                        <tr><td><span class="chemin">Ajustes</span></td><td>Las pestañas Empresa, Impuestos, Email, Factura, Tratamiento, Contabilidad, Bancaria y Contador.</td><td><a href="administration.html">Administración</a></td></tr>
-                        <tr><td><span class="chemin">Procesador de pago</span></td><td>La conexión de Square, Plaid y Stripe.</td><td><a href="administration.html">Administración</a></td></tr>
-                        <tr><td><span class="chemin">Pagos automáticos</span></td><td>Las autorizaciones, el calendario y el historial de los pagos automáticos a proveedores.</td><td><a href="administration.html">Administración</a></td></tr>
+                        <tr><td colspan="3"><strong>Mi empresa</strong></td></tr>
+                        <tr><td><span class="chemin">Agenda</span></td><td>Sus citas y la planificación de sus servicios.</td><td><a href="agenda.html">Agenda</a></td></tr>
+                        <tr><td><span class="chemin">Empleados</span></td><td>Las fichas de sus empleados.</td><td><a href="employes.html">Empleados</a></td></tr>
+                        <tr><td><span class="chemin">Correo</span></td><td>El buzón de correo de la empresa (dirección @60sec.ca): correos enviados y recibidos.</td><td><a href="courriel.html">Correo</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Diarios</span></td><td>Los asientos contables (diario general y diarios especializados).</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Plantillas de diarios</span></td><td>Asientos tipo reutilizables (alquiler, sueldos, amortización).</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Cuentas bancarias</span></td><td>Sus cuentas bancarias y de tarjeta de crédito.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Extracto bancario</span></td><td>Las transacciones bancarias importadas (conexión Plaid o archivo) y su conciliación.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Informe de impuestos</span></td><td>La declaración de GST/TPS y QST/TVQ para un período de remisión.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Cierre del ejercicio fiscal</span></td><td>El cierre de un ejercicio y el traspaso del beneficio neto a beneficios no distribuidos.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Plan contable</span></td><td>La lista de sus cuentas (activo, pasivo, capital, ingresos, gastos) y su mantenimiento.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Productos y servicios › Productos</span></td><td>El catálogo de sus productos y servicios (precio, impuestos, cuenta de ventas).</td><td><a href="produits.html">Productos</a></td></tr>
+                        <tr><td><span class="chemin">Productos y servicios › Categoría de producto</span></td><td>Las categorías que agrupan sus productos.</td><td><a href="produits.html">Productos</a></td></tr>
+                        <tr><td><span class="chemin">Tareas por aprobar</span></td><td>Las tareas programadas en espera de su aprobación. Un <strong>indicador amarillo</strong> en la entrada muestra el número de tareas pendientes.</td><td><a href="approbations.html">Aprobaciones</a></td></tr>
+                        <tr><td colspan="3"><strong>Mi acompañamiento</strong></td></tr>
+                        <tr><td><span class="chemin">Mi despacho contable</span></td><td>Una ventana sobre la página: su despacho contable, quién hace qué en nombre de su empresa, y el directorio de despachos certificados.</td><td><a href="#es-mi-despacho">Esta página</a></td></tr>
+                        <tr><td colspan="3"><strong>Administración</strong></td></tr>
+                        <tr><td><span class="chemin">Ajustes</span></td><td>Las pestañas Empresa, Impuestos, Email, Factura, Tratamiento, Contabilidad, Bancaria y Contador.</td><td><a href="administration.html#es-parametros">Administración</a></td></tr>
+                        <tr><td><span class="chemin">Usuarios</span></td><td>La gestión de las cuentas de la empresa (<strong>solo administradores</strong>).</td><td><a href="administration.html#es-usuarios">Administración</a></td></tr>
+                        <tr><td><span class="chemin">Importación de datos</span></td><td>La página de inicio de las importaciones: la importación de sus datos desde un archivo o desde su antiguo programa contable (QuickBooks y otros), y en qué punto está cada una. Las pantallas de importación se abren desde esa página.</td><td><a href="importation.html">Importación</a></td></tr>
                         <tr><td><span class="chemin">Cerrar sesión</span></td><td>Cierra la sesión y borra la cookie «Recordarme».</td><td>Esta página</td></tr>
                     </tbody>
                 </table>
@@ -1058,6 +1133,9 @@
                 <details><summary>El mosaico «Facturas» del panel Módulos abre las facturas de proveedores. ¿Dónde están mis facturas de clientes?</summary><p>En <span class="chemin">Ventas › Facturas de clientes</span>, o mediante el botón <kbd>Nueva factura</kbd> de la banda para crear una.</p></details>
                 <details><summary>Cambio el idioma con FR / EN / ES, pero vuelve al francés en mi siguiente inicio de sesión.</summary><p>El idioma se memoriza solo durante la sesión. Elíjalo de nuevo tras iniciar sesión; sus datos y su configuración no se ven afectados.</p></details>
                 <details><summary>No veo la entrada «Usuarios» o me devuelve al Panel de control.</summary><p>Esa pantalla está reservada a los administradores. Su rol se muestra bajo su nombre en la cabecera. Pida a un administrador de la empresa que gestione las cuentas.</p></details>
+                <details><summary>El menú de la izquierda desapareció: ¿cómo lo recupero?</summary><p>Se ocultó con el botón <kbd>☰</kbd>. Haga clic en <kbd>☰</kbd>, en el extremo izquierdo de la cabecera (su información sobre herramientas dice «Mostrar el menú»): el menú vuelve. En un teléfono, toque el <kbd>☰</kbd> de la barra superior.</p></details>
+                <details><summary>¿Por qué el menú sigue oculto cuando vuelvo?</summary><p>Su elección se guarda en este navegador: el menú vuelve tal como lo dejó, en cada página y en cada visita. Haga clic en <kbd>☰</kbd> para volver a mostrarlo; esa nueva elección se guarda a su vez. En otro navegador u otra computadora, el menú se muestra mientras no lo oculte allí.</p></details>
+                <details><summary>¿Dónde quedaron Productos y servicios, Procesador de pago, Importación y Mi despacho contable?</summary><p>El menú está ahora ordenado por secciones. <span class="chemin">Productos y servicios</span> es un grupo de la sección Mi empresa, después de Contabilidad. <span class="chemin">Procesador de pago</span> y <span class="chemin">Pagos automáticos</span> están en el grupo <span class="chemin">Pagos</span> de la sección Mi dinero. <span class="chemin">Importación de datos</span> está en la sección Administración. <span class="chemin">Mi despacho contable</span> está en la sección Mi acompañamiento: se abre en una ventana sobre la página, con el directorio de despachos certificados que antes era un botón de la cabecera.</p></details>
                 <details><summary>¿Mi despacho tiene acceso a mis datos cuando lo elijo?</summary><p>No. Elegir un despacho en <span class="chemin">Mon cabinet comptable</span> no le da ningún acceso. Para que trabaje en su expediente, entréguele la clave de contador (<span class="chemin">Paramètres › Comptable</span>) o añada a su contador como usuario. El bloque « Accès et garde-fous » indica si existe una clave.</p></details>
                 <details><summary>¿Se avisa al despacho de mi elección o de mi reparto?</summary><p>No, no se le envía nada automáticamente. Transmítale usted mismo el reparto: <kbd>Envoyer à &lt;despacho&gt;</kbd> abre su correo con el texto listo (la ficha pasa entonces a « Répartition proposée le … »), o use <kbd>Copier</kbd> o <kbd>Imprimer</kbd>.</p></details>
                 <details><summary>¿Los demás usuarios de la empresa ven mi despacho y mi reparto?</summary><p>Sí. La elección del despacho y el reparto se guardan para la empresa, automáticamente, en cada cambio. Todos sus usuarios ven la misma elección, en cualquier computadora, y borrar los datos del navegador no la borra. Si aparece « Enregistrement impossible pour l’instant. Réessayez. », el último cambio no se guardó: vuelva a hacerlo.</p></details>
