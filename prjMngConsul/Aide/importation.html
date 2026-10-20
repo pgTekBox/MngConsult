@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -26,7 +26,7 @@
 
             <section id="fr-demarche">
                 <h2>La démarche globale de reprise</h2>
-                <p>Le point d’entrée unique est l’écran <span class="chemin">Importation › Importation des données</span>. Tous les écrans d’import s’ouvrent depuis cette page par leur bouton <kbd>Ouvrir →</kbd>.</p>
+                <p>Le point d’entrée unique est l’écran <span class="chemin">Administration › Importation des données</span>. Tous les écrans d’import s’ouvrent depuis cette page par leur bouton <kbd>Ouvrir →</kbd>.</p>
                 <h3>Principe de base</h3>
                 <p>Ce qui entre va d’abord <strong>en préparation</strong>. Rien ne touche la comptabilité tant que vous ne cliquez pas sur un bouton du type <kbd>Créer…</kbd> ou <kbd>Appliquer…</kbd>. Vous pouvez donc lire, relire, corriger et abandonner sans conséquence.</p>
                 <h3>Ordre recommandé</h3>
@@ -55,7 +55,7 @@
 
             <section id="fr-hub">
                 <h2>Hub « Importation des données »</h2>
-                <p>Écran d’accueil de la reprise (<span class="chemin">Importation › Importation des données</span>). Il recense tous les postes d’import, leur donne une note sur 10 et ouvre chaque écran.</p>
+                <p>Écran d’accueil de la reprise (<span class="chemin">Administration › Importation des données</span>). Il recense tous les postes d’import, leur donne une note sur 10 et ouvre chaque écran.</p>
                 <p>La note repose sur quatre critères : lire le fichier, le contrôler, le mettre en préparation, l’appliquer à la comptabilité. Exception : la carte <strong>QuickBooks, en direct</strong> et les cartes <strong>« Valider… »</strong> sont notées sur la <strong>dernière extraction</strong> de votre compagnie — la part des ressources qui ont répondu (pour une carte « Valider… », seulement les ressources que cet écran lit, celles de son bouton <kbd>Importer depuis QuickBooks</kbd>). La carte <strong>1. Plan comptable</strong>, elle, suit l’avancement de la reprise : 0/10 sans plan chargé, 2/10 dès qu’il l’est, jusqu’à 5 points pour la part des comptes décidés à l’étape 2 et jusqu’à 3 points pour la part des comptes « Créer » créés à l’étape 3 — 10/10 quand tout est décidé et créé, 9 au plus tant qu’il reste un compte à décider ou à créer. « Ce qui fonctionne » donne les décomptes (chargés, décidés, liés, ignorés, créés) et « Ce qui manque » ce qui reste à chaque étape. Tout rapatrié : 10/10 ; une ressource en échec sur quatre : 8/10 ; aucune extraction encore : 0/10 avec la mention « Aucune extraction encore pour cette compagnie ». « Ce qui fonctionne » donne la date, le nombre de ressources rapatriées et le nombre d’enregistrements ; « Ce qui manque » nomme les ressources qui n’ont pas répondu, ou jamais lues, avec leur motif. Les postes <strong>obligatoires pour la comptabilité</strong> (balance, clients, fournisseurs, produits, factures, taxes) sont notés sur l’avancement réel de votre compagnie, pas sur le code : 0 tant que rien n’est en préparation, 5 quand les données attendent, jusqu’à 10 quand tout est appliqué (créé en comptabilité, ou reconnu pour les taxes) ; la balance plafonne à 5, rien ne l’applique encore. La carte écrit les quantités en tête de « Ce qui fonctionne » (« 172 client(s) en préparation, 0 créé(s) »).</p>
                 <h3>Sections et cartes</h3>
                 <ul>
@@ -77,7 +77,7 @@
 
             <section id="fr-quickbooks">
                 <h2>Importer depuis QuickBooks</h2>
-                <p>Lecture directe de la comptabilité QuickBooks, sans fichier à exporter (<span class="chemin">Importation › Importer depuis QuickBooks</span>). L’écran se lit en trois blocs ; le lien <kbd>← Retour aux importations</kbd>, en haut, ramène à la page des importations.</p>
+                <p>Lecture directe de la comptabilité QuickBooks, sans fichier à exporter (<span class="chemin">Administration › Importation des données › Importer depuis QuickBooks</span>). L’écran se lit en trois blocs ; le lien <kbd>← Retour aux importations</kbd>, en haut, ramène à la page des importations.</p>
                 <h3>1. La liaison</h3>
                 <ul>
                     <li>Pastille verte : reliée. Orange : non reliée. Rouge : non configurée sur le serveur ou injoignable.</li>
@@ -188,7 +188,7 @@
 
             <section id="fr-plan-etape1">
                 <h2>Étape 1 : Importer le plan comptable</h2>
-                <p>Charge le plan comptable de l’ancien logiciel en préparation (<span class="chemin">Importation › Importer le plan comptable</span>). Un fil des 3 étapes, cliquable, et un bloc « État de cette étape » figurent en haut de page. La note de ce bloc suit <strong>votre reprise</strong>, pas le code : étape 1, 10/10 dès que le plan est chargé (0 sinon) ; étape 2, la part des comptes décidés, 10/10 quand il n’en reste aucun à décider ; étape 3, la part des comptes « Créer » créés, 10/10 quand il n’en reste aucun à créer. Déplié, le bloc dit « Où en est la reprise » et « Ce qui reste », puis ce que l’écran sait faire et ne sait pas encore faire — cette dernière partie ne change qu’avec le code.</p>
+                <p>Charge le plan comptable de l’ancien logiciel en préparation (<span class="chemin">Administration › Importation des données › Importer le plan comptable</span>). Un fil des 3 étapes, cliquable, et un bloc « État de cette étape » figurent en haut de page. La note de ce bloc suit <strong>votre reprise</strong>, pas le code : étape 1, 10/10 dès que le plan est chargé (0 sinon) ; étape 2, la part des comptes décidés, 10/10 quand il n’en reste aucun à décider ; étape 3, la part des comptes « Créer » créés, 10/10 quand il n’en reste aucun à créer. Déplié, le bloc dit « Où en est la reprise » et « Ce qui reste », puis ce que l’écran sait faire et ne sait pas encore faire — cette dernière partie ne change qu’avec le code.</p>
                 <h3>En bref</h3>
                 <ol>
                     <li>Chargez le plan comptable de l’ancien logiciel : en direct avec <kbd>⬇ Importer depuis QuickBooks</kbd>, ou par un fichier CSV exporté.</li>
@@ -287,7 +287,7 @@
                 </ul>
                 <p>Quand tout est décidé, l’écran renvoie à la grille (relecture) et à l’étape 3 (création). La note de la carte « Associer les comptes, un par un » sur la page Importation est celle du plan comptable : elle monte avec les décisions.</p>
                 <div class="note" data-titre="Aide dédiée">Cet écran a sa propre page d’aide, pas à pas : <a href="correspondance-comptes.html">Correspondance des comptes</a> — comment lier, comment créer, comment ignorer, la fenêtre d’enregistrement et les messages qui nomment les deux logiciels.</div>
-                <p>Décide, compte par compte, ce que devient chaque compte de l’ancien logiciel : le lier à un compte existant, le créer, ou l’ignorer (<span class="chemin">Importation › Correspondance des comptes</span>). Rien n’est écrit en comptabilité : les décisions sont conservées à part.</p>
+                <p>Décide, compte par compte, ce que devient chaque compte de l’ancien logiciel : le lier à un compte existant, le créer, ou l’ignorer (<span class="chemin">Administration › Importation des données › Correspondance des comptes</span>). Rien n’est écrit en comptabilité : les décisions sont conservées à part.</p>
                 <h3>En bref</h3>
                 <ol>
                     <li>À l’ouverture, une partie du travail est déjà faite : les comptes dont le nom QuickBooks est connu du plan standard arrivent <strong>liés d’office</strong>, et les propositions « même nom » arrivent préréglées sur « Lier ».</li>
@@ -425,7 +425,7 @@
 
             <section id="fr-plan-etape3">
                 <h2>Étape 3 : Créer les comptes au plan</h2>
-                <p>Les comptes que vous avez marqués <strong>Créer</strong> à l’étape 2 entrent ici dans votre plan comptable (<span class="chemin">Importation › Créer les comptes au plan</span>, ou le lien <kbd>Créer les comptes au plan →</kbd> au bas de la correspondance). <strong>C’est la première étape qui écrit dans votre comptabilité</strong> : tout ce qui précède restait en préparation et pouvait être abandonné ; les comptes créés ici existent pour de bon. Rien n’est écrit tant que vous n’avez pas cliqué sur <kbd>Créer les comptes</kbd>. Le lien <kbd>← revenir à la correspondance</kbd> ramène à l’étape 2. Pour la façon de décider ce qui se crée et ce qui se lie, voir l’<a href="correspondance-comptes.html">aide dédiée à la correspondance</a>.</p>
+                <p>Les comptes que vous avez marqués <strong>Créer</strong> à l’étape 2 entrent ici dans votre plan comptable (<span class="chemin">Administration › Importation des données › Créer les comptes au plan</span>, ou le lien <kbd>Créer les comptes au plan →</kbd> au bas de la correspondance). <strong>C’est la première étape qui écrit dans votre comptabilité</strong> : tout ce qui précède restait en préparation et pouvait être abandonné ; les comptes créés ici existent pour de bon. Rien n’est écrit tant que vous n’avez pas cliqué sur <kbd>Créer les comptes</kbd>. Le lien <kbd>← revenir à la correspondance</kbd> ramène à l’étape 2. Pour la façon de décider ce qui se crée et ce qui se lie, voir l’<a href="correspondance-comptes.html">aide dédiée à la correspondance</a>.</p>
                 <h3>Ce que l’écran montre</h3>
                 <table>
                     <thead><tr><th>Élément</th><th>Contenu</th></tr></thead>
@@ -492,7 +492,7 @@
 
             <section id="fr-tiers-produits">
                 <h2>Clients, Fournisseurs, Produits et services</h2>
-                <p>Un même écran, titré « Importer les clients », « Importer les fournisseurs » ou « Importer les produits et services » (<span class="chemin">Importation › Clients / Fournisseurs / Produits et services</span>), avec le bouton QuickBooks.</p>
+                <p>Un même écran, titré « Importer les clients », « Importer les fournisseurs » ou « Importer les produits et services » (<span class="chemin">Administration › Importation des données › Clients / Fournisseurs / Produits et services</span>), avec le bouton QuickBooks.</p>
                 <h3>Le fichier à importer</h3>
                 <ul>
                     <li>« D’où viennent vos données ? » : logiciel, séparateur, encodage, marche à suivre et colonnes attendues.</li>
@@ -540,7 +540,7 @@
 
             <section id="fr-balance">
                 <h2>Importer la balance de vérification</h2>
-                <p>Charge la balance de vérification de l’ancien logiciel, <strong>arrêtée à la date de bascule</strong> (<span class="chemin">Importation › Balance de vérification</span>). Elle est lue, contrôlée et mise en préparation à côté du plan comptable, pour vérifier que les deux concordent. <strong>Aucune écriture n’est passée dans vos livres</strong> : la création des soldes d’ouverture reste à faire par votre comptable.</p>
+                <p>Charge la balance de vérification de l’ancien logiciel, <strong>arrêtée à la date de bascule</strong> (<span class="chemin">Administration › Importation des données › Balance de vérification</span>). Elle est lue, contrôlée et mise en préparation à côté du plan comptable, pour vérifier que les deux concordent. <strong>Aucune écriture n’est passée dans vos livres</strong> : la création des soldes d’ouverture reste à faire par votre comptable.</p>
                 <h3>Deux voies pour la charger</h3>
                 <table>
                     <thead><tr><th>Voie</th><th>Où</th><th>Comment</th></tr></thead>
@@ -760,7 +760,7 @@
 
             <section id="en-approach">
                 <h2>The overall migration approach</h2>
-                <p>The single entry point is the <span class="chemin">Import › Data import</span> screen. Every import screen opens from that page through its <kbd>Open →</kbd> button.</p>
+                <p>The single entry point is the <span class="chemin">Administration › Data import</span> screen. Every import screen opens from that page through its <kbd>Open →</kbd> button.</p>
                 <h3>Basic principle</h3>
                 <p>Whatever comes in goes first <strong>into staging</strong>. Nothing touches the books until you click a button such as <kbd>Create…</kbd> or <kbd>Apply…</kbd>. You can read, re-read, correct and abandon without consequence.</p>
                 <h3>Recommended order</h3>
@@ -789,7 +789,7 @@
 
             <section id="en-hub">
                 <h2>“Data import” hub</h2>
-                <p>Home screen of the migration (<span class="chemin">Import › Data import</span>). It lists every import item, scores it out of 10 and opens each screen.</p>
+                <p>Home screen of the migration (<span class="chemin">Administration › Data import</span>). It lists every import item, scores it out of 10 and opens each screen.</p>
                 <p>The score rests on four criteria: read the file, check it, put it in staging, apply it to the books. Exception: the <strong>QuickBooks, en direct</strong> card and the <strong>“Valider…”</strong> cards are scored on your company’s <strong>last extraction</strong> — the share of resources that responded (for a “Valider…” card, only the resources that screen reads, those of its <kbd>Importer depuis QuickBooks</kbd> button). The <strong>1. Plan comptable</strong> card follows the migration’s progress instead: 0/10 with no chart loaded, 2/10 as soon as it is, up to 5 points for the share of accounts decided in step 2 and up to 3 points for the share of “Create” accounts created in step 3 — 10/10 when everything is decided and created, 9 at most while an account remains to decide or to create. “Ce qui fonctionne” gives the counts (loaded, decided, linked, ignored, created) and “Ce qui manque” what remains at each step. Everything fetched: 10/10; one resource in four failed: 8/10; no extraction yet: 0/10 with the note “Aucune extraction encore pour cette compagnie”. “Ce qui fonctionne” gives the date, the number of resources fetched and the number of records; “Ce qui manque” names the resources that did not respond, or were never read, with the reason. The items <strong>required for the books</strong> (trial balance, customers, suppliers, products, invoices, taxes) are scored on your company’s actual progress, not on the code: 0 while nothing is in staging, 5 when the data is waiting, up to 10 when everything is applied (created in the books, or recognised for taxes); the trial balance caps at 5, nothing applies it yet. The card writes the quantities at the start of “Ce qui fonctionne” (“172 client(s) en préparation, 0 créé(s)”).</p>
                 <h3>Sections and cards</h3>
                 <ul>
@@ -811,7 +811,7 @@
 
             <section id="en-quickbooks">
                 <h2>Import from QuickBooks</h2>
-                <p>Direct read of the QuickBooks books, with no file to export (<span class="chemin">Import › Import from QuickBooks</span>). The screen has three blocks; the <kbd>← Retour aux importations</kbd> link at the top goes back to the imports page.</p>
+                <p>Direct read of the QuickBooks books, with no file to export (<span class="chemin">Administration › Data import › Import from QuickBooks</span>). The screen has three blocks; the <kbd>← Retour aux importations</kbd> link at the top goes back to the imports page.</p>
                 <h3>1. The connection</h3>
                 <ul>
                     <li>Green dot: connected. Orange: not connected. Red: not configured on the server, or unreachable.</li>
@@ -922,7 +922,7 @@
 
             <section id="en-chart-step1">
                 <h2>Step 1: Import the chart of accounts</h2>
-                <p>Loads the chart of accounts of the former application into staging (<span class="chemin">Import › Import the chart of accounts</span>). A clickable 3-step trail and an “État de cette étape” block sit at the top. That block’s score follows <strong>your migration</strong>, not the code: step 1, 10/10 as soon as the chart is loaded (0 otherwise); step 2, the share of accounts decided, 10/10 when none remains to decide; step 3, the share of “Create” accounts created, 10/10 when none remains to create. Unfolded, the block says “Où en est la reprise” and “Ce qui reste”, then what the screen can and cannot do yet — that last part changes only with the code.</p>
+                <p>Loads the chart of accounts of the former application into staging (<span class="chemin">Administration › Data import › Import the chart of accounts</span>). A clickable 3-step trail and an “État de cette étape” block sit at the top. That block’s score follows <strong>your migration</strong>, not the code: step 1, 10/10 as soon as the chart is loaded (0 otherwise); step 2, the share of accounts decided, 10/10 when none remains to decide; step 3, the share of “Create” accounts created, 10/10 when none remains to create. Unfolded, the block says “Où en est la reprise” and “Ce qui reste”, then what the screen can and cannot do yet — that last part changes only with the code.</p>
                 <h3>In short</h3>
                 <ol>
                     <li>Load the chart of accounts of the former application: directly with <kbd>⬇ Import from QuickBooks</kbd>, or through an exported CSV file.</li>
@@ -1021,7 +1021,7 @@
                 </ul>
                 <p>Once everything is decided, the screen points to the grid (review) and to step 3 (creation). The score of the “Associer les comptes, un par un” card on the Import page is the chart’s: it rises with the decisions.</p>
                 <div class="note" data-titre="Dedicated help">This screen has its own step-by-step help page: <a href="correspondance-comptes.html">Account mapping</a> — how to link, how to create, how to ignore, the save popup and the messages that name both applications.</div>
-                <p>Decides, account by account, what becomes of each account of the former application: link it to an existing account, create it, or ignore it (<span class="chemin">Import › Account mapping</span>). Nothing is written to the books: decisions are kept aside.</p>
+                <p>Decides, account by account, what becomes of each account of the former application: link it to an existing account, create it, or ignore it (<span class="chemin">Administration › Data import › Account mapping</span>). Nothing is written to the books: decisions are kept aside.</p>
                 <h3>In short</h3>
                 <ol>
                     <li>On opening, part of the work is already done: accounts whose QuickBooks name is known to the standard chart come <strong>linked outright</strong>, and “same name” suggestions come preset to “Link”.</li>
@@ -1159,7 +1159,7 @@
 
             <section id="en-chart-step3">
                 <h2>Step 3: Create the accounts in the chart</h2>
-                <p>The accounts you marked <strong>Create</strong> at step 2 enter your chart of accounts here (<span class="chemin">Import › Create the accounts in the chart</span>, or the link <kbd>Create the accounts in the chart →</kbd> at the bottom of the mapping). <strong>This is the first step that writes to your books</strong>: everything before stayed in preparation and could be abandoned; the accounts created here exist for good. Nothing is written until you click <kbd>Create the accounts</kbd>. The link <kbd>← back to mapping</kbd> returns to step 2. For how to decide what gets created and what gets linked, see the <a href="correspondance-comptes.html">dedicated mapping help</a>.</p>
+                <p>The accounts you marked <strong>Create</strong> at step 2 enter your chart of accounts here (<span class="chemin">Administration › Data import › Create the accounts in the chart</span>, or the link <kbd>Create the accounts in the chart →</kbd> at the bottom of the mapping). <strong>This is the first step that writes to your books</strong>: everything before stayed in preparation and could be abandoned; the accounts created here exist for good. Nothing is written until you click <kbd>Create the accounts</kbd>. The link <kbd>← back to mapping</kbd> returns to step 2. For how to decide what gets created and what gets linked, see the <a href="correspondance-comptes.html">dedicated mapping help</a>.</p>
                 <h3>What the screen shows</h3>
                 <table>
                     <thead><tr><th>Element</th><th>Content</th></tr></thead>
@@ -1226,7 +1226,7 @@
 
             <section id="en-parties-products">
                 <h2>Customers, Suppliers, Products and services</h2>
-                <p>One common screen, titled “Import customers”, “Import suppliers” or “Import products and services” (<span class="chemin">Import › Customers / Suppliers / Products and services</span>), with the QuickBooks button.</p>
+                <p>One common screen, titled “Import customers”, “Import suppliers” or “Import products and services” (<span class="chemin">Administration › Data import › Customers / Suppliers / Products and services</span>), with the QuickBooks button.</p>
                 <h3>The file to import</h3>
                 <ul>
                     <li>“Where does your data come from?”: application, separator, encoding, step-by-step and expected columns.</li>
@@ -1274,7 +1274,7 @@
 
             <section id="en-trial-balance">
                 <h2>Import the trial balance</h2>
-                <p>Loads the trial balance of the former application, <strong>as at the cut-over date</strong> (<span class="chemin">Import › Trial balance</span>). It is read, checked and placed in staging next to the chart of accounts, to verify that both agree. <strong>No entry is posted to your books</strong>: the opening balances are still to be entered by your accountant.</p>
+                <p>Loads the trial balance of the former application, <strong>as at the cut-over date</strong> (<span class="chemin">Administration › Data import › Trial balance</span>). It is read, checked and placed in staging next to the chart of accounts, to verify that both agree. <strong>No entry is posted to your books</strong>: the opening balances are still to be entered by your accountant.</p>
                 <h3>Two ways to load it</h3>
                 <table>
                     <thead><tr><th>Way</th><th>Where</th><th>How</th></tr></thead>
@@ -1494,7 +1494,7 @@
 
             <section id="es-metodo">
                 <h2>El método global de migración</h2>
-                <p>El punto de entrada único es la pantalla <span class="chemin">Importación › Importación de datos</span>. Todas las pantallas de importación se abren desde esa página con su botón <kbd>Abrir →</kbd>.</p>
+                <p>El punto de entrada único es la pantalla <span class="chemin">Administración › Importación de datos</span>. Todas las pantallas de importación se abren desde esa página con su botón <kbd>Abrir →</kbd>.</p>
                 <h3>Principio básico</h3>
                 <p>Lo que entra va primero <strong>a preparación</strong>. Nada toca la contabilidad mientras no pulse un botón del tipo <kbd>Crear…</kbd> o <kbd>Aplicar…</kbd>. Puede leer, releer, corregir y abandonar sin consecuencias.</p>
                 <h3>Orden recomendado</h3>
@@ -1523,7 +1523,7 @@
 
             <section id="es-centro">
                 <h2>Centro « Importación de datos »</h2>
-                <p>Pantalla de inicio de la migración (<span class="chemin">Importación › Importación de datos</span>). Enumera todos los elementos de importación, les da una nota sobre 10 y abre cada pantalla.</p>
+                <p>Pantalla de inicio de la migración (<span class="chemin">Administración › Importación de datos</span>). Enumera todos los elementos de importación, les da una nota sobre 10 y abre cada pantalla.</p>
                 <p>La nota se basa en cuatro criterios: leer el archivo, controlarlo, ponerlo en preparación, aplicarlo a la contabilidad. Excepción: la tarjeta <strong>QuickBooks, en direct</strong> y las tarjetas <strong>« Valider… »</strong> se califican según la <strong>última extracción</strong> de su empresa — la parte de los recursos que respondieron (para una tarjeta « Valider… », solo los recursos que esa pantalla lee, los de su botón <kbd>Importer depuis QuickBooks</kbd>). La tarjeta <strong>1. Plan comptable</strong>, en cambio, sigue el avance de la migración: 0/10 sin plan cargado, 2/10 en cuanto lo está, hasta 5 puntos por la parte de cuentas decididas en la etapa 2 y hasta 3 puntos por la parte de cuentas « Crear » creadas en la etapa 3 — 10/10 cuando todo está decidido y creado, 9 como máximo mientras quede una cuenta por decidir o por crear. « Ce qui fonctionne » da los recuentos (cargadas, decididas, vinculadas, ignoradas, creadas) y « Ce qui manque » lo que falta en cada etapa. Todo traído: 10/10; un recurso de cuatro fallido: 8/10; ninguna extracción todavía: 0/10 con la mención « Aucune extraction encore pour cette compagnie ». « Ce qui fonctionne » da la fecha, el número de recursos traídos y el número de registros; « Ce qui manque » nombra los recursos que no respondieron, o nunca leídos, con su motivo. Los puestos <strong>obligatorios para la contabilidad</strong> (balance, clientes, proveedores, productos, facturas, impuestos) se califican según el avance real de su empresa, no según el código: 0 mientras nada está en preparación, 5 cuando los datos esperan, hasta 10 cuando todo está aplicado (creado en la contabilidad, o reconocido para los impuestos); el balance se limita a 5, nada lo aplica todavía. La tarjeta escribe las cantidades al inicio de « Ce qui fonctionne » (« 172 client(s) en préparation, 0 créé(s) »).</p>
                 <h3>Secciones y tarjetas</h3>
                 <ul>
@@ -1545,7 +1545,7 @@
 
             <section id="es-quickbooks">
                 <h2>Importar desde QuickBooks</h2>
-                <p>Lectura directa de la contabilidad QuickBooks, sin archivo que exportar (<span class="chemin">Importación › Importar desde QuickBooks</span>). La pantalla tiene tres bloques; el enlace <kbd>← Retour aux importations</kbd>, arriba, vuelve a la página de importaciones.</p>
+                <p>Lectura directa de la contabilidad QuickBooks, sin archivo que exportar (<span class="chemin">Administración › Importación de datos › Importar desde QuickBooks</span>). La pantalla tiene tres bloques; el enlace <kbd>← Retour aux importations</kbd>, arriba, vuelve a la página de importaciones.</p>
                 <h3>1. La conexión</h3>
                 <ul>
                     <li>Punto verde: conectada. Naranja: no conectada. Rojo: no configurada en el servidor o inaccesible.</li>
@@ -1656,7 +1656,7 @@
 
             <section id="es-plan-etapa1">
                 <h2>Etapa 1: Importar el plan de cuentas</h2>
-                <p>Carga en preparación el plan de cuentas del programa anterior (<span class="chemin">Importación › Importar el plan de cuentas</span>). Arriba figuran un hilo de las 3 etapas, pulsable, y un bloque « État de cette étape ». La nota de ese bloque sigue <strong>su migración</strong>, no el código: etapa 1, 10/10 en cuanto el plan está cargado (0 si no); etapa 2, la parte de cuentas decididas, 10/10 cuando no queda ninguna por decidir; etapa 3, la parte de cuentas « Crear » creadas, 10/10 cuando no queda ninguna por crear. Desplegado, el bloque dice « Où en est la reprise » y « Ce qui reste », y luego lo que la pantalla sabe y no sabe hacer aún — esta última parte solo cambia con el código.</p>
+                <p>Carga en preparación el plan de cuentas del programa anterior (<span class="chemin">Administración › Importación de datos › Importar el plan de cuentas</span>). Arriba figuran un hilo de las 3 etapas, pulsable, y un bloque « État de cette étape ». La nota de ese bloque sigue <strong>su migración</strong>, no el código: etapa 1, 10/10 en cuanto el plan está cargado (0 si no); etapa 2, la parte de cuentas decididas, 10/10 cuando no queda ninguna por decidir; etapa 3, la parte de cuentas « Crear » creadas, 10/10 cuando no queda ninguna por crear. Desplegado, el bloque dice « Où en est la reprise » y « Ce qui reste », y luego lo que la pantalla sabe y no sabe hacer aún — esta última parte solo cambia con el código.</p>
                 <h3>En resumen</h3>
                 <ol>
                     <li>Cargue el plan de cuentas del programa anterior: en directo con <kbd>⬇ Importar desde QuickBooks</kbd>, o mediante un archivo CSV exportado.</li>
@@ -1755,7 +1755,7 @@
                 </ul>
                 <p>Cuando todo está decidido, la pantalla remite a la cuadrícula (relectura) y a la etapa 3 (creación). La nota de la tarjeta « Associer les comptes, un par un » en la página Importación es la del plan de cuentas: sube con las decisiones.</p>
                 <div class="note" data-titre="Ayuda dedicada">Esta pantalla tiene su propia página de ayuda, paso a paso: <a href="correspondance-comptes.html">Correspondencia de cuentas</a> — cómo vincular, cómo crear, cómo ignorar, la ventana al guardar y los mensajes que nombran ambos programas.</div>
-                <p>Decide, cuenta por cuenta, qué pasa con cada cuenta del programa anterior: vincularla a una cuenta existente, crearla o ignorarla (<span class="chemin">Importación › Correspondencia de cuentas</span>). Nada se escribe en contabilidad: las decisiones se guardan aparte.</p>
+                <p>Decide, cuenta por cuenta, qué pasa con cada cuenta del programa anterior: vincularla a una cuenta existente, crearla o ignorarla (<span class="chemin">Administración › Importación de datos › Correspondencia de cuentas</span>). Nada se escribe en contabilidad: las decisiones se guardan aparte.</p>
                 <h3>En resumen</h3>
                 <ol>
                     <li>Al abrir, parte del trabajo ya está hecho: las cuentas cuyo nombre QuickBooks es conocido por el plan estándar llegan <strong>vinculadas de oficio</strong>, y las propuestas « mismo nombre » llegan preajustadas en « Vincular ».</li>
@@ -1893,7 +1893,7 @@
 
             <section id="es-plan-etapa3">
                 <h2>Etapa 3: Crear las cuentas en el plan</h2>
-                <p>Las cuentas que marcó <strong>Crear</strong> en la etapa 2 entran aquí en su plan contable (<span class="chemin">Importación › Crear las cuentas en el plan</span>, o el enlace <kbd>Crear las cuentas en el plan →</kbd> al pie de la correspondencia). <strong>Es la primera etapa que escribe en su contabilidad</strong>: todo lo anterior quedaba en preparación y podía abandonarse; las cuentas creadas aquí existen definitivamente. No se escribe nada mientras no haga clic en <kbd>Crear las cuentas</kbd>. El enlace <kbd>← volver a la correspondencia</kbd> lleva a la etapa 2. Para saber cómo decidir qué se crea y qué se vincula, vea la <a href="correspondance-comptes.html">ayuda dedicada a la correspondencia</a>.</p>
+                <p>Las cuentas que marcó <strong>Crear</strong> en la etapa 2 entran aquí en su plan contable (<span class="chemin">Administración › Importación de datos › Crear las cuentas en el plan</span>, o el enlace <kbd>Crear las cuentas en el plan →</kbd> al pie de la correspondencia). <strong>Es la primera etapa que escribe en su contabilidad</strong>: todo lo anterior quedaba en preparación y podía abandonarse; las cuentas creadas aquí existen definitivamente. No se escribe nada mientras no haga clic en <kbd>Crear las cuentas</kbd>. El enlace <kbd>← volver a la correspondencia</kbd> lleva a la etapa 2. Para saber cómo decidir qué se crea y qué se vincula, vea la <a href="correspondance-comptes.html">ayuda dedicada a la correspondencia</a>.</p>
                 <h3>Lo que muestra la pantalla</h3>
                 <table>
                     <thead><tr><th>Elemento</th><th>Contenido</th></tr></thead>
@@ -1960,7 +1960,7 @@
 
             <section id="es-terceros-productos">
                 <h2>Clientes, Proveedores, Productos y servicios</h2>
-                <p>Una misma pantalla, titulada « Importar los clientes », « Importar los proveedores » o « Importar los productos y servicios » (<span class="chemin">Importación › Clientes / Proveedores / Productos y servicios</span>), con el botón QuickBooks.</p>
+                <p>Una misma pantalla, titulada « Importar los clientes », « Importar los proveedores » o « Importar los productos y servicios » (<span class="chemin">Administración › Importación de datos › Clientes / Proveedores / Productos y servicios</span>), con el botón QuickBooks.</p>
                 <h3>El archivo que importar</h3>
                 <ul>
                     <li>« ¿De dónde vienen sus datos? »: programa, separador, codificación, pasos a seguir y columnas esperadas.</li>
@@ -2008,7 +2008,7 @@
 
             <section id="es-balance">
                 <h2>Importar el balance de comprobación</h2>
-                <p>Carga el balance de comprobación del programa anterior, <strong>cerrado a la fecha de corte</strong> (<span class="chemin">Importación › Balance de comprobación</span>). Se lee, se controla y se pone en preparación junto al plan de cuentas, para verificar que ambos concuerdan. <strong>Ningún asiento se pasa a sus libros</strong>: los saldos de apertura quedan por crear por su contador.</p>
+                <p>Carga el balance de comprobación del programa anterior, <strong>cerrado a la fecha de corte</strong> (<span class="chemin">Administración › Importación de datos › Balance de comprobación</span>). Se lee, se controla y se pone en preparación junto al plan de cuentas, para verificar que ambos concuerdan. <strong>Ningún asiento se pasa a sus libros</strong>: los saldos de apertura quedan por crear por su contador.</p>
                 <h3>Dos vías para cargarlo</h3>
                 <table>
                     <thead><tr><th>Vía</th><th>Dónde</th><th>Cómo</th></tr></thead>
