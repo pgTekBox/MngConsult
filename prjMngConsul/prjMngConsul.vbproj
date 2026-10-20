@@ -295,6 +295,7 @@
     <Content Include="css\listvew.css" />
     <Content Include="css\cabinet-60s.css" />
     <Content Include="css\parametres-60s.css" />
+    <Content Include="css\qui-fait-quoi.css" />
     <Content Include="css\rapports-60s.css" />
     <Content Include="css\telerik-bleumarine.css" />
     <Content Include="css\icones-trait.css" />
@@ -499,6 +500,8 @@
     <Content Include="js\RadWindows.js" />
     <Content Include="js\cabinet-60s.js" />
     <Content Include="js\parametres-60s.js" />
+    <Content Include="js\qui-fait-quoi-data.js" />
+    <Content Include="js\qui-fait-quoi.js" />
     <Content Include="js\rapports-60s.js" />
     <Content Include="js\viewport.js" />
     <Content Include="LandingPage.aspx" />
@@ -518,6 +521,7 @@
     <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="AssocierCompte.aspx" />
     <Content Include="CabinetsCertifies.aspx" />
+    <Content Include="QuiFaitQuoi.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
     <Content Include="ImportApideck.aspx" />
     <Content Include="ValiderFactures.aspx" />
@@ -1449,6 +1453,13 @@
     </Compile>
     <Compile Include="MonCabinet.ashx.vb">
       <DependentUpon>MonCabinet.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="QuiFaitQuoi.aspx.designer.vb">
+      <DependentUpon>QuiFaitQuoi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="QuiFaitQuoi.aspx.vb">
+      <DependentUpon>QuiFaitQuoi.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="AssistantCompte.ashx.vb">
       <DependentUpon>AssistantCompte.ashx</DependentUpon>
