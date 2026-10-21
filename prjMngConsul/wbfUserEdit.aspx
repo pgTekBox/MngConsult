@@ -103,9 +103,13 @@
 
         .hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
     </style>
+    <%-- Signature « Portail du client » (voir css/edition-60s.css) --%>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
+    <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
 </head>
 
-<body>
+<body class="f60">
     <form id="form1" runat="server">
 
         <telerik:RadScriptManager ID="RadScriptManager1" runat="server"
@@ -115,6 +119,7 @@
 
             <div class="top">
                 <div>
+                    <div class="f60-rub"><asp:Literal ID="litRubrique" runat="server" /></div>
                     <div class="title">
                         <asp:Literal ID="litTitle" runat="server" Text="Nouvel utilisateur" />
                     </div>

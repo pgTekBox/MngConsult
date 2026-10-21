@@ -162,8 +162,12 @@
             border-bottom: 1px dashed var(--line); margin-bottom: 12px;
         }
     </style>
+    <%-- Signature « Portail du client » (voir css/edition-60s.css) --%>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
+    <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
 </head>
-<body>
+<body class="f60">
     <form id="form1" runat="server">
         <telerik:RadScriptManager ID="RadScriptManager1" runat="server" />
         <telerik:RadAjaxLoadingPanel ID="lp1" runat="server" Skin="Metro" />
@@ -175,6 +179,7 @@
                 <%-- En-tête --%>
                 <div class="top">
                     <div>
+                        <div class="f60-rub"><asp:Literal ID="litRubrique" runat="server" /></div>
                         <div class="title"><asp:Label ID="lblTitle" runat="server" Text="Nouveau produit" /></div>
                         <div class="sub"><asp:Label ID="lblSub" runat="server" Text="Remplissez les informations du produit" /></div>
                     </div>

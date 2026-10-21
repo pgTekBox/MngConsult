@@ -13,6 +13,15 @@ Partial Public Class wbfEmployeeEdit
     '''<summary>form1 control.</summary>
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
+    '''<summary>
+    '''litRubrique control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>sm1 control.</summary>
     Protected WithEvents sm1 As Global.System.Web.UI.ScriptManager
 

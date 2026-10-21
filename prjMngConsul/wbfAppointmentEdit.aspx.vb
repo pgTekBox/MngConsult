@@ -402,4 +402,10 @@ Public Class wbfAppointmentEdit
         Return n
     End Function
 
+''' <summary>Signature « Portail du client » : rubrique de l'en-tête (css/edition-60s.css).</summary>
+    Private Sub F60_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim lg As String = CurrentLang
+        litRubrique.Text = Server.HtmlEncode(If(lg = "en", "Calendar · Appointment", If(lg = "es", "Agenda · Cita", "Agenda · Rendez-vous")))
+    End Sub
+
 End Class

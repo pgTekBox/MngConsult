@@ -31,11 +31,16 @@
         .msg { margin:0 0 12px; padding:10px 14px; border-radius:10px; font-size:13px; font-weight:700; }
         .msg.err { background:rgba(239,68,68,.1); color:#dc2626; border:1px solid rgba(239,68,68,.3); }
     </style>
+    <%-- Signature « Portail du client » (voir css/edition-60s.css) --%>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
+    <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
 </head>
-<body>
+<body class="f60">
     <form id="form1" runat="server">
         <asp:ScriptManager ID="sm1" runat="server" />
         <div class="wrap">
+            <div class="f60-rub"><asp:Literal ID="litRubrique" runat="server" /></div>
             <h1><asp:Literal ID="litTitle" runat="server" /></h1>
 
             <asp:Panel ID="pnlMsg" runat="server" Visible="false">

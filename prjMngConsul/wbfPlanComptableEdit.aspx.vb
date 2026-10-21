@@ -209,4 +209,10 @@ Public Class wbfPlanComptableEdit
         Return s.Trim()
     End Function
 
+''' <summary>Signature « Portail du client » : rubrique de l'en-tête (css/edition-60s.css).</summary>
+    Private Sub F60_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim lg As String = CurrentLang
+        litRubrique.Text = Server.HtmlEncode(If(lg = "en", "Accounting · Account", If(lg = "es", "Contabilidad · Cuenta", "Comptabilité · Compte")))
+    End Sub
+
 End Class

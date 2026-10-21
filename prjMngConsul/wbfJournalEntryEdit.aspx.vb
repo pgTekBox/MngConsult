@@ -797,4 +797,11 @@ Public Class wbfJournalEntryEdit
         Return Nothing
     End Function
 
+''' <summary>Signature « Portail du client » : rubrique de l'en-tête (css/edition-60s.css).</summary>
+    Private Sub F60_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim lg As String = CurrentLang
+        litRubrique.Text = Server.HtmlEncode(If(lg = "en", "Accounting · Entry", If(lg = "es", "Contabilidad · Asiento", "Comptabilité · Écriture")))
+        litTitreDoc.Text = Server.HtmlEncode(If(lg = "en", "Journal entry", If(lg = "es", "Asiento de diario", "Écriture de journal")))
+    End Sub
+
 End Class

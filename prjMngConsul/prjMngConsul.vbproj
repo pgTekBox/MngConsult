@@ -294,7 +294,7 @@
     <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
     <Content Include="css\cabinet-60s.css" />
-    <Content Include="css\facture-60s.css" />
+    <Content Include="css\edition-60s.css" />
     <Content Include="css\parametres-60s.css" />
     <Content Include="css\qui-fait-quoi.css" />
     <Content Include="css\rapports-60s.css" />

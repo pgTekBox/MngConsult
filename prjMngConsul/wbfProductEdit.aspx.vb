@@ -294,4 +294,10 @@ Public Class wbfProductEdit
         Return DBNull.Value
     End Function
 
+''' <summary>Signature « Portail du client » : rubrique de l'en-tête (css/edition-60s.css).</summary>
+    Private Sub F60_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim lg As String = CurrentLang
+        litRubrique.Text = Server.HtmlEncode(If(lg = "en", "Products and services · Product", If(lg = "es", "Productos y servicios · Producto", "Produits et services · Produit")))
+    End Sub
+
 End Class

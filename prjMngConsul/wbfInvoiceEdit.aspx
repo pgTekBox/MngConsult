@@ -512,9 +512,9 @@
     <%-- Signature « Portail du client » (maquette Main.dc.html, fenêtre Facture) : couche de présentation --%>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
-    <link rel="stylesheet" href="css/facture-60s.css?v=2026102101" />
+    <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
 </head>
-<body class="f60">
+<body class="f60 f60-facture">
     <form id="form1" runat="server">
         <telerik:RadScriptManager
             ID="RadScriptManager1"

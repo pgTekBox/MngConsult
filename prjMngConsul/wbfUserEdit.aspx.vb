@@ -171,4 +171,10 @@ Public Class wbfUserEdit
         pMsg.Attributes("class") = "msg " & If(isError, "bad", "ok")
     End Sub
 
+''' <summary>Signature « Portail du client » : rubrique de l'en-tête (css/edition-60s.css).</summary>
+    Private Sub F60_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim lg As String = CurrentLang
+        litRubrique.Text = Server.HtmlEncode(If(lg = "en", "Administration · User", If(lg = "es", "Administración · Usuario", "Administration · Utilisateur")))
+    End Sub
+
 End Class

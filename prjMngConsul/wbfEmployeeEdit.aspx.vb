@@ -175,4 +175,10 @@ Public Class wbfEmployeeEdit
         End Select
     End Function
 
+''' <summary>Signature « Portail du client » : rubrique de l'en-tête (css/edition-60s.css).</summary>
+    Private Sub F60_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim lg As String = CurrentLang
+        litRubrique.Text = Server.HtmlEncode(If(lg = "en", "My business · Employee", If(lg = "es", "Mi empresa · Empleado", "Mon entreprise · Employé")))
+    End Sub
+
 End Class

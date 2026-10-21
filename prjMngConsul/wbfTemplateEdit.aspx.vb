@@ -607,4 +607,11 @@ Public Class wbfTemplateEdit
         Return Nothing
     End Function
 
+''' <summary>Signature « Portail du client » : rubrique de l'en-tête (css/edition-60s.css).</summary>
+    Private Sub F60_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim lg As String = CurrentLang
+        litRubrique.Text = Server.HtmlEncode(If(lg = "en", "Accounting · Template", If(lg = "es", "Contabilidad · Plantilla", "Comptabilité · Modèle")))
+        litTitreDoc.Text = Server.HtmlEncode(If(lg = "en", "Entry template", If(lg = "es", "Plantilla de asiento", "Modèle d'écriture")))
+    End Sub
+
 End Class

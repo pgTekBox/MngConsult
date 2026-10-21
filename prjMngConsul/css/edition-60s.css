@@ -1,10 +1,11 @@
 ﻿/* =====================================================================
-   60secondes · Facture client (wbfInvoiceEdit.aspx) — signature « Portail du client »
+   60secondes · Écrans d'édition (fenêtres) — signature « Portail du client »
+   D'abord la fenêtre Facture client (wbfInvoiceEdit.aspx), puis les autres écrans d'édition
    Valeurs reprises de la maquette Main.dc.html (fenêtre « Facture ») :
    fond #F2F5F9, cartes blanches arrondies, en-tête blanc (rubrique bleue,
    titre, pastille d'état), lignes en grille, pied blanc avec les boutons à
    gauche et les totaux à droite. Ne touche ni aux contrôles ni aux scripts.
-   Portée : body.f60.
+   Portée : body.f60 (body.f60-facture pour ce qui est propre à la facture client).
    ===================================================================== */
 body.f60 {
   --f-ink: #0E1F3D; --f-muted: #44536E; --f-soft: #5B6B86; --f-blue: #1B4F9C; --f-blue-d: #143A73;
@@ -26,7 +27,7 @@ body.f60 .f60-etat-ok::before { content: ""; width: 15px; height: 15px; backgrou
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E") center/contain no-repeat;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E") center/contain no-repeat; }
 /* L'en-tête porte le numéro et l'état : l'ancien badge et l'ancienne ligne « No » ne s'affichent plus */
-body.f60 .badge-posted, body.f60 .doc-number { display: none !important; }
+body.f60-facture .badge-posted, body.f60-facture .doc-number { display: none !important; }
 
 /* ---------- Corps ---------- */
 body.f60 .content { padding: 18px 22px 24px; overflow: visible; }
@@ -75,7 +76,7 @@ body.f60 .imgaction { width: 32px !important; height: 32px !important; min-width
 body.f60 .imgaction img, body.f60 .imgaction .rbImage, body.f60 .imgaction .rbIcon { display: none !important; }
 body.f60 .imgaction[id$="OrdreHaut"] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2344536E' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 15l6-6 6 6'/%3E%3C/svg%3E") !important; }
 body.f60 .imgaction[id$="OrdreBas"] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2344536E' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important; }
-body.f60 .imgaction[id$="RadImageButton1"] { border-color: #F3C2BD !important; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A3261C' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") !important; }
+body.f60 .imgaction[id$="RadImageButton1"], body.f60 .imgaction[id$="btnDeleteLine"] { border-color: #F3C2BD !important; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A3261C' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") !important; }
 body.f60 .imgaction:hover { background-color: var(--f-chip) !important; }
 body.f60 .readonly .imgaction { display: none !important; }
 
@@ -100,3 +101,84 @@ body.f60 .totals { min-width: 240px; display: grid; grid-template-columns: 1fr a
 body.f60 .totals .tot { color: var(--f-muted); }
 body.f60 .totals .tot strong { color: var(--f-ink); }
 body.f60 .totals .tot:nth-last-child(-n+2), body.f60 .totals .tot:nth-last-child(-n+2) strong { font-size: 18px; font-weight: 800; color: var(--f-ink); }
+
+/* =====================================================================
+   Fiches (client, fournisseur, produit, catégorie, compte, utilisateur,
+   rendez-vous, employé) : .wrap > .top (.title, .sub, .bar) + .card
+   (.cardHead .h, .cardBody .field). En-tête blanc collé en haut, cartes
+   blanches, champs de 44 px, boutons en pilules dans une barre fixe en bas.
+   ===================================================================== */
+body.f60 { background: var(--f-bg) !important; }
+body.f60 .wrap { max-width: none; margin: 0; padding: 0 0 96px; }
+body.f60 .f60-rub { font-size: 14px; font-weight: 800; color: var(--f-blue); text-transform: uppercase; letter-spacing: .06em; }
+
+/* En-tête */
+body.f60 .wrap > .top, body.f60 .rap-top > .top { position: sticky; top: 0; z-index: 6; margin: 0 0 18px; padding: 18px 22px; background: #FFFFFF; border-bottom: 1px solid var(--f-line); }
+body.f60 .top .title { font-size: 24px; font-weight: 800; line-height: 1.2; letter-spacing: 0; color: var(--f-ink); }
+body.f60 .top .sub { margin-top: 2px; font-size: 15px; color: var(--f-muted); }
+
+/* Boutons de l'en-tête : barre blanche fixe en bas, comme le pied de la facture */
+body.f60 .top .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 7; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: flex-start; padding: 16px 22px; background: #FFFFFF; border-top: 1px solid var(--f-line); }
+body.f60 .btn, body.f60 a.btn, body.f60 input.btn { min-height: 46px; height: auto; padding: 0 18px; border: 1px solid var(--f-field); border-radius: 999px; background: #FFFFFF; color: var(--f-ink); font-family: inherit; font-weight: 800; font-size: 15px; line-height: 44px; box-shadow: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+body.f60 .btn:hover { background: var(--f-chip); }
+body.f60 .btn.primary { order: -1; background: var(--f-blue); border-color: var(--f-blue); color: #FFFFFF; }
+body.f60 .btn.primary:hover { background: var(--f-blue-d); }
+body.f60 .top .bar .btn.danger { order: 9; margin-left: auto; }
+body.f60 .btn.danger { background: #FFFFFF; border-color: #F3C2BD; color: #A3261C; }
+body.f60 .btn.danger:hover { background: #FDECEA; }
+/* Boutons de la carte (adresses, analyse de document…) : un peu plus petits */
+body.f60 .card .btn { min-height: 40px; line-height: 38px; font-size: 14px; }
+body.f60 .card .btn-icon { min-height: 32px; width: 32px; padding: 0; line-height: 30px; }
+
+/* Messages */
+body.f60 .msg { margin: 0 22px 14px; padding: 12px 16px; border-radius: 16px; background: #E3EBF7; color: var(--f-blue-d); font-weight: 700; border: 0; }
+body.f60 .msg.err, body.f60 .msg.error, body.f60 .msg.danger { background: #FDECEA; color: #8A1F14; }
+body.f60 .msg.ok, body.f60 .msg.success { background: #E3F3EA; color: #0F5A3A; }
+
+/* Cartes */
+body.f60 .wrap .card { margin: 0 22px 14px; border: 0; border-radius: 20px; background: #FFFFFF; box-shadow: none; overflow: visible; }
+body.f60 .cardHead { padding: 16px 18px 4px; border-bottom: 0; }
+body.f60 .cardHead .h { font-size: 18px; font-weight: 800; color: var(--f-ink); }
+body.f60 .cardBody { padding: 12px 18px 18px; }
+body.f60 .small { font-size: 13px; color: var(--f-muted); }
+
+/* Champs */
+body.f60 .field label { display: block; margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--f-ink); }
+body.f60 .field input[type="text"], body.f60 .field input[type="email"], body.f60 .field input[type="tel"], body.f60 .field input[type="number"], body.f60 .field input[type="password"], body.f60 .field input[type="date"], body.f60 .field input:not([type]), body.f60 .field textarea, body.f60 .field select,
+body.f60 .field .riTextBox, body.f60 .field .rtbLike .riTextBox {
+  min-height: 44px !important; padding: 10px 14px !important; border: 1px solid var(--f-field) !important; border-radius: 12px !important; background: #FFFFFF !important;
+  font-family: inherit !important; font-size: 15px !important; font-weight: 700 !important; color: var(--f-ink) !important; box-shadow: none !important; box-sizing: border-box; width: 100%; }
+body.f60 .field textarea, body.f60 .field textarea.riTextBox { min-height: 88px !important; font-weight: 600 !important; line-height: 1.45; }
+body.f60 .field input:focus, body.f60 .field textarea:focus, body.f60 .field select:focus, body.f60 .field .riTextBox:focus { border-color: var(--f-blue) !important; box-shadow: 0 0 0 3px #DCE6F6 !important; outline: none; }
+body.f60 .field input[type="checkbox"], body.f60 .field input[type="radio"] { width: 18px; height: 18px; min-height: 0 !important; padding: 0 !important; accent-color: var(--f-blue); vertical-align: -3px; }
+/* Les zones de texte Telerik prennent toute la largeur du champ (sauf largeur voulue en ligne sur le contrôle lui-même) */
+body.f60 .field .RadInput:not([style*="width"]), body.f60 .field .riSingle:not([style*="width"]), body.f60 .field .rtbLike, body.f60 .field .RadInput.rtbLike { width: 100% !important; }
+/* Listes déroulantes Telerik */
+body.f60 .field .RadDropDownList .rddlInner, body.f60 .field .RadComboBox .rcbInner { min-height: 44px !important; height: 44px !important; padding: 0 40px 0 14px !important; border: 1px solid var(--f-field) !important; border-radius: 12px !important; background: #FFFFFF !important; box-shadow: none !important; box-sizing: border-box; display: flex !important; align-items: center; }
+body.f60 .field .rddlFakeInput, body.f60 .field .rcbInput { font-family: inherit !important; font-size: 15px !important; font-weight: 700 !important; color: var(--f-ink) !important; }
+body.f60 .field .RadPicker .riTextBox { padding-right: 40px !important; }
+body.f60 .field .RadPicker .RadInput { position: relative; }
+body.f60 .field .RadPicker .rcSelect { position: absolute !important; right: 6px; top: 6px; width: 32px; height: 32px; }
+
+/* Employé (fiche simple : .wrap > h1, .grid > .field) */
+body.f60 .wrap > h1 { margin: 0 0 18px; padding: 18px 22px; background: #FFFFFF; border-bottom: 1px solid var(--f-line); font-size: 24px; font-weight: 800; color: var(--f-ink); }
+body.f60 .wrap > .f60-rub + h1 { padding-top: 0; }
+body.f60 .wrap > .f60-rub { padding: 18px 22px 2px; background: #FFFFFF; }
+body.f60 .wrap > .grid { margin: 0 22px 14px; padding: 18px; border-radius: 20px; background: #FFFFFF; }
+
+/* =====================================================================
+   Documents (facture fournisseur, écriture de journal, modèle) : même
+   présentation que la facture client ; leurs badges d'état restent en place
+   et prennent la forme d'une pastille.
+   ===================================================================== */
+body.f60 .badge-posted, body.f60 .badge-validee, body.f60 .badge-extournee { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; border: 0; font-weight: 800; font-size: 14px; background: #E3F3EA; color: #0F5A3A; }
+body.f60 .badge-extournee { background: #FDECEA; color: #8A1F14; }
+body.f60 .container > .RadButton:not(.imgaction), body.f60 .header-actions .RadButton:not(.imgaction), body.f60 .actions .RadButton:not(.imgaction) { min-height: 44px !important; height: auto !important; padding: 0 18px !important; border: 1px solid var(--f-field) !important; border-radius: 999px !important; background: #FFFFFF !important; color: var(--f-ink) !important; font-family: inherit !important; font-weight: 800 !important; box-shadow: none !important; }
+body.f60 .header-actions .RadButton .rbText, body.f60 .actions .RadButton .rbText { color: inherit !important; font: inherit !important; line-height: 42px; padding: 0 !important; }
+body.f60 [id$="radSave"].RadButton { border-color: var(--f-blue) !important; background: var(--f-blue) !important; color: #FFFFFF !important; }
+body.f60 [id$="radSave"].RadButton .rbText { color: #FFFFFF !important; }
+body.f60 .card label, body.f60 .row2 label, body.f60 .row3 label, body.f60 .row4 label { font-weight: 800; color: var(--f-ink); font-size: 14px; }
+body.f60 .row4 { display: grid; gap: 12px 16px; align-items: end; }
+body.f60 .card .RadInput .riTextBox, body.f60 .card .RadComboBox .rcbInner { min-height: 44px !important; border: 1px solid var(--f-field) !important; border-radius: 12px !important; font-family: inherit !important; font-weight: 700 !important; box-shadow: none !important; box-sizing: border-box; }
+body.f60 .card .RadComboBox .rcbInner { display: flex !important; align-items: center; padding: 0 40px 0 12px !important; height: 44px !important; }
+body.f60 .supplier-selector { min-height: 44px; padding: 11px 14px; border: 1px solid var(--f-field); border-radius: 12px; font-weight: 700; font-size: 15px; color: var(--f-ink); background: #FFFFFF; display: block; box-sizing: border-box; cursor: pointer; }

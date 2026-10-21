@@ -1024,5 +1024,12 @@ Public Class wbfSupplierInvoinceEdit
     End Sub
 
 
+''' <summary>Signature « Portail du client » : rubrique de l'en-tête (css/edition-60s.css).</summary>
+    Private Sub F60_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim lg As String = CurrentLang
+        litRubrique.Text = Server.HtmlEncode(If(lg = "en", "Purchases · Supplier invoice", If(lg = "es", "Compras · Factura de proveedor", "Achats · Facture fournisseur")))
+        litTitreDoc.Text = Server.HtmlEncode(If(lg = "en", "Supplier invoice", If(lg = "es", "Factura de proveedor", "Facture fournisseur")))
+    End Sub
+
 End Class
 

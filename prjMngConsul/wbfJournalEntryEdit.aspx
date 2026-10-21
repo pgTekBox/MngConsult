@@ -322,8 +322,12 @@
 
       
     </style>
+    <%-- Signature « Portail du client » (voir css/edition-60s.css) --%>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
+    <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
 </head>
-<body>
+<body class="f60">
     <form id="form1" runat="server">
         <telerik:RadScriptManager ID="RadScriptManager1" runat="server" EnablePartialRendering="true" AsyncPostBackTimeout="300" />
 
@@ -364,6 +368,9 @@
         </telerik:RadAjaxManager>
 
         <asp:Panel ID="pnlMain" runat="server" CssClass="rw-page">
+
+            <%-- En-tête : rubrique et titre (PreRender) --%>
+            <div class="f60-tete"><div class="f60-tete-t"><div class="f60-rub"><asp:Literal ID="litRubrique" runat="server" /></div><h2><asp:Literal ID="litTitreDoc" runat="server" /></h2></div></div>
 
             <div class="content">
                 <div class="container">
@@ -512,6 +519,15 @@
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </div>
+
+                            <%-- Ajouter une ligne (sous les lignes) --%>
+                            <div class="fab-addline">
+                                <telerik:RadImageButton ID="btnAddLine" runat="server"
+                    Image-Url="~/Images/rondplus45.png"
+                    Width="56px" Height="56px"
+                    ToolTip="Ajouter une ligne">
+                </telerik:RadImageButton>
+                            </div>
                         </div>
                     </div>
 
@@ -520,6 +536,9 @@
 
             <%-- FOOTER TOTAUX D/C/ÉCART --%>
             <div class="footerbar">
+                <div class="f60-actions">
+                    <telerik:RadButton ID="radSave" runat="server" Text="Enregistrer l'écriture" />
+                </div>
                 <div class="totals">
                     <div class="tot"><asp:Literal ID="litTotalDebit" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
@@ -538,17 +557,7 @@
                 </div>
             </div>
 
-            <%-- BOUTON FAB AJOUTER LIGNE --%>
-            <div style="z-index:25000" class="fab-addline">
-                <telerik:RadImageButton ID="btnAddLine" runat="server"
-                    Image-Url="~/Images/rondplus45.png"
-                    Width="56px" Height="56px"
-                    ToolTip="Ajouter une ligne">
-                </telerik:RadImageButton>
-            </div>
 
-            <telerik:RadButton ID="radSave" runat="server"
-                BackColor="lightgrey" Text="Enregistrer l'écriture" />
 
             <%-- OVERLAY PICKER COMPTES --%>
             <asp:HiddenField ID="hidSelectedAccountId" runat="server" />

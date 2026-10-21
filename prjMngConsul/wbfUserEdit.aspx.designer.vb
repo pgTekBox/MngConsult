@@ -23,6 +23,15 @@ Partial Public Class wbfUserEdit
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
     '''<summary>
+    '''litRubrique control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''RadScriptManager1 control.
     '''</summary>
     '''<remarks>
