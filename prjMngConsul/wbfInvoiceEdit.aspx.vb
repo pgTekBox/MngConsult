@@ -92,6 +92,27 @@ Public Class wbfInvoiceEdit
 
     End Sub
 
+    ''' <summary>
+    ''' En-tête de la fenêtre (signature « Portail du client ») : rubrique, titre
+    ''' (« Nouvelle facture » ou « Facture n° ») et pastille d'état ; bandeau de
+    ''' lecture seule quand la facture est comptabilisée.
+    ''' </summary>
+    Private Sub wbfInvoiceEdit_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        litRubrique.Text = Server.HtmlEncode(L("rubrique"))
+        Dim no As String = lblDocNumber.Text.Trim()      ' déjà encodé par ShowDocNumber
+        litTitre.Text = If(no.Length > 0, Server.HtmlEncode(L("invoiceTitle")) & " " & no,
+                           Server.HtmlEncode(If(InvoiceId > 0, L("invoiceTitle"), L("newInvoice"))))
+        If Comptabilise Then
+            lblEtat.Text = Server.HtmlEncode(L("statePosted"))
+            lblEtat.CssClass = "f60-etat f60-etat-ok"
+        Else
+            lblEtat.Text = Server.HtmlEncode(If(InvoiceId > 0, L("stateDraft"), L("stateNew")))
+            lblEtat.CssClass = "f60-etat"
+        End If
+        pnlVerrou.Visible = Comptabilise
+        litVerrou.Text = Server.HtmlEncode(L("lockedMsg"))
+    End Sub
+
     ''' <summary>Applique les libellés localisés (fr/en/es) aux contrôles serveur.</summary>
     Private Sub ApplyLocalization()
         Page.Title = L("pageTitle")
@@ -181,6 +202,13 @@ Public Class wbfInvoiceEdit
             Case "subtotal" : Return Choose3(lang, "Sous-total", "Subtotal", "Subtotal")
             Case "save" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
             Case "addLine" : Return Choose3(lang, "Ajouter une ligne", "Add a line", "Agregar una línea")
+            Case "rubrique" : Return Choose3(lang, "Ventes · Facture", "Sales · Invoice", "Ventas · Factura")
+            Case "newInvoice" : Return Choose3(lang, "Nouvelle facture", "New invoice", "Nueva factura")
+            Case "invoiceTitle" : Return Choose3(lang, "Facture", "Invoice", "Factura")
+            Case "stateNew" : Return Choose3(lang, "Nouvelle", "New", "Nueva")
+            Case "stateDraft" : Return Choose3(lang, "Brouillon", "Draft", "Borrador")
+            Case "statePosted" : Return Choose3(lang, "Comptabilisée", "Posted", "Contabilizada")
+            Case "lockedMsg" : Return Choose3(lang, "Facture comptabilisée : elle est en lecture seule.", "Posted invoice: it is read-only.", "Factura contabilizada: es de solo lectura.")
             Case "searchProduct" : Return Choose3(lang, "Rechercher un produit…", "Search a product…", "Buscar un producto…")
             Case "searchCustomer" : Return Choose3(lang, "Rechercher un client…", "Search a customer…", "Buscar un cliente…")
             Case "searchAccount" : Return Choose3(lang, "Rechercher un compte…", "Search an account…", "Buscar una cuenta…")
@@ -457,8 +485,8 @@ Public Class wbfInvoiceEdit
 
                 ' cacher boutons actions
                 Dim btnDel = CType(item.FindControl("RadImageButton1"), Telerik.Web.UI.RadImageButton)
-                Dim btnUp = CType(item.FindControl("RadImageButton2"), Telerik.Web.UI.RadImageButton)
-                Dim btnDown = CType(item.FindControl("RadImageButton3"), Telerik.Web.UI.RadImageButton)
+                Dim btnUp = CType(item.FindControl("OrdreHaut"), Telerik.Web.UI.RadImageButton)
+                Dim btnDown = CType(item.FindControl("OrdreBas"), Telerik.Web.UI.RadImageButton)
 
                 If btnDel IsNot Nothing Then btnDel.Visible = False
                 If btnUp IsNot Nothing Then btnUp.Visible = False

@@ -59,6 +59,51 @@ Partial Public Class wbfInvoiceEdit
     Protected WithEvents pnlMain As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''litRubrique control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litTitre control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''lblEtat control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblEtat As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''pnlVerrou control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlVerrou As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litVerrou control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litVerrou As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''lblPostedBadge control.
     '''</summary>
     '''<remarks>

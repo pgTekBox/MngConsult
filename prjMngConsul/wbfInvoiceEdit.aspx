@@ -509,8 +509,12 @@
          
      
     </style>
+    <%-- Signature « Portail du client » (maquette Main.dc.html, fenêtre Facture) : couche de présentation --%>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
+    <link rel="stylesheet" href="css/facture-60s.css?v=2026102101" />
 </head>
-<body>
+<body class="f60">
     <form id="form1" runat="server">
         <telerik:RadScriptManager
             ID="RadScriptManager1"
@@ -558,6 +562,15 @@
 
         <asp:Panel ID="pnlMain" runat="server" CssClass="rw-page">
 
+            <%-- En-tête : rubrique, titre et état (remplis dans PreRender) --%>
+            <div class="f60-tete">
+                <div class="f60-tete-t">
+                    <div class="f60-rub"><asp:Literal ID="litRubrique" runat="server" /></div>
+                    <h2><asp:Literal ID="litTitre" runat="server" /></h2>
+                </div>
+                <asp:Label ID="lblEtat" runat="server" CssClass="f60-etat" />
+            </div>
+
            
 
             <div class="content">
@@ -569,6 +582,8 @@
                         <asp:Literal ID="litLblDocNumber" runat="server" />
                         <asp:Label ID="lblDocNumber" runat="server" CssClass="doc-number-value" />
                     </asp:Panel>
+                    <asp:Panel ID="pnlVerrou" runat="server" CssClass="f60-verrou" Visible="false"><asp:Literal ID="litVerrou" runat="server" /></asp:Panel>
+
                     <div class="card">
                         <div class="card-body">
 
@@ -736,12 +751,31 @@
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </div>
+
+                            <%-- Ajouter une ligne (sous les lignes, comme la maquette) --%>
+                            <div class="fab-addline">
+                                <telerik:RadImageButton ID="btnAddLine"
+                                    runat="server"
+                                    Image-Url="~/Images/rondplus45.png"
+                                    Width="56px"
+                                    Height="56px"
+                                    ToolTip="Ajouter une ligne">
+                                </telerik:RadImageButton>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="footerbar">
+                <div class="f60-actions">
+                    <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked" CssClass="f60-primaire" Text="Enregistrer" />
+
+                    <%-- Envoyer la facture au client par courriel (PDF + lien Square optionnel) --%>
+                    <asp:Button ID="btnSendEmail" runat="server" CssClass="btn-send-email"
+                        CausesValidation="false" Text="Envoyer au client"
+                        OnClientClick="openSendEmailDialog(); return false;" />
+                </div>
                 <div class="totals">
                     <div class="tot">
                         <asp:Label ID="lblCapSubTotal" runat="server" Text="Sous-total" />
@@ -771,22 +805,7 @@
                 </div>
             </div>
 
-            <div class="fab-addline">
-                <telerik:RadImageButton ID="btnAddLine"
-                    runat="server"
-                    Image-Url="~/Images/rondplus45.png"
-                    Width="56px"
-                    Height="56px"
-                    ToolTip="Ajouter une ligne">
-                </telerik:RadImageButton>
-            </div>
 
-            <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked"  BackColor="lightgrey" Text="Enrgistrer" />
-
-            <%-- Envoyer la facture au client par courriel (PDF + lien Square optionnel) --%>
-            <asp:Button ID="btnSendEmail" runat="server" CssClass="btn-send-email"
-                CausesValidation="false" Text="Envoyer au client"
-                OnClientClick="openSendEmailDialog(); return false;" />
 
             <%-- Section overlay des Produits --%>
             <asp:HiddenField ID="hidSelectedProductId" runat="server" />
