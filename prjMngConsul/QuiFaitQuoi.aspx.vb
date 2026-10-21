@@ -6,12 +6,16 @@ Imports System.Web.Script.Serialization
 ''' <summary>
 ''' « Qui fait quoi » : la répartition des actions entre l'entreprise, son cabinet
 ''' et 60secondes (modèle 60secondes-qui-fait-quoi.html). Affichée dans l'onglet
-''' « Qui fait quoi » de la fenêtre Mon cabinet comptable.
+''' « Qui fait quoi » de l'écran Mon cabinet comptable.
+'''
+''' Chaque action est un paramètre de compagnie (T326, catégorie QUIFAITQUOI) :
+''' ShortName « QFQ:<id> », sVal = moi | cabinet | moi+cabinet ; la valeur par
+''' défaut (compagnie modèle) est la proposition de 60.
 '''
 '''   GET  : la page, avec son contexte (window.QFQ_CONTEXTE) : nom de l'entreprise,
-'''          cabinet choisi (T323MonCabinet), choix enregistrés, lecture seule.
-'''   POST : (JSON, même origine, administrateurs seulement) enregistre les choix
-'''          dans le paramètre de compagnie QFQ_CHOIX (s0150 / s0151).
+'''          cabinet choisi (T323MonCabinet), choix (paramètres QFQ:*), lecture seule.
+'''   POST : (JSON, même origine, administrateurs seulement) met à jour les
+'''          paramètres QFQ:* des actions modifiées (s0150 / s0151).
 '''
 ''' Profil et métier : paramètres PROFIL et METIER de Paramètres › Entreprise. S'ils
 ''' manquent, la page invite à les choisir.
@@ -21,8 +25,7 @@ Public Class QuiFaitQuoi
 
 
     Private Const Categorie As String = "QUIFAITQUOI"
-    Private Const Cle As String = "QFQ_CHOIX"
-    Private Const TailleMax As Integer = 8000      ' T101ParamValues.sVal
+    Private Const Prefixe As String = "QFQ:"
 
     Protected ContexteJson As String = "null"
 
@@ -42,13 +45,13 @@ Public Class QuiFaitQuoi
         End If
 
         Dim js As New JavaScriptSerializer()
-        Dim param As DataRow = LireParam()
+        Dim params = LireParams()
         Dim ctx As New Dictionary(Of String, Object) From {
             {"entreprise", CompanyName},
             {"profil", ParamEntreprise("PROFIL")},
             {"metier", ParamEntreprise("METIER")},
             {"cabinet", LireCabinet(js)},
-            {"choix", ChoixEnregistres(js, param)},
+            {"choix", ChoixEnregistres(params)},
             {"urlEnregistrer", ResolveUrl("~/QuiFaitQuoi")},
             {"lectureSeule", Not EstAdmin()}
         }
@@ -60,19 +63,32 @@ Public Class QuiFaitQuoi
     '  Lecture
     ' ---------------------------------------------------------------------
 
-    ''' <summary>Le paramètre QFQ_CHOIX de la compagnie (s0150 le crée au besoin à partir du modèle).</summary>
-    Private Function LireParam() As DataRow
+    ''' <summary>
+    ''' Les paramètres QFQ:* de la compagnie : id de l'action → (ParamId, valeur).
+    ''' s0150 crée au besoin ceux qui manquent, avec la valeur par défaut du modèle.
+    ''' </summary>
+    Private Function LireParams() As Dictionary(Of String, KeyValuePair(Of Integer, String))
+        Dim res As New Dictionary(Of String, KeyValuePair(Of Integer, String))(StringComparer.Ordinal)
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@Categorie", Categorie))
         Dim ds As DataSet = ExecuteSQLds("s0150GetParamsForCompany", p)
-        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
+        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return res
         For Each r As DataRow In ds.Tables(0).Rows
-            If String.Equals(Convert.ToString(r("ShortName")), Cle, StringComparison.OrdinalIgnoreCase) Then Return r
+            Dim cle As String = Convert.ToString(r("ShortName"))
+            If Not cle.StartsWith(Prefixe, StringComparison.Ordinal) Then Continue For
+            res(cle.Substring(Prefixe.Length)) = New KeyValuePair(Of Integer, String)(
+                Convert.ToInt32(r("ParamId")), If(IsDBNull(r("sVal")), "", Convert.ToString(r("sVal"))))
         Next
-        Return Nothing
+        Return res
     End Function
 
+    ''' <summary>moi | cabinet | moi+cabinet (au moins un responsable).</summary>
+    Private Shared Function Valeur(moi As Boolean, cab As Boolean) As String
+        If moi AndAlso cab Then Return "moi+cabinet"
+        If cab Then Return "cabinet"
+        Return "moi"
+    End Function
     ''' <summary>Valeur texte d'un paramètre de Paramètres › Entreprise (Nothing si vide).</summary>
     Private _entreprise As DataTable
     Private Function ParamEntreprise(cle As String) As String
@@ -92,24 +108,17 @@ Public Class QuiFaitQuoi
         Return Nothing
     End Function
 
-    ''' <summary>Les choix enregistrés, au format attendu par la page : [{ id, moi, cabinet }].</summary>
-    Private Shared Function ChoixEnregistres(js As JavaScriptSerializer, param As DataRow) As List(Of Object)
+    ''' <summary>Les choix, au format attendu par la page : [{ id, moi, cabinet }].</summary>
+    Private Shared Function ChoixEnregistres(params As Dictionary(Of String, KeyValuePair(Of Integer, String))) As List(Of Object)
         Dim liste As New List(Of Object)
-        If param Is Nothing OrElse IsDBNull(param("sVal")) Then Return liste
-        Try
-            Dim doc = js.Deserialize(Of Dictionary(Of String, Object))(Convert.ToString(param("sVal")))
-            Dim c = TryCast(If(doc IsNot Nothing AndAlso doc.ContainsKey("c"), doc("c"), Nothing), Dictionary(Of String, Object))
-            If c Is Nothing Then Return liste
-            For Each kv In c
-                Dim v As String = Convert.ToString(kv.Value)
-                liste.Add(New Dictionary(Of String, Object) From {{"id", kv.Key}, {"moi", v.Contains("m")}, {"cabinet", v.Contains("c")}})
-            Next
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("QuiFaitQuoi (lecture) : " & ex.Message)
-        End Try
+        For Each kv In params
+            Dim v As String = kv.Value.Value.ToLowerInvariant()
+            Dim moi As Boolean = v.Contains("moi"), cab As Boolean = v.Contains("cabinet")
+            If Not moi AndAlso Not cab Then Continue For     ' valeur vide ou inconnue : la page part de la proposition de 60
+            liste.Add(New Dictionary(Of String, Object) From {{"id", kv.Key}, {"moi", moi}, {"cabinet", cab}})
+        Next
         Return liste
     End Function
-
     ''' <summary>Le cabinet choisi dans Mon cabinet comptable, ou Nothing s'il n'y en a pas.</summary>
     Private Function LireCabinet(js As JavaScriptSerializer) As Object
         Try
@@ -195,43 +204,35 @@ Public Class QuiFaitQuoi
             Return
         End If
 
-        ' Forme compacte : seules les actions où l'entreprise ou le cabinet a un rôle (pas celles de 60, ni Phase 2 / Hors 60secondes).
-        Dim c As New SortedDictionary(Of String, String)(StringComparer.Ordinal)
+        ' Sans cabinet, la page impose « moi » partout : rien de choisi, on ne touche pas
+        ' aux valeurs enregistrées (elles reviennent quand un cabinet est choisi).
+        If doc.ContainsKey("cabinet") AndAlso String.Equals(Convert.ToString(doc("cabinet")), "aucun", StringComparison.OrdinalIgnoreCase) Then
+            RepondreJson(200, New With {.ok = True, .nb = 0})
+            Return
+        End If
+
+        ' Une mise à jour par action dont la valeur change (actions de la compagnie seulement :
+        ' un id inconnu des paramètres QFQ:* est ignoré).
+        Dim params = LireParams()
+        Dim nb As Integer = 0
         For Each item In activites
             Dim a = TryCast(item, Dictionary(Of String, Object))
             If a Is Nothing OrElse Not a.ContainsKey("id") Then Continue For
             Dim id As String = Convert.ToString(a("id"))
-            If String.IsNullOrWhiteSpace(id) OrElse id.Length > 40 Then Continue For
+            If Not params.ContainsKey(id) Then Continue For
             Dim moi As Boolean = a.ContainsKey("moi") AndAlso Convert.ToBoolean(a("moi"))
             Dim cab As Boolean = a.ContainsKey("cabinet") AndAlso Convert.ToBoolean(a("cabinet"))
-            If Not moi AndAlso Not cab Then Continue For
-            c(id) = If(moi, "m", "") & If(cab, "c", "")
+            If Not moi AndAlso Not cab Then Continue For      ' action de 60, Phase 2, Hors 60secondes
+            Dim v As String = Valeur(moi, cab)
+            If String.Equals(params(id).Value, v, StringComparison.OrdinalIgnoreCase) Then Continue For
+
+            Dim p As New Collection
+            p.Add(New SqlParameter("@ParamId", params(id).Key))
+            p.Add(New SqlParameter("@sVal", SqlDbType.VarChar, 8000) With {.Value = v})
+            ExecuteSQL("s0151UpdateParamValue", p)
+            nb += 1
         Next
-
-        Dim valeur As String = js.Serialize(New Dictionary(Of String, Object) From {
-            {"v", 1},
-            {"profil", If(doc.ContainsKey("profil"), Convert.ToString(doc("profil")), "")},
-            {"metier", If(doc.ContainsKey("metier"), Convert.ToString(doc("metier")), "")},
-            {"c", c}
-        })
-        ' sVal est un VARCHAR : le texte doit tenir dans 8000 octets, sans caractère hors Windows-1252.
-        If Encoding.GetEncoding(1252).GetByteCount(valeur) > TailleMax Then
-            RepondreJson(413, New With {.erreur = "Trop de choix à enregistrer."})
-            Return
-        End If
-
-        Dim param As DataRow = LireParam()
-        If param Is Nothing Then
-            RepondreJson(500, New With {.erreur = "Paramètre QFQ_CHOIX introuvable."})
-            Return
-        End If
-
-        Dim p As New Collection
-        p.Add(New SqlParameter("@ParamId", Convert.ToInt32(param("ParamId"))))
-        p.Add(New SqlParameter("@sVal", SqlDbType.VarChar, TailleMax) With {.Value = valeur})
-        ExecuteSQL("s0151UpdateParamValue", p)
-
-        RepondreJson(200, New With {.ok = True, .nb = c.Count})
+        RepondreJson(200, New With {.ok = True, .nb = nb})
     End Sub
 
     Private Sub RepondreJson(statut As Integer, contenu As Object)
