@@ -56,7 +56,7 @@ function blocDe(a){ var d=a.d.charAt(0); if(a.c==="S") return DOM2BLOC[d]; if(d=
 var NIV = {A:"Fait par 60", B:"À approuver", C:"À faire", D:"À décider"};
 var NOM_PROFIL = {"TA":"Travailleur autonome","Cie 0":"Société sans employé","Cie 1-4":"Société avec employés"};
 
-var etat = { profil:null, metier:null, entreprise:"", cabinet:"aucun", cabNom:"", urlEnregistrer:null, resp:{}, ouvert:null, vus:{}, sauve:"{}" };
+var etat = { profil:null, metier:null, entreprise:"", cabinet:"aucun", cabNom:"", urlEnregistrer:null, resp:{}, ouvert:null, vus:{}, sauve:"{}", tout:false };
 function normProfil(p){
   var s=String(p||"").toLowerCase().replace(/\s|_|-/g,"");
   if(s==="ta"||s==="travailleurautonome") return "TA";
@@ -93,7 +93,8 @@ function regle(a){
   if (a.e==="Phase 2") return "p2";
   if (a.e==="Hors 60secondes") return "hors";
   if (a.n==="A") return "60";
-  if (etat.cabinet==="aucun") return "moi";
+  /* ERP : ce sont des paramètres de la compagnie, réglables en tout temps, même sans cabinet
+     (ils s'appliquent dès qu'un cabinet est choisi). */
   return "libre";
 }
 /* Proposition de 60 : {moi, cab} */
@@ -114,8 +115,13 @@ function basculer(a,qui){
   if(!c.moi && !c.cab) return;           /* au moins un responsable */
   etat.resp[a.id]=c;
 }
+/* ERP : sans profil ou métier reconnu, ou sur demande (« Toutes les actions »), tous les
+   paramètres « Qui fait quoi » : les actions où l'entreprise ou son cabinet a un rôle. */
+function tousParametres(){
+  return DATA.A.filter(function(a){ return !/^Choisir qui/.test(a.a) && a.n!=="A" && a.e!=="Phase 2" && a.e!=="Hors 60secondes"; });
+}
 function activites(){
-  var c=combo(); if(!c) return [];
+  var c=combo(); if(!c || etat.tout) return tousParametres();
   var T={"Tous":1}; T[c.p]=1; T[c.g]=1; var exo=/^Exonéré/.test(c.t||"");
   return DATA.A.filter(function(a){
     if(!T[a.p]) return false;
@@ -150,27 +156,29 @@ function dessiner(){
   $("ctxProfil").textContent = NOM_PROFIL[etat.profil] || (etat.profil||"Profil inconnu");
   $("ctxMetier").textContent = etat.metier || "Métier inconnu";
   $("cabNom").textContent = etat.cabinet==="aucun" ? "Aucun cabinet" : etat.cabNom;
+  /* ERP : profil et métier viennent de Paramètres › Entreprise ; sans eux, tous les paramètres s'affichent */
+  var tous = !c || etat.tout, bandeau='';
   if(!c){
-    /* ERP : profil et métier viennent de Paramètres › Entreprise */
     var lienParam=' <a href="wbfSetting" target="_top">Ouvrir Paramètres › Entreprise</a>';
     var msg = (!etat.profil || !etat.metier)
-      ? 'Choisissez d\'abord le profil et le métier de votre entreprise dans Paramètres › Entreprise : 60 s\'en sert pour vous proposer les actions qui vous concernent.'+lienParam
-      : 'Le métier « '+esc(etat.metier)+' » n\'est pas prévu pour le profil « '+esc(NOM_PROFIL[etat.profil]||etat.profil)+' ». Vérifiez le profil et le métier dans Paramètres › Entreprise.'+lienParam;
-    $("liste").innerHTML='<div class="empty">'+msg+'</div>'; $("resStats").innerHTML=""; $("resTot").textContent="—"; $("btnSave").disabled=true; return;
+      ? 'Vous voyez tous les paramètres « Qui fait quoi » ('+liste.length+' actions). Choisissez le profil et le métier de votre entreprise pour ne garder que ceux qui vous concernent.'
+      : 'Le métier « '+esc(etat.metier)+' » n\'est pas prévu pour le profil « '+esc(NOM_PROFIL[etat.profil]||etat.profil)+' » : vous voyez tous les paramètres « Qui fait quoi » ('+liste.length+' actions). Vérifiez le profil et le métier.';
+    bandeau='<div class="qfq-bandeau">'+msg+lienParam+'</div>';
   }
   liste.forEach(function(a){ var s=statut(a); if(n[s]!==undefined) n[s]++; });
   var cel=function(cls,nv,lab){ return '<span class="st '+cls+(nv?'':' zero')+'"><b>'+nv+'</b><span>'+lab+'</span></span>'; };
   $("resStats").innerHTML = cel("st-moi",n.moi,"Moi")+cel("st-par",n.par,n.par>1?"Partagées":"Partagée")+cel("st-cab",n.cab,"Cabinet")+cel("st-60",n["60"],"Par 60");
   var nb=BLOCS.filter(function(b){return liste.some(function(a){return blocDe(a)===b.k;});});
   var revus=nb.filter(function(b){return etat.vus[b.k];}).length;
-  $("resTot").textContent = liste.length+" actions · "+revus+" de "+nb.length+" blocs revus";
+  $("resTot").innerHTML = liste.length+" actions · "+revus+" de "+nb.length+" blocs revus"+
+    (c ? ' · <button type="button" class="voir-tout" data-tout>'+(etat.tout ? 'Mon profil et mon métier seulement' : 'Toutes les actions ('+tousParametres().length+')')+'</button>' : '');
   var diff=0, avant=JSON.parse(etat.sauve);
   Object.keys(etat.resp).forEach(function(k){ if(JSON.stringify(etat.resp[k])!==JSON.stringify(avant[k])) diff++; });
   Object.keys(avant).forEach(function(k){ if(!etat.resp[k]) diff++; });
   $("btnSave").disabled = diff===0 || etat.lecture;
   $("btnSave").textContent = etat.lecture ? "Consultation seulement" : diff ? "Enregistrer ("+diff+")" : "Enregistré";
   $("btnSave").title = etat.lecture ? "Seul un administrateur de votre compagnie peut modifier la répartition." : "";
-  $("cabEtat").innerHTML = etat.cabinet==="aucun" ? '<span style="color:#44536E">Tout vous revient. Invitez votre cabinet pour partager.</span>'
+  $("cabEtat").innerHTML = etat.cabinet==="aucun" ? '<span style="color:#44536E">Aucun cabinet choisi : ces réglages s\'appliqueront dès que vous en choisirez un.</span>'
     : etat.cabinet==="certifie" ? '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Cabinet certifié 60secondes'
     : '<span style="color:#7A5200">Cabinet invité, pas encore certifié</span>';
   var G={}; liste.forEach(function(a){ var k=blocDe(a); (G[k]=G[k]||[]).push(a); });
@@ -184,7 +192,7 @@ function dessiner(){
     var m={"60":0,moi:0,par:0,cab:0}; g.forEach(function(a){ var s=statut(a); if(m[s]!==undefined) m[s]++; });
     var ouvert=etat.ouvert===b.k;
     var libres=hum.filter(function(a){ return regle(a)==="libre"; });
-    var desc=b.met ? (c.m+" · ordres, permis, organismes et règles propres") : b.d;
+    var desc=b.met ? (tous ? "Tous les métiers · ordres, permis, organismes et règles propres à chacun" : c.m+" · ordres, permis, organismes et règles propres") : b.d;
     var tot=g.length, pct=function(x){ return (100*x/tot).toFixed(1)+"%"; };
     var cell=function(cls,nv,lab){ return '<span class="st '+cls+(nv?'':' zero')+'"><b>'+nv+'</b><span>'+lab+'</span></span>'; };
     html+='<section class="bloc'+(ouvert?' ouvert':'')+'" id="s-'+b.k+'"><button class="bloc-btn" data-k="'+b.k+'" aria-expanded="'+ouvert+'" aria-controls="b-'+b.k+'">'+
@@ -200,7 +208,10 @@ function dessiner(){
       var tMoi=libres.every(function(a){return choixDe(a).moi;}), tCab=libres.every(function(a){return choixDe(a).cab;});
       html+='<div class="tout"><span class="tout-l">Tout le bloc</span>'+duo('data-bloc="'+b.k+'"', tMoi, tCab, false, false, "Tout le bloc "+b.t)+'</div>';
     }
-    hum.forEach(function(a){ html+='<div class="li"><span class="nom">'+esc(a.a)+'<span class="nv">'+(NIV[a.n]||"")+'</span>'+noteDe(a)+'</span>'+cellule(a)+'</div>'; });
+    /* ERP : en vue « tous les paramètres », les actions propres à une famille ou à un métier sont regroupées sous leur nom */
+    var dern='';
+    if(tous) hum.sort(function(x,y){ var kx=x.c==="S"?"0":"1|"+x.f+"|"+x.m, ky=y.c==="S"?"0":"1|"+y.f+"|"+y.m; return kx.localeCompare(ky,"fr"); });
+    hum.forEach(function(a){ if(tous && a.c!=="S"){ var tg=a.f+(a.m && a.m!=="Tous de la famille" && a.m!=="—" ? " · "+a.m : " · toute la famille"); if(tg!==dern){ html+='<div class="sous">'+esc(tg)+'</div>'; dern=tg; } } html+='<div class="li"><span class="nom">'+esc(a.a)+'<span class="nv">'+(NIV[a.n]||"")+'</span>'+noteDe(a)+'</span>'+cellule(a)+'</div>'; });
     if(aut.length){
       html+='<div class="sous">60 s\'en occupe seul · '+aut.length+'</div>';
       aut.forEach(function(a){ html+='<div class="li l60"><span class="nom">'+esc(a.a)+'</span>'+cellule(a)+'</div>'; });
@@ -210,7 +221,7 @@ function dessiner(){
       '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="'+(nx?'M9 6l6 6-6 6':'M5 12l5 5 9-10')+'"/></svg></button></div>';
     html+='</div></section>';
   });
-  $("liste").innerHTML = html || '<div class="empty">Aucune action.</div>';
+  $("liste").innerHTML = bandeau + (html || '<div class="empty">Aucune action.</div>');
 }
 
 /* Interactions */
@@ -234,6 +245,7 @@ $("liste").addEventListener("click",function(e){
   }
   var y=window.scrollY; dessiner(); window.scrollTo(0,y);
 });
+$("resTot").addEventListener("click",function(e){ if(e.target.closest("[data-tout]")){ etat.tout=!etat.tout; etat.ouvert=null; dessiner(); } });
 function ouvrir(k){
   if(etat.ouvert) etat.vus[etat.ouvert]=true;
   etat.ouvert=k; if(k) etat.vus[k]=true;

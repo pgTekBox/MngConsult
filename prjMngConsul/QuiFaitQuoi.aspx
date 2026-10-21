@@ -19,6 +19,10 @@
 .resume { top: 8px; }
 .bloc { scroll-margin-top: 150px; }
 .page { padding-top: 12px; }
+/* Tous les paramètres : bandeau d'explication et bascule « Toutes les actions » */
+.qfq-bandeau { margin: 0 0 14px; padding: 14px 18px; border-radius: 18px; background: #E3EBF7; color: #143A73; font-weight: 700; font-size: 14px; line-height: 1.5; }
+.qfq-bandeau a { color: #1B4F9C; font-weight: 800; }
+.voir-tout { border: 0; background: none; padding: 0; font: inherit; font-weight: 800; color: #1B4F9C; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -79,6 +83,6 @@
 <div class="toast" id="toast" role="status" hidden></div>
 <script>window.QFQ_CONTEXTE = <%= ContexteJson %>;</script>
 <script src="js/qui-fait-quoi-data.js?v=2026102001"></script>
-<script src="js/qui-fait-quoi.js?v=2026102003"></script>
+<script src="js/qui-fait-quoi.js?v=2026102104"></script>
 </body>
 </html>

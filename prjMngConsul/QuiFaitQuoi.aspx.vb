@@ -204,12 +204,6 @@ Public Class QuiFaitQuoi
             Return
         End If
 
-        ' Sans cabinet, la page impose « moi » partout : rien de choisi, on ne touche pas
-        ' aux valeurs enregistrées (elles reviennent quand un cabinet est choisi).
-        If doc.ContainsKey("cabinet") AndAlso String.Equals(Convert.ToString(doc("cabinet")), "aucun", StringComparison.OrdinalIgnoreCase) Then
-            RepondreJson(200, New With {.ok = True, .nb = 0})
-            Return
-        End If
 
         ' Une mise à jour par action dont la valeur change (actions de la compagnie seulement :
         ' un id inconnu des paramètres QFQ:* est ignoré).
