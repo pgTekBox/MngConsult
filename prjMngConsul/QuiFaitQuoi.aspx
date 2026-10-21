@@ -7,8 +7,8 @@
 <title>Qui fait quoi — 60secondes</title>
 <%-- Page « Qui fait quoi » (modèle 60secondes-qui-fait-quoi.html, inventaire v5.2), affichée dans
      l'onglet « Qui fait quoi » de la fenêtre Mon cabinet comptable (js/cabinet-60s.js, dans un cadre).
-     Le contexte (entreprise, cabinet choisi) vient du serveur. Profil et métier : Paramètres › Entreprise (PROFIL, METIER). Les choix sont enregistrés dans le
-     paramètre de compagnie QFQ_CHOIX (POST vers cette page, administrateurs seulement). --%>
+     Le contexte (entreprise, cabinet choisi) vient du serveur. Profil et métier : Paramètres › Entreprise (PROFIL, METIER). Chaque choix est un paramètre de
+     compagnie QFQ:<id> (T326 ; POST vers cette page, administrateurs seulement). --%>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/qui-fait-quoi.css?v=2026102001">
