@@ -182,7 +182,7 @@
     var it = cM.get_selectedItem && cM.get_selectedItem(), prof = cP.get_value && cP.get_value();
     var liste = it && it.get_attributes && it.get_attributes().getAttribute('data-profils');
     if (!it || !it.get_value() || !prof || !liste) { note('METIER', NOTES.METIER); return; }
-    if (liste.split('|').indexOf(prof) < 0) note('METIER', 'Ce métier n\'est pas prévu pour le profil choisi : « Qui fait quoi » ne pourra pas proposer vos actions.', 's60-warn');
+    if (liste.split('|').indexOf(prof) < 0) note('METIER', 'Ce métier n\'est pas prévu pour le profil choisi : « Qui fait quoi » affichera tous ses paramètres au lieu de ceux de votre métier.', 's60-warn');
     else note('METIER', NOTES.METIER, 's60-ok');
   }
   function majCalculs() { exempleTaxes(); numeroFacture(); etatBancaire(); etatComptable(); etatMetier(); }
