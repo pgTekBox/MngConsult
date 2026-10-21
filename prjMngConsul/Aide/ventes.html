@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -174,7 +174,7 @@
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>+ Nouvelle facture</kbd> (pastille bleue, en haut à droite) : ouvre la fenêtre « Ajouter une facture » (voir <a href="#fr-edition-facture">Édition d’une facture</a>).</li>
+                    <li><kbd>+ Nouvelle facture</kbd> (pastille bleue, en haut à droite) : ouvre la fenêtre « Nouvelle facture » (voir <a href="#fr-edition-facture">Édition d’une facture</a>).</li>
                     <li><kbd>Importer de Square</kbd> (infobulle « Rapatrier les factures et paiements Square comme factures clients ») : les factures Square deviennent des factures clients avec leur en-tête, leurs lignes et les taxes TPS/TVQ ; le client est créé au besoin. Les paiements Square sont rapprochés d’une facture existante ; s’il n’y en a pas, une facture déjà payée est créée avec une seule ligne « Vente au terminal (Square) », sans taxes.</li>
                     <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>À recevoir</strong> (le reste à payer des factures ouvertes, partielles ou en retard, et leur nombre), <strong>En retard</strong> (le reste des factures en retard ; point rouge s’il y en a, vert sinon), <strong>Brouillons</strong> (à comptabiliser) et <strong>Payées</strong> (le total des factures payées). Un clic pose le filtre correspondant sur la liste — le cadre de l’indicateur passe en bleu — et un second clic l’enlève.</li>
                     <li>Les <strong>puces de filtre</strong> de la carte « recherche » : <strong>État</strong> — Toutes, Brouillons, Comptabilisées ; <strong>Paiement</strong> — Tous, En retard, Partielle, Ouverte, Payée, En cours (brouillon). Chaque puce porte son nombre ; une puce cliquée s’allume (fond bleu marine) et se combine aux autres de son groupe ; « Toutes » et « Tous » enlèvent le filtre du groupe.</li>
@@ -194,7 +194,7 @@
                         <tr><td>Échéance</td><td>La date d’échéance en gras ; en dessous, en petit, la date d’émission (« émise 16 sept. 2026 »).</td></tr>
                         <tr><td>Client</td><td>Nom, adresse et courriel. Si l’application mobile a envoyé des données, des badges s’ajoutent : un appareil photo avec un nombre (« {n} photo(s) prise(s) sur place — cliquer pour voir », ouvre la fenêtre « Photos — facture {n°} ») et une épingle (« Lieu d’intervention — ouvrir la carte », ouvre Google Maps).</td></tr>
                         <tr><td>Paiement</td><td>Une pastille colorée : En retard (rouge), Partielle (ambre), Ouverte (bleu), Payée (vert), En cours (gris : brouillon).</td></tr>
-                        <tr><td>Reste</td><td>Le solde encore dû, en rouge quand la facture est en retard ; en dessous, en petit, ce qui est déjà reçu (« reçu 919,80 �) s’il y a eu un encaissement.</td></tr>
+                        <tr><td>Reste</td><td>Le solde encore dû, en rouge quand la facture est en retard ; en dessous, en petit, ce qui est déjà reçu (« reçu 919,80 ») s’il y a eu un encaissement.</td></tr>
                         <tr><td>Total</td><td>Total de la facture, taxes incluses.</td></tr>
                         <tr><td>État</td><td>Brouillon (gris) ou Comptabilisé (vert, avec un cadenas : la facture ne se modifie plus).</td></tr>
                         <tr><td>Action</td><td>Les boutons décrits ci-dessous.</td></tr>
@@ -293,22 +293,28 @@
             <section id="fr-edition-facture">
                 <h2>Édition d’une facture</h2>
                 <h3>But</h3>
-                <p>La fenêtre de facture s’ouvre depuis <span class="chemin">Ventes › Factures clients</span> (<kbd>Ajouter une facture</kbd> ou <kbd>Modifier</kbd>). On y saisit le client, les dates, les lignes et on y voit les totaux calculés avec TPS et TVQ. On peut aussi enregistrer, comptabiliser dans la foulée et envoyer la facture au client.</p>
+                <p>La fenêtre de facture s’ouvre depuis <span class="chemin">Ventes › Factures clients</span> (<kbd>+ Nouvelle facture</kbd> ou clic sur une facture de la liste). On y saisit le client, les dates, les lignes et on y voit les totaux calculés avec TPS et TVQ. On peut aussi enregistrer, comptabiliser dans la foulée et envoyer la facture au client.</p>
 
-                <h3>Champs de l’en-tête</h3>
+                <h3>En-tête de la fenêtre</h3>
+                <ul>
+                    <li>Au-dessus du titre, l’étiquette de section « Ventes · Facture ».</li>
+                    <li>Titre : « Nouvelle facture » pour une facture pas encore enregistrée ; sinon « Facture » suivi de son numéro (numéro de brouillon tant qu’elle n’est pas comptabilisée, numéro officiel une fois comptabilisée).</li>
+                    <li>À droite, une pastille de statut : « Nouvelle » (pas encore enregistrée), « Brouillon » (enregistrée, non comptabilisée) ou « Comptabilisée » (verte, avec un cadenas).</li>
+                    <li>Quand la facture est comptabilisée, un bandeau vert « Facture comptabilisée : elle est en lecture seule. » s’affiche sous l’en-tête : les champs sont verrouillés, les boutons des lignes (supprimer, monter, descendre) et <kbd>Ajouter une ligne</kbd> sont masqués, et <kbd>Enregistrer</kbd> est grisé.</li>
+                </ul>
+
+                <h3>Carte « Client »</h3>
                 <table>
                     <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
                     <tbody>
-                        <tr><td>Badge « Comptabilisé 🔒 »</td><td>—</td><td>Affiché quand la facture est comptabilisée ; tout devient en lecture seule.</td></tr>
-                        <tr><td>Numéro</td><td>—</td><td>Visible dès le premier enregistrement. Provisoire tant que la facture est un brouillon.</td></tr>
-                        <tr><td>Client</td><td>Non (mais indispensable)</td><td>Sélecteur « Rechercher un client… » présentant des cartes avec le nom et l’adresse de facturation. Sur une nouvelle facture, on lit « Sélectionner un client ».</td></tr>
+                        <tr><td>Client</td><td>Non (mais indispensable)</td><td>Sélecteur « Rechercher un client… » présentant des cartes avec le nom et l’adresse de facturation. Sur une nouvelle facture, on lit « Sélectionner un client ». L’adresse du client choisi s’affiche dans la carte.</td></tr>
                         <tr><td>Date de facture</td><td>Non</td><td>Calendrier. Si vide à la comptabilisation, la date du jour est utilisée.</td></tr>
                         <tr><td>Date d’échéance</td><td>Non</td><td>Calendrier. Si vide à la comptabilisation, calculée à partir du délai de paiement du client.</td></tr>
                         <tr><td>Comptabilisé</td><td>Non</td><td>Case à cocher. Si elle est cochée quand vous cliquez sur <kbd>Enregistrer</kbd>, la facture est comptabilisée dans la foulée.</td></tr>
                     </tbody>
                 </table>
 
-                <h3>Lignes</h3>
+                <h3>Carte « Lignes »</h3>
                 <p>Le tableau des lignes comporte les colonnes Produit, Compte, Qté, Prix unitaire, Total, Tx et Ordre.</p>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
@@ -318,19 +324,22 @@
                         <tr><td>Qté</td><td>Chiffres et point seulement (la virgule est convertie), 2 décimales au maximum. Le signe moins est retiré : impossible de saisir une ligne négative.</td></tr>
                         <tr><td>Prix unitaire</td><td>Mêmes règles que la quantité.</td></tr>
                         <tr><td>Total</td><td>Quantité × prix unitaire, calculé automatiquement.</td></tr>
-                        <tr><td>Tx</td><td>Statut de taxe de la ligne. Seul « taxable » entre dans la base de calcul de la TPS et de la TVQ.</td></tr>
-                        <tr><td>Ordre</td><td>Flèches haut et bas pour réordonner les lignes.</td></tr>
+                        <tr><td>Tx</td><td>Pastille du statut de taxe de la ligne. Seul « taxable » entre dans la base de calcul de la TPS et de la TVQ.</td></tr>
+                        <tr><td>Ordre</td><td>Boutons ronds à flèche haut et bas pour réordonner les lignes.</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li>Corbeille : supprime la ligne après la question « Supprimer cette ligne ? ».</li>
-                    <li>Bouton rond <kbd>+</kbd> (« Ajouter une ligne ») : ajoute une ligne vide avec quantité 1 et prix 0.</li>
+                    <li>Bouton rond rouge <kbd>×</kbd> : supprime la ligne après la question « Supprimer cette ligne ? ».</li>
+                    <li>Bouton <kbd>+ Ajouter une ligne</kbd> (contour pointillé, sous les lignes) : ajoute une ligne vide avec quantité 1 et prix 0.</li>
                     <li>Listes vides : « Aucun produit trouvé. », « Aucun client trouvé. », « Aucun compte trouvé. »</li>
                     <li>Au bas de chaque sélecteur, les boutons <kbd>Ajouter des produits</kbd>, <kbd>Ajouter des clients</kbd> et <kbd>Ajouter des comptes</kbd> ne créent rien pour l’instant.</li>
                 </ul>
 
+                <h3>Barre du bas</h3>
+                <p>Une barre reste visible au bas de la fenêtre pendant le défilement : les boutons d’action à gauche (<kbd>Enregistrer</kbd> en bleu, <kbd>Envoyer au client</kbd> pour une facture déjà enregistrée) et les totaux à droite.</p>
+
                 <h3>Totaux</h3>
-                <p>Le bloc des totaux affiche « Sous-total », « TPS », « TVQ » et « Total ». La TPS est de 5 % et la TVQ de 9,975 % du sous-total <strong>taxable</strong> (somme des lignes dont le statut est « taxable »), chacune arrondie au cent.</p>
+                <p>Les totaux, à droite de la barre du bas, affichent « Sous-total », « TPS », « TVQ » et « Total » (en gras). La TPS est de 5 % et la TVQ de 9,975 % du sous-total <strong>taxable</strong> (somme des lignes dont le statut est « taxable »), chacune arrondie au cent.</p>
 
                 <h3>Boutons et actions</h3>
                 <ul>
@@ -339,9 +348,9 @@
                 </ul>
                 <p>Pour créer et comptabiliser une facture en une fois :</p>
                 <ol>
-                    <li>Cliquez sur <kbd>Ajouter une facture</kbd> dans la liste.</li>
+                    <li>Cliquez sur <kbd>+ Nouvelle facture</kbd> dans la liste.</li>
                     <li>Choisissez le client dans « Rechercher un client… ».</li>
-                    <li>Ajoutez des lignes avec <kbd>+</kbd>, choisissez le produit ou tapez la description, la quantité et le prix.</li>
+                    <li>Ajoutez des lignes avec <kbd>+ Ajouter une ligne</kbd>, choisissez le produit ou tapez la description, la quantité et le prix.</li>
                     <li>Vérifiez le statut de taxe « Tx » de chaque ligne et les totaux.</li>
                     <li>Cochez « Comptabilisé », puis cliquez sur <kbd>Enregistrer</kbd>.</li>
                 </ol>
@@ -351,7 +360,7 @@
                     <li><strong>Brouillon</strong> : facture non comptabilisée. Son numéro provisoire est « {préfixe}-{Id} », avec le préfixe « BRO » par défaut (réglable dans <span class="chemin">Administration › Paramètres › Facture</span>, champ « Préfixe de brouillon »). Les dates sont facultatives.</li>
                     <li><strong>Comptabilisation</strong> : le numéro officiel est attribué une seule fois, selon le format réglé dans les paramètres ({PREFIXE}-{AAAA}-{NUMERO} par défaut, numéro sur 4 chiffres, compteur remis à zéro chaque année si l’option est activée). Une date de facture vide devient la date du jour ; une échéance vide devient la date de facture plus le délai de paiement du client.</li>
                     <li><strong>Écriture au journal</strong> : comptes clients 1100 au débit ; revenus au crédit (le compte de la ligne, sinon 4000) ; TPS à payer 2200 ; TVQ à payer 2210. Voir <a href="comptabilite.html#fr-journaux">Comptabilité › Journaux</a>.</li>
-                    <li><strong>Facture comptabilisée</strong> : en lecture seule. Seul <kbd>Envoyer au client</kbd> reste possible.</li>
+                    <li><strong>Facture comptabilisée</strong> : en lecture seule (pastille « Comptabilisée » et bandeau vert). Seul <kbd>Envoyer au client</kbd> reste possible.</li>
                 </ul>
 
                 <h3>Messages</h3>
@@ -496,7 +505,7 @@
             <section id="fr-faq">
                 <h2>Questions fréquentes</h2>
                 <details><summary>Pourquoi ma facture porte-t-elle un numéro « BRO-… » ?</summary><p>C’est le numéro provisoire d’un brouillon. Le numéro officiel n’est attribué qu’à la comptabilisation, selon le format réglé dans <span class="chemin">Administration › Paramètres › Facture</span>. Le préfixe « BRO » est lui aussi réglable.</p></details>
-                <details><summary>Je ne peux plus modifier une facture, pourquoi ?</summary><p>Elle est comptabilisée (badge « Comptabilisé 🔒 »). Une facture comptabilisée est en lecture seule ; seul <kbd>Envoyer au client</kbd> reste possible. Pour corriger, passez par une écriture d’ajustement en <a href="comptabilite.html">Comptabilité</a>.</p></details>
+                <details><summary>Je ne peux plus modifier une facture, pourquoi ?</summary><p>Elle est comptabilisée (pastille verte « Comptabilisée » et bandeau « Facture comptabilisée : elle est en lecture seule. »). Une facture comptabilisée est en lecture seule ; seul <kbd>Envoyer au client</kbd> reste possible. Pour corriger, passez par une écriture d’ajustement en <a href="comptabilite.html">Comptabilité</a>.</p></details>
                 <details><summary>L’envoi échoue avec « Aucun courriel de facturation pour ce client. »</summary><p>Ouvrez la fiche du client, ajoutez ou modifiez une adresse de type « Facturation » et renseignez son champ « Courriel », puis cliquez sur <kbd>Enregistrer</kbd> en haut de la fiche.</p></details>
                 <details><summary>Pourquoi le bouton <kbd>Générer le lien</kbd> est-il grisé ?</summary><p>Aucun compte Square n’est connecté pour la compagnie. Connectez-le dans <span class="chemin">Administration › Processeur de paiement</span>.</p></details>
                 <details><summary>Le lien de paiement porte-t-il sur le total ou sur le solde ?</summary><p>Sur le solde restant. Après un paiement partiel, un nouveau lien réclame seulement la différence.</p></details>
@@ -684,7 +693,7 @@
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>+ Nouvelle facture</kbd> (+ New invoice, blue pill at the top right): opens the “Ajouter une facture” window (see <a href="#en-invoice-editing">Editing an invoice</a>).</li>
+                    <li><kbd>+ Nouvelle facture</kbd> (+ New invoice, blue pill at the top right): opens the “New invoice” window (see <a href="#en-invoice-editing">Editing an invoice</a>).</li>
                     <li><kbd>Importer de Square</kbd> (tooltip « Rapatrier les factures et paiements Square comme factures clients »): Square invoices become customer invoices with their header, lines and GST/QST; the customer is created if needed. Square payments are matched to an existing invoice; when none matches, a paid invoice is created with a single line “Vente au terminal (Square)”, without taxes.</li>
                     <li>The four <strong>indicators</strong> under the title: <strong>À recevoir</strong> (To receive: the balance due of open, partial and overdue invoices, and their count), <strong>En retard</strong> (Overdue: the balance of overdue invoices; red dot when there are some, green otherwise), <strong>Brouillons</strong> (Drafts, to post) and <strong>Payées</strong> (Paid: the total of paid invoices). A click applies the matching filter to the list — the indicator’s frame turns blue — and a second click removes it.</li>
                     <li>The <strong>filter chips</strong> of the “search” card: <strong>État</strong> (Status) — Toutes, Brouillons, Comptabilisées; <strong>Paiement</strong> (Payment) — Tous, En retard, Partielle, Ouverte, Payée, En cours (draft). Each chip carries its count; a clicked chip lights up (navy background) and combines with the others of its group; “Toutes” and “Tous” remove the group’s filter.</li>
@@ -803,22 +812,28 @@
             <section id="en-invoice-editing">
                 <h2>Editing an invoice</h2>
                 <h3>Purpose</h3>
-                <p>The invoice window opens from <span class="chemin">Sales › Customer invoices</span> (<kbd>Ajouter une facture</kbd> or <kbd>Modifier</kbd>). You enter the customer, the dates and the lines, and you see the totals computed with GST and QST. You can also save, post on the spot and send the invoice to the customer.</p>
+                <p>The invoice window opens from <span class="chemin">Sales › Customer invoices</span> (<kbd>+ New invoice</kbd> or a click on an invoice in the list). You enter the customer, the dates and the lines, and you see the totals computed with GST and QST. You can also save, post on the spot and send the invoice to the customer.</p>
 
-                <h3>Header fields</h3>
+                <h3>Window header</h3>
+                <ul>
+                    <li>Above the title, the section label “Sales · Invoice”.</li>
+                    <li>Title: “New invoice” for an invoice not saved yet; otherwise “Invoice” followed by its number (draft number until it is posted, official number once posted).</li>
+                    <li>On the right, a status pill: “New” (not saved yet), “Draft” (saved, not posted) or “Posted” (green, with a padlock).</li>
+                    <li>When the invoice is posted, a green banner “Posted invoice: it is read-only.” appears under the header: fields are locked, the line buttons (delete, up, down) and <kbd>Add a line</kbd> are hidden, and <kbd>Enregistrer</kbd> is greyed out.</li>
+                </ul>
+
+                <h3>“Client” card</h3>
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
-                        <tr><td>“Comptabilisé 🔒” badge</td><td>—</td><td>Shown when the invoice is posted; everything becomes read-only.</td></tr>
-                        <tr><td>Numéro (Number)</td><td>—</td><td>Visible from the first save. Provisional while the invoice is a draft.</td></tr>
-                        <tr><td>Client</td><td>No (but essential)</td><td>“Rechercher un client…” picker showing cards with the name and billing address. On a new invoice it reads « Sélectionner un client ».</td></tr>
+                        <tr><td>Client</td><td>No (but essential)</td><td>“Rechercher un client…” picker showing cards with the name and billing address. On a new invoice it reads « Sélectionner un client ». The selected customer’s address is shown in the card.</td></tr>
                         <tr><td>Date de facture (Invoice date)</td><td>No</td><td>Calendar. If empty at posting, today’s date is used.</td></tr>
                         <tr><td>Date d’échéance (Due date)</td><td>No</td><td>Calendar. If empty at posting, computed from the customer’s payment terms.</td></tr>
                         <tr><td>Comptabilisé (Posted)</td><td>No</td><td>Checkbox. If checked when you click <kbd>Enregistrer</kbd>, the invoice is posted on the spot.</td></tr>
                     </tbody>
                 </table>
 
-                <h3>Lines</h3>
+                <h3>“Lignes” card</h3>
                 <p>The line table has the columns Produit, Compte, Qté, Prix unitaire, Total, Tx and Ordre.</p>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
@@ -828,19 +843,22 @@
                         <tr><td>Qté (Qty)</td><td>Digits and a dot only (a comma is converted), 2 decimals maximum. The minus sign is removed: a negative line cannot be entered.</td></tr>
                         <tr><td>Prix unitaire (Unit price)</td><td>Same rules as the quantity.</td></tr>
                         <tr><td>Total</td><td>Quantity × unit price, computed automatically.</td></tr>
-                        <tr><td>Tx</td><td>Tax status of the line. Only “taxable” enters the GST and QST base.</td></tr>
-                        <tr><td>Ordre (Order)</td><td>Up and down arrows to reorder lines.</td></tr>
+                        <tr><td>Tx</td><td>Pill showing the tax status of the line. Only “taxable” enters the GST and QST base.</td></tr>
+                        <tr><td>Ordre (Order)</td><td>Round up and down arrow buttons to reorder lines.</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li>Trash can: deletes the line after the question « Supprimer cette ligne ? ».</li>
-                    <li>Round <kbd>+</kbd> button (« Ajouter une ligne »): adds an empty line with quantity 1 and price 0.</li>
+                    <li>Round red <kbd>×</kbd> button: deletes the line after the question « Supprimer cette ligne ? ».</li>
+                    <li><kbd>+ Add a line</kbd> button (dashed outline, under the lines): adds an empty line with quantity 1 and price 0.</li>
                     <li>Empty lists: « Aucun produit trouvé. », « Aucun client trouvé. », « Aucun compte trouvé. »</li>
                     <li>At the bottom of each picker, the <kbd>Ajouter des produits</kbd>, <kbd>Ajouter des clients</kbd> and <kbd>Ajouter des comptes</kbd> buttons do not create anything for now.</li>
                 </ul>
 
+                <h3>Bottom bar</h3>
+                <p>A bar stays visible at the bottom of the window while you scroll: the action buttons on the left (<kbd>Enregistrer</kbd> in blue, <kbd>Envoyer au client</kbd> for an invoice already saved) and the totals on the right.</p>
+
                 <h3>Totals</h3>
-                <p>The totals block shows “Sous-total”, “TPS”, “TVQ” and “Total”. GST is 5 % and QST 9.975 % of the <strong>taxable</strong> subtotal (sum of the lines whose status is “taxable”), each rounded to the cent.</p>
+                <p>The totals, on the right of the bottom bar, show “Sous-total”, “TPS”, “TVQ” and “Total” (in bold). GST is 5 % and QST 9.975 % of the <strong>taxable</strong> subtotal (sum of the lines whose status is “taxable”), each rounded to the cent.</p>
 
                 <h3>Buttons and actions</h3>
                 <ul>
@@ -849,9 +867,9 @@
                 </ul>
                 <p>To create and post an invoice in one go:</p>
                 <ol>
-                    <li>Click <kbd>Ajouter une facture</kbd> in the list.</li>
+                    <li>Click <kbd>+ New invoice</kbd> in the list.</li>
                     <li>Choose the customer in “Rechercher un client…”.</li>
-                    <li>Add lines with <kbd>+</kbd>, pick the product or type the description, quantity and price.</li>
+                    <li>Add lines with <kbd>+ Add a line</kbd>, pick the product or type the description, quantity and price.</li>
                     <li>Check the “Tx” tax status of each line and the totals.</li>
                     <li>Check “Comptabilisé”, then click <kbd>Enregistrer</kbd>.</li>
                 </ol>
@@ -861,7 +879,7 @@
                     <li><strong>Draft</strong>: an unposted invoice. Its provisional number is “{prefix}-{Id}”, with the prefix “BRO” by default (set in <span class="chemin">Administration › Settings › Invoice</span>, “Préfixe de brouillon” field). Dates are optional.</li>
                     <li><strong>Posting</strong>: the official number is assigned once, following the format set in the settings ({PREFIXE}-{AAAA}-{NUMERO} by default, 4-digit number, counter reset every year if the option is on). An empty invoice date becomes today; an empty due date becomes the invoice date plus the customer’s payment terms.</li>
                     <li><strong>Journal entry</strong>: accounts receivable 1100 debited; revenue credited (the line’s account, otherwise 4000); GST payable 2200; QST payable 2210. See <a href="comptabilite.html">Accounting › Journals</a>.</li>
-                    <li><strong>Posted invoice</strong>: read-only. Only <kbd>Envoyer au client</kbd> remains available.</li>
+                    <li><strong>Posted invoice</strong>: read-only (“Posted” pill and green banner). Only <kbd>Envoyer au client</kbd> remains available.</li>
                 </ul>
 
                 <h3>Messages</h3>
@@ -1006,7 +1024,7 @@
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
                 <details><summary>Why does my invoice have a “BRO-…” number?</summary><p>It is the provisional number of a draft. The official number is assigned only at posting, following the format set in <span class="chemin">Administration › Settings › Invoice</span>. The “BRO” prefix can be changed too.</p></details>
-                <details><summary>I can no longer edit an invoice. Why?</summary><p>It is posted (“Comptabilisé 🔒” badge). A posted invoice is read-only; only <kbd>Envoyer au client</kbd> remains available. To correct it, make an adjusting entry in <a href="comptabilite.html">Accounting</a>.</p></details>
+                <details><summary>I can no longer edit an invoice. Why?</summary><p>It is posted (green “Posted” pill and “Posted invoice: it is read-only.” banner). A posted invoice is read-only; only <kbd>Envoyer au client</kbd> remains available. To correct it, make an adjusting entry in <a href="comptabilite.html">Accounting</a>.</p></details>
                 <details><summary>Sending fails with « Aucun courriel de facturation pour ce client. »</summary><p>Open the customer record, add or edit a “Facturation” address, fill its “Courriel” field, then click <kbd>Enregistrer</kbd> at the top of the record.</p></details>
                 <details><summary>Why is the <kbd>Générer le lien</kbd> button greyed out?</summary><p>No Square account is connected for the company. Connect it in <span class="chemin">Administration › Payment processor</span>.</p></details>
                 <details><summary>Does the payment link cover the total or the balance?</summary><p>The remaining balance. After a partial payment, a new link requests only the difference.</p></details>
@@ -1194,7 +1212,7 @@
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>+ Nouvelle facture</kbd> (+ Nueva factura, píldora azul arriba a la derecha): abre la ventana « Ajouter une facture » (vea <a href="#es-edicion-factura">Edición de una factura</a>).</li>
+                    <li><kbd>+ Nouvelle facture</kbd> (+ Nueva factura, píldora azul arriba a la derecha): abre la ventana « Nueva factura » (vea <a href="#es-edicion-factura">Edición de una factura</a>).</li>
                     <li><kbd>Importer de Square</kbd> (descripción « Rapatrier les factures et paiements Square comme factures clients »): las facturas Square se convierten en facturas de clientes con su encabezado, sus líneas y los impuestos TPS/TVQ; el cliente se crea si hace falta. Los pagos Square se concilian con una factura existente; si no hay ninguna, se crea una factura ya pagada con una sola línea « Vente au terminal (Square) », sin impuestos.</li>
                     <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>À recevoir</strong> (Por cobrar: el saldo pendiente de las facturas abiertas, parciales o vencidas, y su número), <strong>En retard</strong> (Vencidas: el saldo de las facturas vencidas; punto rojo si las hay, verde si no), <strong>Brouillons</strong> (Borradores, por contabilizar) y <strong>Payées</strong> (Pagadas: el total de las facturas pagadas). Un clic aplica el filtro correspondiente a la lista — el marco del indicador pasa a azul — y un segundo clic lo quita.</li>
                     <li>Las <strong>píldoras de filtro</strong> de la tarjeta « búsqueda »: <strong>État</strong> (Estado) — Toutes, Brouillons, Comptabilisées; <strong>Paiement</strong> (Pago) — Tous, En retard, Partielle, Ouverte, Payée, En cours (borrador). Cada píldora lleva su número; una píldora pulsada se enciende (fondo azul marino) y se combina con las demás de su grupo; « Toutes » y « Tous » quitan el filtro del grupo.</li>
@@ -1313,22 +1331,28 @@
             <section id="es-edicion-factura">
                 <h2>Edición de una factura</h2>
                 <h3>Objetivo</h3>
-                <p>La ventana de factura se abre desde <span class="chemin">Ventas › Facturas de clientes</span> (<kbd>Ajouter une facture</kbd> o <kbd>Modifier</kbd>). Aquí se introduce el cliente, las fechas y las líneas, y se ven los totales calculados con TPS y TVQ. También se puede guardar, contabilizar al momento y enviar la factura al cliente.</p>
+                <p>La ventana de factura se abre desde <span class="chemin">Ventas › Facturas de clientes</span> (<kbd>+ Nueva factura</kbd> o clic en una factura de la lista). Aquí se introduce el cliente, las fechas y las líneas, y se ven los totales calculados con TPS y TVQ. También se puede guardar, contabilizar al momento y enviar la factura al cliente.</p>
 
-                <h3>Campos del encabezado</h3>
+                <h3>Encabezado de la ventana</h3>
+                <ul>
+                    <li>Encima del título, la etiqueta de sección « Ventas · Factura ».</li>
+                    <li>Título: « Nueva factura » para una factura aún no guardada; si no, « Factura » seguido de su número (número de borrador mientras no esté contabilizada, número oficial una vez contabilizada).</li>
+                    <li>A la derecha, una píldora de estado: « Nueva » (aún no guardada), « Borrador » (guardada, no contabilizada) o « Contabilizada » (verde, con un candado).</li>
+                    <li>Cuando la factura está contabilizada, aparece bajo el encabezado una franja verde « Factura contabilizada: es de solo lectura. »: los campos quedan bloqueados, los botones de las líneas (eliminar, subir, bajar) y <kbd>Agregar una línea</kbd> se ocultan, y <kbd>Enregistrer</kbd> aparece en gris.</li>
+                </ul>
+
+                <h3>Tarjeta « Client »</h3>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
-                        <tr><td>Insignia « Comptabilisé 🔒 »</td><td>—</td><td>Se muestra cuando la factura está contabilizada; todo pasa a solo lectura.</td></tr>
-                        <tr><td>Numéro (Número)</td><td>—</td><td>Visible desde el primer guardado. Provisional mientras la factura sea un borrador.</td></tr>
-                        <tr><td>Client</td><td>No (pero indispensable)</td><td>Selector « Rechercher un client… » con tarjetas que muestran el nombre y la dirección de facturación. En una factura nueva se lee « Sélectionner un client ».</td></tr>
+                        <tr><td>Client</td><td>No (pero indispensable)</td><td>Selector « Rechercher un client… » con tarjetas que muestran el nombre y la dirección de facturación. En una factura nueva se lee « Sélectionner un client ». La dirección del cliente elegido se muestra en la tarjeta.</td></tr>
                         <tr><td>Date de facture (Fecha de factura)</td><td>No</td><td>Calendario. Si está vacía al contabilizar, se usa la fecha de hoy.</td></tr>
                         <tr><td>Date d’échéance (Fecha de vencimiento)</td><td>No</td><td>Calendario. Si está vacía al contabilizar, se calcula a partir del plazo de pago del cliente.</td></tr>
                         <tr><td>Comptabilisé (Contabilizada)</td><td>No</td><td>Casilla. Si está marcada al hacer clic en <kbd>Enregistrer</kbd>, la factura se contabiliza al momento.</td></tr>
                     </tbody>
                 </table>
 
-                <h3>Líneas</h3>
+                <h3>Tarjeta « Lignes »</h3>
                 <p>La tabla de líneas tiene las columnas Produit, Compte, Qté, Prix unitaire, Total, Tx y Ordre.</p>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
@@ -1338,19 +1362,22 @@
                         <tr><td>Qté (Cant.)</td><td>Solo cifras y punto (la coma se convierte), 2 decimales como máximo. El signo menos se elimina: no se puede introducir una línea negativa.</td></tr>
                         <tr><td>Prix unitaire (Precio unitario)</td><td>Mismas reglas que la cantidad.</td></tr>
                         <tr><td>Total</td><td>Cantidad × precio unitario, calculado automáticamente.</td></tr>
-                        <tr><td>Tx</td><td>Estado de impuesto de la línea. Solo « taxable » entra en la base de cálculo de TPS y TVQ.</td></tr>
-                        <tr><td>Ordre (Orden)</td><td>Flechas arriba y abajo para reordenar las líneas.</td></tr>
+                        <tr><td>Tx</td><td>Píldora del estado de impuesto de la línea. Solo « taxable » entra en la base de cálculo de TPS y TVQ.</td></tr>
+                        <tr><td>Ordre (Orden)</td><td>Botones redondos con flecha arriba y abajo para reordenar las líneas.</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li>Papelera: elimina la línea tras la pregunta « Supprimer cette ligne ? ».</li>
-                    <li>Botón redondo <kbd>+</kbd> (« Ajouter une ligne »): añade una línea vacía con cantidad 1 y precio 0.</li>
+                    <li>Botón redondo rojo <kbd>×</kbd>: elimina la línea tras la pregunta « Supprimer cette ligne ? ».</li>
+                    <li>Botón <kbd>+ Agregar una línea</kbd> (contorno punteado, debajo de las líneas): añade una línea vacía con cantidad 1 y precio 0.</li>
                     <li>Listas vacías: « Aucun produit trouvé. », « Aucun client trouvé. », « Aucun compte trouvé. »</li>
                     <li>Al pie de cada selector, los botones <kbd>Ajouter des produits</kbd>, <kbd>Ajouter des clients</kbd> y <kbd>Ajouter des comptes</kbd> no crean nada por ahora.</li>
                 </ul>
 
+                <h3>Barra inferior</h3>
+                <p>Una barra permanece visible al pie de la ventana durante el desplazamiento: los botones de acción a la izquierda (<kbd>Enregistrer</kbd> en azul, <kbd>Envoyer au client</kbd> para una factura ya guardada) y los totales a la derecha.</p>
+
                 <h3>Totales</h3>
-                <p>El bloque de totales muestra « Sous-total », « TPS », « TVQ » y « Total ». La TPS es del 5 % y la TVQ del 9,975 % del subtotal <strong>gravable</strong> (suma de las líneas cuyo estado es « taxable »), cada una redondeada al centavo.</p>
+                <p>Los totales, a la derecha de la barra inferior, muestran « Sous-total », « TPS », « TVQ » y « Total » (en negrita). La TPS es del 5 % y la TVQ del 9,975 % del subtotal <strong>gravable</strong> (suma de las líneas cuyo estado es « taxable »), cada una redondeada al centavo.</p>
 
                 <h3>Botones y acciones</h3>
                 <ul>
@@ -1359,9 +1386,9 @@
                 </ul>
                 <p>Para crear y contabilizar una factura de una vez:</p>
                 <ol>
-                    <li>Haga clic en <kbd>Ajouter une facture</kbd> en la lista.</li>
+                    <li>Haga clic en <kbd>+ Nueva factura</kbd> en la lista.</li>
                     <li>Elija el cliente en « Rechercher un client… ».</li>
-                    <li>Añada líneas con <kbd>+</kbd>, elija el producto o escriba la descripción, la cantidad y el precio.</li>
+                    <li>Añada líneas con <kbd>+ Agregar una línea</kbd>, elija el producto o escriba la descripción, la cantidad y el precio.</li>
                     <li>Compruebe el estado de impuesto « Tx » de cada línea y los totales.</li>
                     <li>Marque « Comptabilisé » y haga clic en <kbd>Enregistrer</kbd>.</li>
                 </ol>
@@ -1371,7 +1398,7 @@
                     <li><strong>Borrador</strong>: factura no contabilizada. Su número provisional es « {prefijo}-{Id} », con el prefijo « BRO » de forma predeterminada (ajustable en <span class="chemin">Administración › Parámetros › Factura</span>, campo « Préfixe de brouillon »). Las fechas son opcionales.</li>
                     <li><strong>Contabilización</strong>: el número oficial se asigna una sola vez, según el formato definido en los parámetros ({PREFIXE}-{AAAA}-{NUMERO} de forma predeterminada, número de 4 cifras, contador reiniciado cada año si la opción está activada). Una fecha de factura vacía pasa a ser la de hoy; un vencimiento vacío pasa a ser la fecha de factura más el plazo de pago del cliente.</li>
                     <li><strong>Asiento en el diario</strong>: cuentas por cobrar 1100 al debe; ingresos al haber (la cuenta de la línea, si no 4000); TPS por pagar 2200; TVQ por pagar 2210. Vea <a href="comptabilite.html">Contabilidad › Diarios</a>.</li>
-                    <li><strong>Factura contabilizada</strong>: solo lectura. Solo <kbd>Envoyer au client</kbd> sigue disponible.</li>
+                    <li><strong>Factura contabilizada</strong>: solo lectura (píldora « Contabilizada » y franja verde). Solo <kbd>Envoyer au client</kbd> sigue disponible.</li>
                 </ul>
 
                 <h3>Mensajes</h3>
@@ -1516,7 +1543,7 @@
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
                 <details><summary>¿Por qué mi factura lleva un número « BRO-… »?</summary><p>Es el número provisional de un borrador. El número oficial solo se asigna al contabilizar, según el formato definido en <span class="chemin">Administración › Parámetros › Factura</span>. El prefijo « BRO » también es ajustable.</p></details>
-                <details><summary>Ya no puedo modificar una factura, ¿por qué?</summary><p>Está contabilizada (insignia « Comptabilisé 🔒 »). Una factura contabilizada es de solo lectura; solo <kbd>Envoyer au client</kbd> sigue disponible. Para corregir, haga un asiento de ajuste en <a href="comptabilite.html">Contabilidad</a>.</p></details>
+                <details><summary>Ya no puedo modificar una factura, ¿por qué?</summary><p>Está contabilizada (píldora verde « Contabilizada » y franja « Factura contabilizada: es de solo lectura. »). Una factura contabilizada es de solo lectura; solo <kbd>Envoyer au client</kbd> sigue disponible. Para corregir, haga un asiento de ajuste en <a href="comptabilite.html">Contabilidad</a>.</p></details>
                 <details><summary>El envío falla con « Aucun courriel de facturation pour ce client. »</summary><p>Abra la ficha del cliente, añada o modifique una dirección de tipo « Facturation » y rellene su campo « Courriel »; luego haga clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha.</p></details>
                 <details><summary>¿Por qué el botón <kbd>Générer le lien</kbd> está atenuado?</summary><p>No hay ninguna cuenta Square conectada para la empresa. Conéctela en <span class="chemin">Administración › Procesador de pagos</span>.</p></details>
                 <details><summary>¿El enlace de pago cubre el total o el saldo?</summary><p>El saldo restante. Tras un pago parcial, un nuevo enlace reclama solo la diferencia.</p></details>
