@@ -83,8 +83,8 @@
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>← Retour à la liste</kbd> (barre du haut) : ferme la fiche <strong>sans enregistrer</strong> et sans avertissement.</li>
-                    <li><kbd>Enregistrer</kbd> (barre du haut) : sauvegarde le client, puis toutes les modifications d’adresses en une seule fois, puis ferme la fiche.</li>
+                    <li><kbd>Enregistrer</kbd> (bleu, premier à gauche dans la barre blanche fixée au bas de la fiche) : sauvegarde le client, puis toutes les modifications d’adresses en une seule fois, puis ferme la fiche.</li>
+                    <li><kbd>← Retour à la liste</kbd> (barre du bas, à côté d’<kbd>Enregistrer</kbd>) : ferme la fiche <strong>sans enregistrer</strong> et sans avertissement.</li>
                     <li>Flèche ▾ (infobulle « Réduire / Agrandir ») ou clic sur le titre : déplie ou replie l’encadré « Remplissage automatique par document ». L’encadré est replié à l’ouverture de la fiche.</li>
                     <li><kbd>Analyser le document</kbd> : envoie le fichier déposé à l’IA pour remplir les champs vides.</li>
                     <li><kbd>+ Ajouter une adresse</kbd> : ouvre la fenêtre « Édition adresse ».</li>
@@ -135,7 +135,7 @@
                     <li>Dépliez l’encadré « Remplissage automatique par document », puis glissez la photo ou le PDF de la carte dans la zone de dépôt.</li>
                     <li>Cliquez sur <kbd>Analyser le document</kbd>. Après l’analyse, l’encadré se replie : dépliez-le de nouveau pour lire le message de résultat.</li>
                     <li>Vérifiez chaque champ rempli, corrigez au besoin.</li>
-                    <li>Cliquez sur <kbd>Enregistrer</kbd> en haut de la fiche.</li>
+                    <li>Cliquez sur <kbd>Enregistrer</kbd> dans la barre du bas de la fiche.</li>
                 </ol>
                 <h3>Règles</h3>
                 <ul>
@@ -160,7 +160,7 @@
                 <p>La carte « Pièces jointes » présente les colonnes Fichier (lien pour ouvrir), Type, Taille, Note et Provenance. Sur une nouvelle fiche, on lit « Enregistrez d’abord la fiche. » ; sans pièce jointe : « Aucune pièce jointe. Celles de QuickBooks arrivent par Importations ▸ Pièces jointes ▸ Rattacher aux fiches. » (voir <a href="importation.html">Importation</a>).</p>
 
                 <h3>Trucs et pièges</h3>
-                <div class="piege" data-titre="Piège">Ajouter, modifier ou supprimer une adresse ne fait que mettre la liste à jour à l’écran. <strong>Rien n’est écrit</strong> tant que vous n’avez pas cliqué sur <kbd>Enregistrer</kbd> en haut de la fiche. Si vous quittez par <kbd>← Retour à la liste</kbd>, toutes les modifications d’adresses sont perdues, sans avertissement.</div>
+                <div class="piege" data-titre="Piège">Ajouter, modifier ou supprimer une adresse ne fait que mettre la liste à jour à l’écran. <strong>Rien n’est écrit</strong> tant que vous n’avez pas cliqué sur <kbd>Enregistrer</kbd> dans la barre du bas de la fiche. Si vous quittez par <kbd>← Retour à la liste</kbd>, toutes les modifications d’adresses sont perdues, sans avertissement.</div>
                 <div class="piege" data-titre="Piège">La suppression d’une adresse ne demande aucune confirmation.</div>
                 <div class="astuce" data-titre="Astuce">Le courriel de l’adresse de type « Facturation » est celui auquel les factures sont envoyées et qui préremplit la page de paiement Square. Sans lui, l’envoi d’une facture échoue avec « Aucun courriel de facturation pour ce client. » Donnez à chaque client au moins une adresse de facturation avec un courriel.</div>
                 <div class="note" data-titre="Bon à savoir">Le « Délai de paiement (jours) » n’a d’effet qu’à la comptabilisation d’une facture dont l’échéance est vide : l’échéance devient la date de facture plus ce délai.</div>
@@ -506,7 +506,7 @@
                 <h2>Questions fréquentes</h2>
                 <details><summary>Pourquoi ma facture porte-t-elle un numéro « BRO-… » ?</summary><p>C’est le numéro provisoire d’un brouillon. Le numéro officiel n’est attribué qu’à la comptabilisation, selon le format réglé dans <span class="chemin">Administration › Paramètres › Facture</span>. Le préfixe « BRO » est lui aussi réglable.</p></details>
                 <details><summary>Je ne peux plus modifier une facture, pourquoi ?</summary><p>Elle est comptabilisée (pastille verte « Comptabilisée » et bandeau « Facture comptabilisée : elle est en lecture seule. »). Une facture comptabilisée est en lecture seule ; seul <kbd>Envoyer au client</kbd> reste possible. Pour corriger, passez par une écriture d’ajustement en <a href="comptabilite.html">Comptabilité</a>.</p></details>
-                <details><summary>L’envoi échoue avec « Aucun courriel de facturation pour ce client. »</summary><p>Ouvrez la fiche du client, ajoutez ou modifiez une adresse de type « Facturation » et renseignez son champ « Courriel », puis cliquez sur <kbd>Enregistrer</kbd> en haut de la fiche.</p></details>
+                <details><summary>L’envoi échoue avec « Aucun courriel de facturation pour ce client. »</summary><p>Ouvrez la fiche du client, ajoutez ou modifiez une adresse de type « Facturation » et renseignez son champ « Courriel », puis cliquez sur <kbd>Enregistrer</kbd> dans la barre du bas de la fiche.</p></details>
                 <details><summary>Pourquoi le bouton <kbd>Générer le lien</kbd> est-il grisé ?</summary><p>Aucun compte Square n’est connecté pour la compagnie. Connectez-le dans <span class="chemin">Administration › Processeur de paiement</span>.</p></details>
                 <details><summary>Le lien de paiement porte-t-il sur le total ou sur le solde ?</summary><p>Sur le solde restant. Après un paiement partiel, un nouveau lien réclame seulement la différence.</p></details>
                 <details><summary>Comment retrouver les factures en retard ?</summary><p>Dans <span class="chemin">Ventes › Factures clients</span>, cochez « En retard » dans le filtre « Paiement ». Le filtre reste mémorisé pour la session.</p></details>
@@ -514,7 +514,7 @@
                 <details><summary>Pourquoi la TPS et la TVQ semblent-elles trop basses ?</summary><p>Elles ne se calculent que sur les lignes dont le statut « Tx » est « taxable ». Vérifiez le statut de chaque ligne.</p></details>
                 <details><summary>J’ai supprimé un client par erreur : est-ce récupérable ?</summary><p>Non, la suppression est immédiate et sans confirmation. Si le client avait des factures, la base l’a toutefois refusée. Sinon, recréez le client ou réimportez-le depuis Square s’il y existait.</p></details>
                 <details><summary>Un paiement Square importé a créé une facture « Vente au terminal (Square) » sans taxes. Est-ce normal ?</summary><p>Oui : quand aucun brouillon ou facture ne correspond au paiement, une facture payée est créée avec cette ligne unique, sans taxes. Corrigez l’écriture si la vente était taxable.</p></details>
-                <details><summary>Les modifications d’adresses que j’ai faites ont disparu.</summary><p>Vous avez quitté la fiche par <kbd>← Retour à la liste</kbd>. Les adresses ne sont écrites que lorsque vous cliquez sur <kbd>Enregistrer</kbd> en haut de la fiche client.</p></details>
+                <details><summary>Les modifications d’adresses que j’ai faites ont disparu.</summary><p>Vous avez quitté la fiche par <kbd>← Retour à la liste</kbd>. Les adresses ne sont écrites que lorsque vous cliquez sur <kbd>Enregistrer</kbd> dans la barre du bas de la fiche client.</p></details>
                 <details><summary>Le PDF d’un brouillon montre des dates que je n’ai pas saisies.</summary><p>Pour un brouillon sans dates, le PDF utilise la date du jour et une échéance à +30 jours. Les vraies dates sont attribuées à la comptabilisation.</p></details>
             </section>
 
@@ -602,8 +602,8 @@
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>← Retour à la liste</kbd> (Back to list, top bar): closes the record <strong>without saving</strong> and without warning.</li>
-                    <li><kbd>Enregistrer</kbd> (Save, top bar): saves the customer, then all address changes in one go, then closes the record.</li>
+                    <li><kbd>Enregistrer</kbd> (Save, blue, first on the left in the white bar fixed at the bottom of the record): saves the customer, then all address changes in one go, then closes the record.</li>
+                    <li><kbd>← Retour à la liste</kbd> (Back to list, bottom bar, next to Save): closes the record <strong>without saving</strong> and without warning.</li>
                     <li>▾ arrow (tooltip “Réduire / Agrandir”) or a click on the title: expands or collapses the “Remplissage automatique par document” panel. The panel is collapsed when the record opens.</li>
                     <li><kbd>Analyser le document</kbd> (Analyze document): sends the dropped file to the AI to fill the empty fields.</li>
                     <li><kbd>+ Ajouter une adresse</kbd> (Add address): opens the “Édition adresse” window.</li>
@@ -654,7 +654,7 @@
                     <li>Expand the “Remplissage automatique par document” panel, then drag the photo or PDF of the card into the drop zone.</li>
                     <li>Click <kbd>Analyser le document</kbd>. After the analysis, the panel collapses: expand it again to read the result message.</li>
                     <li>Check every filled field and correct as needed.</li>
-                    <li>Click <kbd>Enregistrer</kbd> at the top of the record.</li>
+                    <li>Click <kbd>Enregistrer</kbd> in the bottom bar of the record.</li>
                 </ol>
                 <h3>Rules</h3>
                 <ul>
@@ -679,7 +679,7 @@
                 <p>The “Pièces jointes” (Attachments) card shows the columns Fichier (link to open), Type, Taille (Size), Note and Provenance (Source). On a new record it reads « Enregistrez d’abord la fiche. » (Save the record first); with no attachment: « Aucune pièce jointe. Celles de QuickBooks arrivent par Importations ▸ Pièces jointes ▸ Rattacher aux fiches. » (see <a href="importation.html">Import</a>).</p>
 
                 <h3>Tips and pitfalls</h3>
-                <div class="piege" data-titre="Pitfall">Adding, editing or deleting an address only updates the on-screen list. <strong>Nothing is written</strong> until you click <kbd>Enregistrer</kbd> at the top of the record. If you leave with <kbd>← Retour à la liste</kbd>, all address changes are lost, without warning.</div>
+                <div class="piege" data-titre="Pitfall">Adding, editing or deleting an address only updates the on-screen list. <strong>Nothing is written</strong> until you click <kbd>Enregistrer</kbd> in the bottom bar of the record. If you leave with <kbd>← Retour à la liste</kbd>, all address changes are lost, without warning.</div>
                 <div class="piege" data-titre="Pitfall">Deleting an address asks for no confirmation.</div>
                 <div class="astuce" data-titre="Tip">The email of the “Facturation” address is the one invoices are sent to and the one that pre-fills the Square payment page. Without it, sending an invoice fails with « Aucun courriel de facturation pour ce client. » Give every customer at least one billing address with an email.</div>
                 <div class="note" data-titre="Good to know">“Délai de paiement (jours)” only takes effect when an invoice with an empty due date is posted: the due date becomes the invoice date plus this number of days.</div>
@@ -1025,7 +1025,7 @@
                 <h2>Frequently asked questions</h2>
                 <details><summary>Why does my invoice have a “BRO-…” number?</summary><p>It is the provisional number of a draft. The official number is assigned only at posting, following the format set in <span class="chemin">Administration › Settings › Invoice</span>. The “BRO” prefix can be changed too.</p></details>
                 <details><summary>I can no longer edit an invoice. Why?</summary><p>It is posted (green “Posted” pill and “Posted invoice: it is read-only.” banner). A posted invoice is read-only; only <kbd>Envoyer au client</kbd> remains available. To correct it, make an adjusting entry in <a href="comptabilite.html">Accounting</a>.</p></details>
-                <details><summary>Sending fails with « Aucun courriel de facturation pour ce client. »</summary><p>Open the customer record, add or edit a “Facturation” address, fill its “Courriel” field, then click <kbd>Enregistrer</kbd> at the top of the record.</p></details>
+                <details><summary>Sending fails with « Aucun courriel de facturation pour ce client. »</summary><p>Open the customer record, add or edit a “Facturation” address, fill its “Courriel” field, then click <kbd>Enregistrer</kbd> in the bottom bar of the record.</p></details>
                 <details><summary>Why is the <kbd>Générer le lien</kbd> button greyed out?</summary><p>No Square account is connected for the company. Connect it in <span class="chemin">Administration › Payment processor</span>.</p></details>
                 <details><summary>Does the payment link cover the total or the balance?</summary><p>The remaining balance. After a partial payment, a new link requests only the difference.</p></details>
                 <details><summary>How do I find overdue invoices?</summary><p>In <span class="chemin">Sales › Customer invoices</span>, check “En retard” in the “Paiement” filter. The filter is remembered for the session.</p></details>
@@ -1121,8 +1121,8 @@
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>← Retour à la liste</kbd> (Volver a la lista, barra superior): cierra la ficha <strong>sin guardar</strong> y sin aviso.</li>
-                    <li><kbd>Enregistrer</kbd> (Guardar, barra superior): guarda el cliente, luego todas las modificaciones de direcciones de una vez, y cierra la ficha.</li>
+                    <li><kbd>Enregistrer</kbd> (Guardar, azul, primero a la izquierda en la barra blanca fija en la parte inferior de la ficha): guarda el cliente, luego todas las modificaciones de direcciones de una vez, y cierra la ficha.</li>
+                    <li><kbd>← Retour à la liste</kbd> (Volver a la lista, barra inferior, junto a Guardar): cierra la ficha <strong>sin guardar</strong> y sin aviso.</li>
                     <li>Flecha ▾ (texto emergente « Réduire / Agrandir ») o clic en el título: despliega o pliega el recuadro « Remplissage automatique par document ». El recuadro está plegado al abrir la ficha.</li>
                     <li><kbd>Analyser le document</kbd> (Analizar el documento): envía el archivo depositado a la IA para rellenar los campos vacíos.</li>
                     <li><kbd>+ Ajouter une adresse</kbd> (Añadir dirección): abre la ventana « Édition adresse ».</li>
@@ -1173,7 +1173,7 @@
                     <li>Despliegue el recuadro « Remplissage automatique par document » y arrastre la foto o el PDF de la tarjeta a la zona de depósito.</li>
                     <li>Haga clic en <kbd>Analyser le document</kbd>. Tras el análisis, el recuadro se pliega: despliéguelo de nuevo para leer el mensaje de resultado.</li>
                     <li>Revise cada campo rellenado y corrija si hace falta.</li>
-                    <li>Haga clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha.</li>
+                    <li>Haga clic en <kbd>Enregistrer</kbd> en la barra inferior de la ficha.</li>
                 </ol>
                 <h3>Reglas</h3>
                 <ul>
@@ -1198,7 +1198,7 @@
                 <p>La tarjeta « Pièces jointes » (Archivos adjuntos) presenta las columnas Fichier (enlace para abrir), Type, Taille (Tamaño), Note y Provenance (Origen). En una ficha nueva se lee « Enregistrez d’abord la fiche. » (Guarde primero la ficha); sin adjuntos: « Aucune pièce jointe. Celles de QuickBooks arrivent par Importations ▸ Pièces jointes ▸ Rattacher aux fiches. » (vea <a href="importation.html">Importación</a>).</p>
 
                 <h3>Trucos y trampas</h3>
-                <div class="piege" data-titre="Trampa">Añadir, modificar o eliminar una dirección solo actualiza la lista en pantalla. <strong>No se escribe nada</strong> hasta que haga clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha. Si sale con <kbd>← Retour à la liste</kbd>, todas las modificaciones de direcciones se pierden, sin aviso.</div>
+                <div class="piege" data-titre="Trampa">Añadir, modificar o eliminar una dirección solo actualiza la lista en pantalla. <strong>No se escribe nada</strong> hasta que haga clic en <kbd>Enregistrer</kbd> en la barra inferior de la ficha. Si sale con <kbd>← Retour à la liste</kbd>, todas las modificaciones de direcciones se pierden, sin aviso.</div>
                 <div class="piege" data-titre="Trampa">La eliminación de una dirección no pide ninguna confirmación.</div>
                 <div class="astuce" data-titre="Consejo">El correo electrónico de la dirección de tipo « Facturation » es aquel al que se envían las facturas y el que rellena previamente la página de pago Square. Sin él, el envío de una factura falla con « Aucun courriel de facturation pour ce client. » Dé a cada cliente al menos una dirección de facturación con correo electrónico.</div>
                 <div class="note" data-titre="Conviene saber">El « Délai de paiement (jours) » solo tiene efecto al contabilizar una factura cuyo vencimiento está vacío: el vencimiento pasa a ser la fecha de factura más ese plazo.</div>
@@ -1544,7 +1544,7 @@
                 <h2>Preguntas frecuentes</h2>
                 <details><summary>¿Por qué mi factura lleva un número « BRO-… »?</summary><p>Es el número provisional de un borrador. El número oficial solo se asigna al contabilizar, según el formato definido en <span class="chemin">Administración › Parámetros › Factura</span>. El prefijo « BRO » también es ajustable.</p></details>
                 <details><summary>Ya no puedo modificar una factura, ¿por qué?</summary><p>Está contabilizada (píldora verde « Contabilizada » y franja « Factura contabilizada: es de solo lectura. »). Una factura contabilizada es de solo lectura; solo <kbd>Envoyer au client</kbd> sigue disponible. Para corregir, haga un asiento de ajuste en <a href="comptabilite.html">Contabilidad</a>.</p></details>
-                <details><summary>El envío falla con « Aucun courriel de facturation pour ce client. »</summary><p>Abra la ficha del cliente, añada o modifique una dirección de tipo « Facturation » y rellene su campo « Courriel »; luego haga clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha.</p></details>
+                <details><summary>El envío falla con « Aucun courriel de facturation pour ce client. »</summary><p>Abra la ficha del cliente, añada o modifique una dirección de tipo « Facturation » y rellene su campo « Courriel »; luego haga clic en <kbd>Enregistrer</kbd> en la barra inferior de la ficha.</p></details>
                 <details><summary>¿Por qué el botón <kbd>Générer le lien</kbd> está atenuado?</summary><p>No hay ninguna cuenta Square conectada para la empresa. Conéctela en <span class="chemin">Administración › Procesador de pagos</span>.</p></details>
                 <details><summary>¿El enlace de pago cubre el total o el saldo?</summary><p>El saldo restante. Tras un pago parcial, un nuevo enlace reclama solo la diferencia.</p></details>
                 <details><summary>¿Cómo encuentro las facturas vencidas?</summary><p>En <span class="chemin">Ventas › Facturas de clientes</span>, marque « En retard » en el filtro « Paiement ». El filtro se recuerda durante la sesión.</p></details>
@@ -1552,7 +1552,7 @@
                 <details><summary>¿Por qué la TPS y la TVQ parecen demasiado bajas?</summary><p>Solo se calculan sobre las líneas cuyo estado « Tx » es « taxable ». Compruebe el estado de cada línea.</p></details>
                 <details><summary>Eliminé un cliente por error: ¿se puede recuperar?</summary><p>No, la eliminación es inmediata y sin confirmación. Si el cliente tenía facturas, la base de datos la habrá rechazado. En caso contrario, vuelva a crear el cliente o reimpórtelo desde Square si existía allí.</p></details>
                 <details><summary>Un pago Square importado creó una factura « Vente au terminal (Square) » sin impuestos. ¿Es normal?</summary><p>Sí: cuando ningún borrador ni factura corresponde al pago, se crea una factura pagada con esa única línea, sin impuestos. Corrija el asiento si la venta era gravable.</p></details>
-                <details><summary>Las modificaciones de direcciones que hice han desaparecido.</summary><p>Salió de la ficha con <kbd>← Retour à la liste</kbd>. Las direcciones solo se escriben cuando hace clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha de cliente.</p></details>
+                <details><summary>Las modificaciones de direcciones que hice han desaparecido.</summary><p>Salió de la ficha con <kbd>← Retour à la liste</kbd>. Las direcciones solo se escriben cuando hace clic en <kbd>Enregistrer</kbd> en la barra inferior de la ficha de cliente.</p></details>
                 <details><summary>El PDF de un borrador muestra fechas que no introduje.</summary><p>Para un borrador sin fechas, el PDF usa la fecha de hoy y un vencimiento a +30 días. Las fechas reales se asignan al contabilizar.</p></details>
             </section>
 

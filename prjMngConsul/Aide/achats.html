@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -66,9 +66,10 @@
                 <h2>Fiche fournisseur</h2>
                 <p>La fenêtre « Édition — Fournisseur » s’ouvre par <kbd>Ajouter Fournisseur</kbd> ou <kbd>Modifier</kbd> depuis la liste. Elle regroupe les informations du fournisseur, ses adresses et ses pièces jointes.</p>
                 <h3>Boutons et actions</h3>
+                <p>L’en-tête blanc affiche la rubrique « Achats · Fournisseur » au-dessus du titre ; les boutons sont dans la barre blanche fixée au bas de la fenêtre.</p>
                 <ul>
+                    <li><kbd>Enregistrer</kbd> (bleu, à gauche) : enregistre la fiche et ses adresses, puis ferme la fenêtre.</li>
                     <li><kbd>← Retour à la liste</kbd> : ferme la fenêtre <strong>sans enregistrer et sans avertissement</strong>.</li>
-                    <li><kbd>Enregistrer</kbd> : enregistre la fiche et ses adresses, puis ferme la fenêtre.</li>
                 </ul>
                 <p>Sur une fiche existante, l’en-tête affiche « Origine » (d’où vient la fiche, par exemple une importation) et « Créé » (date et heure, aaaa-mm-jj hh:mm).</p>
                 <h3>Champs de la carte « Informations Fournisseur »</h3>
@@ -234,13 +235,13 @@
                         <tr><td>Prix unitaire</td><td>Même règle : virgule → point, 2 décimales au maximum.</td></tr>
                         <tr><td>Total</td><td>Quantité × prix unitaire, calculé automatiquement.</td></tr>
                         <tr><td>Tx</td><td>Statut de taxe de la ligne ; seules les lignes taxables entrent dans le calcul de la TPS et de la TVQ.</td></tr>
-                        <tr><td>Ordre</td><td>Flèches haut / bas pour déplacer la ligne ; corbeille pour la supprimer (« Supprimer cette ligne ? »).</td></tr>
+                        <tr><td>Ordre</td><td>Boutons ronds haut / bas pour déplacer la ligne ; bouton rond rouge <kbd>×</kbd> pour la supprimer (« Supprimer cette ligne ? »).</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li>Bouton rond <kbd>+</kbd> (« Ajouter une ligne ») : ajoute une ligne vide.</li>
-                    <li>Pied de page : Sous-total, TPS (5 % des lignes taxables), TVQ (9,975 % des lignes taxables) et Total, recalculés en direct à chaque modification.</li>
-                    <li><kbd>Enregistrer</kbd> : enregistre l’en-tête et les lignes, puis ferme la fenêtre.</li>
+                    <li><kbd>+ Ajouter une ligne</kbd> (bouton en pointillés, sous les lignes) : ajoute une ligne vide.</li>
+                    <li>Barre fixée au bas de la fenêtre : à droite, Sous-total, TPS (5 % des lignes taxables), TVQ (9,975 % des lignes taxables) et Total, recalculés en direct à chaque modification.</li>
+                    <li><kbd>Enregistrer</kbd> (à gauche de la barre du bas) : enregistre l’en-tête et les lignes, puis ferme la fenêtre.</li>
                 </ul>
                 <p>Pour saisir une facture fournisseur :</p>
                 <ol>
@@ -253,7 +254,7 @@
                 </ol>
                 <h3>Règles de comptabilisation</h3>
                 <ul>
-                    <li>Cocher <strong>Comptabilisé</strong> puis enregistrer rend la facture <strong>définitive</strong> : badge « Comptabilisé 🔒 », champs et lignes bloqués, bouton <kbd>Enregistrer</kbd> désactivé, bouton <kbd>+</kbd> masqué, suppression bloquée depuis la liste.</li>
+                    <li>Cocher <strong>Comptabilisé</strong> puis enregistrer rend la facture <strong>définitive</strong> : badge « Comptabilisé 🔒 », champs et lignes bloqués, bouton <kbd>Enregistrer</kbd> désactivé, bouton <kbd>+ Ajouter une ligne</kbd> masqué, suppression bloquée depuis la liste.</li>
                     <li><strong>Aucune confirmation n’est demandée avant de comptabiliser.</strong></li>
                     <li>Seules les factures comptabilisées peuvent être payées par Stripe ou programmées en paiement automatique. Le décaissement manuel, lui, reste accessible.</li>
                 </ul>
@@ -652,9 +653,10 @@
                 <h2>Supplier record</h2>
                 <p>The “Edit — Supplier” dialog opens through <kbd>Add supplier</kbd> or <kbd>Edit</kbd> from the list. It groups the supplier’s information, addresses and attachments.</p>
                 <h3>Buttons and actions</h3>
+                <p>The white header shows the section label “Purchases · Supplier” above the title; the buttons sit in the white bar fixed at the bottom of the dialog.</p>
                 <ul>
+                    <li><kbd>Save</kbd> (blue, on the left): saves the record and its addresses, then closes the dialog.</li>
                     <li><kbd>← Back to list</kbd>: closes the dialog <strong>without saving and without warning</strong>.</li>
-                    <li><kbd>Save</kbd>: saves the record and its addresses, then closes the dialog.</li>
                 </ul>
                 <p>On an existing record, the header shows “Origin” (where the record came from, for example an import) and “Created” (date and time, yyyy-mm-dd hh:mm).</p>
                 <h3>Fields of the “Supplier information” card</h3>
@@ -820,13 +822,13 @@
                         <tr><td>Unit price</td><td>Same rule: comma → point, 2 decimals maximum.</td></tr>
                         <tr><td>Total</td><td>Quantity × unit price, computed automatically.</td></tr>
                         <tr><td>Tax</td><td>Tax status of the line; only taxable lines count toward GST and QST.</td></tr>
-                        <tr><td>Order</td><td>Up / down arrows to move the line; trash icon to remove it (“Delete this line?”).</td></tr>
+                        <tr><td>Order</td><td>Round up / down buttons to move the line; round red <kbd>×</kbd> button to remove it (“Delete this line?”).</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li>Round <kbd>+</kbd> button (“Add a line”): adds an empty line.</li>
-                    <li>Footer: Subtotal, GST (5 % of taxable lines), QST (9.975 % of taxable lines) and Total, recalculated live on every change.</li>
-                    <li><kbd>Save</kbd>: saves the header and the lines, then closes the dialog.</li>
+                    <li><kbd>+ Add a line</kbd> (dashed button, under the lines): adds an empty line.</li>
+                    <li>Bar fixed at the bottom of the dialog: on the right, Subtotal, GST (5 % of taxable lines), QST (9.975 % of taxable lines) and Total, recalculated live on every change.</li>
+                    <li><kbd>Save</kbd> (on the left of the bottom bar): saves the header and the lines, then closes the dialog.</li>
                 </ul>
                 <p>To enter a supplier invoice:</p>
                 <ol>
@@ -839,7 +841,7 @@
                 </ol>
                 <h3>Posting rules</h3>
                 <ul>
-                    <li>Checking <strong>Posted</strong> then saving makes the invoice <strong>final</strong>: “Posted 🔒” badge, fields and lines locked, <kbd>Save</kbd> disabled, <kbd>+</kbd> hidden, deletion blocked from the list.</li>
+                    <li>Checking <strong>Posted</strong> then saving makes the invoice <strong>final</strong>: “Posted 🔒” badge, fields and lines locked, <kbd>Save</kbd> disabled, <kbd>+ Add a line</kbd> hidden, deletion blocked from the list.</li>
                     <li><strong>No confirmation is asked before posting.</strong></li>
                     <li>Only posted invoices can be paid through Stripe or scheduled for automatic payment. Manual disbursement remains available.</li>
                 </ul>
@@ -1238,9 +1240,10 @@
                 <h2>Ficha de proveedor</h2>
                 <p>La ventana «Edición — Proveedor» se abre con <kbd>Agregar proveedor</kbd> o <kbd>Editar</kbd> desde la lista. Reúne la información del proveedor, sus direcciones y sus archivos adjuntos.</p>
                 <h3>Botones y acciones</h3>
+                <p>El encabezado blanco muestra la rúbrica «Compras · Proveedor» encima del título; los botones están en la barra blanca fija en la parte inferior de la ventana.</p>
                 <ul>
+                    <li><kbd>Guardar</kbd> (azul, a la izquierda): guarda la ficha y sus direcciones, luego cierra la ventana.</li>
                     <li><kbd>← Volver a la lista</kbd>: cierra la ventana <strong>sin guardar y sin aviso</strong>.</li>
-                    <li><kbd>Guardar</kbd>: guarda la ficha y sus direcciones, luego cierra la ventana.</li>
                 </ul>
                 <p>En una ficha existente, el encabezado muestra «Origen» (de dónde viene la ficha, por ejemplo una importación) y «Creado» (fecha y hora, aaaa-mm-dd hh:mm).</p>
                 <h3>Campos de la tarjeta «Información del proveedor»</h3>
@@ -1406,13 +1409,13 @@
                         <tr><td>Precio unitario</td><td>Misma regla: coma → punto, 2 decimales como máximo.</td></tr>
                         <tr><td>Total</td><td>Cantidad × precio unitario, calculado automáticamente.</td></tr>
                         <tr><td>Imp.</td><td>Estado de impuesto de la línea; solo las líneas gravables entran en el cálculo de la TPS y la TVQ.</td></tr>
-                        <tr><td>Orden</td><td>Flechas arriba / abajo para mover la línea; papelera para eliminarla («¿Eliminar esta línea?»).</td></tr>
+                        <tr><td>Orden</td><td>Botones redondos arriba / abajo para mover la línea; botón redondo rojo <kbd>×</kbd> para eliminarla («¿Eliminar esta línea?»).</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li>Botón redondo <kbd>+</kbd> («Agregar una línea»): agrega una línea vacía.</li>
-                    <li>Pie de página: Subtotal, TPS (5 % de las líneas gravables), TVQ (9,975 % de las líneas gravables) y Total, recalculados en vivo con cada modificación.</li>
-                    <li><kbd>Guardar</kbd>: guarda el encabezado y las líneas, luego cierra la ventana.</li>
+                    <li><kbd>+ Agregar una línea</kbd> (botón punteado, debajo de las líneas): agrega una línea vacía.</li>
+                    <li>Barra fija en la parte inferior de la ventana: a la derecha, Subtotal, TPS (5 % de las líneas gravables), TVQ (9,975 % de las líneas gravables) y Total, recalculados en vivo con cada modificación.</li>
+                    <li><kbd>Guardar</kbd> (a la izquierda de la barra inferior): guarda el encabezado y las líneas, luego cierra la ventana.</li>
                 </ul>
                 <p>Para capturar una factura de proveedor:</p>
                 <ol>
@@ -1425,7 +1428,7 @@
                 </ol>
                 <h3>Reglas de contabilización</h3>
                 <ul>
-                    <li>Marcar <strong>Contabilizado</strong> y guardar hace la factura <strong>definitiva</strong>: insignia «Contabilizado 🔒», campos y líneas bloqueados, botón <kbd>Guardar</kbd> desactivado, botón <kbd>+</kbd> oculto, eliminación bloqueada desde la lista.</li>
+                    <li>Marcar <strong>Contabilizado</strong> y guardar hace la factura <strong>definitiva</strong>: insignia «Contabilizado 🔒», campos y líneas bloqueados, botón <kbd>Guardar</kbd> desactivado, botón <kbd>+ Agregar una línea</kbd> oculto, eliminación bloqueada desde la lista.</li>
                     <li><strong>No se pide ninguna confirmación antes de contabilizar.</strong></li>
                     <li>Solo las facturas contabilizadas pueden pagarse por Stripe o programarse en pago automático. El desembolso manual sigue disponible.</li>
                 </ul>

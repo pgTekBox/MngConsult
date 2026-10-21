@@ -749,7 +749,7 @@
 
             <div class="footerbar">
                 <div class="f60-actions">
-                    <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked" Text="Enrgistrer" />
+                    <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked" Text="Enregistrer" />
                 </div>
                 <div class="totals">
                     <div class="tot">

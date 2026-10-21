@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -124,7 +124,7 @@
 
             <section id="fr-ecriture">
                 <h2>Écriture</h2>
-                <p>Fenêtre « Nouvelle écriture » ou « Modifier l’écriture », ouverte depuis <span class="chemin">Comptabilité › Journaux</span>.</p>
+                <p>Fenêtre « Nouvelle écriture » ou « Modifier l’écriture », ouverte depuis <span class="chemin">Comptabilité › Journaux</span>. Son en-tête blanc affiche la rubrique « Comptabilité · Écriture » au-dessus du titre « Écriture de journal ».</p>
                 <h3>But</h3>
                 <p>Saisir ou modifier une écriture en partie double : un en-tête (journal, période, date, pièce, libellé) et des lignes (compte, libellé, débit ou crédit).</p>
                 <h3>Boutons et actions</h3>
@@ -136,9 +136,9 @@
                         </ul>
                     </li>
                     <li>Sélecteur <kbd>Sélectionner un compte ▾</kbd> sur chaque ligne : liste des comptes avec une recherche qui ignore les accents (« Rechercher un compte... »). Si le plan comptable ne contient aucun compte : « Aucun compte trouvé. »</li>
-                    <li>Bouton rond <kbd>+</kbd> (« Ajouter une ligne ») : ajoute une ligne vide.</li>
-                    <li><strong>Corbeille</strong> d’une ligne : confirmation « Supprimer cette ligne ? ».</li>
-                    <li><kbd>Enregistrer l’écriture</kbd> : vérifie les règles, enregistre, puis ferme la fenêtre.</li>
+                    <li><kbd>+ Ajouter une ligne</kbd> (bouton en pointillés, sous les lignes) : ajoute une ligne vide.</li>
+                    <li>Bouton rond rouge <kbd>×</kbd> d’une ligne : confirmation « Supprimer cette ligne ? ».</li>
+                    <li><kbd>Enregistrer l’écriture</kbd> (à gauche de la barre fixée au bas de la fenêtre) : vérifie les règles, enregistre, puis ferme la fenêtre.</li>
                 </ul>
                 <h3>Champs de l’en-tête</h3>
                 <table>
@@ -165,7 +165,7 @@
                 <ul>
                     <li>Une nouvelle écriture démarre avec 2 lignes vides.</li>
                     <li>Saisir un débit efface le crédit de la même ligne, et l’inverse.</li>
-                    <li>Pied de fenêtre : Total Débit, Total Crédit et « Écart (D − C) », en vert si nul, en rouge sinon. Un badge est recalculé à chaque frappe : « Équilibré ✓ », « Déséquilibré ✗ » ou « Vide ».</li>
+                    <li>Barre du bas, à droite : Total Débit, Total Crédit et « Écart (D − C) », en vert si nul, en rouge sinon. Un badge est recalculé à chaque frappe : « Équilibré ✓ », « Déséquilibré ✗ » ou « Vide ».</li>
                 </ul>
                 <h3>Règles</h3>
                 <p>Vérifiées à l’enregistrement, dans cet ordre :</p>
@@ -177,13 +177,13 @@
                     <li>Total débit = total crédit (tolérance de 0,005).</li>
                     <li>Le total est supérieur à 0.</li>
                 </ol>
-                <p>Une écriture <strong>Validée</strong> (🔒) ou <strong>Extournée</strong> s’ouvre en lecture seule : champs grisés, boutons <kbd>+</kbd>, <kbd>Charger un template</kbd> et corbeilles masqués, <kbd>Enregistrer</kbd> désactivé.</p>
+                <p>Une écriture <strong>Validée</strong> (🔒) ou <strong>Extournée</strong> s’ouvre en lecture seule : champs grisés, boutons <kbd>+ Ajouter une ligne</kbd>, <kbd>Charger un template</kbd> et <kbd>×</kbd> des lignes masqués, <kbd>Enregistrer</kbd> désactivé.</p>
                 <h3>Marche à suivre</h3>
                 <p>Pour saisir une écriture manuelle :</p>
                 <ol>
                     <li>Dans <span class="chemin">Comptabilité › Journaux</span>, cliquez sur <kbd>+</kbd>.</li>
                     <li>Choisissez le journal et la période, ajustez la date, tapez le libellé.</li>
-                    <li>Sur chaque ligne, choisissez un compte et saisissez un débit ou un crédit. Ajoutez des lignes avec <kbd>+</kbd>.</li>
+                    <li>Sur chaque ligne, choisissez un compte et saisissez un débit ou un crédit. Ajoutez des lignes avec <kbd>+ Ajouter une ligne</kbd>.</li>
                     <li>Vérifiez que le badge indique « Équilibré ✓ ».</li>
                     <li>Laissez « Valider l’écriture » décochée si vous voulez pouvoir la retoucher, puis cliquez sur <kbd>Enregistrer l’écriture</kbd>.</li>
                 </ol>
@@ -256,7 +256,7 @@
 
             <section id="fr-fiche-modele">
                 <h2>Fiche modèle</h2>
-                <p>Fenêtre « Nouveau template » ou « Modifier le template », ouverte depuis <span class="chemin">Comptabilité › Modèles de journaux</span>.</p>
+                <p>Fenêtre « Nouveau template » ou « Modifier le template », ouverte depuis <span class="chemin">Comptabilité › Modèles de journaux</span>. Son en-tête blanc affiche la rubrique « Comptabilité · Modèle » au-dessus du titre « Modèle d’écriture ».</p>
                 <h3>Champs</h3>
                 <table>
                     <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
@@ -279,7 +279,7 @@
                         <tr><td>Montant</td><td>Utilisé seulement en mode pré-rempli.</td></tr>
                     </tbody>
                 </table>
-                <p>Un nouveau modèle démarre avec 2 lignes. Bouton <kbd>+</kbd> pour ajouter une ligne ; corbeille avec confirmation « Supprimer cette ligne ? ».</p>
+                <p>Un nouveau modèle démarre avec 2 lignes. Bouton en pointillés <kbd>+ Ajouter une ligne</kbd>, sous les lignes, pour ajouter une ligne ; bouton rond rouge <kbd>×</kbd> d’une ligne pour la supprimer, avec confirmation « Supprimer cette ligne ? ».</p>
                 <h3>Bandeau d’information</h3>
                 <ul>
                     <li>Case cochée : « Mode <strong>pré-rempli</strong> : les montants enregistrés ici seront automatiquement utilisés à chaque application du modèle. »</li>
@@ -287,7 +287,7 @@
                 </ul>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Enregistrer le modèle</kbd> : vérifie les règles et enregistre.</li>
+                    <li><kbd>Enregistrer le modèle</kbd> (à gauche de la barre fixée au bas de la fenêtre) : vérifie les règles et enregistre.</li>
                 </ul>
                 <h3>Règles</h3>
                 <ul>
@@ -529,10 +529,11 @@
 
             <section id="fr-fiche-compte">
                 <h2>Fiche de compte</h2>
-                <p>Fenêtre « Nouveau compte » (sous-titre « Remplissez les informations du compte ») ou « Modifier le compte » (sous-titre « Numéro : xxxx »), ouverte depuis <span class="chemin">Comptabilité › Plan comptable</span>.</p>
+                <p>Fenêtre « Nouveau compte » (sous-titre « Remplissez les informations du compte ») ou « Modifier le compte » (sous-titre « Numéro : xxxx »), ouverte depuis <span class="chemin">Comptabilité › Plan comptable</span>. La rubrique « Comptabilité · Compte » s’affiche au-dessus du titre, dans l’en-tête blanc.</p>
                 <h3>Boutons et actions</h3>
+                <p>Les boutons sont dans la barre blanche fixée au bas de la fenêtre.</p>
                 <ul>
-                    <li><kbd>Enregistrer</kbd> : vérifie et enregistre.</li>
+                    <li><kbd>Enregistrer</kbd> (bleu, à gauche) : vérifie et enregistre.</li>
                     <li><kbd>Fermer</kbd> : ferme sans enregistrer.</li>
                 </ul>
                 <h3>Champs (carte « Informations du compte »)</h3>
@@ -712,7 +713,7 @@
 
             <section id="en-entry">
                 <h2>Entry</h2>
-                <p>“New entry” or “Edit entry” window, opened from <span class="chemin">Accounting › Journals</span>.</p>
+                <p>“New entry” or “Edit entry” window, opened from <span class="chemin">Accounting › Journals</span>. Its white header shows the section label “Accounting · Entry” above the title “Journal entry”.</p>
                 <h3>Purpose</h3>
                 <p>Key in or edit a double-entry transaction: a header (journal, period, date, voucher number, description) and lines (account, description, debit or credit).</p>
                 <h3>Buttons and actions</h3>
@@ -724,9 +725,9 @@
                         </ul>
                     </li>
                     <li><kbd>Select an account ▾</kbd> picker on each line: list of accounts with an accent-insensitive search (“Search for an account...”). If the chart of accounts contains no account: “No account found.”</li>
-                    <li>Round <kbd>+</kbd> button (“Add a line”): adds an empty line.</li>
-                    <li>Line <strong>trash</strong>: confirmation “Delete this line?”.</li>
-                    <li><kbd>Save entry</kbd>: checks the rules, saves, then closes the window.</li>
+                    <li><kbd>+ Add a line</kbd> (dashed button, under the lines): adds an empty line.</li>
+                    <li>Round red <kbd>×</kbd> button of a line: confirmation “Delete this line?”.</li>
+                    <li><kbd>Save entry</kbd> (on the left of the bar fixed at the bottom of the window): checks the rules, saves, then closes the window.</li>
                 </ul>
                 <h3>Header fields</h3>
                 <table>
@@ -753,7 +754,7 @@
                 <ul>
                     <li>A new entry starts with 2 empty lines.</li>
                     <li>Typing a debit clears the credit of the same line, and vice versa.</li>
-                    <li>Window footer: Total Debit, Total Credit and “Difference (D − C)”, green when zero, red otherwise. A badge is recomputed at every keystroke: “Balanced ✓”, “Unbalanced ✗” or “Empty”.</li>
+                    <li>Bottom bar, on the right: Total Debit, Total Credit and “Difference (D − C)”, green when zero, red otherwise. A badge is recomputed at every keystroke: “Balanced ✓”, “Unbalanced ✗” or “Empty”.</li>
                 </ul>
                 <h3>Rules</h3>
                 <p>Checked when saving, in this order:</p>
@@ -765,13 +766,13 @@
                     <li>Total debit = total credit (0.005 tolerance).</li>
                     <li>The total is greater than 0.</li>
                 </ol>
-                <p>A <strong>Validated</strong> (🔒) or <strong>Reversed</strong> entry opens read-only: greyed fields, <kbd>+</kbd>, <kbd>Load a template</kbd> and trash buttons hidden, <kbd>Save</kbd> disabled.</p>
+                <p>A <strong>Validated</strong> (🔒) or <strong>Reversed</strong> entry opens read-only: greyed fields, <kbd>+ Add a line</kbd>, <kbd>Load a template</kbd> and line <kbd>×</kbd> buttons hidden, <kbd>Save</kbd> disabled.</p>
                 <h3>Step by step</h3>
                 <p>To key in a manual entry:</p>
                 <ol>
                     <li>In <span class="chemin">Accounting › Journals</span>, click <kbd>+</kbd>.</li>
                     <li>Choose the journal and the period, adjust the date, type the description.</li>
-                    <li>On each line, pick an account and enter a debit or a credit. Add lines with <kbd>+</kbd>.</li>
+                    <li>On each line, pick an account and enter a debit or a credit. Add lines with <kbd>+ Add a line</kbd>.</li>
                     <li>Check that the badge reads “Balanced ✓”.</li>
                     <li>Leave “Validate the entry” unchecked if you want to be able to edit it later, then click <kbd>Save entry</kbd>.</li>
                 </ol>
@@ -844,7 +845,7 @@
 
             <section id="en-template-form">
                 <h2>Template form</h2>
-                <p>“New template” or “Edit template” window, opened from <span class="chemin">Accounting › Journal templates</span>.</p>
+                <p>“New template” or “Edit template” window, opened from <span class="chemin">Accounting › Journal templates</span>. Its white header shows the section label “Accounting · Template” above the title “Entry template”.</p>
                 <h3>Fields</h3>
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
@@ -867,7 +868,7 @@
                         <tr><td>Amount</td><td>Used only in pre-filled mode.</td></tr>
                     </tbody>
                 </table>
-                <p>A new template starts with 2 lines. <kbd>+</kbd> button to add a line; trash with confirmation “Delete this line?”.</p>
+                <p>A new template starts with 2 lines. Dashed <kbd>+ Add a line</kbd> button, under the lines, to add a line; round red <kbd>×</kbd> button of a line to remove it, with confirmation “Delete this line?”.</p>
                 <h3>Information banner</h3>
                 <ul>
                     <li>Checkbox checked: “<strong>Pre-filled</strong> mode: the amounts saved here are automatically used each time the template is applied.”</li>
@@ -875,7 +876,7 @@
                 </ul>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Save template</kbd>: checks the rules and saves.</li>
+                    <li><kbd>Save template</kbd> (on the left of the bar fixed at the bottom of the window): checks the rules and saves.</li>
                 </ul>
                 <h3>Rules</h3>
                 <ul>
@@ -1117,10 +1118,11 @@
 
             <section id="en-account-form">
                 <h2>Account form</h2>
-                <p>“New account” window (subtitle “Fill in the account information”) or “Edit account” (subtitle “Number: xxxx”), opened from <span class="chemin">Accounting › Chart of accounts</span>.</p>
+                <p>“New account” window (subtitle “Fill in the account information”) or “Edit account” (subtitle “Number: xxxx”), opened from <span class="chemin">Accounting › Chart of accounts</span>. The section label “Accounting · Account” appears above the title, in the white header.</p>
                 <h3>Buttons and actions</h3>
+                <p>The buttons sit in the white bar fixed at the bottom of the window.</p>
                 <ul>
-                    <li><kbd>Save</kbd>: checks and saves.</li>
+                    <li><kbd>Save</kbd> (blue, on the left): checks and saves.</li>
                     <li><kbd>Close</kbd>: closes without saving.</li>
                 </ul>
                 <h3>Fields (“Account information” card)</h3>
@@ -1300,7 +1302,7 @@
 
             <section id="es-asiento">
                 <h2>Asiento</h2>
-                <p>Ventana «Nuevo asiento» o «Editar asiento», abierta desde <span class="chemin">Contabilidad › Diarios</span>.</p>
+                <p>Ventana «Nuevo asiento» o «Editar asiento», abierta desde <span class="chemin">Contabilidad › Diarios</span>. Su encabezado blanco muestra la rúbrica «Contabilidad · Asiento» encima del título «Asiento de diario».</p>
                 <h3>Objetivo</h3>
                 <p>Introducir o modificar un asiento por partida doble: una cabecera (diario, período, fecha, comprobante, descripción) y líneas (cuenta, descripción, débito o crédito).</p>
                 <h3>Botones y acciones</h3>
@@ -1312,9 +1314,9 @@
                         </ul>
                     </li>
                     <li>Selector <kbd>Seleccionar una cuenta ▾</kbd> en cada línea: lista de cuentas con una búsqueda que ignora los acentos («Buscar una cuenta...»). Si el plan contable no contiene ninguna cuenta: «No se encontró ninguna cuenta.»</li>
-                    <li>Botón redondo <kbd>+</kbd> («Agregar una línea»): añade una línea vacía.</li>
-                    <li><strong>Papelera</strong> de una línea: confirmación «¿Eliminar esta línea?».</li>
-                    <li><kbd>Guardar asiento</kbd>: comprueba las reglas, guarda y cierra la ventana.</li>
+                    <li><kbd>+ Agregar una línea</kbd> (botón punteado, debajo de las líneas): añade una línea vacía.</li>
+                    <li>Botón redondo rojo <kbd>×</kbd> de una línea: confirmación «¿Eliminar esta línea?».</li>
+                    <li><kbd>Guardar asiento</kbd> (a la izquierda de la barra fija en la parte inferior de la ventana): comprueba las reglas, guarda y cierra la ventana.</li>
                 </ul>
                 <h3>Campos de la cabecera</h3>
                 <table>
@@ -1341,7 +1343,7 @@
                 <ul>
                     <li>Un nuevo asiento empieza con 2 líneas vacías.</li>
                     <li>Introducir un débito borra el crédito de la misma línea, y viceversa.</li>
-                    <li>Pie de la ventana: Total Débito, Total Crédito y «Diferencia (D − C)», en verde si es nula, en rojo si no. Una insignia se recalcula con cada pulsación: «Cuadrado ✓», «Descuadrado ✗» o «Vacío».</li>
+                    <li>Barra inferior, a la derecha: Total Débito, Total Crédito y «Diferencia (D − C)», en verde si es nula, en rojo si no. Una insignia se recalcula con cada pulsación: «Cuadrado ✓», «Descuadrado ✗» o «Vacío».</li>
                 </ul>
                 <h3>Reglas</h3>
                 <p>Comprobadas al guardar, en este orden:</p>
@@ -1353,13 +1355,13 @@
                     <li>Total débito = total crédito (tolerancia de 0,005).</li>
                     <li>El total es superior a 0.</li>
                 </ol>
-                <p>Un asiento <strong>Validado</strong> (🔒) o <strong>Reversado</strong> se abre en solo lectura: campos en gris, botones <kbd>+</kbd>, <kbd>Cargar una plantilla</kbd> y papeleras ocultos, <kbd>Guardar</kbd> desactivado.</p>
+                <p>Un asiento <strong>Validado</strong> (🔒) o <strong>Reversado</strong> se abre en solo lectura: campos en gris, botones <kbd>+ Agregar una línea</kbd>, <kbd>Cargar una plantilla</kbd> y <kbd>×</kbd> de las líneas ocultos, <kbd>Guardar</kbd> desactivado.</p>
                 <h3>Paso a paso</h3>
                 <p>Para introducir un asiento manual:</p>
                 <ol>
                     <li>En <span class="chemin">Contabilidad › Diarios</span>, haga clic en <kbd>+</kbd>.</li>
                     <li>Elija el diario y el período, ajuste la fecha, escriba la descripción.</li>
-                    <li>En cada línea, elija una cuenta e introduzca un débito o un crédito. Añada líneas con <kbd>+</kbd>.</li>
+                    <li>En cada línea, elija una cuenta e introduzca un débito o un crédito. Añada líneas con <kbd>+ Agregar una línea</kbd>.</li>
                     <li>Compruebe que la insignia indica «Cuadrado ✓».</li>
                     <li>Deje «Validar el asiento» sin marcar si quiere poder retocarlo, y haga clic en <kbd>Guardar asiento</kbd>.</li>
                 </ol>
@@ -1432,7 +1434,7 @@
 
             <section id="es-ficha-plantilla">
                 <h2>Ficha de plantilla</h2>
-                <p>Ventana «Nueva plantilla» o «Modificar la plantilla», abierta desde <span class="chemin">Contabilidad › Plantillas de diarios</span>.</p>
+                <p>Ventana «Nueva plantilla» o «Modificar la plantilla», abierta desde <span class="chemin">Contabilidad › Plantillas de diarios</span>. Su encabezado blanco muestra la rúbrica «Contabilidad · Plantilla» encima del título «Plantilla de asiento».</p>
                 <h3>Campos</h3>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
@@ -1455,7 +1457,7 @@
                         <tr><td>Importe</td><td>Se usa solo en modo pre-rellenado.</td></tr>
                     </tbody>
                 </table>
-                <p>Una nueva plantilla empieza con 2 líneas. Botón <kbd>+</kbd> para añadir una línea; papelera con confirmación «¿Eliminar esta línea?».</p>
+                <p>Una nueva plantilla empieza con 2 líneas. Botón punteado <kbd>+ Agregar una línea</kbd>, debajo de las líneas, para añadir una línea; botón redondo rojo <kbd>×</kbd> de una línea para eliminarla, con confirmación «¿Eliminar esta línea?».</p>
                 <h3>Banner de información</h3>
                 <ul>
                     <li>Casilla marcada: «Modo <strong>pre-rellenado</strong>: los importes guardados aquí se utilizan automáticamente cada vez que se aplica la plantilla.»</li>
@@ -1463,7 +1465,7 @@
                 </ul>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Guardar plantilla</kbd>: comprueba las reglas y guarda.</li>
+                    <li><kbd>Guardar plantilla</kbd> (a la izquierda de la barra fija en la parte inferior de la ventana): comprueba las reglas y guarda.</li>
                 </ul>
                 <h3>Reglas</h3>
                 <ul>
@@ -1705,10 +1707,11 @@
 
             <section id="es-ficha-cuenta">
                 <h2>Ficha de cuenta</h2>
-                <p>Ventana «Nueva cuenta» (subtítulo «Rellene la información de la cuenta») o «Modificar la cuenta» (subtítulo «Número: xxxx»), abierta desde <span class="chemin">Contabilidad › Plan contable</span>.</p>
+                <p>Ventana «Nueva cuenta» (subtítulo «Rellene la información de la cuenta») o «Modificar la cuenta» (subtítulo «Número: xxxx»), abierta desde <span class="chemin">Contabilidad › Plan contable</span>. La rúbrica «Contabilidad · Cuenta» aparece encima del título, en el encabezado blanco.</p>
                 <h3>Botones y acciones</h3>
+                <p>Los botones están en la barra blanca fija en la parte inferior de la ventana.</p>
                 <ul>
-                    <li><kbd>Guardar</kbd>: comprueba y guarda.</li>
+                    <li><kbd>Guardar</kbd> (azul, a la izquierda): comprueba y guarda.</li>
                     <li><kbd>Cerrar</kbd>: cierra sin guardar.</li>
                 </ul>
                 <h3>Campos (tarjeta «Información de la cuenta»)</h3>
