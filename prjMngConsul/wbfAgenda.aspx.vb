@@ -198,6 +198,7 @@ Public Class wbfAgenda
                     .fin = If(dFin.Date > dDeb.Date, 24 * 60, dFin.Hour * 60 + dFin.Minute),
                     .client = If(client = "", titre, client),
                     .objet = If(client = "", Txt(r("TypeName")), titre),
+                    .cli = If(IsDBNull(r("CustomerId")), "", Convert.ToString(r("CustomerId"))),
                     .lieu = Txt(r("Location")),
                     .typ = Txt(r("TypeName")),
                     .emp = empId,
@@ -251,7 +252,7 @@ Public Class wbfAgenda
     Private Function Textes() As Object
         Dim cles As String() = {
             "toutAgenda", "resume", "toutEquipe", "periodeDuAu", "prec5", "suiv5", "aujourdhui", "employeAffiche", "equipeN",
-            "plusRdv", "aide", "lTermine", "lEnCours", "lAVenir", "auj", "rdvH", "nouveauIci",
+            "plusRdv", "aide", "lTermine", "lAFacturer", "chipAFacturer", "lEnCours", "lAVenir", "auj", "rdvH", "nouveauIci",
             "majTitre", "majAide", "plagesLibres", "aucunePlage", "jour", "heure", "duree", "employe", "aucunEmploye",
             "plageLibre", "echanger", "aucunEchange", "conflit", "changement", "enregistrer", "ficheComplete",
             "annulerRdv", "confirmAnnuler", "fermer", "winRdv", "facturable", "rappelA"
@@ -279,6 +280,8 @@ Public Class wbfAgenda
             Case "plusRdv" : Return Choose3(lang, "+ RDV", "+ Appt", "+ Cita")
             Case "aide" : Return Choose3(lang, "Touchez un rendez-vous pour le déplacer, l'échanger avec un autre, le confier à un autre employé ou l'annuler. Touchez une heure libre pour ajouter un RDV.", "Tap an appointment to move it, swap it with another, hand it to another employee or cancel it. Tap a free hour to add an appointment.", "Toque una cita para moverla, intercambiarla con otra, asignarla a otro empleado o cancelarla. Toque una hora libre para añadir una cita.")
             Case "lTermine" : Return Choose3(lang, "Terminé", "Completed", "Terminado")
+            Case "lAFacturer" : Return Choose3(lang, "Terminé : facturer", "Completed: invoice", "Terminado: facturar")
+            Case "chipAFacturer" : Return Choose3(lang, "Terminé · facturer", "Completed · invoice", "Terminado · facturar")
             Case "lEnCours" : Return Choose3(lang, "En cours", "In progress", "En curso")
             Case "lAVenir" : Return Choose3(lang, "À venir", "Upcoming", "Próximo")
             Case "auj" : Return Choose3(lang, "aujourd'hui", "today", "hoy")
