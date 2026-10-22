@@ -1,226 +1,320 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
+Imports System.Globalization
 Imports Newtonsoft.Json
-Imports Telerik.Web.UI
+Imports Newtonsoft.Json.Linq
 
+''' <summary>
+''' L'agenda, au modèle de la fenêtre « Tout l'agenda » de la page d'accueil 60secondes
+''' du 21 octobre : 5 jours ouvrables par colonne, heure par heure, navigation ‹ ›,
+''' filtre par employé, « + RDV » ; toucher un RDV ouvre « Mettre à jour le RDV » à droite
+''' (jour, heure, durée, employé, plages libres, échange avec un autre RDV, annulation).
+''' Le serveur bâtit le modèle (rendez-vous s0100, employés s0106) ; la page le dessine.
+''' Les changements reviennent par un postback (hfAction + hfData) puis la page se recharge.
+''' </summary>
 Public Class wbfAgenda
     Inherits clsData
 
-    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+    ''' <summary>Le modèle de la page, en JSON.</summary>
+    Protected ModeleJson As String = "null"
 
-        rwAppointment.Title = T("Rendez-vous", "Appointment", "Cita")
+    ''' <summary>Nombre de jours ouvrables chargés : la période affichée (5) et les deux suivantes, pour les plages libres.</summary>
+    Private Const JOURS_CHARGES As Integer = 15
+
+    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        rwAppointment.Title = L("winRdv")
         ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
         DirectCast(Master, SiteMaster).FondDePage = True
-        ApplyLocalization()
+
+        If Not isAuthenticated Then
+            Response.Redirect("~/Default.aspx")
+            Return
+        End If
 
         If Not IsPostBack Then
-
-            If Not isAuthenticated Then
-                Response.Redirect("~/Default.aspx")
-                Return
-            End If
-            ' Date courante par défaut
-            hfCurrentDate.Value = Date.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            hfViewMode.Value = "month"
-            LoadAll()
+            Try
+                ModeleJson = JsonConvert.SerializeObject(BatirModele(), New JsonSerializerSettings With {
+                    .StringEscapeHandling = StringEscapeHandling.EscapeHtml
+                })
+            Catch ex As Exception
+                System.Diagnostics.Debug.WriteLine("Agenda : " & ex.Message)
+                ModeleJson = "null"
+            End Try
         End If
     End Sub
 
-    ''' <summary>
-    ''' Libellés de la barre d'outils et de l'entête du mois.
-    '''
-    ''' Ils passent par des Literal et non par des &lt;%= %&gt; : la page porte un
-    ''' RadAjaxPanel, et Telerik déplace l'UpdatePanel dans la collection de
-    ''' contrôles du conteneur. Un seul bloc de code dans ce conteneur fait
-    ''' échouer ce déplacement (« La collection Controls ne peut pas être
-    ''' modifiée »). Les seuls &lt;%= %&gt; restants sont dans le RadCodeBlock du
-    ''' bas de page, qui est justement là pour ça.
-    ''' </summary>
-    Private Sub ApplyLocalization()
-        litTipPrev.Text = T("Précédent", "Previous", "Anterior")
-        litTipNext.Text = T("Suivant", "Next", "Siguiente")
-        litTipToday.Text = T("Aujourd'hui", "Today", "Hoy")
+    ' =====================================================================
+    ' Les changements : déplacer / confier, échanger, annuler
+    ' =====================================================================
 
-        litViewMonth.Text = T("Mois", "Month", "Mes")
-        litViewWeek.Text = T("Semaine", "Week", "Semana")
-        litViewDay.Text = T("Jour", "Day", "Día")
-
-        litAddAppt.Text = T("Rendez-vous", "Appointment", "Cita")
-        litRubrique.Text = T("Mon entreprise", "My business", "Mi empresa")
-        litTitre.Text = T("Agenda", "Agenda", "Agenda")
-        litSousTitre.Text = T("Vos rendez-vous, livraisons et commandes spéciales, par employé.", "Your appointments, deliveries and special orders, by employee.", "Sus citas, entregas y pedidos especiales, por empleado.")
-        litEmployees.Text = T("Employés", "Employees", "Empleados")
-
-        litDow1.Text = T("Lun", "Mon", "Lun")
-        litDow2.Text = T("Mar", "Tue", "Mar")
-        litDow3.Text = T("Mer", "Wed", "Mié")
-        litDow4.Text = T("Jeu", "Thu", "Jue")
-        litDow5.Text = T("Ven", "Fri", "Vie")
-        litDow6.Text = T("Sam", "Sat", "Sáb")
-        litDow7.Text = T("Dim", "Sun", "Dom")
+    Protected Sub btnAction_Click(sender As Object, e As EventArgs) Handles btnAction.Click
+        Try
+            Dim d As JObject = JObject.Parse(If(hfData.Value, "{}"))
+            Select Case hfAction.Value
+                Case "maj"
+                    Dim jour As Date = Date.ParseExact(CStr(d("jour")), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                    Dim debut As Date = jour.AddMinutes(CInt(d("deb")))
+                    Dim fin As Date = debut.AddMinutes(Math.Max(5, CInt(d("duree"))))
+                    Dim emp As String = If(CStr(d("emp")), "")
+                    Resauver(CInt(d("id")), debut, fin, emp, Nothing)
+                Case "echanger"
+                    Dim a As DataRow = LireRdv(CInt(d("id")))
+                    Dim b As DataRow = LireRdv(CInt(d("autre")))
+                    If a IsNot Nothing AndAlso b IsNot Nothing Then
+                        Dim aDeb As Date = CDate(a("StartDateTime")), aFin As Date = CDate(a("EndDateTime"))
+                        Dim bDeb As Date = CDate(b("StartDateTime")), bFin As Date = CDate(b("EndDateTime"))
+                        ' Chacun prend la plage de l'autre en gardant sa durée.
+                        Deplacer(CInt(a("Id")), bDeb, bDeb + (aFin - aDeb))
+                        Deplacer(CInt(b("Id")), aDeb, aDeb + (bFin - bDeb))
+                    End If
+                Case "annuler"
+                    Dim r As DataRow = LireRdv(CInt(d("id")))
+                    If r IsNot Nothing Then
+                        Resauver(CInt(r("Id")), CDate(r("StartDateTime")), CDate(r("EndDateTime")),
+                                 If(IsDBNull(r("EmployeeId")), "", r("EmployeeId").ToString()), "Annulé")
+                    End If
+            End Select
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Agenda, changement : " & ex.Message)
+        End Try
+        Response.Redirect(Request.RawUrl, False)
+        Context.ApplicationInstance.CompleteRequest()
     End Sub
 
-    ''' <summary>Sélecteur de langue simple (fr/en/es) pour les libellés de la page.</summary>
-    Protected Function T(fr As String, en As String, es As String) As String
-        Select Case CurrentLang
+    ''' <summary>Un RDV de la compagnie (s0101), ou Nothing.</summary>
+    Private Function LireRdv(id As Integer) As DataRow
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@Id", id))
+        Dim ds As DataSet = ExecuteSQLds("s0101GetAppointmentById", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return Nothing
+        Return ds.Tables(0).Rows(0)
+    End Function
+
+    Private Sub Deplacer(id As Integer, debut As Date, fin As Date)
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@Id", id))
+        p.Add(New SqlParameter("@StartDateTime", debut))
+        p.Add(New SqlParameter("@EndDateTime", fin))
+        p.Add(New SqlParameter("@UserName", If(User.Identity.Name, "")))
+        ExecuteSQL("s0104MoveAppointment", p)
+    End Sub
+
+    ''' <summary>
+    ''' Réenregistre un RDV (s0102) avec une nouvelle plage, un employé et, au besoin, un
+    ''' nouvel état ; tout le reste est repris tel quel de s0101.
+    ''' </summary>
+    Private Sub Resauver(id As Integer, debut As Date, fin As Date, emp As String, statut As String)
+        Dim r As DataRow = LireRdv(id)
+        If r Is Nothing Then Return
+        Dim empId As Integer
+        Dim p As New Collection
+        p.Add(New SqlParameter("@Id", id))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@Title", r("Title")))
+        p.Add(New SqlParameter("@Description", r("Description")))
+        p.Add(New SqlParameter("@StartDateTime", debut))
+        p.Add(New SqlParameter("@EndDateTime", fin))
+        p.Add(New SqlParameter("@IsAllDay", If(IsDBNull(r("IsAllDay")), False, r("IsAllDay"))))
+        p.Add(New SqlParameter("@CustomerId", r("CustomerId")))
+        p.Add(New SqlParameter("@EmployeeId", If(Integer.TryParse(emp, empId), CObj(empId), DBNull.Value)))
+        p.Add(New SqlParameter("@AppointmentTypeId", r("AppointmentTypeId")))
+        p.Add(New SqlParameter("@Status", If(statut, If(IsDBNull(r("Status")), "Planifié", r("Status")))))
+        p.Add(New SqlParameter("@Location", r("Location")))
+        p.Add(New SqlParameter("@RecurrenceRule", r("RecurrenceRule")))
+        p.Add(New SqlParameter("@ReminderMinutes", r("ReminderMinutes")))
+        p.Add(New SqlParameter("@UserName", If(User.Identity.Name, "")))
+        Dim outNew As New SqlParameter("@NewId", SqlDbType.Int)
+        outNew.Direction = ParameterDirection.Output
+        p.Add(outNew)
+        ExecuteSQL("s0102SaveAppointment", p)
+    End Sub
+
+    ' =====================================================================
+    ' Le modèle
+    ' =====================================================================
+
+    Private Function BatirModele() As Object
+        Dim aujourdhui As Date = Date.Today
+
+        ' Premier jour affiché (?debut=aaaa-mm-jj), aujourd'hui par défaut ; un samedi ou un dimanche passe au lundi.
+        Dim debut As Date = aujourdhui
+        Dim q As Date
+        If Date.TryParseExact(If(Request.QueryString("debut"), ""), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, q) Then debut = q
+        While debut.DayOfWeek = DayOfWeek.Saturday OrElse debut.DayOfWeek = DayOfWeek.Sunday
+            debut = debut.AddDays(1)
+        End While
+
+        Dim jours As New List(Of Date)
+        Dim d As Date = debut
+        While jours.Count < JOURS_CHARGES
+            If d.DayOfWeek <> DayOfWeek.Saturday AndAlso d.DayOfWeek <> DayOfWeek.Sunday Then jours.Add(d)
+            d = d.AddDays(1)
+        End While
+
+        ' Les employés
+        Dim emps As New List(Of Object)
+        Dim couleurs As New Dictionary(Of Integer, String)
+        Dim pe As New Collection
+        pe.Add(New SqlParameter("@CompanyGUID", Company))
+        Dim dsE As DataSet = ExecuteSQLds("s0106GetEmployeesForAgenda", pe)
+        If dsE IsNot Nothing AndAlso dsE.Tables.Count > 0 Then
+            For Each r As DataRow In dsE.Tables(0).Rows
+                Dim id As Integer = Convert.ToInt32(r("Id"))
+                Dim coul As String = If(Txt(r("ColorHex")) = "", "#1B4F9C", Txt(r("ColorHex")))
+                couleurs(id) = coul
+                emps.Add(New With {.v = id.ToString(), .lab = Txt(r("FullName")), .ini = Initiales(Txt(r("FullName"))), .c = coul})
+            Next
+        End If
+
+        ' Les rendez-vous des jours chargés
+        Dim rdv As New List(Of Object)
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@StartDate", jours(0)))
+        p.Add(New SqlParameter("@EndDate", jours(jours.Count - 1).AddDays(1)))
+        p.Add(New SqlParameter("@EmployeeId", DBNull.Value))
+        Dim ds As DataSet = ExecuteSQLds("s0100GetAppointmentsByRange", p)
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+            For Each r As DataRow In ds.Tables(0).Rows
+                Dim dDeb As Date = Convert.ToDateTime(r("StartDateTime"))
+                Dim dFin As Date = Convert.ToDateTime(r("EndDateTime"))
+                Dim statut As String = Txt(r("Status"))
+                If statut = "Annulé" Then Continue For
+                Dim empId As String = If(IsDBNull(r("EmployeeId")), "", Convert.ToInt32(r("EmployeeId")).ToString())
+                Dim etat As String = "avenir"
+                If statut = "Terminé" OrElse dFin < Date.Now Then
+                    etat = "termine"
+                ElseIf dDeb <= Date.Now Then
+                    etat = "encours"
+                End If
+                Dim client As String = Txt(r("CustomerName"))
+                Dim titre As String = Txt(r("Title"))
+                rdv.Add(New With {
+                    .id = Convert.ToInt32(r("Id")),
+                    .jour = dDeb.ToString("yyyy-MM-dd"),
+                    .deb = dDeb.Hour * 60 + dDeb.Minute,
+                    .fin = If(dFin.Date > dDeb.Date, 24 * 60, dFin.Hour * 60 + dFin.Minute),
+                    .client = If(client = "", titre, client),
+                    .objet = If(client = "", Txt(r("TypeName")), titre),
+                    .lieu = Txt(r("Location")),
+                    .typ = Txt(r("TypeName")),
+                    .emp = empId,
+                    .empNom = Txt(r("EmployeeName")),
+                    .c = If(empId <> "" AndAlso couleurs.ContainsKey(CInt(empId)), couleurs(CInt(empId)), "#8D9CB3"),
+                    .etat = etat,
+                    .rappel = If(IsDBNull(r("ReminderMinutes")), -1, Convert.ToInt32(r("ReminderMinutes")))
+                })
+            Next
+        End If
+
+        Return New With {
+            .lang = CurrentLang,
+            .jours = jours.Select(Function(j) j.ToString("yyyy-MM-dd")).ToList(),
+            .prec = PasserJoursOuvrables(debut, -5).ToString("yyyy-MM-dd"),
+            .suiv = jours(5).ToString("yyyy-MM-dd"),
+            .aujourdhui = aujourdhui.ToString("yyyy-MM-dd"),
+            .maintenant = Date.Now.Hour * 60 + Date.Now.Minute,
+            .emps = emps,
+            .rdv = rdv,
+            .t = Textes()
+        }
+    End Function
+
+    Private Shared Function PasserJoursOuvrables(d As Date, n As Integer) As Date
+        Dim pas As Integer = Math.Sign(n), reste As Integer = Math.Abs(n)
+        While reste > 0
+            d = d.AddDays(pas)
+            If d.DayOfWeek <> DayOfWeek.Saturday AndAlso d.DayOfWeek <> DayOfWeek.Sunday Then reste -= 1
+        End While
+        Return d
+    End Function
+
+    ' =====================================================================
+    ' Petits outils
+    ' =====================================================================
+
+    Private Shared Function Txt(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return ""
+        Return Convert.ToString(o).Trim()
+    End Function
+
+    Private Shared Function Initiales(nom As String) As String
+        Dim parts = nom.Split(New Char() {" "c, "-"c}, StringSplitOptions.RemoveEmptyEntries)
+        If parts.Length = 0 Then Return ""
+        If parts.Length = 1 Then Return parts(0).Substring(0, Math.Min(2, parts(0).Length)).ToUpperInvariant()
+        Return (parts(0).Substring(0, 1) & parts(parts.Length - 1).Substring(0, 1)).ToUpperInvariant()
+    End Function
+
+    ''' <summary>Les textes dont la page a besoin côté navigateur.</summary>
+    Private Function Textes() As Object
+        Dim cles As String() = {
+            "toutAgenda", "resume", "toutEquipe", "periodeDuAu", "prec5", "suiv5", "aujourdhui", "employeAffiche", "equipeN",
+            "plusRdv", "aide", "lTermine", "lEnCours", "lAVenir", "auj", "rdvH", "nouveauIci",
+            "majTitre", "majAide", "plagesLibres", "aucunePlage", "jour", "heure", "duree", "employe", "aucunEmploye",
+            "plageLibre", "echanger", "aucunEchange", "conflit", "changement", "enregistrer", "ficheComplete",
+            "annulerRdv", "confirmAnnuler", "fermer", "winRdv", "facturable", "rappelA"
+        }
+        Dim t As New Dictionary(Of String, String)
+        For Each k As String In cles : t(k) = L(k) : Next
+        Return t
+    End Function
+
+    ''' <summary>Traductions de l'agenda (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Agenda — 60secondes", "Calendar — 60secondes", "Agenda — 60secondes")
+            Case "winRdv" : Return Choose3(lang, "Rendez-vous", "Appointment", "Cita")
+            Case "toutAgenda" : Return Choose3(lang, "Tout l'agenda", "Full calendar", "Toda la agenda")
+            Case "resume" : Return Choose3(lang, "{0} RDV · {1} h planifiées", "{0} appt · {1} h scheduled", "{0} citas · {1} h planificadas")
+            Case "toutEquipe" : Return Choose3(lang, " · toute l'équipe", " · whole team", " · todo el equipo")
+            Case "periodeDuAu" : Return Choose3(lang, "{0} au {1}", "{0} to {1}", "{0} al {1}")
+            Case "prec5" : Return Choose3(lang, "5 jours précédents", "Previous 5 days", "5 días anteriores")
+            Case "suiv5" : Return Choose3(lang, "5 jours suivants", "Next 5 days", "5 días siguientes")
+            Case "aujourdhui" : Return Choose3(lang, "Aujourd'hui", "Today", "Hoy")
+            Case "employeAffiche" : Return Choose3(lang, "Employé affiché", "Employee shown", "Empleado mostrado")
+            Case "equipeN" : Return Choose3(lang, "Toute l'équipe ({0})", "Whole team ({0})", "Todo el equipo ({0})")
+            Case "plusRdv" : Return Choose3(lang, "+ RDV", "+ Appt", "+ Cita")
+            Case "aide" : Return Choose3(lang, "Touchez un rendez-vous pour le déplacer, l'échanger avec un autre, le confier à un autre employé ou l'annuler. Touchez une heure libre pour ajouter un RDV.", "Tap an appointment to move it, swap it with another, hand it to another employee or cancel it. Tap a free hour to add an appointment.", "Toque una cita para moverla, intercambiarla con otra, asignarla a otro empleado o cancelarla. Toque una hora libre para añadir una cita.")
+            Case "lTermine" : Return Choose3(lang, "Terminé", "Completed", "Terminado")
+            Case "lEnCours" : Return Choose3(lang, "En cours", "In progress", "En curso")
+            Case "lAVenir" : Return Choose3(lang, "À venir", "Upcoming", "Próximo")
+            Case "auj" : Return Choose3(lang, "aujourd'hui", "today", "hoy")
+            Case "rdvH" : Return Choose3(lang, "{0} RDV · {1} h", "{0} appt · {1} h", "{0} citas · {1} h")
+            Case "nouveauIci" : Return Choose3(lang, "Nouveau RDV le {0} à {1}", "New appointment on {0} at {1}", "Nueva cita el {0} a las {1}")
+            Case "majTitre" : Return Choose3(lang, "Mettre à jour le RDV", "Update the appointment", "Actualizar la cita")
+            Case "majAide" : Return Choose3(lang, "Mettre à jour", "Update", "Actualizar")
+            Case "plagesLibres" : Return Choose3(lang, "Prochaines plages libres", "Next free slots", "Próximos huecos libres")
+            Case "aucunePlage" : Return Choose3(lang, "Aucune plage libre dans les trois prochaines semaines.", "No free slot in the next three weeks.", "Ningún hueco libre en las próximas tres semanas.")
+            Case "jour" : Return Choose3(lang, "Jour", "Day", "Día")
+            Case "heure" : Return Choose3(lang, "Heure", "Time", "Hora")
+            Case "duree" : Return Choose3(lang, "Durée", "Duration", "Duración")
+            Case "employe" : Return Choose3(lang, "Employé", "Employee", "Empleado")
+            Case "aucunEmploye" : Return Choose3(lang, "Aucun employé", "No employee", "Ningún empleado")
+            Case "plageLibre" : Return Choose3(lang, "Changer pour une plage libre", "Switch to a free slot", "Cambiar a un hueco libre")
+            Case "echanger" : Return Choose3(lang, "Échanger sa plage avec un autre RDV", "Swap its slot with another appointment", "Intercambiar su hueco con otra cita")
+            Case "aucunEchange" : Return Choose3(lang, "Aucun échange", "No swap", "Ningún intercambio")
+            Case "conflit" : Return Choose3(lang, "Conflit : {0} a déjà {1} à cette heure.", "Conflict: {0} already has {1} at this time.", "Conflicto: {0} ya tiene {1} a esta hora.")
+            Case "changement" : Return Choose3(lang, "Nouveau : {0}", "New: {0}", "Nuevo: {0}")
+            Case "enregistrer" : Return Choose3(lang, "Enregistrer le changement", "Save the change", "Guardar el cambio")
+            Case "ficheComplete" : Return Choose3(lang, "Ouvrir la fiche complète", "Open the full record", "Abrir la ficha completa")
+            Case "annulerRdv" : Return Choose3(lang, "Annuler le RDV", "Cancel the appointment", "Cancelar la cita")
+            Case "confirmAnnuler" : Return Choose3(lang, "Annuler ce rendez-vous ?", "Cancel this appointment?", "¿Cancelar esta cita?")
+            Case "fermer" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
+            Case "facturable" : Return Choose3(lang, "Terminé : il peut être facturé depuis la fiche.", "Completed: it can be invoiced from the record.", "Terminada: puede facturarse desde la ficha.")
+            Case "rappelA" : Return Choose3(lang, "Rappel : à {0}", "Reminder: at {0}", "Recordatorio: a las {0}")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
             Case "en" : Return en
             Case "es" : Return es
             Case Else : Return fr
         End Select
-    End Function
-
-    ''' <summary>Locale BCP-47 pour toLocaleDateString côté JS.</summary>
-    Protected Function AgLocale() As String
-        Select Case CurrentLang
-            Case "en" : Return "en-CA"
-            Case "es" : Return "es-ES"
-            Case Else : Return "fr-CA"
-        End Select
-    End Function
-
-    ''' <summary>
-    ''' Handler unique pour les requêtes Ajax du RadAjaxManager.
-    ''' Appelé depuis le JS via : $find('ram1').ajaxRequest('refresh' | 'move')
-    ''' </summary>
-    Protected Sub RAP1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles RAP1.AjaxRequest
-        Select Case e.Argument
-            Case "refresh"
-                LoadAll()
-            Case "move"
-                ProcessMove()
-                LoadAll()
-            Case Else
-                LoadAll()
-        End Select
-    End Sub
-
-    ''' <summary>
-    ''' Traite un drag&drop : déplace le RDV dans la BD
-    ''' Format hfMoveData : "Id|Start|End"
-    ''' </summary>
-    Private Sub ProcessMove()
-        Dim raw As String = hfMoveData.Value
-        If String.IsNullOrEmpty(raw) Then Return
-
-        Dim parts() As String = raw.Split("|"c)
-        If parts.Length < 3 Then Return
-
-        Dim id As Integer = 0
-        Dim dStart, dEnd As Date
-        If Not Integer.TryParse(parts(0), id) Then Return
-        If Not Date.TryParse(parts(1), dStart) Then Return
-        If Not Date.TryParse(parts(2), dEnd) Then Return
-
-        Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", Company))
-        p.Add(New SqlParameter("@Id", id))
-        p.Add(New SqlParameter("@StartDateTime", dStart))
-        p.Add(New SqlParameter("@EndDateTime", dEnd))
-        p.Add(New SqlParameter("@UserName", If(User.Identity.Name, "")))
-
-        ExecuteSQL("s0104MoveAppointment", p)
-
-        hfMoveData.Value = ""
-    End Sub
-
-    ''' <summary>
-    ''' Charge events + employés + types selon la vue + date courante.
-    ''' </summary>
-    Private Sub LoadAll()
-        Dim view As String = If(hfViewMode.Value, "month").ToLower()
-        Dim current As Date = Date.Now
-        Date.TryParse(hfCurrentDate.Value, current)
-
-        ' Calcul de la plage selon la vue
-        Dim rangeStart, rangeEnd As Date
-        Select Case view
-            Case "month"
-                Dim first = New Date(current.Year, current.Month, 1)
-                ' on prend une fenêtre élargie pour couvrir le grid 6x7
-                rangeStart = first.AddDays(-7)
-                rangeEnd = first.AddMonths(1).AddDays(7)
-            Case "week"
-                Dim sow = StartOfWeek(current)
-                rangeStart = sow
-                rangeEnd = sow.AddDays(7)
-            Case "day"
-                rangeStart = current.Date
-                rangeEnd = current.Date.AddDays(1)
-            Case Else
-                rangeStart = current.AddDays(-15)
-                rangeEnd = current.AddDays(15)
-        End Select
-
-        ' === Events ===
-        Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", Company))
-        p.Add(New SqlParameter("@StartDate", rangeStart))
-        p.Add(New SqlParameter("@EndDate", rangeEnd))
-        p.Add(New SqlParameter("@EmployeeId", DBNull.Value))
-
-        Dim ds As DataSet = ExecuteSQLds("s0100GetAppointmentsByRange", p)
-        Dim eventsList As New List(Of Object)
-
-        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
-            For Each r As DataRow In ds.Tables(0).Rows
-                eventsList.Add(New With {
-                    .Id = CInt(r("Id")),
-                    .Title = If(r("Title") Is DBNull.Value, "", r("Title").ToString()),
-                    .Description = If(r("Description") Is DBNull.Value, "", r("Description").ToString()),
-                    .Start = CDate(r("StartDateTime")).ToString("yyyy-MM-ddTHH:mm:ss"),
-                    .[End] = CDate(r("EndDateTime")).ToString("yyyy-MM-ddTHH:mm:ss"),
-                    .IsAllDay = (Not (r("IsAllDay") Is DBNull.Value) AndAlso CBool(r("IsAllDay"))),
-                    .CustomerId = If(r("CustomerId") Is DBNull.Value, Nothing, CInt(r("CustomerId"))),
-                    .CustomerName = If(r("CustomerName") Is DBNull.Value, "", r("CustomerName").ToString()),
-                    .EmployeeId = If(r("EmployeeId") Is DBNull.Value, Nothing, CInt(r("EmployeeId"))),
-                    .EmployeeName = If(r("EmployeeName") Is DBNull.Value, "", r("EmployeeName").ToString()),
-                    .TypeName = If(r("TypeName") Is DBNull.Value, "", r("TypeName").ToString()),
-                    .Color = If(r("ColorHex") Is DBNull.Value, "#2563eb", r("ColorHex").ToString()),
-                    .Status = If(r("Status") Is DBNull.Value, "", r("Status").ToString()),
-                    .Location = If(r("Location") Is DBNull.Value, "", r("Location").ToString()),
-                    .ReminderMinutes = If(r("ReminderMinutes") Is DBNull.Value, Nothing, CInt(r("ReminderMinutes")))
-                })
-            Next
-        End If
-
-        hfEvents.Value = JsonConvert.SerializeObject(eventsList)
-
-        ' === Employés ===
-        Dim pe As New Collection
-        pe.Add(New SqlParameter("@CompanyGUID", Company))
-        Dim dsEmp As DataSet = ExecuteSQLds("s0106GetEmployeesForAgenda", pe)
-        Dim empList As New List(Of Object)
-        If dsEmp IsNot Nothing AndAlso dsEmp.Tables.Count > 0 Then
-            For Each r As DataRow In dsEmp.Tables(0).Rows
-                empList.Add(New With {
-                    .Id = CInt(r("Id")),
-                    .FullName = r("FullName").ToString(),
-                    .ColorHex = If(r("ColorHex") Is DBNull.Value, "#06b6d4", r("ColorHex").ToString())
-                })
-            Next
-        End If
-        hfEmployees.Value = JsonConvert.SerializeObject(empList)
-
-        ' === Types ===
-        Dim pt As New Collection
-        pt.Add(New SqlParameter("@CompanyGUID", Company))
-        Dim dsT As DataSet = ExecuteSQLds("s0105GetAppointmentTypes", pt)
-        Dim typesList As New List(Of Object)
-        If dsT IsNot Nothing AndAlso dsT.Tables.Count > 0 Then
-            For Each r As DataRow In dsT.Tables(0).Rows
-                typesList.Add(New With {
-                    .Id = CInt(r("Id")),
-                    .TypeName = r("TypeName").ToString(),
-                    .ColorHex = If(r("ColorHex") Is DBNull.Value, "#2563eb", r("ColorHex").ToString())
-                })
-            Next
-        End If
-        hfTypes.Value = JsonConvert.SerializeObject(typesList)
-    End Sub
-
-    Private Function StartOfWeek(d As Date) As Date
-        Dim diff As Integer = (CInt(d.DayOfWeek) + 6) Mod 7
-        Return d.Date.AddDays(-diff)
     End Function
 
 End Class

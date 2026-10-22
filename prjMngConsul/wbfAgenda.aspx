@@ -1,450 +1,96 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
-    MaintainScrollPositionOnPostback="true" CodeBehind="wbfAgenda.aspx.vb"
-    Inherits="MngConsul.wbfAgenda" %>
+    CodeBehind="wbfAgenda.aspx.vb" Inherits="MngConsul.wbfAgenda" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Agenda — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
-    <style>
-        /* =========================================================
-           AGENDA  — Layout
-           ========================================================= */
-        .ag-wrap {
-            display: flex;
-            flex-direction: column;
-            min-height: 600px;
-        }
+<%-- L'agenda, au modèle de la fenêtre « Tout l'agenda » de la page d'accueil 60secondes
+     du 21 octobre : en-tête (période ‹ ›, Aujourd'hui, employé, + RDV), grille de
+     5 jours ouvrables heure par heure, et à droite « Mettre à jour le RDV ».
+     Couleurs : marine #0E1F3D, action #1B4F9C, bleu pâle #E3EBF7, bordures #D5DDE8. --%>
+<style>
+    .ag{ font-family:Nunito, system-ui, sans-serif; color:#0E1F3D; font-size:15px; line-height:1.4; background:#FFFFFF; border-radius:24px; overflow:hidden; display:flex; flex-direction:column; }
+    .ag button, .ag select{ font-family:inherit; }
+    .ag button{ cursor:pointer; }
 
-        /* ---- Toolbar ---- */
-        .ag-toolbar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--mc-stroke);
-            flex-wrap: wrap;
-            background: rgba(255,255,255,.75);
-        }
+    /* En-tête */
+    .ag-tete{ display:flex; flex-wrap:wrap; align-items:center; gap:10px 12px; padding:14px 18px; border-bottom:1px solid #E3E9F1; }
+    .ag-ico{ width:40px; height:40px; flex-shrink:0; border-radius:12px; background:#E3EBF7; color:#1B4F9C; display:flex; align-items:center; justify-content:center; }
+    .ag-titre{ display:flex; flex-direction:column; line-height:1.15; margin-right:auto; }
+    .ag-titre b{ font-size:20px; font-weight:800; } .ag-titre span{ font-size:13px; color:#44536E; }
+    .ag-nav{ display:flex; align-items:center; gap:4px; padding:3px; border:1px solid #D5DDE8; border-radius:999px; }
+    .ag-nav a{ width:34px; height:34px; border-radius:50%; background:#F2F5F9; color:#0E1F3D; font-size:18px; font-weight:800; display:flex; align-items:center; justify-content:center; text-decoration:none; }
+    .ag-nav a:hover{ background:#E3EBF7; color:#0E1F3D; }
+    .ag-nav b{ padding:0 10px; font-size:15px; white-space:nowrap; }
+    .ag-pill{ min-height:40px; padding:0 14px; border:1px solid #D5DDE8; border-radius:999px; background:#FFFFFF; color:#44536E; font-weight:800; font-size:14px; display:flex; align-items:center; text-decoration:none; }
+    .ag-pill:hover{ background:#F2F5F9; color:#0E1F3D; }
+    .ag-pill.off{ opacity:.5; pointer-events:none; }
+    .ag-tete select{ min-height:40px; max-width:240px; padding:0 10px; border:1px solid #AEBBCD; border-radius:999px; background:#FFFFFF; color:#0E1F3D; font-weight:800; font-size:14px; }
+    .ag-plus{ min-height:44px; padding:0 18px; border:0; border-radius:999px; background:#1B4F9C; color:#FFFFFF; font-size:16px; font-weight:800; }
+    .ag-plus:hover{ background:#143A73; }
 
-        .ag-toolbar .ag-nav {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
+    /* Légende */
+    .ag-leg{ display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px; padding:10px 18px; border-bottom:1px solid #E3E9F1; font-size:13px; color:#44536E; }
+    .ag-leg .aide{ flex:1 1 300px; }
+    .ag-chip{ padding:2px 9px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; }
+    .ag-chip i{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+    .ag-emp{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:700; color:#44536E; }
+    .ag-emp i{ width:10px; height:10px; border-radius:3px; display:inline-block; }
 
-        .ag-toolbar .ag-title {
-            font-weight: 800;
-            font-size: 18px;
-            text-transform: capitalize;
-            min-width: 220px;
-        }
+    /* Corps : grille + panneau */
+    .ag-corps{ display:flex; align-items:stretch; min-height:560px; }
+    .ag-grille{ flex:1 1 auto; min-width:0; padding:10px 12px 16px 6px; overflow-x:auto; }
+    .ag-cols{ display:grid; grid-template-columns:44px repeat(5, minmax(130px, 1fr)); gap:0 6px; min-width:720px; }
+    .ag-jt{ position:sticky; top:0; z-index:2; min-height:44px; padding:4px 8px 6px; background:#FFFFFF; border-bottom:3px solid transparent; display:flex; flex-direction:column; justify-content:flex-end; }
+    .ag-jt b{ font-size:15px; } .ag-jt span{ font-size:12px; color:#44536E; }
+    .ag-jt.auj{ border-bottom-color:#1B4F9C; } .ag-jt.auj b{ color:#1B4F9C; }
+    .ag-heures{ position:relative; }
+    .ag-heures span{ position:absolute; right:6px; transform:translateY(-50%); font-size:11px; font-weight:700; color:#5B6B86; }
+    .ag-col{ position:relative; border-radius:12px; background:#F7F9FC; cursor:copy; }
+    .ag-col.auj{ background:#F2F6FC; }
+    .ag-ligne-h{ position:absolute; left:0; right:0; border-top:1px solid #E3E9F1; pointer-events:none; }
+    .ag-maint{ position:absolute; left:-3px; right:0; border-top:2px solid #E35D55; z-index:3; pointer-events:none; }
+    .ag-maint::before{ content:""; position:absolute; left:-3px; top:-5px; width:8px; height:8px; border-radius:50%; background:#E35D55; }
+    .ag-ev{ position:absolute; z-index:1; box-sizing:border-box; padding:3px 6px 3px 8px; border:1.5px solid #C9D5E6; border-left-width:5px; border-radius:10px; background:#FFFFFF; color:#0E1F3D; text-align:left; overflow:hidden; display:flex; flex-direction:column; gap:1px; cursor:pointer; }
+    .ag-ev:hover{ box-shadow:0 4px 12px rgba(14,31,61,.15); z-index:4; }
+    .ag-ev.sel{ border-color:#1B4F9C; border-width:2px; border-left-width:5px; background:#E3EBF7; z-index:4; }
+    .ag-ev.termine{ background:#FBFCFE; }
+    .ag-ev .l1{ font-size:12px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ag-ev .l2{ font-size:11px; color:#44536E; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ag-ev .ag-chip{ align-self:flex-start; font-size:10px; padding:1px 6px; }
 
-        .ag-toolbar .ag-spacer {
-            flex: 1;
-        }
-
-        .ag-views {
-            display: flex;
-            border: 1px solid var(--mc-stroke);
-            border-radius: 12px;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .ag-views button {
-            border: none;
-            background: transparent;
-            padding: 8px 14px;
-            cursor: pointer;
-            font-weight: 700;
-            color: #44536E;
-        }
-
-        .ag-views button.active {
-            background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
-            color: #0E1F3D;
-        }
-
-        .ag-iconbtn {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            border: 1px solid var(--mc-stroke);
-            background: #fff;
-            cursor: pointer;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ag-iconbtn:hover { background: #f8fafc; }
-
-        .ag-btn-add {
-            background: linear-gradient(135deg, #1B4F9C, #06b6d4);
-            color: #fff;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 800;
-        }
-
-        /* ---- Filtres ressources ---- */
-        .ag-resources {
-            display: flex;
-            gap: 8px;
-            padding: 10px 16px;
-            border-bottom: 1px solid var(--mc-stroke);
-            flex-wrap: wrap;
-            background: #fbfcfe;
-        }
-
-        .ag-res-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--mc-stroke);
-            background: #fff;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .ag-res-pill .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            display: inline-block;
-        }
-
-        .ag-res-pill.off {
-            opacity: .35;
-        }
-
-        /* =========================================================
-           VUE MOIS
-           ========================================================= */
-        .ag-month {
-            display: grid;
-            grid-template-rows: auto 1fr;
-        }
-
-        .ag-month-head {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            background: #f8fafc;
-            border-bottom: 1px solid var(--mc-stroke);
-        }
-
-        .ag-month-head div {
-            padding: 8px;
-            text-align: center;
-            font-weight: 800;
-            font-size: 12px;
-            color: #44536E;
-            text-transform: uppercase;
-        }
-
-        .ag-month-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            grid-auto-rows: minmax(110px, 1fr);
-        }
-
-        .ag-day {
-            border-right: 1px solid #eef2f7;
-            border-bottom: 1px solid #eef2f7;
-            padding: 6px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            position: relative;
-            background: #fff;
-            min-height: 110px;
-        }
-
-        .ag-day.other {
-            background: #fafbfc;
-            color: #94a3b8;
-        }
-
-        .ag-day.today .ag-day-num {
-            background: #1B4F9C;
-            color: #fff;
-        }
-
-        .ag-day-num {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700;
-            min-width: 24px;
-            height: 24px;
-            padding: 0 6px;
-            border-radius: 999px;
-            align-self: flex-start;
-        }
-
-        .ag-event {
-            font-size: 11px;
-            padding: 3px 6px;
-            border-radius: 6px;
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            border-left: 3px solid rgba(0,0,0,.2);
-        }
-
-        .ag-event.dragging { opacity: .4; }
-
-        .ag-day.drop-target { background: #E3EBF7; }
-
-        .ag-event-more {
-            font-size: 11px;
-            color: #1B4F9C;
-            cursor: pointer;
-            font-weight: 700;
-        }
-
-        /* =========================================================
-           VUE SEMAINE / JOUR
-           ========================================================= */
-        .ag-week-wrap {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .ag-week-allday {
-            display: grid;
-            border-bottom: 1px solid var(--mc-stroke);
-            background: #f8fafc;
-            font-size: 11px;
-        }
-
-        .ag-week-allday .lbl {
-            padding: 6px 8px;
-            font-weight: 700;
-            color: #44536E;
-            border-right: 1px solid #eef2f7;
-            text-align: right;
-        }
-
-        .ag-week-allday .cell {
-            padding: 4px;
-            border-right: 1px solid #eef2f7;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-height: 28px;
-        }
-
-        .ag-week-head {
-            display: grid;
-            background: #f8fafc;
-            border-bottom: 1px solid var(--mc-stroke);
-            font-size: 12px;
-        }
-
-        .ag-week-head .col {
-            padding: 8px;
-            text-align: center;
-            font-weight: 800;
-            border-right: 1px solid #eef2f7;
-        }
-
-        .ag-week-head .col.today {
-            color: #1B4F9C;
-        }
-
-        .ag-week-head .col .num {
-            font-size: 18px;
-            display: block;
-        }
-
-        .ag-week-body {
-            display: grid;
-            position: relative;
-            overflow-y: auto;
-            max-height: 600px;
-        }
-
-        .ag-time-col {
-            border-right: 1px solid #eef2f7;
-            background: #fafbfc;
-        }
-
-        .ag-time-slot {
-            height: 40px;
-            padding: 2px 6px;
-            font-size: 11px;
-            color: #44536E;
-            text-align: right;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .ag-day-col {
-            border-right: 1px solid #eef2f7;
-            position: relative;
-            min-height: 100%;
-        }
-
-        .ag-day-col .ag-slot {
-            height: 40px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .ag-day-col .ag-slot.half {
-            border-bottom: 1px dashed #f1f5f9;
-        }
-
-        .ag-day-col.drop-target {
-            background: #E3EBF7;
-        }
-
-        .ag-week-event {
-            position: absolute;
-            left: 4px;
-            right: 4px;
-            border-radius: 6px;
-            padding: 4px 6px;
-            color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: grab;
-            overflow: hidden;
-            border-left: 3px solid rgba(0,0,0,.25);
-            box-shadow: 0 2px 6px rgba(0,0,0,.12);
-        }
-
-        .ag-week-event:active { cursor: grabbing; }
-
-        .ag-week-event .ev-title {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .ag-week-event .ev-time {
-            font-size: 10px;
-            opacity: .9;
-        }
-
-        .ag-week-event.dragging { opacity: .5; }
-
-        /* "Ligne du temps" actuelle */
-        .ag-now-line {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #ef4444;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        .ag-now-line::before {
-            content: '';
-            position: absolute;
-            left: -5px;
-            top: -4px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #ef4444;
-        }
-
-        /* =========================================================
-           Notifications / toasts
-           ========================================================= */
-        .ag-toast-host {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 9999;
-        }
-
-        .ag-toast {
-            background: #fff;
-            border: 1px solid var(--mc-stroke);
-            border-left: 4px solid #1B4F9C;
-            border-radius: 10px;
-            padding: 10px 14px;
-            box-shadow: 0 8px 24px rgba(2,6,23,.15);
-            min-width: 280px;
-            max-width: 360px;
-            animation: slideIn .25s ease-out;
-        }
-
-        .ag-toast .t-title {
-            font-weight: 800;
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .ag-toast .t-body {
-            font-size: 12px;
-            color: #44536E;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(120%); opacity: 0; }
-            to   { transform: translateX(0); opacity: 1; }
-        }
-
-        /* =========================================================
-           La signature du gabarit « Portail du client » : la tête sur le fond,
-           la barre d'outils, le filtre des employés et le calendrier en cartes.
-           ========================================================= */
-        .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
-        .fc-tete .txt { flex: 1 1 260px }
-        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
-        .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
-        .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
-        .fc-tete .btns { display: flex; flex-wrap: wrap; gap: 8px }
-        .fc-btn { min-height: 44px; padding: 0 16px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer }
-        .fc-btn.primaire { padding: 0 20px; border-color: #1B4F9C; background: #1B4F9C; color: #fff; font-weight: 800 }
-        .fc-btn.primaire:hover { background: #143A73 }
-        .ag-wrap { gap: 16px; min-height: 0 }
-        .ag-toolbar { border: 0; border-radius: 24px; background: #fff; padding: 14px 18px }
-        .ag-toolbar .ag-title { font-size: 20px; color: #0E1F3D }
-        .ag-iconbtn { width: 40px; height: 40px; border-radius: 50%; border-color: #AEBBCD; font-size: 16px }
-        .ag-iconbtn:hover { background: #F2F5F9 }
-        .ag-views { border: 0; border-radius: 999px; background: #E8EDF5; padding: 4px; gap: 4px; overflow: visible }
-        .ag-views button { border-radius: 999px; min-height: 36px; padding: 0 14px; color: #0E1F3D; font-family: inherit }
-        .ag-views button:hover { background: rgba(255,255,255,.6) }
-        .ag-views button.active { background: #fff; box-shadow: 0 1px 2px rgba(14,31,61,.12); color: #0E1F3D }
-        .ag-resources { border: 0; border-radius: 24px; background: #fff; padding: 12px 18px; align-items: center }
-        .ag-resources > span:first-child { font-size: 13px !important; font-weight: 800 !important; color: #5B6B86 !important }
-        .ag-res-pill { min-height: 36px; padding: 0 12px; border-color: #AEBBCD; font-size: 13px; color: #0E1F3D }
-        .ag-res-pill:hover { background: #F2F5F9 }
-        .ag-month, .ag-week-wrap { background: #fff; border-radius: 24px; overflow: hidden }
-        .ag-month-head, .ag-week-head, .ag-week-allday { background: transparent; border-bottom-color: #E3E9F1 }
-        .ag-month-head div { color: #5B6B86; font-size: 13px; padding: 12px 8px }
-        .ag-day { border-color: #E3E9F1 }
-        .ag-day.other { background: #FAFCFF }
-        .ag-time-col { background: #FAFCFF }
-        .ag-week-head .col, .ag-week-allday .lbl, .ag-week-allday .cell, .ag-time-col, .ag-day-col { border-right-color: #E3E9F1 }
-
-    </style>
+    /* Panneau de droite */
+    .ag-panneau{ flex:0 0 340px; box-sizing:border-box; padding:16px; border-left:1px solid #E3E9F1; background:#F7F9FC; display:flex; flex-direction:column; gap:12px; }
+    .ag-panneau h2{ margin:0; font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#44536E; }
+    .ag-panneau p{ margin:0; font-size:14px; color:#44536E; }
+    .ag-carte{ padding:12px 14px; border-radius:16px; background:#FFFFFF; border-left:5px solid #1B4F9C; display:flex; flex-direction:column; gap:2px; }
+    .ag-carte b{ font-size:18px; } .ag-carte span{ font-size:13px; color:#44536E; }
+    .ag-champ{ display:flex; flex-direction:column; gap:4px; font-size:13px; font-weight:800; color:#0E1F3D; }
+    .ag-champ select{ min-height:42px; padding:0 10px; border:1px solid #AEBBCD; border-radius:12px; background:#FFFFFF; color:#0E1F3D; font-size:15px; font-weight:800; }
+    .ag-deux{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .ag-libres{ display:flex; flex-wrap:wrap; gap:6px; }
+    .ag-libres button{ min-height:30px; padding:0 10px; border:1.5px solid #43B47A; border-radius:999px; background:#FFFFFF; color:#0F5A3A; font-size:12px; font-weight:800; white-space:nowrap; }
+    .ag-libres button:hover, .ag-libres button[aria-pressed="true"]{ background:#E3F3EA; }
+    .ag-msg{ padding:8px 10px; border-radius:12px; font-size:13px; font-weight:700; }
+    .ag-msg.conflit{ background:#FDECEA; color:#A3261C; }
+    .ag-msg.change{ background:#E3EBF7; color:#143A73; }
+    .ag-msg.info{ background:#E3F3EA; color:#0F5A3A; }
+    .ag-btn{ min-height:44px; padding:0 18px; border:1px solid #1B4F9C; border-radius:999px; background:#1B4F9C; color:#FFFFFF; font-size:15px; font-weight:800; }
+    .ag-btn:hover{ background:#143A73; }
+    .ag-btn:disabled{ opacity:.45; cursor:default; background:#1B4F9C; }
+    .ag-btn.clair{ background:#FFFFFF; color:#0E1F3D; border-color:#AEBBCD; }
+    .ag-btn.clair:hover{ background:#F2F5F9; }
+    .ag-btn.rouge{ background:#FFFFFF; color:#A3261C; border-color:#E35D55; }
+    .ag-btn.rouge:hover{ background:#FDECEA; }
+    .ag-rangee{ display:flex; flex-wrap:wrap; gap:8px; }
+    .ag-rangee .ag-btn{ flex:1 1 auto; }
+</style>
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 
-    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
     <telerik:RadWindowManager ID="rwmAgenda" runat="server" EnableShadow="true">
         <Windows>
             <telerik:RadWindow ID="rwAppointment" runat="server"
@@ -463,698 +109,358 @@
         </Windows>
     </telerik:RadWindowManager>
 
-    <%-- ===== AJAX MANAGER : rafraîchit la zone agenda après ajout/modif/suppression ===== --%>
-   
-    <%-- Panel ne contenant QUE les hidden fields (pas de blocs <%= %> à l'intérieur) --%>
-        <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
-        <asp:HiddenField ID="hfEvents"        runat="server" ClientIDMode="Static" />
-        <asp:HiddenField ID="hfEmployees"     runat="server" ClientIDMode="Static" />
-        <asp:HiddenField ID="hfTypes"         runat="server" ClientIDMode="Static" />
-        <asp:HiddenField ID="hfViewMode"      runat="server" ClientIDMode="Static" Value="month" />
-        <asp:HiddenField ID="hfCurrentDate"   runat="server" ClientIDMode="Static" />
-        <asp:HiddenField ID="hfEmployeeFilter" runat="server" ClientIDMode="Static" />
-        <asp:HiddenField ID="hfMoveData"      runat="server" ClientIDMode="Static" />
-      </telerik:RadAjaxPanel>
-    <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique, le titre,
-         le sous-titre, et à droite le bouton « + Rendez-vous » en pastille bleue. --%>
-    <div class="fc-tete">
-        <div class="txt">
-            <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
-            <h1><asp:Literal ID="litTitre" runat="server" /></h1>
-            <p><asp:Literal ID="litSousTitre" runat="server" /></p>
-        </div>
-        <div class="btns">
-            <button type="button" class="fc-btn primaire" onclick="agNewAppointment(); return false;">+ <asp:Literal ID="litAddAppt" runat="server" /></button>
-        </div>
-    </div>
-
-    <div class="ag-wrap">
-
-        <%-- Les libellés passent par des Literal et non par des <%= %> : cette
-             page porte un RadAjaxPanel, et Telerik déplace l'UpdatePanel dans
-             la collection de contrôles du parent. Un seul bloc de code ailleurs
-             dans ce même conteneur fait échouer ce déplacement (« La collection
-             Controls ne peut pas être modifiée »). Les Literal sont renseignés
-             dans ApplyLocalization. --%>
-
-        <!-- TOOLBAR -->
-        <div class="ag-toolbar">
-            <div class="ag-nav">
-                <button type="button" class="ag-iconbtn" onclick="agNav(-1); return false;" title='<asp:Literal ID="litTipPrev" runat="server" />'>‹</button>
-                <button type="button" class="ag-iconbtn" onclick="agNav(1); return false;"  title='<asp:Literal ID="litTipNext" runat="server" />'>›</button>
-                <button type="button" class="ag-iconbtn" onclick="agNavToday(); return false;" title='<asp:Literal ID="litTipToday" runat="server" />'>●</button>
-            </div>
-
-            <div class="ag-title" id="agTitle">—</div>
-
-            <div class="ag-spacer"></div>
-
-            <div class="ag-views" role="tablist">
-                <button type="button" id="vMonth" class="active" onclick="agSetView('month'); return false;"><asp:Literal ID="litViewMonth" runat="server" /></button>
-                <button type="button" id="vWeek"  onclick="agSetView('week');  return false;"><asp:Literal ID="litViewWeek" runat="server" /></button>
-                <button type="button" id="vDay"   onclick="agSetView('day');   return false;"><asp:Literal ID="litViewDay" runat="server" /></button>
-            </div>
-
-        </div>
-
-        <!-- FILTRES RESSOURCES -->
-        <div class="ag-resources" id="agResources">
-            <span style="font-size:12px; font-weight:700; color:#44536E; align-self:center;"><asp:Literal ID="litEmployees" runat="server" /> :</span>
-            <%-- généré par JS --%>
-        </div>
-
-        <!-- VUE MOIS -->
-        <div class="ag-month" id="agMonthView">
-            <div class="ag-month-head">
-                <div><asp:Literal ID="litDow1" runat="server" /></div><div><asp:Literal ID="litDow2" runat="server" /></div><div><asp:Literal ID="litDow3" runat="server" /></div><div><asp:Literal ID="litDow4" runat="server" /></div><div><asp:Literal ID="litDow5" runat="server" /></div><div><asp:Literal ID="litDow6" runat="server" /></div><div><asp:Literal ID="litDow7" runat="server" /></div>
-            </div>
-            <div class="ag-month-grid" id="agMonthGrid"></div>
-        </div>
-
-        <!-- VUE SEMAINE / JOUR -->
-        <div class="ag-week-wrap" id="agWeekView" style="display:none">
-            <div class="ag-week-allday" id="agAllDay"></div>
-            <div class="ag-week-head"   id="agWeekHead"></div>
-            <div class="ag-week-body"   id="agWeekBody"></div>
-        </div>
-
-    </div>
-
-    <!-- Hôte des toasts/rappels -->
-    <div class="ag-toast-host" id="agToastHost"></div>
-
-    <%-- Les seuls blocs de code de la page sont ici, dans un RadCodeBlock :
-         c'est la façon prévue par Telerik de garder du <%= %> sur une page
-         gérée en AJAX. Sans cette enveloppe, RadAjaxPanel ne peut plus
-         déplacer son UpdatePanel et la page lève « La collection Controls ne
-         peut pas être modifiée ». --%>
-    <telerik:RadCodeBlock ID="rcbAgendaI18n" runat="server">
-        <script>
-            // ============================================================
-            // I18N (fr/en/es) — injecté côté serveur selon la langue
-            // ============================================================
-            var AG_LANG = '<%= AgLocale() %>';
-            var AG_I18N = {
-                employees: '<%= T("Employés","Employees","Empleados") %>',
-                allDay: '<%= T("Toute la journée","All day","Todo el día") %>',
-                at: '<%= T("À","At","A las") %>'
-            };
-        </script>
-    </telerik:RadCodeBlock>
-
-    <script>
-        // ============================================================
-        // ÉTAT GLOBAL (côté client)
-        // ============================================================
-        var AG = {
-            view: document.getElementById('hfViewMode').value || 'month',
-            currentDate: parseISODate(document.getElementById('hfCurrentDate').value) || new Date(),
-            events: JSON.parse(document.getElementById('hfEvents').value || '[]'),
-            employees: JSON.parse(document.getElementById('hfEmployees').value || '[]'),
-            types: JSON.parse(document.getElementById('hfTypes').value || '[]'),
-            empFilter: (document.getElementById('hfEmployeeFilter').value || '').split(',').filter(Boolean).map(Number),
-            startHour: 7,
-            endHour: 20,
-            slotMinutes: 30
-        };
-
-        function parseISODate(s) {
-            if (!s) return null;
-            var d = new Date(s);
-            return isNaN(d) ? null : d;
-        }
-
-        function fmtIso(d) {
-            // YYYY-MM-DD HH:mm:ss
-            var z = function (n) { return n < 10 ? '0' + n : n; };
-            return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()) + ' ' + z(d.getHours()) + ':' + z(d.getMinutes()) + ':00';
-        }
-
-        function fmtTime(d) {
-            var z = function (n) { return n < 10 ? '0' + n : n; };
-            return z(d.getHours()) + ':' + z(d.getMinutes());
-        }
-
-        function startOfWeek(d) {
-            var x = new Date(d);
-            var day = (x.getDay() + 6) % 7; // lundi = 0
-            x.setDate(x.getDate() - day);
-            x.setHours(0, 0, 0, 0);
-            return x;
-        }
-
-        function startOfMonth(d) {
-            return new Date(d.getFullYear(), d.getMonth(), 1);
-        }
-
-        function addDays(d, n) {
-            var x = new Date(d);
-            x.setDate(x.getDate() + n);
-            return x;
-        }
-
-        function sameDay(a, b) {
-            return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-        }
-
-        function monthLabel(d) {
-            return d.toLocaleDateString(AG_LANG, { year: 'numeric', month: 'long' });
-        }
-
-        function dayLabel(d) {
-            return d.toLocaleDateString(AG_LANG, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-        }
-
-        // ============================================================
-        // RENDU TOOLBAR + RESSOURCES
-        // ============================================================
-        function agRenderTitle() {
-            var el = document.getElementById('agTitle');
-            if (AG.view === 'month') {
-                el.textContent = monthLabel(AG.currentDate);
-            } else if (AG.view === 'week') {
-                var s = startOfWeek(AG.currentDate);
-                var e = addDays(s, 6);
-                el.textContent = s.toLocaleDateString(AG_LANG, { day: 'numeric', month: 'short' }) + ' – ' +
-                    e.toLocaleDateString(AG_LANG, { day: 'numeric', month: 'short', year: 'numeric' });
-            } else {
-                el.textContent = dayLabel(AG.currentDate);
-            }
-        }
-
-        function agRenderResources() {
-            var host = document.getElementById('agResources');
-            // garde le label
-            host.innerHTML = '<span style="font-size:12px; font-weight:700; color:#44536E; align-self:center;">' + AG_I18N.employees + ' :</span>';
-            AG.employees.forEach(function (emp) {
-                var on = AG.empFilter.length === 0 || AG.empFilter.indexOf(emp.Id) !== -1;
-                var pill = document.createElement('span');
-                pill.className = 'ag-res-pill' + (on ? '' : ' off');
-                pill.innerHTML = '<span class="dot" style="background:' + (emp.ColorHex || '#06b6d4') + '"></span>' + emp.FullName;
-                pill.onclick = function () {
-                    var idx = AG.empFilter.indexOf(emp.Id);
-                    if (AG.empFilter.length === 0) {
-                        // partir de "tous", ne garder que celui-ci
-                        AG.empFilter = AG.employees.map(function (e) { return e.Id }).filter(function (id) { return id !== emp.Id });
-                    } else if (idx === -1) {
-                        AG.empFilter.push(emp.Id);
-                    } else {
-                        AG.empFilter.splice(idx, 1);
-                    }
-                    if (AG.empFilter.length === AG.employees.length) AG.empFilter = [];
-                    document.getElementById('hfEmployeeFilter').value = AG.empFilter.join(',');
-                    agRender();
-                };
-                host.appendChild(pill);
-            });
-        }
-
-        // ============================================================
-        // FILTRAGE
-        // ============================================================
-        function agFilteredEvents() {
-            if (!AG.empFilter || AG.empFilter.length === 0) return AG.events;
-            return AG.events.filter(function (ev) {
-                if (!ev.EmployeeId) return true;
-                return AG.empFilter.indexOf(ev.EmployeeId) !== -1;
-            });
-        }
-
-        // ============================================================
-        // VUE MOIS
-        // ============================================================
-        function agRenderMonth() {
-            document.getElementById('agMonthView').style.display = '';
-            document.getElementById('agWeekView').style.display = 'none';
-
-            var grid = document.getElementById('agMonthGrid');
-            grid.innerHTML = '';
-
-            var first = startOfMonth(AG.currentDate);
-            var firstDow = (first.getDay() + 6) % 7;
-            var start = addDays(first, -firstDow);
-
-            var today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            var events = agFilteredEvents();
-
-            for (var i = 0; i < 42; i++) {
-                var d = addDays(start, i);
-                var dayEl = document.createElement('div');
-                dayEl.className = 'ag-day';
-                if (d.getMonth() !== AG.currentDate.getMonth()) dayEl.classList.add('other');
-                if (sameDay(d, today)) dayEl.classList.add('today');
-
-                var num = document.createElement('div');
-                num.className = 'ag-day-num';
-                num.textContent = d.getDate();
-                dayEl.appendChild(num);
-
-                // Drag&drop : accepter le drop
-                (function (date, el) {
-                    el.addEventListener('dragover', function (e) {
-                        e.preventDefault();
-                        el.classList.add('drop-target');
-                    });
-                    el.addEventListener('dragleave', function () {
-                        el.classList.remove('drop-target');
-                    });
-                    el.addEventListener('drop', function (e) {
-                        e.preventDefault();
-                        el.classList.remove('drop-target');
-                        var id = e.dataTransfer.getData('text/plain');
-                        if (id) agMoveEvent(parseInt(id, 10), date, null);
-                    });
-                    el.addEventListener('dblclick', function () {
-                        agNewAppointmentAt(date, null);
-                    });
-                })(new Date(d), dayEl);
-
-                // Événements du jour
-                var dayEvents = events.filter(function (ev) {
-                    var s = new Date(ev.Start), e = new Date(ev.End);
-                    return s <= addDays(d, 1) && e >= d;
-                });
-
-                var max = 3;
-                dayEvents.slice(0, max).forEach(function (ev) {
-                    var box = document.createElement('div');
-                    box.className = 'ag-event';
-                    box.style.background = ev.Color || '#1B4F9C';
-                    box.draggable = true;
-                    box.title = ev.Title + (ev.CustomerName ? ' — ' + ev.CustomerName : '');
-                    var s = new Date(ev.Start);
-                    box.textContent = (ev.IsAllDay ? '' : fmtTime(s) + ' ') + ev.Title;
-                    box.addEventListener('click', function (e) {
-                        e.stopPropagation();
-                        agEditAppointment(ev.Id);
-                    });
-                    box.addEventListener('dragstart', function (e) {
-                        e.dataTransfer.setData('text/plain', ev.Id);
-                        box.classList.add('dragging');
-                    });
-                    box.addEventListener('dragend', function () { box.classList.remove('dragging'); });
-                    dayEl.appendChild(box);
-                });
-
-                if (dayEvents.length > max) {
-                    var more = document.createElement('div');
-                    more.className = 'ag-event-more';
-                    more.textContent = '+' + (dayEvents.length - max) + ' de plus';
-                    more.onclick = function () {
-                        AG.view = 'day';
-                        AG.currentDate = new Date(d);
-                        document.getElementById('hfViewMode').value = 'day';
-                        document.getElementById('hfCurrentDate').value = fmtIso(AG.currentDate);
-                        agRender();
-                    };
-                    dayEl.appendChild(more);
-                }
-
-                grid.appendChild(dayEl);
-            }
-        }
-
-        // ============================================================
-        // VUE SEMAINE / JOUR
-        // ============================================================
-        function agRenderWeek() {
-            document.getElementById('agMonthView').style.display = 'none';
-            document.getElementById('agWeekView').style.display = '';
-
-            var isDay = (AG.view === 'day');
-            var dayCount = isDay ? 1 : 7;
-            var start = isDay ? new Date(AG.currentDate.getFullYear(), AG.currentDate.getMonth(), AG.currentDate.getDate()) : startOfWeek(AG.currentDate);
-            start.setHours(0, 0, 0, 0);
-
-            // Grilles
-            var allday = document.getElementById('agAllDay');
-            var head = document.getElementById('agWeekHead');
-            var body = document.getElementById('agWeekBody');
-
-            var cols = 'minmax(60px, 80px) repeat(' + dayCount + ', 1fr)';
-            allday.style.gridTemplateColumns = cols;
-            head.style.gridTemplateColumns = cols;
-            body.style.gridTemplateColumns = cols;
-
-            // Header
-            var today = new Date(); today.setHours(0, 0, 0, 0);
-            head.innerHTML = '<div class="col" style="background:#fafbfc;"></div>';
-            allday.innerHTML = '<div class="lbl">' + AG_I18N.allDay + '</div>';
-
-            for (var i = 0; i < dayCount; i++) {
-                var d = addDays(start, i);
-                var col = document.createElement('div');
-                col.className = 'col' + (sameDay(d, today) ? ' today' : '');
-                col.innerHTML = '<span>' + d.toLocaleDateString(AG_LANG, { weekday: 'short' }) + '</span><span class="num">' + d.getDate() + '</span>';
-                head.appendChild(col);
-
-                var ad = document.createElement('div');
-                ad.className = 'cell';
-                allday.appendChild(ad);
-            }
-
-            // Body : col temps + colonnes jours
-            body.innerHTML = '';
-            var totalSlots = (AG.endHour - AG.startHour) * 2; // 30 min
-
-            // colonne heures
-            var timeCol = document.createElement('div');
-            timeCol.className = 'ag-time-col';
-            for (var h = AG.startHour; h < AG.endHour; h++) {
-                var s1 = document.createElement('div'); s1.className = 'ag-time-slot';
-                s1.textContent = (h < 10 ? '0' + h : h) + ':00';
-                timeCol.appendChild(s1);
-                var s2 = document.createElement('div'); s2.className = 'ag-time-slot';
-                s2.textContent = '';
-                timeCol.appendChild(s2);
-            }
-            body.appendChild(timeCol);
-
-            var slotHeightPx = 40; // doit matcher le CSS .ag-time-slot
-
-            var events = agFilteredEvents();
-            var dayCols = [];
-
-            for (var i = 0; i < dayCount; i++) {
-                var d = addDays(start, i);
-                var col = document.createElement('div');
-                col.className = 'ag-day-col';
-                col.style.position = 'relative';
-                col.style.height = (totalSlots * slotHeightPx) + 'px';
-
-                // slots vides + double-click pour créer
-                for (var s = 0; s < totalSlots; s++) {
-                    var slot = document.createElement('div');
-                    slot.className = 'ag-slot' + (s % 2 ? ' half' : '');
-                    (function (date, slotIdx, slotEl) {
-                        slotEl.addEventListener('dblclick', function () {
-                            var when = new Date(date);
-                            when.setHours(AG.startHour + Math.floor(slotIdx / 2), (slotIdx % 2) * 30, 0, 0);
-                            agNewAppointmentAt(when, when);
-                        });
-                    })(new Date(d), s, slot);
-                    col.appendChild(slot);
-                }
-
-                // drop target
-                (function (colEl, date) {
-                    colEl.addEventListener('dragover', function (e) {
-                        e.preventDefault();
-                        colEl.classList.add('drop-target');
-                    });
-                    colEl.addEventListener('dragleave', function () {
-                        colEl.classList.remove('drop-target');
-                    });
-                    colEl.addEventListener('drop', function (e) {
-                        e.preventDefault();
-                        colEl.classList.remove('drop-target');
-                        var id = e.dataTransfer.getData('text/plain');
-                        if (!id) return;
-                        // calc position
-                        var rect = colEl.getBoundingClientRect();
-                        var y = e.clientY - rect.top;
-                        var slotIdx = Math.max(0, Math.floor(y / slotHeightPx));
-                        var newDate = new Date(date);
-                        newDate.setHours(AG.startHour + Math.floor(slotIdx / 2), (slotIdx % 2) * 30, 0, 0);
-                        agMoveEvent(parseInt(id, 10), newDate, newDate);
-                    });
-                })(col, new Date(d));
-
-                body.appendChild(col);
-                dayCols.push({ el: col, date: new Date(d) });
-
-                // ligne "maintenant"
-                if (sameDay(d, today)) {
-                    var now = new Date();
-                    var minSinceStart = (now.getHours() - AG.startHour) * 60 + now.getMinutes();
-                    if (minSinceStart > 0 && minSinceStart < (AG.endHour - AG.startHour) * 60) {
-                        var line = document.createElement('div');
-                        line.className = 'ag-now-line';
-                        line.style.top = (minSinceStart / 30 * slotHeightPx) + 'px';
-                        col.appendChild(line);
-                    }
-                }
-            }
-
-            // Placement events
-            events.forEach(function (ev) {
-                var s = new Date(ev.Start), e = new Date(ev.End);
-
-                // Toute la journée
-                if (ev.IsAllDay) {
-                    for (var i = 0; i < dayCount; i++) {
-                        var d = addDays(start, i);
-                        if (s <= addDays(d, 1) && e >= d) {
-                            var cell = allday.children[i + 1]; // +1 pour le label
-                            var pill = document.createElement('div');
-                            pill.className = 'ag-event';
-                            pill.style.background = ev.Color || '#1B4F9C';
-                            pill.textContent = ev.Title;
-                            pill.title = ev.Title;
-                            pill.addEventListener('click', function () { agEditAppointment(ev.Id); });
-                            cell.appendChild(pill);
-                        }
-                    }
-                    return;
-                }
-
-                // Pour chaque jour visible où l'événement chevauche
-                for (var i = 0; i < dayCount; i++) {
-                    var col = dayCols[i];
-                    var dayStart = new Date(col.date); dayStart.setHours(AG.startHour, 0, 0, 0);
-                    var dayEnd = new Date(col.date); dayEnd.setHours(AG.endHour, 0, 0, 0);
-
-                    if (e <= dayStart || s >= dayEnd) continue;
-
-                    var evStart = s < dayStart ? dayStart : s;
-                    var evEnd = e > dayEnd ? dayEnd : e;
-
-                    var topMin = (evStart.getHours() - AG.startHour) * 60 + evStart.getMinutes();
-                    var dur = Math.max(15, (evEnd - evStart) / 60000);
-
-                    var box = document.createElement('div');
-                    box.className = 'ag-week-event';
-                    box.style.top = (topMin / 30 * slotHeightPx) + 'px';
-                    box.style.height = (dur / 30 * slotHeightPx - 2) + 'px';
-                    box.style.background = ev.Color || '#1B4F9C';
-                    box.draggable = true;
-                    box.innerHTML = '<div class="ev-time">' + fmtTime(s) + ' – ' + fmtTime(e) + '</div>' +
-                        '<div class="ev-title">' + ev.Title + (ev.CustomerName ? ' · ' + ev.CustomerName : '') + '</div>';
-                    box.addEventListener('click', function () { agEditAppointment(ev.Id); });
-                    box.addEventListener('dragstart', function (eDrag) {
-                        eDrag.dataTransfer.setData('text/plain', ev.Id);
-                        box.classList.add('dragging');
-                    });
-                    box.addEventListener('dragend', function () { box.classList.remove('dragging'); });
-
-                    col.el.appendChild(box);
-                }
-            });
-        }
-
-        // ============================================================
-        // RENDU PRINCIPAL
-        // ============================================================
-        function agRender() {
-            agRenderTitle();
-            agRenderResources();
-            // boutons vues
-            ['Month', 'Week', 'Day'].forEach(function (v) {
-                var b = document.getElementById('v' + v);
-                if (b) b.classList.toggle('active', AG.view === v.toLowerCase());
-            });
-            if (AG.view === 'month') agRenderMonth();
-            else agRenderWeek();
-        }
-
-        // ============================================================
-        // NAVIGATION
-        // ============================================================
-        function agNav(dir) {
-            if (AG.view === 'month') {
-                AG.currentDate = new Date(AG.currentDate.getFullYear(), AG.currentDate.getMonth() + dir, 1);
-            } else if (AG.view === 'week') {
-                AG.currentDate = addDays(AG.currentDate, 7 * dir);
-            } else {
-                AG.currentDate = addDays(AG.currentDate, dir);
-            }
-            document.getElementById('hfCurrentDate').value = fmtIso(AG.currentDate);
-            agReload();
-        }
-
-        function agNavToday() {
-            AG.currentDate = new Date();
-            document.getElementById('hfCurrentDate').value = fmtIso(AG.currentDate);
-            agReload();
-        }
-
-        function agSetView(v) {
-            AG.view = v;
-            document.getElementById('hfViewMode').value = v;
-            agReload();
-        }
-
-        function agReload() {
-            // Déclenche un AjaxRequest sur le RadAjaxManager → recharge le panneau pnlAgenda
-            
-            var mgr = $find("RAP1");
-            console.log('Reloading agenda with view='  );
-            console.log(mgr);
-            if (mgr) {
-                
-                mgr.ajaxRequest('refresh');
-            }
-        }
-
-        // ============================================================
-        // CRÉATION / ÉDITION
-        // ============================================================
-        function agNewAppointment() {
-            var d = new Date(AG.currentDate);
-            d.setHours(9, 0, 0, 0);
-            agNewAppointmentAt(d, null);
-        }
-
-        // Largeur cible 1300, sinon la largeur de la fenêtre (mobile / petit écran)
-        function agComputeWindowSize() {
-            var targetW = 1300;
-            var targetH = 700;
-            var maxW = Math.floor(window.innerWidth * 0.98);
-            var maxH = Math.floor(window.innerHeight * 0.95);
-            return {
-                w: Math.min(targetW, maxW),
-                h: Math.min(targetH, maxH)
-            };
-        }
-
-        function agOpenApptWindow(url) {
-            // Régler la taille de la fenêtre AVANT de l'ouvrir
-            var sz = agComputeWindowSize();
-
-            // radopen ouvre la fenêtre identifiée par son ID dans le RadWindowManager
+    <%-- Les changements faits dans le panneau reviennent au serveur par ce bouton caché. --%>
+    <asp:HiddenField ID="hfAction" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfData" runat="server" ClientIDMode="Static" />
+    <asp:Button ID="btnAction" runat="server" ClientIDMode="Static" style="display:none" />
+
+    <div class="ag" id="agAgenda"></div>
+
+    <script type="text/javascript">
+        // Fenêtre du rendez-vous (nouveau ou fiche complète) ; à la fermeture, l'agenda se recharge.
+        function agOuvrirFiche(url) {
             var win = window.radopen(url, 'rwAppointment');
             if (!win) return;
-
-            win.setSize(sz.w, sz.h);
+            win.setSize(Math.min(1300, Math.floor(window.innerWidth * 0.98)), Math.min(700, Math.floor(window.innerHeight * 0.95)));
             win.center();
-            win.setActive(true);
         }
-
-        function agNewAppointmentAt(date, withTime) {
-            var d = new Date(date);
-            if (!withTime) { d.setHours(9, 0, 0, 0); }
-            agOpenApptWindow('wbfAppointmentEdit.aspx?id=0&start=' + encodeURIComponent(fmtIso(d)));
-        }
-
-        function agEditAppointment(id) {
-            agOpenApptWindow('wbfAppointmentEdit.aspx?id=' + id);
-        }
-
         function agOnApptClose(sender, args) {
-            // Recharger après fermeture du popup
-            // setTimeout pour laisser la fenêtre finir sa fermeture
-            // avant de déclencher le postback
-            setTimeout(function () {
-                agReload();
-            }, 50);
+            setTimeout(function () { window.location.reload(); }, 50);
         }
 
-        // ============================================================
-        // DRAG & DROP : déplacement
-        // ============================================================
-        function agMoveEvent(id, newDate, newDateTime) {
-            // Trouver l'event original pour préserver la durée
-            var ev = AG.events.find(function (e) { return e.Id === id; });
-            if (!ev) return;
+        (function () {
+            var M = <%= ModeleJson %>;
+            var racine = document.getElementById('agAgenda');
+            if (!M || !racine) return;
+            var T = M.t;
+            var CLE = '60s-accueil-choix';
+            var choix = {};
+            try { choix = JSON.parse(window.localStorage.getItem(CLE) || '{}') || {}; } catch (e) { choix = {}; }
+            function garder(k, v) { choix[k] = v; try { window.localStorage.setItem(CLE, JSON.stringify(choix)); } catch (e) { } }
 
-            var oldStart = new Date(ev.Start);
-            var oldEnd = new Date(ev.End);
-            var duration = oldEnd - oldStart;
-
-            var newStart;
-            if (newDateTime) {
-                newStart = new Date(newDateTime);
-            } else {
-                // garder l'heure originale, changer la date
-                newStart = new Date(newDate);
-                newStart.setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0);
+            // --- petits outils ---
+            function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+            function bouton(cls, txt) { var b = el('button', cls, txt); b.type = 'button'; return b; }
+            function fmt(s) { var a = arguments; return String(s).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1]; }); }
+            function maj(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+            var LOC = M.lang === 'en' ? 'en-CA' : (M.lang === 'es' ? 'es-ES' : 'fr-CA');
+            function pad(n) { return (n < 10 ? '0' : '') + n; }
+            function dJ(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+            function jLong(s) { return maj(dJ(s).toLocaleDateString(LOC, { weekday: 'long', day: 'numeric', month: 'long' })); }
+            function jCourt(s) { var d = dJ(s); return maj(d.toLocaleDateString(LOC, { weekday: 'short' }).replace('.', '')) + ' ' + d.getDate(); }
+            function fH(min) {
+                var h = Math.floor(min / 60), m = min % 60;
+                if (M.lang === 'en') return new Date(2000, 0, 1, h, m).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                if (M.lang === 'es') return h + ':' + pad(m);
+                return h + ' h' + (m ? ' ' + pad(m) : '');
             }
-            var newEnd = new Date(newStart.getTime() + duration);
+            function fD(min) { var h = Math.floor(min / 60), m = min % 60; return h ? h + ' h' + (m ? ' ' + pad(m) : '') : m + ' min'; }
+            function nbH(min) { var s = String(Math.round(min / 6) / 10); return M.lang === 'en' ? s : s.replace('.', ','); }
+            var CAL = '<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 9h18M8 2v4M16 2v4"></path></svg>';
 
-            // Envoi au serveur
-            document.getElementById('hfMoveData').value =
-                id + '|' + fmtIso(newStart) + '|' + fmtIso(newEnd);
-            var mgr = $find('RAP1');
-            if (mgr) {
-                mgr.ajaxRequest('move');
+            // --- l'état ---
+            var periode = M.jours.slice(0, 5);
+            var empOk = function (v) { return M.emps.some(function (e) { return e.v === v; }); };
+            var s = { emp: empOk(choix.agEmp) ? choix.agEmp : '', sel: null, ed: null };
+            function visibles(j) {
+                return M.rdv.filter(function (r) { return r.jour === j && (!s.emp || r.emp === s.emp); })
+                            .sort(function (a, b) { return a.deb - b.deb || a.fin - b.fin; });
             }
-        }
+            function nomEmp(v) { var e = M.emps.filter(function (x) { return x.v === v; })[0]; return e ? e.lab : T.aucunEmploye; }
 
-        // ============================================================
-        // RAPPELS / NOTIFICATIONS (côté client)
-        // ============================================================
-        function agCheckReminders() {
-            var now = new Date();
-            AG.events.forEach(function (ev) {
-                if (!ev.ReminderMinutes) return;
-                if (ev._reminded) return;
-                var s = new Date(ev.Start);
-                var triggerAt = new Date(s.getTime() - ev.ReminderMinutes * 60000);
-                if (now >= triggerAt && now < s) {
-                    agShowToast(ev.Title, AG_I18N.at + ' ' + fmtTime(s) + (ev.CustomerName ? ' — ' + ev.CustomerName : ''));
-                    ev._reminded = true;
+            // Heures affichées : 8 h à 18 h, élargies aux RDV de la période.
+            var H0 = 8 * 60, H1 = 18 * 60;
+            M.rdv.forEach(function (r) { if (periode.indexOf(r.jour) >= 0) { H0 = Math.min(H0, Math.floor(r.deb / 60) * 60); H1 = Math.max(H1, Math.ceil(r.fin / 60) * 60); } });
+            var PX = 62 / 60; // 62 px par heure
+
+            // Libre si aucun RDV de l'employé (ou de personne, sans employé) ne chevauche [a, b).
+            function libre(j, emp, a, b, sauf) {
+                return !M.rdv.some(function (r) {
+                    return r.jour === j && r.id !== sauf && (!emp || !r.emp || r.emp === emp) && r.deb < b && r.fin > a;
+                });
+            }
+            // Les prochaines plages libres d'une durée donnée (jours ouvrables chargés, 8 h à 18 h, pas de 30 min).
+            function plagesLibres(emp, duree, max, sauf) {
+                var out = [];
+                M.jours.forEach(function (j) {
+                    if (out.length >= max) return;
+                    var depart = 8 * 60;
+                    if (j < M.aujourdhui) return;
+                    if (j === M.aujourdhui) depart = Math.max(depart, Math.ceil((M.maintenant + 1) / 30) * 30);
+                    for (var h = depart; h + duree <= 18 * 60 && out.length < max; h += 30) {
+                        if (libre(j, emp, h, h + duree, sauf)) { out.push({ j: j, h: h }); h += Math.max(0, duree - 30) + 60; }
+                    }
+                });
+                return out;
+            }
+
+            function envoyer(action, data) {
+                document.getElementById('hfAction').value = action;
+                document.getElementById('hfData').value = JSON.stringify(data);
+                document.getElementById('btnAction').click();
+            }
+
+            // =================== En-tête ===================
+            function peindreTete() {
+                var t = el('div', 'ag-tete');
+                var ico = el('span', 'ag-ico'); ico.innerHTML = CAL; t.appendChild(ico);
+                var nT = 0, mT = 0;
+                periode.forEach(function (j) { visibles(j).forEach(function (r) { nT++; mT += r.fin - r.deb; }); });
+                var ti = el('span', 'ag-titre'); ti.appendChild(el('b', '', T.toutAgenda));
+                ti.appendChild(el('span', '', fmt(T.resume, nT, nbH(mT)) + (s.emp ? ' · ' + nomEmp(s.emp) : (M.emps.length > 1 ? T.toutEquipe : ''))));
+                t.appendChild(ti);
+
+                function lien(debut) { var u = new URL(window.location.href); u.searchParams.set('debut', debut); return u.toString(); }
+                var nav = el('div', 'ag-nav');
+                var p = el('a', '', '‹'); p.href = lien(M.prec); p.setAttribute('aria-label', T.prec5); p.title = T.prec5; nav.appendChild(p);
+                var d0 = dJ(periode[0]), d4 = dJ(periode[4]);
+                var lib = d0.getMonth() === d4.getMonth()
+                    ? fmt(T.periodeDuAu, d0.getDate(), d4.toLocaleDateString(LOC, { day: 'numeric', month: 'long', year: 'numeric' }))
+                    : fmt(T.periodeDuAu, d0.toLocaleDateString(LOC, { day: 'numeric', month: 'long' }), d4.toLocaleDateString(LOC, { day: 'numeric', month: 'long', year: 'numeric' }));
+                nav.appendChild(el('b', '', lib));
+                var n = el('a', '', '›'); n.href = lien(M.suiv); n.setAttribute('aria-label', T.suiv5); n.title = T.suiv5; nav.appendChild(n);
+                t.appendChild(nav);
+
+                var ua = new URL(window.location.href); ua.searchParams.delete('debut');
+                var auj = el('a', 'ag-pill' + (periode[0] === M.aujourdhui ? ' off' : ''), T.aujourdhui); auj.href = ua.toString(); t.appendChild(auj);
+
+                if (M.emps.length) {
+                    var se = el('select'); se.setAttribute('aria-label', T.employeAffiche);
+                    var o0 = el('option', '', fmt(T.equipeN, M.emps.length)); o0.value = ''; se.appendChild(o0);
+                    M.emps.forEach(function (e) { var o = el('option', '', e.lab); o.value = e.v; se.appendChild(o); });
+                    se.value = s.emp;
+                    se.addEventListener('change', function () { s.emp = se.value; garder('agEmp', s.emp); peindre(); });
+                    t.appendChild(se);
                 }
-            });
-        }
-
-        function agShowToast(title, body) {
-            var host = document.getElementById('agToastHost');
-            var t = document.createElement('div');
-            t.className = 'ag-toast';
-            t.innerHTML = '<div class="t-title"><i class="ic ic-bell" aria-hidden="true"></i> ' + title + '</div><div class="t-body">' + body + '</div>';
-            host.appendChild(t);
-            setTimeout(function () {
-                t.style.transition = 'opacity .4s';
-                t.style.opacity = '0';
-                setTimeout(function () { host.removeChild(t); }, 400);
-            }, 8000);
-        }
-
-        // Démarrage initial
-        document.addEventListener('DOMContentLoaded', function () {
-            agRender();
-            agCheckReminders();
-            setInterval(agCheckReminders, 60000); // chaque minute
-        });
-
-        // ============================================================
-        // Re-rendu après chaque AjaxRequest du RadAjaxManager
-        // (ajout/modif/suppression de RDV, drag&drop, navigation, etc.)
-        // ============================================================
-        function agReloadFromHiddenFields() {
-            try {
-                AG.events = JSON.parse(document.getElementById('hfEvents').value || '[]');
-                AG.employees = JSON.parse(document.getElementById('hfEmployees').value || '[]');
-                AG.types = JSON.parse(document.getElementById('hfTypes').value || '[]');
-                AG.view = document.getElementById('hfViewMode').value || 'month';
-                var dateStr = document.getElementById('hfCurrentDate').value;
-                if (dateStr) {
-                    var d = new Date(dateStr.replace(' ', 'T'));
-                    if (!isNaN(d)) AG.currentDate = d;
-                }
-            } catch (e) {
-                console.error('Erreur de rechargement agenda:', e);
+                var plus = bouton('ag-plus', T.plusRdv);
+                plus.addEventListener('click', function () {
+                    var p0 = plagesLibres(s.emp, 60, 1)[0];
+                    nouveau(p0 ? p0.j : periode[0], p0 ? p0.h : 9 * 60);
+                });
+                t.appendChild(plus);
+                return t;
             }
-        }
 
-        if (typeof Sys !== 'undefined' && Sys.WebForms) {
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function (sender, args) {
-                if (args && args.get_error()) return;
-                agReloadFromHiddenFields();
-                agRender();
-            });
-        }
+            function nouveau(j, min) {
+                agOuvrirFiche('wbfAppointmentEdit.aspx?id=0&start=' + encodeURIComponent(j + 'T' + pad(Math.floor(min / 60)) + ':' + pad(min % 60) + ':00') + (s.emp ? '&emp=' + s.emp : ''));
+            }
+
+            // =================== Légende ===================
+            var ETATS = { termine: ['#E3F3EA', '#0F5A3A', '#43B47A'], encours: ['#E3EBF7', '#143A73', '#1B4F9C'], avenir: ['#E8EDF5', '#44536E', '#8D9CB3'] };
+            function chipEtat(etat) {
+                var c = ETATS[etat] || ETATS.avenir;
+                var sp = el('span', 'ag-chip', etat === 'termine' ? T.lTermine : etat === 'encours' ? T.lEnCours : T.lAVenir);
+                sp.style.background = c[0]; sp.style.color = c[1]; return sp;
+            }
+            function peindreLegende() {
+                var l = el('div', 'ag-leg');
+                ['termine', 'encours', 'avenir'].forEach(function (k) { var c = chipEtat(k); var i = el('i'); i.style.background = ETATS[k][2]; c.insertBefore(i, c.firstChild); l.appendChild(c); });
+                if (!s.emp && M.emps.length > 1) {
+                    M.emps.forEach(function (e) { var sp = el('span', 'ag-emp'); var i = el('i'); i.style.background = e.c; sp.appendChild(i); sp.appendChild(document.createTextNode(e.lab)); l.appendChild(sp); });
+                }
+                l.appendChild(el('span', 'aide', T.aide));
+                return l;
+            }
+
+            // =================== La grille ===================
+            // Les RDV qui se chevauchent se partagent la largeur de la colonne.
+            function voies(liste) {
+                var fins = [], res = [];
+                liste.forEach(function (r) {
+                    var v = 0; while (fins[v] > r.deb) v++;
+                    fins[v] = r.fin; res.push({ r: r, v: v });
+                });
+                res.forEach(function (x) {
+                    var n = 1;
+                    res.forEach(function (y) { if (y.r.deb < x.r.fin && y.r.fin > x.r.deb) n = Math.max(n, y.v + 1); });
+                    x.n = n;
+                });
+                return res;
+            }
+            function peindreGrille() {
+                var g = el('div', 'ag-grille'), cols = el('div', 'ag-cols');
+                var haut = (H1 - H0) * PX;
+                cols.appendChild(el('div'));
+                periode.forEach(function (j) {
+                    var l = visibles(j);
+                    var jt = el('div', 'ag-jt' + (j === M.aujourdhui ? ' auj' : ''));
+                    jt.appendChild(el('b', '', jCourt(j) + (j === M.aujourdhui ? ' · ' + T.auj : '')));
+                    jt.appendChild(el('span', '', fmt(T.rdvH, l.length, nbH(l.reduce(function (t, r) { return t + (r.fin - r.deb); }, 0)))));
+                    cols.appendChild(jt);
+                });
+                var hs = el('div', 'ag-heures'); hs.style.height = haut + 'px';
+                for (var h = H0; h <= H1; h += 60) { var sp = el('span', '', fH(h).replace(/ h$/, ' h')); sp.style.top = ((h - H0) * PX) + 'px'; if (h > H0) hs.appendChild(sp); }
+                cols.appendChild(hs);
+                periode.forEach(function (j) {
+                    var c = el('div', 'ag-col' + (j === M.aujourdhui ? ' auj' : '')); c.style.height = haut + 'px';
+                    for (var h = H0 + 60; h < H1; h += 60) { var li = el('div', 'ag-ligne-h'); li.style.top = ((h - H0) * PX) + 'px'; c.appendChild(li); }
+                    if (j === M.aujourdhui && M.maintenant > H0 && M.maintenant < H1) { var mt = el('div', 'ag-maint'); mt.style.top = ((M.maintenant - H0) * PX) + 'px'; c.appendChild(mt); }
+                    // Une heure libre : nouveau RDV à cette heure (à la demi-heure près).
+                    c.title = '';
+                    c.addEventListener('click', function (ev) {
+                        if (ev.target !== c) return;
+                        var y = ev.offsetY, min = H0 + Math.floor(y / PX / 30) * 30;
+                        nouveau(j, min);
+                    });
+                    c.addEventListener('mousemove', function (ev) {
+                        if (ev.target !== c) return;
+                        c.title = fmt(T.nouveauIci, jLong(j), fH(H0 + Math.floor(ev.offsetY / PX / 30) * 30));
+                    });
+                    voies(visibles(j)).forEach(function (x) {
+                        var r = x.r, b = bouton('ag-ev ' + r.etat + (s.sel === r.id ? ' sel' : ''));
+                        b.style.top = ((r.deb - H0) * PX + 1) + 'px';
+                        b.style.height = Math.max(22, (r.fin - r.deb) * PX - 2) + 'px';
+                        b.style.left = (x.v * 100 / x.n) + '%';
+                        b.style.width = 'calc(' + (100 / x.n) + '% - 3px)';
+                        b.style.borderLeftColor = r.c;
+                        b.appendChild(el('span', 'l1', fH(r.deb) + '–' + fH(r.fin) + ' ' + r.client));
+                        if (r.fin - r.deb >= 45 && r.objet) b.appendChild(el('span', 'l2', r.objet));
+                        if (r.fin - r.deb >= 60) b.appendChild(chipEtat(r.etat));
+                        b.title = fH(r.deb) + '–' + fH(r.fin) + ' · ' + r.client + (r.objet ? ' · ' + r.objet : '') + (r.empNom ? ' · ' + r.empNom : '');
+                        b.addEventListener('click', function () { choisir(r); });
+                        c.appendChild(b);
+                    });
+                    cols.appendChild(c);
+                });
+                g.appendChild(cols);
+                return g;
+            }
+
+            // =================== Le panneau de droite ===================
+            function choisir(r) {
+                s.sel = r.id;
+                s.ed = { r: r, j: r.jour, h: r.deb, d: r.fin - r.deb, e: r.emp, ech: '' };
+                peindre();
+            }
+            function champ(lab, opts, val, onchange) {
+                var l = el('label', 'ag-champ', lab), se = el('select');
+                opts.forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; se.appendChild(op); });
+                se.value = String(val);
+                se.addEventListener('change', function () { onchange(se.value); peindre(); });
+                l.appendChild(se); return l;
+            }
+            function peindrePanneau() {
+                var p = el('aside', 'ag-panneau');
+                if (!s.ed) {
+                    p.appendChild(el('h2', '', T.majAide));
+                    p.appendChild(el('p', '', T.aide));
+                    p.appendChild(el('h2', '', T.plagesLibres));
+                    var pl = plagesLibres(s.emp, 60, 6);
+                    var ch = el('div', 'ag-libres');
+                    pl.forEach(function (x) {
+                        var b = bouton('', jCourt(x.j) + ' · ' + fH(x.h)); b.title = fmt(T.nouveauIci, jLong(x.j), fH(x.h));
+                        b.addEventListener('click', function () { nouveau(x.j, x.h); }); ch.appendChild(b);
+                    });
+                    if (!pl.length) p.appendChild(el('p', '', T.aucunePlage)); else p.appendChild(ch);
+                    return p;
+                }
+                var ed = s.ed, r = ed.r;
+                p.appendChild(el('h2', '', T.majTitre));
+                var c = el('div', 'ag-carte'); c.style.borderLeftColor = r.c;
+                c.appendChild(el('b', '', r.client));
+                if (r.objet) c.appendChild(el('span', '', r.objet));
+                var det = [jLong(r.jour) + ', ' + fH(r.deb) + '–' + fH(r.fin), r.lieu, r.empNom].filter(Boolean).join(' · ');
+                c.appendChild(el('span', '', det));
+                p.appendChild(c);
+                if (r.etat === 'termine') p.appendChild(el('div', 'ag-msg info', T.facturable));
+
+                p.appendChild(champ(T.jour, M.jours.map(function (j) { return [j, jLong(j)]; }), ed.j, function (v) { ed.j = v; ed.ech = ''; }));
+                var heures = [], durees = [];
+                for (var h = 6 * 60; h <= 21 * 60; h += 15) heures.push([h, fH(h)]);
+                [15, 30, 45, 60, 75, 90, 105, 120, 150, 180, 210, 240, 300, 360, 480].forEach(function (d) { durees.push([d, fD(d)]); });
+                if (!heures.some(function (x) { return x[0] === ed.h; })) heures.push([ed.h, fH(ed.h)]);
+                if (!durees.some(function (x) { return x[0] === ed.d; })) durees.push([ed.d, fD(ed.d)]);
+                var deux = el('div', 'ag-deux');
+                deux.appendChild(champ(T.heure, heures.sort(function (a, b) { return a[0] - b[0]; }), ed.h, function (v) { ed.h = +v; ed.ech = ''; }));
+                deux.appendChild(champ(T.duree, durees.sort(function (a, b) { return a[0] - b[0]; }), ed.d, function (v) { ed.d = +v; ed.ech = ''; }));
+                p.appendChild(deux);
+                if (M.emps.length) {
+                    p.appendChild(champ(T.employe, [['', T.aucunEmploye]].concat(M.emps.map(function (e) { return [e.v, e.lab]; })), ed.e, function (v) { ed.e = v; ed.ech = ''; }));
+                }
+
+                // Plages libres pour ce RDV (même employé, même durée)
+                var pl = plagesLibres(ed.e, ed.d, 4, r.id);
+                if (pl.length) {
+                    var bl = el('div', 'ag-champ', T.plageLibre), ch = el('div', 'ag-libres');
+                    pl.forEach(function (x) {
+                        var on = x.j === ed.j && x.h === ed.h;
+                        var b = bouton('', jCourt(x.j) + ' · ' + fH(x.h)); b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                        b.addEventListener('click', function () { ed.j = x.j; ed.h = x.h; ed.ech = ''; peindre(); });
+                        ch.appendChild(b);
+                    });
+                    bl.appendChild(ch); p.appendChild(bl);
+                }
+
+                // Échanger avec un autre RDV de la période
+                var autres = M.rdv.filter(function (x) { return x.id !== r.id && periode.indexOf(x.jour) >= 0; })
+                                  .sort(function (a, b) { return a.jour < b.jour ? -1 : a.jour > b.jour ? 1 : a.deb - b.deb; });
+                if (autres.length) {
+                    p.appendChild(champ(T.echanger, [['', T.aucunEchange]].concat(autres.map(function (x) { return [x.id, jCourt(x.jour) + ' ' + fH(x.deb) + ' · ' + x.client]; })), ed.ech,
+                        function (v) { ed.ech = v; if (v) { ed.j = r.jour; ed.h = r.deb; ed.d = r.fin - r.deb; ed.e = r.emp; } }));
+                }
+
+                var change = ed.j !== r.jour || ed.h !== r.deb || ed.d !== r.fin - r.deb || ed.e !== r.emp;
+                if (!ed.ech && change) {
+                    var conf = M.rdv.filter(function (x) { return x.id !== r.id && x.jour === ed.j && (!ed.e || !x.emp || x.emp === ed.e) && x.deb < ed.h + ed.d && x.fin > ed.h; })[0];
+                    if (conf) p.appendChild(el('div', 'ag-msg conflit', fmt(T.conflit, ed.e ? nomEmp(ed.e) : (conf.empNom || T.aucunEmploye), fH(conf.deb) + ' · ' + conf.client)));
+                    p.appendChild(el('div', 'ag-msg change', fmt(T.changement, jLong(ed.j) + ', ' + fH(ed.h) + '–' + fH(ed.h + ed.d) + (M.emps.length ? ' · ' + nomEmp(ed.e) : ''))));
+                }
+                if (ed.ech) {
+                    var o = M.rdv.filter(function (x) { return String(x.id) === String(ed.ech); })[0];
+                    if (o) p.appendChild(el('div', 'ag-msg change', fmt(T.changement, r.client + ' → ' + jCourt(o.jour) + ' ' + fH(o.deb) + ' · ' + o.client + ' → ' + jCourt(r.jour) + ' ' + fH(r.deb))));
+                }
+                var en = bouton('ag-btn', T.enregistrer); en.disabled = !change && !ed.ech;
+                en.addEventListener('click', function () {
+                    en.disabled = true;
+                    if (ed.ech) envoyer('echanger', { id: r.id, autre: +ed.ech });
+                    else envoyer('maj', { id: r.id, jour: ed.j, deb: ed.h, duree: ed.d, emp: ed.e });
+                });
+                p.appendChild(en);
+                var ra = el('div', 'ag-rangee');
+                var fi = bouton('ag-btn clair', T.ficheComplete); fi.addEventListener('click', function () { agOuvrirFiche('wbfAppointmentEdit.aspx?id=' + r.id); });
+                ra.appendChild(fi); p.appendChild(ra);
+                var rb = el('div', 'ag-rangee');
+                var an = bouton('ag-btn rouge', T.annulerRdv);
+                an.addEventListener('click', function () { if (window.confirm(T.confirmAnnuler)) envoyer('annuler', { id: r.id }); });
+                var fe = bouton('ag-btn clair', T.fermer); fe.addEventListener('click', function () { s.sel = null; s.ed = null; peindre(); });
+                rb.appendChild(an); rb.appendChild(fe); p.appendChild(rb);
+                return p;
+            }
+
+            function peindre() {
+                var y = window.scrollY;
+                racine.innerHTML = '';
+                racine.appendChild(peindreTete());
+                racine.appendChild(peindreLegende());
+                var corps = el('div', 'ag-corps');
+                corps.appendChild(peindreGrille());
+                corps.appendChild(peindrePanneau());
+                racine.appendChild(corps);
+                window.scrollTo(0, y);
+            }
+            peindre();
+
+            // =================== Les rappels ===================
+            // Chaque minute, tant que la page est ouverte : un RDV d'aujourd'hui dont le rappel
+            // est atteint (début − délai) et qui n'est pas commencé s'annonce 8 secondes en haut à droite.
+            var vus = {};
+            var CLOCHE = '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D9A03C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"></path></svg>';
+            function rappels() {
+                var n = new Date(), j = n.getFullYear() + '-' + pad(n.getMonth() + 1) + '-' + pad(n.getDate()), m = n.getHours() * 60 + n.getMinutes();
+                M.rdv.forEach(function (r) {
+                    if (r.jour !== j || !(r.rappel >= 0) || vus[r.id] || m < r.deb - r.rappel || m >= r.deb) return;
+                    vus[r.id] = 1;
+                    var t = el('div', 'ag-rappel'); t.setAttribute('role', 'status');
+                    t.style.cssText = 'position:fixed;top:' + (18 + 76 * document.querySelectorAll('.ag-rappel').length) + 'px;right:18px;z-index:100000;display:flex;gap:10px;align-items:flex-start;max-width:340px;padding:12px 16px;border-radius:16px;background:#0E1F3D;color:#FFFFFF;font-family:Nunito,sans-serif;box-shadow:0 12px 30px rgba(14,31,61,.35)';
+                    var ic = el('span'); ic.innerHTML = CLOCHE; t.appendChild(ic);
+                    var tx = el('span'); tx.style.cssText = 'display:flex;flex-direction:column;line-height:1.25';
+                    tx.appendChild(el('b', '', r.client + (r.objet ? ' · ' + r.objet : '')));
+                    tx.appendChild(el('span', '', fmt(T.rappelA, fH(r.deb))));
+                    t.appendChild(tx); document.body.appendChild(t);
+                    setTimeout(function () { t.remove(); }, 8000);
+                });
+            }
+            rappels(); setInterval(rappels, 60000);
+        })();
     </script>
 </asp:Content>
