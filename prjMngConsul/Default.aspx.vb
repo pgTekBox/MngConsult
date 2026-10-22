@@ -4,14 +4,15 @@ Imports System.Globalization
 Imports Newtonsoft.Json
 
 ''' <summary>
-''' Le tableau de bord, au modèle de l'accueil 60secondes (accueil-60secondes-complet.html) :
-'''   1. la fenêtre de 60 (bonjour, ce qui passe en premier, À faire rouge / jaune),
-'''      le bouton « + Facture » et la tuile noire qui mène aux 12 éléments du menu ;
-'''   2. Mon argent : mois, compte bancaire, six cases (Encaisse, Revenus, À recevoir,
-'''      À payer, En retard, Encaisse prévue sur 4 semaines) ;
-'''   3. l'Agenda : la journée en liste et la semaine de 5 jours ouvrables ;
-'''   4. les Activités à faire, classées par couleur (rouge = date dépassée,
-'''      jaune = date qui approche, noir = fait par 60).
+''' Le tableau de bord, au modèle de la page d'accueil 60secondes du 21 octobre
+''' (60secondes-plateforme-complete-page-premiere-21-oct.html) :
+'''   1. la fenêtre de 60 : bonjour, « En premier », puis sur la même ligne
+'''      Activité à faire (rouge / jaune), Messages, Revenu en retard,
+'''      Paiements en retard et le compte d'opérations (l'œil montre le solde) ;
+'''   2. l'Agenda : Aujourd'hui (plages libres, RDV, Facturer, + RDV) et
+'''      À venir (7 prochains jours, semaine suivante, ce mois-ci, mois prochain) ;
+'''   3. les Activités à faire, classées par couleur (rouge = date dépassée,
+'''      jaune = date qui approche) ; 60 se rend sur l'enjeu prioritaire.
 ''' Tout est calculé à partir des vraies données de la compagnie (factures clients
 ''' s0026, factures fournisseurs s0023, comptes bancaires T143PlaidAccount,
 ''' rendez-vous s0100, tâches à approuver s0745, essai s0687). Le serveur bâtit un
@@ -65,117 +66,78 @@ Public Class _Default
     Private aujourdhui As Date = Date.Today
 
     Private Function BatirModele() As Object
-        Dim c As CultureInfo = Cult()
-
-        ' ---------- Le mois affiché (?mois=aaaa-mm), le mois courant par défaut ----------
-        Dim debutMoisCourant As New Date(aujourdhui.Year, aujourdhui.Month, 1)
-        Dim moisAffiche As Date = debutMoisCourant
-        Dim q As String = If(Request.QueryString("mois"), "")
-        Dim m As Date
-        If Date.TryParseExact(q & "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, m) Then
-            If m <= debutMoisCourant AndAlso m >= debutMoisCourant.AddMonths(-11) Then moisAffiche = m
-        End If
-        Dim optionsMois As New List(Of Object)
-        For i As Integer = 0 To 11
-            Dim d As Date = debutMoisCourant.AddMonths(-i)
-            optionsMois.Add(New With {.v = d.ToString("yyyy-MM"), .lab = Majuscule(d.ToString("MMMM yyyy", c))})
-        Next
-
         ' ---------- Les données ----------
         Dim ventes As DataTable = Table("s0026GetCustomersInvoices")
         Dim achats As DataTable = Table("s0023GetSuppliersInvoices")
         Dim comptes As DataTable = ComptesBancaires()
         Dim nbApprob As Integer = CompterApprobations()
 
-        ' ---------- Mon argent ----------
+        ' ---------- Le compte d'opérations ----------
         Dim encaisse As Decimal = 0D, aCompte As Boolean = comptes IsNot Nothing AndAlso comptes.Rows.Count > 0
         Dim libCompte As String = L("bqAucun"), majCompte As String = ""
         If aCompte Then
             For Each r As DataRow In comptes.Rows : encaisse += Dec(r("BalanceCurrent")) : Next
             Dim r0 As DataRow = comptes.Rows(0)
             libCompte = Txt(r0("BankName"))
-            If Txt(r0("AccountName")) <> "" Then libCompte &= " · " & Txt(r0("AccountName"))
             If Txt(r0("Mask")) <> "" Then libCompte &= " ••• " & Txt(r0("Mask"))
             If comptes.Rows.Count > 1 Then libCompte &= " " & String.Format(L("bqAutres"), comptes.Rows.Count - 1)
             Dim maj As Date? = DateN(r0("BalanceUpdated"))
-            majCompte = Txt(r0("BankName")) & If(maj.HasValue, " · " & String.Format(L("auDate"), JourMois(maj.Value)), "")
+            majCompte = Txt(r0("BankName")) & If(Txt(r0("AccountName")) <> "", " · " & Txt(r0("AccountName")), "") &
+                        If(maj.HasValue, " · " & String.Format(L("auDate"), JourMois(maj.Value)), "")
         End If
 
-        Dim finMois As Date = moisAffiche.AddMonths(1)
-        Dim revenus As Decimal = 0D, nbRevenus As Integer = 0
-        Dim aRecevoir As Decimal = 0D, nbARecevoir As Integer = 0
+        ' ---------- Ventes : en retard, à échéance dans 7 jours, brouillons ----------
         Dim enRetard As Decimal = 0D
         Dim retardsVentes As New List(Of DataRow)
         Dim prochesVentes As New List(Of DataRow)
         Dim brouillonsVentes As Integer = 0
-        Dim dans28 As Date = aujourdhui.AddDays(28)
-        Dim entrees28 As Decimal = 0D
-
         If ventes IsNot Nothing Then
             For Each r As DataRow In ventes.Rows
-                Dim compta As Boolean = Txt(r("ComptabilisationStatus")).ToUpperInvariant() = "COMPTABILISE"
-                If Not compta Then brouillonsVentes += 1 : Continue For
-                Dim dd As Date? = DateN(r("DocumentDate"))
-                If dd.HasValue AndAlso dd.Value >= moisAffiche AndAlso dd.Value < finMois Then
-                    revenus += Dec(r("Total")) : nbRevenus += 1
-                End If
+                If Txt(r("ComptabilisationStatus")).ToUpperInvariant() <> "COMPTABILISE" Then brouillonsVentes += 1 : Continue For
                 Dim reste As Decimal = Dec(r("ResteAPayer"))
                 If reste <= 0.005D OrElse Txt(r("StatutPaiement")).ToUpperInvariant() = "PAYEE" Then Continue For
-                aRecevoir += reste : nbARecevoir += 1
                 Dim ech As Date? = DateN(r("DueDate"))
                 If (ech.HasValue AndAlso ech.Value < aujourdhui) OrElse Txt(r("StatutPaiement")).ToUpperInvariant() = "EN_RETARD" Then
                     enRetard += reste : retardsVentes.Add(r)
-                Else
-                    If ech.HasValue AndAlso ech.Value <= aujourdhui.AddDays(7) Then prochesVentes.Add(r)
-                    If Not ech.HasValue OrElse ech.Value <= dans28 Then entrees28 += reste
+                ElseIf ech.HasValue AndAlso ech.Value <= aujourdhui.AddDays(7) Then
+                    prochesVentes.Add(r)
                 End If
             Next
         End If
 
-        Dim aPayer As Decimal = 0D, nbAPayer As Integer = 0
+        ' ---------- Achats : en retard, à échéance dans 7 jours ----------
         Dim retardsAchats As New List(Of DataRow)
         Dim prochesAchats As New List(Of DataRow)
-        Dim sorties28 As Decimal = 0D
         If achats IsNot Nothing Then
             For Each r As DataRow In achats.Rows
                 If Txt(r("ComptabilisationStatus")).ToUpperInvariant() <> "COMPTABILISE" Then Continue For
                 Dim reste As Decimal = Dec(r("ResteAPayer"))
                 If reste <= 0.005D OrElse Txt(r("StatutPaiement")).ToUpperInvariant() = "PAYEE" Then Continue For
-                aPayer += reste : nbAPayer += 1
                 Dim ech As Date? = DateN(r("DueDate"))
                 If ech.HasValue AndAlso ech.Value < aujourdhui Then
                     retardsAchats.Add(r)
                 ElseIf ech.HasValue AndAlso ech.Value <= aujourdhui.AddDays(7) Then
                     prochesAchats.Add(r)
                 End If
-                If Not ech.HasValue OrElse ech.Value <= dans28 Then sorties28 += reste
             Next
         End If
 
         retardsVentes = retardsVentes.OrderBy(Function(r) If(DateN(r("DueDate")), aujourdhui)).ToList()
-        Dim prevue As Decimal = encaisse + entrees28 - sorties28
+        Dim payRetard As Decimal = retardsAchats.Sum(Function(r) Dec(r("ResteAPayer")))
 
-        Dim argent As New List(Of Object)
-        argent.Add(Case6(L("kEncaisse"), If(aCompte, Montant(encaisse), "—"), If(aCompte, majCompte, L("kEncaisseSansBanque")), "", "PlaidAccounts.aspx", True))
-        argent.Add(Case6(L("kRevenus"), Montant(revenus),
-                         If(nbRevenus = 0, L("kRevenusAucune"), String.Format(L("kRevenusN"), nbRevenus)), "", "wbfCustomersInvoices.aspx", False))
-        argent.Add(Case6(L("kARecevoir"), Montant(aRecevoir),
-                         If(enRetard > 0, String.Format(L("kDontRetard"), Montant(enRetard)), String.Format(L("kFacturesClients"), nbARecevoir)),
-                         If(enRetard > 0, "r", ""), "wbfCustomersInvoices.aspx", False))
-        argent.Add(Case6(L("kAPayer"), Montant(aPayer), String.Format(L("kFacturesFourn"), nbAPayer),
-                         If(retardsAchats.Count > 0, "r", If(prochesAchats.Count > 0, "y", "")), "wbfSuppliersInvoices.aspx", False))
+        ' ---------- Les montants de la ligne de 60 : Revenu en retard, Paiements en retard ----------
         Dim sousRetard As String = L("kRetardAucun")
         If retardsVentes.Count > 0 Then
             Dim pire As Date? = DateN(retardsVentes(0)("DueDate"))
             sousRetard = String.Format(L("kRetardN"), retardsVentes.Count) &
                          If(pire.HasValue, " · " & String.Format(L("echueDepuis"), (aujourdhui - pire.Value).Days), "")
         End If
-        argent.Add(Case6(L("kEnRetard"), Montant(enRetard), sousRetard, If(enRetard > 0, "r", ""), "wbfCustomersInvoices.aspx", False))
-        Dim dotPrevue As String = ""
-        If aCompte Then dotPrevue = If(prevue < 0, "r", If(prevue < encaisse, "y", ""))
-        argent.Add(Case6(L("kPrevue"), If(aCompte, Montant(prevue), "—"),
-                         If(aCompte, String.Format(L("kPrevueSous"), JourMois(dans28)), L("kEncaisseSansBanque")),
-                         dotPrevue, "PlaidAccounts.aspx", False))
+        Dim sousPay As String = If(retardsAchats.Count = 0, L("kPayAucun"),
+                                   String.Format(L("kFacturesFourn"), retardsAchats.Count) & " · " & Noms(retardsAchats))
+        Dim entete As New List(Of Object) From {
+            New With {.lab = L("kEnRetard"), .val = Montant(enRetard), .sous = sousRetard, .actif = enRetard > 0, .url = "wbfCustomersInvoices.aspx"},
+            New With {.lab = L("kPayRetard"), .val = Montant(payRetard), .sous = sousPay, .actif = payRetard > 0, .url = "wbfSuppliersInvoices.aspx"}
+        }
 
         ' ---------- Activités à faire ----------
         Dim acts As New List(Of Object)
@@ -195,7 +157,7 @@ Public Class _Default
         End If
         If retardsAchats.Count > 0 Then
             acts.Add(Activite("r", String.Format(L("aFournRetard"), retardsAchats.Count),
-                              L("catAchats") & " · " & Noms(retardsAchats) & " · " & Montant(retardsAchats.Sum(Function(r) Dec(r("ResteAPayer")))),
+                              L("catAchats") & " · " & Noms(retardsAchats) & " · " & Montant(payRetard),
                               L("aFournRetardDet"), L("btnPreparer"), "wbfSuppliersInvoices.aspx"))
         End If
         If nbApprob > 0 Then
@@ -224,45 +186,22 @@ Public Class _Default
         Dim essai As Object = EtatEssai()
         If essai IsNot Nothing Then acts.Add(essai)
 
-        ' ---------- Agenda ----------
-        Dim agenda As Object = BatirAgenda(c)
-
-        ' ---------- La tuile noire : les 12 éléments du menu ----------
-        Dim tuile As New List(Of Object) From {
-            Nav(L("dashboard"), "Default.aspx"), Nav(L("sales"), "wbfCustomersInvoices.aspx"),
-            Nav(L("purchases"), "wbfSuppliersInvoices.aspx"), Nav(L("payments"), "wbfPaymentProcessors.aspx"),
-            Nav(L("reports"), "wbfEtatResultats.aspx"), Nav(L("agenda"), "wbfAgenda.aspx"),
-            Nav(L("employees"), "wbfEmployees.aspx"), Nav(L("accounting"), "wbfJournal.aspx"),
-            Nav(L("products"), "wbfProducts.aspx"), Nav(L("approvals"), "wbfApprobations.aspx"),
-            Nav(L("myFirm"), "CabinetsCertifies.aspx"), Nav(L("settings"), "wbfSetting.aspx")
-        }
-
         Dim prenom As String = ""
         Try : prenom = UserFirstName : Catch : End Try
 
         Return New With {
             .prenom = prenom,
             .lang = CurrentLang,
-            .mois = New With {.val = moisAffiche.ToString("yyyy-MM"), .courant = (moisAffiche = debutMoisCourant), .options = optionsMois},
-            .banque = New With {.aCompte = aCompte, .lib = libCompte, .solde = If(aCompte, Montant(encaisse), "")},
-            .argent = argent,
+            .banque = New With {.aCompte = aCompte, .lib = libCompte, .solde = If(aCompte, Montant(encaisse), ""), .maj = majCompte},
+            .entete = entete,
             .activites = acts,
-            .agenda = agenda,
-            .tuile = tuile,
+            .agenda = BatirAgenda(),
             .t = Textes()
         }
     End Function
 
-    Private Function Case6(lab As String, val As String, sous As String, dot As String, url As String, oeil As Boolean) As Object
-        Return New With {.lab = lab, .val = val, .sous = sous, .dot = dot, .url = url, .oeil = oeil}
-    End Function
-
     Private Function Activite(u As String, titre As String, sous As String, detail As String, bouton As String, url As String) As Object
         Return New With {.u = u, .t = titre, .d = sous, .det = detail, .btn = bouton, .url = url}
-    End Function
-
-    Private Function Nav(lab As String, url As String, Optional fenetre As Boolean = False) As Object
-        Return New With {.lab = lab, .url = ResolveUrl("~/" & url), .fen = fenetre}
     End Function
 
     ''' <summary>L'essai gratuit (s0687) : une activité jaune dans les 30 derniers jours.</summary>
@@ -286,22 +225,10 @@ Public Class _Default
     End Function
 
     ''' <summary>
-    ''' L'agenda : 5 jours ouvrables à partir d'aujourd'hui (?sem=n décale d'autant de
-    ''' semaines), les employés et les rendez-vous de la période (s0100, s0106).
+    ''' L'agenda : les employés et les rendez-vous d'aujourd'hui jusqu'à la fin du mois
+    ''' prochain (s0100, s0106). La page en tire Aujourd'hui, les plages libres et À venir.
     ''' </summary>
-    Private Function BatirAgenda(c As CultureInfo) As Object
-        Dim decalage As Integer = 0
-        Integer.TryParse(If(Request.QueryString("sem"), "0"), decalage)
-        If decalage < -52 OrElse decalage > 52 Then decalage = 0
-
-        Dim depart As Date = aujourdhui.AddDays(7 * decalage)
-        Dim jours As New List(Of Date)
-        Dim d As Date = depart
-        While jours.Count < 5
-            If d.DayOfWeek <> DayOfWeek.Saturday AndAlso d.DayOfWeek <> DayOfWeek.Sunday Then jours.Add(d)
-            d = d.AddDays(1)
-        End While
-
+    Private Function BatirAgenda() As Object
         Dim emps As New List(Of Object)
         Dim couleurs As New Dictionary(Of Integer, String)
         Try
@@ -319,12 +246,13 @@ Public Class _Default
         Catch
         End Try
 
+        Dim finPeriode As Date = New Date(aujourdhui.Year, aujourdhui.Month, 1).AddMonths(2)
         Dim rdv As New List(Of Object)
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlParameter("@StartDate", jours(0)))
-            p.Add(New SqlParameter("@EndDate", jours(4).AddDays(1)))
+            p.Add(New SqlParameter("@StartDate", aujourdhui))
+            p.Add(New SqlParameter("@EndDate", finPeriode))
             p.Add(New SqlParameter("@EmployeeId", DBNull.Value))
             Dim ds As DataSet = ExecuteSQLds("s0100GetAppointmentsByRange", p)
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
@@ -340,17 +268,19 @@ Public Class _Default
                     ElseIf debut <= Date.Now Then
                         etat = "encours"
                     End If
-                    Dim ecart As TimeSpan = fin - debut
                     Dim client As String = Txt(r("CustomerName"))
                     Dim titre As String = Txt(r("Title"))
                     rdv.Add(New With {
                         .id = Convert.ToInt32(r("Id")),
                         .jour = debut.ToString("yyyy-MM-dd"),
-                        .tri = debut.ToString("HHmm"),
+                        .deb = debut.Hour * 60 + debut.Minute,
+                        .fin = If(fin.Date > debut.Date, 24 * 60, fin.Hour * 60 + fin.Minute),
                         .h = Heure(debut),
-                        .plage = Heure(debut) & " – " & Heure(fin) & " · " & Duree(ecart),
+                        .plage = Heure(debut) & " – " & Heure(fin),
+                        .duree = Duree(fin - debut),
                         .client = If(client = "", titre, client),
                         .court = If(client = "", Txt(r("TypeName")), titre),
+                        .cli = If(IsDBNull(r("CustomerId")), "", Convert.ToString(r("CustomerId"))),
                         .desc = Txt(r("Description")),
                         .lieu = Txt(r("Location")),
                         .typ = Txt(r("TypeName")),
@@ -358,39 +288,18 @@ Public Class _Default
                         .empNom = Txt(r("EmployeeName")),
                         .ini = Initiales(Txt(r("EmployeeName"))),
                         .c = If(empId <> "" AndAlso couleurs.ContainsKey(CInt(empId)), couleurs(CInt(empId)), "#1B4F9C"),
-                        .etat = etat,
-                        .statut = If(statut = "", "Planifié", statut)
+                        .etat = etat
                     })
                 Next
             End If
         Catch
         End Try
 
-        Dim lesJours As New List(Of Object)
-        For Each j As Date In jours
-            lesJours.Add(New With {
-                .v = j.ToString("yyyy-MM-dd"),
-                .court = Majuscule(j.ToString("ddd", c).TrimEnd("."c)) & " " & j.Day.ToString(),
-                .libLong = Majuscule(j.ToString("dddd d MMMM", c)),
-                .auj = (j = aujourdhui)
-            })
-        Next
-
-        Dim titreSemaine As String
-        If jours(0).Month = jours(4).Month Then
-            titreSemaine = String.Format(L("agDuAu"), jours(0).Day, jours(4).ToString("d MMMM yyyy", c))
-        Else
-            titreSemaine = String.Format(L("agDuAu"), jours(0).ToString("d MMMM", c), jours(4).ToString("d MMMM yyyy", c))
-        End If
-
         Return New With {
             .emps = emps,
-            .jours = lesJours,
             .rdv = rdv,
-            .sem = decalage,
-            .titre = titreSemaine,
             .aujourdhui = aujourdhui.ToString("yyyy-MM-dd"),
-            .debutRdv = jours(0).ToString("yyyy-MM-ddT09:00:00")
+            .maintenant = Date.Now.Hour * 60 + Date.Now.Minute
         }
     End Function
 
@@ -500,11 +409,6 @@ Public Class _Default
         Return (parts(0).Substring(0, 1) & parts(parts.Length - 1).Substring(0, 1)).ToUpperInvariant()
     End Function
 
-    Private Shared Function Majuscule(s As String) As String
-        If String.IsNullOrEmpty(s) Then Return s
-        Return Char.ToUpper(s(0)) & s.Substring(1)
-    End Function
-
     Private Shared Function NumFacture(r As DataRow) As String
         Dim n As String = Txt(r("NumeroSort"))
         If n = "" Then Return ""
@@ -530,42 +434,24 @@ Public Class _Default
 
     ''' <summary>Les textes dont la page a besoin côté navigateur.</summary>
     Private Function Textes() As Object
-        Return New With {
-            .bonjour = L("bonjour"), .bonjourNom = L("bonjourNom"),
-            .gUrgent1 = L("gUrgent1"), .gUrgentN = L("gUrgentN"), .gVeille = L("gVeille"), .gOk = L("gOk"),
-            .enPremier = L("enPremier"), .aFaire = L("aFaire"), .rienUrgent = L("rienUrgent"),
-            .indR = L("indR"), .indY = L("indY"),
-            .allerA = L("allerA"), .ouvrir = L("ouvrir"),
-            .voirMontant = L("voirMontant"), .masquerMontant = L("masquerMontant"),
-            .moisCourant = L("moisCourant"), .moisPasse = L("moisPasse"),
-            .lRouge = L("lRouge"), .lJaune = L("lJaune"), .lNoir = L("lNoir"), .faitPar60 = L("faitPar60"),
-            .toutFait = L("toutFait"), .tous = L("tous"),
-            .choses1 = L("choses1"), .chosesN = L("chosesN"),
-            .equipe = L("equipe"), .agAuj = L("agAuj"), .agRdv1 = L("agRdv1"), .agRdvN = L("agRdvN"), .agLibre = L("agLibre"),
-            .agVide = L("agVide"), .agSemSous = L("agSemSous"),
-            .stTermine = L("stTermine"), .stEnCours = L("stEnCours"), .stAVenir = L("stAVenir"),
-            .iHeure = L("iHeure"), .iEmploye = L("iEmploye"), .iType = L("iType"), .iLieu = L("iLieu"),
-            .ouvrirRdv = L("ouvrirRdv"), .winRdv = L("winRdv"),
-            .assistant60 = L("assistant60"),
-            .factureBtn = L("factureBtn"),
-            .autresFct = L("autresFct"),
-            .fctPrec = L("fctPrec"),
-            .fctSuiv = L("fctSuiv"),
-            .monArgent = L("monArgent"),
-            .moisPrec = L("moisPrec"),
-            .moisSuiv = L("moisSuiv"),
-            .moisAffiche = L("moisAffiche"),
-            .noteArgent = L("noteArgent"),
-            .agenda = L("agenda"),
-            .agendaDe = L("agendaDe"),
-            .messages = L("messages"),
-            .ajouterRdv = L("ajouterRdv"),
-            .rdvBtn = L("rdvBtn"),
-            .semPrec = L("semPrec"),
-            .semaine = L("semaine"),
-            .semSuiv = L("semSuiv"),
-            .activites = L("activites")
+        Dim cles As String() = {
+            "bonjour", "bonjourNom", "gUrgent1", "gUrgentN", "gVeille", "gOk",
+            "enPremier", "rienUrgent", "assistant60", "a60Aria", "a60Retour", "a60RetourTip",
+            "activiteAFaire", "indR", "indY", "messages", "msgAria",
+            "compteOp", "voirMontant", "masquerMontant", "brancher",
+            "agenda", "agendaAria", "agendaTip", "agendaDe", "equipeN",
+            "plagesLibres", "plagesAria", "plagesVide", "plageTip", "agAuj", "agAujAbr", "agRdvH", "agEmployes",
+            "agVide", "libre", "stTermine", "stEnCours", "stAVenir",
+            "facturer", "facturerAria", "plusRdv", "nouveauRdvAvec", "voirDetail",
+            "iHeure", "iEmploye", "iType", "iLieu", "ouvrirRdv", "winRdv",
+            "aVenir", "aVenirPlanif", "toutEquipe", "pSem", "pProch", "pMois", "pMoisP", "periode", "avVide",
+            "replier", "deplier",
+            "activites", "lRouge", "lJaune", "dateDepassee", "propose60", "a60Ici", "a60Choisir", "merci60", "conseil60",
+            "toutFait", "tous", "segR", "segY"
         }
+        Dim t As New Dictionary(Of String, String)
+        For Each k As String In cles : t(k) = L(k) : Next
+        Return t
     End Function
 
     ''' <summary>Traductions du tableau de bord (fr/en/es).</summary>
@@ -586,84 +472,86 @@ Public Class _Default
             Case "gVeille" : Return Choose3(lang, "À surveiller", "To watch", "A vigilar")
             Case "gOk" : Return Choose3(lang, "Tout va bien", "All good", "Todo va bien")
             Case "enPremier" : Return Choose3(lang, "En premier", "First", "Primero")
-            Case "aFaire" : Return Choose3(lang, "À faire", "To do", "Por hacer")
             Case "rienUrgent" : Return Choose3(lang, "Rien d'urgent. Tout est sous contrôle.", "Nothing urgent. Everything is under control.", "Nada urgente. Todo está bajo control.")
+            Case "assistant60" : Return Choose3(lang, "60, votre assistant", "60, your assistant", "60, su asistente")
+            Case "a60Aria" : Return Choose3(lang, "60 : aller à l'enjeu prioritaire", "60: go to the top priority", "60: ir al asunto prioritario")
+            Case "a60Retour" : Return Choose3(lang, "Ramener 60 près de vous", "Bring 60 back", "Traer a 60 de vuelta")
+            Case "a60RetourTip" : Return Choose3(lang, "60 est en train de régler l'enjeu — cliquez pour le ramener", "60 is handling the issue — click to bring it back", "60 está resolviendo el asunto — haga clic para traerlo")
+            Case "activiteAFaire" : Return Choose3(lang, "Activité à faire", "Activities to do", "Actividades por hacer")
             Case "indR" : Return Choose3(lang, "{0} activité(s) en retard, à faire obligatoirement", "{0} overdue activity(ies), must be done", "{0} actividad(es) atrasada(s), obligatorias")
             Case "indY" : Return Choose3(lang, "{0} activité(s) dont la date approche", "{0} activity(ies) coming due", "{0} actividad(es) cuya fecha se acerca")
-            Case "factureBtn" : Return Choose3(lang, "Facture", "Invoice", "Factura")
-            Case "allerA" : Return Choose3(lang, "Aller à", "Go to", "Ir a")
-            Case "ouvrir" : Return Choose3(lang, "Ouvrir", "Open", "Abrir")
-            Case "fctPrec" : Return Choose3(lang, "Fonction précédente", "Previous function", "Función anterior")
-            Case "fctSuiv" : Return Choose3(lang, "Fonction suivante", "Next function", "Función siguiente")
-            Case "autresFct" : Return Choose3(lang, "Autres fonctions", "Other functions", "Otras funciones")
-            Case "assistant60" : Return Choose3(lang, "60, votre assistant", "60, your assistant", "60, su asistente")
-
-            ' Mon argent
-            Case "monArgent" : Return Choose3(lang, "Mon argent", "My money", "Mi dinero")
-            Case "moisPrec" : Return Choose3(lang, "Mois précédent", "Previous month", "Mes anterior")
-            Case "moisSuiv" : Return Choose3(lang, "Mois suivant", "Next month", "Mes siguiente")
-            Case "moisAffiche" : Return Choose3(lang, "Mois affiché", "Month shown", "Mes mostrado")
-            Case "moisCourant" : Return Choose3(lang, "Mois en cours", "Current month", "Mes en curso")
-            Case "moisPasse" : Return Choose3(lang, "Mois passé", "Past month", "Mes pasado")
+            Case "messages" : Return Choose3(lang, "Messages", "Messages", "Mensajes")
+            Case "msgAria" : Return Choose3(lang, "Ouvrir le centre de messages", "Open the message center", "Abrir el centro de mensajes")
+            Case "compteOp" : Return Choose3(lang, "Compte d'opérations", "Operating account", "Cuenta operativa")
             Case "voirMontant" : Return Choose3(lang, "Voir le solde", "Show balance", "Ver el saldo")
             Case "masquerMontant" : Return Choose3(lang, "Masquer le solde", "Hide balance", "Ocultar el saldo")
-            Case "bqAucun" : Return Choose3(lang, "Aucun compte bancaire branché", "No bank account connected", "Ninguna cuenta bancaria conectada")
+            Case "brancher" : Return Choose3(lang, "Brancher", "Connect", "Conectar")
+            Case "bqAucun" : Return Choose3(lang, "Aucun compte branché", "No account connected", "Ninguna cuenta conectada")
             Case "bqAutres" : Return Choose3(lang, "(+{0})", "(+{0})", "(+{0})")
             Case "auDate" : Return Choose3(lang, "au {0}", "as of {0}", "al {0}")
-            Case "kEncaisse" : Return Choose3(lang, "Encaisse aujourd'hui", "Cash today", "Efectivo hoy")
-            Case "kEncaisseSansBanque" : Return Choose3(lang, "branchez votre banque", "connect your bank", "conecte su banco")
-            Case "kRevenus" : Return Choose3(lang, "Revenus du mois", "Revenue for the month", "Ingresos del mes")
-            Case "kRevenusAucune" : Return Choose3(lang, "aucune facture comptabilisée", "no invoice posted", "ninguna factura contabilizada")
-            Case "kRevenusN" : Return Choose3(lang, "{0} facture(s) comptabilisée(s)", "{0} invoice(s) posted", "{0} factura(s) contabilizada(s)")
-            Case "kARecevoir" : Return Choose3(lang, "À recevoir", "Receivable", "Por cobrar")
-            Case "kDontRetard" : Return Choose3(lang, "dont {0} en retard", "of which {0} overdue", "de los cuales {0} atrasados")
-            Case "kFacturesClients" : Return Choose3(lang, "{0} facture(s) client(s)", "{0} customer invoice(s)", "{0} factura(s) de cliente")
-            Case "kAPayer" : Return Choose3(lang, "À payer", "Payable", "Por pagar")
-            Case "kFacturesFourn" : Return Choose3(lang, "{0} facture(s) fournisseur(s)", "{0} supplier invoice(s)", "{0} factura(s) de proveedor")
-            Case "kEnRetard" : Return Choose3(lang, "En retard", "Overdue", "Atrasado")
-            Case "kRetardAucun" : Return Choose3(lang, "aucune facture en retard", "no overdue invoice", "ninguna factura atrasada")
-            Case "kRetardN" : Return Choose3(lang, "{0} facture(s)", "{0} invoice(s)", "{0} factura(s)")
+            Case "kEnRetard" : Return Choose3(lang, "Revenu en retard", "Overdue revenue", "Ingresos atrasados")
+            Case "kRetardAucun" : Return Choose3(lang, "aucune facture client en retard", "no overdue customer invoice", "ninguna factura de cliente atrasada")
+            Case "kRetardN" : Return Choose3(lang, "{0} facture(s) client(s)", "{0} customer invoice(s)", "{0} factura(s) de cliente")
             Case "echueDepuis" : Return Choose3(lang, "échue depuis {0} jours", "{0} days overdue", "vencida hace {0} días")
-            Case "kPrevue" : Return Choose3(lang, "Encaisse prévue · 4 semaines", "Projected cash · 4 weeks", "Efectivo previsto · 4 semanas")
-            Case "kPrevueSous" : Return Choose3(lang, "prévue au {0}", "projected for {0}", "prevista al {0}")
-            Case "noteArgent" : Return Choose3(lang, "Montants en dollars canadiens ($ CA). Revenus : mois affiché ; les autres montants : en date d'aujourd'hui.", "Amounts in Canadian dollars (CAD). Revenue: month shown; other amounts: as of today.", "Importes en dólares canadienses (CAD). Ingresos: mes mostrado; los demás importes: a la fecha de hoy.")
+            Case "kPayRetard" : Return Choose3(lang, "Paiements en retard", "Overdue payments", "Pagos atrasados")
+            Case "kPayAucun" : Return Choose3(lang, "aucune facture fournisseur en retard", "no overdue supplier invoice", "ninguna factura de proveedor atrasada")
+            Case "kFacturesFourn" : Return Choose3(lang, "{0} facture(s) fournisseur(s)", "{0} supplier invoice(s)", "{0} factura(s) de proveedor")
 
             ' Agenda
             Case "agenda" : Return Choose3(lang, "Agenda", "Calendar", "Agenda")
+            Case "agendaAria" : Return Choose3(lang, "Ouvrir l'agenda complet", "Open the full calendar", "Abrir la agenda completa")
+            Case "agendaTip" : Return Choose3(lang, "Voir et mettre à jour tout l'agenda", "See and update the whole calendar", "Ver y actualizar toda la agenda")
             Case "agendaDe" : Return Choose3(lang, "Agenda de", "Calendar of", "Agenda de")
-            Case "equipe" : Return Choose3(lang, "Toute l'équipe", "Whole team", "Todo el equipo")
-            Case "messages" : Return Choose3(lang, "Messages", "Messages", "Mensajes")
-            Case "rdvBtn" : Return Choose3(lang, "RDV", "Appt", "Cita")
-            Case "ajouterRdv" : Return Choose3(lang, "Ajouter un rendez-vous", "Add an appointment", "Añadir una cita")
+            Case "equipeN" : Return Choose3(lang, "Toute l'équipe ({0})", "Whole team ({0})", "Todo el equipo ({0})")
+            Case "plagesLibres" : Return Choose3(lang, "Plages libres de l'agenda", "Free slots", "Huecos libres de la agenda")
+            Case "plagesAria" : Return Choose3(lang, "3 prochaines plages libres", "Next 3 free slots", "3 próximos huecos libres")
+            Case "plagesVide" : Return Choose3(lang, "aucune dans les deux prochaines semaines", "none in the next two weeks", "ninguno en las dos próximas semanas")
+            Case "plageTip" : Return Choose3(lang, "Libre {0} de {1} à {2} — cliquez pour réserver", "Free {0} from {1} to {2} — click to book", "Libre {0} de {1} a {2} — haga clic para reservar")
             Case "agAuj" : Return Choose3(lang, "Aujourd'hui", "Today", "Hoy")
-            Case "agRdv1" : Return Choose3(lang, "1 RDV", "1 appt", "1 cita")
-            Case "agRdvN" : Return Choose3(lang, "{0} RDV", "{0} appts", "{0} citas")
-            Case "agLibre" : Return Choose3(lang, "libre", "free", "libre")
+            Case "agAujAbr" : Return Choose3(lang, "Auj.", "Today", "Hoy")
+            Case "agRdvH" : Return Choose3(lang, "{0} RDV · {1} h", "{0} appt · {1} h", "{0} citas · {1} h")
+            Case "agEmployes" : Return Choose3(lang, "{0} employés", "{0} employees", "{0} empleados")
             Case "agVide" : Return Choose3(lang, "Aucun RDV : journée libre.", "No appointment: free day.", "Ninguna cita: día libre.")
-            Case "agSemSous" : Return Choose3(lang, "5 jours ouvrables · cliquez un jour", "5 business days · click a day", "5 días hábiles · haga clic en un día")
-            Case "agDuAu" : Return Choose3(lang, "{0} au {1}", "{0} to {1}", "{0} al {1}")
-            Case "semPrec" : Return Choose3(lang, "Semaine précédente", "Previous week", "Semana anterior")
-            Case "semSuiv" : Return Choose3(lang, "Semaine suivante", "Next week", "Semana siguiente")
-            Case "semaine" : Return Choose3(lang, "Semaine", "Week", "Semana")
+            Case "libre" : Return Choose3(lang, "Libre", "Free", "Libre")
             Case "stTermine" : Return Choose3(lang, "Terminé", "Completed", "Terminado")
             Case "stEnCours" : Return Choose3(lang, "En cours", "In progress", "En curso")
             Case "stAVenir" : Return Choose3(lang, "À venir", "Upcoming", "Próximo")
+            Case "facturer" : Return Choose3(lang, "Facturer", "Invoice", "Facturar")
+            Case "facturerAria" : Return Choose3(lang, "Facturer {0}", "Invoice {0}", "Facturar a {0}")
+            Case "plusRdv" : Return Choose3(lang, "+ RDV", "+ Appt", "+ Cita")
+            Case "nouveauRdvAvec" : Return Choose3(lang, "Nouveau RDV avec {0}", "New appointment with {0}", "Nueva cita con {0}")
+            Case "voirDetail" : Return Choose3(lang, "Voir le détail du RDV de {0}", "See the details of {0}'s appointment", "Ver el detalle de la cita de {0}")
             Case "iHeure" : Return Choose3(lang, "Heure et temps", "Time and duration", "Hora y duración")
             Case "iEmploye" : Return Choose3(lang, "Employé", "Employee", "Empleado")
             Case "iType" : Return Choose3(lang, "Service", "Service", "Servicio")
             Case "iLieu" : Return Choose3(lang, "Lieu", "Location", "Lugar")
             Case "ouvrirRdv" : Return Choose3(lang, "Ouvrir le rendez-vous", "Open the appointment", "Abrir la cita")
+            Case "aVenir" : Return Choose3(lang, "À venir", "Upcoming", "Próximamente")
+            Case "aVenirPlanif" : Return Choose3(lang, "{0} RDV · {1} h planifiées", "{0} appt · {1} h scheduled", "{0} citas · {1} h planificadas")
+            Case "toutEquipe" : Return Choose3(lang, " · toute l'équipe", " · whole team", " · todo el equipo")
+            Case "pSem" : Return Choose3(lang, "Prochains 7 jours", "Next 7 days", "Próximos 7 días")
+            Case "pProch" : Return Choose3(lang, "Semaine suivante ({0})", "Following week ({0})", "Semana siguiente ({0})")
+            Case "pMois" : Return Choose3(lang, "Ce mois-ci", "This month", "Este mes")
+            Case "pMoisP" : Return Choose3(lang, "Mois prochain", "Next month", "Mes próximo")
+            Case "periode" : Return Choose3(lang, "Période", "Period", "Período")
+            Case "avVide" : Return Choose3(lang, "Aucun RDV pour cette période.", "No appointment for this period.", "Ninguna cita para este período.")
+            Case "replier" : Return Choose3(lang, "Replier", "Collapse", "Plegar")
+            Case "deplier" : Return Choose3(lang, "Déplier", "Expand", "Desplegar")
 
             ' Activités
             Case "activites" : Return Choose3(lang, "Activités à faire", "Activities to do", "Actividades por hacer")
             Case "lRouge" : Return Choose3(lang, "Rouge : date dépassée, à faire obligatoirement", "Red: date passed, must be done", "Rojo: fecha vencida, obligatorio")
             Case "lJaune" : Return Choose3(lang, "Jaune : la date d'action approche", "Yellow: action date is near", "Amarillo: la fecha de acción se acerca")
-            Case "lNoir" : Return Choose3(lang, "Noir : fait automatiquement par 60", "Black: done automatically by 60", "Negro: hecho automáticamente por 60")
-            Case "faitPar60" : Return Choose3(lang, "Fait par 60", "Done by 60", "Hecho por 60")
+            Case "dateDepassee" : Return Choose3(lang, "Date dépassée", "Date passed", "Fecha vencida")
+            Case "propose60" : Return Choose3(lang, "Proposée par 60, en haut", "Suggested by 60, on top", "Propuesta por 60, arriba")
+            Case "a60Ici" : Return Choose3(lang, "60 · je suis là pour régler cet enjeu avec vous", "60 · I'm here to settle this with you", "60 · estoy aquí para resolver esto con usted")
+            Case "a60Choisir" : Return Choose3(lang, "Choisissez une action ci-dessous : je passe ensuite au prochain enjeu.", "Choose an action below: I'll then move on to the next issue.", "Elija una acción abajo: luego paso al siguiente asunto.")
+            Case "merci60" : Return Choose3(lang, "Merci, 60", "Thanks, 60", "Gracias, 60")
+            Case "conseil60" : Return Choose3(lang, "Conseil de 60 :", "60's advice:", "Consejo de 60:")
             Case "toutFait" : Return Choose3(lang, "Tout est fait pour aujourd'hui. Bravo!", "Everything is done for today. Well done!", "Todo está hecho por hoy. ¡Bravo!")
             Case "tous" : Return Choose3(lang, "Tout voir", "See all", "Ver todo")
-            Case "choses1" : Return Choose3(lang, "1 chose à regarder", "1 thing to look at", "1 cosa que mirar")
-            Case "chosesN" : Return Choose3(lang, "{0} choses à regarder", "{0} things to look at", "{0} cosas que mirar")
+            Case "segR" : Return Choose3(lang, "{0} en retard — afficher seulement celles-ci", "{0} overdue — show only these", "{0} atrasadas — mostrar solo estas")
+            Case "segY" : Return Choose3(lang, "{0} dont la date approche — afficher seulement celles-ci", "{0} coming due — show only these", "{0} por vencer — mostrar solo estas")
             Case "catVentes" : Return Choose3(lang, "Ventes", "Sales", "Ventas")
             Case "catAchats" : Return Choose3(lang, "Achats", "Purchases", "Compras")
             Case "catTaches" : Return Choose3(lang, "Tâches", "Tasks", "Tareas")
@@ -701,19 +589,6 @@ Public Class _Default
             Case "btnApprouver" : Return Choose3(lang, "Voir et approuver", "See and approve", "Ver y aprobar")
             Case "btnBrancher" : Return Choose3(lang, "Brancher ma banque", "Connect my bank", "Conectar mi banco")
             Case "btnForfait" : Return Choose3(lang, "Choisir mon forfait", "Choose my plan", "Elegir mi plan")
-
-            ' La tuile noire (mêmes mots que le menu)
-            Case "dashboard" : Return Choose3(lang, "Tableau de bord", "Dashboard", "Panel de control")
-            Case "sales" : Return Choose3(lang, "Ventes", "Sales", "Ventas")
-            Case "purchases" : Return Choose3(lang, "Achats", "Purchases", "Compras")
-            Case "payments" : Return Choose3(lang, "Paiements", "Payments", "Pagos")
-            Case "reports" : Return Choose3(lang, "Rapports", "Reports", "Informes")
-            Case "employees" : Return Choose3(lang, "Employés", "Employees", "Empleados")
-            Case "accounting" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
-            Case "products" : Return Choose3(lang, "Produits et services", "Products and services", "Productos y servicios")
-            Case "approvals" : Return Choose3(lang, "Tâches à approuver", "Tasks to approve", "Tareas por aprobar")
-            Case "myFirm" : Return Choose3(lang, "Mon cabinet comptable", "My accounting firm", "Mi despacho contable")
-            Case "settings" : Return Choose3(lang, "Paramètres", "Settings", "Ajustes")
             Case Else : Return ""
         End Select
     End Function

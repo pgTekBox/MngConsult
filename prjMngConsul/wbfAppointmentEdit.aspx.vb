@@ -42,6 +42,10 @@ Public Class wbfAppointmentEdit
                 rdpEnd.SelectedDate = endDt
                 rtpEnd.SelectedDate = New Date(1980, 1, 1, endDt.Hour, endDt.Minute, 0)
 
+                ' Client et employé suggérés (« + RDV » d'une ligne du tableau de bord)
+                If Not String.IsNullOrEmpty(Request.QueryString("client")) Then SafeSelect(rddlCustomer, Request.QueryString("client"))
+                If Not String.IsNullOrEmpty(Request.QueryString("emp")) Then SafeSelect(rddlEmployee, Request.QueryString("emp"))
+
                 litTitle.Text = T("Nouveau rendez-vous", "New appointment", "Nueva cita")
             End If
         End If
