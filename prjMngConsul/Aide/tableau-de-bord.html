@@ -244,56 +244,54 @@
             <section id="fr-tableau-de-bord">
                 <h2>Tableau de bord</h2>
                 <h3>But</h3>
-                <p>Le Tableau de bord (<span class="chemin">Tableau de bord</span>) est la page qui s’ouvre après la connexion, après un changement de compagnie et après l’enregistrement du profil d’une nouvelle entreprise. Il accueille les nouveaux clients, affiche quelques indicateurs de la compagnie et offre des raccourcis vers les écrans les plus utilisés.</p>
+                <p>Le Tableau de bord (<span class="chemin">Tableau de bord</span>) est la page qui s’ouvre après la connexion. En un coup d’œil : ce qui presse (la fenêtre de 60), votre journée (l’Agenda) et ce qu’il reste à faire (les Activités à faire). Tous les chiffres sont réels et recalculés à chaque ouverture de la page.</p>
 
-                <h3>L’accueil : « Bonjour, prénom ! Voici votre journée. »</h3>
-                <p>En tête de page, la carte d’accueil reprend le style « Doux bleu marine » : le visage « Le 60 », votre prénom, et trois boutons en pastilles.</p>
+                <h3>1. La fenêtre de 60</h3>
+                <p>La première ligne, encadrée de rouge (quelque chose d’urgent), de jaune (quelque chose approche) ou de vert (tout va bien).</p>
                 <ul>
-                    <li><kbd>+ Nouvelle facture</kbd> : ouvre directement la fenêtre d’édition d’une facture client.</li>
-                    <li><kbd>Voir les clients</kbd> : ouvre <span class="chemin">Ventes › Clients</span>.</li>
-                    <li><kbd>Paramètres</kbd> : ouvre <span class="chemin">Paramètres</span>.</li>
+                    <li><strong>60</strong>, l’assistant, à côté de « Bonjour, prénom! ». Un clic l’envoie sur l’enjeu prioritaire : il ouvre l’activité, s’y place avec son conseil (« 60 · je suis là pour régler cet enjeu avec vous ») et attend votre action. Sa place devient un rond pointillé ; un clic sur ce rond ou sur <kbd>Merci, 60</kbd> le ramène.</li>
+                    <li><strong>En premier</strong> : l’activité la plus urgente, en une ligne (le texte complet apparaît au survol) ; un clic y envoie 60.</li>
+                    <li><strong>Activité à faire</strong> : le rond rouge compte les activités en retard, le rond jaune celles dont la date approche ; un clic envoie 60 sur la première de cette couleur.</li>
+                    <li><strong>Messages</strong> : ouvre la messagerie.</li>
+                    <li><strong>Revenu en retard</strong> : le solde des factures clients échues (bordure rouge s’il y en a) ; l’info-bulle donne le nombre de factures et le plus vieux retard. Ouvre <span class="chemin">Ventes › Factures clients</span>.</li>
+                    <li><strong>Paiements en retard</strong> : le solde des factures fournisseurs échues ; ouvre <span class="chemin">Achats › Factures fournisseurs</span>.</li>
+                    <li><strong>Compte d’opérations</strong> : votre compte bancaire branché (banque et derniers chiffres). L’œil montre ou masque le solde ; le choix est mémorisé dans votre navigateur. Sans compte branché, <kbd>Brancher</kbd> ouvre les comptes bancaires.</li>
                 </ul>
-                <h3>Les trois choses à regarder (données réelles)</h3>
-                <p>Trois lignes, toujours : chacune porte une pastille <strong>Urgent</strong> (rouge), <strong>À surveiller</strong> (doré) ou <strong>Tout va bien</strong> (vert), un titre, une phrase et un bouton qui mène à l’écran concerné.</p>
+
+                <h3>2. L’Agenda</h3>
+                <p><strong>Aujourd’hui</strong> : la date, le nombre de RDV et d’heures, puis :</p>
+                <ul>
+                    <li><strong>La liste des employés</strong> (s’il y en a plusieurs) : un employé, ou « Toute l’équipe », qui range la journée en une colonne par employé. Le choix est partagé avec l’écran Agenda.</li>
+                    <li><strong>Plages libres de l’agenda</strong> : les trois prochaines plages d’au moins une heure (jours ouvrables, 9 h à 17 h) ; un clic ouvre un nouveau RDV à cette heure.</li>
+                    <li><kbd>Agenda</kbd> : ouvre l’écran <a href="agenda.html">Agenda</a>. Le bouton rond ▴ / ▾ replie ou déplie le bloc.</li>
+                    <li>Chaque RDV : l’heure, le client et l’objet, <kbd>Facturer</kbd> quand il est terminé et rattaché à un client, le lieu, l’état (Terminé, En cours, À venir), ▾ pour le détail (lieu, heure et durée, employé, service, <kbd>Ouvrir le rendez-vous</kbd>) et <kbd>+ RDV</kbd>, qui ouvre un nouveau RDV avec le même client et le même employé, une semaine plus tard à la même heure.</li>
+                </ul>
+                <p><strong>À venir</strong> (replié au départ) : quatre onglets — Prochains 7 jours, Semaine suivante, Ce mois-ci, Mois prochain — et les RDV de la période, regroupés par jour.</p>
+
+                <h3>3. Les Activités à faire</h3>
+                <ul>
+                    <li>Le nombre d’activités, puis une barre rouge et jaune : chaque couleur compte ses activités et sert de filtre (<kbd>Tout voir</kbd> l’enlève).</li>
+                    <li>Rouge : date dépassée, à faire obligatoirement. Jaune : la date d’action approche. Les rouges passent toujours en premier ; la première porte « Proposée par 60, en haut ».</li>
+                    <li>Un clic sur une activité l’ouvre : le « Conseil de 60 » et le bouton qui mène à l’écran où agir.</li>
+                </ul>
                 <table>
-                    <thead><tr><th>Ligne</th><th>Ce qu’elle dit</th><th>Où mène le bouton</th></tr></thead>
+                    <thead><tr><th>Activité</th><th>Couleur</th><th>Quand</th></tr></thead>
                     <tbody>
-                        <tr><td>Tâches à approuver</td><td>« Urgent — N tâche(s) à approuver » s’il y en a (le même décompte que la pastille « Approbations » du menu) ; sinon « Tout va bien — Rien à approuver ».</td><td>Approbations</td></tr>
-                        <tr><td>Factures fournisseur</td><td>« À surveiller — N facture(s) fournisseur » s’il y en a ; sinon « Tout va bien — Aucune facture fournisseur ».</td><td>Achats › Factures fournisseurs</td></tr>
-                        <tr><td>Revenus du mois</td><td>« Tout va bien — Revenus du mois : N $ » : les factures clients comptabilisées ce mois-ci, le même chiffre que la carte « Revenus ».</td><td>Ventes › Factures clients</td></tr>
+                        <tr><td>Facture client en retard</td><td>Rouge</td><td>Une par facture échue (les cinq plus vieilles), puis « N autres factures en retard ».</td></tr>
+                        <tr><td>Factures fournisseurs en retard</td><td>Rouge</td><td>Au moins une facture fournisseur échue et non payée.</td></tr>
+                        <tr><td>Tâches à approuver</td><td>Jaune</td><td>Des tâches attendent votre décision (même décompte que le menu).</td></tr>
+                        <tr><td>Factures fournisseurs à suivre</td><td>Jaune</td><td>Échéance dans les 7 prochains jours.</td></tr>
+                        <tr><td>Factures clients qui arrivent à échéance</td><td>Jaune</td><td>Échéance dans les 7 prochains jours.</td></tr>
+                        <tr><td>Factures en brouillon</td><td>Jaune</td><td>Factures clients pas encore comptabilisées.</td></tr>
+                        <tr><td>Branchez votre compte bancaire</td><td>Jaune</td><td>Aucun compte bancaire branché.</td></tr>
+                        <tr><td>Essai : N jours restants</td><td>Jaune (rouge à 3 jours ou moins)</td><td>Les 30 derniers jours de l’essai.</td></tr>
                     </tbody>
                 </table>
-
-                <h3>Cartes KPI (données réelles)</h3>
-                <p>Quatre cartes affichent des chiffres réels de la compagnie active. Elles sont recalculées à chaque ouverture de la page.</p>
-                <table>
-                    <thead><tr><th>Carte</th><th>Ce qu’elle compte</th></tr></thead>
-                    <tbody>
-                        <tr><td>« Clients »</td><td>Le nombre de tiers de type client, ou de type « client et fournisseur ».</td></tr>
-                        <tr><td>« Factures fournisseur »</td><td>Le nombre de documents de type facture fournisseur, toutes périodes confondues.</td></tr>
-                        <tr><td>« Produits »</td><td>Le nombre d’articles de votre catalogue de produits et services.</td></tr>
-                        <tr><td>« Revenus »</td><td>Le total des factures clients <strong>comptabilisées</strong> datées du mois courant, arrondi au dollar et suivi de « $ ». Par exemple « 12 345 $ ».</td></tr>
-                    </tbody>
-                </table>
-
-                <h3>Autres panneaux</h3>
-                <ul>
-                    <li><strong>Modules</strong> : six tuiles d’accès rapide : Clients, Factures, Produits, Fournisseurs, Reçus, Paramètres.</li>
-                    <li><strong>Factures récentes</strong> : une liste d’exemple avec un lien « Voir tout », signalée « Exemples fictifs, pour illustrer ».</li>
-                </ul>
-                <h3>La colonne de droite</h3>
-                <ul>
-                    <li><strong>Ce mois-ci</strong> (carte bleu marine) : un point par indicateur — vert quand tout va bien, doré pour « à surveiller » (des factures fournisseurs), rouge pour « urgent » (des tâches à approuver) — avec les mêmes chiffres que les cartes KPI.</li>
-                    <li><strong>Mon cabinet certifié</strong> : les utilisateurs comptables rattachés à votre compagnie (les mêmes que « Demander à mon cabinet certifié » dans la reprise comptable), et <kbd>Écrire à mon comptable</kbd>, qui ouvre votre messagerie avec leurs adresses. Sans comptable rattaché : « Aucun comptable n’est rattaché à votre compagnie » et <kbd>Inviter mon comptable</kbd>, qui ouvre <span class="chemin">Utilisateurs</span>.</li>
-                    <li><strong>Actions rapides</strong> : Créer une facture, Ajouter un client, Ajouter un produit, Voir les reçus.</li>
-                    <li><strong>Activité récente</strong> : panneau de présentation, signalé « Exemples fictifs ».</li>
-                </ul>
 
                 <h3>Trucs et pièges</h3>
-                <div class="piege" data-titre="Piège">Plusieurs panneaux du Tableau de bord sont des <strong>exemples de présentation</strong> : « Factures récentes » et « Activité récente » ne reflètent pas vos données. Seules les quatre cartes KPI (Clients, Factures fournisseur, Produits, Revenus) sont réelles. Pour vos vrais chiffres, utilisez les écrans du menu et les <a href="rapports.html">Rapports</a>.</div>
-                <div class="piege" data-titre="Piège">Dans le panneau Modules, la tuile <strong>Factures</strong> ouvre les factures <strong>fournisseurs</strong>, pas les factures clients. Pour vos factures de vente, passez par <span class="chemin">Ventes › Factures clients</span> ou par le bouton <kbd>Nouvelle facture</kbd>.</div>
-                <div class="attention" data-titre="Attention">La carte « Revenus » exclut les factures clients qui ne sont pas encore comptabilisées (brouillons). Si le total vous semble bas, vérifiez qu’il ne reste pas de brouillons à comptabiliser dans <span class="chemin">Ventes › Factures clients</span>.</div>
-                <div class="note" data-titre="Bon à savoir">En cas d’erreur de lecture des données, les quatre cartes affichent 0 plutôt qu’un message d’erreur. Rechargez la page ; si les zéros persistent alors que vous avez des données, contactez le soutien.</div>
+                <div class="attention" data-titre="Attention">« Revenu en retard » ne compte que les factures clients <strong>comptabilisées</strong> : un brouillon n’est ni envoyé ni en retard. Les brouillons apparaissent dans l’activité jaune « Factures en brouillon ».</div>
+                <div class="note" data-titre="Bon à savoir">Les choix d’affichage (employé, blocs repliés, onglet d’À venir, solde visible) sont gardés dans ce navigateur seulement.</div>
+                <div class="astuce" data-titre="Astuce">Pressé? Cliquez sur 60 : il vous amène directement sur ce qui compte le plus, avec le bouton pour le régler.</div>
             </section>
 
             <section id="fr-premiers-pas">
@@ -343,7 +341,6 @@
                     <li>Dans <span class="chemin">Ventes › Clients</span>, cliquez <kbd>Ajouter Client</kbd> pour chaque client : nom, adresse de facturation et courriel (c’est à ce courriel que partent les factures).</li>
                     <li>Dans <span class="chemin">Produits et services › Produits</span>, créez vos produits et services avec leur prix, leurs taxes et leur compte de vente. Regroupez-les au besoin par <span class="chemin">Catégorie de produit</span>.</li>
                 </ol>
-                <div class="astuce" data-titre="Astuce">Les boutons <kbd>Voir les clients</kbd> du bandeau et les tuiles « Clients » et « Produits » du panneau Modules mènent aux mêmes écrans depuis le Tableau de bord.</div>
 
                 <h3>Étape 6 : Première facture</h3>
                 <ol>
@@ -351,7 +348,7 @@
                     <li>Choisissez le client, ajoutez les lignes de produits ou de services, vérifiez la TPS et la TVQ calculées.</li>
                     <li>Enregistrez : la facture est un <strong>brouillon</strong> (numéro « BRO-… »). Comptabilisez-la pour obtenir son numéro définitif selon le format choisi dans <span class="chemin">Paramètres</span>, onglet « Facture » (par exemple PREFIXE-2026-0001).</li>
                     <li>Envoyez le PDF par courriel ou, si Square est connecté, joignez un lien de paiement.</li>
-                    <li>Retournez au Tableau de bord : la carte « Revenus » reflète maintenant la facture comptabilisée.</li>
+                    <li>Retournez au Tableau de bord : la facture comptabilisée n’apparaît plus parmi les brouillons ; si elle vient à échéance sans être payée, elle passera dans « Revenu en retard ».</li>
                 </ol>
                 <div class="note" data-titre="Bon à savoir">Avant d’envoyer des courriels au nom de la compagnie, vérifiez votre adresse d’expéditeur dans <span class="chemin">Paramètres</span>, onglet « Email » (<kbd>Vérifier cette adresse</kbd>) : une adresse vérifiée devient l’adresse de réponse de vos courriels.</div>
 
@@ -365,16 +362,16 @@
 
             <section id="fr-faq">
                 <h2>Questions fréquentes</h2>
-                <details><summary>Pourquoi les « Factures récentes » et l’« Activité récente » ne correspondent-elles pas à mes données ?</summary><p>Ces panneaux, comme les mini-statistiques du bandeau et le « Résumé », sont des exemples de présentation. Seules les quatre cartes KPI (Clients, Factures fournisseur, Produits, Revenus) affichent des chiffres réels. Consultez les écrans du menu ou les Rapports pour vos données.</p></details>
-                <details><summary>Ma carte « Revenus » n’inclut pas une facture que je viens de créer. Pourquoi ?</summary><p>La carte ne compte que les factures clients comptabilisées et datées du mois courant. Un brouillon n’y figure pas : comptabilisez la facture dans <span class="chemin">Ventes › Factures clients</span>. Une facture datée d’un autre mois n’est pas comptée non plus.</p></details>
-                <details><summary>Les quatre cartes affichent 0 alors que j’ai des données.</summary><p>En cas d’erreur de lecture, les cartes affichent 0. Rechargez la page. Vérifiez aussi que la bonne compagnie est sélectionnée dans l’en-tête si vous êtes comptable. Si le problème persiste, contactez support@60sec.ca.</p></details>
+                <details><summary>Que fait 60 quand je clique dessus ?</summary><p>Il va sur l’activité la plus urgente, l’ouvre avec son conseil et attend que vous cliquiez sur le bouton d’action. Sa place, près du bonjour, devient un rond pointillé : cliquez dessus ou sur <kbd>Merci, 60</kbd> pour le ramener.</p></details>
+                <details><summary>« Revenu en retard » n’inclut pas une facture échue. Pourquoi ?</summary><p>Seules les factures clients <strong>comptabilisées</strong> et non payées comptent. Une facture en brouillon n’est pas en retard : elle apparaît dans l’activité jaune « Factures en brouillon ».</p></details>
+                <details><summary>Pourquoi « Facturer » n’apparaît-il pas sur un RDV ?</summary><p>Le bouton apparaît seulement sur un RDV terminé (statut « Terminé » ou heure de fin passée) et rattaché à un client. Ouvrez le RDV pour choisir son client.</p></details>
+                <details><summary>Où sont passés « Mon argent », « + Facture » et la tuile noire ?</summary><p>Ils ont été retirés de la nouvelle page. Les montants en retard sont sur la ligne de 60, les factures se créent depuis <span class="chemin">Ventes › Factures clients</span> ou depuis un RDV terminé (<kbd>Facturer</kbd>), et tous les écrans restent dans le menu de gauche.</p></details>
                 <details><summary>Comment savoir combien de jours d’essai il me reste ?</summary><p>La pastille d’essai de l’en-tête indique « Essai · N jours » et son info-bulle donne la date exacte. La ligne de forfait de la boîte de bienvenue affiche aussi « Essai gratuit jusqu’au [date] ».</p></details>
                 <details><summary>Je suis comptable : comment passer d’une compagnie à l’autre ?</summary><p>Utilisez la liste déroulante de compagnie dans l’en-tête. Après vérification de votre accès, vous êtes ramené au Tableau de bord de la compagnie choisie et tous les écrans affichent ses données.</p></details>
                 <details><summary>Le sélecteur de compagnie n’apparaît pas dans mon en-tête.</summary><p>Il n’apparaît que si vous êtes relié à plusieurs compagnies. Avec une seule compagnie, l’en-tête affiche simplement son nom. Pour être relié à une autre compagnie, obtenez sa clé comptable auprès de son propriétaire.</p></details>
                 <details><summary>Que fait le bouton ? de l’en-tête ?</summary><p>Il ouvre, dans une fenêtre séparée, l’aide de la section de l’écran courant. Certains écrans ont leur propre page d’aide, comme la Correspondance des comptes. Vous pouvez y changer de langue, rechercher dans la page, imprimer, ou revenir au sommaire général de l’aide.</p></details>
                 <details><summary>L’assistant IA voit-il mes clients et mes numéros de compte ?</summary><p>Non. Aucun nom de client, de fournisseur ou d’employé et aucun numéro de compte n’est envoyé au service d’IA. Seuls le profil général de la compagnie, ses particularités et votre question sont transmis.</p></details>
                 <details><summary>Comment poser une question à l’assistant à la voix ?</summary><p>Ouvrez la boîte de l’assistant (visage violet en bas à droite), cliquez sur le micro et parlez. Le texte reconnu s’affiche ; après une pause, la question est envoyée automatiquement et la réponse est lue à voix haute. La reconnaissance vocale dépend de votre navigateur : autorisez l’accès au micro quand il vous le demande.</p></details>
-                <details><summary>La tuile « Factures » du panneau Modules ouvre les factures fournisseurs. Où sont mes factures clients ?</summary><p>Dans <span class="chemin">Ventes › Factures clients</span>, ou par le bouton <kbd>Nouvelle facture</kbd> du bandeau pour en créer une.</p></details>
                 <details><summary>Je change la langue avec FR / EN / ES, mais elle revient au français à ma prochaine connexion.</summary><p>La langue est mémorisée pour la session seulement. Choisissez-la de nouveau après la connexion ; vos données et vos paramètres ne sont pas touchés.</p></details>
                 <details><summary>Je ne vois pas l’entrée « Utilisateurs » ou elle me renvoie au Tableau de bord.</summary><p>Cet écran est réservé aux administrateurs. Votre rôle est affiché sous votre nom dans l’en-tête. Demandez à un administrateur de la compagnie de gérer les comptes.</p></details>
                 <details><summary>Le menu de gauche a disparu : comment le retrouver ?</summary><p>Il a été masqué par le bouton <kbd>☰</kbd>. Cliquez sur <kbd>☰</kbd>, tout à gauche de l’en-tête (son info-bulle dit « Afficher le menu ») : le menu revient. Sur téléphone, touchez le <kbd>☰</kbd> de la barre du haut.</p></details>
@@ -398,7 +395,7 @@
                         <tr><td>Action partagée</td><td>Dans Mon cabinet comptable › Qui fait quoi, action dont vous et votre cabinet êtes tous deux responsables : « Moi » et « Mon cabinet » sont choisis.</td></tr>
                         <tr><td>Administrateur</td><td>Utilisateur d’une compagnie qui peut, en plus, gérer les comptes des autres utilisateurs (écran Utilisateurs).</td></tr>
                         <tr><td>Assistant IA</td><td>Aide conversationnelle propre à votre compagnie, accessible par le visage violet en bas à droite. Répond au clavier ou à la voix, sans transmettre vos données nominatives.</td></tr>
-                        <tr><td>Carte KPI</td><td>Indicateur clé affiché sur le Tableau de bord : Clients, Factures fournisseur, Produits et Revenus. Ce sont les seules données réelles de la page.</td></tr>
+                        <tr><td>Fenêtre de 60</td><td>Première ligne du Tableau de bord : le bonjour, l’activité « En premier » et les compteurs (Activité à faire, Messages, Revenu en retard, Paiements en retard, Compte d’opérations).</td></tr>
                         <tr><td>Clé comptable</td><td>Code fourni dans Paramètres › Comptable qui permet à un comptable externe d’accéder à la compagnie sans y être créé comme utilisateur.</td></tr>
                         <tr><td>Compagnie active</td><td>La compagnie choisie dans l’en-tête ; toutes les données affichées lui appartiennent.</td></tr>
                         <tr><td>Comptable</td><td>Rôle qui donne accès à plusieurs compagnies (celles qui ont communiqué leur clé comptable) et au sélecteur de compagnie.</td></tr>
@@ -639,56 +636,54 @@
             <section id="en-dashboard">
                 <h2>Dashboard</h2>
                 <h3>Purpose</h3>
-                <p>The Dashboard (<span class="chemin">Dashboard</span>) is the page that opens after sign-in, after a company switch and after saving the profile of a new company. It welcomes new customers, shows a few company indicators and offers shortcuts to the most used screens.</p>
+                <p>The Dashboard (<span class="chemin">Dashboard</span>) is the page that opens after you sign in. At a glance: what is pressing (60’s window), your day (the Agenda) and what is left to do (Activities to do). All figures are real and recalculated each time the page opens.</p>
 
-                <h3>The welcome card: “Hello, first name! Here is your day.”</h3>
-                <p>At the top of the page, the welcome card follows the “Doux bleu marine” style: the “Le 60” face, your first name and three pill buttons.</p>
+                <h3>1. 60’s window</h3>
+                <p>The first row, framed in red (something urgent), yellow (something is coming due) or green (all good).</p>
                 <ul>
-                    <li><kbd>+ Nouvelle facture</kbd>: opens the customer invoice edit window directly.</li>
-                    <li><kbd>Voir les clients</kbd>: opens <span class="chemin">Ventes › Clients</span>.</li>
-                    <li><kbd>Paramètres</kbd>: opens <span class="chemin">Paramètres</span>.</li>
+                    <li><strong>60</strong>, the assistant, next to “Hello, first name!”. A click sends it to the top priority: it opens the activity, settles there with its advice (“60 · I’m here to settle this with you”) and waits for your action. Its place becomes a dotted circle; a click on that circle or on <kbd>Thanks, 60</kbd> brings it back.</li>
+                    <li><strong>First</strong>: the most urgent activity, on one line (the full text shows on hover); a click sends 60 there.</li>
+                    <li><strong>Activities to do</strong>: the red circle counts overdue activities, the yellow one those coming due; a click sends 60 to the first one of that colour.</li>
+                    <li><strong>Messages</strong>: opens the mailbox.</li>
+                    <li><strong>Overdue revenue</strong>: the balance of overdue customer invoices (red border if any); the tooltip gives the number of invoices and the oldest delay. Opens <span class="chemin">Sales › Customer invoices</span>.</li>
+                    <li><strong>Overdue payments</strong>: the balance of overdue supplier invoices; opens <span class="chemin">Purchases › Supplier invoices</span>.</li>
+                    <li><strong>Operating account</strong>: your connected bank account (bank and last digits). The eye shows or hides the balance; the choice is remembered in your browser. Without a connected account, <kbd>Connect</kbd> opens the bank accounts.</li>
                 </ul>
-                <h3>The three things to look at (real data)</h3>
-                <p>Always three rows: each carries an <strong>Urgent</strong> (red), <strong>À surveiller</strong> (gold) or <strong>Tout va bien</strong> (green) badge, a title, a sentence and a button to the relevant screen.</p>
+
+                <h3>2. The Agenda</h3>
+                <p><strong>Today</strong>: the date, the number of appointments and hours, then:</p>
+                <ul>
+                    <li><strong>The employee list</strong> (if there are several): one employee, or “Whole team”, which lays the day out in one column per employee. The choice is shared with the Agenda screen.</li>
+                    <li><strong>Free slots</strong>: the next three slots of at least one hour (business days, 9 AM to 5 PM); a click opens a new appointment at that time.</li>
+                    <li><kbd>Calendar</kbd>: opens the <a href="agenda.html">Agenda</a> screen. The round ▴ / ▾ button collapses or expands the block.</li>
+                    <li>Each appointment: the time, the customer and subject, <kbd>Invoice</kbd> when it is completed and linked to a customer, the location, the status (Completed, In progress, Upcoming), ▾ for details (location, time and duration, employee, service, <kbd>Open the appointment</kbd>) and <kbd>+ Appt</kbd>, which opens a new appointment with the same customer and employee, one week later at the same time.</li>
+                </ul>
+                <p><strong>Upcoming</strong> (collapsed at first): four tabs — Next 7 days, Following week, This month, Next month — and the period’s appointments, grouped by day.</p>
+
+                <h3>3. Activities to do</h3>
+                <ul>
+                    <li>The number of activities, then a red and yellow bar: each colour counts its activities and acts as a filter (<kbd>See all</kbd> removes it).</li>
+                    <li>Red: date passed, must be done. Yellow: action date is near. Red ones always come first; the first one reads “Suggested by 60, on top”.</li>
+                    <li>A click on an activity opens it: “60’s advice” and the button leading to the screen where you act.</li>
+                </ul>
                 <table>
-                    <thead><tr><th>Row</th><th>What it says</th><th>Where the button goes</th></tr></thead>
+                    <thead><tr><th>Activity</th><th>Colour</th><th>When</th></tr></thead>
                     <tbody>
-                        <tr><td>Tasks to approve</td><td>“Urgent — N tâche(s) à approuver” when there are some (the same count as the “Approbations” badge in the menu); otherwise “Tout va bien — Rien à approuver”.</td><td>Approvals</td></tr>
-                        <tr><td>Supplier invoices</td><td>“À surveiller — N facture(s) fournisseur” when there are some; otherwise “Tout va bien — Aucune facture fournisseur”.</td><td>Purchases › Supplier invoices</td></tr>
-                        <tr><td>Revenue this month</td><td>“Tout va bien — Revenus du mois : N $”: customer invoices posted this month, the same figure as the “Revenus” card.</td><td>Sales › Customer invoices</td></tr>
+                        <tr><td>Customer invoice overdue</td><td>Red</td><td>One per overdue invoice (the five oldest), then “N more overdue invoices”.</td></tr>
+                        <tr><td>Overdue supplier invoices</td><td>Red</td><td>At least one overdue, unpaid supplier invoice.</td></tr>
+                        <tr><td>Tasks to approve</td><td>Yellow</td><td>Tasks are waiting for your decision (same count as the menu).</td></tr>
+                        <tr><td>Supplier invoices to follow</td><td>Yellow</td><td>Due within the next 7 days.</td></tr>
+                        <tr><td>Customer invoices coming due</td><td>Yellow</td><td>Due within the next 7 days.</td></tr>
+                        <tr><td>Draft invoices</td><td>Yellow</td><td>Customer invoices not yet posted.</td></tr>
+                        <tr><td>Connect your bank account</td><td>Yellow</td><td>No bank account connected.</td></tr>
+                        <tr><td>Trial: N days left</td><td>Yellow (red at 3 days or less)</td><td>The last 30 days of the trial.</td></tr>
                     </tbody>
                 </table>
-
-                <h3>KPI cards (real data)</h3>
-                <p>Four cards show real figures of the active company. They are recalculated every time the page opens.</p>
-                <table>
-                    <thead><tr><th>Card</th><th>What it counts</th></tr></thead>
-                    <tbody>
-                        <tr><td>“Customers”</td><td>The number of third parties of type customer, or of type “customer and supplier”.</td></tr>
-                        <tr><td>“Supplier invoices”</td><td>The number of documents of type supplier invoice, all periods together.</td></tr>
-                        <tr><td>“Products”</td><td>The number of items in your product and service catalogue.</td></tr>
-                        <tr><td>“Revenue”</td><td>The total of <strong>posted</strong> customer invoices dated in the current month, rounded to the dollar and followed by “$”. For example “12 345 $”.</td></tr>
-                    </tbody>
-                </table>
-
-                <h3>Other panels</h3>
-                <ul>
-                    <li><strong>Modules</strong>: six quick-access tiles: Customers, Invoices, Products, Suppliers, Receipts, Settings.</li>
-                    <li><strong>Recent invoices</strong>: a sample list with a “Voir tout” link, marked “Exemples fictifs, pour illustrer”.</li>
-                </ul>
-                <h3>The right-hand column</h3>
-                <ul>
-                    <li><strong>Ce mois-ci</strong> (navy card): one dot per indicator — green when all is well, gold for “to watch” (supplier invoices), red for “urgent” (tasks to approve) — with the same figures as the KPI cards.</li>
-                    <li><strong>Mon cabinet certifié</strong>: the accountant users attached to your company (the same as “Demander à mon cabinet certifié” in the books migration), and <kbd>Écrire à mon comptable</kbd>, which opens your mail client with their addresses. With no accountant attached: “Aucun comptable n’est rattaché à votre compagnie” and <kbd>Inviter mon comptable</kbd>, which opens <span class="chemin">Utilisateurs</span>.</li>
-                    <li><strong>Quick actions</strong>: Create an invoice, Add a customer, Add a product, View receipts.</li>
-                    <li><strong>Recent activity</strong>: a presentation panel, marked “Exemples fictifs”.</li>
-                </ul>
 
                 <h3>Tips and pitfalls</h3>
-                <div class="piege" data-titre="Pitfall">Several Dashboard panels are <strong>presentation samples</strong>: the banner mini-statistics, “Recent invoices”, “Recent activity” and “Summary” do not reflect your data. Only the four KPI cards (Customers, Supplier invoices, Products, Revenue) are real. For your real figures, use the menu screens and the <a href="rapports.html">Reports</a>.</div>
-                <div class="piege" data-titre="Pitfall">In the Modules panel, the <strong>Invoices</strong> tile opens <strong>supplier</strong> invoices, not customer invoices. For your sales invoices, go through <span class="chemin">Sales › Customer invoices</span> or the <kbd>New invoice</kbd> button.</div>
-                <div class="attention" data-titre="Warning">The “Revenue” card excludes customer invoices that are not yet posted (drafts). If the total looks low, check that no drafts remain to be posted in <span class="chemin">Sales › Customer invoices</span>.</div>
-                <div class="note" data-titre="Good to know">If the data cannot be read, the four cards show 0 rather than an error message. Reload the page; if the zeros persist although you have data, contact support.</div>
+                <div class="attention" data-titre="Warning">“Overdue revenue” only counts <strong>posted</strong> customer invoices: a draft is neither sent nor overdue. Drafts appear in the yellow “Draft invoices” activity.</div>
+                <div class="note" data-titre="Good to know">Display choices (employee, collapsed blocks, Upcoming tab, visible balance) are kept in this browser only.</div>
+                <div class="astuce" data-titre="Tip">In a hurry? Click 60: it takes you straight to what matters most, with the button to settle it.</div>
             </section>
 
             <section id="en-first-steps">
@@ -738,7 +733,6 @@
                     <li>In <span class="chemin">Sales › Customers</span>, click <kbd>Add Customer</kbd> for each customer: name, billing address and e-mail (invoices are sent to this e-mail).</li>
                     <li>In <span class="chemin">Products and services › Products</span>, create your products and services with their price, taxes and sales account. Group them by <span class="chemin">Product category</span> if needed.</li>
                 </ol>
-                <div class="astuce" data-titre="Tip">The <kbd>View customers</kbd> button of the banner and the “Customers” and “Products” tiles of the Modules panel lead to the same screens from the Dashboard.</div>
 
                 <h3>Step 6: First invoice</h3>
                 <ol>
@@ -746,7 +740,7 @@
                     <li>Choose the customer, add the product or service lines, check the calculated GST and QST.</li>
                     <li>Save: the invoice is a <strong>draft</strong> (number “BRO-…”). Post it to get its final number according to the format chosen in <span class="chemin">Settings</span>, “Invoice” tab (for example PREFIX-2026-0001).</li>
                     <li>Send the PDF by e-mail or, if Square is connected, attach a payment link.</li>
-                    <li>Return to the Dashboard: the “Revenue” card now reflects the posted invoice.</li>
+                    <li>Return to the Dashboard: the posted invoice no longer counts among the drafts; if it comes due unpaid, it will move into “Overdue revenue”.</li>
                 </ol>
                 <div class="note" data-titre="Good to know">Before sending e-mails on behalf of the company, verify your sender address in <span class="chemin">Settings</span>, “Email” tab (<kbd>Verify this address</kbd>): a verified address becomes the reply address of your e-mails.</div>
 
@@ -760,16 +754,16 @@
 
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
-                <details><summary>Why do “Recent invoices” and “Recent activity” not match my data?</summary><p>These panels, like the banner mini-statistics and the “Summary”, are presentation samples. Only the four KPI cards (Customers, Supplier invoices, Products, Revenue) show real figures. Use the menu screens or the Reports for your data.</p></details>
-                <details><summary>My “Revenue” card does not include an invoice I just created. Why?</summary><p>The card only counts posted customer invoices dated in the current month. A draft is not included: post the invoice in <span class="chemin">Sales › Customer invoices</span>. An invoice dated in another month is not counted either.</p></details>
-                <details><summary>The four cards show 0 although I have data.</summary><p>If the data cannot be read, the cards show 0. Reload the page. Also check that the right company is selected in the header if you are an accountant. If the problem persists, contact support@60sec.ca.</p></details>
+                <details><summary>What does 60 do when I click it?</summary><p>It goes to the most urgent activity, opens it with its advice and waits for you to click the action button. Its place, next to the greeting, becomes a dotted circle: click it or <kbd>Thanks, 60</kbd> to bring it back.</p></details>
+                <details><summary>“Overdue revenue” does not include an overdue invoice. Why?</summary><p>Only <strong>posted</strong>, unpaid customer invoices count. A draft invoice is not overdue: it appears in the yellow “Draft invoices” activity.</p></details>
+                <details><summary>Why doesn’t “Invoice” appear on an appointment?</summary><p>The button only appears on a completed appointment (status “Completed” or end time passed) linked to a customer. Open the appointment to choose its customer.</p></details>
+                <details><summary>Where did “My money”, “+ Invoice” and the black tile go?</summary><p>They were removed from the new page. Overdue amounts are on 60’s row, invoices are created from <span class="chemin">Sales › Customer invoices</span> or from a completed appointment (<kbd>Invoice</kbd>), and every screen remains in the left menu.</p></details>
                 <details><summary>How do I know how many trial days I have left?</summary><p>The trial badge in the header reads “Trial · N days” and its tooltip gives the exact date. The plan line of the welcome box also shows “Free trial until [date]”.</p></details>
                 <details><summary>I am an accountant: how do I switch from one company to another?</summary><p>Use the company drop-down list in the header. After your access is checked, you are taken to the Dashboard of the chosen company and every screen shows its data.</p></details>
                 <details><summary>The company selector does not appear in my header.</summary><p>It only appears if you are linked to several companies. With a single company, the header simply shows its name. To be linked to another company, get its accountant key from its owner.</p></details>
                 <details><summary>What does the ? button in the header do?</summary><p>It opens, in a separate window, the help of the section of the current screen. Some screens have their own help page, such as Account mapping. There you can change language, search the page, print, or go back to the general help contents.</p></details>
                 <details><summary>Does the AI assistant see my customers and my account numbers?</summary><p>No. No customer, supplier or employee name and no account number is sent to the AI service. Only the general company profile, its particularities and your question are transmitted.</p></details>
                 <details><summary>How do I ask the assistant a question by voice?</summary><p>Open the assistant box (purple face at the bottom right), click the microphone and speak. The recognised text is displayed; after a pause, the question is sent automatically and the answer is read aloud. Speech recognition depends on your browser: allow microphone access when asked.</p></details>
-                <details><summary>The “Invoices” tile of the Modules panel opens supplier invoices. Where are my customer invoices?</summary><p>In <span class="chemin">Sales › Customer invoices</span>, or through the banner’s <kbd>New invoice</kbd> button to create one.</p></details>
                 <details><summary>I change the language with FR / EN / ES, but it goes back to French at my next sign-in.</summary><p>The language is remembered for the session only. Choose it again after signing in; your data and settings are not affected.</p></details>
                 <details><summary>I do not see the “Users” entry, or it sends me back to the Dashboard.</summary><p>This screen is reserved for administrators. Your role is shown under your name in the header. Ask an administrator of the company to manage accounts.</p></details>
                 <details><summary>The left menu has disappeared: how do I get it back?</summary><p>It was hidden with the <kbd>☰</kbd> button. Click <kbd>☰</kbd> at the far left of the header (its tooltip says “Show menu”): the menu comes back. On a phone, tap the <kbd>☰</kbd> in the top bar.</p></details>
@@ -793,7 +787,7 @@
                         <tr><td>Shared action</td><td>In Mon cabinet comptable › Qui fait quoi, an action you and your firm are both responsible for: “Moi” and “Mon cabinet” are both selected.</td></tr>
                         <tr><td>Administrator</td><td>User of a company who can, in addition, manage the accounts of other users (Users screen).</td></tr>
                         <tr><td>AI assistant</td><td>Conversational help specific to your company, reached through the purple face at the bottom right. Answers by keyboard or voice, without transmitting your personal data.</td></tr>
-                        <tr><td>KPI card</td><td>Key indicator shown on the Dashboard: Customers, Supplier invoices, Products and Revenue. They are the only real data on the page.</td></tr>
+                        <tr><td>60’s window</td><td>First row of the Dashboard: the greeting, the “First” activity and the counters (Activities to do, Messages, Overdue revenue, Overdue payments, Operating account).</td></tr>
                         <tr><td>Accountant key</td><td>Code provided in Settings › Accountant that lets an external accountant access the company without being created as a user.</td></tr>
                         <tr><td>Active company</td><td>The company chosen in the header; all data shown belongs to it.</td></tr>
                         <tr><td>Accountant</td><td>Role that gives access to several companies (those that shared their accountant key) and to the company selector.</td></tr>
@@ -1034,56 +1028,54 @@
             <section id="es-panel-de-control">
                 <h2>Panel de control</h2>
                 <h3>Objetivo</h3>
-                <p>El Panel de control (<span class="chemin">Panel de control</span>) es la página que se abre después de iniciar sesión, después de un cambio de empresa y después de guardar el perfil de una nueva empresa. Da la bienvenida a los nuevos clientes, muestra algunos indicadores de la empresa y ofrece accesos directos a las pantallas más usadas.</p>
+                <p>El Panel de control (<span class="chemin">Panel de control</span>) es la página que se abre tras iniciar sesión. De un vistazo: lo que urge (la ventana de 60), su día (la Agenda) y lo que queda por hacer (las Actividades por hacer). Todas las cifras son reales y se recalculan cada vez que se abre la página.</p>
 
-                <h3>La bienvenida: « ¡Hola, nombre! Aquí está su día. »</h3>
-                <p>En la parte superior de la página, la tarjeta de inicio sigue el estilo « Doux bleu marine »: la cara « Le 60 », su nombre y tres botones en píldora.</p>
+                <h3>1. La ventana de 60</h3>
+                <p>La primera fila, enmarcada en rojo (algo urgente), amarillo (algo se acerca) o verde (todo va bien).</p>
                 <ul>
-                    <li><kbd>+ Nouvelle facture</kbd>: abre directamente la ventana de edición de una factura de cliente.</li>
-                    <li><kbd>Voir les clients</kbd>: abre <span class="chemin">Ventes › Clients</span>.</li>
-                    <li><kbd>Paramètres</kbd>: abre <span class="chemin">Paramètres</span>.</li>
+                    <li><strong>60</strong>, el asistente, junto a «¡Hola, nombre!». Un clic lo envía al asunto prioritario: abre la actividad, se coloca en ella con su consejo («60 · estoy aquí para resolver esto con usted») y espera su acción. Su lugar se vuelve un círculo punteado; un clic en ese círculo o en <kbd>Gracias, 60</kbd> lo trae de vuelta.</li>
+                    <li><strong>Primero</strong>: la actividad más urgente, en una línea (el texto completo aparece al pasar el ratón); un clic envía a 60 allí.</li>
+                    <li><strong>Actividades por hacer</strong>: el círculo rojo cuenta las actividades atrasadas, el amarillo las que se acercan; un clic envía a 60 a la primera de ese color.</li>
+                    <li><strong>Mensajes</strong>: abre la mensajería.</li>
+                    <li><strong>Ingresos atrasados</strong>: el saldo de las facturas de cliente vencidas (borde rojo si las hay); la información indica el número de facturas y el retraso más antiguo. Abre <span class="chemin">Ventas › Facturas de clientes</span>.</li>
+                    <li><strong>Pagos atrasados</strong>: el saldo de las facturas de proveedor vencidas; abre <span class="chemin">Compras › Facturas de proveedores</span>.</li>
+                    <li><strong>Cuenta operativa</strong>: su cuenta bancaria conectada (banco y últimos dígitos). El ojo muestra u oculta el saldo; la elección se guarda en su navegador. Sin cuenta conectada, <kbd>Conectar</kbd> abre las cuentas bancarias.</li>
                 </ul>
-                <h3>Las tres cosas que mirar (datos reales)</h3>
-                <p>Siempre tres líneas: cada una lleva una etiqueta <strong>Urgent</strong> (roja), <strong>À surveiller</strong> (dorada) o <strong>Tout va bien</strong> (verde), un título, una frase y un botón hacia la pantalla correspondiente.</p>
+
+                <h3>2. La Agenda</h3>
+                <p><strong>Hoy</strong>: la fecha, el número de citas y de horas, luego:</p>
+                <ul>
+                    <li><strong>La lista de empleados</strong> (si hay varios): un empleado, o «Todo el equipo», que organiza el día en una columna por empleado. La elección se comparte con la pantalla Agenda.</li>
+                    <li><strong>Huecos libres de la agenda</strong>: los tres próximos huecos de al menos una hora (días hábiles, 9:00 a 17:00); un clic abre una nueva cita a esa hora.</li>
+                    <li><kbd>Agenda</kbd>: abre la pantalla <a href="agenda.html">Agenda</a>. El botón redondo ▴ / ▾ pliega o despliega el bloque.</li>
+                    <li>Cada cita: la hora, el cliente y el asunto, <kbd>Facturar</kbd> cuando está terminada y vinculada a un cliente, el lugar, el estado (Terminado, En curso, Próximo), ▾ para el detalle (lugar, hora y duración, empleado, servicio, <kbd>Abrir la cita</kbd>) y <kbd>+ Cita</kbd>, que abre una nueva cita con el mismo cliente y el mismo empleado, una semana después a la misma hora.</li>
+                </ul>
+                <p><strong>Próximamente</strong> (plegado al inicio): cuatro pestañas — Próximos 7 días, Semana siguiente, Este mes, Mes próximo — y las citas del período, agrupadas por día.</p>
+
+                <h3>3. Las Actividades por hacer</h3>
+                <ul>
+                    <li>El número de actividades, luego una barra roja y amarilla: cada color cuenta sus actividades y sirve de filtro (<kbd>Ver todo</kbd> lo quita).</li>
+                    <li>Rojo: fecha vencida, obligatorio. Amarillo: la fecha de acción se acerca. Las rojas van siempre primero; la primera lleva «Propuesta por 60, arriba».</li>
+                    <li>Un clic en una actividad la abre: el «Consejo de 60» y el botón que lleva a la pantalla donde actuar.</li>
+                </ul>
                 <table>
-                    <thead><tr><th>Línea</th><th>Qué dice</th><th>Adónde lleva el botón</th></tr></thead>
+                    <thead><tr><th>Actividad</th><th>Color</th><th>Cuándo</th></tr></thead>
                     <tbody>
-                        <tr><td>Tareas por aprobar</td><td>« Urgent — N tâche(s) à approuver » si las hay (el mismo recuento que la etiqueta « Approbations » del menú); si no, « Tout va bien — Rien à approuver ».</td><td>Aprobaciones</td></tr>
-                        <tr><td>Facturas de proveedor</td><td>« À surveiller — N facture(s) fournisseur » si las hay; si no, « Tout va bien — Aucune facture fournisseur ».</td><td>Compras › Facturas de proveedores</td></tr>
-                        <tr><td>Ingresos del mes</td><td>« Tout va bien — Revenus du mois : N $ »: las facturas de clientes contabilizadas este mes, la misma cifra que la tarjeta « Revenus ».</td><td>Ventas › Facturas de clientes</td></tr>
+                        <tr><td>Factura de cliente atrasada</td><td>Rojo</td><td>Una por factura vencida (las cinco más antiguas), luego «N facturas atrasadas más».</td></tr>
+                        <tr><td>Facturas de proveedor atrasadas</td><td>Rojo</td><td>Al menos una factura de proveedor vencida y no pagada.</td></tr>
+                        <tr><td>Tareas por aprobar</td><td>Amarillo</td><td>Hay tareas esperando su decisión (mismo recuento que el menú).</td></tr>
+                        <tr><td>Facturas de proveedor por seguir</td><td>Amarillo</td><td>Vencen en los próximos 7 días.</td></tr>
+                        <tr><td>Facturas de cliente por vencer</td><td>Amarillo</td><td>Vencen en los próximos 7 días.</td></tr>
+                        <tr><td>Facturas en borrador</td><td>Amarillo</td><td>Facturas de cliente aún no contabilizadas.</td></tr>
+                        <tr><td>Conecte su cuenta bancaria</td><td>Amarillo</td><td>Ninguna cuenta bancaria conectada.</td></tr>
+                        <tr><td>Prueba: quedan N días</td><td>Amarillo (rojo a 3 días o menos)</td><td>Los últimos 30 días de la prueba.</td></tr>
                     </tbody>
                 </table>
-
-                <h3>Tarjetas KPI (datos reales)</h3>
-                <p>Cuatro tarjetas muestran cifras reales de la empresa activa. Se recalculan cada vez que se abre la página.</p>
-                <table>
-                    <thead><tr><th>Tarjeta</th><th>Qué cuenta</th></tr></thead>
-                    <tbody>
-                        <tr><td>«Clientes»</td><td>El número de terceros de tipo cliente, o de tipo «cliente y proveedor».</td></tr>
-                        <tr><td>«Facturas de proveedor»</td><td>El número de documentos de tipo factura de proveedor, todos los períodos juntos.</td></tr>
-                        <tr><td>«Productos»</td><td>El número de artículos de su catálogo de productos y servicios.</td></tr>
-                        <tr><td>«Ingresos»</td><td>El total de las facturas de clientes <strong>contabilizadas</strong> fechadas en el mes en curso, redondeado al dólar y seguido de «$». Por ejemplo «12 345 $».</td></tr>
-                    </tbody>
-                </table>
-
-                <h3>Otros paneles</h3>
-                <ul>
-                    <li><strong>Módulos</strong>: seis tarjetas de acceso rápido: Clientes, Facturas, Productos, Proveedores, Recibos, Parámetros.</li>
-                    <li><strong>Facturas recientes</strong>: una lista de ejemplo con un enlace « Voir tout », marcada « Exemples fictifs, pour illustrer ».</li>
-                </ul>
-                <h3>La columna derecha</h3>
-                <ul>
-                    <li><strong>Ce mois-ci</strong> (tarjeta azul marino): un punto por indicador — verde cuando todo va bien, dorado para « a vigilar » (facturas de proveedor), rojo para « urgente » (tareas por aprobar) — con las mismas cifras que las tarjetas KPI.</li>
-                    <li><strong>Mon cabinet certifié</strong>: los usuarios contadores vinculados a su empresa (los mismos que « Demander à mon cabinet certifié » en la migración contable), y <kbd>Écrire à mon comptable</kbd>, que abre su correo con sus direcciones. Sin contador vinculado: « Aucun comptable n’est rattaché à votre compagnie » e <kbd>Inviter mon comptable</kbd>, que abre <span class="chemin">Utilisateurs</span>.</li>
-                    <li><strong>Acciones rápidas</strong>: Crear una factura, Añadir un cliente, Añadir un producto, Ver los recibos.</li>
-                    <li><strong>Actividad reciente</strong>: panel de presentación, marcado « Exemples fictifs ».</li>
-                </ul>
 
                 <h3>Consejos y trampas</h3>
-                <div class="piege" data-titre="Trampa">Varios paneles del Panel de control son <strong>ejemplos de presentación</strong>: las miniestadísticas de la banda, «Facturas recientes», «Actividad reciente» y «Resumen» no reflejan sus datos. Solo las cuatro tarjetas KPI (Clientes, Facturas de proveedor, Productos, Ingresos) son reales. Para sus cifras reales, use las pantallas del menú y los <a href="rapports.html">Informes</a>.</div>
-                <div class="piege" data-titre="Trampa">En el panel Módulos, el mosaico <strong>Facturas</strong> abre las facturas de <strong>proveedores</strong>, no las facturas de clientes. Para sus facturas de venta, pase por <span class="chemin">Ventas › Facturas de clientes</span> o por el botón <kbd>Nueva factura</kbd>.</div>
-                <div class="attention" data-titre="Atención">La tarjeta «Ingresos» excluye las facturas de clientes que aún no están contabilizadas (borradores). Si el total le parece bajo, compruebe que no queden borradores por contabilizar en <span class="chemin">Ventas › Facturas de clientes</span>.</div>
-                <div class="note" data-titre="Conviene saber">Si los datos no pueden leerse, las cuatro tarjetas muestran 0 en lugar de un mensaje de error. Recargue la página; si los ceros persisten aunque tenga datos, contacte con el soporte.</div>
+                <div class="attention" data-titre="Atención">«Ingresos atrasados» solo cuenta las facturas de cliente <strong>contabilizadas</strong>: un borrador no se envía ni está atrasado. Los borradores aparecen en la actividad amarilla «Facturas en borrador».</div>
+                <div class="note" data-titre="Conviene saber">Las elecciones de visualización (empleado, bloques plegados, pestaña de Próximamente, saldo visible) se guardan solo en este navegador.</div>
+                <div class="astuce" data-titre="Consejo">¿Con prisa? Haga clic en 60: le lleva directamente a lo que más importa, con el botón para resolverlo.</div>
             </section>
 
             <section id="es-primeros-pasos">
@@ -1133,7 +1125,6 @@
                     <li>En <span class="chemin">Ventas › Clientes</span>, pulse <kbd>Añadir cliente</kbd> para cada cliente: nombre, dirección de facturación y correo (a ese correo se envían las facturas).</li>
                     <li>En <span class="chemin">Productos y servicios › Productos</span>, cree sus productos y servicios con su precio, sus impuestos y su cuenta de ventas. Agrúpelos si lo desea por <span class="chemin">Categoría de producto</span>.</li>
                 </ol>
-                <div class="astuce" data-titre="Consejo">El botón <kbd>Ver clientes</kbd> de la banda y los mosaicos «Clientes» y «Productos» del panel Módulos llevan a las mismas pantallas desde el Panel de control.</div>
 
                 <h3>Paso 6: Primera factura</h3>
                 <ol>
@@ -1141,7 +1132,7 @@
                     <li>Elija el cliente, añada las líneas de productos o servicios, verifique la GST/TPS y la QST/TVQ calculadas.</li>
                     <li>Guarde: la factura es un <strong>borrador</strong> (número «BRO-…»). Contabilícela para obtener su número definitivo según el formato elegido en <span class="chemin">Ajustes</span>, pestaña «Factura» (por ejemplo PREFIJO-2026-0001).</li>
                     <li>Envíe el PDF por correo o, si Square está conectado, adjunte un enlace de pago.</li>
-                    <li>Vuelva al Panel de control: la tarjeta «Ingresos» refleja ahora la factura contabilizada.</li>
+                    <li>Vuelva al Panel de control: la factura contabilizada ya no cuenta entre los borradores; si vence sin pagarse, pasará a «Ingresos atrasados».</li>
                 </ol>
                 <div class="note" data-titre="Conviene saber">Antes de enviar correos en nombre de la empresa, verifique su dirección de remitente en <span class="chemin">Ajustes</span>, pestaña «Email» (<kbd>Verificar esta dirección</kbd>): una dirección verificada se convierte en la dirección de respuesta de sus correos.</div>
 
@@ -1155,16 +1146,16 @@
 
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
-                <details><summary>¿Por qué «Facturas recientes» y «Actividad reciente» no corresponden a mis datos?</summary><p>Esos paneles, como las miniestadísticas de la banda y el «Resumen», son ejemplos de presentación. Solo las cuatro tarjetas KPI (Clientes, Facturas de proveedor, Productos, Ingresos) muestran cifras reales. Consulte las pantallas del menú o los Informes para sus datos.</p></details>
-                <details><summary>Mi tarjeta «Ingresos» no incluye una factura que acabo de crear. ¿Por qué?</summary><p>La tarjeta solo cuenta las facturas de clientes contabilizadas y fechadas en el mes en curso. Un borrador no aparece: contabilice la factura en <span class="chemin">Ventas › Facturas de clientes</span>. Una factura fechada en otro mes tampoco se cuenta.</p></details>
-                <details><summary>Las cuatro tarjetas muestran 0 aunque tengo datos.</summary><p>Si los datos no pueden leerse, las tarjetas muestran 0. Recargue la página. Compruebe también que la empresa correcta esté seleccionada en la cabecera si es contador. Si el problema persiste, contacte con support@60sec.ca.</p></details>
+                <details><summary>¿Qué hace 60 cuando hago clic en él?</summary><p>Va a la actividad más urgente, la abre con su consejo y espera que haga clic en el botón de acción. Su lugar, junto al saludo, se vuelve un círculo punteado: haga clic en él o en <kbd>Gracias, 60</kbd> para traerlo de vuelta.</p></details>
+                <details><summary>«Ingresos atrasados» no incluye una factura vencida. ¿Por qué?</summary><p>Solo cuentan las facturas de cliente <strong>contabilizadas</strong> y no pagadas. Una factura en borrador no está atrasada: aparece en la actividad amarilla «Facturas en borrador».</p></details>
+                <details><summary>¿Por qué no aparece «Facturar» en una cita?</summary><p>El botón solo aparece en una cita terminada (estado «Terminado» o hora de fin pasada) y vinculada a un cliente. Abra la cita para elegir su cliente.</p></details>
+                <details><summary>¿Dónde quedaron «Mi dinero», «+ Factura» y el mosaico negro?</summary><p>Se retiraron de la nueva página. Los importes atrasados están en la fila de 60, las facturas se crean desde <span class="chemin">Ventas › Facturas de clientes</span> o desde una cita terminada (<kbd>Facturar</kbd>), y todas las pantallas siguen en el menú de la izquierda.</p></details>
                 <details><summary>¿Cómo sé cuántos días de prueba me quedan?</summary><p>El indicador de prueba de la cabecera muestra «Prueba · N días» y su descripción emergente da la fecha exacta. La línea de plan del cuadro de bienvenida muestra también «Prueba gratuita hasta el [fecha]».</p></details>
                 <details><summary>Soy contador: ¿cómo paso de una empresa a otra?</summary><p>Use la lista desplegable de empresa en la cabecera. Tras verificar su acceso, se le lleva al Panel de control de la empresa elegida y todas las pantallas muestran sus datos.</p></details>
                 <details><summary>El selector de empresa no aparece en mi cabecera.</summary><p>Solo aparece si está vinculado a varias empresas. Con una sola empresa, la cabecera muestra simplemente su nombre. Para vincularse a otra empresa, obtenga su clave de contador de su propietario.</p></details>
                 <details><summary>¿Qué hace el botón ? de la cabecera?</summary><p>Abre, en una ventana aparte, la ayuda de la sección de la pantalla actual. Algunas pantallas tienen su propia página de ayuda, como la Correspondencia de cuentas. Ahí puede cambiar de idioma, buscar en la página, imprimir o volver al índice general de la ayuda.</p></details>
                 <details><summary>¿El asistente IA ve mis clientes y mis números de cuenta?</summary><p>No. No se envía al servicio de IA ningún nombre de cliente, proveedor o empleado ni ningún número de cuenta. Solo se transmiten el perfil general de la empresa, sus particularidades y su pregunta.</p></details>
                 <details><summary>¿Cómo hago una pregunta al asistente por voz?</summary><p>Abra el cuadro del asistente (cara violeta abajo a la derecha), pulse el micrófono y hable. El texto reconocido se muestra; tras una pausa, la pregunta se envía automáticamente y la respuesta se lee en voz alta. El reconocimiento de voz depende de su navegador: autorice el acceso al micrófono cuando se lo pida.</p></details>
-                <details><summary>El mosaico «Facturas» del panel Módulos abre las facturas de proveedores. ¿Dónde están mis facturas de clientes?</summary><p>En <span class="chemin">Ventas › Facturas de clientes</span>, o mediante el botón <kbd>Nueva factura</kbd> de la banda para crear una.</p></details>
                 <details><summary>Cambio el idioma con FR / EN / ES, pero vuelve al francés en mi siguiente inicio de sesión.</summary><p>El idioma se memoriza solo durante la sesión. Elíjalo de nuevo tras iniciar sesión; sus datos y su configuración no se ven afectados.</p></details>
                 <details><summary>No veo la entrada «Usuarios» o me devuelve al Panel de control.</summary><p>Esa pantalla está reservada a los administradores. Su rol se muestra bajo su nombre en la cabecera. Pida a un administrador de la empresa que gestione las cuentas.</p></details>
                 <details><summary>El menú de la izquierda desapareció: ¿cómo lo recupero?</summary><p>Se ocultó con el botón <kbd>☰</kbd>. Haga clic en <kbd>☰</kbd>, en el extremo izquierdo de la cabecera (su información sobre herramientas dice «Mostrar el menú»): el menú vuelve. En un teléfono, toque el <kbd>☰</kbd> de la barra superior.</p></details>
@@ -1188,7 +1179,7 @@
                         <tr><td>Acción compartida</td><td>En Mon cabinet comptable › Qui fait quoi, acción de la que usted y su despacho son ambos responsables: « Moi » y « Mon cabinet » están elegidos.</td></tr>
                         <tr><td>Administrador</td><td>Usuario de una empresa que puede, además, gestionar las cuentas de los demás usuarios (pantalla Usuarios).</td></tr>
                         <tr><td>Asistente IA</td><td>Ayuda conversacional propia de su empresa, accesible por la cara violeta abajo a la derecha. Responde por teclado o por voz, sin transmitir sus datos nominativos.</td></tr>
-                        <tr><td>Tarjeta KPI</td><td>Indicador clave mostrado en el Panel de control: Clientes, Facturas de proveedor, Productos e Ingresos. Son los únicos datos reales de la página.</td></tr>
+                        <tr><td>Ventana de 60</td><td>Primera fila del Panel de control: el saludo, la actividad «Primero» y los contadores (Actividades por hacer, Mensajes, Ingresos atrasados, Pagos atrasados, Cuenta operativa).</td></tr>
                         <tr><td>Clave de contador</td><td>Código proporcionado en Ajustes › Contador que permite a un contador externo acceder a la empresa sin ser creado como usuario.</td></tr>
                         <tr><td>Empresa activa</td><td>La empresa elegida en la cabecera; todos los datos mostrados le pertenecen.</td></tr>
                         <tr><td>Contador</td><td>Rol que da acceso a varias empresas (las que comunicaron su clave de contador) y al selector de empresa.</td></tr>

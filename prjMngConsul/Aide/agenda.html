@@ -26,89 +26,76 @@
 
             <section id="fr-agenda">
                 <h2>Agenda</h2>
-                <p>L’écran <span class="chemin">Agenda</span> affiche les rendez-vous de la compagnie sous forme de calendrier. Les employés sont les « ressources » de l’agenda : chaque rendez-vous peut être attribué à l’un d’eux, et un filtre par employé permet de n’afficher que les rendez-vous qui vous intéressent. Le titre « Agenda » pose sur le fond de la page ; la barre de navigation, le filtre des employés et le calendrier sont trois cartes blanches.</p>
+                <p>L’écran <span class="chemin">Agenda</span> affiche « Tout l’agenda » : cinq jours ouvrables côte à côte, heure par heure, avec à droite le panneau « Mettre à jour le RDV ». Les employés sont les « ressources » de l’agenda : chaque rendez-vous peut être confié à l’un d’eux, et vous pouvez afficher toute l’équipe ou un seul employé.</p>
 
                 <h3>But</h3>
-                <p>Voir d’un coup d’œil les rendez-vous du mois, de la semaine ou de la journée ; en créer de nouveaux ; les déplacer ; ouvrir leur fiche pour les modifier, les supprimer ou les facturer. Les employés qui apparaissent dans l’agenda sont ceux créés dans <a href="employes.html#fr-employes">Employés</a>.</p>
+                <p>Voir d’un coup d’œil les rendez-vous de la semaine ; en ajouter ; les déplacer, les échanger, les confier à un autre employé ou les annuler sans ouvrir leur fiche ; ouvrir la fiche complète pour le reste (client, type, récurrence, rappel, facturation). Les employés proposés sont ceux créés dans <a href="employes.html#fr-employes">Employés</a>.</p>
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>‹</kbd> (info-bulle « Précédent ») et <kbd>›</kbd> (info-bulle « Suivant ») : reculent ou avancent d’un mois, d’une semaine ou d’un jour, selon la vue affichée.</li>
-                    <li><kbd>●</kbd> (info-bulle « Aujourd’hui ») : revient à la date du jour.</li>
-                    <li><kbd>Mois</kbd>, <kbd>Semaine</kbd>, <kbd>Jour</kbd> : changent de vue. La pastille de la vue active est blanche.</li>
-                    <li><kbd>+ Rendez-vous</kbd> (pastille bleue, à droite du titre) : ouvre la fenêtre « Rendez-vous » avec un nouveau rendez-vous fixé à 9 h 00, à la date affichée.</li>
-                    <li><strong>Double-clic sur une case du mois</strong> : crée un nouveau rendez-vous à 9 h 00 ce jour-là.</li>
-                    <li><strong>Double-clic sur une plage de 30 minutes</strong> (vues Semaine et Jour) : crée un nouveau rendez-vous à cette heure précise.</li>
-                    <li><strong>Clic sur un rendez-vous</strong> : ouvre sa fiche en modification (voir <a href="#fr-rendez-vous">Fiche rendez-vous</a>).</li>
-                    <li><strong>Glisser-déposer un rendez-vous</strong> : le déplace.
-                        <ul>
-                            <li>En vue Mois, la date change, mais l’heure et la durée sont conservées.</li>
-                            <li>En vue Semaine ou Jour, l’heure de début devient la plage de 30 minutes où vous relâchez le rendez-vous ; la durée est conservée.</li>
-                            <li>L’enregistrement est immédiat, sans confirmation.</li>
-                        </ul>
-                    </li>
-                    <li><strong>« +N de plus »</strong> (vue Mois, quand une journée compte plus de 3 rendez-vous) : bascule en vue Jour sur cette journée.</li>
+                    <li><kbd>‹</kbd> (info-bulle « 5 jours précédents ») et <kbd>›</kbd> (« 5 jours suivants ») : reculent ou avancent de cinq jours ouvrables. La période affichée est au centre, par exemple « 22 au 28 octobre 2026 ».</li>
+                    <li><kbd>Aujourd’hui</kbd> : revient à la période qui commence aujourd’hui (grisé quand vous y êtes déjà).</li>
+                    <li><strong>Liste des employés</strong> : « Toute l’équipe (N) » ou un employé. Le choix est mémorisé dans votre navigateur et partagé avec le tableau de bord.</li>
+                    <li><kbd>+ RDV</kbd> (pastille bleue) : ouvre la fenêtre « Rendez-vous » sur la prochaine plage libre d’une heure.</li>
+                    <li><strong>Clic sur une heure libre</strong> d’une colonne : ouvre un nouveau rendez-vous à cette heure (à la demi-heure près) ; l’info-bulle indique « Nouveau RDV le … à … ».</li>
+                    <li><strong>Clic sur un rendez-vous</strong> : le sélectionne (fond bleu pâle) et ouvre le panneau « Mettre à jour le RDV » à droite.</li>
                 </ul>
-                <p>La fenêtre du rendez-vous est modale : elle mesure environ 1300 × 700 pixels et se réduit sur un petit écran. L’agenda se recharge automatiquement dès que vous la fermez.</p>
 
-                <h3>Vues</h3>
-                <table>
-                    <thead><tr><th>Vue</th><th>Ce qu’elle affiche</th></tr></thead>
-                    <tbody>
-                        <tr><td>Mois</td><td>Grille de 6 semaines × 7 jours commençant le lundi (Lun … Dim). Le jour courant porte une pastille bleue. Les jours des mois voisins sont grisés. Chaque case affiche au plus 3 rendez-vous, précédés de leur heure (sauf ceux « toute la journée ») ; au-delà, la mention « +N de plus » apparaît.</td></tr>
-                        <tr><td>Semaine</td><td>Sept colonnes, une par jour, découpées en plages de 30 minutes de 07:00 à 20:00. Une rangée « Toute la journée » figure en haut. Une ligne rouge indique l’heure actuelle.</td></tr>
-                        <tr><td>Jour</td><td>Une seule journée, avec les mêmes plages de 30 minutes de 07:00 à 20:00, la rangée « Toute la journée » et la ligne rouge de l’heure actuelle.</td></tr>
-                    </tbody>
-                </table>
-                <p>Dans les vues Semaine et Jour, un rendez-vous qui commence avant 7 h ou finit après 20 h est rogné à ces bornes à l’écran (il n’est pas modifié). Chaque bloc affiche « début – fin », le titre, puis « · client ».</p>
-
-                <h3>Filtres et recherche</h3>
-                <p>Le filtre « Employés : » présente une pastille de couleur par employé actif. La couleur est celle choisie dans la fiche de l’employé.</p>
+                <h3>Le panneau « Mettre à jour le RDV »</h3>
                 <ul>
-                    <li>Au départ, tous les employés sont affichés.</li>
-                    <li>Le premier clic sur une pastille masque cet employé seulement (les autres restent visibles).</li>
-                    <li>Les clics suivants masquent ou réaffichent chaque employé individuellement.</li>
-                    <li>Quand tous les employés sont de nouveau sélectionnés, le filtre revient à « tous ».</li>
-                    <li>Les rendez-vous <strong>sans employé</strong> restent toujours visibles, quel que soit le filtre.</li>
+                    <li>La carte du haut rappelle le client, l’objet, le jour, l’heure, le lieu et l’employé.</li>
+                    <li><strong>Jour</strong> (trois semaines de jours ouvrables), <strong>Heure</strong> (par pas de 15 minutes, de 6 h à 21 h), <strong>Durée</strong> (15 minutes à 8 heures) et <strong>Employé</strong> : changez ce que vous voulez.</li>
+                    <li><strong>Changer pour une plage libre</strong> : jusqu’à quatre plages où l’employé est libre pour la même durée ; un clic les applique.</li>
+                    <li><strong>Échanger sa plage avec un autre RDV</strong> : chaque rendez-vous prend la plage de l’autre et garde sa propre durée.</li>
+                    <li>Un encadré bleu résume le changement (« Nouveau : … ») ; un encadré rouge signale un conflit avec un autre rendez-vous du même employé.</li>
+                    <li><kbd>Enregistrer le changement</kbd> : enregistre puis recharge l’agenda (grisé tant que rien n’a changé).</li>
+                    <li><kbd>Ouvrir la fiche complète</kbd> : ouvre la fenêtre « Rendez-vous » (voir <a href="#fr-rendez-vous">Fiche rendez-vous</a>).</li>
+                    <li><kbd>Annuler le RDV</kbd> : demande « Annuler ce rendez-vous ? », passe son statut à « Annulé » et le retire de l’agenda.</li>
+                    <li><kbd>Fermer</kbd> : referme le panneau sans rien changer.</li>
                 </ul>
-                <p>Il n’y a pas de zone de recherche par texte dans l’agenda : naviguez avec les boutons de période et les vues.</p>
+                <p>Sans rendez-vous sélectionné, le panneau rappelle le mode d’emploi et propose les six prochaines plages libres d’une heure ; un clic en réserve une.</p>
 
                 <h3>Données affichées</h3>
                 <table>
                     <thead><tr><th>Donnée</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>Titre</td><td>Le titre saisi dans la fiche du rendez-vous.</td></tr>
-                        <tr><td>Heure</td><td>L’heure de début (vue Mois) ou « début – fin » (vues Semaine et Jour). Rien pour un rendez-vous « toute la journée ».</td></tr>
-                        <tr><td>Client</td><td>Le nom du client : dans l’info-bulle en vue Mois (après « — »), ou dans le bloc en vues Semaine et Jour (précédé de « · »).</td></tr>
-                        <tr><td>Couleur</td><td>La couleur du bloc vient du <strong>type</strong> de rendez-vous (bleu par défaut), et non de l’employé.</td></tr>
+                        <tr><td>En-tête</td><td>« Tout l’agenda », puis le nombre de RDV et d’heures planifiées de la période, et « toute l’équipe » ou le nom de l’employé affiché.</td></tr>
+                        <tr><td>Colonne d’un jour</td><td>Le jour (« Jeu 22 · aujourd’hui » souligné en bleu pour aujourd’hui), le nombre de RDV et d’heures, puis les rendez-vous à leur heure. Une ligne rouge marque l’heure actuelle.</td></tr>
+                        <tr><td>Heures</td><td>De 8 h à 18 h, élargies automatiquement aux rendez-vous plus tôt ou plus tard.</td></tr>
+                        <tr><td>Rendez-vous</td><td>« début–fin » et le client, l’objet, puis l’état : <strong>Terminé</strong> (vert), <strong>En cours</strong> (bleu), <strong>À venir</strong> (gris). Les rendez-vous qui se chevauchent se partagent la largeur de la colonne.</td></tr>
+                        <tr><td>Couleur</td><td>Le trait de gauche du bloc prend la couleur de l’employé (gris sans employé) ; la légende des couleurs s’affiche en vue « Toute l’équipe ».</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Règles</h3>
                 <ul>
-                    <li>Seuls les employés <strong>actifs</strong> de la compagnie apparaissent comme ressources (filtre et liste « Employé » de la fiche). Un employé désactivé disparaît de l’agenda, mais ses rendez-vous restent.</li>
-                    <li><strong>Rappels</strong> : si un rendez-vous a un rappel, une notification apparaît en haut à droite de l’écran pendant 8 secondes : « 🔔 Titre » puis « À HH:MM — Client ». Elle se déclenche entre (heure de début − délai du rappel) et l’heure de début du rendez-vous.</li>
-                    <li>La vérification des rappels a lieu chaque minute, <strong>uniquement tant que la page Agenda est ouverte</strong> dans votre navigateur.</li>
-                    <li>En vue Mois, un rendez-vous qui s’étend sur plusieurs jours apparaît dans chaque case concernée.</li>
+                    <li>Seuls les jours ouvrables (lundi au vendredi) sont affichés. Un rendez-vous du samedi ou du dimanche reste visible dans sa fiche, mais pas dans la grille.</li>
+                    <li>Les rendez-vous « Annulé » n’apparaissent pas.</li>
+                    <li>Une plage est libre quand l’employé n’a aucun autre rendez-vous qui la chevauche ; un rendez-vous sans employé bloque la plage de tous. Les plages libres sont cherchées de 8 h à 18 h, par pas de 30 minutes.</li>
+                    <li>Un conflit est signalé, mais n’empêche pas d’enregistrer.</li>
+                    <li><strong>Rappels</strong> : si un rendez-vous d’aujourd’hui a un rappel, un avis apparaît 8 secondes en haut à droite (« Rappel : à … ») entre l’heure du rappel et le début du rendez-vous. La vérification a lieu chaque minute, <strong>tant que la page Agenda est ouverte</strong>.</li>
                 </ul>
 
                 <h3>Marche à suivre</h3>
-                <p>Pour créer un rendez-vous à une heure précise :</p>
+                <p>Pour déplacer un rendez-vous et le confier à un collègue :</p>
                 <ol>
-                    <li>Passez en vue <kbd>Semaine</kbd> ou <kbd>Jour</kbd> et rendez-vous à la bonne date avec <kbd>‹</kbd> / <kbd>›</kbd>.</li>
-                    <li>Double-cliquez sur la plage de 30 minutes voulue.</li>
-                    <li>Remplissez au moins le « Titre », vérifiez la date et l’heure de fin, puis cliquez sur <kbd>Enregistrer</kbd>.</li>
+                    <li>Trouvez la bonne période avec <kbd>‹</kbd> / <kbd>›</kbd> et cliquez sur le rendez-vous.</li>
+                    <li>Choisissez le nouvel <strong>Employé</strong>, puis une des plages de « Changer pour une plage libre » (ou réglez Jour et Heure).</li>
+                    <li>Vérifiez l’encadré « Nouveau : … » et qu’aucun conflit n’est signalé, puis cliquez sur <kbd>Enregistrer le changement</kbd>.</li>
                 </ol>
-                <p>Pour déplacer un rendez-vous d’une journée à une autre sans changer l’heure : passez en vue <kbd>Mois</kbd> et glissez le rendez-vous dans la nouvelle case.</p>
 
                 <h3>Messages</h3>
-                <p>L’écran Agenda n’affiche pas de message propre. Le déplacement par glisser-déposer se fait sans confirmation ni avis.</p>
+                <ul class="messages">
+                    <li><span class="msg">« Conflit : … a déjà … à cette heure. »</span> — l’employé choisi a un autre rendez-vous qui chevauche la nouvelle plage ; choisissez une plage libre ou un autre employé.</li>
+                    <li><span class="msg">« Annuler ce rendez-vous ? »</span> — confirmez pour passer le rendez-vous à « Annulé ».</li>
+                    <li><span class="msg">« Aucune plage libre dans les trois prochaines semaines. »</span> — l’agenda est plein de 8 h à 18 h ; ajoutez le rendez-vous à une heure précise depuis la grille.</li>
+                </ul>
 
                 <h3>Trucs et pièges</h3>
-                <div class="piege" data-titre="Piège">Un glisser-déposer mal placé modifie tout de suite le rendez-vous, sans confirmation. Pour annuler, redéplacez-le à sa place d’origine.</div>
+                <div class="piege" data-titre="Piège">« Annuler le RDV » ne le supprime pas : il passe à « Annulé » et disparaît de l’agenda. Pour le supprimer pour de bon, ouvrez la fiche complète et cliquez sur <kbd>Supprimer</kbd>.</div>
                 <div class="attention" data-titre="Attention">Le rappel n’est ni un courriel ni une notification de votre système : il apparaît seulement dans la page Agenda, et seulement si elle est ouverte au moment prévu.</div>
-                <div class="note" data-titre="Bon à savoir">En vue Mois, une journée n’affiche que 3 rendez-vous ; cliquez sur « +N de plus » pour voir la journée complète.</div>
-                <div class="astuce" data-titre="Astuce">Pour ne voir que vos propres rendez-vous, cliquez une seule fois sur votre pastille dans le filtre « Employés : » : au premier clic, elle masque… l’employé cliqué. Cliquez donc plutôt sur les pastilles des collègues que vous souhaitez masquer, ou cliquez sur la vôtre puis de nouveau sur la vôtre pour la réafficher après avoir masqué les autres.</div>
+                <div class="note" data-titre="Bon à savoir">L’employé choisi dans l’agenda est le même que celui du bloc Agenda du tableau de bord : changer l’un change l’autre.</div>
+                <div class="astuce" data-titre="Astuce">Pour intervertir deux clients, utilisez « Échanger sa plage avec un autre RDV » : un seul enregistrement déplace les deux rendez-vous.</div>
             </section>
 
             <section id="fr-rendez-vous">
@@ -184,16 +171,16 @@
 
             <section id="fr-faq">
                 <h2>Questions fréquentes</h2>
-                <details><summary>Pourquoi un employé n’apparaît-il pas dans le filtre « Employés : » ni dans la liste « Employé » ?</summary><p>Seuls les employés <strong>actifs</strong> sont proposés. Ouvrez sa fiche dans <a href="employes.html#fr-fiche-employe">Employés</a> et cochez « Employé actif ».</p></details>
-                <details><summary>J’ai déplacé un rendez-vous par erreur. Comment annuler ?</summary><p>Le déplacement est enregistré immédiatement, sans confirmation. Glissez simplement le rendez-vous à sa position d’origine (même vue), ou ouvrez sa fiche et corrigez la date et l’heure.</p></details>
+                <details><summary>Pourquoi un employé n’apparaît-il pas dans la liste des employés ?</summary><p>Seuls les employés <strong>actifs</strong> sont proposés. Ouvrez sa fiche dans <a href="employes.html#fr-fiche-employe">Employés</a> et cochez « Employé actif ».</p></details>
+                <details><summary>J’ai enregistré un mauvais changement. Comment annuler ?</summary><p>Cliquez de nouveau sur le rendez-vous, remettez le jour, l’heure, la durée ou l’employé d’origine, puis <kbd>Enregistrer le changement</kbd>. Après un échange, échangez de nouveau les deux mêmes rendez-vous.</p></details>
                 <details><summary>Le rappel ne s’est pas affiché. Pourquoi ?</summary><p>Le rappel n’est vérifié que chaque minute, et seulement tant que la page Agenda est ouverte dans votre navigateur. Il n’envoie ni courriel ni notification système. Gardez l’Agenda ouvert sur la période du rappel.</p></details>
                 <details><summary>Pourquoi mon rendez-vous hebdomadaire n’apparaît-il qu’une fois ?</summary><p>La récurrence est enregistrée dans la fiche, mais l’agenda n’affiche que l’occurrence saisie ; aucune répétition n’est générée automatiquement. Créez les occurrences suivantes au besoin.</p></details>
-                <details><summary>Pourquoi le bloc du rendez-vous n’a-t-il pas la couleur de l’employé ?</summary><p>Dans l’agenda, la couleur du bloc vient du <strong>type</strong> de rendez-vous (bleu par défaut). La couleur de l’employé sert seulement aux pastilles du filtre « Employés : ».</p></details>
-                <details><summary>Je ne vois que 3 rendez-vous dans une journée du mois, mais j’en ai plus.</summary><p>La vue Mois limite l’affichage à 3 rendez-vous par case. Cliquez sur « +N de plus » pour passer en vue Jour sur cette date et tout voir.</p></details>
-                <details><summary>Puis-je saisir un rendez-vous avant 7 h ou après 20 h ?</summary><p>Non : les listes d’heures vont de 07:00 à 20:00 par pas de 30 minutes. Un rendez-vous existant qui dépasse ces bornes est rogné à l’écran, mais pas modifié.</p></details>
-                <details><summary>Que se passe-t-il quand je clique sur « Facturer » ?</summary><p>Le rendez-vous est d’abord enregistré (les validations s’appliquent), puis une nouvelle facture client préremplie s’ouvre dans la même fenêtre. Si une validation échoue, la facture ne s’ouvre pas.</p></details>
-                <details><summary>Que deviennent les rendez-vous d’un employé supprimé ?</summary><p>Ils sont conservés, mais n’ont plus d’employé. Ils restent visibles dans l’agenda quel que soit le filtre, puisque les rendez-vous sans employé sont toujours affichés.</p></details>
-                <details><summary>Comment revenir rapidement à aujourd’hui ?</summary><p>Cliquez sur le bouton <kbd>●</kbd> (info-bulle « Aujourd’hui »). Le jour courant porte une pastille bleue en vue Mois et une ligne rouge marque l’heure actuelle dans les vues Semaine et Jour.</p></details>
+                <details><summary>D’où vient la couleur d’un rendez-vous ?</summary><p>Le trait de gauche du bloc prend la couleur de l’employé, choisie dans sa fiche ; il est gris pour un rendez-vous sans employé. La pastille du bas donne l’état : Terminé, En cours ou À venir.</p></details>
+                <details><summary>Je ne vois pas mes rendez-vous du samedi.</summary><p>L’agenda n’affiche que les jours ouvrables, du lundi au vendredi. Ouvrez ces rendez-vous depuis la fiche du client ou déplacez-les en semaine.</p></details>
+                <details><summary>Puis-je placer un rendez-vous avant 7 h ou après 20 h ?</summary><p>Oui, depuis le panneau « Mettre à jour le RDV » : la liste « Heure » va de 6 h à 21 h par pas de 15 minutes. La grille s’élargit d’elle-même pour montrer ces rendez-vous. La fiche complète, elle, propose 07:00 à 20:00.</p></details>
+                <details><summary>Que se passe-t-il quand je clique sur « Facturer » dans la fiche ?</summary><p>Le rendez-vous est d’abord enregistré (les validations s’appliquent), puis une nouvelle facture client préremplie s’ouvre dans la même fenêtre. Si une validation échoue, la facture ne s’ouvre pas.</p></details>
+                <details><summary>Que deviennent les rendez-vous d’un employé supprimé ?</summary><p>Ils sont conservés, mais n’ont plus d’employé : ils apparaissent en vue « Toute l’équipe », avec un trait gris, et bloquent la plage de tous dans la recherche de plages libres.</p></details>
+                <details><summary>Comment revenir rapidement à aujourd’hui ?</summary><p>Cliquez sur <kbd>Aujourd’hui</kbd>. La colonne du jour est soulignée en bleu et une ligne rouge marque l’heure actuelle.</p></details>
             </section>
 
             <section id="fr-glossaire">
@@ -201,15 +188,16 @@
                 <table>
                     <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
                     <tbody>
-                        <tr><td>Ressource</td><td>Employé auquel un rendez-vous peut être attribué. Seuls les employés actifs sont des ressources de l’agenda.</td></tr>
-                        <tr><td>Type de rendez-vous</td><td>Catégorie (« Nom (N min) ») qui fixe la durée par défaut et la couleur du bloc dans l’agenda.</td></tr>
-                        <tr><td>Statut</td><td>Étape du rendez-vous : Planifié, Confirmé, Terminé, Annulé ou No-show (client absent).</td></tr>
-                        <tr><td>No-show</td><td>Statut indiquant que le client ne s’est pas présenté.</td></tr>
-                        <tr><td>Toute la journée</td><td>Rendez-vous sans heure affichée, placé dans la rangée « Toute la journée » des vues Semaine et Jour.</td></tr>
+                        <tr><td>Ressource</td><td>Employé auquel un rendez-vous peut être confié. Seuls les employés actifs sont des ressources de l’agenda.</td></tr>
+                        <tr><td>Période</td><td>Les cinq jours ouvrables affichés côte à côte ; <kbd>‹</kbd> et <kbd>›</kbd> passent à la période précédente ou suivante.</td></tr>
+                        <tr><td>Plage libre</td><td>Moment, entre 8 h et 18 h, où l’employé n’a aucun autre rendez-vous pour toute la durée voulue.</td></tr>
+                        <tr><td>Échange</td><td>Chacun des deux rendez-vous prend la plage de l’autre en gardant sa propre durée.</td></tr>
+                        <tr><td>Conflit</td><td>Chevauchement avec un autre rendez-vous du même employé ; signalé en rouge, sans bloquer l’enregistrement.</td></tr>
+                        <tr><td>Type de rendez-vous</td><td>Catégorie (« Nom (N min) ») qui fixe la durée par défaut dans la fiche.</td></tr>
+                        <tr><td>Statut</td><td>Étape du rendez-vous : Planifié, Confirmé, Terminé, Annulé ou No-show (client absent). « Annuler le RDV » le passe à Annulé.</td></tr>
                         <tr><td>Récurrence</td><td>Fréquence de répétition enregistrée dans la fiche (jour, semaine, 2 semaines, mois, an) ; l’agenda n’en génère pas les occurrences.</td></tr>
-                        <tr><td>Rappel</td><td>Délai avant le début (de 5 minutes à 1 jour) à partir duquel une notification apparaît dans la page Agenda.</td></tr>
-                        <tr><td>Glisser-déposer</td><td>Déplacement d’un rendez-vous à la souris, enregistré immédiatement sans confirmation.</td></tr>
-                        <tr><td>Facturer</td><td>Bouton qui enregistre le rendez-vous puis crée une facture client préremplie.</td></tr>
+                        <tr><td>Rappel</td><td>Délai avant le début (de 5 minutes à 1 jour) à partir duquel un avis apparaît dans la page Agenda.</td></tr>
+                        <tr><td>Facturer</td><td>Bouton de la fiche qui enregistre le rendez-vous puis crée une facture client préremplie.</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -221,89 +209,76 @@
 
             <section id="en-calendar">
                 <h2>Agenda</h2>
-                <p>The <span class="chemin">Agenda</span> screen shows the company’s appointments as a calendar. Employees are the agenda’s “resources”: each appointment can be assigned to one of them, and an employee filter lets you display only the appointments you care about. The “Agenda” title sits on the page background; the navigation bar, the employee filter and the calendar are three white cards.</p>
+                <p>The <span class="chemin">Agenda</span> screen shows the “Full calendar”: five business days side by side, hour by hour, with the “Update the appointment” panel on the right. Employees are the calendar’s “resources”: each appointment can be assigned to one of them, and you can show the whole team or a single employee.</p>
 
                 <h3>Purpose</h3>
-                <p>See at a glance the appointments of the month, week or day; create new ones; move them; open their form to edit, delete or invoice them. The employees shown in the agenda are those created in <a href="employes.html#en-employees">Employees</a>.</p>
+                <p>See the week’s appointments at a glance; add new ones; move, swap, reassign or cancel them without opening their record; open the full record for everything else (customer, type, recurrence, reminder, invoicing). The employees offered are those created in <a href="employes.html#en-employees">Employees</a>.</p>
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>‹</kbd> (tooltip “Previous”) and <kbd>›</kbd> (tooltip “Next”): move back or forward by one month, one week or one day, depending on the current view.</li>
-                    <li><kbd>●</kbd> (tooltip “Today”): returns to today’s date.</li>
-                    <li><kbd>Month</kbd>, <kbd>Week</kbd>, <kbd>Day</kbd>: switch views. The active view’s pill is white.</li>
-                    <li><kbd>+ Appointment</kbd> (blue pill, to the right of the title): opens the “Appointment” window with a new appointment set at 9:00 a.m. on the displayed date.</li>
-                    <li><strong>Double-click on a month cell</strong>: creates a new appointment at 9:00 a.m. on that day.</li>
-                    <li><strong>Double-click on a 30-minute slot</strong> (Week and Day views): creates a new appointment at that exact time.</li>
-                    <li><strong>Click on an appointment</strong>: opens its form for editing (see <a href="#en-appointment">Appointment form</a>).</li>
-                    <li><strong>Drag and drop an appointment</strong>: moves it.
-                        <ul>
-                            <li>In Month view, the date changes but the time and duration are kept.</li>
-                            <li>In Week or Day view, the start time becomes the 30-minute slot where you release the appointment; the duration is kept.</li>
-                            <li>The change is saved immediately, without confirmation.</li>
-                        </ul>
-                    </li>
-                    <li><strong>“+N de plus”</strong> (“N more”, shown in French; Month view, when a day has more than 3 appointments): switches to Day view on that day.</li>
+                    <li><kbd>‹</kbd> (tooltip “Previous 5 days”) and <kbd>›</kbd> (“Next 5 days”): move back or forward five business days. The period shown is in the middle, for example “22 to 28 October 2026”.</li>
+                    <li><kbd>Today</kbd>: returns to the period starting today (greyed out when you are already there).</li>
+                    <li><strong>Employee list</strong>: “Whole team (N)” or one employee. The choice is remembered in your browser and shared with the dashboard.</li>
+                    <li><kbd>+ Appt</kbd> (blue pill): opens the “Appointment” window on the next free one-hour slot.</li>
+                    <li><strong>Click a free hour</strong> in a column: opens a new appointment at that time (to the half hour); the tooltip reads “New appointment on … at …”.</li>
+                    <li><strong>Click an appointment</strong>: selects it (light blue background) and opens the “Update the appointment” panel on the right.</li>
                 </ul>
-                <p>The appointment window is modal: it measures about 1300 × 700 pixels and shrinks on small screens. The agenda reloads automatically as soon as you close it.</p>
 
-                <h3>Views</h3>
-                <table>
-                    <thead><tr><th>View</th><th>What it shows</th></tr></thead>
-                    <tbody>
-                        <tr><td>Month</td><td>A grid of 6 weeks × 7 days starting on Monday (Mon … Sun). Today has a blue dot. Days from neighbouring months are greyed out. Each cell shows at most 3 appointments, preceded by their time (except “all day” ones); beyond that, “+N de plus” appears.</td></tr>
-                        <tr><td>Week</td><td>Seven columns, one per day, split into 30-minute slots from 07:00 to 20:00. An “All day” row sits at the top. A red line marks the current time.</td></tr>
-                        <tr><td>Day</td><td>A single day, with the same 30-minute slots from 07:00 to 20:00, the “All day” row and the red current-time line.</td></tr>
-                    </tbody>
-                </table>
-                <p>In the Week and Day views, an appointment that starts before 7 a.m. or ends after 8 p.m. is clipped to those limits on screen (it is not modified). Each block shows “start – end”, the title, then “· customer”.</p>
-
-                <h3>Filters and search</h3>
-                <p>The “Employees :” filter shows one coloured dot per active employee. The colour is the one chosen in the employee’s form.</p>
+                <h3>The “Update the appointment” panel</h3>
                 <ul>
-                    <li>Initially, all employees are displayed.</li>
-                    <li>The first click on a dot hides that employee only (the others stay visible).</li>
-                    <li>Subsequent clicks hide or show each employee individually.</li>
-                    <li>When every employee is selected again, the filter returns to “all”.</li>
-                    <li>Appointments <strong>without an employee</strong> always stay visible, whatever the filter.</li>
+                    <li>The top card recalls the customer, subject, day, time, location and employee.</li>
+                    <li><strong>Day</strong> (three weeks of business days), <strong>Time</strong> (15-minute steps, 6 AM to 9 PM), <strong>Duration</strong> (15 minutes to 8 hours) and <strong>Employee</strong>: change whatever you need.</li>
+                    <li><strong>Switch to a free slot</strong>: up to four slots where the employee is free for the same duration; one click applies them.</li>
+                    <li><strong>Swap its slot with another appointment</strong>: each appointment takes the other’s slot and keeps its own duration.</li>
+                    <li>A blue box sums up the change (“New: …”); a red box flags a conflict with another appointment of the same employee.</li>
+                    <li><kbd>Save the change</kbd>: saves, then reloads the calendar (greyed out until something changes).</li>
+                    <li><kbd>Open the full record</kbd>: opens the “Appointment” window (see <a href="#en-appointment">Appointment form</a>).</li>
+                    <li><kbd>Cancel the appointment</kbd>: asks “Cancel this appointment?”, sets its status to “Cancelled” and removes it from the calendar.</li>
+                    <li><kbd>Close</kbd>: closes the panel without changing anything.</li>
                 </ul>
-                <p>There is no text search box in the agenda: navigate with the period buttons and the views.</p>
+                <p>With no appointment selected, the panel recalls how it works and offers the next six free one-hour slots; one click books one.</p>
 
                 <h3>Data displayed</h3>
                 <table>
-                    <thead><tr><th>Item</th><th>Content</th></tr></thead>
+                    <thead><tr><th>Data</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Title</td><td>The title entered in the appointment form.</td></tr>
-                        <tr><td>Time</td><td>The start time (Month view) or “start – end” (Week and Day views). Nothing for an “all day” appointment.</td></tr>
-                        <tr><td>Customer</td><td>The customer’s name: in the tooltip in Month view (after “—”), or in the block in the Week and Day views (preceded by “·”).</td></tr>
-                        <tr><td>Colour</td><td>The block colour comes from the appointment <strong>type</strong> (blue by default), not from the employee.</td></tr>
+                        <tr><td>Header</td><td>“Full calendar”, then the number of appointments and hours scheduled in the period, and “whole team” or the name of the employee shown.</td></tr>
+                        <tr><td>Day column</td><td>The day (“Thu 22 · today”, underlined in blue for today), the number of appointments and hours, then the appointments at their time. A red line marks the current time.</td></tr>
+                        <tr><td>Hours</td><td>8 AM to 6 PM, widened automatically to earlier or later appointments.</td></tr>
+                        <tr><td>Appointment</td><td>“start–end” and the customer, the subject, then the status: <strong>Completed</strong> (green), <strong>In progress</strong> (blue), <strong>Upcoming</strong> (grey). Overlapping appointments share the column width.</td></tr>
+                        <tr><td>Colour</td><td>The block’s left stripe takes the employee’s colour (grey without an employee); the colour legend shows in “Whole team” view.</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Rules</h3>
                 <ul>
-                    <li>Only the company’s <strong>active</strong> employees appear as resources (filter and “Employee” list of the form). A deactivated employee disappears from the agenda, but their appointments remain.</li>
-                    <li><strong>Reminders</strong>: if an appointment has a reminder, a notification appears at the top right of the screen for 8 seconds: “🔔 Title” then “At HH:MM — Customer”. It fires between (start time − reminder lead) and the appointment’s start time.</li>
-                    <li>Reminders are checked every minute, <strong>only while the Agenda page is open</strong> in your browser.</li>
-                    <li>In Month view, an appointment spanning several days appears in every cell concerned.</li>
+                    <li>Only business days (Monday to Friday) are shown. A Saturday or Sunday appointment remains visible in its record, but not in the grid.</li>
+                    <li>“Cancelled” appointments do not appear.</li>
+                    <li>A slot is free when the employee has no other appointment overlapping it; an appointment without an employee blocks the slot for everyone. Free slots are searched from 8 AM to 6 PM, in 30-minute steps.</li>
+                    <li>A conflict is flagged but does not prevent saving.</li>
+                    <li><strong>Reminders</strong>: if one of today’s appointments has a reminder, a notice shows for 8 seconds at the top right (“Reminder: at …”) between the reminder time and the start of the appointment. The check runs every minute, <strong>as long as the Agenda page is open</strong>.</li>
                 </ul>
 
                 <h3>Step by step</h3>
-                <p>To create an appointment at a precise time:</p>
+                <p>To move an appointment and hand it to a colleague:</p>
                 <ol>
-                    <li>Switch to <kbd>Week</kbd> or <kbd>Day</kbd> view and go to the right date with <kbd>‹</kbd> / <kbd>›</kbd>.</li>
-                    <li>Double-click the desired 30-minute slot.</li>
-                    <li>Fill in at least the “Title”, check the end date and time, then click <kbd>Save</kbd>.</li>
+                    <li>Find the right period with <kbd>‹</kbd> / <kbd>›</kbd> and click the appointment.</li>
+                    <li>Choose the new <strong>Employee</strong>, then one of the “Switch to a free slot” options (or set Day and Time).</li>
+                    <li>Check the “New: …” box and that no conflict is flagged, then click <kbd>Save the change</kbd>.</li>
                 </ol>
-                <p>To move an appointment to another day without changing its time: switch to <kbd>Month</kbd> view and drag the appointment into the new cell.</p>
 
                 <h3>Messages</h3>
-                <p>The Agenda screen has no messages of its own. Drag-and-drop moves happen without confirmation or notice.</p>
+                <ul class="messages">
+                    <li><span class="msg">“Conflict: … already has … at this time.”</span> — the chosen employee has another appointment overlapping the new slot; choose a free slot or another employee.</li>
+                    <li><span class="msg">“Cancel this appointment?”</span> — confirm to set the appointment to “Cancelled”.</li>
+                    <li><span class="msg">“No free slot in the next three weeks.”</span> — the calendar is full from 8 AM to 6 PM; add the appointment at a precise time from the grid.</li>
+                </ul>
 
                 <h3>Tips and pitfalls</h3>
-                <div class="piege" data-titre="Pitfall">A misplaced drag and drop changes the appointment immediately, without confirmation. To undo, drag it back to its original position.</div>
-                <div class="attention" data-titre="Warning">The reminder is neither an e-mail nor a system notification: it only shows inside the Agenda page, and only if that page is open at the scheduled moment.</div>
-                <div class="note" data-titre="Good to know">In Month view a day shows only 3 appointments; click “+N de plus” (N more) to see the full day.</div>
-                <div class="astuce" data-titre="Tip">To see only your own appointments, remember that the first click on a dot hides the employee you clicked. Click the dots of the colleagues you want to hide instead, or click your own dot twice after hiding the others.</div>
+                <div class="piege" data-titre="Pitfall">“Cancel the appointment” does not delete it: it becomes “Cancelled” and disappears from the calendar. To delete it for good, open the full record and click <kbd>Delete</kbd>.</div>
+                <div class="attention" data-titre="Warning">The reminder is neither an email nor a system notification: it only appears in the Agenda page, and only if it is open at the right time.</div>
+                <div class="note" data-titre="Good to know">The employee chosen in the calendar is the same as in the dashboard’s Agenda block: changing one changes the other.</div>
+                <div class="astuce" data-titre="Tip">To switch two customers, use “Swap its slot with another appointment”: one save moves both appointments.</div>
             </section>
 
             <section id="en-appointment">
@@ -379,16 +354,16 @@
 
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
-                <details><summary>Why doesn’t an employee appear in the “Employees :” filter or in the “Employee” list?</summary><p>Only <strong>active</strong> employees are offered. Open their form in <a href="employes.html#en-employee-form">Employees</a> and check “Active employee”.</p></details>
-                <details><summary>I moved an appointment by mistake. How do I undo?</summary><p>The move is saved immediately, without confirmation. Simply drag the appointment back to its original position (same view), or open its form and correct the date and time.</p></details>
+                <details><summary>Why doesn’t an employee appear in the employee list?</summary><p>Only <strong>active</strong> employees are offered. Open their form in <a href="employes.html#en-employee-form">Employees</a> and check “Active employee”.</p></details>
+                <details><summary>I saved a wrong change. How do I undo it?</summary><p>Click the appointment again, set back the original day, time, duration or employee, then <kbd>Save the change</kbd>. After a swap, swap the same two appointments again.</p></details>
                 <details><summary>The reminder did not show. Why?</summary><p>Reminders are checked every minute, and only while the Agenda page is open in your browser. They send no e-mail and no system notification. Keep the Agenda open during the reminder period.</p></details>
                 <details><summary>Why does my weekly appointment appear only once?</summary><p>The recurrence is stored in the form, but the agenda shows only the entered occurrence; no repetition is generated automatically. Create the following occurrences as needed.</p></details>
-                <details><summary>Why doesn’t the appointment block have the employee’s colour?</summary><p>In the agenda, the block colour comes from the appointment <strong>type</strong> (blue by default). The employee colour is used only for the dots of the “Employees :” filter.</p></details>
-                <details><summary>I only see 3 appointments in a day of the month, but I have more.</summary><p>Month view limits the display to 3 appointments per cell. Click “+N de plus” to switch to Day view on that date and see everything.</p></details>
-                <details><summary>Can I enter an appointment before 7 a.m. or after 8 p.m.?</summary><p>No: the time lists run from 07:00 to 20:00 in 30-minute steps. An existing appointment beyond those limits is clipped on screen, but not modified.</p></details>
-                <details><summary>What happens when I click “Invoice”?</summary><p>The appointment is saved first (validations apply), then a new pre-filled customer invoice opens in the same window. If a validation fails, the invoice does not open.</p></details>
-                <details><summary>What becomes of a deleted employee’s appointments?</summary><p>They are kept, but no longer have an employee. They stay visible in the agenda whatever the filter, since appointments without an employee are always displayed.</p></details>
-                <details><summary>How do I quickly get back to today?</summary><p>Click the <kbd>●</kbd> button (tooltip “Today”). Today has a blue dot in Month view and a red line marks the current time in the Week and Day views.</p></details>
+                <details><summary>Where does an appointment’s colour come from?</summary><p>The block’s left stripe takes the employee’s colour, chosen in their form; it is grey for an appointment without an employee. The bottom chip gives the status: Completed, In progress or Upcoming.</p></details>
+                <details><summary>I can’t see my Saturday appointments.</summary><p>The calendar shows business days only, Monday to Friday. Open those appointments from the customer’s record or move them to a weekday.</p></details>
+                <details><summary>Can I place an appointment before 7 a.m. or after 8 p.m.?</summary><p>Yes, from the “Update the appointment” panel: the “Time” list runs from 6 AM to 9 PM in 15-minute steps. The grid widens by itself to show these appointments. The full record offers 07:00 to 20:00.</p></details>
+                <details><summary>What happens when I click “Invoice” in the record?</summary><p>The appointment is saved first (validations apply), then a new pre-filled customer invoice opens in the same window. If a validation fails, the invoice does not open.</p></details>
+                <details><summary>What becomes of a deleted employee’s appointments?</summary><p>They are kept, but no longer have an employee: they show in “Whole team” view with a grey stripe, and block the slot for everyone in the free-slot search.</p></details>
+                <details><summary>How do I quickly get back to today?</summary><p>Click <kbd>Today</kbd>. Today’s column is underlined in blue and a red line marks the current time.</p></details>
             </section>
 
             <section id="en-glossary">
@@ -397,14 +372,15 @@
                     <thead><tr><th>Term</th><th>Definition</th></tr></thead>
                     <tbody>
                         <tr><td>Resource</td><td>Employee to whom an appointment can be assigned. Only active employees are agenda resources.</td></tr>
-                        <tr><td>Appointment type</td><td>Category (“Name (N min)”) that sets the default duration and the block colour in the agenda.</td></tr>
-                        <tr><td>Status</td><td>Stage of the appointment: Planned, Confirmed, Completed, Cancelled or No-show.</td></tr>
-                        <tr><td>No-show</td><td>Status indicating that the customer did not turn up.</td></tr>
-                        <tr><td>All day</td><td>Appointment without a displayed time, placed in the “All day” row of the Week and Day views.</td></tr>
+                        <tr><td>Period</td><td>The five business days shown side by side; <kbd>‹</kbd> and <kbd>›</kbd> move to the previous or next period.</td></tr>
+                        <tr><td>Free slot</td><td>Time, between 8 AM and 6 PM, when the employee has no other appointment for the whole duration needed.</td></tr>
+                        <tr><td>Swap</td><td>Each of the two appointments takes the other’s slot while keeping its own duration.</td></tr>
+                        <tr><td>Conflict</td><td>Overlap with another appointment of the same employee; flagged in red, without blocking the save.</td></tr>
+                        <tr><td>Appointment type</td><td>Category (“Name (N min)”) that sets the default duration in the record.</td></tr>
+                        <tr><td>Status</td><td>Stage of the appointment: Planned, Confirmed, Completed, Cancelled or No-show. “Cancel the appointment” sets it to Cancelled.</td></tr>
                         <tr><td>Recurrence</td><td>Repetition frequency stored in the form (day, week, 2 weeks, month, year); the agenda does not generate the occurrences.</td></tr>
-                        <tr><td>Reminder</td><td>Lead time before the start (from 5 minutes to 1 day) from which a notification appears in the Agenda page.</td></tr>
-                        <tr><td>Drag and drop</td><td>Moving an appointment with the mouse, saved immediately without confirmation.</td></tr>
-                        <tr><td>Invoice</td><td>Button that saves the appointment and then creates a pre-filled customer invoice.</td></tr>
+                        <tr><td>Reminder</td><td>Lead time before the start (from 5 minutes to 1 day) from which a notice appears in the Agenda page.</td></tr>
+                        <tr><td>Invoice</td><td>Record button that saves the appointment and then creates a pre-filled customer invoice.</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -416,89 +392,76 @@
 
             <section id="es-agenda">
                 <h2>Agenda</h2>
-                <p>La pantalla <span class="chemin">Agenda</span> muestra las citas de la empresa en forma de calendario. Los empleados son los «recursos» de la agenda: cada cita puede asignarse a uno de ellos, y un filtro por empleado permite mostrar solo las citas que le interesan. El título «Agenda» se apoya en el fondo de la página; la barra de navegación, el filtro de empleados y el calendario son tres tarjetas blancas.</p>
+                <p>La pantalla <span class="chemin">Agenda</span> muestra «Toda la agenda»: cinco días hábiles lado a lado, hora por hora, con el panel «Actualizar la cita» a la derecha. Los empleados son los «recursos» de la agenda: cada cita puede asignarse a uno de ellos, y puede mostrar todo el equipo o un solo empleado.</p>
 
                 <h3>Objetivo</h3>
-                <p>Ver de un vistazo las citas del mes, de la semana o del día; crear nuevas; moverlas; abrir su ficha para modificarlas, eliminarlas o facturarlas. Los empleados que aparecen en la agenda son los creados en <a href="employes.html#es-empleados">Empleados</a>.</p>
+                <p>Ver de un vistazo las citas de la semana; añadir nuevas; moverlas, intercambiarlas, asignarlas a otro empleado o cancelarlas sin abrir su ficha; abrir la ficha completa para lo demás (cliente, tipo, recurrencia, recordatorio, facturación). Los empleados propuestos son los creados en <a href="employes.html">Empleados</a>.</p>
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>‹</kbd> (ayuda «Anterior») y <kbd>›</kbd> (ayuda «Siguiente»): retroceden o avanzan un mes, una semana o un día, según la vista activa.</li>
-                    <li><kbd>●</kbd> (ayuda «Hoy»): vuelve a la fecha de hoy.</li>
-                    <li><kbd>Mes</kbd>, <kbd>Semana</kbd>, <kbd>Día</kbd>: cambian de vista. La píldora de la vista activa es blanca.</li>
-                    <li><kbd>+ Cita</kbd> (píldora azul, a la derecha del título): abre la ventana «Cita» con una cita nueva fijada a las 9:00 en la fecha mostrada.</li>
-                    <li><strong>Doble clic en una casilla del mes</strong>: crea una cita nueva a las 9:00 de ese día.</li>
-                    <li><strong>Doble clic en una franja de 30 minutos</strong> (vistas Semana y Día): crea una cita nueva a esa hora exacta.</li>
-                    <li><strong>Clic en una cita</strong>: abre su ficha para modificarla (vea <a href="#es-cita">Ficha de cita</a>).</li>
-                    <li><strong>Arrastrar y soltar una cita</strong>: la mueve.
-                        <ul>
-                            <li>En la vista Mes cambia la fecha, pero se conservan la hora y la duración.</li>
-                            <li>En la vista Semana o Día, la hora de inicio pasa a ser la franja de 30 minutos donde suelta la cita; la duración se conserva.</li>
-                            <li>El guardado es inmediato, sin confirmación.</li>
-                        </ul>
-                    </li>
-                    <li><strong>«+N de plus»</strong> («N más», se muestra en francés; vista Mes, cuando un día tiene más de 3 citas): pasa a la vista Día en ese día.</li>
+                    <li><kbd>‹</kbd> (información «5 días anteriores») y <kbd>›</kbd> («5 días siguientes»): retroceden o avanzan cinco días hábiles. El período mostrado está en el centro, por ejemplo «22 al 28 de octubre de 2026».</li>
+                    <li><kbd>Hoy</kbd>: vuelve al período que empieza hoy (gris cuando ya está en él).</li>
+                    <li><strong>Lista de empleados</strong>: «Todo el equipo (N)» o un empleado. La elección se guarda en su navegador y se comparte con el panel.</li>
+                    <li><kbd>+ Cita</kbd> (píldora azul): abre la ventana «Cita» en el próximo hueco libre de una hora.</li>
+                    <li><strong>Clic en una hora libre</strong> de una columna: abre una nueva cita a esa hora (a la media hora); la información indica «Nueva cita el … a las …».</li>
+                    <li><strong>Clic en una cita</strong>: la selecciona (fondo azul claro) y abre el panel «Actualizar la cita» a la derecha.</li>
                 </ul>
-                <p>La ventana de la cita es modal: mide unos 1300 × 700 píxeles y se reduce en pantallas pequeñas. La agenda se recarga automáticamente en cuanto la cierra.</p>
 
-                <h3>Vistas</h3>
-                <table>
-                    <thead><tr><th>Vista</th><th>Qué muestra</th></tr></thead>
-                    <tbody>
-                        <tr><td>Mes</td><td>Cuadrícula de 6 semanas × 7 días que empieza el lunes (Lun … Dom). El día de hoy lleva un punto azul. Los días de los meses vecinos aparecen en gris. Cada casilla muestra como máximo 3 citas, precedidas de su hora (salvo las de «todo el día»); si hay más, aparece «+N de plus».</td></tr>
-                        <tr><td>Semana</td><td>Siete columnas, una por día, divididas en franjas de 30 minutos de 07:00 a 20:00. Arriba hay una fila «Todo el día». Una línea roja indica la hora actual.</td></tr>
-                        <tr><td>Día</td><td>Un solo día, con las mismas franjas de 30 minutos de 07:00 a 20:00, la fila «Todo el día» y la línea roja de la hora actual.</td></tr>
-                    </tbody>
-                </table>
-                <p>En las vistas Semana y Día, una cita que empieza antes de las 7 h o termina después de las 20 h se recorta en pantalla a esos límites (no se modifica). Cada bloque muestra «inicio – fin», el título y luego «· cliente».</p>
-
-                <h3>Filtros y búsqueda</h3>
-                <p>El filtro «Empleados :» presenta un punto de color por cada empleado activo. El color es el elegido en la ficha del empleado.</p>
+                <h3>El panel «Actualizar la cita»</h3>
                 <ul>
-                    <li>Al principio se muestran todos los empleados.</li>
-                    <li>El primer clic en un punto oculta solo a ese empleado (los demás siguen visibles).</li>
-                    <li>Los clics siguientes ocultan o vuelven a mostrar cada empleado individualmente.</li>
-                    <li>Cuando todos los empleados vuelven a estar seleccionados, el filtro regresa a «todos».</li>
-                    <li>Las citas <strong>sin empleado</strong> permanecen siempre visibles, sea cual sea el filtro.</li>
+                    <li>La tarjeta superior recuerda el cliente, el asunto, el día, la hora, el lugar y el empleado.</li>
+                    <li><strong>Día</strong> (tres semanas de días hábiles), <strong>Hora</strong> (pasos de 15 minutos, de 6:00 a 21:00), <strong>Duración</strong> (15 minutos a 8 horas) y <strong>Empleado</strong>: cambie lo que necesite.</li>
+                    <li><strong>Cambiar a un hueco libre</strong>: hasta cuatro huecos donde el empleado está libre con la misma duración; un clic los aplica.</li>
+                    <li><strong>Intercambiar su hueco con otra cita</strong>: cada cita toma el hueco de la otra y conserva su propia duración.</li>
+                    <li>Un recuadro azul resume el cambio («Nuevo: …»); un recuadro rojo señala un conflicto con otra cita del mismo empleado.</li>
+                    <li><kbd>Guardar el cambio</kbd>: guarda y recarga la agenda (gris mientras nada cambie).</li>
+                    <li><kbd>Abrir la ficha completa</kbd>: abre la ventana «Cita» (vea <a href="#es-cita">Ficha de cita</a>).</li>
+                    <li><kbd>Cancelar la cita</kbd>: pregunta «¿Cancelar esta cita?», pasa su estado a «Cancelado» y la retira de la agenda.</li>
+                    <li><kbd>Cerrar</kbd>: cierra el panel sin cambiar nada.</li>
                 </ul>
-                <p>No hay campo de búsqueda por texto en la agenda: navegue con los botones de periodo y las vistas.</p>
+                <p>Sin cita seleccionada, el panel recuerda el modo de uso y propone los seis próximos huecos libres de una hora; un clic reserva uno.</p>
 
                 <h3>Datos mostrados</h3>
                 <table>
                     <thead><tr><th>Dato</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Título</td><td>El título escrito en la ficha de la cita.</td></tr>
-                        <tr><td>Hora</td><td>La hora de inicio (vista Mes) o «inicio – fin» (vistas Semana y Día). Nada para una cita de «todo el día».</td></tr>
-                        <tr><td>Cliente</td><td>El nombre del cliente: en la ayuda emergente en la vista Mes (después de «—»), o en el bloque en las vistas Semana y Día (precedido de «·»).</td></tr>
-                        <tr><td>Color</td><td>El color del bloque procede del <strong>tipo</strong> de cita (azul por defecto), no del empleado.</td></tr>
+                        <tr><td>Encabezado</td><td>«Toda la agenda», luego el número de citas y de horas planificadas del período, y «todo el equipo» o el nombre del empleado mostrado.</td></tr>
+                        <tr><td>Columna de un día</td><td>El día («Jue 22 · hoy», subrayado en azul para hoy), el número de citas y de horas, luego las citas a su hora. Una línea roja marca la hora actual.</td></tr>
+                        <tr><td>Horas</td><td>De 8:00 a 18:00, ampliadas automáticamente a las citas más tempranas o más tardías.</td></tr>
+                        <tr><td>Cita</td><td>«inicio–fin» y el cliente, el asunto, luego el estado: <strong>Terminado</strong> (verde), <strong>En curso</strong> (azul), <strong>Próximo</strong> (gris). Las citas que se superponen comparten el ancho de la columna.</td></tr>
+                        <tr><td>Color</td><td>El trazo izquierdo del bloque toma el color del empleado (gris sin empleado); la leyenda de colores aparece en la vista «Todo el equipo».</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Reglas</h3>
                 <ul>
-                    <li>Solo los empleados <strong>activos</strong> de la empresa aparecen como recursos (filtro y lista «Empleado» de la ficha). Un empleado desactivado desaparece de la agenda, pero sus citas se conservan.</li>
-                    <li><strong>Recordatorios</strong>: si una cita tiene recordatorio, aparece una notificación arriba a la derecha durante 8 segundos: «🔔 Título» y luego «A las HH:MM — Cliente». Se activa entre (hora de inicio − antelación del recordatorio) y la hora de inicio de la cita.</li>
-                    <li>La comprobación de recordatorios se hace cada minuto, <strong>solo mientras la página Agenda esté abierta</strong> en su navegador.</li>
-                    <li>En la vista Mes, una cita que abarca varios días aparece en cada casilla afectada.</li>
+                    <li>Solo se muestran los días hábiles (lunes a viernes). Una cita del sábado o del domingo sigue visible en su ficha, pero no en la cuadrícula.</li>
+                    <li>Las citas «Cancelado» no aparecen.</li>
+                    <li>Un hueco está libre cuando el empleado no tiene otra cita que lo superponga; una cita sin empleado bloquea el hueco para todos. Los huecos libres se buscan de 8:00 a 18:00, en pasos de 30 minutos.</li>
+                    <li>Un conflicto se señala, pero no impide guardar.</li>
+                    <li><strong>Recordatorios</strong>: si una cita de hoy tiene recordatorio, un aviso aparece 8 segundos arriba a la derecha («Recordatorio: a las …») entre la hora del recordatorio y el inicio de la cita. La verificación ocurre cada minuto, <strong>mientras la página Agenda esté abierta</strong>.</li>
                 </ul>
 
                 <h3>Paso a paso</h3>
-                <p>Para crear una cita a una hora precisa:</p>
+                <p>Para mover una cita y asignarla a un colega:</p>
                 <ol>
-                    <li>Pase a la vista <kbd>Semana</kbd> o <kbd>Día</kbd> y vaya a la fecha correcta con <kbd>‹</kbd> / <kbd>›</kbd>.</li>
-                    <li>Haga doble clic en la franja de 30 minutos deseada.</li>
-                    <li>Rellene al menos el «Título», compruebe la fecha y la hora de fin, y haga clic en <kbd>Guardar</kbd>.</li>
+                    <li>Busque el período con <kbd>‹</kbd> / <kbd>›</kbd> y haga clic en la cita.</li>
+                    <li>Elija el nuevo <strong>Empleado</strong>, luego uno de los huecos de «Cambiar a un hueco libre» (o ajuste Día y Hora).</li>
+                    <li>Verifique el recuadro «Nuevo: …» y que no se señale ningún conflicto, luego haga clic en <kbd>Guardar el cambio</kbd>.</li>
                 </ol>
-                <p>Para mover una cita a otro día sin cambiar la hora: pase a la vista <kbd>Mes</kbd> y arrastre la cita a la nueva casilla.</p>
 
                 <h3>Mensajes</h3>
-                <p>La pantalla Agenda no muestra mensajes propios. El desplazamiento por arrastrar y soltar se hace sin confirmación ni aviso.</p>
+                <ul class="messages">
+                    <li><span class="msg">«Conflicto: … ya tiene … a esta hora.»</span> — el empleado elegido tiene otra cita que se superpone al nuevo hueco; elija un hueco libre u otro empleado.</li>
+                    <li><span class="msg">«¿Cancelar esta cita?»</span> — confirme para pasar la cita a «Cancelado».</li>
+                    <li><span class="msg">«Ningún hueco libre en las próximas tres semanas.»</span> — la agenda está llena de 8:00 a 18:00; añada la cita a una hora precisa desde la cuadrícula.</li>
+                </ul>
 
                 <h3>Consejos y trampas</h3>
-                <div class="piege" data-titre="Trampa">Un arrastre mal colocado modifica la cita de inmediato, sin confirmación. Para deshacerlo, vuelva a arrastrarla a su posición original.</div>
-                <div class="attention" data-titre="Atención">El recordatorio no es un correo ni una notificación del sistema: solo aparece dentro de la página Agenda, y solo si está abierta en el momento previsto.</div>
-                <div class="note" data-titre="Conviene saber">En la vista Mes, un día muestra solo 3 citas; haga clic en «+N de plus» (N más) para ver el día completo.</div>
-                <div class="astuce" data-titre="Consejo">Para ver solo sus propias citas, recuerde que el primer clic en un punto oculta al empleado en el que hizo clic. Haga clic en los puntos de los compañeros que desea ocultar, o haga clic dos veces en el suyo tras ocultar a los demás.</div>
+                <div class="piege" data-titre="Trampa">«Cancelar la cita» no la elimina: pasa a «Cancelado» y desaparece de la agenda. Para eliminarla definitivamente, abra la ficha completa y haga clic en <kbd>Eliminar</kbd>.</div>
+                <div class="attention" data-titre="Atención">El recordatorio no es ni un correo ni una notificación del sistema: solo aparece en la página Agenda, y solo si está abierta en el momento previsto.</div>
+                <div class="note" data-titre="Conviene saber">El empleado elegido en la agenda es el mismo que el del bloque Agenda del panel: cambiar uno cambia el otro.</div>
+                <div class="astuce" data-titre="Consejo">Para intercambiar dos clientes, use «Intercambiar su hueco con otra cita»: un solo guardado mueve ambas citas.</div>
             </section>
 
             <section id="es-cita">
@@ -574,16 +537,16 @@
 
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
-                <details><summary>¿Por qué un empleado no aparece en el filtro «Empleados :» ni en la lista «Empleado»?</summary><p>Solo se proponen los empleados <strong>activos</strong>. Abra su ficha en <a href="employes.html#es-ficha-empleado">Empleados</a> y marque «Empleado activo».</p></details>
-                <details><summary>Moví una cita por error. ¿Cómo lo deshago?</summary><p>El desplazamiento se guarda de inmediato, sin confirmación. Arrastre la cita de vuelta a su posición original (misma vista), o abra su ficha y corrija la fecha y la hora.</p></details>
+                <details><summary>¿Por qué un empleado no aparece en la lista de empleados?</summary><p>Solo se proponen los empleados <strong>activos</strong>. Abra su ficha en <a href="employes.html#es-ficha-empleado">Empleados</a> y marque «Empleado activo».</p></details>
+                <details><summary>Guardé un cambio equivocado. ¿Cómo lo deshago?</summary><p>Haga clic de nuevo en la cita, vuelva a poner el día, la hora, la duración o el empleado de origen y luego <kbd>Guardar el cambio</kbd>. Tras un intercambio, intercambie de nuevo las mismas dos citas.</p></details>
                 <details><summary>El recordatorio no se mostró. ¿Por qué?</summary><p>Los recordatorios se comprueban cada minuto, y solo mientras la página Agenda esté abierta en su navegador. No envían correo ni notificación del sistema. Mantenga la Agenda abierta durante el periodo del recordatorio.</p></details>
                 <details><summary>¿Por qué mi cita semanal aparece una sola vez?</summary><p>La periodicidad se guarda en la ficha, pero la agenda solo muestra la ocurrencia registrada; no se genera ninguna repetición automática. Cree las ocurrencias siguientes según necesite.</p></details>
-                <details><summary>¿Por qué el bloque de la cita no tiene el color del empleado?</summary><p>En la agenda, el color del bloque procede del <strong>tipo</strong> de cita (azul por defecto). El color del empleado se usa solo en los puntos del filtro «Empleados :».</p></details>
-                <details><summary>Solo veo 3 citas en un día del mes, pero tengo más.</summary><p>La vista Mes limita la visualización a 3 citas por casilla. Haga clic en «+N de plus» para pasar a la vista Día en esa fecha y verlo todo.</p></details>
-                <details><summary>¿Puedo registrar una cita antes de las 7 h o después de las 20 h?</summary><p>No: las listas de horas van de 07:00 a 20:00 en pasos de 30 minutos. Una cita existente que supere esos límites se recorta en pantalla, pero no se modifica.</p></details>
-                <details><summary>¿Qué ocurre al hacer clic en «Facturar»?</summary><p>Primero se guarda la cita (se aplican las validaciones) y luego se abre una nueva factura de cliente rellenada en la misma ventana. Si falla una validación, la factura no se abre.</p></details>
-                <details><summary>¿Qué pasa con las citas de un empleado eliminado?</summary><p>Se conservan, pero ya no tienen empleado. Siguen visibles en la agenda sea cual sea el filtro, porque las citas sin empleado se muestran siempre.</p></details>
-                <details><summary>¿Cómo vuelvo rápidamente a hoy?</summary><p>Haga clic en el botón <kbd>●</kbd> (ayuda «Hoy»). El día de hoy lleva un punto azul en la vista Mes y una línea roja marca la hora actual en las vistas Semana y Día.</p></details>
+                <details><summary>¿De dónde viene el color de una cita?</summary><p>El trazo izquierdo del bloque toma el color del empleado, elegido en su ficha; es gris para una cita sin empleado. La etiqueta inferior da el estado: Terminado, En curso o Próximo.</p></details>
+                <details><summary>No veo mis citas del sábado.</summary><p>La agenda solo muestra los días hábiles, de lunes a viernes. Abra esas citas desde la ficha del cliente o muévalas a un día de semana.</p></details>
+                <details><summary>¿Puedo colocar una cita antes de las 7 h o después de las 20 h?</summary><p>Sí, desde el panel «Actualizar la cita»: la lista «Hora» va de 6:00 a 21:00 en pasos de 15 minutos. La cuadrícula se amplía sola para mostrar esas citas. La ficha completa propone de 07:00 a 20:00.</p></details>
+                <details><summary>¿Qué ocurre al hacer clic en «Facturar» en la ficha?</summary><p>Primero se guarda la cita (se aplican las validaciones) y luego se abre una nueva factura de cliente rellenada en la misma ventana. Si falla una validación, la factura no se abre.</p></details>
+                <details><summary>¿Qué pasa con las citas de un empleado eliminado?</summary><p>Se conservan, pero ya no tienen empleado: aparecen en la vista «Todo el equipo» con un trazo gris y bloquean el hueco para todos en la búsqueda de huecos libres.</p></details>
+                <details><summary>¿Cómo vuelvo rápidamente a hoy?</summary><p>Haga clic en <kbd>Hoy</kbd>. La columna de hoy está subrayada en azul y una línea roja marca la hora actual.</p></details>
             </section>
 
             <section id="es-glosario">
@@ -592,14 +555,15 @@
                     <thead><tr><th>Término</th><th>Definición</th></tr></thead>
                     <tbody>
                         <tr><td>Recurso</td><td>Empleado al que puede asignarse una cita. Solo los empleados activos son recursos de la agenda.</td></tr>
-                        <tr><td>Tipo de cita</td><td>Categoría («Nombre (N min)») que fija la duración por defecto y el color del bloque en la agenda.</td></tr>
-                        <tr><td>Estado</td><td>Etapa de la cita: Planificado, Confirmado, Terminado, Cancelado o No se presentó.</td></tr>
-                        <tr><td>No se presentó</td><td>Estado que indica que el cliente no se presentó.</td></tr>
-                        <tr><td>Todo el día</td><td>Cita sin hora mostrada, colocada en la fila «Todo el día» de las vistas Semana y Día.</td></tr>
+                        <tr><td>Período</td><td>Los cinco días hábiles mostrados lado a lado; <kbd>‹</kbd> y <kbd>›</kbd> pasan al período anterior o siguiente.</td></tr>
+                        <tr><td>Hueco libre</td><td>Momento, entre las 8:00 y las 18:00, en que el empleado no tiene otra cita durante toda la duración necesaria.</td></tr>
+                        <tr><td>Intercambio</td><td>Cada una de las dos citas toma el hueco de la otra conservando su propia duración.</td></tr>
+                        <tr><td>Conflicto</td><td>Superposición con otra cita del mismo empleado; se señala en rojo, sin impedir guardar.</td></tr>
+                        <tr><td>Tipo de cita</td><td>Categoría («Nombre (N min)») que fija la duración por defecto en la ficha.</td></tr>
+                        <tr><td>Estado</td><td>Etapa de la cita: Planificado, Confirmado, Terminado, Cancelado o No se presentó. «Cancelar la cita» la pasa a Cancelado.</td></tr>
                         <tr><td>Recurrencia</td><td>Frecuencia de repetición guardada en la ficha (día, semana, 2 semanas, mes, año); la agenda no genera las ocurrencias.</td></tr>
-                        <tr><td>Recordatorio</td><td>Antelación respecto al inicio (de 5 minutos a 1 día) a partir de la cual aparece una notificación en la página Agenda.</td></tr>
-                        <tr><td>Arrastrar y soltar</td><td>Desplazamiento de una cita con el ratón, guardado de inmediato sin confirmación.</td></tr>
-                        <tr><td>Facturar</td><td>Botón que guarda la cita y luego crea una factura de cliente rellenada.</td></tr>
+                        <tr><td>Recordatorio</td><td>Antelación respecto al inicio (de 5 minutos a 1 día) a partir de la cual aparece un aviso en la página Agenda.</td></tr>
+                        <tr><td>Facturar</td><td>Botón de la ficha que guarda la cita y luego crea una factura de cliente rellenada.</td></tr>
                     </tbody>
                 </table>
             </section>
