@@ -1,7 +1,7 @@
 
 (function(){
   var d=document.getElementById('gd-dlg');if(!d||!d.showModal)return;
-  var T=new Date(2027,0,1,0,0,0).getTime(),tm=null;
+  var T=new Date(2027,3,1,0,0,0).getTime(),tm=null;
   function pad(n){return n<10?'0'+n:''+n;}
   function tick(){var r=Math.max(0,T-Date.now()),s=Math.floor(r/1000);
     document.getElementById('gd-d').textContent=Math.floor(s/86400);

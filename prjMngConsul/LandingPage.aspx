@@ -14,7 +14,7 @@
 <meta property="og:image" content="https://60secondes.ca/og-60secondes.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="60secondes — Unir pour grandir. Lancement le 1er janvier 2027.">
+<meta property="og:image:alt" content="60secondes — Unir pour grandir. Lancement le 1er avril 2027.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://60secondes.ca/">
 <link rel="alternate" hreflang="fr-CA" href="https://60secondes.ca/">
@@ -75,7 +75,7 @@
 <section class="hero" aria-labelledby="h-hero">
   <div class="wrap">
     <div>
-      <p class="hero-launch" role="button" tabindex="0" aria-haspopup="dialog"><span aria-hidden="true">●</span><b>Lancement le 1<sup>er</sup> janvier 2027</b></p>
+      <p class="hero-launch" role="button" tabindex="0" aria-haspopup="dialog"><span aria-hidden="true">●</span><b>Lancement le 1<sup>er</sup> avril 2027</b></p>
       <p class="eyebrow">Travailleurs autonomes et PME de 0 à 49 employés</p>
       <h1 id="h-hero" style="margin-top:16px">Votre administration financière <em>100&nbsp;% automatisée</em>.<sup class="n"><a href="#note-6" aria-label="Note 6">6</a></sup></h1>
       <p class="punch">Vous pouvez maintenant vous concentrer sur vos clients&nbsp;!</p>
@@ -178,7 +178,7 @@
       <h2 id="h-how3">Trois étapes. Ensuite, Cortex s'occupe du reste.</h2>
     </div>
     <ol class="how3-steps">
-      <li><span class="how3-n">1</span><h3>Réservez votre place</h3><p>Accès anticipé gratuit et sans engagement. Lancement le 1<sup>er</sup> janvier 2027.</p></li>
+      <li><span class="how3-n">1</span><h3>Réservez votre place</h3><p>Accès anticipé gratuit et sans engagement. Lancement le 1<sup>er</sup> avril 2027.</p></li>
       <li><span class="how3-n">2</span><h3>On transfère vos données</h3><p>Gratuitement et en quelques minutes, depuis votre logiciel actuel : vous-même, votre comptable ou un cabinet certifié.</p></li>
       <li><span class="how3-n">3</span><h3>Cortex s'occupe du reste</h3><p>Il lit, classe, calcule et prépare. Vous répondez seulement aux questions qui méritent votre avis.</p></li>
     </ol>
@@ -680,7 +680,7 @@
           <details><summary>Qui est propriétaire du dossier et des données ?</summary><p>Le client. Il ouvre son compte à son nom et vous invite. Il peut modifier ou retirer votre accès en tout temps, et chaque geste est journalisé.</p></details>
           <details><summary>Puis-je déclencher des paiements pour mon client ?</summary><p>Oui, si votre client vous y autorise. Le client déclenche lui-même ses paiements — fournisseurs, remises, paie — ou donne à votre cabinet l'autorisation de le faire en son nom. Cette autorisation fait partie des permissions qu'il fixe avec vous : il la donne de façon expresse et peut la retirer en tout temps. Chaque déclenchement est journalisé et visible par le client. L'accès de votre cabinet aux renseignements personnels se limite à ce qui est nécessaire, conformément à la Loi 25.</p></details>
           <details><summary>Comment récupérer les données pour préparer les déclarations de revenus ?</summary><p>60secondes vous permettra d'extraire, en quelques clics, les données nécessaires à la préparation des déclarations de revenus de vos clients : balance de vérification codée selon l'IGRF (GIFI), grand livre, conciliations, registre des immobilisations et feuillets de paie. Ces données seront exportées dans un format que vos logiciels d'impôt et de fin d'exercice peuvent importer : aucune ressaisie. Et comme elles sont tenues à jour toute l'année, le dossier est prêt quand la saison commence.</p></details>
-          <details><summary>Quand puis-je commencer ?</summary><p>Lancement le 1<sup>er</sup> janvier 2027. Les cabinets inscrits d'ici là participent au projet pilote, avec 5 à 10 dossiers mesurés sur leurs propres chiffres.</p></details>
+          <details><summary>Quand puis-je commencer ?</summary><p>Lancement le 1<sup>er</sup> avril 2027. Les cabinets inscrits d'ici là participent au projet pilote, avec 5 à 10 dossiers mesurés sur leurs propres chiffres.</p></details>
         </div>
       </div>
       <aside class="fc-cta">
@@ -810,7 +810,7 @@
     <div class="fclub">
       <div class="fclub-l">
         <span class="av-slot" data-av="bonjour" data-size="56"></span>
-        <p class="eyebrow">Avant le lancement du 1<sup>er</sup> janvier 2027</p>
+        <p class="eyebrow">Avant le lancement du 1<sup>er</sup> avril 2027</p>
         <h2 id="h-fclub">Devenez client&#8209;fondateur</h2>
         <p>Avant le lancement, un petit groupe d'entreprises utilise 60secondes avec ses vraies données pour éprouver la plateforme. En échange de vos commentaires :</p>
       </div>
@@ -980,7 +980,7 @@
         <ol id="notes" style="margin:0;padding-left:20px;display:grid;gap:8px">
         <li id="note-1"><strong>Comparaison.</strong> Panier de dix produits pour une société de quatre employés et un professionnel au calendrier ; à chaque fonction, l'option la moins chère offrant une interface française, sinon la moins chère. Prix publics consultés le 8 septembre 2026 (fonctions 1 à 9) et le 17 septembre 2026 (fonctions 10 à 14), avant taxes, bas et haut des fourchettes publiées ; conversion USD au taux de la Banque du Canada du 16 septembre 2026. Modèle type, pas une facture réelle ; les prix de tiers peuvent avoir changé. Hébergement des tiers selon ce que les éditeurs documentent eux-mêmes ; « non documenté » est traité comme « non ». Cortex et la conciliation financière : aucun produit autonome repéré à ces dates. Les marques citées appartiennent à leurs titulaires ; aucune affiliation.</li>
         <li id="note-2"><strong>Prix.</strong> CAD, par mois et par dossier, avant TPS et TVQ. Grille en vigueur au 9 septembre 2026, applicable au lancement ; elle peut être modifiée d'ici la mise en service, avec avis aux personnes inscrites avant toute facturation. Abonnement sans engagement, renouvelé de mois en mois et résiliable en tout temps, avec effet à la fin du mois en cours. La section « 60secondes face à la concurrence » présente, fonction par fonction, les produits du relevé de la note 1 et leurs gammes de prix publiées ; il s'agit d'une information comparative qui ne constitue ni une offre ni une garantie de résultat, et qui porte sur les seuls abonnements, sans le temps de travail.</li>
-        <li id="note-3"><strong>Disponibilité.</strong> Le lancement du 1<sup>er</sup> janvier 2027 est la date prévue et non un engagement. Les demandes d'accès anticipé ne créent aucun contrat, ne réservent aucun prix et n'entraînent aucune facturation. Le portail des cabinets ouvre à la même échéance.</li>
+        <li id="note-3"><strong>Disponibilité.</strong> Le lancement du 1<sup>er</sup> avril 2027 est la date prévue et non un engagement. Les demandes d'accès anticipé ne créent aucun contrat, ne réservent aucun prix et n'entraînent aucune facturation. Le portail des cabinets ouvre à la même échéance.</li>
         <li id="note-4"><strong>Paiements.</strong> 60secondes n'exécute aucun paiement, ne détient aucuns fonds et n'accède à aucun système de paiement : il calcule, prépare et présente le paiement ; le client le déclenche, ou autorise expressément son cabinet comptable certifié à le déclencher en son nom, autorisation qu'il peut retirer en tout temps. L'exécution est prévue par 60sec-Paiement, société affiliée distincte, assujettie à l'enregistrement de fournisseur de services de paiement auprès de la Banque du Canada (Loi sur les activités associées aux paiements de détail), aux obligations de la Loi sur le recyclage des produits de la criminalité et le financement des activités terroristes (CANAFE) et au régime des entreprises de services monétaires de l'Autorité des marchés financiers. Ce service n'est ni offert, ni vendu, ni commercialisé avant l'obtention de ces autorisations, et rien sur cette page ne constitue une offre de services de paiement.</li>
         <li id="note-5"><strong>Hébergement et sécurité.</strong> Serveurs applicatifs, bases de données, boîtes de courriel dédiées, portail des cabinets et copies de sauvegarde hébergés et exploités au Québec et au Canada. Le traitement des pièces et la circulation des données se font sur des infrastructures situées au Québec et au Canada ; aucune donnée ne sort du Canada. Chiffrement en transit (TLS 1.2 ou plus) et au repos, authentification à deux facteurs, journalisation des accès.</li>
         <li id="note-6"><strong>Intelligence artificielle.</strong> Cortex s'appuie sur un modèle de langage fourni par un tiers. Son exploitation sur des infrastructures situées au Canada est soumise aux engagements contractuels de ce fournisseur et à la disponibilité de ses services au Canada ; toute exception serait annoncée au préalable et documentée. Seuls des extraits minimisés lui sont transmis ; ils ne sortent pas du Canada, ne sont pas conservés par ce fournisseur, ne servent pas à entraîner ses modèles et ne comprennent aucune coordonnée bancaire. Une évaluation des facteurs relatifs à la vie privée documente cette communication et est fournie sur demande. Sous un seuil de confiance, la transaction est soumise à votre décision ; le modèle ne déclenche aucun paiement. Conformément à l'article 12.1 de la Loi sur la protection des renseignements personnels dans le secteur privé, vous êtes informé des traitements automatisés, pouvez connaître les principaux facteurs d'un classement et en demander la révision par une personne. Le classement automatisé n'est pas garanti exact : vous demeurez tenu de le vérifier.</li>
@@ -1085,7 +1085,7 @@
   <div class="gd-in" id="gd-step1">
     <button type="button" class="gd-x" id="gd-x" aria-label="Fermer">×</button>
     <div class="gd-top"><span class="gd-flags" aria-hidden="true"><svg class="flag" viewBox="0 0 30 20" width="36" height="24" aria-hidden="true"><rect width="30" height="20" fill="#0F4DA5"/><rect x="13" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/><g fill="#fff"><circle cx="6.5" cy="4" r="1.6"/><circle cx="23.5" cy="4" r="1.6"/><circle cx="6.5" cy="16" r="1.6"/><circle cx="23.5" cy="16" r="1.6"/></g></svg><svg class="flag" viewBox="0 0 30 20" width="36" height="24" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect width="7.5" height="20" fill="#D52B1E"/><rect x="22.5" width="7.5" height="20" fill="#D52B1E"/><path d="M15 4.5l1 2 1.2-.6-.4 2.8 1.8-1.7.5 1.1 1.8-.4-.7 2 .9.5-3 2.4.4 1.1-2.9-.4v2.6h-1.2v-2.6l-2.9.4.4-1.1-3-2.4.9-.5-.7-2 1.8.4.5-1.1 1.8 1.7-.4-2.8 1.2.6z" fill="#D52B1E"/></svg></span><p class="gd-k">Le grand départ</p></div>
-    <h2 class="gd-h" id="gd-h">60secondes sera lancée le <em>1<sup>er</sup> janvier 2027</em>.</h2>
+    <h2 class="gd-h" id="gd-h">60secondes sera lancée le <em>1<sup>er</sup> avril 2027</em>.</h2>
     <div class="gd-cd" aria-label="Temps restant avant le lancement">
       <div><output id="gd-d">0</output><span>jours</span></div>
       <div><output id="gd-hh">0</output><span>heures</span></div>
