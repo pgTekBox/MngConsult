@@ -85,6 +85,19 @@
     .ag-btn.clair:hover{ background:#E8EDF5; }
     .ag-btn.rouge{ background:#FFFFFF; color:#A3261C; border-color:#E35D55; }
     .ag-btn.rouge:hover{ background:#FDECEA; }
+    .ag-panneau h2.dem{ color:#A3261C; display:flex; align-items:center; gap:8px; }
+    .ag-panneau h2.dem span{ min-width:22px; height:22px; padding:0 6px; box-sizing:border-box; border-radius:999px; background:#E35D55; color:#FFFFFF; font-size:12px; letter-spacing:0; display:inline-flex; align-items:center; justify-content:center; }
+    .ag-dem{ padding:12px; border-radius:16px; background:#FFFFFF; border-left:5px solid #1B4F9C; display:flex; flex-direction:column; gap:8px; }
+    .ag-dem .l1{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+    .ag-dem .quand{ font-size:12px; color:#5B6B86; }
+    .ag-dem .qui{ display:flex; flex-direction:column; gap:2px; }
+    .ag-dem .qui b{ font-size:16px; } .ag-dem .qui span{ font-size:13px; color:#44536E; }
+    .ag-dem .texte{ font-size:14px; font-style:italic; color:#0E1F3D; }
+    .ag-dem .acts{ display:flex; flex-wrap:wrap; gap:6px; }
+    .ag-dem .acts button{ min-height:36px; padding:0 12px; border:1.5px solid #1B4F9C; border-radius:999px; background:#FFFFFF; color:#1B4F9C; font-size:13px; font-weight:800; }
+    .ag-dem .acts button:hover{ background:#E3EBF7; }
+    .ag-dem .acts button.prim{ background:#1B4F9C; color:#FFFFFF; }
+    .ag-dem .acts button.prim:hover{ background:#143A73; }
     .ag-rangee{ display:flex; flex-wrap:wrap; gap:8px; }
     .ag-rangee .ag-btn{ flex:1 1 auto; }
 </style>
@@ -350,9 +363,62 @@
                 se.addEventListener('change', function () { onchange(se.value); peindre(); });
                 l.appendChild(se); return l;
             }
+            // =================== RDV demandé ===================
+            // Les demandes des clients : nouveau RDV, déplacement, annulation. Accepter crée,
+            // déplace ou annule le RDV ; refuser ne change rien à l'agenda.
+            var TYPES = {
+                Nouveau: ['#E3EBF7', '#143A73', '#1B4F9C', T.tNouveau],
+                Modification: ['#FBF1DC', '#7A5200', '#7A5200', T.tModification],
+                Annulation: ['#FDECEA', '#A3261C', '#A3261C', T.tAnnulation]
+            };
+            var CANAUX = { Texto: T.cTexto, Courriel: T.cCourriel, Telephone: T.cTelephone, Web: T.cWeb };
+            function ilya(min) { return min < 60 ? fmt(T.ilyaMin, Math.max(1, min)) : min < 1440 ? fmt(T.ilyaH, Math.floor(min / 60)) : fmt(T.ilyaJ, Math.floor(min / 1440)); }
+            function peindreDemandes(p) {
+                var D = M.demandes || [];
+                if (!D.length) return;
+                var h = el('h2', 'dem', T.rdvDemande + ' '); h.appendChild(el('span', '', String(D.length))); p.appendChild(h);
+                D.forEach(function (q) {
+                    var ty = TYPES[q.type] || TYPES.Nouveau;
+                    var c = el('div', 'ag-dem'); c.style.borderLeftColor = ty[2];
+                    var l1 = el('div', 'l1'); var tc = el('span', 'ag-chip', ty[3]); tc.style.background = ty[0]; tc.style.color = ty[1];
+                    l1.appendChild(tc); l1.appendChild(el('span', 'quand', ilya(q.depuis) + ' · ' + fmt(T.parCanal, CANAUX[q.canal] || q.canal))); c.appendChild(l1);
+                    var qui = el('div', 'qui'); qui.appendChild(el('b', '', q.client || '—'));
+                    if (q.rdvId && q.rdvJour) qui.appendChild(el('span', '', fmt(T.rdvDu, jLong(q.rdvJour), fH(q.rdvDeb)) + (q.rdvTitre ? ' · ' + q.rdvTitre : '')));
+                    if (q.type !== 'Annulation' && q.souhJour) qui.appendChild(el('span', '', fmt(T.souhaite, jLong(q.souhJour), fH(q.souhDeb))));
+                    c.appendChild(qui);
+                    if (q.message) c.appendChild(el('span', 'texte', '« ' + q.message + ' »'));
+                    var acts = el('div', 'acts');
+                    if (q.type === 'Annulation') {
+                        var ca = bouton('prim', T.confirmerAnnul);
+                        ca.addEventListener('click', function () { envoyer('demande', { id: q.id, decision: 'Acceptee' }); });
+                        acts.appendChild(ca);
+                    } else {
+                        // La plage souhaitée, puis des plages libres de la même durée, pour deux choix en tout.
+                        var duree = q.type === 'Modification' ? q.rdvDuree : q.souhDuree, choix = [];
+                        if (q.souhJour && q.souhDeb >= 0 && q.souhJour >= M.aujourdhui) choix.push({ j: q.souhJour, h: q.souhDeb });
+                        plagesLibres(q.type === 'Modification' ? q.rdvEmp : '', duree, 3, q.rdvId).forEach(function (x) {
+                            if (choix.length < 2 && !choix.some(function (y) { return y.j === x.j && y.h === x.h; })) choix.push(x);
+                        });
+                        choix.forEach(function (x) {
+                            var b = bouton('prim', fmt(T.accepter, jCourt(x.j) + ' · ' + fH(x.h)));
+                            b.title = jLong(x.j) + ', ' + fH(x.h) + '–' + fH(x.h + duree);
+                            b.addEventListener('click', function () { envoyer('demande', { id: q.id, decision: 'Acceptee', jour: x.j, deb: x.h, duree: duree }); });
+                            acts.appendChild(b);
+                        });
+                    }
+                    var rf = bouton('', T.refuser);
+                    rf.addEventListener('click', function () { if (window.confirm(T.confirmRefus)) envoyer('demande', { id: q.id, decision: 'Refusee' }); });
+                    acts.appendChild(rf);
+                    c.appendChild(acts);
+                    p.appendChild(c);
+                });
+            }
+
             function peindrePanneau() {
                 var p = el('aside', 'ag-panneau');
+                if (M.msg) p.appendChild(el('div', 'ag-msg conflit', M.msg));
                 if (!s.ed) {
+                    peindreDemandes(p);
                     p.appendChild(el('h2', '', T.majAide));
                     p.appendChild(el('p', '', T.aide));
                     p.appendChild(el('h2', '', T.plagesLibres));

@@ -40,6 +40,7 @@
     .ac-pill:hover{ color:#0E1F3D; background:#F7F9FC; }
     .ac-pill b{ font-size:14px; }
     .ac-pill .chv{ padding:0 4px; color:#44536E; }
+    .ac-pill.dem{ padding:0 9px 0 12px; gap:6px; border-color:#E35D55; }
     .ac-pill.mt{ padding:2px 10px; flex-direction:column; align-items:flex-start; justify-content:center; gap:0; line-height:1.1; }
     .ac-pill.mt span{ font-size:12px; font-weight:800; color:#0E1F3D; }
     .ac-pill.mt.actif{ border-color:#E35D55; color:#A3261C; }
@@ -319,6 +320,13 @@
         salut.appendChild(col); f.appendChild(salut);
 
         var pills = el('div', 'ac-pills');
+        // RDV demandé : des clients demandent un RDV, ou de déplacer ou d'annuler un RDV (réponse dans l'Agenda)
+        if (M.demandes > 0) {
+            var pd = el('a', 'ac-pill dem'); pd.href = 'wbfAgenda.aspx'; pd.title = T.rdvDemandeTip;
+            pd.setAttribute('aria-label', T.rdvDemande + ' : ' + M.demandes + ' — ' + T.rdvDemandeTip);
+            pd.appendChild(el('b', '', T.rdvDemande)); pd.appendChild(el('span', 'ac-rond r', String(M.demandes)));
+            pills.appendChild(pd);
+        }
         // Activité à faire : rouge, jaune
         var pa = el('span', 'ac-pill'); pa.appendChild(el('b', '', T.activiteAFaire));
         [['r', nR, T.indR], ['y', nY, T.indY]].forEach(function (x) {

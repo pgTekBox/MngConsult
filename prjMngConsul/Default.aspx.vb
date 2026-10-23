@@ -194,6 +194,7 @@ Public Class _Default
             .lang = CurrentLang,
             .banque = New With {.aCompte = aCompte, .lib = libCompte, .solde = If(aCompte, Montant(encaisse), ""), .maj = majCompte},
             .entete = entete,
+            .demandes = CompterDemandesRdv(),
             .activites = acts,
             .agenda = BatirAgenda(),
             .t = Textes()
@@ -341,6 +342,19 @@ Public Class _Default
         End Try
     End Function
 
+    ''' <summary>Les demandes de RDV des clients en attente (nouveau, déplacement, annulation ; s0910, T328).</summary>
+    Private Function CompterDemandesRdv() As Integer
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0910GetRdvDemandes", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return 0
+            Return ds.Tables(0).Rows.Count
+        Catch
+            Return 0
+        End Try
+    End Function
+
     ''' <summary>Les tâches en attente d'une décision (même décompte que la pastille du menu, s0745).</summary>
     Private Function CompterApprobations() As Integer
         Try
@@ -437,7 +451,7 @@ Public Class _Default
         Dim cles As String() = {
             "bonjour", "bonjourNom", "gUrgent1", "gUrgentN", "gVeille", "gOk",
             "enPremier", "rienUrgent", "assistant60", "a60Aria", "a60Retour", "a60RetourTip",
-            "activiteAFaire", "indR", "indY", "messages", "msgAria",
+            "activiteAFaire", "indR", "indY", "messages", "msgAria", "rdvDemande", "rdvDemandeTip",
             "compteOp", "voirMontant", "masquerMontant", "brancher",
             "agenda", "agendaAria", "agendaTip", "agendaDe", "equipeN",
             "plagesLibres", "plagesAria", "plagesVide", "plageTip", "agAuj", "agAujAbr", "agRdvH", "agEmployes",
@@ -480,6 +494,8 @@ Public Class _Default
             Case "activiteAFaire" : Return Choose3(lang, "Activité à faire", "Activities to do", "Actividades por hacer")
             Case "indR" : Return Choose3(lang, "{0} activité(s) en retard, à faire obligatoirement", "{0} overdue activity(ies), must be done", "{0} actividad(es) atrasada(s), obligatorias")
             Case "indY" : Return Choose3(lang, "{0} activité(s) dont la date approche", "{0} activity(ies) coming due", "{0} actividad(es) cuya fecha se acerca")
+            Case "rdvDemande" : Return Choose3(lang, "RDV demandé", "Requested appt", "Cita solicitada")
+            Case "rdvDemandeTip" : Return Choose3(lang, "Des clients demandent un RDV, ou de déplacer ou d'annuler un RDV : ouvrez l'Agenda pour répondre", "Customers are asking for an appointment, or to move or cancel one: open the Calendar to answer", "Unos clientes piden una cita, o moverla o cancelarla: abra la Agenda para responder")
             Case "messages" : Return Choose3(lang, "Messages", "Messages", "Mensajes")
             Case "msgAria" : Return Choose3(lang, "Ouvrir le centre de messages", "Open the message center", "Abrir el centro de mensajes")
             Case "compteOp" : Return Choose3(lang, "Compte d'opérations", "Operating account", "Cuenta operativa")

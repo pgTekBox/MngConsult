@@ -67,6 +67,23 @@ Public Class wbfAgenda
                         Deplacer(CInt(a("Id")), bDeb, bDeb + (aFin - aDeb))
                         Deplacer(CInt(b("Id")), aDeb, aDeb + (bFin - bDeb))
                     End If
+                Case "demande"
+                    ' Accepter (avec la plage choisie, au besoin) ou refuser une demande de RDV (s0911).
+                    Dim p As New Collection
+                    p.Add(New SqlParameter("@CompanyGUID", Company))
+                    p.Add(New SqlParameter("@Id", CInt(d("id"))))
+                    p.Add(New SqlParameter("@Decision", CStr(d("decision"))))
+                    If d("jour") IsNot Nothing AndAlso d("deb") IsNot Nothing Then
+                        Dim debut As Date = Date.ParseExact(CStr(d("jour")), "yyyy-MM-dd", CultureInfo.InvariantCulture).AddMinutes(CInt(d("deb")))
+                        p.Add(New SqlParameter("@Debut", debut))
+                        p.Add(New SqlParameter("@Fin", debut.AddMinutes(Math.Max(5, CInt(d("duree"))))))
+                    End If
+                    p.Add(New SqlParameter("@UserName", If(User.Identity.Name, "")))
+                    Dim ds As DataSet = ExecuteSQLds("s0911TraiterRdvDemande", p)
+                    If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 AndAlso
+                       Not CBool(ds.Tables(0).Rows(0)("Ok")) Then
+                        Session("AgendaMsg") = Txt(ds.Tables(0).Rows(0)("Msg"))
+                    End If
                 Case "annuler"
                     Dim r As DataRow = LireRdv(CInt(d("id")))
                     If r IsNot Nothing Then
@@ -210,8 +227,14 @@ Public Class wbfAgenda
             Next
         End If
 
+        ' Un message laissé par le dernier changement (une demande déjà traitée, par exemple)
+        Dim msg As String = If(TryCast(Session("AgendaMsg"), String), "")
+        Session.Remove("AgendaMsg")
+
         Return New With {
             .lang = CurrentLang,
+            .msg = msg,
+            .demandes = LireDemandes(),
             .jours = jours.Select(Function(j) j.ToString("yyyy-MM-dd")).ToList(),
             .prec = PasserJoursOuvrables(debut, -5).ToString("yyyy-MM-dd"),
             .suiv = jours(5).ToString("yyyy-MM-dd"),
@@ -221,6 +244,42 @@ Public Class wbfAgenda
             .rdv = rdv,
             .t = Textes()
         }
+    End Function
+
+    ''' <summary>
+    ''' Les demandes de RDV en attente (s0910, T328) : nouveau RDV, déplacement ou annulation,
+    ''' avec la plage souhaitée et le RDV visé.
+    ''' </summary>
+    Private Function LireDemandes() As List(Of Object)
+        Dim liste As New List(Of Object)
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0910GetRdvDemandes", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return liste
+        For Each r As DataRow In ds.Tables(0).Rows
+            Dim sDeb As Date? = If(IsDBNull(r("DebutSouhaite")), CType(Nothing, Date?), CDate(r("DebutSouhaite")))
+            Dim sFin As Date? = If(IsDBNull(r("FinSouhaitee")), CType(Nothing, Date?), CDate(r("FinSouhaitee")))
+            Dim rDeb As Date? = If(IsDBNull(r("RdvDebut")), CType(Nothing, Date?), CDate(r("RdvDebut")))
+            Dim rFin As Date? = If(IsDBNull(r("RdvFin")), CType(Nothing, Date?), CDate(r("RdvFin")))
+            liste.Add(New With {
+                .id = CInt(r("Id")),
+                .type = Txt(r("TypeDemande")),
+                .canal = Txt(r("Canal")),
+                .message = Txt(r("Message")),
+                .depuis = CInt(r("MinutesDepuis")),
+                .client = Txt(r("NomClient")),
+                .souhJour = If(sDeb.HasValue, sDeb.Value.ToString("yyyy-MM-dd"), ""),
+                .souhDeb = If(sDeb.HasValue, sDeb.Value.Hour * 60 + sDeb.Value.Minute, -1),
+                .souhDuree = If(sDeb.HasValue AndAlso sFin.HasValue, CInt((sFin.Value - sDeb.Value).TotalMinutes), 60),
+                .rdvId = If(IsDBNull(r("AppointmentId")), 0, CInt(r("AppointmentId"))),
+                .rdvTitre = Txt(r("RdvTitre")),
+                .rdvJour = If(rDeb.HasValue, rDeb.Value.ToString("yyyy-MM-dd"), ""),
+                .rdvDeb = If(rDeb.HasValue, rDeb.Value.Hour * 60 + rDeb.Value.Minute, -1),
+                .rdvDuree = If(rDeb.HasValue AndAlso rFin.HasValue, CInt((rFin.Value - rDeb.Value).TotalMinutes), 60),
+                .rdvEmp = If(IsDBNull(r("RdvEmployeId")), "", r("RdvEmployeId").ToString())
+            })
+        Next
+        Return liste
     End Function
 
     Private Shared Function PasserJoursOuvrables(d As Date, n As Integer) As Date
@@ -255,7 +314,10 @@ Public Class wbfAgenda
             "plusRdv", "aide", "lTermine", "lAFacturer", "chipAFacturer", "lEnCours", "lAVenir", "auj", "rdvH", "nouveauIci",
             "majTitre", "majAide", "plagesLibres", "aucunePlage", "jour", "heure", "duree", "employe", "aucunEmploye",
             "plageLibre", "echanger", "aucunEchange", "conflit", "changement", "enregistrer", "ficheComplete",
-            "annulerRdv", "confirmAnnuler", "fermer", "winRdv", "facturable", "rappelA"
+            "annulerRdv", "confirmAnnuler", "fermer", "winRdv", "facturable", "rappelA",
+            "rdvDemande", "tNouveau", "tModification", "tAnnulation", "ilyaMin", "ilyaH", "ilyaJ", "parCanal",
+            "cTexto", "cCourriel", "cTelephone", "cWeb", "souhaite", "rdvDu", "accepter", "refuser", "confirmRefus",
+            "confirmerAnnul"
         }
         Dim t As New Dictionary(Of String, String)
         For Each k As String In cles : t(k) = L(k) : Next
@@ -307,6 +369,24 @@ Public Class wbfAgenda
             Case "confirmAnnuler" : Return Choose3(lang, "Annuler ce rendez-vous ?", "Cancel this appointment?", "¿Cancelar esta cita?")
             Case "fermer" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
             Case "facturable" : Return Choose3(lang, "Terminé : il peut être facturé depuis la fiche.", "Completed: it can be invoiced from the record.", "Terminada: puede facturarse desde la ficha.")
+            Case "rdvDemande" : Return Choose3(lang, "RDV demandé", "Requested appointments", "Citas solicitadas")
+            Case "tNouveau" : Return Choose3(lang, "Nouveau RDV demandé", "New appointment request", "Nueva cita solicitada")
+            Case "tModification" : Return Choose3(lang, "Demande de déplacement", "Request to move", "Solicitud de cambio")
+            Case "tAnnulation" : Return Choose3(lang, "Demande d'annulation", "Cancellation request", "Solicitud de cancelación")
+            Case "ilyaMin" : Return Choose3(lang, "il y a {0} min", "{0} min ago", "hace {0} min")
+            Case "ilyaH" : Return Choose3(lang, "il y a {0} h", "{0} h ago", "hace {0} h")
+            Case "ilyaJ" : Return Choose3(lang, "il y a {0} j", "{0} d ago", "hace {0} d")
+            Case "parCanal" : Return Choose3(lang, "par {0}", "by {0}", "por {0}")
+            Case "cTexto" : Return Choose3(lang, "texto", "text", "SMS")
+            Case "cCourriel" : Return Choose3(lang, "courriel", "email", "correo")
+            Case "cTelephone" : Return Choose3(lang, "téléphone", "phone", "teléfono")
+            Case "cWeb" : Return Choose3(lang, "le web", "the web", "la web")
+            Case "souhaite" : Return Choose3(lang, "Souhaité : {0} à {1}", "Wanted: {0} at {1}", "Deseado: {0} a las {1}")
+            Case "rdvDu" : Return Choose3(lang, "RDV du {0} à {1}", "Appointment on {0} at {1}", "Cita del {0} a las {1}")
+            Case "accepter" : Return Choose3(lang, "Accepter : {0}", "Accept: {0}", "Aceptar: {0}")
+            Case "refuser" : Return Choose3(lang, "Refuser", "Decline", "Rechazar")
+            Case "confirmRefus" : Return Choose3(lang, "Refuser cette demande ?", "Decline this request?", "¿Rechazar esta solicitud?")
+            Case "confirmerAnnul" : Return Choose3(lang, "Confirmer l'annulation", "Confirm the cancellation", "Confirmar la cancelación")
             Case "rappelA" : Return Choose3(lang, "Rappel : à {0}", "Reminder: at {0}", "Recordatorio: a las {0}")
             Case Else : Return ""
         End Select
