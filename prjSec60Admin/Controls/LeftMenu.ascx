@@ -117,6 +117,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         Cabinets certifiés
                     </a>
+                    <a class="nav-child" href="~/wbfMetiers.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Métiers
+                    </a>
                     <a class="nav-child" href="~/wbfStripeWebhookDiagnostic.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Webhooks Stripe

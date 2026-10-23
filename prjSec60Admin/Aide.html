@@ -66,6 +66,7 @@ ol.etapes li{margin:6px 0}
   <a href="#reservations">Réservations</a>
   <a href="#compagnies">Compagnies &amp; abonnements</a>
   <a href="#cabinets">Cabinets certifiés</a>
+  <a href="#metiers">Métiers</a>
   <a href="#webhooks">Webhooks Stripe et Square</a>
   <a href="#plaid">Connexions Plaid</a>
   <h2>Paie</h2>
@@ -179,6 +180,17 @@ ol.etapes li{margin:6px 0}
 <tr><td>Actif</td><td>Décoché, le cabinet reste dans la console mais n'est plus proposé aux utilisateurs. Préférez-le à la suppression quand le cabinet peut revenir.</td></tr>
 </table>
 <div class="note">La certification elle-même (formation, entente de confidentialité) se règle hors de la console ; ici on inscrit le cabinet une fois qu'elle est acquise. Les cinq cabinets présents à l'installation sont des exemples aux coordonnées fictives (.example, 555) : remplacez-les par les vrais.</div>
+
+<h2 id="metiers">Métiers</h2>
+<p><span class="chemin">wbfMetiers.aspx</span>. La liste des métiers que 60Sec-AI propose dans <span class="chemin">Paramètres › Entreprise › Métier</span> et dans la page « Qui fait quoi » (tables <code>T330Metier</code> et <code>T330MetierProfil</code>). La même liste sert à toutes les compagnies ; 60Sec-AI la relit au plus deux minutes après un changement. Recherche par métier ou famille ; la colonne Compagnies compte celles qui ont choisi le métier ; <kbd>+ Ajouter un métier</kbd> ; la corbeille supprime (confirmation). Fiche (<span class="chemin">wbfMetierEdit.aspx</span>) :</p>
+<table>
+<tr><th>Champ</th><th>Sens</th></tr>
+<tr><td>Nom du métier *</td><td>Le nom affiché aux utilisateurs (« Électricien »). Deux métiers ne peuvent pas porter le même nom. <strong>Renommer</strong> met aussi à jour les compagnies qui avaient choisi l’ancien nom.</td></tr>
+<tr><td>Famille *, Nouvelle famille</td><td>La famille du métier (« Construction et métiers spécialisés ») : « Qui fait quoi » propose aussi les actions de toute la famille. Une nouvelle famille saisie remplace celle de la liste.</td></tr>
+<tr><td>Actif</td><td>Décoché, le métier n’est plus proposé ; les compagnies qui l’ont déjà choisi le gardent.</td></tr>
+<tr><td>Profils (TA, Cie 0, Cie 1-4), Groupe, Taxes</td><td>Les profils d’entreprise pour lesquels le métier est proposé (au moins un), avec leur groupe (« — » ou « Sociétés ») et le régime de taxes (Taxable, Exonéré, Détaxé, Mixte, À valider).</td></tr>
+</table>
+<div class="note">La suppression est refusée quand des compagnies ont choisi le métier : mettez-le plutôt Inactif. Les actions « Qui fait quoi » propres à un métier restent liées à son nom dans <code>js/qui-fait-quoi-data.js</code> : après avoir renommé un métier, ses actions particulières ne s’affichent plus tant que ce fichier n’est pas mis à jour.</div>
 
 <h2 id="webhooks">Webhooks Stripe et Square</h2>
 <p><span class="chemin">wbfStripeWebhookDiagnostic.aspx</span> et <span class="chemin">wbfSquareWebhookDiagnostic.aspx</span>. La surveillance des événements reçus de Stripe (abonnements, factures, paiements, comptes connectés, virements) et de Square (clients, catalogue, factures, paiements, commandes), avec leur traitement. Filtres « Statut » (Tous, Traités, Échoués, En cours, Ignorés), « Type d'event », « Période » (24 h, 7, 30, 90 jours), <kbd>Appliquer filtres</kbd>, <kbd>🔄 Actualiser</kbd>. Un événement « Échoué » se lit avec son message d'erreur ; c'est le premier endroit à regarder quand un paiement ou une synchronisation ne s'est pas reflété dans une compagnie.</p>

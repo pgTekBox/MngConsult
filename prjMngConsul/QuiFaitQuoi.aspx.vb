@@ -29,6 +29,9 @@ Public Class QuiFaitQuoi
 
     Protected ContexteJson As String = "null"
 
+    ''' <summary>Les métiers actifs (T330, s0912), au format de DATA.M ; « [] » laisse ceux du fichier.</summary>
+    Protected MetiersJson As String = "[]"
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not isAuthenticated Then
             If Request.HttpMethod = "POST" Then
@@ -57,6 +60,7 @@ Public Class QuiFaitQuoi
         }
         ' Inséré dans un <script> : « </ » ne doit pas fermer la balise.
         ContexteJson = js.Serialize(ctx).Replace("</", "<\/")
+        MetiersJson = clsQuiFaitQuoiData.LignesJson().Replace("</", "<\/")
     End Sub
 
     ' ---------------------------------------------------------------------

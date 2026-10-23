@@ -83,6 +83,8 @@
 <div class="toast" id="toast" role="status" hidden></div>
 <script>window.QFQ_CONTEXTE = <%= ContexteJson %>;</script>
 <script src="js/qui-fait-quoi-data.js?v=2026102001"></script>
+<%-- Les métiers viennent de la base (T330, gérés dans la console d'administration) ; ceux du fichier servent de secours. --%>
+<script>(function (m) { if (m && m.length) DATA.M = m; })(<%= MetiersJson %>);</script>
 <script src="js/qui-fait-quoi.js?v=2026102104"></script>
 </body>
 </html>
