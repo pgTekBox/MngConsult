@@ -3,10 +3,10 @@ Imports System.Data.SqlClient
 
 ''' <summary>
 ''' La fiche d'un métier (T330Metier, T330MetierProfil), en fenêtre depuis wbfMetiers.aspx :
-''' nom, famille (existante ou nouvelle), actif, et les profils où il existe (TA, Cie 0,
-''' Cie 1-4) avec leur groupe et leurs taxes. s0914 lit, s0915 enregistre (nom unique ;
-''' renommer met à jour le paramètre METIER des compagnies), s0916 supprime (refusé si
-''' des compagnies l'ont choisi), s0917 donne les familles.
+''' nom, famille (choisie parmi T332FamilleMetier), actif, et les profils où il existe
+''' (TA, Cie 0, Cie 1-4) avec leur groupe et leurs taxes. s0914 lit, s0915 enregistre (nom
+''' unique ; renommer met à jour le paramètre METIER des compagnies), s0916 supprime (refusé
+''' si des compagnies l'ont choisi), s0917 donne les familles (wbfFamillesMetier.aspx).
 ''' </summary>
 Public Class wbfMetierEdit
     Inherits clsData
@@ -117,10 +117,9 @@ Public Class wbfMetierEdit
             ShowMsg("Le nom du métier est obligatoire.", isError:=True)
             Return
         End If
-        Dim famille As String = txtNouvelleFamille.Text.Trim()
-        If famille = "" Then famille = ddlFamille.SelectedValue
+        Dim famille As String = ddlFamille.SelectedValue
         If String.IsNullOrWhiteSpace(famille) Then
-            ShowMsg("Choisissez une famille, ou saisissez une nouvelle famille.", isError:=True)
+            ShowMsg("Choisissez une famille.", isError:=True)
             Return
         End If
         Dim profils As New List(Of String)

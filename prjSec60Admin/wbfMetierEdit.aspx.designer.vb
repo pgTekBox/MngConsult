@@ -46,9 +46,6 @@ Partial Public Class wbfMetierEdit
     '''<summary>ddlFamille control.</summary>
     Protected WithEvents ddlFamille As Global.System.Web.UI.WebControls.DropDownList
 
-    '''<summary>txtNouvelleFamille control.</summary>
-    Protected WithEvents txtNouvelleFamille As Global.System.Web.UI.WebControls.TextBox
-
     '''<summary>cbActive control.</summary>
     Protected WithEvents cbActive As Global.System.Web.UI.WebControls.CheckBox
 

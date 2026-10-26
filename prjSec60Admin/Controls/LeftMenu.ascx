@@ -121,6 +121,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         Métiers
                     </a>
+                    <a class="nav-child" href="~/wbfFamillesMetier.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Familles de métiers
+                    </a>
                     <a class="nav-child" href="~/wbfStripeWebhookDiagnostic.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Webhooks Stripe

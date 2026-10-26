@@ -167,15 +167,10 @@
                         <div class="field">
                             <label>Famille *</label>
                             <asp:DropDownList ID="ddlFamille" runat="server" CssClass="sel" />
-                            <div class="hint">« Qui fait quoi » propose aussi les actions de la famille.</div>
+                            <div class="hint">« Qui fait quoi » propose aussi les actions de la famille. Les familles se gèrent dans Abonnements › Familles de métiers.</div>
                         </div>
                     </div>
                     <div class="grid mt12">
-                        <div class="field">
-                            <label>Nouvelle famille</label>
-                            <asp:TextBox ID="txtNouvelleFamille" runat="server" CssClass="inp" MaxLength="100" />
-                            <div class="hint">Remplie, elle remplace la famille choisie dans la liste.</div>
-                        </div>
                         <div class="field">
                             <label>Statut</label>
                             <div class="checks">
