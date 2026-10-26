@@ -757,15 +757,11 @@
                 document.getElementById('nrAide').textContent = choisi ? NR.t.pret : NR.t.reste;
             }
 
-            // Les lieux offerts par le service (aucun lieu choisi dans sa fiche : tous les lieux) ;
-            // sans service choisi, aucun lieu
+            // Les lieux cochés dans la fiche du service ; aucun lieu coché ou aucun service : aucun lieu
             function nrLieuxDuService(typeId) {
-                if (!typeId) return [];
-                var tous = NR.lieux || [], s = NR.services ? NR.services[typeId] : null;
-                if (s && s.lieux && s.lieux.length) {
-                    return tous.filter(function (l) { return s.lieux.indexOf(l.id) >= 0; });
-                }
-                return tous;
+                var s = typeId && NR.services ? NR.services[typeId] : null;
+                if (!s || !s.lieux || !s.lieux.length) return [];
+                return (NR.lieux || []).filter(function (l) { return s.lieux.indexOf(l.id) >= 0; });
             }
 
             // Une puce par lieu ; toucher une puce pose le lieu du RDV

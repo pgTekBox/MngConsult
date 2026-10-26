@@ -109,7 +109,7 @@ Public Class wbfProductEdit
             Case "rdvOffert" : Return Choose3(lang, "Offert en rendez-vous (dans « Nouveau RDV »)", "Offered as an appointment (in « New appointment »)", "Ofrecido como cita (en « Nueva cita »)")
             Case "rdvDuree" : Return Choose3(lang, "Durée du rendez-vous", "Appointment duration", "Duración de la cita")
             Case "rdvLieux" : Return Choose3(lang, "Lieux offerts", "Offered locations", "Lugares ofrecidos")
-            Case "rdvLieuxHint" : Return Choose3(lang, "Aucun lieu coché : tous les lieux actifs sont offerts. Les lieux se gèrent dans Produits et services › Lieux.", "No location checked: all active locations are offered. Locations are managed in Products and services › Locations.", "Ningún lugar marcado: se ofrecen todos los lugares activos. Los lugares se gestionan en Productos y servicios › Lugares.")
+            Case "rdvLieuxHint" : Return Choose3(lang, "Seuls les lieux cochés sont offerts dans le rendez-vous ; aucun lieu coché : aucun lieu offert. Les lieux se gèrent dans Produits et services › Lieux.", "Only the checked locations are offered in the appointment; none checked: no location offered. Locations are managed in Products and services › Locations.", "Solo los lugares marcados se ofrecen en la cita; ninguno marcado: ningún lugar ofrecido. Los lugares se gestionan en Productos y servicios › Lugares.")
             Case "inactif" : Return Choose3(lang, "inactif", "inactive", "inactivo")
             Case Else : Return ""
         End Select

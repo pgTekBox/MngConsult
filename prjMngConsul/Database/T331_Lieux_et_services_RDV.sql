@@ -8,8 +8,8 @@
 -- en rendez-vous, puis les lieux du service choisi.
 --
 --   T331Lieu           un lieu : nom (unique par compagnie), type, adresse, actif
---   T331ServiceLieu    les lieux d'un service (T075Products) ; aucun lieu choisi
---                      = tous les lieux actifs de la compagnie
+--   T331ServiceLieu    les lieux d'un service (T075Products) : seuls les lieux
+--                      cochés sont offerts dans le rendez-vous (aucun = aucun lieu)
 --
 -- Un produit est offert en rendez-vous quand T075Products.Appointment = 1, ou
 -- quand Appointment est NULL et que c'est un service (TypeArticle = 'service',
@@ -200,7 +200,7 @@ GO
 
 -- -----------------------------------------------------------------------------
 -- Enregistre l'offre en rendez-vous, la durée et les lieux d'un service.
---   @LieuIds : « 1,4,7 » ; vide = aucun lieu choisi (tous les lieux offerts).
+--   @LieuIds : « 1,4,7 » ; vide = aucun lieu offert.
 --   Seuls les lieux de la compagnie sont retenus.
 -- -----------------------------------------------------------------------------
 CREATE OR ALTER PROCEDURE dbo.s0923SaveServiceRdv
@@ -233,7 +233,7 @@ GO
 
 -- -----------------------------------------------------------------------------
 -- (Nouveau RDV) Les services actifs offerts en rendez-vous, par nom :
---   Duree (60 min si elle manque), Prix, LieuIds « 1,4 » (vide = tous les lieux) ;
+--   Duree (60 min si elle manque), Prix, LieuIds « 1,4 » (vide = aucun lieu) ;
 -- puis les lieux actifs de la compagnie.
 -- -----------------------------------------------------------------------------
 CREATE OR ALTER PROCEDURE dbo.s0924GetServicesRdv
