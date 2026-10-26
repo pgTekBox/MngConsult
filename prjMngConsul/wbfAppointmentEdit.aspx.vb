@@ -103,8 +103,12 @@ Public Class wbfAppointmentEdit
             Next
         End If
 
+        If Services.Count = 0 AndAlso Lieux.Count = 0 Then LoadTypes(remplirListe:=False)
+
         Dim modele = New With {
             .lang = CurrentLang,
+            .services = Services,
+            .lieux = Lieux,
             .base = base.ToString("yyyy-MM-dd"),
             .semaines = SEMAINES,
             .aujourdhui = Date.Today.ToString("yyyy-MM-dd"),
@@ -132,7 +136,8 @@ Public Class wbfAppointmentEdit
                 .aucunClient = T("Aucun client", "No customer", "Ningún cliente"),
                 .aucunService = T("Aucun service", "No service", "Ningún servicio"),
                 .actuelle = T("Plage actuelle", "Current slot", "Horario actual"),
-                .avec = T("avec", "with", "con")
+                .avec = T("avec", "with", "con"),
+                .avantTaxes = T("avant taxes", "before taxes", "antes de impuestos")
             }
         }
         PlagesJson = JsonConvert.SerializeObject(modele, New JsonSerializerSettings With {
@@ -299,51 +304,68 @@ Public Class wbfAppointmentEdit
         End If
     End Sub
 
+    ''' <summary>Les services du dropdown : nom, durée, prix et lieux, par Id (pour le JS).</summary>
+    Private ReadOnly Services As New Dictionary(Of String, Object)
+    ''' <summary>Les lieux actifs de la compagnie (Produits et services › Lieux).</summary>
+    Private ReadOnly Lieux As New List(Of Object)
+
     ''' <summary>
-    ''' Charge la liste des types de RDV ET construit la map JSON
-    ''' { "Id" : DurationMinutes, ... } pour le JS côté client.
+    ''' Les services offerts en rendez-vous (s0924, Produits et services) dans le dropdown
+    ''' « Quel service ? » (ex. « Massage suédois · 1 h · 95 $ »), la map JSON
+    ''' { "Id" : durée } pour le JS, et les lieux de chaque service.
     ''' </summary>
-    Private Sub LoadTypes()
+    Private Sub LoadTypes(Optional remplirListe As Boolean = True)
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", Company))
-        Dim ds As DataSet = ExecuteSQLds("s0105GetAppointmentTypes", p)
+        Dim ds As DataSet = ExecuteSQLds("s0924GetServicesRdv", p)
 
-        rddlType.Items.Clear()
-        rddlType.Items.Add(New DropDownListItem("-- Aucun --", ""))
+        ' Sur un retour au serveur, la liste vit dans le ViewState : seules les données sont relues.
+        If remplirListe Then
+            rddlType.Items.Clear()
+            rddlType.Items.Add(New DropDownListItem(T("-- Aucun --", "-- None --", "-- Ninguno --"), ""))
+        End If
 
-        Dim sb As New StringBuilder()
-        sb.Append("{")
-        Dim first As Boolean = True
-
+        Dim durees As New Dictionary(Of String, Integer)
         If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
             For Each r As DataRow In ds.Tables(0).Rows
-
                 Dim idStr As String = r("Id").ToString()
-                Dim typeName As String = r("TypeName").ToString()
+                Dim nom As String = Txt(r("Nom"))
+                Dim duree As Integer = Convert.ToInt32(r("Duree"))
+                Dim prix As Decimal = Convert.ToDecimal(r("Prix"))
 
-                ' Affichage avec durée (ex : "Consultation (30 min)")
-                Dim durMin As Integer = 0
-                If Not (r("DurationMinutes") Is DBNull.Value) Then
-                    Integer.TryParse(r("DurationMinutes").ToString(), durMin)
-                End If
+                Dim texte As String = nom & " · " & DureeTexte(duree)
+                If prix > 0 Then texte &= " · " & PrixTexte(prix)
+                If remplirListe Then rddlType.Items.Add(New DropDownListItem(texte, idStr))
 
-                Dim displayText As String = typeName
-                If durMin > 0 Then
-                    displayText &= " (" & durMin.ToString() & " min)"
-                End If
-
-                rddlType.Items.Add(New DropDownListItem(displayText, idStr))
-
-                ' Construction du JSON
-                If Not first Then sb.Append(",")
-                sb.Append("""").Append(idStr).Append(""":").Append(durMin)
-                first = False
+                durees(idStr) = duree
+                Services(idStr) = New With {
+                    .nom = nom,
+                    .prix = prix,
+                    .lieux = Txt(r("LieuIds")).Split(","c).Where(Function(s) s <> "").Select(Function(s) CInt(s)).ToList()
+                }
+            Next
+        End If
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 1 Then
+            For Each r As DataRow In ds.Tables(1).Rows
+                Lieux.Add(New With {.id = CInt(r("Id")), .nom = Txt(r("Nom")), .type = Txt(r("TypeLieu")), .adr = Txt(r("Adresse"))})
             Next
         End If
 
-        sb.Append("}")
-        hfTypeDurations.Value = sb.ToString()
+        If remplirListe Then hfTypeDurations.Value = JsonConvert.SerializeObject(durees)
     End Sub
+
+    ''' <summary>45 min, 1 h, 1 h 30…</summary>
+    Private Shared Function DureeTexte(m As Integer) As String
+        If m < 60 Then Return m & " min"
+        Return (m \ 60) & " h" & If(m Mod 60 > 0, " " & (m Mod 60).ToString("00"), "")
+    End Function
+
+    ''' <summary>95 $ ou 95,50 $ (fr, es) ; $95 ou $95.50 (en).</summary>
+    Private Function PrixTexte(prix As Decimal) As String
+        Dim fmt As String = If(prix = Decimal.Truncate(prix), "0", "0.00")
+        If CurrentLang = "en" Then Return "$" & prix.ToString(fmt, Globalization.CultureInfo.InvariantCulture)
+        Return prix.ToString(fmt, Globalization.CultureInfo.GetCultureInfo("fr-CA")) & " $"
+    End Function
 
     Private Sub LoadAppointment(id As Integer)
         Dim p As New Collection
@@ -370,7 +392,12 @@ Public Class wbfAppointmentEdit
 
         SafeSelect(rddlCustomer, If(r("CustomerId") Is DBNull.Value, "", r("CustomerId").ToString()))
         SafeSelect(rddlEmployee, If(r("EmployeeId") Is DBNull.Value, "", r("EmployeeId").ToString()))
-        SafeSelect(rddlType, If(r("AppointmentTypeId") Is DBNull.Value, "", r("AppointmentTypeId").ToString()))
+        ' Le service du RDV, même s'il n'est plus offert en rendez-vous
+        Dim typeId As String = If(r("AppointmentTypeId") Is DBNull.Value, "", r("AppointmentTypeId").ToString())
+        If typeId <> "" AndAlso rddlType.FindItemByValue(typeId) Is Nothing AndAlso Txt(r("TypeName")) <> "" Then
+            rddlType.Items.Add(New DropDownListItem(Txt(r("TypeName")), typeId))
+        End If
+        SafeSelect(rddlType, typeId)
         SafeSelect(rddlStatus, If(r("Status") Is DBNull.Value, "Planifié", r("Status").ToString()))
         SafeSelect(rddlRecurrence, If(r("RecurrenceRule") Is DBNull.Value, "", r("RecurrenceRule").ToString()))
         SafeSelect(rddlReminder, If(r("ReminderMinutes") Is DBNull.Value, "", r("ReminderMinutes").ToString()))

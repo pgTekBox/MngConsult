@@ -27,6 +27,7 @@ Public Class wbfProductEdit
             BindDDL()
             ProductId = CInt(Request.QueryString("Id"))
             BindData()
+            BindRdv()
         End If
         ApplyLocalization()
     End Sub
@@ -64,6 +65,11 @@ Public Class wbfProductEdit
         SetLiteral(Me, "litActiveProduct", L("activeProduct"))
         SetLiteral(Me, "litIdLabel", L("idLabel"))
         SetLiteral(Me, "litCreatedLabel", L("createdLabel"))
+        SetLiteral(Me, "litRdv", L("rdv"))
+        SetLiteral(Me, "litRdvOffert", L("rdvOffert"))
+        SetLiteral(Me, "litRdvDuree", L("rdvDuree"))
+        SetLiteral(Me, "litRdvLieux", L("rdvLieux"))
+        SetLiteral(Me, "litRdvLieuxHint", L("rdvLieuxHint"))
     End Sub
 
     ''' <summary>Traductions de l'interface Édition produit (fr/en/es).</summary>
@@ -99,6 +105,12 @@ Public Class wbfProductEdit
             Case "idLabel" : Return Choose3(lang, "ID :", "ID:", "ID:")
             Case "createdLabel" : Return Choose3(lang, "Créé le :", "Created on:", "Creado el:")
             Case "nameRequired" : Return Choose3(lang, "Le nom du produit est obligatoire.", "The product name is required.", "El nombre del producto es obligatorio.")
+            Case "rdv" : Return Choose3(lang, "Rendez-vous", "Appointments", "Citas")
+            Case "rdvOffert" : Return Choose3(lang, "Offert en rendez-vous (dans « Nouveau RDV »)", "Offered as an appointment (in « New appointment »)", "Ofrecido como cita (en « Nueva cita »)")
+            Case "rdvDuree" : Return Choose3(lang, "Durée du rendez-vous", "Appointment duration", "Duración de la cita")
+            Case "rdvLieux" : Return Choose3(lang, "Lieux offerts", "Offered locations", "Lugares ofrecidos")
+            Case "rdvLieuxHint" : Return Choose3(lang, "Aucun lieu coché : tous les lieux actifs sont offerts. Les lieux se gèrent dans Produits et services › Lieux.", "No location checked: all active locations are offered. Locations are managed in Products and services › Locations.", "Ningún lugar marcado: se ofrecen todos los lugares activos. Los lugares se gestionan en Productos y servicios › Lugares.")
+            Case "inactif" : Return Choose3(lang, "inactif", "inactive", "inactivo")
             Case Else : Return ""
         End Select
     End Function
@@ -146,6 +158,71 @@ Public Class wbfProductEdit
         pAchat.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         pAchat.Add(New SqlClient.SqlParameter("@ClasseParentIds", "7,8"))
         SetDDL(rddlCompteAchat, "Name", "Value", "s0059GetComptesForDDL", pAchat)
+
+        ' Durées de rendez-vous
+        rddlDuree.Items.Clear()
+        For Each m As Integer In {15, 30, 45, 60, 75, 90, 120, 150, 180, 240}
+            rddlDuree.Items.Add(New DropDownListItem(DureeTexte(m), m.ToString()))
+        Next
+        rddlDuree.SelectedValue = "60"
+    End Sub
+
+    ''' <summary>45 min, 1 h, 1 h 30…</summary>
+    Private Shared Function DureeTexte(m As Integer) As String
+        If m < 60 Then Return m & " min"
+        Return (m \ 60) & " h" & If(m Mod 60 > 0, " " & (m Mod 60).ToString("00"), "")
+    End Function
+
+    ''' <summary>
+    ''' Le rendez-vous du service (s0922) : offert, durée, puis tous les lieux de la
+    ''' compagnie, cochés s'il les a choisis. Un nouveau produit n'a que les lieux.
+    ''' </summary>
+    Private Sub BindRdv()
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@ProductId", ProductId))
+        Dim ds As DataSet = ExecuteSQLds("s0922GetServiceRdv", p)
+        If ds Is Nothing OrElse ds.Tables.Count < 2 Then Return
+
+        chkRdv.Checked = False
+        If ds.Tables(0).Rows.Count > 0 Then
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            chkRdv.Checked = CBool(r("Offert"))
+            Dim m As Integer = CInt(r("DurationMinutes"))
+            If m > 0 Then
+                If rddlDuree.FindItemByValue(m.ToString()) Is Nothing Then
+                    rddlDuree.Items.Add(New DropDownListItem(DureeTexte(m), m.ToString()))
+                End If
+                rddlDuree.SelectedValue = m.ToString()
+            End If
+        End If
+
+        cblLieux.Items.Clear()
+        For Each r As DataRow In ds.Tables(1).Rows
+            Dim actif As Boolean = CBool(r("Actif"))
+            Dim it As New ListItem(r("Nom").ToString() & If(actif, "", " (" & L("inactif") & ")"), r("Id").ToString())
+            it.Selected = CBool(r("Choisi"))
+            cblLieux.Items.Add(it)
+        Next
+    End Sub
+
+    ''' <summary>Enregistre l'offre en rendez-vous, la durée et les lieux du service (s0923).</summary>
+    Private Sub SaveRdv()
+        If ProductId <= 0 Then Return
+        Dim ids As New List(Of String)
+        For Each it As ListItem In cblLieux.Items
+            If it.Selected Then ids.Add(it.Value)
+        Next
+        Dim m As Integer = 0
+        Integer.TryParse(rddlDuree.SelectedValue, m)
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@ProductId", ProductId))
+        p.Add(New SqlClient.SqlParameter("@Offert", chkRdv.Checked))
+        p.Add(New SqlClient.SqlParameter("@DurationMinutes", If(m > 0, CObj(m), DBNull.Value)))
+        p.Add(New SqlClient.SqlParameter("@LieuIds", String.Join(",", ids)))
+        ExecuteSQL("s0923SaveServiceRdv", p)
     End Sub
 
     ' ── Chargement des données ──
@@ -228,6 +305,7 @@ Public Class wbfProductEdit
         Else
             UpdateProduct()
         End If
+        SaveRdv()
 
         ' Fermer la fenêtre
         Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"

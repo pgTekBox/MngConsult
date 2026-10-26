@@ -195,6 +195,7 @@ Namespace Controls
             sb.Append(GroupStart(Ico("tag"), "productsServices"))
             sb.Append(Child("~/wbfProducts.aspx", "products"))
             sb.Append(Child("~/wbfProductCategory.aspx", "productCategory"))
+            sb.Append(Child("~/wbfLieux.aspx", "lieux"))
             sb.Append(GroupEnd)
 
             ' La boîte de messages : les tâches que l'exécuteur ne lancera pas sans
@@ -257,6 +258,7 @@ Namespace Controls
                 Case "chartOfAccounts" : Return Choose3(lang, "Plan comptable", "Chart of accounts", "Plan contable")
                 Case "productCategory" : Return Choose3(lang, "Catégorie de produit", "Product category", "Categoría de producto")
                 Case "products" : Return Choose3(lang, "Produits", "Products", "Productos")
+                Case "lieux" : Return Choose3(lang, "Lieux", "Locations", "Lugares")
                 Case "reports" : Return Choose3(lang, "Rapports", "Reports", "Informes")
                 Case "incomeStatement" : Return Choose3(lang, "État des résultats", "Income statement", "Estado de resultados")
                 Case "balanceSheet" : Return Choose3(lang, "Bilan", "Balance sheet", "Balance general")

@@ -223,11 +223,9 @@
                                 runat="server" DefaultMessage="Sélectionner…" Width="100%"
                                 DropDownHeight="260px" Skin="Metro" OnClientSelectedIndexChanged="aeOnTypeChanged">
                             </telerik:RadDropDownList>
-                            <div class="nr-lieu">
+                            <%-- Les lieux du service choisi (Produits et services › Lieux), dessinés par nrLieux() --%>
+                            <div class="nr-lieu" id="nrLieuRow" hidden>
                                 <span class="nr-lieu-l"><%= T("Lieu","Location","Lugar") %></span>
-                                <button type="button" class="nr-puce" data-lieu="<%= T("Chez le client","At the customer's","En casa del cliente") %>"><%= T("Chez le client","At the customer's","En casa del cliente") %></button>
-                                <button type="button" class="nr-puce" data-lieu="<%= T("À votre place d'affaires","At your place of business","En su negocio") %>"><%= T("À votre place d'affaires","At your place of business","En su negocio") %></button>
-                                <button type="button" class="nr-puce" data-lieu="<%= T("À distance","Remote","A distancia") %>"><%= T("À distance","Remote","A distancia") %></button>
                             </div>
                         </div>
                     </div>
@@ -368,6 +366,10 @@
                         <div class="nr-ligne">
                             <div class="nr-ligne-ico" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
                             <div><div class="nr-k"><%= T("Durée","Duration","Duración") %></div><div class="nr-v" id="nrDuree"></div></div>
+                        </div>
+                        <div class="nr-ligne" id="nrMontantLigne" hidden>
+                            <div class="nr-ligne-ico" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></div>
+                            <div><div class="nr-k"><%= T("Montant prévu","Expected amount","Importe previsto") %></div><div class="nr-v" id="nrMontant"></div></div>
                         </div>
                     </div>
 
@@ -713,8 +715,9 @@
                 document.getElementById('nrP3').className = 'nr-pastille' + (choisi ? ' ok' : '');
                 document.getElementById('nrP3').textContent = choisi ? '✓' : '3';
 
+                var service = typ && NR.services ? NR.services[typ.get_value()] : null;
                 document.getElementById('nrNom').textContent = cli ? cli.get_text() : NR.t.aucunClient;
-                var svc = typ ? typ.get_text().replace(/\s*\(\d+ min\)$/, '') + ' · ' + nrDureeTxt(duree) : NR.t.aucunService;
+                var svc = typ ? (service ? service.nom : typ.get_text()) + ' · ' + nrDureeTxt(duree) : NR.t.aucunService;
                 if (emp) svc += ' · ' + NR.t.avec + ' ' + emp.get_text();
                 document.getElementById('nrSvc').textContent = svc;
 
@@ -735,10 +738,14 @@
 
                 var loc = $find(AE_IDS.txtLocation), lieu = loc ? loc.get_value() : '';
                 document.getElementById('nrLieu').textContent = lieu || '—';
-                Array.prototype.forEach.call(document.querySelectorAll('.nr-puce'), function (p) {
-                    p.classList.toggle('on', p.getAttribute('data-lieu') === lieu);
-                });
+                nrLieux(typ ? typ.get_value() : '', lieu);
                 document.getElementById('nrDuree').textContent = nrDureeTxt(duree);
+
+                // Montant prévu : le prix du service, avant taxes
+                var prix = service ? Number(service.prix) || 0 : 0;
+                document.getElementById('nrMontantLigne').hidden = !(prix > 0);
+                document.getElementById('nrMontant').textContent = prix > 0
+                    ? prix.toLocaleString(nrLoc(), { style: 'currency', currency: 'CAD' }) + ' ' + NR.t.avantTaxes : '';
 
                 var rap = $find(AE_IDS.rddlReminder);
                 document.getElementById('nrRappel').checked = !!(rap && rap.get_selectedItem() && rap.get_selectedItem().get_value() === '1440');
@@ -748,6 +755,41 @@
                 cta.value = choisi ? NR_texteCta : NR.t.choisir;
                 if (fact) fact.disabled = !choisi;
                 document.getElementById('nrAide').textContent = choisi ? NR.t.pret : NR.t.reste;
+            }
+
+            // Les lieux offerts par le service (aucun lieu choisi dans sa fiche : tous les lieux)
+            function nrLieuxDuService(typeId) {
+                var tous = NR.lieux || [], s = typeId && NR.services ? NR.services[typeId] : null;
+                if (s && s.lieux && s.lieux.length) {
+                    return tous.filter(function (l) { return s.lieux.indexOf(l.id) >= 0; });
+                }
+                return tous;
+            }
+
+            // Une puce par lieu ; toucher une puce pose le lieu du RDV
+            function nrLieux(typeId, lieuActuel) {
+                var rangee = document.getElementById('nrLieuRow');
+                Array.prototype.forEach.call(rangee.querySelectorAll('.nr-puce'), function (p) { p.remove(); });
+                var liste = nrLieuxDuService(typeId);
+                rangee.hidden = !liste.length;
+                liste.forEach(function (l) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'nr-puce' + (l.nom === lieuActuel ? ' on' : '');
+                    b.textContent = l.nom;
+                    if (l.adr) b.title = l.adr;
+                    b.onclick = function () {
+                        var loc = $find(AE_IDS.txtLocation);
+                        if (loc) loc.set_value(l.nom);
+                        nrMaj();
+                    };
+                    rangee.appendChild(b);
+                });
+                // Un seul lieu offert et aucun lieu posé : c'est celui-là
+                if (liste.length === 1 && !lieuActuel) {
+                    var loc = $find(AE_IDS.txtLocation);
+                    if (loc) { loc.set_value(liste[0].nom); document.getElementById('nrLieu').textContent = liste[0].nom; rangee.querySelector('.nr-puce').classList.add('on'); }
+                }
             }
 
             function nrMaj() {
@@ -768,13 +810,6 @@
                 document.getElementById('nrSem').onchange = function () {
                     NR_sem = parseInt(this.value, 10) || 0; NR_jour = null; nrMaj();
                 };
-                Array.prototype.forEach.call(document.querySelectorAll('.nr-puce'), function (p) {
-                    p.onclick = function () {
-                        var loc = $find(AE_IDS.txtLocation);
-                        if (loc) loc.set_value(p.getAttribute('data-lieu'));
-                        nrMaj();
-                    };
-                });
                 document.getElementById('nrRappel').onchange = function () {
                     var rap = $find(AE_IDS.rddlReminder);
                     var it = rap && rap.findItemByValue(this.checked ? '1440' : '');

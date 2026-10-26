@@ -157,6 +157,18 @@
         .chk-wrap input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
         .chk-wrap label { font-size: 13px; font-weight: 700; color: var(--text); margin: 0; }
 
+        /* Lieux du service : des puces à cocher */
+        .pe-lieux { display: flex; flex-wrap: wrap; gap: 8px; }
+        .pe-lieux input[type="checkbox"] { position: absolute; opacity: 0; width: 1px; height: 1px; }
+        .pe-lieux label {
+            display: inline-block !important; margin: 0 !important; padding: 8px 14px; cursor: pointer;
+            border: 1px solid var(--line); border-radius: 999px; background: #fff;
+            font-size: 14px !important; font-weight: 800 !important; color: var(--text);
+        }
+        .pe-lieux input[type="checkbox"]:checked + label { background: var(--primary-weak); border-color: var(--primary); }
+        .pe-lieux input[type="checkbox"]:focus-visible + label { box-shadow: 0 0 0 3px rgba(27,79,156,.25); }
+        .pe-off { opacity: .45; pointer-events: none; }
+
         .section-hint {
             font-size: 12px; color: var(--muted); padding: 0 0 10px;
             border-bottom: 1px dashed var(--line); margin-bottom: 12px;
@@ -263,6 +275,32 @@
                 </div>
 
                 <%-- ═══════════════════════════════════════════
+                     CARTE : Rendez-vous (offert dans « Nouveau RDV », durée, lieux)
+                ═══════════════════════════════════════════ --%>
+                <div class="card">
+                    <div class="cardHead"><div class="h"><asp:Literal ID="litRdv" runat="server" /></div></div>
+                    <div class="cardBody">
+                        <div class="grid">
+                            <div class="chk-wrap" style="padding-top:0;">
+                                <asp:CheckBox ID="chkRdv" runat="server" ClientIDMode="Static" onclick="peRdv();" />
+                                <label for="chkRdv"><asp:Literal ID="litRdvOffert" runat="server" /></label>
+                            </div>
+                            <div class="field" id="peDuree">
+                                <label><asp:Literal ID="litRdvDuree" runat="server" /></label>
+                                <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlDuree" runat="server" DropDownHeight="250px" />
+                            </div>
+                        </div>
+                        <div class="field" id="peLieux" style="margin-top:12px;">
+                            <label><asp:Literal ID="litRdvLieux" runat="server" /></label>
+                            <asp:CheckBoxList ID="cblLieux" runat="server" RepeatLayout="Flow" RepeatDirection="Horizontal" CssClass="pe-lieux" />
+                            <div class="section-hint" style="border:0;padding:6px 0 0;margin:0;">
+                                <asp:Literal ID="litRdvLieuxHint" runat="server" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%-- ═══════════════════════════════════════════
                      CARTE 3 : Comptes du plan comptable
                 ═══════════════════════════════════════════ --%>
                 <div class="card">
@@ -319,6 +357,16 @@
                 var oWnd = GetRadWindow();
                 if (oWnd) oWnd.close();
             }
+            // Durée et lieux ne servent que si le service est offert en rendez-vous
+            function peRdv() {
+                var cb = document.getElementById('chkRdv');
+                if (!cb) return;
+                ['peDuree', 'peLieux'].forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (el) el.classList.toggle('pe-off', !cb.checked);
+                });
+            }
+            if (typeof Sys !== 'undefined' && Sys.Application) Sys.Application.add_load(peRdv);
         </script>
 
     </form>

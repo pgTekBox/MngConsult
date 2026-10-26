@@ -219,4 +219,76 @@ Partial Public Class wbfProductEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents tlblCreated As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''litRdv control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litRdv As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''chkRdv control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkRdv As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
+    '''litRdvOffert control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litRdvOffert As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litRdvDuree control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litRdvDuree As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''rddlDuree control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rddlDuree As Global.Telerik.Web.UI.RadDropDownList
+
+    '''<summary>
+    '''litRdvLieux control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litRdvLieux As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''cblLieux control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents cblLieux As Global.System.Web.UI.WebControls.CheckBoxList
+
+    '''<summary>
+    '''litRdvLieuxHint control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litRdvLieuxHint As Global.System.Web.UI.WebControls.Literal
 End Class
