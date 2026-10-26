@@ -131,6 +131,15 @@ Partial Public Class wbfAppointmentEdit
     Protected WithEvents hfId As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''hfChoisi control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hfChoisi As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''txtTitle control.
     '''</summary>
     '''<remarks>

@@ -1,10 +1,20 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Text
+Imports System.Text.RegularExpressions
+Imports Newtonsoft.Json
 Imports Telerik.Web.UI
 
 Public Class wbfAppointmentEdit
     Inherits clsData
+
+    ''' <summary>Modèle des plages (semaines, RDV déjà pris, textes) pour l'étape « Quand ? ».</summary>
+    Protected PlagesJson As String = "null"
+
+    ''' <summary>Heures de l'agenda (comme wbfAgenda) et pas des plages, en minutes.</summary>
+    Private Const OUVERTURE As Integer = 9 * 60
+    Private Const FERMETURE As Integer = 19 * 60
+    Private Const SEMAINES As Integer = 5
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -26,14 +36,18 @@ Public Class wbfAppointmentEdit
 
             If id > 0 Then
                 LoadAppointment(id)
-                litTitle.Text = T("Modifier le rendez-vous", "Edit appointment", "Editar la cita")
+                litTitle.Text = T("Modifier le RDV", "Edit appointment", "Editar la cita")
                 btnDelete.Visible = True
+                hfChoisi.Value = "1"
             Else
                 ' Date suggérée venue de l'agenda
                 Dim startStr As String = Request.QueryString("start")
                 Dim startDt As Date = Date.Now.Date.AddHours(9)
-                If Not String.IsNullOrEmpty(startStr) Then
-                    Date.TryParse(startStr, startDt)
+                If Not String.IsNullOrEmpty(startStr) AndAlso Date.TryParse(startStr, startDt) Then
+                    ' Une heure touchée dans l'agenda : la plage est déjà choisie
+                    hfChoisi.Value = "1"
+                Else
+                    startDt = Date.Now.Date.AddHours(9)
                 End If
                 Dim endDt As Date = startDt.AddHours(1)
 
@@ -46,22 +60,117 @@ Public Class wbfAppointmentEdit
                 If Not String.IsNullOrEmpty(Request.QueryString("client")) Then SafeSelect(rddlCustomer, Request.QueryString("client"))
                 If Not String.IsNullOrEmpty(Request.QueryString("emp")) Then SafeSelect(rddlEmployee, Request.QueryString("emp"))
 
-                litTitle.Text = T("Nouveau rendez-vous", "New appointment", "Nueva cita")
+                ' Rappel 24 h avant coché d'office (case du résumé)
+                SafeSelect(rddlReminder, "1440")
+
+                litTitle.Text = T("Nouveau RDV", "New appointment", "Nueva cita")
             End If
         End If
     End Sub
+
+    ''' <summary>
+    ''' Les semaines proposées à l'étape « Quand ? » (à partir de celle du début du RDV)
+    ''' et les RDV déjà pris pendant ces semaines (s0100), sans le RDV ouvert ni les annulés.
+    ''' La page en tire les jours ouvrables, leurs plages libres et le résumé.
+    ''' </summary>
+    Private Sub BatirPlages()
+        Dim debutRdv As Date = If(rdpStart.SelectedDate.HasValue, rdpStart.SelectedDate.Value.Date, Date.Today)
+        Dim base As Date = debutRdv.AddDays(-((CInt(debutRdv.DayOfWeek) + 6) Mod 7))   ' lundi
+        Dim fin As Date = base.AddDays(7 * SEMAINES)
+
+        Dim idOuvert As Integer = 0
+        Integer.TryParse(hfId.Value, idOuvert)
+
+        Dim pris As New List(Of Object)
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@StartDate", base))
+        p.Add(New SqlParameter("@EndDate", fin))
+        p.Add(New SqlParameter("@EmployeeId", DBNull.Value))
+        Dim ds As DataSet = ExecuteSQLds("s0100GetAppointmentsByRange", p)
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+            For Each r As DataRow In ds.Tables(0).Rows
+                If Convert.ToInt32(r("Id")) = idOuvert Then Continue For
+                If Txt(r("Status")) = "Annulé" Then Continue For
+                Dim dDeb As Date = Convert.ToDateTime(r("StartDateTime"))
+                Dim dFin As Date = Convert.ToDateTime(r("EndDateTime"))
+                pris.Add(New With {
+                    .j = dDeb.ToString("yyyy-MM-dd"),
+                    .deb = dDeb.Hour * 60 + dDeb.Minute,
+                    .fin = If(dFin.Date > dDeb.Date, 24 * 60, dFin.Hour * 60 + dFin.Minute),
+                    .emp = If(IsDBNull(r("EmployeeId")), "", Convert.ToInt32(r("EmployeeId")).ToString())
+                })
+            Next
+        End If
+
+        Dim modele = New With {
+            .lang = CurrentLang,
+            .base = base.ToString("yyyy-MM-dd"),
+            .semaines = SEMAINES,
+            .aujourdhui = Date.Today.ToString("yyyy-MM-dd"),
+            .maintenant = Date.Now.Hour * 60 + Date.Now.Minute,
+            .ouv = OUVERTURE,
+            .ferm = FERMETURE,
+            .pris = pris,
+            .t = New With {
+                .choisir = T("Choisissez une plage", "Choose a time slot", "Elija un horario"),
+                .reste = T("Il reste à choisir une plage.", "A time slot remains to be chosen.", "Falta elegir un horario."),
+                .pret = T("Tout est prêt.", "Everything is ready.", "Todo está listo."),
+                .cetteSemaine = T("Cette semaine", "This week", "Esta semana"),
+                .semProchaine = T("Semaine prochaine", "Next week", "Próxima semana"),
+                .semDu = T("Semaine du", "Week of", "Semana del"),
+                .libres = T("plages libres", "free slots", "horarios libres"),
+                .libre1 = T("plage libre", "free slot", "horario libre"),
+                .libresCourt = T("libres", "free", "libres"),
+                .complet = T("complet", "full", "completo"),
+                .auj = T("Auj.", "Today", "Hoy"),
+                .aujLong = T("Aujourd'hui", "Today", "Hoy"),
+                .matin = T("Matin", "Morning", "Mañana"),
+                .apm = T("Après-midi", "Afternoon", "Tarde"),
+                .soir = T("Soir", "Evening", "Noche"),
+                .aucune = T("Aucune plage libre ce jour-là.", "No free slot that day.", "Ningún horario libre ese día."),
+                .aucunClient = T("Aucun client", "No customer", "Ningún cliente"),
+                .aucunService = T("Aucun service", "No service", "Ningún servicio"),
+                .actuelle = T("Plage actuelle", "Current slot", "Horario actual"),
+                .avec = T("avec", "with", "con")
+            }
+        }
+        PlagesJson = JsonConvert.SerializeObject(modele, New JsonSerializerSettings With {
+            .StringEscapeHandling = StringEscapeHandling.EscapeHtml
+        })
+    End Sub
+
+    Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Try
+            BatirPlages()
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Plages RDV : " & ex.Message)
+            PlagesJson = "null"
+        End Try
+    End Sub
+
+    Private Shared Function Txt(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return ""
+        Return Convert.ToString(o).Trim()
+    End Function
 
     ''' <summary>Localisation fr/en/es des contrôles serveur (Telerik + boutons).</summary>
     Private Sub ApplyLocalization()
         btnDelete.Text = T("Supprimer", "Delete", "Eliminar")
         btnDelete.OnClientClick = "return confirm('" &
             T("Supprimer ce rendez-vous ?", "Delete this appointment?", "¿Eliminar esta cita?").Replace("'", "\'") & "');"
-        lnkBack.Text = "← " & T("Annuler", "Cancel", "Cancelar")
-        btnInvoice.Text = T("Facturer", "Invoice", "Facturar")
+        lnkBack.Text = "×"
+        lnkBack.ToolTip = T("Annuler", "Cancel", "Cancelar")
+        btnInvoice.Text = T("Enregistrer et facturer", "Save and invoice", "Guardar y facturar")
         btnInvoice.ToolTip = T("Sauvegarder le rendez-vous et créer une facture",
                                "Save the appointment and create an invoice",
                                "Guardar la cita y crear una factura")
-        btnSave.Text = T("Enregistrer", "Save", "Guardar")
+        btnSave.Text = If(Request.QueryString("id") IsNot Nothing AndAlso Request.QueryString("id") <> "0",
+                          T("Enregistrer", "Save", "Guardar"),
+                          T("Confirmer le RDV", "Confirm appointment", "Confirmar la cita"))
+
+        txtTitle.EmptyMessage = T("Le service ou le client si vide", "The service or the customer if empty", "El servicio o el cliente si está vacío")
+        txtDescription.EmptyMessage = T("Note pour le RDV (facultatif)", "Note for the appointment (optional)", "Nota para la cita (opcional)")
 
         Dim sel As String = T("Sélectionner…", "Select…", "Seleccionar…")
         rddlCustomer.DefaultMessage = sel
@@ -310,6 +419,15 @@ Public Class wbfAppointmentEdit
     Private Function SaveAppointment(ByRef newId As Integer) As Boolean
 
         newId = 0
+
+        ' Sans titre saisi (le titre est replié dans « Plus de détails ») : le service, sinon le client
+        If String.IsNullOrWhiteSpace(txtTitle.Text) Then
+            If Not String.IsNullOrEmpty(rddlType.SelectedValue) Then
+                txtTitle.Text = Regex.Replace(rddlType.SelectedText, "\s*\(\d+ min\)$", "")
+            ElseIf Not String.IsNullOrEmpty(rddlCustomer.SelectedValue) Then
+                txtTitle.Text = rddlCustomer.SelectedText
+            End If
+        End If
 
         ' Validations
         If String.IsNullOrWhiteSpace(txtTitle.Text) Then
