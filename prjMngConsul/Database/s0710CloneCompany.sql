@@ -90,6 +90,7 @@ BEGIN
      ('T300Employees','ManagerId','T300Employees'),
      ('Appointments','CustomerId','T050Party'),
      ('Appointments','EmployeeId','T300Employees'),
+     ('Appointments','AppointmentTypeId','T075Products'),   -- le service du RDV (vwAppointmentTypes)
      ('Appointments','RecurrenceParentId','Appointments');
 
     ---------------------------------------------------------------------------
