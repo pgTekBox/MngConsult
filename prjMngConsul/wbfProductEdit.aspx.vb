@@ -219,7 +219,8 @@ Public Class wbfProductEdit
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlClient.SqlParameter("@ProductId", ProductId))
-        p.Add(New SqlClient.SqlParameter("@Offert", chkRdv.Checked))
+        ' Un lieu coché offre le service en rendez-vous
+        p.Add(New SqlClient.SqlParameter("@Offert", chkRdv.Checked OrElse ids.Count > 0))
         p.Add(New SqlClient.SqlParameter("@DurationMinutes", If(m > 0, CObj(m), DBNull.Value)))
         p.Add(New SqlClient.SqlParameter("@LieuIds", String.Join(",", ids)))
         ExecuteSQL("s0923SaveServiceRdv", p)

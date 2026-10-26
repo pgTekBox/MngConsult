@@ -685,6 +685,7 @@
     <Content Include="wbfPlanComptableEdit.aspx" />
     <Content Include="wbfProductCategory.aspx" />
     <Content Include="wbfLieux.aspx" />
+    <Content Include="wbfLieuEdit.aspx" />
     <Content Include="wbfProductCategoryEdit.aspx" />
     <Content Include="wbfProductEdit.aspx" />
     <Content Include="wbfProducts.aspx" />
@@ -1500,6 +1501,13 @@
     </Compile>
     <Compile Include="wbfPlanComptableEdit.aspx.vb">
       <DependentUpon>wbfPlanComptableEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfLieuEdit.aspx.designer.vb">
+      <DependentUpon>wbfLieuEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfLieuEdit.aspx.vb">
+      <DependentUpon>wbfLieuEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfLieux.aspx.designer.vb">

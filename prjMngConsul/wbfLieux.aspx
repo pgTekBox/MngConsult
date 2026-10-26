@@ -7,8 +7,8 @@
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
     <style>
     /* ── Produits et services › Lieux : la signature du gabarit « Portail du client »
-       (comme Catégories de produits) : le titre sur le fond de la page, la fiche
-       d'un lieu quand on en ajoute ou en modifie un, puis la liste. ── */
+       (comme Catégories de produits) : le titre sur le fond de la page, puis la
+       liste ; la fiche d'un lieu s'ouvre dans une fenêtre (wbfLieuEdit.aspx). ── */
     .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
     .fc-tete .txt { flex: 1 1 260px }
     .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
@@ -22,17 +22,6 @@
     .li-msg { margin: 0 0 16px; padding: 12px 16px; border-radius: 16px; font-weight: 700 }
     .li-msg.ok { background: #E3F3EA; color: #0F5A3A }
     .li-msg.err { background: #FDECEA; color: #8A1F14 }
-
-    /* La fiche d'un lieu */
-    .li-fiche { padding: 18px; border-radius: 24px; background: #fff; margin-bottom: 16px }
-    .li-fiche h2 { margin: 0 0 12px; font-size: 20px; font-weight: 800; color: #0E1F3D }
-    .li-grille { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1.6fr); gap: 12px 16px; align-items: end }
-    .li-champ label { display: block; margin: 0 0 6px; font-size: 14px; font-weight: 800; color: #0E1F3D }
-    .li-champ input[type=text], .li-champ select { width: 100%; min-height: 44px; padding: 0 14px; border: 1px solid #AEBBCD; border-radius: 12px; background: #fff; font: inherit; font-size: 15px; font-weight: 700; color: #0E1F3D; box-sizing: border-box }
-    .li-champ input[type=text]:focus, .li-champ select:focus { outline: none; border-color: #1B4F9C; box-shadow: 0 0 0 3px #DCE6F6 }
-    .li-actif { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-weight: 700 }
-    .li-actif input { width: 18px; height: 18px; accent-color: #1B4F9C }
-    .li-boutons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px }
 
     /* La liste */
     .li-liste { padding: 6px 12px 12px; border-radius: 24px; background: #fff }
@@ -52,7 +41,6 @@
     .li-pied { padding: 12px 6px 0; color: #44536E; font-size: 14px }
 
     @media (max-width: 860px) {
-        .li-grille { grid-template-columns: 1fr }
         .li-tete { display: none }
         .li-ligne { grid-template-columns: minmax(0, 1fr) auto; }
         .li-ligne .c-adr, .li-ligne .c-nb { grid-column: 1 / -1 }
@@ -69,40 +57,12 @@
                 <p><asp:Literal ID="litSousTitre" runat="server" /></p>
             </div>
             <div>
-                <asp:Button ID="btnAdd" runat="server" CssClass="fc-btn primaire" CausesValidation="false" />
+                <button type="button" class="fc-btn primaire" onclick="liOuvrir(0);"><%= L("ajouter") %></button>
             </div>
         </div>
 
         <asp:Panel ID="pnlMsg" runat="server" Visible="false">
             <div id="divMsg" runat="server" class="li-msg"></div>
-        </asp:Panel>
-
-        <%-- La fiche d'un lieu : nouveau (hfId = 0) ou existant --%>
-        <asp:Panel ID="pnlFiche" runat="server" Visible="false" CssClass="li-fiche" DefaultButton="btnSave">
-            <asp:HiddenField ID="hfId" runat="server" Value="0" />
-            <h2><asp:Literal ID="litFicheTitre" runat="server" /></h2>
-            <div class="li-grille">
-                <div class="li-champ">
-                    <label for="<%= txtNom.ClientID %>"><%= L("nom") %> *</label>
-                    <asp:TextBox ID="txtNom" runat="server" MaxLength="150" />
-                </div>
-                <div class="li-champ">
-                    <label for="<%= ddlType.ClientID %>"><%= L("type") %></label>
-                    <asp:DropDownList ID="ddlType" runat="server" />
-                </div>
-                <div class="li-champ">
-                    <label for="<%= txtAdresse.ClientID %>"><%= L("adresse") %></label>
-                    <asp:TextBox ID="txtAdresse" runat="server" MaxLength="300" />
-                </div>
-            </div>
-            <label class="li-actif">
-                <asp:CheckBox ID="chkActif" runat="server" Checked="true" />
-                <%= L("actifLong") %>
-            </label>
-            <div class="li-boutons">
-                <asp:Button ID="btnSave" runat="server" CssClass="fc-btn primaire" />
-                <asp:Button ID="btnCancel" runat="server" CssClass="fc-btn" CausesValidation="false" />
-            </div>
         </asp:Panel>
 
         <div class="li-liste">
@@ -123,8 +83,7 @@
                         <div class="c-nb doux"><%# NbServicesTexte(Eval("NbServices")) %></div>
                         <div><%# ActifCell(Eval("Actif")) %></div>
                         <div class="li-actions">
-                            <asp:Button ID="btnEdit" runat="server" CssClass="btn btn-icon btn-icon-edit" Text=""
-                                CommandName="Modifier" CommandArgument='<%# Eval("Id") %>' CausesValidation="false" />
+                            <button type="button" class="btn btn-icon btn-icon-edit" onclick="liOuvrir(<%# Eval("Id") %>);"></button>
                             <asp:Button ID="btnDelete" runat="server" CssClass="btn btn-icon btn-icon-delete" Text=""
                                 CommandName="Supprimer" CommandArgument='<%# Eval("Id") %>' CausesValidation="false"
                                 OnClientClick='<%# ConfirmerSuppression() %>' />
@@ -135,4 +94,32 @@
             <asp:Panel ID="pnlVide" runat="server" Visible="false" CssClass="li-vide"><%= L("vide") %></asp:Panel>
             <div class="li-pied"><asp:Literal ID="litPied" runat="server" /></div>
         </div>
+
+    <%-- La fiche d'un lieu (wbfLieuEdit.aspx) dans une fenêtre ; à sa fermeture, la liste
+         se recharge par le bouton caché. DestroyOnClose="false" : la même fenêtre resert. --%>
+    <telerik:RadWindowManager ID="rwmLieux" runat="server" EnableShadow="true" />
+    <telerik:RadWindow ID="rwLieu" runat="server"
+        Modal="true"
+        VisibleOnPageLoad="false"
+        Behaviors="Close,Move"
+        DestroyOnClose="false"
+        ClientIDMode="Static"
+        OnClientClose="liFermee">
+    </telerik:RadWindow>
+    <asp:Button ID="btnRafraichir" runat="server" ClientIDMode="Static" CausesValidation="false" Text="" style="display:none" />
+
+    <script type="text/javascript">
+        function liOuvrir(id) {
+            var w = $find('rwLieu');
+            if (!w) return;
+            w.set_title(id > 0 ? <%= HttpUtility.JavaScriptStringEncode(L("modifier"), True) %> : <%= HttpUtility.JavaScriptStringEncode(L("nouveau"), True) %>);
+            w.setUrl('wbfLieuEdit.aspx?Id=' + (id || 0));
+            w.setSize(Math.min(620, window.innerWidth - 20), Math.min(470, window.innerHeight - 20));
+            w.show();
+            w.center();
+        }
+        function liFermee() {
+            document.getElementById('btnRafraichir').click();
+        }
+    </script>
 </asp:Content>

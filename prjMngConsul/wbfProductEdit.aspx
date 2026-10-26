@@ -292,7 +292,7 @@
                         </div>
                         <div class="field" id="peLieux" style="margin-top:12px;">
                             <label><asp:Literal ID="litRdvLieux" runat="server" /></label>
-                            <asp:CheckBoxList ID="cblLieux" runat="server" RepeatLayout="Flow" RepeatDirection="Horizontal" CssClass="pe-lieux" />
+                            <asp:CheckBoxList ID="cblLieux" runat="server" ClientIDMode="Static" RepeatLayout="Flow" RepeatDirection="Horizontal" CssClass="pe-lieux" />
                             <div class="section-hint" style="border:0;padding:6px 0 0;margin:0;">
                                 <asp:Literal ID="litRdvLieuxHint" runat="server" />
                             </div>
@@ -357,15 +357,19 @@
                 var oWnd = GetRadWindow();
                 if (oWnd) oWnd.close();
             }
-            // Durée et lieux ne servent que si le service est offert en rendez-vous
+            // La durée ne sert que si le service est offert en rendez-vous
             function peRdv() {
                 var cb = document.getElementById('chkRdv');
-                if (!cb) return;
-                ['peDuree', 'peLieux'].forEach(function (id) {
-                    var el = document.getElementById(id);
-                    if (el) el.classList.toggle('pe-off', !cb.checked);
-                });
+                var duree = document.getElementById('peDuree');
+                if (cb && duree) duree.classList.toggle('pe-off', !cb.checked);
             }
+            // Cocher un lieu offre le service en rendez-vous
+            document.addEventListener('change', function (e) {
+                var t = e.target;
+                if (!t || t.type !== 'checkbox' || !t.checked || !t.closest('#cblLieux')) return;
+                var cb = document.getElementById('chkRdv');
+                if (cb && !cb.checked) { cb.checked = true; peRdv(); }
+            });
             if (typeof Sys !== 'undefined' && Sys.Application) Sys.Application.add_load(peRdv);
         </script>
 

@@ -234,11 +234,13 @@
 
     </telerik:RadAjaxPanel>
 
+    <%-- DestroyOnClose="false" : la liste se rafraîchit en AJAX (RAP1) sans recréer cette
+         fenêtre ; détruite à la fermeture, $find('rwProduct') ne la trouverait plus au clic suivant. --%>
     <telerik:RadWindow ID="rwProduct" runat="server"
         Modal="true"
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
-        DestroyOnClose="true"
+        DestroyOnClose="false"
         ClientIDMode="Static"
         Title="Ajouter / Modifier un produit"
         OnClientClose="rwProduct_OnClientClose">

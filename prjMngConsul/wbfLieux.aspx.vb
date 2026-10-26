@@ -6,7 +6,7 @@ Imports System.Data.SqlClient
 ''' (chez le client, à sa place d'affaires, à distance, ou un autre lieu nommé).
 ''' Chaque service choisit ses lieux dans sa fiche (wbfProductEdit) ; la fenêtre
 ''' « Nouveau RDV » offre les lieux du service choisi. La première visite pose les
-''' trois lieux de base (s0918). Liste et fiche sur la même page.
+''' trois lieux de base (s0918). La fiche d'un lieu s'ouvre en fenêtre (wbfLieuEdit).
 ''' </summary>
 Public Class wbfLieux
     Inherits clsData
@@ -21,19 +21,13 @@ Public Class wbfLieux
         DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
-        If Not IsPostBack Then
-            RemplirTypes()
-            Lier()
-        End If
+        If Not IsPostBack Then Lier()
     End Sub
 
     Private Sub ApplyLocalization()
         litRubrique.Text = Server.HtmlEncode(L("rubrique"))
         litPageTitle.Text = Server.HtmlEncode(L("pageTitleShort"))
         litSousTitre.Text = Server.HtmlEncode(L("sousTitre"))
-        btnAdd.Text = L("ajouter")
-        btnSave.Text = L("enregistrer")
-        btnCancel.Text = L("annuler")
     End Sub
 
     ''' <summary>Traductions de la page Lieux (fr/en/es).</summary>
@@ -47,12 +41,6 @@ Public Class wbfLieux
             Case "ajouter" : Return Choose3(lang, "+ Ajouter un lieu", "+ Add a location", "+ Agregar un lugar")
             Case "nouveau" : Return Choose3(lang, "Nouveau lieu", "New location", "Nuevo lugar")
             Case "modifier" : Return Choose3(lang, "Modifier le lieu", "Edit location", "Editar el lugar")
-            Case "nom" : Return Choose3(lang, "Nom", "Name", "Nombre")
-            Case "type" : Return Choose3(lang, "Type", "Type", "Tipo")
-            Case "adresse" : Return Choose3(lang, "Adresse (facultatif)", "Address (optional)", "Dirección (opcional)")
-            Case "actifLong" : Return Choose3(lang, "Lieu actif (offert dans les rendez-vous)", "Active location (offered in appointments)", "Lugar activo (ofrecido en las citas)")
-            Case "enregistrer" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
-            Case "annuler" : Return Choose3(lang, "Annuler", "Cancel", "Cancelar")
             Case "colNom" : Return Choose3(lang, "Nom", "Name", "Nombre")
             Case "colType" : Return Choose3(lang, "Type", "Type", "Tipo")
             Case "colAdresse" : Return Choose3(lang, "Adresse", "Address", "Dirección")
@@ -68,9 +56,6 @@ Public Class wbfLieux
             Case "vide" : Return Choose3(lang, "Aucun lieu.", "No location.", "Ningún lugar.")
             Case "pied" : Return Choose3(lang, "{0} lieu(x)", "{0} location(s)", "{0} lugar(es)")
             Case "confirmSuppr" : Return Choose3(lang, "Supprimer ce lieu ? Les services qui l'avaient choisi ne l'offriront plus.", "Delete this location? Services that had chosen it will no longer offer it.", "¿Eliminar este lugar? Los servicios que lo habían elegido ya no lo ofrecerán.")
-            Case "nomRequis" : Return Choose3(lang, "Le nom du lieu est obligatoire.", "The location name is required.", "El nombre del lugar es obligatorio.")
-            Case "doublon" : Return Choose3(lang, "Un autre lieu porte déjà ce nom.", "Another location already has this name.", "Otro lugar ya tiene este nombre.")
-            Case "enregistre" : Return Choose3(lang, "Lieu enregistré.", "Location saved.", "Lugar guardado.")
             Case "supprime" : Return Choose3(lang, "Lieu supprimé.", "Location deleted.", "Lugar eliminado.")
             Case Else : Return ""
         End Select
@@ -83,14 +68,6 @@ Public Class wbfLieux
             Case Else : Return fr
         End Select
     End Function
-
-    Private Sub RemplirTypes()
-        ddlType.Items.Clear()
-        ddlType.Items.Add(New ListItem(L("tClient"), "client"))
-        ddlType.Items.Add(New ListItem(L("tAffaires"), "affaires"))
-        ddlType.Items.Add(New ListItem(L("tDistance"), "distance"))
-        ddlType.Items.Add(New ListItem(L("tAutre"), "autre"))
-    End Sub
 
     ' ── La liste ──
 
@@ -107,99 +84,26 @@ Public Class wbfLieux
         litPied.Text = Server.HtmlEncode(String.Format(L("pied"), n))
     End Sub
 
-    Private Sub rptLieux_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rptLieux.ItemCommand
-        Dim id As Integer = 0
-        Integer.TryParse(Convert.ToString(e.CommandArgument), id)
-        If id <= 0 Then Return
-
-        Select Case e.CommandName
-            Case "Modifier"
-                OuvrirFiche(id)
-            Case "Supprimer"
-                Dim p As New Collection
-                p.Add(New SqlParameter("@CompanyGUID", Company))
-                p.Add(New SqlParameter("@Id", id))
-                ExecuteSQL("s0921DeleteLieu", p)
-                If hfId.Value = id.ToString() Then pnlFiche.Visible = False
-                Message(L("supprime"), True)
-                Lier()
-        End Select
-    End Sub
-
-    ' ── La fiche ──
-
-    Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
-        OuvrirFiche(0)
-    End Sub
-
-    Private Sub OuvrirFiche(id As Integer)
-        hfId.Value = id.ToString()
-        txtNom.Text = ""
-        txtAdresse.Text = ""
-        ddlType.SelectedValue = "autre"
-        chkActif.Checked = True
-        litFicheTitre.Text = Server.HtmlEncode(If(id = 0, L("nouveau"), L("modifier")))
-
-        If id > 0 Then
-            Dim p As New Collection
-            p.Add(New SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlParameter("@Id", id))
-            Dim ds As DataSet = ExecuteSQLds("s0919GetLieuById", p)
-            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
-            Dim r As DataRow = ds.Tables(0).Rows(0)
-            txtNom.Text = Convert.ToString(r("Nom"))
-            txtAdresse.Text = Convert.ToString(r("Adresse"))
-            If ddlType.Items.FindByValue(Convert.ToString(r("TypeLieu"))) IsNot Nothing Then ddlType.SelectedValue = Convert.ToString(r("TypeLieu"))
-            chkActif.Checked = Convert.ToBoolean(r("Actif"))
-        End If
-
+    ''' <summary>La fenêtre d'un lieu vient de se fermer : la liste se recharge.</summary>
+    Private Sub btnRafraichir_Click(sender As Object, e As EventArgs) Handles btnRafraichir.Click
         pnlMsg.Visible = False
-        pnlFiche.Visible = True
-        txtNom.Focus()
-    End Sub
-
-    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        If String.IsNullOrWhiteSpace(txtNom.Text) Then
-            Message(L("nomRequis"), False)
-            Return
-        End If
-
-        Dim id As Integer = 0
-        Integer.TryParse(hfId.Value, id)
-
-        Dim p As New Collection
-        p.Add(New SqlParameter("@Id", id))
-        p.Add(New SqlParameter("@CompanyGUID", Company))
-        p.Add(New SqlParameter("@Nom", txtNom.Text.Trim()))
-        p.Add(New SqlParameter("@TypeLieu", ddlType.SelectedValue))
-        p.Add(New SqlParameter("@Adresse", If(String.IsNullOrWhiteSpace(txtAdresse.Text), CObj(DBNull.Value), txtAdresse.Text.Trim())))
-        p.Add(New SqlParameter("@Actif", chkActif.Checked))
-        Dim outId As New SqlParameter("@NewId", SqlDbType.Int)
-        outId.Direction = ParameterDirection.Output
-        p.Add(outId)
-
-        Try
-            ExecuteSQL("s0920SaveLieu", p)
-        Catch ex As SqlException
-            ' s0920 refuse un nom déjà pris (le nom vide est vérifié plus haut)
-            Message(L("doublon"), False)
-            Return
-        End Try
-
-        pnlFiche.Visible = False
-        Message(L("enregistre"), True)
         Lier()
     End Sub
 
-    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
-        pnlFiche.Visible = False
-        pnlMsg.Visible = False
-    End Sub
+    Private Sub rptLieux_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rptLieux.ItemCommand
+        Dim id As Integer = 0
+        Integer.TryParse(Convert.ToString(e.CommandArgument), id)
+        If id <= 0 OrElse e.CommandName <> "Supprimer" Then Return
 
-    Private Sub Message(texte As String, ok As Boolean)
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@Id", id))
+        ExecuteSQL("s0921DeleteLieu", p)
+
         pnlMsg.Visible = True
-        divMsg.InnerText = texte
-        divMsg.Attributes("class") = "li-msg " & If(ok, "ok", "err")
+        divMsg.InnerText = L("supprime")
+        divMsg.Attributes("class") = "li-msg ok"
+        Lier()
     End Sub
 
     ' ── Les cellules de la liste ──

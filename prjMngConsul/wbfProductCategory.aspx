@@ -212,11 +212,13 @@
 
     </telerik:RadAjaxPanel>
 
+    <%-- DestroyOnClose="false" : la liste se rafraîchit en AJAX (RAP1) sans recréer cette
+         fenêtre ; détruite à la fermeture, $find('rwCategory') ne la trouverait plus au clic suivant. --%>
     <telerik:RadWindow ID="rwCategory" runat="server"
         Modal="true"
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
-        DestroyOnClose="true"
+        DestroyOnClose="false"
         ClientIDMode="Static"
         Title="Ajouter / Modifier une catégorie"
         OnClientClose="rwCategory_OnClientClose">

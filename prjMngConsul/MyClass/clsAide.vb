@@ -64,7 +64,7 @@ Public NotInheritable Class clsAide
             Case "wbfsuppliers", "wbfsupplieredit", "wbfsuppliersinvoices", "wbfsupplierinvoinceedit", "wbfsupplierpaymentchoice",
                  "wbfsupplierpaymentdream", "wbfsupplierpaymentinterac", "wbfsupplierpaymentsuccess", "wbfsupplierpaymentsync",
                  "wbfsupplierstripeonboarding", "wbfreceipt", "wbfreceiptedit", "wbfreceipteditpopup", "receipts" : Return "achats"
-            Case "wbfproducts", "wbfproductedit", "wbfproductcategory", "wbfproductcategoryedit", "wbflieux" : Return "produits"
+            Case "wbfproducts", "wbfproductedit", "wbfproductcategory", "wbfproductcategoryedit", "wbflieux", "wbflieuedit" : Return "produits"
             Case "wbfjournal", "wbfjournallist", "wbfjournalentryedit", "wbftemplate", "wbftemplatelist", "wbftemplateedit",
                  "plaidaccounts", "wbfreleve", "wbfrapporttaxe", "wbffermetureannee", "wbfplancomptable", "wbfplancomptableedit" : Return "comptabilite"
             Case "wbfrapportplancomptable", "wbfetatresultats", "wbfbilan", "wbffluxtresorerie", "wbfbeneficesnonrepartis",

@@ -16,19 +16,12 @@ Partial Public Class wbfLieux
     Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litPageTitle As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
-    Protected WithEvents btnAdd As Global.System.Web.UI.WebControls.Button
     Protected WithEvents pnlMsg As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents divMsg As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-    Protected WithEvents pnlFiche As Global.System.Web.UI.WebControls.Panel
-    Protected WithEvents hfId As Global.System.Web.UI.WebControls.HiddenField
-    Protected WithEvents litFicheTitre As Global.System.Web.UI.WebControls.Literal
-    Protected WithEvents txtNom As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents ddlType As Global.System.Web.UI.WebControls.DropDownList
-    Protected WithEvents txtAdresse As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents chkActif As Global.System.Web.UI.WebControls.CheckBox
-    Protected WithEvents btnSave As Global.System.Web.UI.WebControls.Button
-    Protected WithEvents btnCancel As Global.System.Web.UI.WebControls.Button
     Protected WithEvents rptLieux As Global.System.Web.UI.WebControls.Repeater
     Protected WithEvents pnlVide As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litPied As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents rwmLieux As Global.Telerik.Web.UI.RadWindowManager
+    Protected WithEvents rwLieu As Global.Telerik.Web.UI.RadWindow
+    Protected WithEvents btnRafraichir As Global.System.Web.UI.WebControls.Button
 End Class
