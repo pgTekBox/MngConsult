@@ -168,6 +168,7 @@
         .pe-lieux input[type="checkbox"]:checked + label { background: var(--primary-weak); border-color: var(--primary); }
         .pe-lieux input[type="checkbox"]:focus-visible + label { box-shadow: 0 0 0 3px rgba(27,79,156,.25); }
         .pe-off { opacity: .45; pointer-events: none; }
+        .pe-pale { opacity: .55; }
 
         .section-hint {
             font-size: 12px; color: var(--muted); padding: 0 0 10px;
@@ -282,7 +283,7 @@
                     <div class="cardBody">
                         <div class="grid">
                             <div class="chk-wrap" style="padding-top:0;">
-                                <asp:CheckBox ID="chkRdv" runat="server" ClientIDMode="Static" onclick="peRdv();" />
+                                <asp:CheckBox ID="chkRdv" runat="server" ClientIDMode="Static" />
                                 <label for="chkRdv"><asp:Literal ID="litRdvOffert" runat="server" /></label>
                             </div>
                             <div class="field" id="peDuree">
@@ -357,16 +358,21 @@
                 var oWnd = GetRadWindow();
                 if (oWnd) oWnd.close();
             }
-            // La durée ne sert que si le service est offert en rendez-vous
+            // Durée et lieux ne servent que si le service est offert en rendez-vous ;
+            // les lieux restent cliquables (cocher un lieu offre le service)
             function peRdv() {
                 var cb = document.getElementById('chkRdv');
-                var duree = document.getElementById('peDuree');
-                if (cb && duree) duree.classList.toggle('pe-off', !cb.checked);
+                if (!cb) return;
+                var duree = document.getElementById('peDuree'), lieux = document.getElementById('peLieux');
+                if (duree) duree.classList.toggle('pe-off', !cb.checked);
+                if (lieux) lieux.classList.toggle('pe-pale', !cb.checked);
             }
-            // Cocher un lieu offre le service en rendez-vous
+            // La case « Offert » met la durée et les lieux à jour ; cocher un lieu offre le service
             document.addEventListener('change', function (e) {
                 var t = e.target;
-                if (!t || t.type !== 'checkbox' || !t.checked || !t.closest('#cblLieux')) return;
+                if (!t || t.type !== 'checkbox') return;
+                if (t.id === 'chkRdv') { peRdv(); return; }
+                if (!t.checked || !t.closest('#cblLieux')) return;
                 var cb = document.getElementById('chkRdv');
                 if (cb && !cb.checked) { cb.checked = true; peRdv(); }
             });

@@ -219,8 +219,9 @@ Public Class wbfProductEdit
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlClient.SqlParameter("@ProductId", ProductId))
-        ' Un lieu coché offre le service en rendez-vous
-        p.Add(New SqlClient.SqlParameter("@Offert", chkRdv.Checked OrElse ids.Count > 0))
+        ' La case décide seule : cocher un lieu la coche à l'écran (wbfProductEdit.aspx),
+        ' mais on peut ensuite la décocher pour retirer le service en gardant ses lieux.
+        p.Add(New SqlClient.SqlParameter("@Offert", chkRdv.Checked))
         p.Add(New SqlClient.SqlParameter("@DurationMinutes", If(m > 0, CObj(m), DBNull.Value)))
         p.Add(New SqlClient.SqlParameter("@LieuIds", String.Join(",", ids)))
         ExecuteSQL("s0923SaveServiceRdv", p)
