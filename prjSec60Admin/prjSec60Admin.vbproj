@@ -386,6 +386,8 @@
     <Content Include="wbfMetierEdit.aspx" />
     <Content Include="wbfFamillesMetier.aspx" />
     <Content Include="wbfFamilleMetierEdit.aspx" />
+    <Content Include="wbfSecteursActivite.aspx" />
+    <Content Include="wbfSecteurActiviteEdit.aspx" />
     <Content Include="wbfPaieAnnees.aspx" />
     <Content Include="wbfPaieFormulaires.aspx" />
     <Content Include="Aide.html" />
@@ -506,6 +508,20 @@
     </Compile>
     <Compile Include="wbfFamilleMetierEdit.aspx.designer.vb">
       <DependentUpon>wbfFamilleMetierEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSecteursActivite.aspx.vb">
+      <DependentUpon>wbfSecteursActivite.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfSecteursActivite.aspx.designer.vb">
+      <DependentUpon>wbfSecteursActivite.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSecteurActiviteEdit.aspx.vb">
+      <DependentUpon>wbfSecteurActiviteEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfSecteurActiviteEdit.aspx.designer.vb">
+      <DependentUpon>wbfSecteurActiviteEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfCabinets.aspx.vb">
       <DependentUpon>wbfCabinets.aspx</DependentUpon>

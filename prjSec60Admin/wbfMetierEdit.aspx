@@ -172,6 +172,11 @@
                     </div>
                     <div class="grid mt12">
                         <div class="field">
+                            <label>Secteur d'activité</label>
+                            <asp:DropDownList ID="ddlSecteur" runat="server" CssClass="sel" />
+                            <div class="hint">Facultatif. Les secteurs se gèrent dans Abonnements › Secteurs d'activité.</div>
+                        </div>
+                        <div class="field">
                             <label>Statut</label>
                             <div class="checks">
                                 <label class="check"><asp:CheckBox ID="cbActive" runat="server" Checked="true" /><span>Actif (proposé dans 60Sec-AI)</span></label>

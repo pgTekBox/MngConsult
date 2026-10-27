@@ -41,6 +41,7 @@
         }
         .met-name { font-weight: 700; }
         .met-meta { font-size: 12px; color: #64748b; }
+        .met-secteur { font-size: 11px; color: #2563eb; margin-top: 2px; }
 
         .badge {
             display: inline-flex; align-items: center;
@@ -116,7 +117,7 @@
             <div class="search-group">
                 <asp:TextBox ID="tbSearch" runat="server"
                     CssClass="input txttbsearch"
-                    placeholder="Rechercher (métier, famille)…" />
+                    placeholder="Rechercher (métier, famille, secteur)…" />
 
                 <asp:Button ID="btnSearch" runat="server"
                     CssClass="btn btn-icon btn-icon-search" Text="" />
@@ -148,7 +149,7 @@
                         <div class="listview-list-head">
                             <div></div>
                             <div>Métier</div>
-                            <div class="col-famille">Famille</div>
+                            <div class="col-famille">Famille / secteur</div>
                             <div>Profils</div>
                             <div class="col-cie">Compagnies</div>
                             <div>Statut</div>
@@ -169,7 +170,10 @@
 
                         <div class="met-name"><%# Server.HtmlEncode(S(Eval("Nom"))) %></div>
 
-                        <div class="met-meta col-famille"><%# Server.HtmlEncode(S(Eval("Famille"))) %></div>
+                        <div class="met-meta col-famille">
+                            <%# Server.HtmlEncode(S(Eval("Famille"))) %>
+                            <div class="met-secteur"><%# Server.HtmlEncode(S(Eval("Secteur"))) %></div>
+                        </div>
 
                         <div><%# GetProfils(Eval("Profils")) %></div>
 

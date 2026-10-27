@@ -3,10 +3,12 @@ Imports System.Data.SqlClient
 
 ''' <summary>
 ''' La fiche d'un métier (T330Metier, T330MetierProfil), en fenêtre depuis wbfMetiers.aspx :
-''' nom, famille (choisie parmi T332FamilleMetier), actif, et les profils où il existe
-''' (TA, Cie 0, Cie 1-4) avec leur groupe et leurs taxes. s0914 lit, s0915 enregistre (nom
-''' unique ; renommer met à jour le paramètre METIER des compagnies), s0916 supprime (refusé
-''' si des compagnies l'ont choisi), s0917 donne les familles (wbfFamillesMetier.aspx).
+''' nom, famille (choisie parmi T332FamilleMetier), secteur d'activité facultatif (parmi
+''' T333SecteurActivite), actif, et les profils où il existe (TA, Cie 0, Cie 1-4) avec leur
+''' groupe et leurs taxes. s0914 lit, s0915 enregistre (nom unique ; renommer met à jour le
+''' paramètre METIER des compagnies) puis s0934 pose le secteur, s0916 supprime (refusé si
+''' des compagnies l'ont choisi), s0917 donne les familles (wbfFamillesMetier.aspx), s0930
+''' les secteurs (wbfSecteursActivite.aspx).
 ''' </summary>
 Public Class wbfMetierEdit
     Inherits clsData
@@ -62,6 +64,14 @@ Public Class wbfMetierEdit
                 ddlFamille.Items.Add(New ListItem(S(r("Famille")), S(r("Famille"))))
             Next
         End If
+        ddlSecteur.Items.Clear()
+        ddlSecteur.Items.Add(New ListItem("— Aucun —", ""))
+        Dim dsS As DataSet = ExecuteSQLds("s0930GetSecteursActiviteAdminList")
+        If dsS IsNot Nothing AndAlso dsS.Tables.Count > 0 Then
+            For Each r As DataRow In dsS.Tables(0).Rows
+                ddlSecteur.Items.Add(New ListItem(S(r("Nom")), S(r("Id"))))
+            Next
+        End If
         For Each pr In LignesProfils()
             pr.Groupe.Items.Clear()
             For Each g In Groupes : pr.Groupe.Items.Add(New ListItem(g, g)) : Next
@@ -84,6 +94,7 @@ Public Class wbfMetierEdit
         Dim famille As String = S(r("Famille"))
         If ddlFamille.Items.FindByValue(famille) Is Nothing Then ddlFamille.Items.Add(New ListItem(famille, famille))
         SetDdl(ddlFamille, famille)
+        SetDdl(ddlSecteur, S(r("SecteurId")))
         cbActive.Checked = CBool(r("IsActive"))
 
         Dim lignes = LignesProfils()
@@ -145,6 +156,12 @@ Public Class wbfMetierEdit
             p.Add(outRen)
 
             ExecuteSQL("s0915SaveMetier", p)
+
+            ' Le secteur (facultatif) : vide = aucun.
+            Dim pS As New Collection
+            pS.Add(New SqlParameter("@MetierId", CInt(outNew.Value)))
+            pS.Add(New SqlParameter("@SecteurId", If(ddlSecteur.SelectedValue = "", CObj(DBNull.Value), CObj(CInt(ddlSecteur.SelectedValue)))))
+            ExecuteSQL("s0934SetMetierSecteur", pS)
 
             ScriptManager.RegisterStartupScript(Me, Me.GetType(), "closewin",
                 "if (typeof closeWin === 'function') closeWin();", True)
