@@ -23,9 +23,16 @@ Public Class HeaderUser
 
         BindUserInfo()
         BindCompanies()
-        RenderCompanyLogo()
-        LoadTrialBadge()
-        LoadSquareBadge()
+
+        If EnPortailComptable Then
+            ' En portail comptable : aucun contexte compagnie (ni logo, ni essai, ni Square).
+            pnlTrial.Visible = False
+            pnlSquare.Visible = False
+        Else
+            RenderCompanyLogo()
+            LoadTrialBadge()
+            LoadSquareBadge()
+        End If
 
     End Sub
 
@@ -258,6 +265,12 @@ Public Class HeaderUser
 
         Dim dt As DataTable = ds.Tables(0)
 
+        ' Comptable : toujours le dropdown, avec « Portail comptable » en tête
+        ' (même s'il n'a qu'une compagnie), pour pouvoir rejoindre son cabinet.
+        If IsAccountant Then
+            BindCompaniesComptable(dt)
+            Return
+        End If
 
         If dt.Rows.Count = 1 Then
             ' Une seule compagnie : label simple
@@ -311,6 +324,42 @@ Public Class HeaderUser
         End If
     End Sub
 
+    ''' <summary>Libellé localisé de l'option « Portail comptable » du dropdown.</summary>
+    Private Function PortalLabel() As String
+        Return Choose3(CurrentLang, "— Portail comptable —", "— Accountant portal —", "— Portal del contador —")
+    End Function
+
+    ''' <summary>
+    ''' Remplissage du dropdown pour un comptable : « Portail comptable » en tête,
+    ''' puis ses compagnies. Sélectionne le portail si on y est, sinon la compagnie
+    ''' courante (et retombe sur le portail si la compagnie de session est hors liste).
+    ''' </summary>
+    Private Sub BindCompaniesComptable(dt As DataTable)
+        ddlCompany.Items.Clear()
+        ddlCompany.Items.Add(New ListItem(PortalLabel(), "PORTAL"))
+        For Each r As DataRow In dt.Rows
+            Dim sguid As String = r("CompanyGUID").ToString().ToUpper()
+            ddlCompany.Items.Add(New ListItem(r("Name").ToString(), sguid))
+        Next
+
+        ddlCompany.ClearSelection()
+        If EnPortailComptable Then
+            ddlCompany.Items.FindByValue("PORTAL").Selected = True
+        Else
+            Dim cur As ListItem = ddlCompany.Items.FindByValue(Company.ToString().ToUpper())
+            If cur IsNot Nothing Then
+                cur.Selected = True
+            Else
+                ' Compagnie de session absente de la liste : montrer le portail.
+                ddlCompany.Items.FindByValue("PORTAL").Selected = True
+                EnPortailComptable = True
+            End If
+        End If
+
+        pnlCompanyPicker.Visible = True
+        pnlCompanyLabel.Visible = False
+    End Sub
+
     ''' <summary>
     ''' Quand l'utilisateur change de compagnie via le dropdown :
     ''' - Vérifier qu'il y a bien accès (sécurité côté serveur)
@@ -322,11 +371,19 @@ Public Class HeaderUser
         Dim newGuidStr As String = ddlCompany.SelectedValue
         If String.IsNullOrEmpty(newGuidStr) Then Return
 
+        ' Bascule vers l'espace du cabinet (menu et pages du portail comptable).
+        If newGuidStr = "PORTAL" Then
+            EnPortailComptable = True
+            Response.Redirect("~/wbfCabTableauBord.aspx")
+            Return
+        End If
+
         Dim newGuid As Guid
         If Not Guid.TryParse(newGuidStr, newGuid) Then Return
 
-        ' Si c'est déjà la compagnie courante, ne rien faire (évite les redirections inutiles)
-        If Company = newGuid Then Return
+        ' Déjà sur cette compagnie ET pas en portail : rien à faire. (En portail, on
+        ' laisse passer pour en sortir même si c'est la compagnie de session.)
+        If Company = newGuid AndAlso Not EnPortailComptable Then Return
 
 
         ' Vérifier l'accès côté serveur.
@@ -354,9 +411,9 @@ Public Class HeaderUser
             Return
         End If
 
-        ' Mettre à jour la session
+        ' Entrer dans le dossier : quitter le portail et pointer la compagnie.
+        EnPortailComptable = False
         Company = newGuid
-        'Session("CompanyName") = ddlCompany.SelectedItem.Text
 
         ' Redirection vers le tableau de bord
         Response.Redirect("~/Default.aspx")

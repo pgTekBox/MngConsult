@@ -8,7 +8,13 @@ Namespace Controls
         Inherits clsDataUC
 
         Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-            litMenu.Text = BuildMenu()
+            ' Un comptable en mode « Portail comptable » voit le menu de son cabinet ;
+            ' sinon (ou dans une compagnie), le menu ERP habituel.
+            If IsAccountant AndAlso EnPortailComptable Then
+                litMenu.Text = BuildPortailMenu()
+            Else
+                litMenu.Text = BuildMenu()
+            End If
         End Sub
 
         Private ReadOnly CHEV As String =
@@ -219,6 +225,75 @@ Namespace Controls
             Return sb.ToString()
         End Function
 
+        ''' <summary>
+        ''' Le menu du « Portail comptable » (espace du cabinet), sensible au rôle du
+        ''' membre (s0919). Les écrans encore à construire apparaissent en « À venir »
+        ''' (non cliquables), pour que la structure reflète la maquette sans tromper.
+        ''' </summary>
+        Private Function BuildPortailMenu() As String
+            Dim sb As New StringBuilder()
+            Dim role As String = GetCabinetRole()
+
+            ' Toujours disponibles
+            sb.Append(Item("~/wbfCabTableauBord.aspx", Ico("home"), "portalDashboard"))
+
+            Dim filesKey As String =
+                If(role = "admin", "portalFilesAll",
+                If(role = "responsable", "portalFilesTeam", "portalFiles"))
+            sb.Append(Item("~/wbfCabDossiers.aspx", Ico("users"), filesKey))
+
+            ' Section du cabinet (écrans à venir)
+            Select Case role
+                Case "admin"
+                    sb.Append(Section("portalSecFirm"))
+                    sb.Append(ItemSoon(Ico("users"), "portalTeam"))
+                    sb.Append(ItemSoon(Ico("inbox"), "portalUnassigned"))
+                    sb.Append(ItemSoon(Ico("user-cog"), "portalMembers"))
+                    sb.Append(ItemSoon(Ico("settings"), "portalActivities"))
+                    sb.Append(ItemSoon(Ico("firm"), "portalProfile"))
+                Case "responsable"
+                    sb.Append(Section("portalSecTeam"))
+                    sb.Append(ItemSoon(Ico("users"), "portalTeamActivities"))
+                    sb.Append(ItemSoon(Ico("settings"), "portalActivities"))
+                Case "employe"
+                    sb.Append(Section("portalSecTools"))
+                    sb.Append(ItemSoon(Ico("book"), "portalTools"))
+                Case Else ' solo (ou rôle inconnu)
+                    sb.Append(Section("portalSecFirm"))
+                    sb.Append(ItemSoon(Ico("inbox"), "portalUnassigned"))
+                    sb.Append(ItemSoon(Ico("settings"), "portalActivities"))
+                    sb.Append(ItemSoon(Ico("firm"), "portalProfile"))
+            End Select
+
+            ' Administration
+            sb.Append(Section("secAdmin"))
+            sb.Append(Item("~/wbfLogout.aspx", Ico("logout"), "logout"))
+
+            Return sb.ToString()
+        End Function
+
+        ''' <summary>Le rôle du comptable connecté dans son cabinet (s0919), ou "" si aucun.</summary>
+        Private Function GetCabinetRole() As String
+            Try
+                Dim p As New Collection
+                p.Add(New SqlParameter("@UserId", UserEmail))
+                Dim ds As DataSet = ExecuteSQLds("s0919GetUserCabinet", p)
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                    Return Convert.ToString(ds.Tables(0).Rows(0)("Role")).Trim().ToLowerInvariant()
+                End If
+            Catch
+            End Try
+            Return ""
+        End Function
+
+        ''' <summary>Entrée de menu « À venir » : non cliquable, grisée, avec une pastille.</summary>
+        Private Function ItemSoon(icon As String, labelKey As String) As String
+            Return "<span class=""nav-item nav-item--soon"" aria-disabled=""true"">" &
+                   "<span class=""nav-ico"" aria-hidden=""true"">" & icon & "</span>" &
+                   "<span class=""nav-txt"">" & L(labelKey) & "</span>" &
+                   "<span class=""nav-badge"">" & L("comingSoon") & "</span></span>"
+        End Function
+
         ''' <summary>Traductions du menu (fr/en/es).</summary>
         Protected Function L(key As String) As String
             Dim lang As String = CurrentLang
@@ -279,6 +354,22 @@ Namespace Controls
                 Case "stripeDiag" : Return Choose3(lang, "Diagnostic Stripe", "Stripe diagnostics", "Diagnóstico de Stripe")
                 Case "autoPay" : Return Choose3(lang, "Paiements automatiques", "Automatic payments", "Pagos automáticos")
                 Case "logout" : Return Choose3(lang, "Déconnexion", "Log out", "Cerrar sesión")
+                ' --- Portail comptable ---
+                Case "portalDashboard" : Return Choose3(lang, "Tableau de bord", "Dashboard", "Panel de control")
+                Case "portalFiles" : Return Choose3(lang, "Mes dossiers", "My files", "Mis expedientes")
+                Case "portalFilesAll" : Return Choose3(lang, "Tous les dossiers", "All files", "Todos los expedientes")
+                Case "portalFilesTeam" : Return Choose3(lang, "Dossiers de l'équipe", "Team files", "Expedientes del equipo")
+                Case "portalSecFirm" : Return Choose3(lang, "Mon cabinet", "My firm", "Mi despacho")
+                Case "portalSecTeam" : Return Choose3(lang, "Mon équipe", "My team", "Mi equipo")
+                Case "portalSecTools" : Return Choose3(lang, "Outils", "Tools", "Herramientas")
+                Case "portalTeam" : Return Choose3(lang, "Mon équipe", "My team", "Mi equipo")
+                Case "portalTeamActivities" : Return Choose3(lang, "Employés et activités", "Staff and activities", "Empleados y actividades")
+                Case "portalUnassigned" : Return Choose3(lang, "Clients non associés", "Unassigned clients", "Clientes sin asignar")
+                Case "portalMembers" : Return Choose3(lang, "Membres et sécurité", "Members and security", "Miembros y seguridad")
+                Case "portalActivities" : Return Choose3(lang, "Activités à attribuer", "Activities to assign", "Actividades por asignar")
+                Case "portalProfile" : Return Choose3(lang, "Profil du cabinet", "Firm profile", "Perfil del despacho")
+                Case "portalTools" : Return Choose3(lang, "Traitement en lot", "Batch processing", "Procesamiento por lotes")
+                Case "comingSoon" : Return Choose3(lang, "À venir", "Soon", "Pronto")
                 Case Else : Return ""
             End Select
         End Function

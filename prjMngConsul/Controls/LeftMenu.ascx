@@ -153,6 +153,11 @@
     .nav-badge.y { background: #E3B341; color: #3D2A00; }
     .nav-badge.r { background: #A3261C; color: #FFFFFF; }
 
+    /* Entrées « À venir » du portail comptable : visibles mais non cliquables */
+    .nav-item--soon { opacity: .55; cursor: default; }
+    .nav-item--soon:hover { background: transparent; }
+    .nav-item--soon .nav-badge { background: #E8EDF5; color: #5B6B86; font-weight: 700; }
+
     /* Groupes dépliables (les écrans d'un même élément) */
     .chev { display: flex; color: #5B6B86; }
     .chev svg { transition: transform .18s ease; }

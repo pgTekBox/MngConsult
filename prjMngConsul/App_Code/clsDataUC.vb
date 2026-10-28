@@ -64,6 +64,24 @@ Public Class clsDataUC
         End Set
     End Property
 
+    ''' <summary>
+    ''' Vrai quand le comptable a choisi « Portail comptable » dans le sélecteur
+    ''' de l'en-tête : le menu de gauche et les pages basculent sur l'espace du
+    ''' cabinet. Mis à False dès qu'il entre dans une compagnie (dossier).
+    ''' </summary>
+    Public Property EnPortailComptable() As Boolean
+        Get
+            Try
+                Return Session("PortailComptable") IsNot Nothing AndAlso CBool(Session("PortailComptable"))
+            Catch
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As Boolean)
+            Session("PortailComptable") = Value
+        End Set
+    End Property
+
 
     Public Property isAdmin() As Boolean
         Get

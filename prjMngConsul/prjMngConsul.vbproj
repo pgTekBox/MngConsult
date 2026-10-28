@@ -522,6 +522,8 @@
     <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="AssocierCompte.aspx" />
     <Content Include="CabinetsCertifies.aspx" />
+    <Content Include="wbfCabTableauBord.aspx" />
+    <Content Include="wbfCabDossiers.aspx" />
     <Content Include="QuiFaitQuoi.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
     <Content Include="ImportApideck.aspx" />
@@ -812,6 +814,14 @@
     </Compile>
     <Compile Include="CabinetsCertifies.aspx.vb">
       <DependentUpon>CabinetsCertifies.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabTableauBord.aspx.vb">
+      <DependentUpon>wbfCabTableauBord.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabDossiers.aspx.vb">
+      <DependentUpon>wbfCabDossiers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CorrespondanceComptes.aspx.designer.vb">
