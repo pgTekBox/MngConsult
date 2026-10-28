@@ -196,19 +196,38 @@ Public Class clsDataUC
     Public Property CompanyName() As String
         Get
             Try
-                If String.IsNullOrEmpty(Session("CompanyName")) Then
-                    Dim userRow As DataRow = GetUserById(UserId)
-                    Session("CompanyName") = CType(userRow("CompanyName"), String)
+                ' Nom de la compagnie COURANTE (celle de session), pas la compagnie
+                ' maison de l'utilisateur : le comptable change de dossier via le
+                ' sélecteur, le nom doit suivre. Cache indexé sur le GUID courant.
+                Dim cg As String = Company.ToString()
+                If Session("CompanyName") Is Nothing OrElse CStr(If(Session("CompanyNameGuid"), "")) <> cg Then
+                    Session("CompanyName") = GetCompanyNameByGuid(Company)
+                    Session("CompanyNameGuid") = cg
                 End If
-                Return Session("CompanyName")
+                Return CStr(If(Session("CompanyName"), ""))
             Catch ex As Exception
                 Return ""
             End Try
         End Get
         Set(ByVal Value As String)
             Session("CompanyName") = Value
+            Session("CompanyNameGuid") = Company.ToString()
         End Set
     End Property
+
+    ''' <summary>Nom d'une compagnie par son GUID (s0918GetCompanyName → fCompanyName).</summary>
+    Private Function GetCompanyNameByGuid(cg As Guid) As String
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", cg))
+            Dim ds As DataSet = ExecuteSQLds("s0918GetCompanyName", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Return CStr(ds.Tables(0).Rows(0)("Name"))
+            End If
+        Catch
+        End Try
+        Return ""
+    End Function
 
     Public Property Abonnement() As String
         Get
