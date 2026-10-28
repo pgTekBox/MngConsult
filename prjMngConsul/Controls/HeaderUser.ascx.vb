@@ -329,9 +329,12 @@ Public Class HeaderUser
         If Company = newGuid Then Return
 
 
-        ' Vérifier l'accès côté serveur
+        ' Vérifier l'accès côté serveur.
+        ' s0211ValidateCompanyAccess attend l'EMAIL (WHERE email = @UserId), comme
+        ' s0210GetUserCompanies — pas l'Id entier, sinon HasAccess=0 et le changement
+        ' de compagnie est silencieusement rejeté.
         Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", UserId))
+        p.Add(New SqlParameter("@UserId", UserEmail))
         p.Add(New SqlParameter("@CompanyGUID", newGuid))
 
         Dim outAccess As New SqlParameter("@HasAccess", SqlDbType.Bit)
