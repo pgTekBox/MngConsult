@@ -236,7 +236,8 @@ Namespace Controls
             Dim role As String = GetCabinetRole()
 
             ' Toujours disponibles
-            sb.Append(Item("~/wbfCabTableauBord.aspx", Ico("home"), "portalDashboard"))
+            sb.Append(Item("~/wbfCabJournee.aspx", Ico("home"), "portalJournee"))
+            sb.Append(Item("~/wbfCabTableauBord.aspx", Ico("chart"), "portalDashboard"))
 
             Dim filesKey As String = If(role = "admin", "portalFilesAll", "portalFiles")
             sb.Append(Item("~/wbfCabDossiers.aspx", Ico("users"), filesKey))
@@ -377,6 +378,7 @@ Namespace Controls
                 Case "autoPay" : Return Choose3(lang, "Paiements automatiques", "Automatic payments", "Pagos automáticos")
                 Case "logout" : Return Choose3(lang, "Déconnexion", "Log out", "Cerrar sesión")
                 ' --- Portail comptable ---
+                Case "portalJournee" : Return Choose3(lang, "Ma journée", "My day", "Mi día")
                 Case "portalDashboard" : Return Choose3(lang, "Tableau de bord", "Dashboard", "Panel de control")
                 Case "portalFiles" : Return Choose3(lang, "Mes dossiers", "My files", "Mis expedientes")
                 Case "portalFilesAll" : Return Choose3(lang, "Tous les dossiers", "All files", "Todos los expedientes")

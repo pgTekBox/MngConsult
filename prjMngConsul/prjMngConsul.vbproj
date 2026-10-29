@@ -523,6 +523,7 @@
     <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="AssocierCompte.aspx" />
     <Content Include="CabinetsCertifies.aspx" />
+    <Content Include="wbfCabJournee.aspx" />
     <Content Include="wbfCabTableauBord.aspx" />
     <Content Include="wbfCabDossiers.aspx" />
     <Content Include="wbfCabMembres.aspx" />
@@ -826,6 +827,10 @@
     </Compile>
     <Compile Include="CabinetsCertifies.aspx.vb">
       <DependentUpon>CabinetsCertifies.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabJournee.aspx.vb">
+      <DependentUpon>wbfCabJournee.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfCabTableauBord.aspx.vb">

@@ -374,7 +374,7 @@ Public Class HeaderUser
         ' Bascule vers l'espace du cabinet (menu et pages du portail comptable).
         If newGuidStr = "PORTAL" Then
             EnPortailComptable = True
-            Response.Redirect("~/wbfCabTableauBord.aspx")
+            Response.Redirect("~/wbfCabJournee.aspx")
             Return
         End If
 
