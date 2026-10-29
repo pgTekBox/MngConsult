@@ -167,9 +167,6 @@
 
     function render() {
         var open = scopeEmp().filter(function (a) { return !a.fait; });
-        var cr = open.filter(function (a) { return a.pr === 'r'; }).length;
-        var cy = open.filter(function (a) { return a.pr === 'y'; }).length;
-        var cg = open.filter(function (a) { return a.pr === 'g'; }).length;
         var urgA = open.filter(function (a) { return a.pr === 'r' && a.etat === 'a'; }).length;
 
         var html = '';
@@ -186,13 +183,6 @@
         if (!D.reel) html += '<div class="jrn-illus">'
             + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A5200" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>'
             + '<span>' + esc(L.illustratif) + '</span></div>';
-
-        // Santé
-        html += '<div class="jrn-sante">'
-            + tile('r', cr, L.urgent, cr + ' ' + L.aFaire)
-            + tile('y', cy, L.surveiller, cy + ' ' + L.aFaire)
-            + tile('g', cg, L.bien, cg + ' ' + L.aFaire)
-            + '</div>';
 
         // 60 conseille
         var msg = urgA ? (urgA === 1 ? L.commencez1 : fmt(L.commencez, urgA)) : L.ordre;
