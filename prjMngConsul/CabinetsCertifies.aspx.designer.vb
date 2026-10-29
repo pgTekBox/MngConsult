@@ -31,6 +31,9 @@ Partial Public Class CabinetsCertifies
     '''<summary>litOutils control.</summary>
     Protected WithEvents litOutils As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>litDemande control.</summary>
+    Protected WithEvents litDemande As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>litListe control.</summary>
     Protected WithEvents litListe As Global.System.Web.UI.WebControls.Literal
 

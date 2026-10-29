@@ -656,6 +656,8 @@
     <Content Include="AssistantIA.ashx" />
     <Content Include="ApideckEtat.ashx" />
     <Content Include="MonCabinet.ashx" />
+    <Content Include="DemandeCabinet.ashx" />
+    <Content Include="wbfCabDemandes.aspx" />
     <Content Include="AssistantCompte.ashx" />
     <Content Include="wbfAppointmentEdit.aspx" />
     <Content Include="wbfAutoPayAuthorizations.aspx" />
@@ -1508,6 +1510,13 @@
     </Compile>
     <Compile Include="MonCabinet.ashx.vb">
       <DependentUpon>MonCabinet.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="DemandeCabinet.ashx.vb">
+      <DependentUpon>DemandeCabinet.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfCabDemandes.aspx.vb">
+      <DependentUpon>wbfCabDemandes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="QuiFaitQuoi.aspx.designer.vb">
       <DependentUpon>QuiFaitQuoi.aspx</DependentUpon>

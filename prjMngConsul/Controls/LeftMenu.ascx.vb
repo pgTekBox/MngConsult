@@ -248,6 +248,7 @@ Namespace Controls
                     ' Gestion du cabinet (la répartition des activités se gère par
                     ' dossier depuis la fiche client, via « Mes dossiers »).
                     sb.Append(Section("portalSecFirm"))
+                    sb.Append(Item("~/wbfCabDemandes.aspx", Ico("inbox"), "portalDemandes", "nav-item", GetDemandesCount(), "y"))
                     sb.Append(Item("~/wbfCabMembres.aspx", Ico("user-cog"), "portalMembers"))
                     sb.Append(Item("~/wbfCabEquipes.aspx", Ico("users"), "portalEquipes"))
                     sb.Append(Item("~/wbfCabAffectation.aspx", Ico("inbox"), "portalAssign"))
@@ -267,6 +268,18 @@ Namespace Controls
             sb.Append(Item("~/wbfLogout.aspx", Ico("logout"), "logout"))
 
             Return sb.ToString()
+        End Function
+
+        ''' <summary>Nombre de demandes de clients en attente pour le cabinet (s0939), pour le badge du menu.</summary>
+        Private Function GetDemandesCount() As Integer
+            Try
+                Dim p As New Collection
+                p.Add(New SqlParameter("@UserId", UserEmail))
+                Dim ds As DataSet = ExecuteSQLds("s0939ListDemandesCabinet", p)
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then Return ds.Tables(0).Rows.Count
+            Catch
+            End Try
+            Return 0
         End Function
 
         ''' <summary>Le rôle du comptable connecté dans son cabinet (s0919), ou "" si aucun.</summary>
@@ -362,6 +375,7 @@ Namespace Controls
                 Case "portalTeam" : Return Choose3(lang, "Mon équipe", "My team", "Mi equipo")
                 Case "portalTeamActivities" : Return Choose3(lang, "Employés et activités", "Staff and activities", "Empleados y actividades")
                 Case "portalUnassigned" : Return Choose3(lang, "Clients non associés", "Unassigned clients", "Clientes sin asignar")
+                Case "portalDemandes" : Return Choose3(lang, "Demandes de clients", "Client requests", "Solicitudes de clientes")
                 Case "portalMembers" : Return Choose3(lang, "Membres et sécurité", "Members and security", "Miembros y seguridad")
                 Case "portalEquipes" : Return Choose3(lang, "Équipes", "Teams", "Equipos")
                 Case "portalAssign" : Return Choose3(lang, "Affectation des dossiers", "File assignment", "Asignación de expedientes")

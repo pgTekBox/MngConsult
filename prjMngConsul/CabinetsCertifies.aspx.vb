@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports System.Data.SqlClient
 Imports System.Globalization
 Imports System.Text
 
@@ -103,6 +104,53 @@ Public Class CabinetsCertifies
             sb.Append("<p class=""cab-vide"">").Append(Server.HtmlEncode(T("L'annuaire n'a pas pu être lu : ", "The directory could not be read: ", "No se pudo leer el directorio: ") & ex.Message)).Append("</p>")
         End Try
         litListe.Text = sb.ToString()
+        RendreDemande()
+    End Sub
+
+    ''' <summary>
+    ''' Flux entrant : bannière du statut de la demande de cabinet de la compagnie
+    ''' (s0941) + script du bouton « Demander ce cabinet » (POST DemandeCabinet.ashx).
+    ''' </summary>
+    Private Sub RendreDemande()
+        Dim sb As New StringBuilder()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0941GetMaDemande", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                Dim statut As String = Convert.ToString(r("Statut"))
+                Dim cab As String = Convert.ToString(r("CabinetNom"))
+                Dim cls As String = "dem-en", txt As String = ""
+                Select Case statut
+                    Case "EnAttente"
+                        txt = T("Demande en attente auprès de ", "Request pending with ", "Solicitud pendiente con ") & cab & "."
+                    Case "Acceptee"
+                        cls = "dem-ok"
+                        txt = cab & T(" a accepté votre demande. C'est votre cabinet.", " accepted your request. It is your firm.", " aceptó su solicitud. Es su despacho.")
+                    Case "Refusee"
+                        cls = "dem-no"
+                        txt = T("Votre demande auprès de ", "Your request to ", "Su solicitud a ") & cab & T(" a été refusée.", " was declined.", " fue rechazada.")
+                End Select
+                If txt <> "" Then
+                    sb.Append("<div class=""cab-demande-statut ").Append(cls).Append(""">").Append(Server.HtmlEncode(txt)).Append("</div>")
+                End If
+            End If
+        Catch
+        End Try
+
+        ' Script du bouton « Demander ce cabinet »
+        Dim envoyee As String = HttpUtility.JavaScriptStringEncode(T("✓ Demande envoyée", "✓ Request sent", "✓ Solicitud enviada"))
+        Dim deja As String = HttpUtility.JavaScriptStringEncode(T("Déjà en attente", "Already pending", "Ya pendiente"))
+        Dim erreur As String = HttpUtility.JavaScriptStringEncode(T("Réessayer", "Try again", "Reintentar"))
+        sb.Append("<script type=""text/javascript"">(function(){var M={e:'").Append(envoyee).Append("',d:'").Append(deja).Append("',x:'").Append(erreur).Append("'};")
+        sb.Append("Array.prototype.forEach.call(document.querySelectorAll('.cab-demander'),function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-cab-id');b.disabled=true;")
+        sb.Append("fetch('DemandeCabinet.ashx',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({cabinetId:parseInt(id,10)})})")
+        sb.Append(".then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})")
+        sb.Append(".then(function(z){if(z.ok){b.textContent=M.e;}else if(z.j&&z.j.code===1){b.textContent=M.d;}else{b.textContent=M.x;b.disabled=false;}})")
+        sb.Append(".catch(function(){b.textContent=M.x;b.disabled=false;});});});})();</script>")
+
+        litDemande.Text = sb.ToString()
     End Sub
 
     Private Function Carte(r As DataRow) As String
@@ -131,7 +179,7 @@ Public Class CabinetsCertifies
         txt.Append(desc)
 
         Dim sb As New StringBuilder()
-        sb.Append("<article class=""cab-carte"" data-txt=""").Append(Server.HtmlEncode(txt.ToString())).Append(""">")
+        sb.Append("<article class=""cab-carte"" data-cab-id=""").Append(Convert.ToString(r("Id"))).Append(""" data-txt=""").Append(Server.HtmlEncode(txt.ToString())).Append(""">")
         sb.Append("<div class=""cab-top""><div class=""cab-av"" aria-hidden=""true"">").Append(Server.HtmlEncode(Initiales(nom))).Append("</div><div>")
         sb.Append("<h2>").Append(Server.HtmlEncode(nom)).Append("</h2>")
         If resp <> "" Then sb.Append("<div class=""cab-resp"">").Append(Server.HtmlEncode(resp)).Append("</div>")
@@ -154,6 +202,7 @@ Public Class CabinetsCertifies
         Next
         sb.Append("</div>")
         sb.Append("<div class=""cab-actions"">")
+        sb.Append("<button type=""button"" class=""cab-demander"" data-cab-id=""").Append(Convert.ToString(r("Id"))).Append(""">").Append(Server.HtmlEncode(T("Demander ce cabinet", "Request this firm", "Solicitar este despacho"))).Append("</button>")
         If courriel <> "" Then sb.Append("<a href=""mailto:").Append(Server.HtmlEncode(courriel)).Append("""><i class=""ic ic-mail"" aria-hidden=""true""></i>").Append(Server.HtmlEncode(T("Écrire", "Write", "Escribir"))).Append("</a>")
         If site <> "" Then sb.Append("<a class=""sec"" href=""").Append(Server.HtmlEncode(site)).Append(""" target=""_blank"" rel=""noopener""><i class=""ic ic-globe"" aria-hidden=""true""></i>").Append(Server.HtmlEncode(T("Site web", "Website", "Sitio web"))).Append("</a>")
         If tel <> "" Then sb.Append("<span class=""tel"">").Append(Server.HtmlEncode(T("Tél. ", "Tel. ", "Tel. ") & tel)).Append("</span>")

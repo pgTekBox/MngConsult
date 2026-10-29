@@ -63,6 +63,14 @@
     .cab-actions .tel { display: inline-flex; align-items: center; color: #44536E; padding: 7px 4px }
     .cab-vide { background: #fff; border-radius: 20px; padding: 24px; text-align: center; color: #44536E; font-size: 14px }
     .cab-vide[hidden] { display: none }
+    /* Flux entrant : bouton « Demander ce cabinet » + bannière de statut */
+    .cab-actions .cab-demander { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 0; border-radius: 999px; font: inherit; font-weight: 700; font-size: 13px; color: #fff; background: var(--mc-primary, #1B4F9C); cursor: pointer }
+    .cab-actions .cab-demander:hover { background: var(--mc-primary-dark, #143A73) }
+    .cab-actions .cab-demander:disabled { opacity: .7; cursor: default }
+    .cab-demande-statut { border-radius: 16px; padding: 12px 16px; margin: 0 0 16px; font-weight: 700; font-size: 14px }
+    .cab-demande-statut.dem-en { background: #FBF1DC; color: #7A5200 }
+    .cab-demande-statut.dem-ok { background: #E3F3EA; color: #0F5A3A }
+    .cab-demande-statut.dem-no { background: #FDECEA; color: #A3261C }
 </style>
 <asp:Literal ID="litPopupCss" runat="server" />
 <link rel="stylesheet" href="css/cabinet-60s.css?v=2026102004" />
@@ -83,6 +91,8 @@
         <p class="cab-lede"><asp:Literal ID="litLede" runat="server" /></p>
         <asp:Literal ID="litOutils" runat="server" />
     </section>
+
+    <asp:Literal ID="litDemande" runat="server" />
 
     <div class="cab-liste" id="cabListe">
         <asp:Literal ID="litListe" runat="server" />
