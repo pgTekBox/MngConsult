@@ -58,6 +58,20 @@
     .jrow .jt .jp { color: #5B6B86; font-size: 12px }
     .vide { color: #44536E; font-size: 14px }
     .avenir { color: #5B6B86; font-size: 14px; font-weight: 700 }
+    /* Préparer la rencontre */
+    .prep { width: 100%; min-height: 160px; padding: 12px 14px; border: 1px solid var(--mc-line,#D5DDE8); border-radius: 14px; font: inherit; font-size: 14.5px; line-height: 1.5; color: #0E1F3D; background: #fff; outline: none; box-sizing: border-box; resize: vertical }
+    .prep:focus { border-color: var(--mc-primary,#1B4F9C); box-shadow: 0 0 0 4px rgba(27,79,156,.14) }
+    .rapp { display: flex; flex-direction: column; gap: 6px }
+    .rapp .r { padding: 10px 12px; border-radius: 12px; background: var(--mc-page,#F2F5F9); font-size: 14px; color: #0E1F3D; font-weight: 700 }
+    /* Miroir */
+    .mir-sum { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin-bottom: 16px }
+    @media (max-width: 680px) { .mir-sum { grid-template-columns: 1fr } }
+    .mir-sum .k { border-radius: 18px; padding: 16px 18px } .mir-sum .k .n { font-size: 26px; font-weight: 800 } .mir-sum .k .l { font-size: 13px; font-weight: 700; margin-top: 4px }
+    .mir-sum .cli { background: #E3F3EA } .mir-sum .cli .n, .mir-sum .cli .l { color: #0F5A3A }
+    .mir-sum .par { background: #E3EBF7 } .mir-sum .par .n, .mir-sum .par .l { color: #143A73 }
+    .mir-list { max-height: 320px; overflow: auto; border: 1px solid var(--mc-line,#D5DDE8); border-radius: 14px; padding: 6px 2px }
+    .mir-list .mi { padding: 7px 12px; font-size: 13.5px; color: #0E1F3D; border-bottom: 1px solid #F0F3F8 }
+    .mir-list .mi .tg { font-size: 11px; font-weight: 800; color: #143A73; margin-left: 6px }
     .msg { margin-top: 12px; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; font-weight: 700; background: #E3F3EA; color: #0F5A3A }
 </style>
 </asp:Content>
@@ -118,7 +132,22 @@
             <div class="jr"><asp:Literal ID="litJournal" runat="server" /></div>
         </asp:Panel>
 
-        <%-- Onglets à venir (Parts D/F) --%>
+        <%-- Onglet PRÉPARER LA RENCONTRE --%>
+        <asp:Panel ID="pnlPreparer" runat="server" Visible="false">
+            <h2 class="secT"><asp:Literal ID="litPrepT" runat="server" /></h2>
+            <asp:TextBox ID="txtPrep" runat="server" TextMode="MultiLine" CssClass="prep" />
+            <div class="actions" style="margin-top:12px"><asp:Button ID="btnSavePrep" runat="server" CssClass="btn p" /></div>
+            <asp:Literal ID="litPrepMsg" runat="server" />
+            <h3 class="secT" style="margin-top:20px"><asp:Literal ID="litRappelsT" runat="server" /></h3>
+            <asp:Literal ID="litRappels" runat="server" />
+        </asp:Panel>
+
+        <%-- Onglet MIROIR (ce que voit le client) --%>
+        <asp:Panel ID="pnlMiroir" runat="server" Visible="false">
+            <asp:Literal ID="litMiroir" runat="server" />
+        </asp:Panel>
+
+        <%-- Onglets à venir (Part D) --%>
         <asp:Panel ID="pnlAvenir" runat="server" Visible="false">
             <div class="avenir"><asp:Literal ID="litAvenir" runat="server" /></div>
         </asp:Panel>

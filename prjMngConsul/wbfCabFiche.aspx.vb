@@ -33,6 +33,15 @@ Public Class wbfCabFiche
     Protected WithEvents litTachesVide As System.Web.UI.WebControls.Literal
     Protected WithEvents pnlJournal As System.Web.UI.WebControls.Panel
     Protected WithEvents litJournal As System.Web.UI.WebControls.Literal
+    Protected WithEvents pnlPreparer As System.Web.UI.WebControls.Panel
+    Protected WithEvents litPrepT As System.Web.UI.WebControls.Literal
+    Protected WithEvents txtPrep As System.Web.UI.WebControls.TextBox
+    Protected WithEvents btnSavePrep As System.Web.UI.WebControls.Button
+    Protected WithEvents litPrepMsg As System.Web.UI.WebControls.Literal
+    Protected WithEvents litRappelsT As System.Web.UI.WebControls.Literal
+    Protected WithEvents litRappels As System.Web.UI.WebControls.Literal
+    Protected WithEvents pnlMiroir As System.Web.UI.WebControls.Panel
+    Protected WithEvents litMiroir As System.Web.UI.WebControls.Literal
     Protected WithEvents pnlAvenir As System.Web.UI.WebControls.Panel
     Protected WithEvents litAvenir As System.Web.UI.WebControls.Literal
 
@@ -71,15 +80,20 @@ Public Class wbfCabFiche
                 Case "echanges"
                     pnlAvenir.Visible = True : litAvenir.Text = Server.HtmlEncode(T("Échanges — à venir.", "Messages — coming soon.", "Intercambios — próximamente."))
                 Case "preparer"
-                    pnlAvenir.Visible = True : litAvenir.Text = Server.HtmlEncode(T("Préparer la rencontre — à venir.", "Meeting prep — coming soon.", "Preparar la reunión — próximamente."))
+                    pnlPreparer.Visible = True : TextesPrep() : BindPrep() : BindRappels()
                 Case "miroir"
-                    pnlAvenir.Visible = True : litAvenir.Text = Server.HtmlEncode(T("Ce que voit le client — à venir.", "What the client sees — coming soon.", "Lo que ve el cliente — próximamente."))
+                    pnlMiroir.Visible = True : BindMiroir()
                 Case Else
                     pnlVue.Visible = True : RendreVue(r)
             End Select
         Else
-            ' Postback : on est sur l'onglet Tâches (seul à poster) ; garder visible.
-            pnlTaches.Visible = True : Textes()
+            ' Postback : seuls les onglets Tâches et Préparer postent.
+            Select Case tab
+                Case "preparer"
+                    pnlPreparer.Visible = True : TextesPrep() : BindRappels()
+                Case Else
+                    pnlTaches.Visible = True : Textes()
+            End Select
         End If
     End Sub
 
@@ -280,6 +294,94 @@ Public Class wbfCabFiche
             sb.Append("<div class=""vide"">").Append(Server.HtmlEncode(T("Rien au journal pour l'instant.", "Nothing in the log yet.", "Nada en el registro aún."))).Append("</div>")
         End If
         litJournal.Text = sb.ToString()
+    End Sub
+
+    ' ---- Onglet Préparer la rencontre ----
+    Private Sub TextesPrep()
+        litPrepT.Text = Server.HtmlEncode(T("Points à aborder", "Points to discuss", "Puntos a tratar"))
+        litRappelsT.Text = Server.HtmlEncode(T("Rappels", "Reminders", "Recordatorios"))
+        btnSavePrep.Text = T("Enregistrer les notes", "Save notes", "Guardar notas")
+    End Sub
+
+    Private Sub BindPrep()
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@CompanyGUID", _g))
+        Dim ds As DataSet = ExecuteSQLds("s0949GetPrep", p)
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+            txtPrep.Text = Convert.ToString(ds.Tables(0).Rows(0)("Notes"))
+        End If
+    End Sub
+
+    ''' <summary>Rappels = les tâches ouvertes du dossier (non faites).</summary>
+    Private Sub BindRappels()
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@CompanyGUID", _g))
+        Dim ds As DataSet = ExecuteSQLds("s0942ListTaches", p)
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""rapp"">")
+        Dim n As Integer = 0
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+            For Each r As DataRow In ds.Tables(0).Rows
+                If Convert.ToString(r("Statut")) = "fait" Then Continue For
+                sb.Append("<div class=""r"">").Append(Server.HtmlEncode(Convert.ToString(r("Titre"))))
+                sb.Append(" <span style=""color:#5B6B86;font-weight:700"">(").Append(Server.HtmlEncode(StatutLabel(r("Statut")))).Append(")</span></div>")
+                n += 1
+            Next
+        End If
+        If n = 0 Then sb.Append("<div class=""vide"">").Append(Server.HtmlEncode(T("Aucune tâche ouverte.", "No open task.", "Ninguna tarea abierta."))).Append("</div>")
+        sb.Append("</div>")
+        litRappels.Text = sb.ToString()
+    End Sub
+
+    Protected Sub btnSavePrep_Click(sender As Object, e As EventArgs) Handles btnSavePrep.Click
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@CompanyGUID", _g))
+        p.Add(New SqlParameter("@Notes", If(txtPrep.Text, "")))
+        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+        p.Add(outErr)
+        ExecuteSQL("s0950SavePrep", p)
+        litPrepMsg.Text = "<div class=""msg"">" & Server.HtmlEncode(T("Notes enregistrées.", "Notes saved.", "Notas guardadas.")) & "</div>"
+    End Sub
+
+    ' ---- Onglet Miroir (ce que voit le client) ----
+    Private Sub BindMiroir()
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", _g))
+        p.Add(New SqlParameter("@Categorie", "QUIFAITQUOI"))
+        Dim ds As DataSet = ExecuteSQLds("s0150GetParamsForCompany", p)
+
+        Dim nCli As Integer = 0, nPar As Integer = 0
+        Dim liste As New StringBuilder()
+        liste.Append("<div class=""mir-list"">")
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+            Dim dt As DataTable = ds.Tables(0)
+            Dim dv As New DataView(dt)
+            If dt.Columns.Contains("Ordre") Then dv.Sort = "Ordre ASC"
+            For Each drv As DataRowView In dv
+                Dim sval As String = If(IsDBNull(drv("sVal")), "", Convert.ToString(drv("sVal")))
+                If sval = "moi" OrElse sval = "moi+cabinet" Then
+                    If sval = "moi" Then nCli += 1 Else nPar += 1
+                    Dim tag As String = If(sval = "moi+cabinet", " <span class=""tg"">" & Server.HtmlEncode(T("partagé", "shared", "compartido")) & "</span>", "")
+                    liste.Append("<div class=""mi"">").Append(Server.HtmlEncode(Convert.ToString(drv("Name")))).Append(tag).Append("</div>")
+                End If
+            Next
+        End If
+        liste.Append("</div>")
+
+        Dim sb As New StringBuilder()
+        sb.Append("<p class=""secT"" style=""font-weight:700;color:#44536E;font-size:14px"">").Append(Server.HtmlEncode(
+            T("Ce que le client doit faire de son côté (sa part du « qui fait quoi »).",
+              "What the client must do on their side (their share of « who does what »).",
+              "Lo que el cliente debe hacer por su parte (su parte de « quién hace qué »)."))).Append("</p>")
+        sb.Append("<div class=""mir-sum"">")
+        sb.Append("<div class=""k cli""><div class=""n"">").Append(nCli).Append("</div><div class=""l"">").Append(Server.HtmlEncode(T("activités du client", "client activities", "actividades del cliente"))).Append("</div></div>")
+        sb.Append("<div class=""k par""><div class=""n"">").Append(nPar).Append("</div><div class=""l"">").Append(Server.HtmlEncode(T("activités partagées", "shared activities", "actividades compartidas"))).Append("</div></div>")
+        sb.Append("</div>")
+        If nCli + nPar > 0 Then sb.Append(liste.ToString()) Else sb.Append("<div class=""vide"">").Append(Server.HtmlEncode(T("Le cabinet s'occupe de tout.", "The firm handles everything.", "El despacho se encarga de todo."))).Append("</div>")
+        litMiroir.Text = sb.ToString()
     End Sub
 
     ' ---- Helpers ----
