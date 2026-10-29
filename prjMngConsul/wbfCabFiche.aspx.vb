@@ -33,6 +33,11 @@ Public Class wbfCabFiche
     Protected WithEvents litTachesVide As System.Web.UI.WebControls.Literal
     Protected WithEvents pnlJournal As System.Web.UI.WebControls.Panel
     Protected WithEvents litJournal As System.Web.UI.WebControls.Literal
+    Protected WithEvents pnlEchanges As System.Web.UI.WebControls.Panel
+    Protected WithEvents litFil As System.Web.UI.WebControls.Literal
+    Protected WithEvents txtEch As System.Web.UI.WebControls.TextBox
+    Protected WithEvents btnEnvoyerEch As System.Web.UI.WebControls.Button
+    Protected WithEvents litEchMsg As System.Web.UI.WebControls.Literal
     Protected WithEvents pnlPreparer As System.Web.UI.WebControls.Panel
     Protected WithEvents litPrepT As System.Web.UI.WebControls.Literal
     Protected WithEvents txtPrep As System.Web.UI.WebControls.TextBox
@@ -78,7 +83,7 @@ Public Class wbfCabFiche
                 Case "journal"
                     pnlJournal.Visible = True : BindJournal()
                 Case "echanges"
-                    pnlAvenir.Visible = True : litAvenir.Text = Server.HtmlEncode(T("Échanges — à venir.", "Messages — coming soon.", "Intercambios — próximamente."))
+                    pnlEchanges.Visible = True : TextesEch() : BindFil() : MarkCabinetLu()
                 Case "preparer"
                     pnlPreparer.Visible = True : TextesPrep() : BindPrep() : BindRappels()
                 Case "miroir"
@@ -87,10 +92,12 @@ Public Class wbfCabFiche
                     pnlVue.Visible = True : RendreVue(r)
             End Select
         Else
-            ' Postback : seuls les onglets Tâches et Préparer postent.
+            ' Postback : les onglets Tâches, Préparer et Échanges postent.
             Select Case tab
                 Case "preparer"
                     pnlPreparer.Visible = True : TextesPrep() : BindRappels()
+                Case "echanges"
+                    pnlEchanges.Visible = True : TextesEch()
                 Case Else
                     pnlTaches.Visible = True : Textes()
             End Select
@@ -294,6 +301,79 @@ Public Class wbfCabFiche
             sb.Append("<div class=""vide"">").Append(Server.HtmlEncode(T("Rien au journal pour l'instant.", "Nothing in the log yet.", "Nada en el registro aún."))).Append("</div>")
         End If
         litJournal.Text = sb.ToString()
+    End Sub
+
+    ' ---- Onglet Échanges ----
+    Private Sub TextesEch()
+        btnEnvoyerEch.Text = T("Envoyer", "Send", "Enviar")
+    End Sub
+
+    Private Sub BindFil()
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", _g))
+        Dim ds As DataSet = ExecuteSQLds("s0951ListEchanges", p)
+        Dim sb As New StringBuilder()
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+            For Each r As DataRow In ds.Tables(0).Rows
+                Dim cote As String = If(Convert.ToString(r("Expediteur")) = "cabinet", "cab", "cli")
+                Dim quand As String = Convert.ToDateTime(r("Utc")).ToLocalTime().ToString("yyyy-MM-dd HH:mm")
+                Dim qui As String = If(cote = "cab", If(IsDBNull(r("ExpNom")), T("Cabinet", "Firm", "Despacho"), Convert.ToString(r("ExpNom"))), T("Le client", "The client", "El cliente"))
+                If qui.Trim() = "" Then qui = If(cote = "cab", T("Cabinet", "Firm", "Despacho"), T("Le client", "The client", "El cliente"))
+                sb.Append("<div class=""bulle ").Append(cote).Append(""">")
+                sb.Append("<div class=""meta"">").Append(Server.HtmlEncode(qui & " · " & quand)).Append("</div>")
+                sb.Append(Server.HtmlEncode(Convert.ToString(r("Texte"))).Replace(vbCrLf, "<br/>").Replace(vbLf, "<br/>"))
+                sb.Append("</div>")
+            Next
+        Else
+            sb.Append("<div class=""vide"">").Append(Server.HtmlEncode(T("Aucun message. Écrivez le premier à votre client.", "No message. Write the first to your client.", "Ningún mensaje. Escriba el primero a su cliente."))).Append("</div>")
+        End If
+        litFil.Text = sb.ToString()
+    End Sub
+
+    Private Sub MarkCabinetLu()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", _g))
+            p.Add(New SqlParameter("@Cote", "cabinet"))
+            ExecuteSQL("s0954MarkEchangesLus", p)
+        Catch
+        End Try
+    End Sub
+
+    Protected Sub btnEnvoyerEch_Click(sender As Object, e As EventArgs) Handles btnEnvoyerEch.Click
+        Dim texte As String = If(txtEch.Text, "").Trim()
+        If texte = "" Then BindFil() : Return
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@CompanyGUID", _g))
+        p.Add(New SqlParameter("@Texte", texte))
+        Dim outMail As New SqlParameter("@ClientEmail", SqlDbType.NVarChar, 200) With {.Direction = ParameterDirection.Output}
+        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+        p.Add(outMail) : p.Add(outErr)
+        ExecuteSQL("s0952AddEchangeCabinet", p)
+
+        ' Notification courriel au client (best-effort).
+        Try
+            Dim email As String = If(outMail.Value Is Nothing OrElse IsDBNull(outMail.Value), "", Convert.ToString(outMail.Value))
+            If email <> "" Then
+                Dim sujet As String = T("Votre comptable vous a écrit", "Your accountant wrote to you", "Su contador le ha escrito")
+                Dim corps As String = T("Vous avez un nouveau message de votre cabinet comptable dans 60Sec-AI. Connectez-vous pour le lire et répondre.",
+                                        "You have a new message from your accounting firm in 60Sec-AI. Sign in to read and reply.",
+                                        "Tiene un nuevo mensaje de su despacho contable en 60Sec-AI. Inicie sesión para leer y responder.")
+                Dim pm As New Collection
+                pm.Add(New SqlParameter("@To", email))
+                pm.Add(New SqlParameter("@Subject", sujet))
+                pm.Add(New SqlParameter("@HTMLBody", "<p>" & Server.HtmlEncode(corps) & "</p>"))
+                pm.Add(New SqlParameter("@TextBody", corps))
+                ExecuteSQLMail("s0610InsertOutboundMail", pm)
+            End If
+        Catch
+        End Try
+
+        txtEch.Text = ""
+        BindFil()
+        litEchMsg.Text = "<div class=""msg"">" & Server.HtmlEncode(T("Message envoyé.", "Message sent.", "Mensaje enviado.")) & "</div>"
     End Sub
 
     ' ---- Onglet Préparer la rencontre ----

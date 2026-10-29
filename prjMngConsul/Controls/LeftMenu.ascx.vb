@@ -212,6 +212,7 @@ Namespace Controls
             ' ---------- Mon accompagnement ----------
             sb.Append(Section("secSupport"))
             sb.Append(Item("~/CabinetsCertifies.aspx", Ico("firm"), "myFirm"))
+            sb.Append(Item("~/wbfEchangesCabinet.aspx", Ico("mail"), "firmMessages", "nav-item", GetEchangesClientCount(), "y"))
 
             ' ---------- Administration ----------
             sb.Append(Section("secAdmin"))
@@ -271,6 +272,22 @@ Namespace Controls
             Return sb.ToString()
         End Function
 
+        ''' <summary>Messages du cabinet non lus par le client (s0955 côté 'client'), pour le badge.</summary>
+        Private Function GetEchangesClientCount() As Integer
+            Try
+                If Company = Guid.Empty Then Return 0
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", Company))
+                p.Add(New SqlParameter("@Cote", "client"))
+                Dim ds As DataSet = ExecuteSQLds("s0955CountEchangesNonLus", p)
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                    Return Convert.ToInt32(ds.Tables(0).Rows(0)("N"))
+                End If
+            Catch
+            End Try
+            Return 0
+        End Function
+
         ''' <summary>Nombre de demandes de clients en attente pour le cabinet (s0939), pour le badge du menu.</summary>
         Private Function GetDemandesCount() As Integer
             Try
@@ -318,6 +335,7 @@ Namespace Controls
                 Case "secAdmin" : Return Choose3(lang, "Administration", "Administration", "Administración")
                 Case "payments" : Return Choose3(lang, "Paiements", "Payments", "Pagos")
                 Case "myFirm" : Return Choose3(lang, "Mon cabinet comptable", "My accounting firm", "Mi despacho contable")
+                Case "firmMessages" : Return Choose3(lang, "Messages du cabinet", "Firm messages", "Mensajes del despacho")
                 Case "welcome" : Return Choose3(lang, "Bienvenue", "Welcome", "Bienvenida")
                 Case "dashboard" : Return Choose3(lang, "Tableau de bord", "Dashboard", "Panel de control")
                 Case "agenda" : Return Choose3(lang, "Agenda", "Agenda", "Agenda")

@@ -72,6 +72,15 @@
     .mir-list { max-height: 320px; overflow: auto; border: 1px solid var(--mc-line,#D5DDE8); border-radius: 14px; padding: 6px 2px }
     .mir-list .mi { padding: 7px 12px; font-size: 13.5px; color: #0E1F3D; border-bottom: 1px solid #F0F3F8 }
     .mir-list .mi .tg { font-size: 11px; font-weight: 800; color: #143A73; margin-left: 6px }
+    /* Échanges */
+    .fil { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px }
+    .bulle { max-width: 78%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.45 }
+    .bulle .meta { font-size: 11px; font-weight: 800; margin-bottom: 3px; opacity: .8 }
+    .bulle.cab { align-self: flex-end; background: var(--mc-primary, #1B4F9C); color: #fff; border-bottom-right-radius: 4px }
+    .bulle.cli { align-self: flex-start; background: var(--mc-page, #F2F5F9); color: #0E1F3D; border-bottom-left-radius: 4px }
+    .envoi { display: flex; gap: 10px; align-items: flex-end }
+    .ech-in { flex: 1; min-height: 60px; padding: 10px 12px; border: 1px solid var(--mc-line,#D5DDE8); border-radius: 14px; font: inherit; font-size: 14px; color: #0E1F3D; background: #fff; outline: none; box-sizing: border-box; resize: vertical }
+    .ech-in:focus { border-color: var(--mc-primary,#1B4F9C); box-shadow: 0 0 0 4px rgba(27,79,156,.14) }
     .msg { margin-top: 12px; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; font-weight: 700; background: #E3F3EA; color: #0F5A3A }
 </style>
 </asp:Content>
@@ -130,6 +139,16 @@
         <%-- Onglet JOURNAL --%>
         <asp:Panel ID="pnlJournal" runat="server" Visible="false">
             <div class="jr"><asp:Literal ID="litJournal" runat="server" /></div>
+        </asp:Panel>
+
+        <%-- Onglet ÉCHANGES --%>
+        <asp:Panel ID="pnlEchanges" runat="server" Visible="false">
+            <div class="fil"><asp:Literal ID="litFil" runat="server" /></div>
+            <div class="envoi">
+                <asp:TextBox ID="txtEch" runat="server" TextMode="MultiLine" CssClass="ech-in" />
+                <asp:Button ID="btnEnvoyerEch" runat="server" CssClass="btn p" />
+            </div>
+            <asp:Literal ID="litEchMsg" runat="server" />
         </asp:Panel>
 
         <%-- Onglet PRÉPARER LA RENCONTRE --%>
