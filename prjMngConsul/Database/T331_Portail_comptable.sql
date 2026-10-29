@@ -148,6 +148,7 @@ BEGIN
                CAST(NULL AS NVARCHAR(200))    AS Name,
                CAST(NULL AS NVARCHAR(50))     AS CompanyCode,
                CAST(NULL AS UNIQUEIDENTIFIER) AS AssignedUserGUID,
+               CAST(NULL AS INT)              AS EquipeId,
                CAST(NULL AS NVARCHAR(100))    AS EquipeNom
         WHERE 1 = 0;
         RETURN;
@@ -160,6 +161,7 @@ BEGIN
             dbo.fCompanyName(c.CompanyGUID) AS Name,
             c.CompanyCode,
             d.AssignedUserGUID,
+            d.EquipeId,
             eq.Nom AS EquipeNom
         FROM dbo.T010Company c
         LEFT JOIN dbo.T334CabinetDossier d ON d.CabinetId = @cabId AND d.CompanyGUID = c.CompanyGUID
@@ -176,6 +178,7 @@ BEGIN
             dbo.fCompanyName(c.CompanyGUID) AS Name,
             c.CompanyCode,
             d.AssignedUserGUID,
+            d.EquipeId,
             eq.Nom AS EquipeNom
         FROM dbo.T334CabinetDossier d
         JOIN dbo.T010Company c      ON c.CompanyGUID = d.CompanyGUID
@@ -191,6 +194,7 @@ BEGIN
             dbo.fCompanyName(c.CompanyGUID) AS Name,
             c.CompanyCode,
             d.AssignedUserGUID,
+            d.EquipeId,
             eq.Nom AS EquipeNom
         FROM dbo.T334CabinetDossier d
         JOIN dbo.T010Company c      ON c.CompanyGUID = d.CompanyGUID

@@ -244,11 +244,13 @@ Namespace Controls
 
             ' Section du cabinet (écrans à venir)
             Select Case role
-                Case "admin"
+                Case "admin", "solo"
+                    ' Gestion du cabinet (livrée) + écrans encore à venir
                     sb.Append(Section("portalSecFirm"))
-                    sb.Append(ItemSoon(Ico("users"), "portalTeam"))
-                    sb.Append(ItemSoon(Ico("inbox"), "portalUnassigned"))
-                    sb.Append(ItemSoon(Ico("user-cog"), "portalMembers"))
+                    sb.Append(Item("~/wbfCabMembres.aspx", Ico("user-cog"), "portalMembers"))
+                    sb.Append(Item("~/wbfCabEquipes.aspx", Ico("users"), "portalEquipes"))
+                    sb.Append(Item("~/wbfCabAffectation.aspx", Ico("inbox"), "portalAssign"))
+                    sb.Append(ItemSoon(Ico("tag"), "portalUnassigned"))
                     sb.Append(ItemSoon(Ico("settings"), "portalActivities"))
                     sb.Append(ItemSoon(Ico("firm"), "portalProfile"))
                 Case "responsable"
@@ -258,11 +260,6 @@ Namespace Controls
                 Case "employe"
                     sb.Append(Section("portalSecTools"))
                     sb.Append(ItemSoon(Ico("book"), "portalTools"))
-                Case Else ' solo (ou rôle inconnu)
-                    sb.Append(Section("portalSecFirm"))
-                    sb.Append(ItemSoon(Ico("inbox"), "portalUnassigned"))
-                    sb.Append(ItemSoon(Ico("settings"), "portalActivities"))
-                    sb.Append(ItemSoon(Ico("firm"), "portalProfile"))
             End Select
 
             ' Administration
@@ -366,6 +363,8 @@ Namespace Controls
                 Case "portalTeamActivities" : Return Choose3(lang, "Employés et activités", "Staff and activities", "Empleados y actividades")
                 Case "portalUnassigned" : Return Choose3(lang, "Clients non associés", "Unassigned clients", "Clientes sin asignar")
                 Case "portalMembers" : Return Choose3(lang, "Membres et sécurité", "Members and security", "Miembros y seguridad")
+                Case "portalEquipes" : Return Choose3(lang, "Équipes", "Teams", "Equipos")
+                Case "portalAssign" : Return Choose3(lang, "Affectation des dossiers", "File assignment", "Asignación de expedientes")
                 Case "portalActivities" : Return Choose3(lang, "Activités à attribuer", "Activities to assign", "Actividades por asignar")
                 Case "portalProfile" : Return Choose3(lang, "Profil du cabinet", "Firm profile", "Perfil del despacho")
                 Case "portalTools" : Return Choose3(lang, "Traitement en lot", "Batch processing", "Procesamiento por lotes")

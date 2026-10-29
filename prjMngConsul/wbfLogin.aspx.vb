@@ -156,6 +156,18 @@ Public Class wbfLogin
             clsRememberMe.Issue(Context, CInt(userRow("Id")))
         End If
 
+        ' Un comptable membre d'un cabinet entre directement dans son portail : il
+        ' n'a pas de compagnie maison « réelle » (son accès aux dossiers passe par le
+        ' périmètre du cabinet), donc on ne pointe aucune compagnie ici et on saute
+        ' la vérification d'abonnement (propre au propriétaire d'une compagnie).
+        If EstMembreCabinet(email) Then
+            Company = Guid.Empty
+            EnPortailComptable = True
+            UpdateLastLogin(CInt(userRow("Id")))
+            Aller("~/wbfCabTableauBord.aspx")
+            Return
+        End If
+
         'Verifier s'il a un abonnement actif (pour le rediriger vers la page de paiement s'il n'en a pas)
         Dim pa As New Collection
         pa.Add(New SqlParameter("@CompanyGUID", CType(userRow("CompanyGUID"), Guid)))
@@ -189,6 +201,18 @@ Public Class wbfLogin
             Aller("~/Default.aspx")
         End If
     End Sub
+
+    ''' <summary>Vrai si cet utilisateur (par courriel) est membre actif d'un cabinet (s0919).</summary>
+    Private Function EstMembreCabinet(email As String) As Boolean
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@UserId", email))
+            Dim ds As DataSet = ExecuteSQLds("s0919GetUserCabinet", p)
+            Return ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0
+        Catch
+            Return False
+        End Try
+    End Function
 
     Private Function GetUserByEmail(email As String) As DataRow
         Try
