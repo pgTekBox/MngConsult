@@ -127,7 +127,7 @@ Public Class wbfCabFiche
             Dim ds As DataSet = ExecuteSQLds("s0919GetUserCabinet", p)
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
                 Dim role As String = Convert.ToString(ds.Tables(0).Rows(0)("Role")).Trim().ToLowerInvariant()
-                Return role = "admin" OrElse role = "solo" OrElse role = "responsable"
+                Return role = "admin" OrElse role = "solo"
             End If
         Catch
         End Try

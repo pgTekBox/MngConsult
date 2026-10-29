@@ -15,12 +15,10 @@ Public Class wbfCabAffectation
     Protected WithEvents litMsg As System.Web.UI.WebControls.Literal
     Protected WithEvents litHDoss As System.Web.UI.WebControls.Literal
     Protected WithEvents litHMembre As System.Web.UI.WebControls.Literal
-    Protected WithEvents litHEquipe As System.Web.UI.WebControls.Literal
     Protected WithEvents rptDossiers As System.Web.UI.WebControls.Repeater
     Protected WithEvents litVide As System.Web.UI.WebControls.Literal
 
     Private _membres As DataTable
-    Private _equipes As DataTable
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not isAuthenticated OrElse Not IsAccountant Then
@@ -62,12 +60,11 @@ Public Class wbfCabAffectation
 
     Private Sub Textes()
         litTitre.Text = Server.HtmlEncode(T("Affectation des dossiers", "File assignment", "Asignación de expedientes"))
-        litSous.Text = Server.HtmlEncode(T("Confiez chaque dossier à un membre et/ou une équipe.",
-                                           "Assign each file to a member and/or a team.",
-                                           "Asigne cada expediente a un miembro y/o un equipo."))
+        litSous.Text = Server.HtmlEncode(T("Confiez chaque dossier à un membre.",
+                                           "Assign each file to a member.",
+                                           "Asigne cada expediente a un miembro."))
         litHDoss.Text = Server.HtmlEncode(T("Dossier", "File", "Expediente"))
         litHMembre.Text = Server.HtmlEncode(T("Membre", "Member", "Miembro"))
-        litHEquipe.Text = Server.HtmlEncode(T("Équipe", "Team", "Equipo"))
     End Sub
 
     Private Sub ChargerListes()
@@ -75,11 +72,6 @@ Public Class wbfCabAffectation
         pm.Add(New SqlParameter("@UserId", UserEmail))
         Dim dsm As DataSet = ExecuteSQLds("s0922ListCabinetMembres", pm)
         _membres = If(dsm IsNot Nothing AndAlso dsm.Tables.Count > 0, dsm.Tables(0), New DataTable())
-
-        Dim pe As New Collection
-        pe.Add(New SqlParameter("@UserId", UserEmail))
-        Dim dse As DataSet = ExecuteSQLds("s0928ListEquipes", pe)
-        _equipes = If(dse IsNot Nothing AndAlso dse.Tables.Count > 0, dse.Tables(0), New DataTable())
     End Sub
 
     Private Sub BindDossiers()
@@ -96,9 +88,7 @@ Public Class wbfCabAffectation
         If e.Item.ItemType <> ListItemType.Item AndAlso e.Item.ItemType <> ListItemType.AlternatingItem Then Return
         Dim row As DataRowView = CType(e.Item.DataItem, DataRowView)
         Dim ddlMembre As DropDownList = CType(e.Item.FindControl("ddlMembre"), DropDownList)
-        Dim ddlEquipe As DropDownList = CType(e.Item.FindControl("ddlEquipe"), DropDownList)
 
-        ' Membres
         ddlMembre.Items.Clear()
         ddlMembre.Items.Add(New ListItem(T("— Non assigné —", "— Unassigned —", "— Sin asignar —"), ""))
         If _membres IsNot Nothing Then
@@ -110,17 +100,6 @@ Public Class wbfCabAffectation
         End If
         Dim assigned As String = If(IsDBNull(row("AssignedUserGUID")), "", Convert.ToString(row("AssignedUserGUID")))
         SelectValue(ddlMembre, assigned)
-
-        ' Équipes
-        ddlEquipe.Items.Clear()
-        ddlEquipe.Items.Add(New ListItem(T("— Aucune —", "— None —", "— Ninguno —"), ""))
-        If _equipes IsNot Nothing Then
-            For Each t As DataRow In _equipes.Rows
-                ddlEquipe.Items.Add(New ListItem(Convert.ToString(t("Nom")), Convert.ToString(t("Id"))))
-            Next
-        End If
-        Dim eqId As String = If(IsDBNull(row("EquipeId")), "", Convert.ToString(row("EquipeId")))
-        SelectValue(ddlEquipe, eqId)
     End Sub
 
     Private Shared Sub SelectValue(ddl As DropDownList, value As String)
@@ -135,18 +114,15 @@ Public Class wbfCabAffectation
         If Not Guid.TryParse(Convert.ToString(e.CommandArgument), g) Then Return
 
         Dim ddlMembre As DropDownList = CType(e.Item.FindControl("ddlMembre"), DropDownList)
-        Dim ddlEquipe As DropDownList = CType(e.Item.FindControl("ddlEquipe"), DropDownList)
 
         Dim membre As Object = DBNull.Value
         If Not String.IsNullOrEmpty(ddlMembre.SelectedValue) Then membre = New Guid(ddlMembre.SelectedValue)
-        Dim equipe As Object = DBNull.Value
-        If Not String.IsNullOrEmpty(ddlEquipe.SelectedValue) Then equipe = CInt(ddlEquipe.SelectedValue)
 
         Dim p As New Collection
         p.Add(New SqlParameter("@UserId", UserEmail))
         p.Add(New SqlParameter("@CompanyGUID", g))
         p.Add(New SqlParameter("@AssignedUserGUID", membre))
-        p.Add(New SqlParameter("@EquipeId", equipe))
+        p.Add(New SqlParameter("@EquipeId", DBNull.Value))
         Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
         p.Add(outErr)
         ExecuteSQL("s0930AssignDossier", p)

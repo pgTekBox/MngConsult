@@ -238,9 +238,7 @@ Namespace Controls
             ' Toujours disponibles
             sb.Append(Item("~/wbfCabTableauBord.aspx", Ico("home"), "portalDashboard"))
 
-            Dim filesKey As String =
-                If(role = "admin", "portalFilesAll",
-                If(role = "responsable", "portalFilesTeam", "portalFiles"))
+            Dim filesKey As String = If(role = "admin", "portalFilesAll", "portalFiles")
             sb.Append(Item("~/wbfCabDossiers.aspx", Ico("users"), filesKey))
 
             ' Section du cabinet (écrans à venir)
@@ -251,15 +249,10 @@ Namespace Controls
                     sb.Append(Section("portalSecFirm"))
                     sb.Append(Item("~/wbfCabDemandes.aspx", Ico("inbox"), "portalDemandes", "nav-item", GetDemandesCount(), "y"))
                     sb.Append(Item("~/wbfCabMembres.aspx", Ico("user-cog"), "portalMembers"))
-                    sb.Append(Item("~/wbfCabEquipes.aspx", Ico("users"), "portalEquipes"))
                     sb.Append(Item("~/wbfCabAffectation.aspx", Ico("inbox"), "portalAssign"))
                     sb.Append(Item("~/wbfCabNonAssocies.aspx", Ico("tag"), "portalUnassigned"))
                     sb.Append(Item("~/wbfCabDroits.aspx", Ico("settings"), "portalDroits"))
                     sb.Append(Item("~/wbfCabProfil.aspx", Ico("firm"), "portalProfile"))
-                Case "responsable"
-                    sb.Append(Section("portalSecTeam"))
-                    sb.Append(ItemSoon(Ico("users"), "portalTeamActivities"))
-                    sb.Append(ItemSoon(Ico("settings"), "portalActivities"))
                 Case "employe"
                     sb.Append(Section("portalSecTools"))
                     sb.Append(ItemSoon(Ico("book"), "portalTools"))

@@ -18,7 +18,7 @@
     .msg { margin: 8px 0 0; padding: 12px 14px; border-radius: 14px; font-size: 13.5px; font-weight: 700 }
     .msg.ok { background: #E3F3EA; color: #0F5A3A }
 
-    .arow { display: grid; grid-template-columns: 1fr 190px 170px auto; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; background: var(--mc-page, #F2F5F9); margin-bottom: 8px }
+    .arow { display: grid; grid-template-columns: 1fr 220px auto; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; background: var(--mc-page, #F2F5F9); margin-bottom: 8px }
     @media (max-width: 760px) { .arow { grid-template-columns: 1fr 1fr; } }
     .arow .doss { min-width: 0 }
     .arow .doss .nm { font-weight: 800; color: #0E1F3D }
@@ -27,7 +27,7 @@
     .arow select:focus { border-color: var(--mc-primary, #1B4F9C); box-shadow: 0 0 0 4px rgba(27,79,156,.14) }
     .arow .save { height: 40px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--mc-primary, #1B4F9C); color: #fff; font: inherit; font-weight: 800; font-size: 13px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center }
     .arow .save:hover { background: var(--mc-primary-dark, #143A73) }
-    .hdr { display: grid; grid-template-columns: 1fr 190px 170px auto; gap: 12px; padding: 0 14px 8px; font-size: 12px; font-weight: 800; color: #5B6B86; text-transform: uppercase; letter-spacing: .04em }
+    .hdr { display: grid; grid-template-columns: 1fr 220px auto; gap: 12px; padding: 0 14px 8px; font-size: 12px; font-weight: 800; color: #5B6B86; text-transform: uppercase; letter-spacing: .04em }
     @media (max-width: 760px) { .hdr { display: none } }
 </style>
 </asp:Content>
@@ -50,7 +50,6 @@
         <div class="hdr">
             <span><asp:Literal ID="litHDoss" runat="server" /></span>
             <span><asp:Literal ID="litHMembre" runat="server" /></span>
-            <span><asp:Literal ID="litHEquipe" runat="server" /></span>
             <span></span>
         </div>
         <asp:Repeater ID="rptDossiers" runat="server" OnItemDataBound="rptDossiers_ItemDataBound" OnItemCommand="rptDossiers_ItemCommand">
@@ -61,7 +60,6 @@
                         <div class="cd"><%# Server.HtmlEncode(Convert.ToString(Eval("CompanyCode"))) %></div>
                     </div>
                     <asp:DropDownList ID="ddlMembre" runat="server" />
-                    <asp:DropDownList ID="ddlEquipe" runat="server" />
                     <asp:LinkButton ID="lnkSave" runat="server" CssClass="save" CommandName="save" CommandArgument='<%# Eval("CompanyGUID") %>' Text='<%# LblEnregistrer %>' />
                 </div>
             </ItemTemplate>

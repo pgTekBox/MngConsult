@@ -526,7 +526,6 @@
     <Content Include="wbfCabTableauBord.aspx" />
     <Content Include="wbfCabDossiers.aspx" />
     <Content Include="wbfCabMembres.aspx" />
-    <Content Include="wbfCabEquipes.aspx" />
     <Content Include="wbfCabAffectation.aspx" />
     <Content Include="wbfCabInvitation.aspx" />
     <Content Include="wbfCabProfil.aspx" />
@@ -839,10 +838,6 @@
     </Compile>
     <Compile Include="wbfCabMembres.aspx.vb">
       <DependentUpon>wbfCabMembres.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="wbfCabEquipes.aspx.vb">
-      <DependentUpon>wbfCabEquipes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfCabAffectation.aspx.vb">

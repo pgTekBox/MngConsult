@@ -22,7 +22,7 @@
 
         <article class="langue" lang="fr">
             <h1>Portail comptable</h1>
-            <p class="intro">L’espace de travail du cabinet comptable, à part des dossiers de vos clients. Un comptable y gère son cabinet : ses dossiers (les compagnies clientes), les membres de l’équipe, les affectations, le profil public et la répartition « qui fait quoi ». On y entre par le <strong>sélecteur en haut à droite</strong> : choisissez <span class="chemin">— Portail comptable —</span> pour l’espace du cabinet, ou le nom d’une compagnie pour travailler dans ce dossier.</p>
+            <p class="intro">L’espace de travail du cabinet comptable, à part des dossiers de vos clients. Un comptable y gère son cabinet : ses dossiers (les compagnies clientes), les membres, les affectations, le profil public et la répartition « qui fait quoi ». On y entre par le <strong>sélecteur en haut à droite</strong> : choisissez <span class="chemin">— Portail comptable —</span> pour l’espace du cabinet, ou le nom d’une compagnie pour travailler dans ce dossier.</p>
 
             <section id="fr-vue">
                 <h2>Vue d’ensemble</h2>
@@ -39,42 +39,41 @@
                 <table>
                     <thead><tr><th>Rôle</th><th>Ce qu’il voit / peut faire</th></tr></thead>
                     <tbody>
-                        <tr><td>Solo</td><td>Un cabinet d’une seule personne. Voit tous ses dossiers et gère tout le cabinet. En invitant un premier collègue, le cabinet passe « avec une équipe » et le compte devient administrateur.</td></tr>
-                        <tr><td>Administrateur</td><td>Gère le cabinet : membres, équipes, affectation des dossiers, profil. Voit tous les dossiers.</td></tr>
-                        <tr><td>Responsable</td><td>Voit les dossiers de son équipe. Ne gère ni les membres ni le profil.</td></tr>
+                        <tr><td>Solo</td><td>Un cabinet d’une seule personne. Voit tous ses dossiers et gère tout le cabinet. En invitant un premier collègue, le compte devient administrateur.</td></tr>
+                        <tr><td>Administrateur</td><td>Gère le cabinet : membres, affectation des dossiers, profil. Voit tous les dossiers.</td></tr>
                         <tr><td>Employé</td><td>Voit uniquement les dossiers qui lui sont affectés.</td></tr>
                     </tbody>
                 </table>
                 <h3>Le périmètre d’accès</h3>
-                <p>Un membre n’accède qu’aux compagnies de <strong>son périmètre</strong> : un administrateur ou un solo accède à tous les dossiers du cabinet ; un responsable, aux dossiers de son équipe ; un employé, aux dossiers qui lui ont été confiés. Ce périmètre vaut aussi bien pour la liste « Mes dossiers » que pour le bouton « Entrer » : on ne peut pas entrer dans un dossier hors de son périmètre.</p>
+                <p>Un membre n’accède qu’aux compagnies de <strong>son périmètre</strong> : un administrateur ou un solo accède à tous les dossiers du cabinet ; un employé, aux dossiers qui lui ont été confiés. Ce périmètre vaut aussi bien pour la liste « Mes dossiers » que pour le bouton « Entrer » : on ne peut pas entrer dans un dossier hors de son périmètre.</p>
                 <div class="note" data-titre="Bon à savoir">Un membre invité n’a pas de « compagnie maison » : il arrive directement dans le portail à sa connexion, et n’accède qu’à ses dossiers.</div>
             </section>
 
             <section id="fr-dossiers">
                 <h2>Tableau de bord et dossiers</h2>
                 <h3>Tableau de bord du cabinet</h3>
-                <p>L’écran d’accueil du portail. Une étiquette donne l’échelle du cabinet (« Cabinet solo », « Cabinet avec une équipe »…) et des tuiles résument : nombre de dossiers, dossiers suivis par moi (selon le rôle), membres du cabinet, équipes. Un aperçu liste les premiers dossiers, avec un lien « Voir tous les dossiers ».</p>
+                <p>L’écran d’accueil du portail. Une étiquette donne l’échelle du cabinet (« Cabinet solo », « Cabinet »…) et des tuiles résument : nombre de dossiers, dossiers suivis par moi (selon le rôle), membres du cabinet. Un aperçu liste les premiers dossiers, avec un lien « Voir tous les dossiers ».</p>
                 <h3>Mes dossiers</h3>
-                <p>La liste des compagnies clientes de votre périmètre. Une recherche filtre les cartes au fil de la frappe. Chaque carte porte le nom du dossier, son code, l’équipe éventuelle, et deux actions : <kbd>Fiche</kbd> (ouvre la fiche du client) et <kbd>Entrer</kbd>.</p>
+                <p>La liste des compagnies clientes de votre périmètre. Une recherche filtre les cartes au fil de la frappe. Chaque carte porte le nom du dossier, son code, et deux actions : <kbd>Fiche</kbd> (ouvre la fiche du client) et <kbd>Entrer</kbd>.</p>
                 <h3>Entrer dans un dossier</h3>
                 <p><kbd>Entrer</kbd> vous fait quitter le portail et ouvre le dossier dans le <strong>menu habituel de l’ERP</strong> : vous travaillez alors dans la comptabilité de ce client. Le sélecteur de l’en-tête affiche désormais son nom. Pour revenir au cabinet, rechoisissez <strong>— Portail comptable —</strong>.</p>
                 <h3>Fiche client</h3>
-                <p>La fiche d’un dossier montre l’en-tête (nom, raison sociale, code), l’affectation (le membre qui le suit, l’équipe) et la répartition « qui fait quoi » en trois tuiles : combien d’activités sont au client, au cabinet, ou partagées. De là, deux boutons : <kbd>Entrer dans le dossier</kbd> et <kbd>Gérer la répartition</kbd>.</p>
+                <p>La fiche d’un dossier montre l’en-tête (nom, raison sociale, code), l’affectation (le membre qui le suit) et la répartition « qui fait quoi » en trois tuiles : combien d’activités sont au client, au cabinet, ou partagées. De là, deux boutons : <kbd>Entrer dans le dossier</kbd> et <kbd>Gérer la répartition</kbd>.</p>
                 <div class="astuce" data-titre="Astuce">Pour ouvrir la fiche d’un dossier, cliquez son nom dans « Mes dossiers » ou son bouton <kbd>Fiche</kbd>. Pour travailler dans sa comptabilité, utilisez plutôt <kbd>Entrer</kbd>.</div>
             </section>
 
             <section id="fr-membres">
                 <h2>Membres et sécurité</h2>
-                <p>Réservé aux administrateurs (et au solo). On y invite des collègues, on règle leur rôle et leur équipe, on les désactive.</p>
+                <p>Réservé aux administrateurs (et au solo). On y invite des collègues, on règle leur rôle, on les désactive.</p>
                 <h3>Inviter un membre</h3>
                 <ol>
-                    <li>Remplissez prénom, nom, courriel, rôle (et équipe au besoin), puis <kbd>Inviter</kbd>.</li>
+                    <li>Remplissez prénom, nom, courriel, rôle, puis <kbd>Inviter</kbd>.</li>
                     <li>Un compte comptable est créé, <strong>en attente d’activation</strong>. Un courriel d’invitation part vers l’adresse, et un <strong>lien d’invitation</strong> s’affiche à l’écran : vous pouvez le copier et le transmettre vous-même.</li>
                     <li>Le membre ouvre le lien, choisit son mot de passe : son compte est activé, il peut se connecter.</li>
                 </ol>
                 <h3>Modifier, désactiver, renvoyer</h3>
                 <ul>
-                    <li><kbd>Modifier</kbd> : change le rôle et l’équipe d’un membre.</li>
+                    <li><kbd>Modifier</kbd> : change le rôle d’un membre.</li>
                     <li><kbd>Renvoyer l’invitation</kbd> : régénère le lien d’un membre encore en attente (et renvoie le courriel).</li>
                     <li><kbd>Désactiver</kbd> / <kbd>Activer</kbd> : coupe ou rétablit l’accès d’un membre.</li>
                 </ul>
@@ -87,21 +86,10 @@
                 <div class="attention" data-titre="Attention">La livraison du courriel d’invitation dépend du service d’envoi. Si le courriel tarde, utilisez le <strong>lien d’invitation affiché</strong> : copiez-le et transmettez-le directement à la personne.</div>
             </section>
 
-            <section id="fr-equipes">
-                <h2>Équipes</h2>
-                <p>Un cabinet peut s’organiser en équipes. Réservé aux administrateurs.</p>
-                <ul>
-                    <li><strong>Créer / renommer</strong> une équipe : donnez-lui un nom.</li>
-                    <li><strong>Responsable</strong> : désignez un membre comme responsable de l’équipe. Le responsable voit les dossiers de son équipe.</li>
-                    <li><strong>Supprimer</strong> : retire l’équipe de la liste.</li>
-                </ul>
-                <p>On rattache un membre à une équipe depuis « Membres et sécurité » (champ Équipe). On confie un dossier à une équipe depuis « Affectation des dossiers ».</p>
-            </section>
-
             <section id="fr-affectation">
                 <h2>Confier les dossiers</h2>
                 <h3>Affectation des dossiers</h3>
-                <p>Pour chaque dossier du cabinet, choisissez le <strong>membre</strong> et/ou l’<strong>équipe</strong> qui le suit, puis <kbd>Enregistrer</kbd> sur la ligne. L’affectation détermine ce que voit chaque membre : un employé ne voit que les dossiers qui lui sont affectés.</p>
+                <p>Pour chaque dossier du cabinet, choisissez le <strong>membre</strong> qui le suit, puis <kbd>Enregistrer</kbd> sur la ligne. L’affectation détermine ce que voit chaque membre : un employé ne voit que les dossiers qui lui sont affectés.</p>
                 <h3>Clients non associés</h3>
                 <p>La liste des dossiers du cabinet <strong>pas encore confiés</strong> à un membre. Pour chacun, choisissez un membre et <kbd>Confier</kbd> : le dossier quitte la liste. Quand tout est confié, la liste affiche « Tous vos dossiers sont confiés ».</p>
                 <div class="note" data-titre="Bon à savoir">« Clients non associés » montre les dossiers du cabinet sans responsable interne. Le rattachement d’une compagnie au cabinet lui-même (le fait qu’elle soit un client du cabinet) se règle en dehors du portail.</div>
@@ -139,8 +127,8 @@
             <section id="fr-regles">
                 <h2>Règles</h2>
                 <ul>
-                    <li>Le portail n’est accessible qu’aux comptables ; les écrans de gestion (membres, équipes, affectation, profil) sont réservés aux administrateurs (et au solo).</li>
-                    <li>Un membre n’accède qu’aux compagnies de son périmètre (tous les dossiers pour un admin/solo ; l’équipe pour un responsable ; les dossiers affectés pour un employé).</li>
+                    <li>Le portail n’est accessible qu’aux comptables ; les écrans de gestion (membres, affectation, profil) sont réservés aux administrateurs (et au solo).</li>
+                    <li>Un membre n’accède qu’aux compagnies de son périmètre (tous les dossiers pour un admin/solo ; les dossiers affectés pour un employé).</li>
                     <li>Il faut toujours au moins un administrateur actif ; on ne peut pas se désactiver soi-même.</li>
                     <li>Un membre invité est créé en attente : il n’a accès à rien tant qu’il n’a pas activé son compte par le lien d’invitation.</li>
                     <li>Confier un dossier à un membre le rend visible pour lui ; un dossier non confié n’apparaît que pour les administrateurs.</li>
@@ -157,7 +145,7 @@
                     <li><span class="msg">« Impossible : c’est le dernier administrateur. »</span> — on ne peut ni désactiver ni rétrograder le seul administrateur du cabinet.</li>
                     <li><span class="msg">« Vous ne pouvez pas vous désactiver vous-même. »</span> — demandez à un autre administrateur.</li>
                     <li><span class="msg">« Dossier confié. »</span> — le dossier a été attribué au membre choisi et quitte la liste des non associés.</li>
-                    <li><span class="msg">« Affectation enregistrée. »</span> — le membre et/ou l’équipe du dossier ont été enregistrés.</li>
+                    <li><span class="msg">« Affectation enregistrée. »</span> — le membre du dossier a été enregistré.</li>
                     <li><span class="msg">« Répartition enregistrée (n modification(s)). »</span> — les choix « qui fait quoi » changés ont été sauvegardés.</li>
                     <li><span class="msg">« Profil enregistré. »</span> — le profil du cabinet est à jour ; si la fiche est publique, elle apparaît dans « Cabinets certifiés ».</li>
                     <li><span class="msg">« Tous vos dossiers sont confiés. »</span> — aucun dossier n’attend d’être confié.</li>
@@ -185,11 +173,10 @@
                         <tr><td>Portail comptable</td><td>L’espace de travail du cabinet, distinct des dossiers des clients, atteint par l’option « — Portail comptable — » du sélecteur.</td></tr>
                         <tr><td>Cabinet</td><td>La firme comptable : un ensemble de membres et de dossiers.</td></tr>
                         <tr><td>Membre</td><td>Un compte comptable rattaché au cabinet, avec un rôle.</td></tr>
-                        <tr><td>Rôle</td><td>Administrateur, responsable, employé, ou solo — détermine ce que le membre voit et peut faire.</td></tr>
+                        <tr><td>Rôle</td><td>Administrateur, employé, ou solo — détermine ce que le membre voit et peut faire.</td></tr>
                         <tr><td>Dossier</td><td>Une compagnie cliente du cabinet.</td></tr>
                         <tr><td>Périmètre</td><td>L’ensemble des dossiers qu’un membre peut voir, selon son rôle et ses affectations.</td></tr>
-                        <tr><td>Affectation</td><td>Le fait de confier un dossier à un membre et/ou une équipe.</td></tr>
-                        <tr><td>Équipe</td><td>Un groupe de membres, avec un responsable, à qui on peut confier des dossiers.</td></tr>
+                        <tr><td>Affectation</td><td>Le fait de confier un dossier à un membre.</td></tr>
                         <tr><td>Qui fait quoi</td><td>La répartition, activité par activité, entre le client, le cabinet, ou partagé.</td></tr>
                         <tr><td>Fiche (annuaire)</td><td>La présentation publique du cabinet dans « Cabinets certifiés », visible des entreprises.</td></tr>
                         <tr><td>Invitation</td><td>Le courriel et le lien par lesquels un nouveau membre pose son mot de passe et active son compte.</td></tr>
@@ -200,7 +187,7 @@
 
         <article class="langue" lang="en">
             <h1>Accountant portal</h1>
-            <p class="intro">The accounting firm’s own workspace, separate from your clients’ files. An accountant manages their firm here: its files (the client companies), the team members, assignments, the public profile and the “who does what” split. You enter it from the <strong>picker at the top right</strong>: choose <span class="chemin">— Accountant portal —</span> for the firm workspace, or a company name to work inside that file.</p>
+            <p class="intro">The accounting firm’s own workspace, separate from your clients’ files. An accountant manages their firm here: its files (the client companies), the members, assignments, the public profile and the “who does what” split. You enter it from the <strong>picker at the top right</strong>: choose <span class="chemin">— Accountant portal —</span> for the firm workspace, or a company name to work inside that file.</p>
 
             <section id="en-overview">
                 <h2>Overview</h2>
@@ -217,42 +204,41 @@
                 <table>
                     <thead><tr><th>Role</th><th>What they see / can do</th></tr></thead>
                     <tbody>
-                        <tr><td>Solo</td><td>A one-person firm. Sees all their files and manages the whole firm. Inviting a first colleague turns the firm into “with a team” and the account becomes an administrator.</td></tr>
-                        <tr><td>Administrator</td><td>Manages the firm: members, teams, file assignment, profile. Sees all files.</td></tr>
-                        <tr><td>Team lead</td><td>Sees their team’s files. Does not manage members or the profile.</td></tr>
+                        <tr><td>Solo</td><td>A one-person firm. Sees all their files and manages the whole firm. Inviting a first colleague makes the account an administrator.</td></tr>
+                        <tr><td>Administrator</td><td>Manages the firm: members, file assignment, profile. Sees all files.</td></tr>
                         <tr><td>Employee</td><td>Sees only the files assigned to them.</td></tr>
                     </tbody>
                 </table>
                 <h3>Access perimeter</h3>
-                <p>A member reaches only the companies in <strong>their perimeter</strong>: an administrator or a solo reaches all of the firm’s files; a team lead, their team’s files; an employee, the files assigned to them. The perimeter applies both to the “My files” list and to the “Enter” button: you cannot enter a file outside your perimeter.</p>
+                <p>A member reaches only the companies in <strong>their perimeter</strong>: an administrator or a solo reaches all of the firm’s files; an employee, the files assigned to them. The perimeter applies both to the “My files” list and to the “Enter” button: you cannot enter a file outside your perimeter.</p>
                 <div class="note" data-titre="Good to know">An invited member has no “home company”: they land directly in the portal when they sign in, and reach only their files.</div>
             </section>
 
             <section id="en-files">
                 <h2>Dashboard and files</h2>
                 <h3>Firm dashboard</h3>
-                <p>The portal’s home screen. A label gives the firm’s scale (“Solo firm”, “Firm with one team”…) and tiles summarize: number of files, files I handle (by role), firm members, teams. A preview lists the first files, with a “See all files” link.</p>
+                <p>The portal’s home screen. A label gives the firm’s scale (“Solo firm”, “Firm”…) and tiles summarize: number of files, files I handle (by role), firm members. A preview lists the first files, with a “See all files” link.</p>
                 <h3>My files</h3>
-                <p>The list of client companies in your perimeter. A search box filters the cards as you type. Each card shows the file name, its code, the team if any, and two actions: <kbd>Details</kbd> (opens the client file) and <kbd>Enter</kbd>.</p>
+                <p>The list of client companies in your perimeter. A search box filters the cards as you type. Each card shows the file name, its code, and two actions: <kbd>Details</kbd> (opens the client file) and <kbd>Enter</kbd>.</p>
                 <h3>Entering a file</h3>
                 <p><kbd>Enter</kbd> takes you out of the portal and opens the file in the <strong>usual ERP menu</strong>: you then work in that client’s accounting. The header picker now shows its name. To return to the firm, pick <strong>— Accountant portal —</strong> again.</p>
                 <h3>Client file</h3>
-                <p>A file’s detail page shows the header (name, legal name, code), the assignment (the member who handles it, the team) and the “who does what” split in three tiles: how many activities are the client’s, the firm’s, or shared. From there, two buttons: <kbd>Enter the file</kbd> and <kbd>Manage the split</kbd>.</p>
+                <p>A file’s detail page shows the header (name, legal name, code), the assignment (the member who handles it) and the “who does what” split in three tiles: how many activities are the client’s, the firm’s, or shared. From there, two buttons: <kbd>Enter the file</kbd> and <kbd>Manage the split</kbd>.</p>
                 <div class="astuce" data-titre="Tip">To open a file’s details, click its name in “My files” or its <kbd>Details</kbd> button. To work in its accounting, use <kbd>Enter</kbd> instead.</div>
             </section>
 
             <section id="en-members">
                 <h2>Members and security</h2>
-                <p>For administrators (and the solo). Here you invite colleagues, set their role and team, and deactivate them.</p>
+                <p>For administrators (and the solo). Here you invite colleagues, set their role, and deactivate them.</p>
                 <h3>Inviting a member</h3>
                 <ol>
-                    <li>Fill in first name, last name, email, role (and team if needed), then <kbd>Invite</kbd>.</li>
+                    <li>Fill in first name, last name, email, role, then <kbd>Invite</kbd>.</li>
                     <li>An accountant account is created, <strong>pending activation</strong>. An invitation email is sent to the address, and an <strong>invitation link</strong> is shown on screen: you can copy it and pass it on yourself.</li>
                     <li>The member opens the link, chooses a password: their account is activated and they can sign in.</li>
                 </ol>
                 <h3>Edit, deactivate, resend</h3>
                 <ul>
-                    <li><kbd>Edit</kbd>: change a member’s role and team.</li>
+                    <li><kbd>Edit</kbd>: change a member’s role.</li>
                     <li><kbd>Resend invitation</kbd>: regenerates the link of a member still pending (and resends the email).</li>
                     <li><kbd>Deactivate</kbd> / <kbd>Activate</kbd>: cuts or restores a member’s access.</li>
                 </ul>
@@ -265,21 +251,10 @@
                 <div class="attention" data-titre="Warning">Delivery of the invitation email depends on the mail service. If the email is slow, use the <strong>invitation link shown on screen</strong>: copy it and pass it directly to the person.</div>
             </section>
 
-            <section id="en-teams">
-                <h2>Teams</h2>
-                <p>A firm can be organized into teams. For administrators.</p>
-                <ul>
-                    <li><strong>Create / rename</strong> a team: give it a name.</li>
-                    <li><strong>Lead</strong>: appoint a member as the team’s lead. The lead sees their team’s files.</li>
-                    <li><strong>Remove</strong>: takes the team off the list.</li>
-                </ul>
-                <p>You attach a member to a team from “Members and security” (Team field). You assign a file to a team from “File assignment”.</p>
-            </section>
-
             <section id="en-assignment">
                 <h2>Assigning files</h2>
                 <h3>File assignment</h3>
-                <p>For each firm file, choose the <strong>member</strong> and/or the <strong>team</strong> that handles it, then <kbd>Save</kbd> on the row. The assignment decides what each member sees: an employee sees only the files assigned to them.</p>
+                <p>For each firm file, choose the <strong>member</strong> that handles it, then <kbd>Save</kbd> on the row. The assignment decides what each member sees: an employee sees only the files assigned to them.</p>
                 <h3>Unassigned clients</h3>
                 <p>The list of firm files <strong>not yet assigned</strong> to a member. For each, choose a member and <kbd>Assign</kbd>: the file leaves the list. When all are assigned, the list reads “All your files are assigned”.</p>
                 <div class="note" data-titre="Good to know">“Unassigned clients” shows the firm’s files with no internal owner. Whether a company belongs to the firm at all (that it is a client of the firm) is set outside the portal.</div>
@@ -317,8 +292,8 @@
             <section id="en-rules">
                 <h2>Rules</h2>
                 <ul>
-                    <li>The portal is reachable only by accountants; the management screens (members, teams, assignment, profile) are for administrators (and the solo).</li>
-                    <li>A member reaches only the companies in their perimeter (all files for an admin/solo; the team for a lead; assigned files for an employee).</li>
+                    <li>The portal is reachable only by accountants; the management screens (members, assignment, profile) are for administrators (and the solo).</li>
+                    <li>A member reaches only the companies in their perimeter (all files for an admin/solo; assigned files for an employee).</li>
                     <li>There must always be at least one active administrator; you cannot deactivate yourself.</li>
                     <li>An invited member is created pending: they reach nothing until they activate their account through the invitation link.</li>
                     <li>Assigning a file to a member makes it visible to them; an unassigned file appears only for administrators.</li>
@@ -335,7 +310,7 @@
                     <li><span class="msg">“Not allowed: this is the last administrator.”</span> — you cannot deactivate or demote the firm’s only administrator.</li>
                     <li><span class="msg">“You cannot deactivate yourself.”</span> — ask another administrator.</li>
                     <li><span class="msg">“File assigned.”</span> — the file was given to the chosen member and leaves the unassigned list.</li>
-                    <li><span class="msg">“Assignment saved.”</span> — the file’s member and/or team were saved.</li>
+                    <li><span class="msg">“Assignment saved.”</span> — the file’s member was saved.</li>
                     <li><span class="msg">“Split saved (n change(s)).”</span> — the changed “who does what” choices were saved.</li>
                     <li><span class="msg">“Profile saved.”</span> — the firm profile is up to date; if the profile is public, it appears in “Certified firms”.</li>
                     <li><span class="msg">“All your files are assigned.”</span> — no file is waiting to be assigned.</li>
@@ -363,11 +338,10 @@
                         <tr><td>Accountant portal</td><td>The firm’s workspace, distinct from clients’ files, reached through the picker’s “— Accountant portal —” option.</td></tr>
                         <tr><td>Firm</td><td>The accounting firm: a set of members and files.</td></tr>
                         <tr><td>Member</td><td>An accountant account attached to the firm, with a role.</td></tr>
-                        <tr><td>Role</td><td>Administrator, team lead, employee, or solo — governs what the member sees and can do.</td></tr>
+                        <tr><td>Role</td><td>Administrator, employee, or solo — governs what the member sees and can do.</td></tr>
                         <tr><td>File</td><td>A client company of the firm.</td></tr>
                         <tr><td>Perimeter</td><td>The set of files a member can see, based on role and assignments.</td></tr>
-                        <tr><td>Assignment</td><td>Giving a file to a member and/or a team.</td></tr>
-                        <tr><td>Team</td><td>A group of members, with a lead, that files can be assigned to.</td></tr>
+                        <tr><td>Assignment</td><td>Giving a file to a member.</td></tr>
                         <tr><td>Who does what</td><td>The split, activity by activity, between the client, the firm, or shared.</td></tr>
                         <tr><td>Profile (directory)</td><td>The firm’s public presentation in “Certified firms”, visible to businesses.</td></tr>
                         <tr><td>Invitation</td><td>The email and link by which a new member sets a password and activates their account.</td></tr>
@@ -378,7 +352,7 @@
 
         <article class="langue" lang="es">
             <h1>Portal del contador</h1>
-            <p class="intro">El espacio de trabajo del despacho contable, separado de los expedientes de sus clientes. Un contador gestiona aquí su despacho: sus expedientes (las empresas clientes), los miembros del equipo, las asignaciones, el perfil público y el reparto « quién hace qué ». Se entra desde el <strong>selector de arriba a la derecha</strong>: elija <span class="chemin">— Portal del contador —</span> para el espacio del despacho, o el nombre de una empresa para trabajar en ese expediente.</p>
+            <p class="intro">El espacio de trabajo del despacho contable, separado de los expedientes de sus clientes. Un contador gestiona aquí su despacho: sus expedientes (las empresas clientes), los miembros, las asignaciones, el perfil público y el reparto « quién hace qué ». Se entra desde el <strong>selector de arriba a la derecha</strong>: elija <span class="chemin">— Portal del contador —</span> para el espacio del despacho, o el nombre de una empresa para trabajar en ese expediente.</p>
 
             <section id="es-vision">
                 <h2>Visión general</h2>
@@ -395,42 +369,41 @@
                 <table>
                     <thead><tr><th>Rol</th><th>Lo que ve / puede hacer</th></tr></thead>
                     <tbody>
-                        <tr><td>Solo</td><td>Un despacho de una sola persona. Ve todos sus expedientes y gestiona todo el despacho. Al invitar a un primer colega, el despacho pasa a « con equipo » y la cuenta se vuelve administrador.</td></tr>
-                        <tr><td>Administrador</td><td>Gestiona el despacho: miembros, equipos, asignación de expedientes, perfil. Ve todos los expedientes.</td></tr>
-                        <tr><td>Responsable</td><td>Ve los expedientes de su equipo. No gestiona ni los miembros ni el perfil.</td></tr>
+                        <tr><td>Solo</td><td>Un despacho de una sola persona. Ve todos sus expedientes y gestiona todo el despacho. Al invitar a un primer colega, la cuenta se vuelve administrador.</td></tr>
+                        <tr><td>Administrador</td><td>Gestiona el despacho: miembros, asignación de expedientes, perfil. Ve todos los expedientes.</td></tr>
                         <tr><td>Empleado</td><td>Ve únicamente los expedientes que le han asignado.</td></tr>
                     </tbody>
                 </table>
                 <h3>El perímetro de acceso</h3>
-                <p>Un miembro solo accede a las empresas de <strong>su perímetro</strong>: un administrador o un solo accede a todos los expedientes del despacho; un responsable, a los de su equipo; un empleado, a los que le han asignado. El perímetro se aplica tanto a la lista « Mis expedientes » como al botón « Entrar »: no se puede entrar en un expediente fuera del propio perímetro.</p>
+                <p>Un miembro solo accede a las empresas de <strong>su perímetro</strong>: un administrador o un solo accede a todos los expedientes del despacho; un empleado, a los que le han asignado. El perímetro se aplica tanto a la lista « Mis expedientes » como al botón « Entrar »: no se puede entrar en un expediente fuera del propio perímetro.</p>
                 <div class="note" data-titre="Conviene saber">Un miembro invitado no tiene « empresa principal »: llega directamente al portal al iniciar sesión y solo accede a sus expedientes.</div>
             </section>
 
             <section id="es-expedientes">
                 <h2>Panel y expedientes</h2>
                 <h3>Panel del despacho</h3>
-                <p>La pantalla de inicio del portal. Una etiqueta indica la escala del despacho (« Despacho individual », « Despacho con un equipo »…) y unas casillas resumen: número de expedientes, expedientes a mi cargo (según el rol), miembros del despacho, equipos. Una vista previa lista los primeros expedientes, con un enlace « Ver todos los expedientes ».</p>
+                <p>La pantalla de inicio del portal. Una etiqueta indica la escala del despacho (« Despacho individual », « Despacho »…) y unas casillas resumen: número de expedientes, expedientes a mi cargo (según el rol), miembros del despacho. Una vista previa lista los primeros expedientes, con un enlace « Ver todos los expedientes ».</p>
                 <h3>Mis expedientes</h3>
-                <p>La lista de las empresas clientes de su perímetro. Un buscador filtra las tarjetas a medida que escribe. Cada tarjeta muestra el nombre del expediente, su código, el equipo si lo hay, y dos acciones: <kbd>Ficha</kbd> (abre la ficha del cliente) y <kbd>Entrar</kbd>.</p>
+                <p>La lista de las empresas clientes de su perímetro. Un buscador filtra las tarjetas a medida que escribe. Cada tarjeta muestra el nombre del expediente, su código, y dos acciones: <kbd>Ficha</kbd> (abre la ficha del cliente) y <kbd>Entrar</kbd>.</p>
                 <h3>Entrar en un expediente</h3>
                 <p><kbd>Entrar</kbd> le saca del portal y abre el expediente en el <strong>menú habitual del ERP</strong>: trabaja entonces en la contabilidad de ese cliente. El selector de la cabecera muestra ahora su nombre. Para volver al despacho, vuelva a elegir <strong>— Portal del contador —</strong>.</p>
                 <h3>Ficha del cliente</h3>
-                <p>La ficha de un expediente muestra la cabecera (nombre, razón social, código), la asignación (el miembro que lo lleva, el equipo) y el reparto « quién hace qué » en tres casillas: cuántas actividades son del cliente, del despacho o compartidas. Desde ahí, dos botones: <kbd>Entrar en el expediente</kbd> y <kbd>Gestionar el reparto</kbd>.</p>
+                <p>La ficha de un expediente muestra la cabecera (nombre, razón social, código), la asignación (el miembro que lo lleva) y el reparto « quién hace qué » en tres casillas: cuántas actividades son del cliente, del despacho o compartidas. Desde ahí, dos botones: <kbd>Entrar en el expediente</kbd> y <kbd>Gestionar el reparto</kbd>.</p>
                 <div class="astuce" data-titre="Consejo">Para abrir la ficha de un expediente, haga clic en su nombre en « Mis expedientes » o en su botón <kbd>Ficha</kbd>. Para trabajar en su contabilidad, use <kbd>Entrar</kbd>.</div>
             </section>
 
             <section id="es-miembros">
                 <h2>Miembros y seguridad</h2>
-                <p>Reservado a los administradores (y al solo). Aquí se invita a colegas, se ajusta su rol y su equipo, y se les desactiva.</p>
+                <p>Reservado a los administradores (y al solo). Aquí se invita a colegas, se ajusta su rol, y se les desactiva.</p>
                 <h3>Invitar a un miembro</h3>
                 <ol>
-                    <li>Rellene nombre, apellido, correo, rol (y equipo si procede), luego <kbd>Invitar</kbd>.</li>
+                    <li>Rellene nombre, apellido, correo, rol, luego <kbd>Invitar</kbd>.</li>
                     <li>Se crea una cuenta de contador, <strong>pendiente de activación</strong>. Se envía un correo de invitación a la dirección, y aparece en pantalla un <strong>enlace de invitación</strong>: puede copiarlo y transmitirlo usted mismo.</li>
                     <li>El miembro abre el enlace, elige su contraseña: su cuenta se activa y puede iniciar sesión.</li>
                 </ol>
                 <h3>Modificar, desactivar, reenviar</h3>
                 <ul>
-                    <li><kbd>Editar</kbd>: cambia el rol y el equipo de un miembro.</li>
+                    <li><kbd>Editar</kbd>: cambia el rol de un miembro.</li>
                     <li><kbd>Reenviar invitación</kbd>: regenera el enlace de un miembro aún pendiente (y reenvía el correo).</li>
                     <li><kbd>Desactivar</kbd> / <kbd>Activar</kbd>: corta o restablece el acceso de un miembro.</li>
                 </ul>
@@ -443,21 +416,10 @@
                 <div class="attention" data-titre="Atención">La entrega del correo de invitación depende del servicio de envío. Si el correo tarda, use el <strong>enlace de invitación mostrado en pantalla</strong>: cópielo y páselo directamente a la persona.</div>
             </section>
 
-            <section id="es-equipos">
-                <h2>Equipos</h2>
-                <p>Un despacho puede organizarse en equipos. Reservado a los administradores.</p>
-                <ul>
-                    <li><strong>Crear / renombrar</strong> un equipo: póngale un nombre.</li>
-                    <li><strong>Responsable</strong>: designe a un miembro como responsable del equipo. El responsable ve los expedientes de su equipo.</li>
-                    <li><strong>Eliminar</strong>: quita el equipo de la lista.</li>
-                </ul>
-                <p>Se vincula a un miembro a un equipo desde « Miembros y seguridad » (campo Equipo). Se asigna un expediente a un equipo desde « Asignación de expedientes ».</p>
-            </section>
-
             <section id="es-asignacion">
                 <h2>Asignar los expedientes</h2>
                 <h3>Asignación de expedientes</h3>
-                <p>Para cada expediente del despacho, elija el <strong>miembro</strong> y/o el <strong>equipo</strong> que lo lleva, luego <kbd>Guardar</kbd> en la fila. La asignación determina lo que ve cada miembro: un empleado solo ve los expedientes que le han asignado.</p>
+                <p>Para cada expediente del despacho, elija el <strong>miembro</strong> que lo lleva, luego <kbd>Guardar</kbd> en la fila. La asignación determina lo que ve cada miembro: un empleado solo ve los expedientes que le han asignado.</p>
                 <h3>Clientes sin asignar</h3>
                 <p>La lista de los expedientes del despacho <strong>aún sin asignar</strong> a un miembro. Para cada uno, elija un miembro y <kbd>Asignar</kbd>: el expediente sale de la lista. Cuando todo está asignado, la lista indica « Todos sus expedientes están asignados ».</p>
                 <div class="note" data-titre="Conviene saber">« Clientes sin asignar » muestra los expedientes del despacho sin responsable interno. Que una empresa pertenezca al despacho (que sea un cliente del despacho) se ajusta fuera del portal.</div>
@@ -495,8 +457,8 @@
             <section id="es-reglas">
                 <h2>Reglas</h2>
                 <ul>
-                    <li>El portal solo es accesible para los contadores; las pantallas de gestión (miembros, equipos, asignación, perfil) están reservadas a los administradores (y al solo).</li>
-                    <li>Un miembro solo accede a las empresas de su perímetro (todos los expedientes para un admin/solo; el equipo para un responsable; los asignados para un empleado).</li>
+                    <li>El portal solo es accesible para los contadores; las pantallas de gestión (miembros, asignación, perfil) están reservadas a los administradores (y al solo).</li>
+                    <li>Un miembro solo accede a las empresas de su perímetro (todos los expedientes para un admin/solo; los asignados para un empleado).</li>
                     <li>Siempre debe haber al menos un administrador activo; no se puede desactivar a uno mismo.</li>
                     <li>Un miembro invitado se crea pendiente: no accede a nada mientras no active su cuenta mediante el enlace de invitación.</li>
                     <li>Asignar un expediente a un miembro lo hace visible para él; un expediente sin asignar solo aparece para los administradores.</li>
@@ -513,7 +475,7 @@
                     <li><span class="msg">« No permitido: es el último administrador. »</span> — no se puede desactivar ni degradar al único administrador del despacho.</li>
                     <li><span class="msg">« No puede desactivarse a sí mismo. »</span> — pida a otro administrador.</li>
                     <li><span class="msg">« Expediente asignado. »</span> — el expediente se atribuyó al miembro elegido y sale de la lista de sin asignar.</li>
-                    <li><span class="msg">« Asignación guardada. »</span> — el miembro y/o el equipo del expediente se guardaron.</li>
+                    <li><span class="msg">« Asignación guardada. »</span> — el miembro del expediente se guardó.</li>
                     <li><span class="msg">« Reparto guardado (n cambio(s)). »</span> — las opciones « quién hace qué » cambiadas se guardaron.</li>
                     <li><span class="msg">« Perfil guardado. »</span> — el perfil del despacho está al día; si la ficha es pública, aparece en « Despachos certificados ».</li>
                     <li><span class="msg">« Todos sus expedientes están asignados. »</span> — ningún expediente espera ser asignado.</li>
@@ -541,11 +503,10 @@
                         <tr><td>Portal del contador</td><td>El espacio de trabajo del despacho, distinto de los expedientes de los clientes, al que se llega por la opción « — Portal del contador — » del selector.</td></tr>
                         <tr><td>Despacho</td><td>La firma contable: un conjunto de miembros y expedientes.</td></tr>
                         <tr><td>Miembro</td><td>Una cuenta de contador vinculada al despacho, con un rol.</td></tr>
-                        <tr><td>Rol</td><td>Administrador, responsable, empleado, o solo — determina lo que el miembro ve y puede hacer.</td></tr>
+                        <tr><td>Rol</td><td>Administrador, empleado, o solo — determina lo que el miembro ve y puede hacer.</td></tr>
                         <tr><td>Expediente</td><td>Una empresa cliente del despacho.</td></tr>
                         <tr><td>Perímetro</td><td>El conjunto de expedientes que un miembro puede ver, según su rol y sus asignaciones.</td></tr>
-                        <tr><td>Asignación</td><td>El hecho de confiar un expediente a un miembro y/o un equipo.</td></tr>
-                        <tr><td>Equipo</td><td>Un grupo de miembros, con un responsable, al que se pueden asignar expedientes.</td></tr>
+                        <tr><td>Asignación</td><td>El hecho de confiar un expediente a un miembro.</td></tr>
                         <tr><td>Quién hace qué</td><td>El reparto, actividad por actividad, entre el cliente, el despacho, o compartido.</td></tr>
                         <tr><td>Ficha (directorio)</td><td>La presentación pública del despacho en « Despachos certificados », visible para las empresas.</td></tr>
                         <tr><td>Invitación</td><td>El correo y el enlace por los que un nuevo miembro pone su contraseña y activa su cuenta.</td></tr>

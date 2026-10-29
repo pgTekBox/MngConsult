@@ -48,7 +48,7 @@ Public Class wbfCabTableauBord
 
         ' --- KPIs + rôle ---
         Dim role As String = ""
-        Dim nbDossiers As Integer = 0, nbAMoi As Integer = 0, nbMembres As Integer = 0, nbEquipes As Integer = 0
+        Dim nbDossiers As Integer = 0, nbAMoi As Integer = 0, nbMembres As Integer = 0
         Try
             Dim ds As DataSet = ExecuteSQLds("s0921GetCabinetKpis", p)
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
@@ -57,7 +57,6 @@ Public Class wbfCabTableauBord
                 nbDossiers = Convert.ToInt32(r("NbDossiers"))
                 nbAMoi = Convert.ToInt32(r("NbDossiersAMoi"))
                 nbMembres = Convert.ToInt32(r("NbMembres"))
-                nbEquipes = Convert.ToInt32(r("NbEquipes"))
             End If
         Catch
         End Try
@@ -66,14 +65,13 @@ Public Class wbfCabTableauBord
         litSous.Text = Server.HtmlEncode(T("Votre espace de cabinet : vos dossiers et votre organisation.",
                                            "Your firm workspace: your files and your organization.",
                                            "Su espacio de despacho: sus expedientes y su organización."))
-        litEchelle.Text = "<span class=""cab-echelle"">" & Server.HtmlEncode(EchelleLab(role, nbEquipes)) & "</span>"
+        litEchelle.Text = "<span class=""cab-echelle"">" & Server.HtmlEncode(EchelleLab(role)) & "</span>"
 
         ' --- Tuiles ---
         Dim sbK As New StringBuilder()
         sbK.Append(Tuile(nbDossiers, T("Dossiers", "Files", "Expedientes")))
         sbK.Append(Tuile(nbAMoi, T("Dossiers suivis par moi", "Files I handle", "Expedientes a mi cargo")))
         sbK.Append(Tuile(nbMembres, T("Membres du cabinet", "Firm members", "Miembros del despacho")))
-        sbK.Append(Tuile(nbEquipes, T("Équipes", "Teams", "Equipos")))
         litKpis.Text = sbK.ToString()
 
         ' --- Aperçu des dossiers ---
@@ -85,11 +83,9 @@ Public Class wbfCabTableauBord
         Return "<div class=""kpi""><div class=""n"">" & n.ToString() & "</div><div class=""l"">" & Server.HtmlEncode(libelle) & "</div></div>"
     End Function
 
-    Private Function EchelleLab(role As String, nbEquipes As Integer) As String
+    Private Function EchelleLab(role As String) As String
         If role = "solo" Then Return T("Cabinet solo", "Solo firm", "Despacho individual")
-        If nbEquipes <= 0 Then Return T("Cabinet", "Firm", "Despacho")
-        If nbEquipes = 1 Then Return T("Cabinet avec une équipe", "Firm with one team", "Despacho con un equipo")
-        Return T("Cabinet à plusieurs équipes", "Firm with several teams", "Despacho con varios equipos")
+        Return T("Cabinet", "Firm", "Despacho")
     End Function
 
     Private Sub RendreDossiers()

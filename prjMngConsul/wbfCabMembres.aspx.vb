@@ -20,13 +20,11 @@ Public Class wbfCabMembres
     Protected WithEvents litLblLast As System.Web.UI.WebControls.Literal
     Protected WithEvents litLblEmail As System.Web.UI.WebControls.Literal
     Protected WithEvents litLblRole As System.Web.UI.WebControls.Literal
-    Protected WithEvents litLblEquipe As System.Web.UI.WebControls.Literal
     Protected WithEvents litLblActive As System.Web.UI.WebControls.Literal
     Protected WithEvents txtFirst As System.Web.UI.WebControls.TextBox
     Protected WithEvents txtLast As System.Web.UI.WebControls.TextBox
     Protected WithEvents txtEmail As System.Web.UI.WebControls.TextBox
     Protected WithEvents ddlRole As System.Web.UI.WebControls.DropDownList
-    Protected WithEvents ddlEquipe As System.Web.UI.WebControls.DropDownList
     Protected WithEvents pnlActive As System.Web.UI.WebControls.Panel
     Protected WithEvents cbActive As System.Web.UI.WebControls.CheckBox
     Protected WithEvents btnSave As System.Web.UI.WebControls.Button
@@ -60,7 +58,6 @@ Public Class wbfCabMembres
         If Not IsPostBack Then
             Textes()
             BindRoleDropdown()
-            BindEquipeDropdown()
             ResetForm()
             BindMembres()
         End If
@@ -97,7 +94,6 @@ Public Class wbfCabMembres
         litLblLast.Text = Server.HtmlEncode(T("Nom", "Last name", "Apellido"))
         litLblEmail.Text = Server.HtmlEncode(T("Courriel", "Email", "Correo"))
         litLblRole.Text = Server.HtmlEncode(T("Rôle", "Role", "Rol"))
-        litLblEquipe.Text = Server.HtmlEncode(T("Équipe", "Team", "Equipo"))
         litLblActive.Text = Server.HtmlEncode(T("Compte actif", "Active account", "Cuenta activa"))
         litListeTitre.Text = Server.HtmlEncode(T("Membres du cabinet", "Firm members", "Miembros del despacho"))
     End Sub
@@ -105,24 +101,7 @@ Public Class wbfCabMembres
     Private Sub BindRoleDropdown()
         ddlRole.Items.Clear()
         ddlRole.Items.Add(New ListItem(T("Employé", "Employee", "Empleado"), "employe"))
-        ddlRole.Items.Add(New ListItem(T("Responsable d'équipe", "Team lead", "Responsable de equipo"), "responsable"))
         ddlRole.Items.Add(New ListItem(T("Administrateur", "Administrator", "Administrador"), "admin"))
-    End Sub
-
-    Private Sub BindEquipeDropdown()
-        ddlEquipe.Items.Clear()
-        ddlEquipe.Items.Add(New ListItem(T("— Aucune —", "— None —", "— Ninguno —"), ""))
-        Try
-            Dim p As New Collection
-            p.Add(New SqlParameter("@UserId", UserEmail))
-            Dim ds As DataSet = ExecuteSQLds("s0928ListEquipes", p)
-            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
-                For Each r As DataRow In ds.Tables(0).Rows
-                    ddlEquipe.Items.Add(New ListItem(Convert.ToString(r("Nom")), Convert.ToString(r("Id"))))
-                Next
-            End If
-        Catch
-        End Try
     End Sub
 
     Private Sub BindMembres()
@@ -142,7 +121,6 @@ Public Class wbfCabMembres
         txtFirst.Text = "" : txtLast.Text = "" : txtEmail.Text = ""
         txtEmail.Enabled = True
         ddlRole.SelectedValue = "employe"
-        ddlEquipe.SelectedIndex = 0
         pnlActive.Visible = False
         cbActive.Checked = True
         btnSave.Text = T("Inviter", "Invite", "Invitar")
@@ -171,7 +149,6 @@ Public Class wbfCabMembres
         txtEmail.Text = Convert.ToString(r("Email"))
         txtEmail.Enabled = False
         SelectValue(ddlRole, Convert.ToString(r("Role")))
-        SelectValue(ddlEquipe, If(IsDBNull(r("EquipeId")), "", Convert.ToString(r("EquipeId"))))
         pnlActive.Visible = True
         cbActive.Checked = Convert.ToBoolean(r("IsActive"))
         btnSave.Text = T("Enregistrer", "Save", "Guardar")
@@ -225,7 +202,7 @@ Public Class wbfCabMembres
         p.Add(New SqlParameter("@FirstName", Nz(txtFirst.Text.Trim())))
         p.Add(New SqlParameter("@LastName", Nz(txtLast.Text.Trim())))
         p.Add(New SqlParameter("@Role", ddlRole.SelectedValue))
-        p.Add(New SqlParameter("@EquipeId", EquipeParam()))
+        p.Add(New SqlParameter("@EquipeId", DBNull.Value))
         ' Pas de compagnie maison réelle : un membre accède aux dossiers par le
         ' périmètre du cabinet, jamais via une compagnie maison.
         p.Add(New SqlParameter("@HomeCompanyGUID", Guid.Empty))
@@ -248,7 +225,6 @@ Public Class wbfCabMembres
         EnvoyerCourrielInvitation(email, lien)   ' best-effort
 
         ResetForm()
-        BindEquipeDropdown()
         BindMembres()
 
         ' Confirmation + lien copiable
@@ -266,7 +242,7 @@ Public Class wbfCabMembres
         p.Add(New SqlParameter("@UserId", UserEmail))
         p.Add(New SqlParameter("@MembreId", membreId))
         p.Add(New SqlParameter("@Role", ddlRole.SelectedValue))
-        p.Add(New SqlParameter("@EquipeId", EquipeParam()))
+        p.Add(New SqlParameter("@EquipeId", DBNull.Value))
         p.Add(New SqlParameter("@IsActive", cbActive.Checked))
         Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
         p.Add(outErr)
@@ -360,11 +336,6 @@ Public Class wbfCabMembres
             ' La livraison du courriel ne doit jamais bloquer l'invitation : le lien copiable reste disponible.
         End Try
     End Sub
-
-    Private Function EquipeParam() As Object
-        If String.IsNullOrEmpty(ddlEquipe.SelectedValue) Then Return DBNull.Value
-        Return CInt(ddlEquipe.SelectedValue)
-    End Function
 
     Private Shared Function Nz(s As String) As Object
         Return If(String.IsNullOrEmpty(s), CType(DBNull.Value, Object), s)

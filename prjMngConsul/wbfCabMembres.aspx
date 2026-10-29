@@ -80,10 +80,6 @@
                     <label><asp:Literal ID="litLblRole" runat="server" /></label>
                     <asp:DropDownList ID="ddlRole" runat="server" />
                 </div>
-                <div>
-                    <label><asp:Literal ID="litLblEquipe" runat="server" /></label>
-                    <asp:DropDownList ID="ddlEquipe" runat="server" />
-                </div>
                 <asp:Panel ID="pnlActive" runat="server" CssClass="chkline" Visible="false">
                     <asp:CheckBox ID="cbActive" runat="server" />
                     <asp:Literal ID="litLblActive" runat="server" />
@@ -110,7 +106,6 @@
                             <div class="em"><%# Server.HtmlEncode(Convert.ToString(Eval("Email"))) %></div>
                         </div>
                         <span class="tag role"><%# RoleLabel(Eval("Role")) %></span>
-                        <%# TeamTag(Eval("EquipeNom")) %>
                         <%# StatutTag(Eval("Pending"), Eval("IsActive")) %>
                         <div class="acts">
                             <asp:LinkButton runat="server" CommandName="edit" CommandArgument='<%# Eval("MembreId") %>' Text='<%# LblModifier %>' />
