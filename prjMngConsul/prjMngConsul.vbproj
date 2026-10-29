@@ -528,6 +528,10 @@
     <Content Include="wbfCabEquipes.aspx" />
     <Content Include="wbfCabAffectation.aspx" />
     <Content Include="wbfCabInvitation.aspx" />
+    <Content Include="wbfCabProfil.aspx" />
+    <Content Include="wbfCabNonAssocies.aspx" />
+    <Content Include="wbfCabFiche.aspx" />
+    <Content Include="wbfCabActivites.aspx" />
     <Content Include="QuiFaitQuoi.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
     <Content Include="ImportApideck.aspx" />
@@ -842,6 +846,22 @@
     </Compile>
     <Compile Include="wbfCabInvitation.aspx.vb">
       <DependentUpon>wbfCabInvitation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabProfil.aspx.vb">
+      <DependentUpon>wbfCabProfil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabNonAssocies.aspx.vb">
+      <DependentUpon>wbfCabNonAssocies.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabFiche.aspx.vb">
+      <DependentUpon>wbfCabFiche.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabActivites.aspx.vb">
+      <DependentUpon>wbfCabActivites.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CorrespondanceComptes.aspx.designer.vb">

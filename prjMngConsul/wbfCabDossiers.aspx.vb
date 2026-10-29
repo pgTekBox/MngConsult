@@ -123,13 +123,16 @@ Public Class wbfCabDossiers
 
         Dim txt As String = nom & " " & code & " " & equipe
         Dim href As String = ResolveUrl("~/wbfCabDossiers.aspx?enter=" & Server.UrlEncode(guid))
+        Dim ficheHref As String = ResolveUrl("~/wbfCabFiche.aspx?company=" & Server.UrlEncode(guid))
 
         Dim sb As New StringBuilder()
         sb.Append("<article class=""doss-carte"" data-txt=""").Append(Server.HtmlEncode(txt)).Append(""">")
         sb.Append("<div class=""doss-top""><span class=""doss-av"">").Append(Server.HtmlEncode(Initiales(nom))).Append("</span><div>")
-        sb.Append("<h2>").Append(Server.HtmlEncode(nom)).Append("</h2>")
+        sb.Append("<h2><a href=""").Append(ficheHref).Append(""" style=""color:inherit;text-decoration:none"">").Append(Server.HtmlEncode(nom)).Append("</a></h2>")
         sb.Append("<div class=""doss-sous"">").Append(Server.HtmlEncode(sous)).Append("</div></div></div>")
-        sb.Append("<div class=""doss-actions""><a class=""doss-entrer"" href=""").Append(href).Append(""">")
+        sb.Append("<div class=""doss-actions"" style=""display:flex;gap:8px"">")
+        sb.Append("<a class=""doss-fiche"" href=""").Append(ficheHref).Append(""">").Append(Server.HtmlEncode(T("Fiche", "Details", "Ficha"))).Append("</a>")
+        sb.Append("<a class=""doss-entrer"" href=""").Append(href).Append(""">")
         sb.Append(Server.HtmlEncode(T("Entrer", "Enter", "Entrar")))
         sb.Append(" <svg aria-hidden=""true"" width=""16"" height=""16"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2.4"" stroke-linecap=""round"" stroke-linejoin=""round""><path d=""M5 12h14M13 6l6 6-6 6""/></svg></a></div>")
         sb.Append("</article>")

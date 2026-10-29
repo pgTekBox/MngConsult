@@ -245,14 +245,14 @@ Namespace Controls
             ' Section du cabinet (écrans à venir)
             Select Case role
                 Case "admin", "solo"
-                    ' Gestion du cabinet (livrée) + écrans encore à venir
+                    ' Gestion du cabinet (la répartition des activités se gère par
+                    ' dossier depuis la fiche client, via « Mes dossiers »).
                     sb.Append(Section("portalSecFirm"))
                     sb.Append(Item("~/wbfCabMembres.aspx", Ico("user-cog"), "portalMembers"))
                     sb.Append(Item("~/wbfCabEquipes.aspx", Ico("users"), "portalEquipes"))
                     sb.Append(Item("~/wbfCabAffectation.aspx", Ico("inbox"), "portalAssign"))
-                    sb.Append(ItemSoon(Ico("tag"), "portalUnassigned"))
-                    sb.Append(ItemSoon(Ico("settings"), "portalActivities"))
-                    sb.Append(ItemSoon(Ico("firm"), "portalProfile"))
+                    sb.Append(Item("~/wbfCabNonAssocies.aspx", Ico("tag"), "portalUnassigned"))
+                    sb.Append(Item("~/wbfCabProfil.aspx", Ico("firm"), "portalProfile"))
                 Case "responsable"
                     sb.Append(Section("portalSecTeam"))
                     sb.Append(ItemSoon(Ico("users"), "portalTeamActivities"))

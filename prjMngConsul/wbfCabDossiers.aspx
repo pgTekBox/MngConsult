@@ -39,6 +39,8 @@
     .doss-entrer { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; text-decoration: none;
         font-weight: 800; color: #fff; background: var(--mc-primary, #1B4F9C) }
     .doss-entrer:hover { background: var(--mc-primary-dark, #143A73) }
+    .doss-fiche { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 999px; text-decoration: none; font-weight: 800; color: var(--mc-primary-dark, #143A73); background: var(--mc-soft2, #E3EBF7) }
+    .doss-fiche:hover { background: var(--mc-soft, #E8EDF5) }
     .doss-vide { background: #fff; border-radius: 20px; padding: 24px; text-align: center; color: #44536E; font-size: 14px }
     .doss-vide[hidden] { display: none }
 </style>
