@@ -1,39 +1,38 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
-Imports System.Text
+Imports System.Web.Script.Serialization
 
 ''' <summary>
-''' « Mes dossiers » du Portail comptable : la liste des compagnies clientes du
-''' cabinet, scopée par le rôle du comptable connecté (s0920). Recherche côté
-''' client. Le bouton « Entrer » (lien ?enter=GUID) valide l'accès (s0211), quitte
-''' le portail et pointe la compagnie, puis renvoie au tableau de bord ERP normal.
-''' Réservé aux comptables ; sinon redirection vers Default.aspx.
+''' « Tous les dossiers » du Portail comptable — calqué sur l'écran « Tous les
+''' clients » de la maquette : les dossiers (compagnies clientes) regroupés par
+''' priorité (sections Urgent / À surveiller / Sans urgence), avec recherche et
+''' filtres (priorité, secteur, employé), et une carte par dossier montrant la
+''' prochaine action et le nombre d'actions à faire.
+'''
+''' Données réelles : dossiers du périmètre (s0957, avec secteur + employé
+''' assigné) et tâches (s0956), agrégées ici par dossier (priorité, nombre à
+''' faire, prochaine action). Rendu + filtres côté client. Cliquer une carte
+''' ouvre la fiche du dossier (wbfCabFiche). Réservé aux comptables.
 ''' </summary>
 Public Class wbfCabDossiers
     Inherits clsData
 
-    Protected WithEvents litTitre As System.Web.UI.WebControls.Literal
-    Protected WithEvents litSous As System.Web.UI.WebControls.Literal
-    Protected WithEvents litOutils As System.Web.UI.WebControls.Literal
-    Protected WithEvents litListe As System.Web.UI.WebControls.Literal
-    Protected WithEvents litVide As System.Web.UI.WebControls.Literal
+    Protected WithEvents litData As System.Web.UI.WebControls.Literal
+    Protected WithEvents litLabels As System.Web.UI.WebControls.Literal
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not isAuthenticated OrElse Not IsAccountant Then
-            Response.Redirect("~/Default.aspx")
-            Return
+            Response.Redirect("~/Default.aspx") : Return
         End If
-
-        ' Action « Entrer » : rejoindre une compagnie et quitter le portail.
-        Dim enter As String = Request.QueryString("enter")
-        If Not String.IsNullOrEmpty(enter) Then
-            EntrerDansDossier(enter)
-            Return
-        End If
-
-        ' Sinon on reste dans l'espace du cabinet.
         EnPortailComptable = True
         DirectCast(Master, SiteMaster).FondDePage = True
+
+        ' Entrer directement dans un dossier (ancien lien ?enter=GUID) : on garde
+        ' la compatibilité — pose la compagnie et sort du portail.
+        Dim ent As String = Request.QueryString("enter")
+        If Not IsPostBack AndAlso Not String.IsNullOrEmpty(ent) Then
+            EntrerDossier(ent) : Return
+        End If
 
         If Not IsPostBack Then Charger()
     End Sub
@@ -46,106 +45,167 @@ Public Class wbfCabDossiers
         End Select
     End Function
 
-    ''' <summary>Valide l'accès (s0211) puis bascule sur la compagnie et sort du portail.</summary>
-    Private Sub EntrerDansDossier(guidStr As String)
+    Private Sub EntrerDossier(guidStr As String)
         Dim g As Guid
-        If Not Guid.TryParse(guidStr, g) Then
+        If Guid.TryParse(guidStr, g) Then
+            Try
+                Dim p As New Collection
+                p.Add(New SqlParameter("@UserId", UserEmail))
+                p.Add(New SqlParameter("@CompanyGUID", g))
+                ExecuteSQLds("s0211ValidateCompanyAccess", p)
+            Catch
+            End Try
+            EnPortailComptable = False
+            Company = g
+            Response.Redirect("~/Default.aspx")
+        Else
             Response.Redirect("~/wbfCabDossiers.aspx")
-            Return
         End If
-
-        Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", UserEmail))
-        p.Add(New SqlParameter("@CompanyGUID", g))
-        Dim outAccess As New SqlParameter("@HasAccess", SqlDbType.Bit)
-        outAccess.Direction = ParameterDirection.Output
-        p.Add(outAccess)
-        ExecuteSQL("s0211ValidateCompanyAccess", p)
-
-        Dim hasAccess As Boolean = False
-        If outAccess.Value IsNot Nothing AndAlso Not IsDBNull(outAccess.Value) Then hasAccess = CBool(outAccess.Value)
-
-        If Not hasAccess Then
-            ' Accès refusé : rester dans le portail.
-            Response.Redirect("~/wbfCabDossiers.aspx")
-            Return
-        End If
-
-        EnPortailComptable = False
-        Company = g
-        Response.Redirect("~/Default.aspx")
     End Sub
 
-    Private Sub Charger()
-        litTitre.Text = Server.HtmlEncode(T("Mes dossiers", "My files", "Mis expedientes"))
-        litSous.Text = Server.HtmlEncode(T("Les compagnies dont vous vous occupez. Entrez dans un dossier pour y travailler.",
-                                           "The companies you handle. Enter a file to work in it.",
-                                           "Las empresas de las que se ocupa. Entre en un expediente para trabajar en él."))
-
-        Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", UserEmail))
-
-        Dim sb As New StringBuilder()
-        Dim total As Integer = 0
-        Try
-            Dim ds As DataSet = ExecuteSQLds("s0920ListCabinetDossiers", p)
-            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
-                For Each r As DataRow In ds.Tables(0).Rows
-                    sb.Append(Carte(r))
-                    total += 1
-                Next
-            End If
-        Catch ex As Exception
-            sb.Append("<div class=""doss-vide"">" & Server.HtmlEncode(T("La liste n'a pas pu être lue : ", "The list could not be read: ", "No se pudo leer la lista: ") & ex.Message) & "</div>")
-        End Try
-
-        litListe.Text = sb.ToString()
-        litVide.Text = Server.HtmlEncode(T("Aucun dossier ne correspond à votre recherche.", "No file matches your search.", "Ningún expediente coincide con su búsqueda."))
-
-        ' Barre d'outils : recherche + décompte
-        litOutils.Text = "<div class=""cab-outils"">" &
-            "<label class=""cab-recherche""><svg aria-hidden=""true"" width=""18"" height=""18"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2.2"" stroke-linecap=""round"" stroke-linejoin=""round""><circle cx=""11"" cy=""11"" r=""7""/><path d=""M21 21l-4.3-4.3""/></svg>" &
-            "<input type=""search"" id=""dossRecherche"" autocomplete=""off"" placeholder=""" &
-            Server.HtmlEncode(T("Rechercher un dossier…", "Search a file…", "Buscar un expediente…")) & """ /></label>" &
-            "<span class=""cab-compte"" id=""dossCompte"" data-un=""" & Server.HtmlEncode(T("{0} dossier", "{0} file", "{0} expediente")) &
-            """ data-plusieurs=""" & Server.HtmlEncode(T("{0} dossiers", "{0} files", "{0} expedientes")) & """></span></div>"
-    End Sub
-
-    Private Function Carte(r As DataRow) As String
-        Dim guid As String = Convert.ToString(r("CompanyGUID"))
-        Dim nom As String = Convert.ToString(r("Name"))
-        Dim code As String = Convert.ToString(r("CompanyCode"))
-        Dim equipe As String = ""
-        If Not IsDBNull(r("EquipeNom")) Then equipe = Convert.ToString(r("EquipeNom"))
-
-        Dim sous As String = code
-        If equipe <> "" Then sous = code & " · " & equipe
-
-        Dim txt As String = nom & " " & code & " " & equipe
-        Dim href As String = ResolveUrl("~/wbfCabDossiers.aspx?enter=" & Server.UrlEncode(guid))
-        Dim ficheHref As String = ResolveUrl("~/wbfCabFiche.aspx?company=" & Server.UrlEncode(guid))
-
-        Dim sb As New StringBuilder()
-        sb.Append("<article class=""doss-carte"" data-txt=""").Append(Server.HtmlEncode(txt)).Append(""">")
-        sb.Append("<div class=""doss-top""><span class=""doss-av"">").Append(Server.HtmlEncode(Initiales(nom))).Append("</span><div>")
-        sb.Append("<h2><a href=""").Append(ficheHref).Append(""" style=""color:inherit;text-decoration:none"">").Append(Server.HtmlEncode(nom)).Append("</a></h2>")
-        sb.Append("<div class=""doss-sous"">").Append(Server.HtmlEncode(sous)).Append("</div></div></div>")
-        sb.Append("<div class=""doss-actions"" style=""display:flex;gap:8px"">")
-        sb.Append("<a class=""doss-fiche"" href=""").Append(ficheHref).Append(""">").Append(Server.HtmlEncode(T("Fiche", "Details", "Ficha"))).Append("</a>")
-        sb.Append("<a class=""doss-entrer"" href=""").Append(href).Append(""">")
-        sb.Append(Server.HtmlEncode(T("Entrer", "Enter", "Entrar")))
-        sb.Append(" <svg aria-hidden=""true"" width=""16"" height=""16"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2.4"" stroke-linecap=""round"" stroke-linejoin=""round""><path d=""M5 12h14M13 6l6 6-6 6""/></svg></a></div>")
-        sb.Append("</article>")
-        Return sb.ToString()
+    ' Priorité d'une tâche ouverte : 0=urgent(r), 1=à surveiller(y), 2=ok(g).
+    Private Shared Function PrioO(statut As String, jours As Integer) As Integer
+        If statut = "bloque" Then Return 1
+        If jours <= 1 Then Return 0
+        If jours <= 7 Then Return 1
+        Return 2
     End Function
 
-    Private Shared Function Initiales(nom As String) As String
-        Dim sb As New StringBuilder()
-        For Each mot As String In If(nom, "").Split(New Char() {" "c, "-"c}, StringSplitOptions.RemoveEmptyEntries)
-            If Char.IsLetter(mot(0)) Then sb.Append(Char.ToUpperInvariant(mot(0)))
-            If sb.Length = 2 Then Exit For
+    Private Class Doss
+        Public Guid As String
+        Public Nom As String
+        Public Code As String
+        Public Secteur As String
+        Public Nouveau As Boolean
+        Public EmpNom As String
+    End Class
+
+    Private Sub Charger()
+        Dim role As String = LireRole()
+        Dim admin As Boolean = (role = "admin" OrElse role = "solo")
+
+        ' --- Dossiers (s0957) ---
+        Dim dossiers As New List(Of Doss)()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@UserId", UserEmail))
+            Dim ds As DataSet = ExecuteSQLds("s0957GetJourneeClients", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                For Each r As DataRow In ds.Tables(0).Rows
+                    Dim sect As String = If(IsDBNull(r("Secteur")), "", Convert.ToString(r("Secteur")).Trim())
+                    If sect = "" Then sect = T("Autres", "Other", "Otros")
+                    dossiers.Add(New Doss With {
+                        .Guid = Convert.ToString(r("CompanyGUID")).ToLowerInvariant(),
+                        .Nom = Convert.ToString(r("Nom")),
+                        .Code = If(IsDBNull(r("CompanyCode")), "", Convert.ToString(r("CompanyCode"))),
+                        .Secteur = sect,
+                        .Nouveau = (Not IsDBNull(r("EstNouveau"))) AndAlso Convert.ToInt32(r("EstNouveau")) = 1,
+                        .EmpNom = If(IsDBNull(r("AssignedNom")), "", Convert.ToString(r("AssignedNom")).Trim())})
+                Next
+            End If
+        Catch
+        End Try
+
+        ' --- Tâches (s0956) agrégées par dossier ---
+        Dim nbByGuid As New Dictionary(Of String, Integer)()
+        Dim pireByGuid As New Dictionary(Of String, Integer)()
+        Dim nextTitreByGuid As New Dictionary(Of String, String)()
+        Dim nextPoidsByGuid As New Dictionary(Of String, Integer)()
+        Dim nextEchByGuid As New Dictionary(Of String, Integer)()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@UserId", UserEmail))
+            Dim ds As DataSet = ExecuteSQLds("s0956GetJourneeTaches", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                For Each r As DataRow In ds.Tables(0).Rows
+                    Dim statut As String = Convert.ToString(r("Statut")).Trim().ToLowerInvariant()
+                    If statut = "fait" Then Continue For   ' seules les tâches ouvertes comptent
+                    Dim g As String = Convert.ToString(r("CompanyGUID")).ToLowerInvariant()
+                    Dim jours As Integer = 999
+                    If Not IsDBNull(r("Jours")) Then jours = Convert.ToInt32(r("Jours"))
+                    Dim o As Integer = PrioO(statut, jours)
+                    Dim poids As Integer = o * 1000 + (jours + 100)
+
+                    nbByGuid(g) = If(nbByGuid.ContainsKey(g), nbByGuid(g), 0) + 1
+                    If Not pireByGuid.ContainsKey(g) OrElse o < pireByGuid(g) Then pireByGuid(g) = o
+                    If Not nextPoidsByGuid.ContainsKey(g) OrElse poids < nextPoidsByGuid(g) Then
+                        nextPoidsByGuid(g) = poids
+                        nextTitreByGuid(g) = Convert.ToString(r("Titre"))
+                        nextEchByGuid(g) = jours
+                    End If
+                Next
+            End If
+        Catch
+        End Try
+
+        ' --- Objets clients pour le rendu ---
+        Dim clients As New List(Of Object)()
+        For Each d As Doss In dossiers
+            Dim nb As Integer = If(nbByGuid.ContainsKey(d.Guid), nbByGuid(d.Guid), 0)
+            Dim o As Integer = If(pireByGuid.ContainsKey(d.Guid), pireByGuid(d.Guid), 2)
+            Dim pk As String = If(o = 0, "r", If(o = 1, "y", "g"))
+            clients.Add(New With {
+                .guid = d.Guid,
+                .nom = d.Nom,
+                .code = d.Code,
+                .secteur = d.Secteur,
+                .nouveau = d.Nouveau,
+                .empNom = d.EmpNom,
+                .pk = pk,
+                .nb = nb,
+                .prochaine = If(nextTitreByGuid.ContainsKey(d.Guid), nextTitreByGuid(d.Guid), ""),
+                .ech = If(nextEchByGuid.ContainsKey(d.Guid), nextEchByGuid(d.Guid), 9999)})
         Next
-        Return sb.ToString()
+
+        Dim data As New Dictionary(Of String, Object) From {
+            {"clients", clients},
+            {"admin", admin}
+        }
+        Dim js As New JavaScriptSerializer() With {.MaxJsonLength = 8 * 1024 * 1024}
+        litData.Text = js.Serialize(data)
+        litLabels.Text = New JavaScriptSerializer().Serialize(Libelles(admin))
+    End Sub
+
+    Private Function LireRole() As String
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@UserId", UserEmail))
+            Dim ds As DataSet = ExecuteSQLds("s0919GetUserCabinet", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Return Convert.ToString(ds.Tables(0).Rows(0)("Role")).Trim().ToLowerInvariant()
+            End If
+        Catch
+        End Try
+        Return ""
+    End Function
+
+    Private Function Libelles(admin As Boolean) As Dictionary(Of String, String)
+        Return New Dictionary(Of String, String) From {
+            {"titre", If(admin, T("Tous les dossiers", "All files", "Todos los expedientes"), T("Mes dossiers", "My files", "Mis expedientes"))},
+            {"sousTitre", T("Vos dossiers, du plus urgent au plus calme. Touchez un dossier pour l'ouvrir.", "Your files, from the most urgent to the calmest. Tap a file to open it.", "Sus expedientes, del más urgente al más tranquilo. Toque uno para abrirlo.")},
+            {"chercher", T("Chercher un dossier…", "Search a file…", "Buscar un expediente…")},
+            {"tous", T("Tous", "All", "Todos")},
+            {"urgent", T("Urgent", "Urgent", "Urgente")},
+            {"surveiller", T("À surveiller", "To watch", "A vigilar")},
+            {"bien", T("Tout va bien", "All good", "Todo bien")},
+            {"sansUrg", T("Sans urgence", "No urgency", "Sin urgencia")},
+            {"secteur", T("Secteur", "Sector", "Sector")},
+            {"employe", T("Employé", "Employee", "Empleado")},
+            {"suiviPar", T("suivi par", "handled by", "a cargo de")},
+            {"nouveau", T("Nouveau", "New", "Nuevo")},
+            {"aFaire", T("à faire", "to do", "por hacer")},
+            {"rienAFaire", T("Rien à faire", "Nothing to do", "Nada por hacer")},
+            {"aucuneAction", T("Aucune action en attente", "No pending action", "Sin acción pendiente")},
+            {"dossierN", T("{n} dossier", "{n} file", "{n} expediente")},
+            {"dossiersN", T("{n} dossiers", "{n} files", "{n} expedientes")},
+            {"rienFiltres", T("Aucun dossier ne correspond.", "No file matches.", "Ningún expediente coincide.")},
+            {"enRetard", T("En retard", "Overdue", "Atrasado")},
+            {"aujourdhui", T("Aujourd'hui", "Today", "Hoy")},
+            {"demain", T("Demain", "Tomorrow", "Mañana")},
+            {"cetteSemaine", T("Cette semaine", "This week", "Esta semana")},
+            {"dansJours", T("Dans {n} jours", "In {n} days", "En {n} días")},
+            {"ilYaJours", T("Il y a {n} jours", "{n} days ago", "Hace {n} días")}
+        }
     End Function
 
 End Class
