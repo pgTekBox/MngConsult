@@ -253,6 +253,7 @@ Namespace Controls
                     sb.Append(Item("~/wbfCabEquipes.aspx", Ico("users"), "portalEquipes"))
                     sb.Append(Item("~/wbfCabAffectation.aspx", Ico("inbox"), "portalAssign"))
                     sb.Append(Item("~/wbfCabNonAssocies.aspx", Ico("tag"), "portalUnassigned"))
+                    sb.Append(Item("~/wbfCabDroits.aspx", Ico("settings"), "portalDroits"))
                     sb.Append(Item("~/wbfCabProfil.aspx", Ico("firm"), "portalProfile"))
                 Case "responsable"
                     sb.Append(Section("portalSecTeam"))
@@ -376,6 +377,7 @@ Namespace Controls
                 Case "portalTeamActivities" : Return Choose3(lang, "Employés et activités", "Staff and activities", "Empleados y actividades")
                 Case "portalUnassigned" : Return Choose3(lang, "Clients non associés", "Unassigned clients", "Clientes sin asignar")
                 Case "portalDemandes" : Return Choose3(lang, "Demandes de clients", "Client requests", "Solicitudes de clientes")
+                Case "portalDroits" : Return Choose3(lang, "Droits par activité", "Activity rights", "Derechos por actividad")
                 Case "portalMembers" : Return Choose3(lang, "Membres et sécurité", "Members and security", "Miembros y seguridad")
                 Case "portalEquipes" : Return Choose3(lang, "Équipes", "Teams", "Equipos")
                 Case "portalAssign" : Return Choose3(lang, "Affectation des dossiers", "File assignment", "Asignación de expedientes")

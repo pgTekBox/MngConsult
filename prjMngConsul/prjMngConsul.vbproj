@@ -533,6 +533,7 @@
     <Content Include="wbfCabNonAssocies.aspx" />
     <Content Include="wbfCabFiche.aspx" />
     <Content Include="wbfCabActivites.aspx" />
+    <Content Include="wbfCabDroits.aspx" />
     <Content Include="QuiFaitQuoi.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
     <Content Include="ImportApideck.aspx" />
@@ -865,6 +866,10 @@
     </Compile>
     <Compile Include="wbfCabActivites.aspx.vb">
       <DependentUpon>wbfCabActivites.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabDroits.aspx.vb">
+      <DependentUpon>wbfCabDroits.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CorrespondanceComptes.aspx.designer.vb">
