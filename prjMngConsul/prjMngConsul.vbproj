@@ -315,6 +315,7 @@
     <Content Include="Aide\employes.html" />
     <Content Include="Aide\courriel.html" />
     <Content Include="Aide\approbations.html" />
+    <Content Include="Aide\portail-comptable.html" />
     <Content Include="Aide\administration.html" />
     <Content Include="Images\logo.svg" />
     <Content Include="js\lucide.min.js" />

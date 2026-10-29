@@ -19,7 +19,8 @@ Public NotInheritable Class clsAide
     ''' <summary>Les sections, dans l'ordre du menu. Clé = nom du fichier sans extension.</summary>
     Public Shared ReadOnly Sections As String() = {
         "tableau-de-bord", "ventes", "achats", "produits", "comptabilite", "rapports",
-        "importation", "correspondance-comptes", "agenda", "employes", "courriel", "approbations", "administration"}
+        "importation", "correspondance-comptes", "agenda", "employes", "courriel", "approbations",
+        "portail-comptable", "administration"}
 
     ''' <summary>Titre d'une section dans une langue (pour l'assistant et le sommaire).</summary>
     Public Shared Function Titre(section As String, langue As String) As String
@@ -37,6 +38,7 @@ Public NotInheritable Class clsAide
             Case "employes" : fr = "Employés" : en = "Employees" : es = "Empleados"
             Case "courriel" : fr = "Courriel" : en = "Mail" : es = "Correo"
             Case "approbations" : fr = "Tâches à approuver" : en = "Tasks to approve" : es = "Tareas por aprobar"
+            Case "portail-comptable" : fr = "Portail comptable" : en = "Accountant portal" : es = "Portal del contador"
             Case "administration" : fr = "Administration et compte" : en = "Administration and account" : es = "Administración y cuenta"
             Case Else : fr = "Aide" : en = "Help" : es = "Ayuda"
         End Select
@@ -76,6 +78,8 @@ Public NotInheritable Class clsAide
             Case "wbfemployees", "wbfemployeeedit", "wbfmailboxreset" : Return "employes"
             Case "wbfmailbox" : Return "courriel"
             Case "wbfapprobations" : Return "approbations"
+            Case "wbfcabtableaubord", "wbfcabdossiers", "wbfcabmembres", "wbfcabequipes", "wbfcabaffectation",
+                 "wbfcabnonassocies", "wbfcabprofil", "wbfcabfiche", "wbfcabactivites", "wbfcabinvitation" : Return "portail-comptable"
             Case "wbfusers", "wbfuseredit", "wbfsetting", "wbfpaymentprocessors", "squareoauth",
                  "wbfautopayauthorizations", "wbfautopayschedule", "wbfautopayhistory", "wbfscheduleautopay",
                  "wbfpayment", "wbfpaymentsuccess", "wbflogin", "wbfregister", "wbfforgotpassword", "wbfresetpassword",
