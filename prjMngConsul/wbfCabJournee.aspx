@@ -126,6 +126,7 @@
     function prenom(id) { var e = empById[id]; return e ? e.nom.split(' ')[0] : ''; }
 
     function echLab(d) {
+        if (d >= 999) return L.sansEch;
         if (d < 0) return L.enRetard + ' · ' + fmt(L.ilYaJours, -d);
         if (d === 0) return L.aujourdhui;
         if (d === 1) return L.demain;
@@ -181,8 +182,8 @@
             + '<p class="sub">' + esc(L.sousTitre) + '</p></div>'
             + '<span class="jrn-echelle">' + esc(echelle) + '</span></div>';
 
-        // Avis « illustratif »
-        html += '<div class="jrn-illus">'
+        // Avis « illustratif » (uniquement en repli, quand il n'y a pas de tâche réelle)
+        if (!D.reel) html += '<div class="jrn-illus">'
             + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A5200" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>'
             + '<span>' + esc(L.illustratif) + '</span></div>';
 
@@ -317,27 +318,42 @@
     function rowHtml(a) {
         var op = a.fait ? '.65' : '1';
         var c60col = a.fait ? '#FFFFFF' : P[a.pr].dot;
-        var open = st.c60 === a.id;
+        var hasC = !!a.conseil;
+        var open = hasC && st.c60 === a.id;
         // lien client
         var cli = a.cliGuid
             ? '<a href="wbfCabFiche.aspx?company=' + encodeURIComponent(a.cliGuid) + '">' + esc(a.cliNom) + '</a>'
             : '<button class="clk" data-demoopen="1">' + esc(a.cliNom) + '</button>';
-        // bouton d'action (illustratif)
+        // pastille de conseil (bouton si un conseil existe, sinon simple point)
+        var dot = hasC
+            ? '<button class="c60" data-c60="' + a.id + '" aria-expanded="' + open + '" title="' + esc(L.conseille) + '"><i style="background:' + c60col + '"></i></button>'
+            : '<span class="c60"><i style="background:' + c60col + '"></i></span>';
+        // bouton d'action : réel (« Marquer comme fait ») ou illustratif
         var btn = '';
         if (!a.fait) {
-            var lab = a.etat === 'w' ? L.suivreClient : (a.etat === 'b' ? L.demanderAcces : L.faireAvec);
-            var ghost = a.etat !== 'a';
-            btn = '<button class="jrn-do' + (ghost ? ' ghost' : '') + '" data-demoact="1">' + esc(lab) + '</button>';
+            if (D.reel) {
+                btn = '<button class="jrn-do" data-done="' + a.taskId + '">' + esc(L.faitBtn) + '</button>';
+            } else {
+                var lab = a.etat === 'w' ? L.suivreClient : (a.etat === 'b' ? L.demanderAcces : L.faireAvec);
+                btn = '<button class="jrn-do' + (a.etat !== 'a' ? ' ghost' : '') + '" data-demoact="1">' + esc(lab) + '</button>';
+            }
         }
-        var chip = a.fait ? '<span class="jrn-chipw" style="background:#E3F3EA;color:#0F5A3A">' + esc(L.faitAuj) + '</span>' : '';
+        // méta : client · (secteur) · échéance · (employé)
+        var meta = cli
+            + (a.secteur ? '<span>' + esc(a.secteur) + '</span>' : '')
+            + '<span>· ' + esc(echLab(a.ech)) + '</span>'
+            + (st.emp === 'tous' ? '<span>· ' + esc(prenom(a.empId)) + '</span>' : '');
+        // chips d'état
+        var chip = '';
+        if (a.fait) chip = '<span class="jrn-chipw" style="background:#E3F3EA;color:#0F5A3A">' + esc(L.faitAuj) + '</span>';
+        else if (a.enCours) chip = '<span class="jrn-chipw" style="background:#E3EBF7;color:#143A73">' + esc(L.enCours) + '</span>';
+        else if (a.etat === 'b') chip = '<span class="jrn-chipw" style="background:#FBF1DC;color:#7A5200">' + esc(L.etatB) + '</span>';
+        var peut = a.peut ? '<span class="jrn-peut">' + esc(L.peutAgir) + ' : ' + esc(a.peut) + '</span>' : '';
         var note = open ? '<div class="jrn-note"><span class="tag">' + esc(L.conseille) + '</span><span style="color:#0E1F3D">' + esc(a.conseil) + '</span></div>' : '';
         return '<div class="jrn-row" style="opacity:' + op + '">'
-            + '<button class="c60" data-c60="' + a.id + '" aria-expanded="' + open + '" title="' + esc(L.conseille) + '"><i style="background:' + c60col + '"></i></button>'
-            + '<div class="mid"><span class="a">' + esc(a.actNom) + '</span>'
-            + '<span class="m">' + cli + '<span>' + esc(a.secteur) + '</span><span>· ' + esc(echLab(a.ech)) + '</span>'
-            + (st.emp === 'tous' ? '<span>· ' + esc(prenom(a.empId)) + '</span>' : '') + '</span></div>'
-            + '<span class="jrn-peut">' + esc(L.peutAgir) + ' : ' + esc(a.peut) + '</span>'
-            + chip + btn + note + '</div>';
+            + dot
+            + '<div class="mid"><span class="a">' + esc(a.actNom) + '</span><span class="m">' + meta + '</span></div>'
+            + peut + chip + btn + note + '</div>';
     }
 
     // ---- Toast ----
@@ -349,10 +365,25 @@
     }
 
     // ---- Interactions (délégation) ----
+    function marquerFait(taskId) {
+        var body = 'op=done&id=' + encodeURIComponent(taskId);
+        fetch(window.location.href, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+            .then(function (r) { return r.json(); })
+            .then(function (j) {
+                if (!j || !j.ok) return toast(L.erreur);
+                actions.forEach(function (a) {
+                    if (String(a.taskId) === String(taskId)) { a.fait = true; a.etat = ''; a.enCours = false; a.pr = prioOf(a); }
+                });
+                render(); toast(L.faitOk);
+            })
+            .catch(function () { toast(L.erreur); });
+    }
+
     root.addEventListener('click', function (ev) {
-        var t = ev.target.closest ? ev.target.closest('[data-emp],[data-etat],[data-prio],[data-grp],[data-c60],[data-clear],[data-demoact],[data-demoopen]') : null;
+        var t = ev.target.closest ? ev.target.closest('[data-emp],[data-etat],[data-prio],[data-grp],[data-c60],[data-clear],[data-demoact],[data-demoopen],[data-done]') : null;
         if (!t) return;
         if (t.hasAttribute('data-clear')) { st.etat = ''; st.prio = 'toutes'; st.emp = 'tous'; st.q = ''; return render(); }
+        if (t.hasAttribute('data-done')) { ev.preventDefault(); return marquerFait(t.getAttribute('data-done')); }
         if (t.hasAttribute('data-demoact')) { ev.preventDefault(); return toast(L.demoAction); }
         if (t.hasAttribute('data-demoopen')) { ev.preventDefault(); return toast(L.demoToast); }
         if (t.hasAttribute('data-c60')) { var id = t.getAttribute('data-c60'); st.c60 = st.c60 === id ? '' : id; return render(); }
