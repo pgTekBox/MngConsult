@@ -7,7 +7,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .cab-page { padding: 0; max-width: 1000px }
+    .cab-page { padding: 0; width: 100% }
     .boite { background: #fff; border-radius: 24px; padding: 20px 24px; margin-bottom: 16px }
 
     .cab-head { display: flex; align-items: center; gap: 14px }
