@@ -239,8 +239,7 @@ Namespace Controls
             sb.Append(Item("~/wbfCabJournee.aspx", Ico("home"), "portalJournee"))
             sb.Append(Item("~/wbfCabTableauBord.aspx", Ico("chart"), "portalDashboard"))
 
-            Dim filesKey As String = If(role = "admin", "portalFilesAll", "portalFiles")
-            sb.Append(Item("~/wbfCabDossiers.aspx", Ico("users"), filesKey))
+            sb.Append(Item("~/wbfCabDossiers.aspx", Ico("users"), "portalFilesAll"))
 
             ' Section du cabinet (écrans à venir)
             Select Case role
@@ -381,7 +380,7 @@ Namespace Controls
                 Case "portalJournee" : Return Choose3(lang, "Ma journée", "My day", "Mi día")
                 Case "portalDashboard" : Return Choose3(lang, "Tableau de bord", "Dashboard", "Panel de control")
                 Case "portalFiles" : Return Choose3(lang, "Mes dossiers", "My files", "Mis expedientes")
-                Case "portalFilesAll" : Return Choose3(lang, "Tous les dossiers", "All files", "Todos los expedientes")
+                Case "portalFilesAll" : Return Choose3(lang, "Tous les clients", "All clients", "Todos los clientes")
                 Case "portalFilesTeam" : Return Choose3(lang, "Dossiers de l'équipe", "Team files", "Expedientes del equipo")
                 Case "portalSecFirm" : Return Choose3(lang, "Mon cabinet", "My firm", "Mi despacho")
                 Case "portalSecTeam" : Return Choose3(lang, "Mon équipe", "My team", "Mi equipo")
