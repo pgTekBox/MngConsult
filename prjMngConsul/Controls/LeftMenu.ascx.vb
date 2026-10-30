@@ -237,7 +237,6 @@ Namespace Controls
 
             ' Toujours disponibles
             sb.Append(Item("~/wbfCabJournee.aspx", Ico("home"), "portalJournee"))
-            sb.Append(Item("~/wbfCabTableauBord.aspx", Ico("chart"), "portalDashboard"))
 
             sb.Append(Item("~/wbfCabDossiers.aspx", Ico("users"), "portalFilesAll"))
 
