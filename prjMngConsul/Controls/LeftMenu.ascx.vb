@@ -246,10 +246,9 @@ Namespace Controls
                     ' Gestion du cabinet (la répartition des activités se gère par
                     ' dossier depuis la fiche client, via « Mes dossiers »).
                     sb.Append(Section("portalSecFirm"))
-                    sb.Append(Item("~/wbfCabDemandes.aspx", Ico("inbox"), "portalDemandes", "nav-item", GetDemandesCount(), "y"))
+                    sb.Append(Item("~/wbfCabDemandes.aspx", Ico("tag"), "portalDemandes", "nav-item", GetDemandesCount(), "y"))
                     sb.Append(Item("~/wbfCabMembres.aspx", Ico("user-cog"), "portalMembers"))
                     sb.Append(Item("~/wbfCabAffectation.aspx", Ico("inbox"), "portalAssign"))
-                    sb.Append(Item("~/wbfCabNonAssocies.aspx", Ico("tag"), "portalUnassigned"))
                     sb.Append(Item("~/wbfCabDroits.aspx", Ico("settings"), "portalDroits"))
                     sb.Append(Item("~/wbfCabProfil.aspx", Ico("firm"), "portalProfile"))
                 Case "employe"
@@ -387,7 +386,7 @@ Namespace Controls
                 Case "portalTeam" : Return Choose3(lang, "Mon équipe", "My team", "Mi equipo")
                 Case "portalTeamActivities" : Return Choose3(lang, "Employés et activités", "Staff and activities", "Empleados y actividades")
                 Case "portalUnassigned" : Return Choose3(lang, "Clients non associés", "Unassigned clients", "Clientes sin asignar")
-                Case "portalDemandes" : Return Choose3(lang, "Demandes de clients", "Client requests", "Solicitudes de clientes")
+                Case "portalDemandes" : Return Choose3(lang, "Clients non associés", "Unassigned clients", "Clientes sin asignar")
                 Case "portalDroits" : Return Choose3(lang, "Droits par activité", "Activity rights", "Derechos por actividad")
                 Case "portalMembers" : Return Choose3(lang, "Membres et sécurité", "Members and security", "Miembros y seguridad")
                 Case "portalEquipes" : Return Choose3(lang, "Équipes", "Teams", "Equipos")
