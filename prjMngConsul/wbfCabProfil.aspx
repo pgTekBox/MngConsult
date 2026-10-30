@@ -182,14 +182,14 @@
   </section>
 
   <div class="onglets" role="tablist">
-    <button role="tab" aria-selected="true" data-p="p-ident" data-l="tIdent"></button>
-    <button role="tab" aria-selected="false" data-p="p-certif"><span data-l="tCertif"></span> <span class="pastille" id="n-certif"></span></button>
-    <button role="tab" aria-selected="false" data-p="p-secu"><span data-l="tSecu"></span> <span class="pastille" id="n-secu"></span></button>
-    <button role="tab" aria-selected="false" data-p="p-service" data-l="tService"></button>
-    <button role="tab" aria-selected="false" data-p="p-clients" data-l="tClients"></button>
-    <button role="tab" aria-selected="false" data-p="p-offre"><span data-l="tOffre"></span> <span class="pastille" id="n-offre"></span></button>
-    <button role="tab" aria-selected="false" data-p="p-orga" data-l="tOrga"></button>
-    <button role="tab" aria-selected="false" data-p="p-contacts" data-l="tContacts"></button>
+    <button type="button" role="tab" aria-selected="true" data-p="p-ident" data-l="tIdent"></button>
+    <button type="button" role="tab" aria-selected="false" data-p="p-certif"><span data-l="tCertif"></span> <span class="pastille" id="n-certif"></span></button>
+    <button type="button" role="tab" aria-selected="false" data-p="p-secu"><span data-l="tSecu"></span> <span class="pastille" id="n-secu"></span></button>
+    <button type="button" role="tab" aria-selected="false" data-p="p-service" data-l="tService"></button>
+    <button type="button" role="tab" aria-selected="false" data-p="p-clients" data-l="tClients"></button>
+    <button type="button" role="tab" aria-selected="false" data-p="p-offre"><span data-l="tOffre"></span> <span class="pastille" id="n-offre"></span></button>
+    <button type="button" role="tab" aria-selected="false" data-p="p-orga" data-l="tOrga"></button>
+    <button type="button" role="tab" aria-selected="false" data-p="p-contacts" data-l="tContacts"></button>
   </div>
 
   <section class="panneau" id="p-ident">
