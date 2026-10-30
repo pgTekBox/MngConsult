@@ -7,7 +7,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .cl { max-width: 1080px; display: flex; flex-direction: column; gap: 14px; color: #0E1F3D }
+    .cl { width: 100%; display: flex; flex-direction: column; gap: 14px; color: #0E1F3D }
     .cl h1 { margin: 0; font-size: 28px; font-weight: 800; line-height: 1.15 }
     .cl .sub { margin: 4px 0 0; font-size: 16px; color: #44536E }
 

@@ -7,7 +7,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .jrn { max-width: 1080px; display: flex; flex-direction: column; gap: 16px; color: #0E1F3D }
+    .jrn { width: 100%; display: flex; flex-direction: column; gap: 16px; color: #0E1F3D }
     .jrn button { font-family: inherit }
 
     .jrn-top { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 16px }

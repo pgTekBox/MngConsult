@@ -7,7 +7,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-#cp{--encre:#0E1F3D;--encre2:#44536E;--encre3:#6A7891;--fond:#F2F5F9;--carte:#FFFFFF;--filet:#E3E9F1;--bord:#D5DDE8;--champ:#F7F9FC;--pastille:#E8EDF5;--choisi:#E3EBF7;--choisi-bord:#1B4F9C;--marine:#1B4F9C;--marine-fonce:#143A73;--nuit:#0E1F3D;--or:#D9A03C;--rouge:#B3261E;--vert:#1E7B45;max-width:1080px;color:var(--encre)}
+#cp{--encre:#0E1F3D;--encre2:#44536E;--encre3:#6A7891;--fond:#F2F5F9;--carte:#FFFFFF;--filet:#E3E9F1;--bord:#D5DDE8;--champ:#F7F9FC;--pastille:#E8EDF5;--choisi:#E3EBF7;--choisi-bord:#1B4F9C;--marine:#1B4F9C;--marine-fonce:#143A73;--nuit:#0E1F3D;--or:#D9A03C;--rouge:#B3261E;--vert:#1E7B45;width:100%;color:var(--encre)}
 #cp *{box-sizing:border-box}
 #cp h1{font-size:28px;font-weight:800;margin:0}
 #cp .chapeau{color:var(--encre2);font-size:16px;margin:6px 0 18px}
