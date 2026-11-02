@@ -84,7 +84,12 @@ Public Class clsData
     Public Property EnPortailComptable() As Boolean
         Get
             Try
-                Return Session("PortailComptable") IsNot Nothing AndAlso CBool(Session("PortailComptable"))
+                ' Jamais défini explicitement : un comptable démarre dans le portail
+                ' par défaut (le sélecteur de l'en-tête se positionne sur « Portail
+                ' comptable »). Dès qu'il entre dans un dossier, la valeur est posée
+                ' (False) et prime ; un non-comptable reste toujours hors portail.
+                If Session("PortailComptable") Is Nothing Then Return IsAccountant
+                Return CBool(Session("PortailComptable"))
             Catch
                 Return False
             End Try
