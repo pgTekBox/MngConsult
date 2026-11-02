@@ -26,7 +26,7 @@ Public Class wbfCabAffectation
         End If
         Dim role As String = RoleCabinet()
         If role <> "admin" AndAlso role <> "solo" Then
-            Response.Redirect("~/wbfCabTableauBord.aspx") : Return
+            Response.Redirect("~/wbfCabJournee.aspx") : Return
         End If
 
         EnPortailComptable = True
