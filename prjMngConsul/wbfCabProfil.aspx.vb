@@ -3,16 +3,20 @@ Imports System.Data.SqlClient
 Imports System.Web.Script.Serialization
 
 ''' <summary>
-''' Profil du cabinet (Portail comptable, admin/solo) — calqué sur la maquette, en
-''' 8 onglets : Identification, Certification, Sécurité, Service, Clients et
-''' visibilité, Offre de services, Organisation, Contacts.
+''' Profil du cabinet (Portail comptable, admin/solo) — calqué sur la maquette v4,
+''' en 7 onglets : Identification, Certification, Sécurité, Clients et visibilité,
+''' Offre de services (vue « par rythme » : blocs mois/paie/paiements/taxes/année,
+''' chacun offert + qui le fait), Organisation, Contacts.
 '''
 ''' Données réelles : champs du cabinet (s0935/s0936 : nom, responsable,
-''' coordonnées, langues, spécialités, accepter de nouveaux clients, fiche
-''' publique→annuaire T319) ; MFA, étapes de certification et offre de services
-''' (s0958/s0959, colonnes T331). Membres réels (s0922) pour l'organisation et
-''' l'attribution. Le reste (garanties, remplaçants, contacts secondaires) est
-''' illustratif. Rendu côté client ; sauvegarde par POST léger (op=save).
+''' coordonnées, accepter de nouveaux clients, fiche publique→annuaire T319) ; MFA,
+''' étapes de certification et offre de services (s0958/s0959, colonnes T331 —
+''' OffreActivites porte désormais les blocs v4 en JSON). Membres réels (s0922)
+''' pour l'organisation et le « qui le fait » de l'offre. Les langues/spécialités
+''' ne sont plus éditées par la v4 mais conservées (ré-émises telles quelles à la
+''' sauvegarde). Garanties, remplaçants et contacts secondaires sont illustratifs.
+''' Rendu + pré-remplissage côté client (Literal litData) ; sauvegarde par POST
+''' léger (op=save, data=json : { core, mfa, certif, offre }).
 ''' </summary>
 Public Class wbfCabProfil
     Inherits clsData
