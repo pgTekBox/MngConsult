@@ -533,6 +533,7 @@
     <Content Include="wbfCabNonAssocies.aspx" />
     <Content Include="wbfCabFiche.aspx" />
     <Content Include="wbfCabActivites.aspx" />
+    <Content Include="wbfCabAvatar60.aspx" />
     <Content Include="wbfCabDroits.aspx" />
     <Content Include="wbfEchangesCabinet.aspx" />
     <Content Include="QuiFaitQuoi.aspx" />
@@ -863,6 +864,10 @@
     </Compile>
     <Compile Include="wbfCabFiche.aspx.vb">
       <DependentUpon>wbfCabFiche.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabAvatar60.aspx.vb">
+      <DependentUpon>wbfCabAvatar60.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfCabActivites.aspx.vb">
