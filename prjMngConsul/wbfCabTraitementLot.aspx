@@ -29,6 +29,7 @@
 .lot60 .lot-demo{display:flex;gap:8px;align-items:center;background:var(--ambre-pale);color:var(--ambre);
   border-radius:12px;padding:10px 14px;font-weight:700;font-size:13.5px;margin-bottom:14px}
 .lot60 .lot-demo svg{width:18px;height:18px;flex:none}
+.lot60 .lot-demo[hidden]{display:none}
 
 .lot60 .btn{background:var(--marine);color:#fff;border:0;border-radius:999px;height:44px;padding:0 20px;font-weight:800;cursor:pointer;white-space:nowrap}
 .lot60 .btn:hover{background:var(--marine-fonce)}
@@ -149,9 +150,9 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <section class="lot60">
-  <div class="lot-demo">
+  <div class="lot-demo" id="demo" hidden>
     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
-    Données de démonstration — le moteur réel de traitement en lot n'est pas encore branché.
+    Données de démonstration — ce cabinet n'a aucune tâche à faire, voici la page à l'œuvre sur un jeu d'exemple.
   </div>
 
   <div class="lot-tete">
@@ -199,7 +200,12 @@
 </section>
 
 <script type="text/javascript">
-const ACTIVITES={
+// Données réelles injectées par le serveur (tâches du cabinet via s0956), ou null.
+var SRV = <asp:Literal ID="litData" runat="server" />;
+const REEL = !!(SRV && SRV.reel);
+
+// Jeu de démonstration (repli quand le cabinet n'a aucune tâche à faire).
+const BUILTIN_ACTIVITES={
   paiement:{nom:'Déclencher un paiement fournisseur',verbe:'Déclencher',cat:'Paiements',pourquoi:'le client, ou le cabinet autorisé dans ses plafonds.'},
   taxes:{nom:'Approuver et produire la déclaration de taxes',verbe:'Produire',cat:'Taxes de vente et remises',pourquoi:'le cabinet révise, le client voit.'},
   seuil:{nom:"S'inscrire aux taxes à l'approche du seuil",verbe:'Inscrire',cat:'Taxes de vente et remises',pourquoi:"60 avertit ; le client s'inscrit lui-même ou le cabinet le fait pour lui."},
@@ -207,7 +213,7 @@ const ACTIVITES={
   concil:{nom:'Approuver la conciliation mensuelle',verbe:'Approuver',cat:'Banque et conciliation',pourquoi:'signature du cabinet sur la fin de mois.'},
   incorpo:{nom:"Évaluer l'incorporation d'un travailleur autonome",verbe:'Évaluer',cat:'Trésorerie, conseil et croissance',pourquoi:'60 signale le moment ; le cabinet conseille.'}
 };
-const TX=[
+const BUILTIN_TX=[
   {id:1,act:'paiement',client:'Marc Allard, électricien',secteur:'Construction',jours:2},
   {id:2,act:'paiement',client:'Annie Roy, photographe',secteur:'Arts et médias',jours:3},
   {id:3,act:'taxes',client:'Luc Gendron, consultant TI',secteur:'Services',jours:0},
@@ -215,10 +221,15 @@ const TX=[
   {id:5,act:'facture',client:'Julie Fortin, designer',secteur:'Services',jours:6},
   {id:6,act:'concil',client:'Pierre Ménard, menuisier',secteur:'Construction',jours:5},
   {id:7,act:'incorpo',client:'Luc Gendron, consultant TI',secteur:'Services',jours:9}
-].map(t=>({...t,exclue:false,faite:false}));
+];
+const ACTIVITES = REEL ? SRV.activites : BUILTIN_ACTIVITES;
+const TX = (REEL ? SRV.tx : BUILTIN_TX).map(t=>({...t,exclue:false,faite:false}));
+if(!REEL){ const d=document.getElementById('demo'); if(d) d.hidden=false; }
+
 const URG={urgent:'Urgent',surveiller:'À surveiller',normal:'Sans urgence'};
-const urg=t=>t.jours<=0||(t.act==='paiement'&&t.jours<=3)?'urgent':t.jours<=1?'surveiller':'normal';
-const echLib=j=>j<=0?"Aujourd'hui":j===1?'Demain':`Dans ${j} jours`;
+const J=t=>(t.jours==null?9999:t.jours);
+const urg=t=>t.jours==null?'normal':(t.jours<=0||(t.act==='paiement'&&t.jours<=3))?'urgent':t.jours<=1?'surveiller':'normal';
+const echLib=j=>j==null?'Sans échéance':j<=0?"Aujourd'hui":j===1?'Demain':`Dans ${j} jours`;
 const AIDES={activite:'Une même activité pour plusieurs clients : le plus rapide.',client:'Tout ce qui est à faire pour un même client.',urgence:"Ce qui presse d'abord.",echeance:"Selon la date d'échéance."};
 let vue='activite', dernier=null, enAttente=null;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -232,10 +243,10 @@ function groupes(){
     if(vue==='activite') add(t.act,{titre:A.nom,sous:A.cat,pourquoi:A.pourquoi,verbe:A.verbe},t);
     else if(vue==='client') add(t.client,{titre:t.client,sous:t.secteur,verbe:'Lancer'},t);
     else if(vue==='urgence'){const u=urg(t);add(u,{titre:URG[u],ordre:['urgent','surveiller','normal'].indexOf(u),verbe:'Lancer'},t)}
-    else {const k=t.jours<=1?'a':t.jours<=7?'b':'c';add(k,{titre:{a:"Aujourd'hui et demain",b:'Cette semaine',c:'Plus tard'}[k],ordre:'abc'.indexOf(k),verbe:'Lancer'},t)}
+    else {const k=J(t)<=1?'a':J(t)<=7?'b':'c';add(k,{titre:{a:"Aujourd'hui et demain",b:'Cette semaine',c:'Plus tard'}[k],ordre:'abc'.indexOf(k),verbe:'Lancer'},t)}
   });
   let L=[...G.values()];
-  L.forEach(g=>{g.tx.sort((x,y)=>x.jours-y.jours);g.niv=g.tx.some(t=>urg(t)==='urgent')?'urgent':g.tx.some(t=>urg(t)==='surveiller')?'surveiller':'normal';g.min=Math.min(...g.tx.map(t=>t.jours))});
+  L.forEach(g=>{g.tx.sort((x,y)=>J(x)-J(y));g.niv=g.tx.some(t=>urg(t)==='urgent')?'urgent':g.tx.some(t=>urg(t)==='surveiller')?'surveiller':'normal';g.min=Math.min(...g.tx.map(t=>J(t)))});
   L.sort((x,y)=>(x.ordre??['urgent','surveiller','normal'].indexOf(x.niv))-(y.ordre??['urgent','surveiller','normal'].indexOf(y.niv))||x.min-y.min);
   return L;
 }
@@ -289,7 +300,16 @@ function confirmer(titre,tx,liste,ok){
   enAttente=ok; $('#confirm').showModal();
 }
 $('#confirm').addEventListener('close',()=>{if($('#confirm').returnValue==='oui'&&enAttente)enAttente();enAttente=null});
+function poster(op,ids){
+  if(!REEL||!ids.length) return;
+  try{
+    fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:'op='+op+'&ids='+encodeURIComponent(ids.join(','))}).catch(()=>{});
+  }catch(e){}
+}
 function faire(liste,msg){
+  const ids=liste.map(t=>t.id);
+  poster('done',ids);
   liste.forEach(t=>t.faite=true); dernier=liste.map(t=>t.id); rendre();
   $('#toast-tx').textContent=msg; $('#toast').hidden=false; clearTimeout(faire.t); faire.t=setTimeout(()=>{$('#toast').hidden=true;dernier=null},10000);
 }
@@ -309,7 +329,7 @@ document.addEventListener('click',e=>{
     confirmer(`Lancer le lot : ${l.length} action${l.length>1?'s':''} ?`,`${g.titre}${x?` · ${x} exclue${x>1?'s':''}, gardée${x>1?'s':''} pour plus tard`:''}.`,l,()=>faire(l,`Lot lancé : ${l.length} action${l.length>1?'s':''} faite${l.length>1?'s':''}.`))}
   else if(b.id==='g-lancer'){const l=L.flatMap(g=>g.tx.filter(t=>!t.exclue));
     confirmer(`Lancer tous les lots : ${l.length} actions ?`,'Les transactions exclues restent dans la liste pour plus tard.',l,()=>faire(l,`${l.length} actions faites et inscrites au journal.`))}
-  else if(b.id==='toast-annuler'&&dernier){dernier.forEach(id=>T(id).faite=false);dernier=null;$('#toast').hidden=true;rendre()}
+  else if(b.id==='toast-annuler'&&dernier){poster('undo',dernier);dernier.forEach(id=>T(id).faite=false);dernier=null;$('#toast').hidden=true;rendre()}
 });
 rendre();
 </script>

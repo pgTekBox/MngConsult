@@ -29,6 +29,7 @@
 .a60 .a60-demo{display:flex;gap:8px;align-items:center;background:var(--ambre-pale);color:var(--ambre);
   border-radius:12px;padding:10px 14px;font-weight:700;font-size:13.5px;margin-bottom:14px}
 .a60 .a60-demo svg{width:18px;height:18px;flex:none}
+.a60 .a60-demo[hidden]{display:none}
 
 .a60 .btn{background:var(--marine);color:#fff;border:0;border-radius:999px;height:44px;padding:0 20px;font-weight:800;cursor:pointer;white-space:nowrap}
 .a60 .btn:hover{background:var(--marine-fonce)}
@@ -190,9 +191,9 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <section class="a60">
-  <div class="a60-demo">
+  <div class="a60-demo" id="demo" hidden>
     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
-    Données de démonstration — le journal réel de l'Avatar 60 n'est pas encore branché.
+    Données de démonstration — aucune activité au journal des dossiers pour l'instant, voici la page à l'œuvre sur un jeu d'exemple.
   </div>
 
   <div class="av-tete">
@@ -277,8 +278,12 @@
 </section>
 
 <script type="text/javascript">
-const AUJ=new Date(2026,9,30);
-const CLIENTS=[
+// Données réelles injectées par le serveur (journal du cabinet via s0961), ou null.
+var SRV = <asp:Literal ID="litData" runat="server" />;
+const REEL = !!(SRV && SRV.reel);
+if(!REEL){ const d=document.getElementById('demo'); if(d) d.hidden=false; }
+const AUJ = (REEL && SRV.auj) ? new Date(SRV.auj[0],SRV.auj[1],SRV.auj[2]) : new Date(2026,9,30);
+const BUILTIN_CLIENTS=[
   {nom:'Marc Allard',metier:'électricien',profil:'Compagnie avec employés'},
   {nom:'Annie Roy',metier:'photographe',profil:'Travailleuse autonome'},
   {nom:'Luc Gendron',metier:'consultant TI',profil:'Compagnie sans employé'},
@@ -286,6 +291,7 @@ const CLIENTS=[
   {nom:'Pierre Ménard',metier:'menuisier',profil:'Compagnie avec employés'},
   {nom:'Nathalie Bisson',metier:'nutritionniste',profil:'Travailleuse autonome'}
 ];
+const CLIENTS = REEL ? SRV.clients : BUILTIN_CLIENTS;
 // Familles d'activités : mêmes libellés que la page Droits par activité.
 const FAM={
   ventes:['Ventes et facturation','M4 4h16v16H4zM8 9h8M8 13h8M8 17h5'],
@@ -308,7 +314,7 @@ const ICC={fait:['#E6F4EA','#1E6B3A'],avalider:['#FFF4DF','#9A5B00'],signale:['#
 
 // j = il y a j jours ; val = qui valide (60 = personne, 60 agit seul)
 const E=(j,h,c,fam,act,resume,res,val,mt,etapes,don,pcs,regle,extra)=>({j,h,c,fam,act,resume,res,val,mt,etapes,don,pcs,regle,...(extra||{})});
-const DATA=[
+const BUILTIN_DATA=[
  E(0,'07:42',0,'banque','Importer et apparier les transactions bancaires','Relevé Desjardins importé : 38 transactions, 36 appariées','signale','cabinet','',
    [['07:40','Relevé du compte d\'opérations Desjardins reçu par le lien bancaire'],['07:41','38 transactions lues, du 23 au 29 octobre'],['07:42','36 transactions appariées aux factures et dépenses'],['07:42','2 transactions incertaines laissées au cabinet','att']],
    [['Compte','Desjardins · opérations ••• 4471'],['Période','23 au 29 octobre 2026'],['Transactions','38'],['Appariées','36'],['Incertaines','2 (412,00 $ et 89,95 $)']],
@@ -396,12 +402,13 @@ const DATA=[
  E(27,'08:45',3,'livres','Classer les transactions dans le plan comptable','41 transactions d\'août classées','fait','60','',
    [['08:45','41 transactions classées sans correction']],[['Période','Août 2026'],['Transactions','41']],[],'Classement confié à 60.')
 ];
+const DATA = REEL ? SRV.data : BUILTIN_DATA;
 DATA.forEach((d,i)=>{d.id=i;d.date=new Date(AUJ);d.date.setDate(AUJ.getDate()-d.j);d.ref='A60-'+fmtD(d.date)+'-'+String(1000+i*37).slice(-4);});
 function fmtD(d){return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')}
 
 const JOURS=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'],MOIS=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const jourLib=d=>{const j=Math.round((AUJ-d)/864e5);const base=`${JOURS[d.getDay()]} ${d.getDate()} ${MOIS[d.getMonth()]}`;return j===0?`Aujourd'hui · ${base}`:j===1?`Hier · ${base}`:base[0].toUpperCase()+base.slice(1)};
-const cliLib=c=>`${CLIENTS[c].nom}, ${CLIENTS[c].metier}`;
+const cliLib=c=>CLIENTS[c].metier?`${CLIENTS[c].nom}, ${CLIENTS[c].metier}`:CLIENTS[c].nom;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const svg=(p,w=2.2)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"><path d="${p}"/></svg>`;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -479,7 +486,7 @@ function ouvrir(id){
   $('#dt-meta').innerHTML=`<span class="res ${d.res}"><span class="pt"></span>${RES[d.res]}</span><span>${esc(cliLib(d.c))}</span><span>${jourLib(d.date)} à ${d.h.replace(':',' h ')}</span>${d.mt?`<span>${esc(d.mt)}</span>`:''}`;
   const rz=$('#dt-resume'); rz.className='dt-resume '+d.res; rz.textContent=d.resume+'.';
   $('#dt-etapes').innerHTML=d.etapes.map(([h,t,c])=>`<li class="${c||''}"><time>${h.replace(':',' h ')}</time>${esc(t)}</li>`).join('');
-  $('#dt-donnees').innerHTML=d.don.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')+`<dt>Client</dt><dd>${esc(CLIENTS[d.c].nom)} · ${esc(CLIENTS[d.c].profil)}</dd><dt>Qui valide</dt><dd>${VALIDE[d.val]}</dd>`+(d.conf?`<dt>Confiance de 60</dt><dd>${d.conf} %</dd>`:'');
+  $('#dt-donnees').innerHTML=d.don.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')+`<dt>Client</dt><dd>${esc(CLIENTS[d.c].nom)}${CLIENTS[d.c].profil?' · '+esc(CLIENTS[d.c].profil):''}</dd><dt>Qui valide</dt><dd>${VALIDE[d.val]}</dd>`+(d.conf?`<dt>Confiance de 60</dt><dd>${d.conf} %</dd>`:'');
   $('#dt-pieces-z').hidden=!d.pcs.length;
   $('#dt-pieces').innerHTML=d.pcs.map(p=>`<li>${svg('M6 2h9l5 5v15H6zM14 2v6h6')}${esc(p)}</li>`).join('');
   $('#dt-droit').textContent=droit(d);
