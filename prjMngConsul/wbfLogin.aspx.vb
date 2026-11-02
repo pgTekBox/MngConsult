@@ -164,7 +164,7 @@ Public Class wbfLogin
             Company = Guid.Empty
             EnPortailComptable = True
             UpdateLastLogin(CInt(userRow("Id")))
-            Aller("~/wbfCabTableauBord.aspx")
+            Aller("~/wbfCabJournee.aspx")
             Return
         End If
 
@@ -190,6 +190,16 @@ Public Class wbfLogin
 
         ' Mettre à jour la dernière connexion
         UpdateLastLogin(userId)
+
+        ' Un comptable (propriétaire d'une compagnie mais pas membre d'un cabinet)
+        ' démarre lui aussi dans le portail : le sélecteur de l'en-tête se positionne
+        ' alors sur « Portail comptable ». Il garde sa compagnie et peut la choisir
+        ' dans le sélecteur au besoin.
+        If Not IsDBNull(userRow("IsAccountant")) AndAlso CBool(userRow("IsAccountant")) Then
+            EnPortailComptable = True
+            Aller("~/wbfCabJournee.aspx")
+            Return
+        End If
 
         ' Redirection
         ' (« //site » ou « /\site » mèneraient hors du site : refusés.)

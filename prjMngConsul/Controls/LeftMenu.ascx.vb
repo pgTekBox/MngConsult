@@ -255,9 +255,6 @@ Namespace Controls
                     ' dossier depuis la fiche client, via « Mes dossiers »).
                     sb.Append(Section("portalSecFirm"))
                     sb.Append(Item("~/wbfCabDemandes.aspx", Ico("tag"), "portalDemandes", "nav-item", GetDemandesCount(), "y"))
-                    sb.Append(Item("~/wbfCabMembres.aspx", Ico("user-cog"), "portalMembers"))
-                    sb.Append(Item("~/wbfCabAffectation.aspx", Ico("inbox"), "portalAssign"))
-                    sb.Append(Item("~/wbfCabDroits.aspx", Ico("settings"), "portalDroits"))
                     sb.Append(Item("~/wbfCabProfil.aspx", Ico("firm"), "portalProfile"))
             End Select
 
