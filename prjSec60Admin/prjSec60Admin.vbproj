@@ -413,6 +413,7 @@
     <Content Include="JobRunner.ashx" />
     <Content Include="AssistantCompteQBO.ashx" />
     <Content Include="MailAttachment.ashx" />
+    <Content Include="ClaudePromptFichier.ashx" />
     <Content Include="wbfJobs.aspx" />
     <Content Include="wbfJobEdit.aspx" />
     <Content Include="wbfJobSchedule.aspx" />
@@ -438,6 +439,10 @@
     <Compile Include="MyClass\clsFormulairePdf.vb" />
     <Compile Include="MailAttachment.ashx.vb">
       <DependentUpon>MailAttachment.ashx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ClaudePromptFichier.ashx.vb">
+      <DependentUpon>ClaudePromptFichier.ashx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="wbfMail.aspx.vb">

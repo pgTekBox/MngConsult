@@ -104,6 +104,23 @@ Public Class wbfClaudePrompts
         Return "<a href=""" & enc & """ target=""_blank"" rel=""noopener"">ouvrir la page</a>"
     End Function
 
+    ''' <summary>Lien de téléchargement du fichier joint (si la demande en a un).</summary>
+    Protected Function LienFichier(id As Object, nom As Object, taille As Object) As String
+        If nom Is Nothing OrElse IsDBNull(nom) Then Return ""
+        Dim n As String = Convert.ToString(nom).Trim()
+        If n = "" Then Return ""
+        Dim i As Integer = 0
+        Integer.TryParse(Convert.ToString(id), i)
+        If i <= 0 Then Return ""
+        Dim libelle As String = Server.HtmlEncode(n)
+        Dim ko As String = ""
+        Dim t As Long = 0
+        If taille IsNot Nothing AndAlso Not IsDBNull(taille) AndAlso Long.TryParse(Convert.ToString(taille), t) AndAlso t > 0 Then
+            ko = If(t >= 1048576, " (" & (t \ 1048576) & " Mo)", " (" & Math.Max(1L, t \ 1024) & " Ko)")
+        End If
+        Return "&#128206; <a href=""ClaudePromptFichier.ashx?id=" & i & """ target=""_blank"" rel=""noopener"">" & libelle & "</a>" & Server.HtmlEncode(ko)
+    End Function
+
     Protected Function InfoFait(statut As Object, doneBy As Object, doneUtc As Object) As String
         If Convert.ToString(statut) <> "fait" Then Return ""
         Dim who As String = If(doneBy Is Nothing OrElse IsDBNull(doneBy), "", Convert.ToString(doneBy))

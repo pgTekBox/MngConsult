@@ -60,6 +60,7 @@
                 <div class="cq-pied">
                     <span><%# Server.HtmlEncode(Qui(Eval("UserEmail"), Eval("DossierNom"))) %></span>
                     <%# LienUrl(Eval("Url")) %>
+                    <%# LienFichier(Eval("Id"), Eval("FichierNom"), Eval("FichierTaille")) %>
                     <%# InfoFait(Eval("Statut"), Eval("DoneBy"), Eval("DoneUtc")) %>
                     <span class="cq-act">
                         <asp:LinkButton runat="server" CssClass="cq-btn ok" CommandName="Done" CommandArgument='<%# Eval("Id") %>'
