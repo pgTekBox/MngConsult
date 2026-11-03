@@ -88,7 +88,7 @@ Public Class LandingReservationHandler
                 Param("@Source", Texte(d, "source", 20)),
                 Param("@LanguePage", Texte(d, "languePage", 10))}
 
-            Dim id As Integer = 0, numero As String = "", avant As Boolean = True
+            Dim id As Integer = 0, numero As String = "", avant As Boolean = True, token As String = ""
             Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
                 Using cmd As New SqlCommand("s0868InsertLandingReservation", conn) With {.CommandType = CommandType.StoredProcedure}
                     cmd.Parameters.AddRange(p.ToArray())
@@ -98,11 +98,26 @@ Public Class LandingReservationHandler
                             id = Convert.ToInt32(rd("Id"))
                             numero = Convert.ToString(rd("Numero"))
                             avant = Convert.ToBoolean(rd("AvantLancement"))
+                            If HasColumn(rd, "ValidationToken") AndAlso Not IsDBNull(rd("ValidationToken")) Then
+                                token = Convert.ToString(rd("ValidationToken"))
+                            End If
                         End If
                     End Using
                 End Using
             End Using
-            context.Response.Write(js.Serialize(New With {.id = id, .numero = numero, .avantLancement = avant}))
+
+            ' Courriel de validation : envoyé à l'adresse saisie (non bloquant). La
+            ' page prévient l'usager qu'il va le recevoir ; le lien confirme l'adresse.
+            Dim valide As Boolean = False
+            If id > 0 AndAlso token <> "" Then
+                Try
+                    EnvoyerCourrielValidation(context, Texte(d, "courriel", 320), Texte(d, "nom", 200), token, Texte(d, "languePage", 10))
+                    valide = True
+                Catch
+                End Try
+            End If
+
+            context.Response.Write(js.Serialize(New With {.id = id, .numero = numero, .avantLancement = avant, .validation = valide}))
         Catch ex As SqlException When ex.Class = 16
             context.Response.StatusCode = 400
             context.Response.Write(js.Serialize(New With {.erreur = ex.Message}))
@@ -155,5 +170,80 @@ Public Class LandingReservationHandler
         If s Is Nothing Then Return Nothing
         Return If(s.Length > n, s.Substring(0, n), s)
     End Function
+
+    Private Shared Function HasColumn(rd As SqlDataReader, nom As String) As Boolean
+        For i As Integer = 0 To rd.FieldCount - 1
+            If String.Equals(rd.GetName(i), nom, StringComparison.OrdinalIgnoreCase) Then Return True
+        Next
+        Return False
+    End Function
+
+    Private Shared Function HtmlEnc(s As String) As String
+        Return System.Web.HttpUtility.HtmlEncode(If(s, ""))
+    End Function
+
+    Private Shared Function Bouton(lien As String, texte As String) As String
+        Return "<p style=""margin:22px 0""><a href=""" & HtmlEnc(lien) &
+               """ style=""background:#1B4F9C;color:#fff;text-decoration:none;font-weight:bold;border-radius:999px;padding:12px 22px;display:inline-block"">" &
+               HtmlEnc(texte) & "</a></p>"
+    End Function
+
+    ''' <summary>
+    ''' Dépose un courriel de validation dans la BD MailService (s0610InsertOutboundMail,
+    ''' ramassé par SrvAI). Trilingue selon la langue de la page. Non bloquant : toute
+    ''' erreur est avalée par l'appelant.
+    ''' </summary>
+    Private Shared Sub EnvoyerCourrielValidation(context As HttpContext, courriel As String, nom As String, token As String, languePage As String)
+        If String.IsNullOrEmpty(courriel) OrElse String.IsNullOrEmpty(token) Then Return
+        Dim mailCnx As String = ConfigurationManager.AppSettings("ConnectionStringMail")
+        If String.IsNullOrEmpty(mailCnx) Then Return
+
+        Dim lang As String = If(languePage, "fr").Trim().ToLowerInvariant()
+        lang = If(lang.Length >= 2, lang.Substring(0, 2), "fr")
+
+        Dim baseUrl As String = context.Request.Url.GetLeftPart(UriPartial.Authority)
+        Dim appPath As String = If(context.Request.ApplicationPath, "/").TrimEnd("/"c)
+        Dim lien As String = baseUrl & appPath & "/LandingValidation.aspx?t=" & Uri.EscapeDataString(token) & "&lang=" & lang
+
+        Dim prenom As String = If(String.IsNullOrEmpty(nom), "", " " & nom)
+        Dim sujet As String, corps As String
+        Select Case lang
+            Case "en"
+                sujet = "Confirm your email — 60secondes"
+                corps = "<p>Hello" & HtmlEnc(prenom) & ",</p>" &
+                        "<p>Thank you for reserving your spot with <strong>60secondes</strong>. Please confirm this email address by clicking the button below.</p>" &
+                        Bouton(lien, "Confirm my email") &
+                        "<p style=""color:#44536E;font-size:13px"">If the button does not work, copy this link into your browser:<br>" & HtmlEnc(lien) & "</p>" &
+                        "<p style=""color:#44536E;font-size:13px"">If you did not make this request, you can ignore this message.</p>"
+            Case "es"
+                sujet = "Confirme su correo — 60secondes"
+                corps = "<p>Hola" & HtmlEnc(prenom) & ",</p>" &
+                        "<p>Gracias por reservar su lugar con <strong>60secondes</strong>. Confirme esta dirección de correo haciendo clic en el botón.</p>" &
+                        Bouton(lien, "Confirmar mi correo") &
+                        "<p style=""color:#44536E;font-size:13px"">Si el botón no funciona, copie este enlace en su navegador:<br>" & HtmlEnc(lien) & "</p>" &
+                        "<p style=""color:#44536E;font-size:13px"">Si no hizo esta solicitud, puede ignorar este mensaje.</p>"
+            Case Else
+                sujet = "Confirmez votre courriel — 60secondes"
+                corps = "<p>Bonjour" & HtmlEnc(prenom) & ",</p>" &
+                        "<p>Merci d'avoir réservé votre place avec <strong>60secondes</strong>. Confirmez cette adresse courriel en cliquant sur le bouton.</p>" &
+                        Bouton(lien, "Confirmer mon courriel") &
+                        "<p style=""color:#44536E;font-size:13px"">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>" & HtmlEnc(lien) & "</p>" &
+                        "<p style=""color:#44536E;font-size:13px"">Si vous n'êtes pas à l'origine de cette demande, ignorez ce message.</p>"
+        End Select
+
+        Dim html As String = "<div style=""font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#0E1F3D;line-height:1.5"">" & corps & "</div>"
+
+        Using conn As New SqlConnection(mailCnx)
+            Using cmd As New SqlCommand("s0610InsertOutboundMail", conn) With {.CommandType = CommandType.StoredProcedure}
+                cmd.Parameters.Add(New SqlParameter("@To", courriel))
+                cmd.Parameters.Add(New SqlParameter("@Subject", sujet))
+                cmd.Parameters.Add(New SqlParameter("@HTMLBody", html))
+                cmd.Parameters.Add(New SqlParameter("@TextBody", lien))
+                cmd.Parameters.Add(New SqlParameter("@ReplyTo", "info@60secondes.ca"))
+                conn.Open()
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
 
 End Class

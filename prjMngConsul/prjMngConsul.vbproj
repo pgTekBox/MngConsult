@@ -509,6 +509,7 @@
     <Content Include="LandingPage.aspx" />
     <Content Include="LandingPageV1.aspx" />
     <Content Include="LandingReservation.ashx" />
+    <Content Include="LandingValidation.aspx" />
     <Content Include="css\landing2.css" />
     <Content Include="js\landing2-1.js" />
     <Content Include="js\landing2-2.js" />
@@ -1086,6 +1087,10 @@
     </Compile>
     <Compile Include="LandingReservation.ashx.vb">
       <DependentUpon>LandingReservation.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="LandingValidation.aspx.vb">
+      <DependentUpon>LandingValidation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Code\clsSquare.vb" />
     <Compile Include="App_Code\clsDreamPayments.vb" />
