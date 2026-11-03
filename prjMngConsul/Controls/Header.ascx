@@ -19,14 +19,12 @@
             </button>
             <a class="logo" href="~/Default.aspx" runat="server" id="lnkLogo">
                 <svg class="logo-visage" aria-hidden="true" width="46" height="46" viewBox="0 0 256 256">
-                    <defs><radialGradient id="hdrAv" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#C8F7F1" /><stop offset="1" stop-color="#3DDCCB" /></radialGradient></defs>
-                    <circle cx="128" cy="128" r="104" fill="url(#hdrAv)" />
-                    <ellipse cx="96" cy="62" rx="44" ry="20" fill="#FFFFFF" opacity=".45" transform="rotate(-20 96 62)" />
-                    <circle cx="128" cy="128" r="102" fill="none" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="3" />
-                    <circle cx="96" cy="120" r="16" fill="none" stroke="#06524C" stroke-width="12" />
-                    <path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#06524C" stroke-width="12" stroke-linecap="round" />
-                    <ellipse cx="160" cy="110" rx="15" ry="25" fill="none" stroke="#06524C" stroke-width="12" />
-                    <path d="M99 166 q29 16 58 0" fill="none" stroke="#06524C" stroke-width="10" stroke-linecap="round" />
+                    <circle cx="128" cy="128" r="104" fill="#5E35C9" />
+                    <circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12" />
+                    <path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" />
+                    <ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)" />
+                    <path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" />
+                    <path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" />
                 </svg>
                 <span class="logo-text"><asp:Literal runat="server" ID="litAppName" Text="60secondes" /></span>
             </a>
