@@ -36,10 +36,10 @@ Namespace Controls
         '''</remarks>
         Protected WithEvents HeaderUser As Global.MngConsul.HeaderUser
 
-        '''<summary>litPlaidStatus control.</summary>
-        Protected WithEvents litPlaidStatus As Global.System.Web.UI.WebControls.Literal
+        '''<summary>litProfilMetier control (profil · métier + essai, à côté du logo).</summary>
+        Protected WithEvents litProfilMetier As Global.System.Web.UI.WebControls.Literal
 
-        '''<summary>litStripeStatus control.</summary>
-        Protected WithEvents litStripeStatus As Global.System.Web.UI.WebControls.Literal
+        '''<summary>litFournisseurs control (« Fournisseurs connectés » + liste).</summary>
+        Protected WithEvents litFournisseurs As Global.System.Web.UI.WebControls.Literal
     End Class
 End Namespace

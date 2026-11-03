@@ -10,8 +10,8 @@ Namespace Controls
 
         Private Sub Header_Load(sender As Object, e As EventArgs) Handles Me.Load
             LoadPortails()
-            LoadPlaidStatus()
-            LoadStripeStatus()
+            LoadProfilEssai()      ' à côté du logo : profil (TA/Cie) · métier + état de l'essai
+            LoadFournisseurs()     ' à droite : « Fournisseurs connectés » (banque, Stripe, Square)
         End Sub
 
         ''' <summary>
@@ -62,63 +62,121 @@ Namespace Controls
             End Select
         End Function
 
-        ''' <summary>Pastille : nombre de fournisseurs connectés à Stripe Connect.</summary>
-        Private Sub LoadStripeStatus()
-            Dim comp As Guid = Guid.Empty
-            Try
-                comp = Company
-            Catch
-            End Try
-            If comp = Guid.Empty Then
-                litStripeStatus.Text = ""
+        ' =====================================================================
+        ' À côté du logo : profil (TA / Cie + nb d'employés) · métier, et l'essai
+        ' (maquette « page première » du 21 octobre). Lu des paramètres Entreprise
+        ' (PROFIL, METIER, mêmes valeurs que « Qui fait quoi ») et de l'essai (s0687).
+        ' =====================================================================
+        Private Sub LoadProfilEssai()
+            Dim comp As Guid = CompagnieCourante()
+            If comp = Guid.Empty Then litProfilMetier.Text = "" : Return
+
+            Dim profil As String = ParamEntreprise("PROFIL")
+            Dim metier As String = ParamEntreprise("METIER")
+            Dim essai As String = EssaiLigne()
+
+            If profil = "" AndAlso metier = "" AndAlso essai = "" Then
+                litProfilMetier.Text = ""
                 Return
             End If
 
-            Dim count As Integer = 0
-            Try
-                Dim p As New Collection
-                p.Add(New SqlParameter("@CompanyGUID", comp))
-                Dim ds As DataSet = ExecuteSQLds("s0699GetStripeSupplierCount", p)
-                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
-                    Dim v As Object = ds.Tables(0).Rows(0)("StripeSupplierCount")
-                    count = If(IsDBNull(v), 0, CInt(v))
+            Dim sb As New StringBuilder()
+            sb.Append("<div class=""hdr-ctx"">")
+            If profil <> "" OrElse metier <> "" Then
+                sb.Append("<div class=""hdr-pm"">")
+                If profil <> "" Then
+                    sb.Append("<b class=""hdr-prof"">").Append(Server.HtmlEncode(profil))
+                    ' « Cie 1-4 » : le nombre réel d'employés dans un cercle.
+                    If profil.StartsWith("Cie 1", StringComparison.OrdinalIgnoreCase) Then
+                        Dim nEmp As Integer = CompterEmployes()
+                        If nEmp > 0 Then
+                            sb.Append("<span class=""hdr-nemp"" title=""").Append(Server.HtmlEncode(NbEmpTitre(nEmp))).Append(""" aria-label=""").Append(Server.HtmlEncode(NbEmpTitre(nEmp))).Append(""">").Append(nEmp).Append("</span>")
+                        End If
+                    End If
+                    sb.Append("</b>")
                 End If
-            Catch
-            End Try
-
-            Dim cls As String = If(count > 0, "on", "off")
-            Dim lbl As String = StripeSuppliersLabel()
-            litStripeStatus.Text =
-                "<span class=""stripe-hdr-pill " & cls & """ title=""" & Server.HtmlEncode(count.ToString() & " " & lbl) & """>" &
-                "<span class=""dot""></span>💳 <span class=""num"">" & count.ToString() & "</span> " &
-                "<span class=""lbl"">" & Server.HtmlEncode(lbl) & "</span></span>"
+                If metier <> "" Then
+                    If profil <> "" Then sb.Append("<span class=""hdr-sep"" aria-hidden=""true"">·</span>")
+                    sb.Append("<b class=""hdr-met"">").Append(Server.HtmlEncode(metier)).Append("</b>")
+                End If
+                sb.Append("</div>")
+            End If
+            If essai <> "" Then sb.Append("<span class=""hdr-essai"">").Append(Server.HtmlEncode(essai)).Append("</span>")
+            sb.Append("</div>")
+            litProfilMetier.Text = sb.ToString()
         End Sub
 
-        Private Function StripeSuppliersLabel() As String
-            Select Case CurrentLang
-                Case "en" : Return "Stripe suppliers"
-                Case "es" : Return "proveedores Stripe"
-                Case Else : Return "fournisseurs Stripe"
-            End Select
+        ''' <summary>« Essai gratuit · N jours restants » (s0687) ; vide si pas en essai.</summary>
+        Private Function EssaiLigne() As String
+            Try
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", Company))
+                Dim ds As DataSet = ExecuteSQLds("s0687GetCompanyTrialStatus", p)
+                If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return ""
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                If IsDBNull(r("IsTrial")) OrElse Not Convert.ToBoolean(r("IsTrial")) OrElse IsDBNull(r("DaysRemaining")) Then Return ""
+                Dim jours As Integer = Convert.ToInt32(r("DaysRemaining"))
+                If jours < 0 Then jours = 0
+                Return Mot(CurrentLang,
+                           "Essai gratuit · " & jours & " jours restants",
+                           "Free trial · " & jours & " days left",
+                           "Prueba gratuita · quedan " & jours & " días")
+            Catch
+                Return ""
+            End Try
         End Function
 
-        ''' <summary>Affiche dans le header si Plaid est connecté et avec quelle(s) banque(s).</summary>
-        Private Sub LoadPlaidStatus()
+        Private Function NbEmpTitre(n As Integer) As String
+            Return Mot(CurrentLang, n & " employé(s)", n & " employee(s)", n & " empleado(s)")
+        End Function
 
-            ' Pas de compagnie en session (ex. page de connexion) → aucun indicateur.
-            Dim comp As Guid = Guid.Empty
+        ''' <summary>Nombre d'employés (ressources d'agenda) de la compagnie, s0106.</summary>
+        Private Function CompterEmployes() As Integer
             Try
-                comp = Company
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", Company))
+                Dim ds As DataSet = ExecuteSQLds("s0106GetEmployeesForAgenda", p)
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then Return ds.Tables(0).Rows.Count
             Catch
             End Try
-            If comp = Guid.Empty Then
-                litPlaidStatus.Text = ""
-                Return
-            End If
+            Return 0
+        End Function
 
-            Dim banks As String = ""
-            Dim bankCount As Integer = 0
+        ''' <summary>Valeur texte d'un paramètre de Paramètres › Entreprise (vide si absent).</summary>
+        Private _entreprise As DataTable
+        Private Function ParamEntreprise(cle As String) As String
+            Try
+                If _entreprise Is Nothing Then
+                    Dim p As New Collection
+                    p.Add(New SqlParameter("@CompanyGUID", Company))
+                    p.Add(New SqlParameter("@Categorie", "ENTREPRISE"))
+                    Dim ds As DataSet = ExecuteSQLds("s0150GetParamsForCompany", p)
+                    _entreprise = If(ds IsNot Nothing AndAlso ds.Tables.Count > 0, ds.Tables(0), New DataTable())
+                End If
+                For Each r As DataRow In _entreprise.Rows
+                    If String.Equals(Convert.ToString(r("ShortName")), cle, StringComparison.OrdinalIgnoreCase) Then
+                        Return If(IsDBNull(r("sVal")), "", Convert.ToString(r("sVal")).Trim())
+                    End If
+                Next
+            Catch
+            End Try
+            Return ""
+        End Function
 
+        ' =====================================================================
+        ' À droite : « Fournisseurs connectés » — un bouton vert (nombre) qui ouvre
+        ' la liste des branchements : banque (Plaid), Stripe, Square. Remplace les
+        ' deux pastilles d'état séparées, comme la maquette.
+        ' =====================================================================
+        Private Sub LoadFournisseurs()
+            Dim comp As Guid = CompagnieCourante()
+            If comp = Guid.Empty Then litFournisseurs.Text = "" : Return
+
+            Dim lignes As New List(Of String)
+            Dim nConnectes As Integer = 0
+
+            ' --- Banque (Plaid) ---
+            Dim bankCount As Integer = 0, banks As String = ""
             Try
                 Dim p As New Collection
                 p.Add(New SqlParameter("@CompanyGUID", comp))
@@ -126,30 +184,74 @@ Namespace Controls
                 If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
                     Dim r As DataRow = ds.Tables(0).Rows(0)
                     bankCount = If(IsDBNull(r("BankCount")), 0, CInt(r("BankCount")))
-                    banks = If(IsDBNull(r("Banks")), "", r("Banks").ToString())
+                    banks = If(IsDBNull(r("Banks")), "", Convert.ToString(r("Banks")))
                 End If
             Catch
             End Try
-
+            Dim labBanque As String = Mot(CurrentLang, "Banque", "Bank", "Banco")
             If bankCount > 0 Then
-                Dim full As String = Server.HtmlEncode(banks)
-                litPlaidStatus.Text =
-                    "<span class=""plaid-pill on"" title=""Plaid — " & full & """>" &
-                    "<span class=""dot""></span>🏦 <span class=""lbl"">" & full & "</span></span>"
+                nConnectes += 1
+                lignes.Add(LigneFournisseur(labBanque, banks, True))
             Else
-                Dim off As String = Server.HtmlEncode(PlaidOffLabel())
-                litPlaidStatus.Text =
-                    "<span class=""plaid-pill off"" title=""" & off & """>" &
-                    "<span class=""dot""></span>🏦 <span class=""lbl"">" & off & "</span></span>"
+                lignes.Add(LigneFournisseur(labBanque, Mot(CurrentLang, "non branchée", "not connected", "no conectado"), False))
             End If
+
+            ' --- Stripe ---
+            Dim stripeCount As Integer = 0
+            Try
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", comp))
+                Dim ds As DataSet = ExecuteSQLds("s0699GetStripeSupplierCount", p)
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                    Dim v As Object = ds.Tables(0).Rows(0)("StripeSupplierCount")
+                    stripeCount = If(IsDBNull(v), 0, CInt(v))
+                End If
+            Catch
+            End Try
+            If stripeCount > 0 Then
+                nConnectes += 1
+                lignes.Add(LigneFournisseur("Stripe", String.Format(Mot(CurrentLang, "{0} fournisseur(s)", "{0} supplier(s)", "{0} proveedor(es)"), stripeCount), True))
+            Else
+                lignes.Add(LigneFournisseur("Stripe", Mot(CurrentLang, "non branché", "not connected", "no conectado"), False))
+            End If
+
+            ' --- Square ---
+            Dim square As Boolean = False
+            Try : square = IsSquareConnected() : Catch : End Try
+            If square Then
+                nConnectes += 1
+                lignes.Add(LigneFournisseur("Square", Mot(CurrentLang, "branché", "connected", "conectado"), True))
+            Else
+                lignes.Add(LigneFournisseur("Square", Mot(CurrentLang, "non branché", "not connected", "no conectado"), False))
+            End If
+
+            Dim libelle As String = Mot(CurrentLang, "Fournisseurs connectés", "Connected providers", "Proveedores conectados")
+            Dim sb As New StringBuilder()
+            sb.Append("<div class=""fourn-wrap"">")
+            sb.Append("<button type=""button"" class=""fourn-btn"" data-fourn-btn aria-expanded=""false"" aria-controls=""fournListe"" title=""").Append(Server.HtmlEncode(libelle)).Append(""">")
+            sb.Append("<span class=""fourn-n"">").Append(nConnectes).Append("</span>")
+            sb.Append("<span class=""fourn-lbl"">").Append(Server.HtmlEncode(libelle)).Append("</span>")
+            sb.Append("<svg class=""fourn-chv"" aria-hidden=""true"" width=""14"" height=""14"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2.6"" stroke-linecap=""round"" stroke-linejoin=""round""><path d=""M6 9l6 6 6-6""></path></svg>")
+            sb.Append("</button>")
+            sb.Append("<div class=""fourn-liste"" id=""fournListe"" data-fourn-liste hidden><b>").Append(Server.HtmlEncode(libelle)).Append("</b>")
+            For Each l As String In lignes : sb.Append(l) : Next
+            sb.Append("</div></div>")
+            litFournisseurs.Text = sb.ToString()
         End Sub
 
-        Private Function PlaidOffLabel() As String
-            Select Case CurrentLang
-                Case "en" : Return "Plaid not connected"
-                Case "es" : Return "Plaid no conectado"
-                Case Else : Return "Plaid non connecté"
-            End Select
+        Private Function LigneFournisseur(nom As String, detail As String, connecte As Boolean) As String
+            Dim cls As String = If(connecte, "on", "off")
+            Return "<div class=""fourn-it " & cls & """><span class=""fourn-nom"">" & Server.HtmlEncode(nom) & "</span>" &
+                   "<span class=""fourn-det"">" & Server.HtmlEncode(detail) & "</span>" &
+                   "<span class=""fourn-dot"" aria-hidden=""true""></span></div>"
+        End Function
+
+        Private Function CompagnieCourante() As Guid
+            Try
+                Return Company
+            Catch
+                Return Guid.Empty
+            End Try
         End Function
 
     End Class
