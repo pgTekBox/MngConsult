@@ -114,6 +114,7 @@
     .ac-mont{ flex-shrink:0; font-size:14px; font-weight:800; white-space:nowrap; }
     .ac-lane .it .ac-doc{ font-size:11px; padding:1px 7px; }
     .ac-lane .it .ac-mont{ font-size:13px; }
+    .ac-note{ padding:4px 2px 0; font-size:12px; font-weight:700; color:#8D9CB3; }
     .ac-ini{ flex-shrink:0; min-width:28px; height:22px; padding:0 6px; box-sizing:border-box; border-radius:999px; color:#fff; font-size:11px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
     .ac-det{ padding:0 12px 12px; display:flex; flex-direction:column; gap:6px; }
     .ac-det > span{ font-size:14px; }
@@ -264,6 +265,13 @@
     function nbH(min) { var s = String(Math.round(min / 6) / 10); return M.lang === 'en' ? s : s.replace('.', ','); }
     var auj = dJ(A.aujourdhui || cle(new Date()));
     var finRdv = new Date(auj.getFullYear(), auj.getMonth() + 2, 1);
+
+    // Exemples fictifs pour la boîte « Aujourd'hui » quand la compagnie n'a aucun RDV
+    // ce jour-là : deux RDV terminés, prêts à facturer — comme la maquette.
+    var DEMO_AUJ = [
+        { id: 'demo-a1', jour: A.aujourdhui, deb: 570, fin: 660, h: fH(570), client: 'Lise Ouellet', court: 'Massage thérapeutique', cli: '0', emp: '', etat: 'termine', lieu: 'À votre place', doc: T.docSoumission, docT: 'soumission', montant: '142,50 $', plage: fH(570) + ' – ' + fH(660), duree: '1 h 30', typ: 'Massage thérapeutique', empNom: '', desc: 'Suivi de la cliente — séance de 60 minutes.' },
+        { id: 'demo-a2', jour: A.aujourdhui, deb: 675, fin: 735, h: fH(675), client: 'Isabelle Côté', court: 'Drainage lymphatique', cli: '0', emp: '', etat: 'termine', lieu: 'À votre place', doc: T.docSoumission, docT: 'soumission', montant: '95,00 $', plage: fH(675) + ' – ' + fH(735), duree: '1 h', typ: 'Drainage lymphatique', empNom: '', desc: 'Première visite.' }
+    ];
 
     // --- l'état de la page ---
     var acts = (M.activites || []).filter(function (a) { return a.u === 'r' || a.u === 'y'; })
@@ -509,11 +517,15 @@
         var sec = el('section', 'ac-carte');
         // --- Aujourd'hui ---
         var bj = el('div', 'ac-bloc'), tete = el('div', 'ac-btete');
-        var liste = rdvDu(A.aujourdhui);
+        // Pas de RDV aujourd'hui → on illustre la boîte avec des exemples fictifs,
+        // exactement comme la maquette (ligne de RDV : document, montant, lieu, état).
+        var reelJ = rdvDu(A.aujourdhui);
+        var simuleJ = reelJ.length === 0;
+        var liste = simuleJ ? DEMO_AUJ : reelJ;
         var tt = el('div', 'titre');
         tt.appendChild(el('b', '', T.agAuj + ' · ' + jLong(auj)));
         tt.appendChild(el('span', '', fmt(T.agRdvH, liste.length, nbH(liste.reduce(function (t, r) { return t + (r.fin - r.deb); }, 0))) +
-                                      (aEquipe && !s.agEmp ? ' · ' + fmt(T.agEmployes, A.emps.length) : '')));
+                                      (aEquipe && !s.agEmp && !simuleJ ? ' · ' + fmt(T.agEmployes, A.emps.length) : '')));
         tete.appendChild(tt);
         var lib = el('div', 'ac-libres');
         if (aEquipe) {
@@ -541,7 +553,7 @@
         tete.appendChild(boutonChev(s.rpJ, function () { s.rpJ = !s.rpJ; garder('rpJ', s.rpJ); peindre(); }));
         bj.appendChild(tete);
         if (s.rpJ) {
-            if (aEquipe && !s.agEmp) {
+            if (!simuleJ && aEquipe && !s.agEmp) {
                 // Toute l'équipe : une rangée par employé
                 var lanes = el('div', 'ac-lanes');
                 var groupes = A.emps.map(function (e) { return { e: e, l: liste.filter(function (r) { return r.emp === e.v; }) }; });
@@ -571,6 +583,7 @@
             } else {
                 if (!liste.length) bj.appendChild(el('div', 'ac-vide', T.agVide));
                 liste.forEach(function (r) { bj.appendChild(ligneRdv(r, false)); });
+                if (simuleJ) bj.appendChild(el('div', 'ac-note', T.exFictifs));
             }
         }
         sec.appendChild(bj);

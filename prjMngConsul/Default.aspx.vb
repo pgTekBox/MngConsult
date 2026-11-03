@@ -516,7 +516,7 @@ Public Class _Default
             "lieuPlace", "lieuChez", "lieuTel", "lieuVisio",
             "agenda", "agendaAria", "agendaTip", "agendaDe", "equipeN",
             "plagesLibres", "plagesAria", "plagesVide", "plageTip", "agAuj", "agAujAbr", "agRdvH", "agEmployes",
-            "agVide", "libre", "stTermine", "stEnCours", "stAVenir",
+            "agVide", "libre", "exFictifs", "stTermine", "stEnCours", "stAVenir",
             "facturer", "facturerAria", "plusRdv", "nouveauRdvAvec", "voirDetail",
             "iHeure", "iEmploye", "iType", "iLieu", "ouvrirRdv", "winRdv",
             "aVenir", "aVenirPlanif", "toutEquipe", "pSem", "pProch", "pMois", "pMoisP", "periode", "avVide",
@@ -607,6 +607,7 @@ Public Class _Default
             Case "agRdvH" : Return Choose3(lang, "{0} RDV · {1} h", "{0} appt · {1} h", "{0} citas · {1} h")
             Case "agEmployes" : Return Choose3(lang, "{0} employés", "{0} employees", "{0} empleados")
             Case "agVide" : Return Choose3(lang, "Aucun RDV : journée libre.", "No appointment: free day.", "Ninguna cita: día libre.")
+            Case "exFictifs" : Return Choose3(lang, "Exemples fictifs, pour illustrer. Vos vrais rendez-vous s'afficheront ici.", "Sample data, for illustration. Your real appointments will show here.", "Ejemplos ficticios, para ilustrar. Sus citas reales aparecerán aquí.")
             Case "libre" : Return Choose3(lang, "Libre", "Free", "Libre")
             Case "stTermine" : Return Choose3(lang, "Terminé", "Completed", "Terminado")
             Case "stEnCours" : Return Choose3(lang, "En cours", "In progress", "En curso")
