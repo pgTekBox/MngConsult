@@ -24,6 +24,7 @@
     .ac-chip{ flex-shrink:0; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; }
     .ac-rond{ min-width:24px; height:24px; padding:0 5px; box-sizing:border-box; border:0; border-radius:999px; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; }
     .ac-rond.r{ background:#E35D55; color:#FFFFFF; } .ac-rond.y{ background:#E3B341; color:#3D2A00; }
+    .ac-rond.b{ background:#1B4F9C; color:#FFFFFF; }
     .ac-rond.vide{ opacity:.35; }
 
     /* 1. La fenêtre de 60 */
@@ -338,9 +339,14 @@
             pa.appendChild(b);
         });
         pills.appendChild(pa);
-        // Messages : le centre de messages
-        var pm = el('a', 'ac-pill'); pm.href = 'wbfMailbox.aspx'; pm.setAttribute('aria-label', T.msgAria); pm.title = T.msgAria;
-        pm.appendChild(el('b', '', T.messages)); pm.appendChild(el('span', 'chv', '›'));
+        // Messages : les messages du cabinet, avec le nombre de non-lus (bleu) s'il y en a.
+        var pm = el('a', 'ac-pill'); pm.href = 'wbfEchangesCabinet.aspx'; pm.setAttribute('aria-label', T.msgAria); pm.title = T.msgAria;
+        pm.appendChild(el('b', '', T.messages));
+        if (M.msgNonLu > 0) {
+            var bn = el('span', 'ac-rond b', String(M.msgNonLu)); bn.title = fmt(T.msgNonLuN, M.msgNonLu);
+            pm.setAttribute('aria-label', bn.title); pm.appendChild(bn);
+        }
+        pm.appendChild(el('span', 'chv', '›'));
         pills.appendChild(pm);
         // Revenu en retard, Paiements en retard
         (M.entete || []).forEach(function (k) {

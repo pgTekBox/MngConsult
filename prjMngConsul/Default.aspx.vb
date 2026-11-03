@@ -195,6 +195,7 @@ Public Class _Default
             .banque = New With {.aCompte = aCompte, .lib = libCompte, .solde = If(aCompte, Montant(encaisse), ""), .maj = majCompte},
             .entete = entete,
             .demandes = CompterDemandesRdv(),
+            .msgNonLu = CompterMessagesNonLus(),
             .activites = acts,
             .agenda = BatirAgenda(),
             .t = Textes()
@@ -355,6 +356,21 @@ Public Class _Default
         End Try
     End Function
 
+    ''' <summary>Les messages du cabinet non lus par le client (s0955, côté « client » ;
+    ''' même décompte que la pastille « Messages du cabinet » du menu).</summary>
+    Private Function CompterMessagesNonLus() As Integer
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@Cote", "client"))
+            Dim ds As DataSet = ExecuteSQLds("s0955CountEchangesNonLus", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return 0
+            Return Convert.ToInt32(ds.Tables(0).Rows(0)("N"))
+        Catch
+            Return 0
+        End Try
+    End Function
+
     ''' <summary>Les tâches en attente d'une décision (même décompte que la pastille du menu, s0745).</summary>
     Private Function CompterApprobations() As Integer
         Try
@@ -451,7 +467,7 @@ Public Class _Default
         Dim cles As String() = {
             "bonjour", "bonjourNom", "gUrgent1", "gUrgentN", "gVeille", "gOk",
             "enPremier", "rienUrgent", "assistant60", "a60Aria", "a60Retour", "a60RetourTip",
-            "activiteAFaire", "indR", "indY", "messages", "msgAria", "rdvDemande", "rdvDemandeTip",
+            "activiteAFaire", "indR", "indY", "messages", "msgAria", "msgNonLuN", "rdvDemande", "rdvDemandeTip",
             "compteOp", "voirMontant", "masquerMontant", "brancher",
             "agenda", "agendaAria", "agendaTip", "agendaDe", "equipeN",
             "plagesLibres", "plagesAria", "plagesVide", "plageTip", "agAuj", "agAujAbr", "agRdvH", "agEmployes",
@@ -497,7 +513,8 @@ Public Class _Default
             Case "rdvDemande" : Return Choose3(lang, "RDV demandé", "Requested appt", "Cita solicitada")
             Case "rdvDemandeTip" : Return Choose3(lang, "Des clients demandent un RDV, ou de déplacer ou d'annuler un RDV : ouvrez l'Agenda pour répondre", "Customers are asking for an appointment, or to move or cancel one: open the Calendar to answer", "Unos clientes piden una cita, o moverla o cancelarla: abra la Agenda para responder")
             Case "messages" : Return Choose3(lang, "Messages", "Messages", "Mensajes")
-            Case "msgAria" : Return Choose3(lang, "Ouvrir le centre de messages", "Open the message center", "Abrir el centro de mensajes")
+            Case "msgAria" : Return Choose3(lang, "Ouvrir les messages du cabinet", "Open firm messages", "Abrir los mensajes del despacho")
+            Case "msgNonLuN" : Return Choose3(lang, "{0} message(s) du cabinet non lu(s)", "{0} unread firm message(s)", "{0} mensaje(s) del despacho sin leer")
             Case "compteOp" : Return Choose3(lang, "Compte d'opérations", "Operating account", "Cuenta operativa")
             Case "voirMontant" : Return Choose3(lang, "Voir le solde", "Show balance", "Ver el saldo")
             Case "masquerMontant" : Return Choose3(lang, "Masquer le solde", "Hide balance", "Ocultar el saldo")
