@@ -583,7 +583,7 @@ a{
             .cp-bouton{display:flex;align-items:center;gap:8px;background:#5E35C9;color:#fff;border:0;border-radius:999px;height:46px;padding:0 18px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 8px 24px rgba(14,31,61,.25)}
             .cp-bouton:hover{background:#4C2AA8}
             .cp-bouton svg{width:20px;height:20px}
-            .cp-pan{position:fixed;left:18px;bottom:76px;width:420px;max-width:calc(100vw - 36px);background:#fff;border:1px solid #E3E9F1;border-radius:18px;box-shadow:0 24px 70px rgba(14,31,61,.30);overflow:hidden}
+            .cp-pan{position:fixed;left:18px;bottom:76px;width:840px;max-width:calc(100vw - 36px);background:#fff;border:1px solid #E3E9F1;border-radius:18px;box-shadow:0 24px 70px rgba(14,31,61,.30);overflow:hidden}
             .cp-pan[hidden]{display:none}
             .cp-tete{display:flex;align-items:center;gap:10px;background:#0E1F3D;color:#fff;padding:12px 14px}
             .cp-tete b{font-size:15px;font-weight:800;flex:1}
