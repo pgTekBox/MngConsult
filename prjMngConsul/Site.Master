@@ -593,8 +593,9 @@ a{
             .cp-page{display:inline-block;background:#E8EDF5;color:#143A73;border-radius:8px;padding:4px 10px;font-weight:800;font-size:13px;margin-bottom:12px}
             .cp-histo{width:100%;border:1px solid #D5DDE8;border-radius:10px;height:40px;padding:0 10px;font:inherit;font-size:14px;background:#F7F9FC;color:#0E1F3D;margin-bottom:10px}
             .cp-histo:focus{outline:2px solid #1B4F9C;outline-offset:1px;background:#fff}
-            .cp-apercu{background:#F2F5F9;border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5;color:#44536E;white-space:pre-wrap;word-break:break-word;margin-bottom:10px}
+            .cp-apercu{background:#F2F5F9;border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5;color:#44536E;word-break:break-word;margin-bottom:10px}
             .cp-apercu[hidden]{display:none}
+            .cp-apercu .cp-texte{max-height:150px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;margin-top:6px}
             .cp-apercu .st{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:800;margin-bottom:6px}
             .cp-apercu .st.fait{background:#E6F4EA;color:#1E6B3A}
             .cp-apercu .st.non{background:#FFF4DF;color:#9A5B00}
@@ -658,7 +659,8 @@ a{
                 if(i===''||!items[i]){ if(apercu) apercu.hidden=true; return; }
                 var it=items[i];
                 if(apercu){ apercu.hidden=false;
-                    apercu.innerHTML='<span class="st '+(it.fait?'fait':'non')+'">'+(it.fait?'Fait':'Non fait')+'</span> <b>'+escH(it.page)+'</b> · '+escH(it.quand)+'<br>'+escH(it.prompt)+
+                    apercu.innerHTML='<span class="st '+(it.fait?'fait':'non')+'">'+(it.fait?'Fait':'Non fait')+'</span> <b>'+escH(it.page)+'</b> · '+escH(it.quand)+
+                        '<div class="cp-texte">'+escH(it.prompt)+'</div>'+
                         (it.fait?'':'<div><button type="button" class="cp-suppr" data-id="'+it.id+'">Supprimer cette demande</button></div>'); }
             });
             if(apercu) apercu.addEventListener('click',function(e){
