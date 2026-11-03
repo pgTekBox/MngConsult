@@ -135,6 +135,7 @@
     display:inline-flex; align-items:center; justify-content:center;
 }
 .hdr-essai{ font-size:13px; color:var(--mc-muted2,#44536E); white-space:nowrap; }
+.hdr-essai.urg{ color:#A3261C; font-weight:800; }
 
 /* « Fournisseurs connectés » : un bouton (nombre en vert) qui ouvre la liste des branchements */
 .fourn-wrap{ position:relative; }

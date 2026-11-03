@@ -24,30 +24,11 @@ Public Class HeaderUser
         BindUserInfo()
         BindCompanies()
 
-        If EnPortailComptable Then
-            ' En portail comptable : aucun contexte compagnie (ni logo, ni essai, ni Square).
-            pnlTrial.Visible = False
-            pnlSquare.Visible = False
-        Else
+        If Not EnPortailComptable Then
+            ' L'essai et Square sont affichés par Header.ascx ; ici, seulement le logo.
             RenderCompanyLogo()
-            LoadTrialBadge()
-            LoadSquareBadge()
         End If
 
-    End Sub
-
-    ''' <summary>Affiche « Square connecté » dans le header si la compagnie a connecté Square.</summary>
-    Private Sub LoadSquareBadge()
-        Try
-            If Company <> Guid.Empty AndAlso IsSquareConnected() Then
-                pnlSquare.Visible = True
-                litSquare.Text = Choose3(CurrentLang, "Square connecté", "Square connected", "Square conectado")
-            Else
-                pnlSquare.Visible = False
-            End If
-        Catch
-            pnlSquare.Visible = False
-        End Try
     End Sub
 
     ''' <summary>Logo de la compagnie DEVANT le nom (via CompanyLogo.ashx). Si aucun logo,
@@ -62,64 +43,8 @@ Public Class HeaderUser
         litCompanyLogoPicker.Text = img
     End Sub
 
-    ''' <summary>
-    ''' Affiche la pastille « fin de l'essai gratuit » dans le header quand la
-    ''' compagnie est en période d'essai. Masquée sinon. Alimentée par
-    ''' s0687GetCompanyTrialStatus (IsTrial / TrialEndOn / DaysRemaining).
-    ''' </summary>
-    Private Sub LoadTrialBadge()
-        Try
-            If Company = Guid.Empty Then
-                pnlTrial.Visible = False
-                Return
-            End If
-
-            Dim p As New Collection
-            p.Add(New SqlParameter("@CompanyGUID", Company))
-            Dim ds As DataSet = ExecuteSQLds("s0687GetCompanyTrialStatus", p)
-
-            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
-                pnlTrial.Visible = False
-                Return
-            End If
-
-            Dim r As DataRow = ds.Tables(0).Rows(0)
-            Dim isTrial As Boolean = Not IsDBNull(r("IsTrial")) AndAlso CBool(r("IsTrial"))
-            If Not isTrial OrElse IsDBNull(r("TrialEndOn")) Then
-                pnlTrial.Visible = False
-                Return
-            End If
-
-            Dim endOn As Date = CDate(r("TrialEndOn"))
-            Dim days As Integer = 0
-            If Not IsDBNull(r("DaysRemaining")) Then days = CInt(r("DaysRemaining"))
-
-            pnlTrial.Visible = True
-            litTrial.Text = TrialLabel(days)
-
-            ' Info-bulle avec la date de fin exacte, localisée
-            Dim lang As String = CurrentLang
-            Dim dateStr As String = endOn.ToString("d MMMM yyyy", Cult())
-            pnlTrial.ToolTip = Choose3(lang,
-                "Votre essai gratuit se termine le " & dateStr,
-                "Your free trial ends on " & dateStr,
-                "Su prueba gratuita finaliza el " & dateStr)
-
-            ' Couleur selon l'urgence
-            Dim css As String = "trial-pill"
-            If days < 0 Then
-                css &= " trial-pill--danger"
-            ElseIf days <= 3 Then
-                css &= " trial-pill--warn"
-            End If
-            pnlTrial.CssClass = css
-
-        Catch
-            pnlTrial.Visible = False
-        End Try
-    End Sub
-
-    ''' <summary>Libellé compact de la pastille d'essai selon les jours restants.</summary>
+    ''' <summary>Libellé compact de la pastille d'essai selon les jours restants.
+    ''' Conservé (non appelé ici) ; l'essai est affiché par Header.ascx.</summary>
     Private Function TrialLabel(days As Integer) As String
         Dim lang As String = CurrentLang
         If days < 0 Then

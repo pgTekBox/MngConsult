@@ -196,6 +196,7 @@ Public Class _Default
             .entete = entete,
             .demandes = CompterDemandesRdv(),
             .msgNonLu = CompterMessagesNonLus(),
+            .presence = BatirPresence(),
             .activites = acts,
             .agenda = BatirAgenda(),
             .t = Textes()
@@ -290,6 +291,9 @@ Public Class _Default
                         .empNom = Txt(r("EmployeeName")),
                         .ini = Initiales(Txt(r("EmployeeName"))),
                         .c = If(empId <> "" AndAlso couleurs.ContainsKey(CInt(empId)), couleurs(CInt(empId)), "#1B4F9C"),
+                        .doc = DocLabel(Txt(r("ModeFacturation")), etat),
+                        .docT = DocType(Txt(r("ModeFacturation")), etat),
+                        .montant = If(IsDBNull(r("MontantPrevu")), "", Montant(Dec(r("MontantPrevu")))),
                         .etat = etat
                     })
                 Next
@@ -303,6 +307,44 @@ Public Class _Default
             .aujourdhui = aujourdhui.ToString("yyyy-MM-dd"),
             .maintenant = Date.Now.Hour * 60 + Date.Now.Minute
         }
+    End Function
+
+    ''' <summary>Le libellé du document produit par un RDV (soumission / facture / tâche).
+    ''' À défaut de mode enregistré : terminé → facture, sinon soumission.</summary>
+    Private Function DocLabel(mode As String, etat As String) As String
+        Select Case DocType(mode, etat)
+            Case "facture" : Return L("docFacture")
+            Case "tache" : Return L("docTache")
+            Case Else : Return L("docSoumission")
+        End Select
+    End Function
+
+    Private Shared Function DocType(mode As String, etat As String) As String
+        Select Case mode.ToLowerInvariant()
+            Case "facture" : Return "facture"
+            Case "tache" : Return "tache"
+            Case "soumission" : Return "soumission"
+            Case Else : Return If(etat = "termine", "facture", "soumission")
+        End Select
+    End Function
+
+    ''' <summary>La présence du jour (absences, retards ; s0969) pour la pastille « Présence ».</summary>
+    Private Function BatirPresence() As Object
+        Dim abs As New List(Of Object), ret As New List(Of Object)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@Jour", aujourdhui))
+            Dim ds As DataSet = ExecuteSQLds("s0969GetPresenceDuJour", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                For Each r As DataRow In ds.Tables(0).Rows
+                    Dim o As Object = New With {.nom = Txt(r("EmployeeName")), .note = Txt(r("Note"))}
+                    If Txt(r("Type")) = "absence" Then abs.Add(o) Else ret.Add(o)
+                Next
+            End If
+        Catch
+        End Try
+        Return New With {.abs = abs.Count, .ret = ret.Count, .absL = abs, .retL = ret}
     End Function
 
     ' =====================================================================
@@ -469,6 +511,9 @@ Public Class _Default
             "enPremier", "rienUrgent", "assistant60", "a60Aria", "a60Retour", "a60RetourTip",
             "activiteAFaire", "indR", "indY", "messages", "msgAria", "msgNonLuN", "rdvDemande", "rdvDemandeTip",
             "compteOp", "voirMontant", "masquerMontant", "brancher",
+            "docSoumission", "docFacture", "docTache", "montantPrevu",
+            "presence", "presenceAbs", "presenceRet", "presAbsTitre", "presRetTitre", "presRien", "presenceAria",
+            "lieuPlace", "lieuChez", "lieuTel", "lieuVisio",
             "agenda", "agendaAria", "agendaTip", "agendaDe", "equipeN",
             "plagesLibres", "plagesAria", "plagesVide", "plageTip", "agAuj", "agAujAbr", "agRdvH", "agEmployes",
             "agVide", "libre", "stTermine", "stEnCours", "stAVenir",
@@ -529,6 +574,23 @@ Public Class _Default
             Case "kPayRetard" : Return Choose3(lang, "Paiements en retard", "Overdue payments", "Pagos atrasados")
             Case "kPayAucun" : Return Choose3(lang, "aucune facture fournisseur en retard", "no overdue supplier invoice", "ninguna factura de proveedor atrasada")
             Case "kFacturesFourn" : Return Choose3(lang, "{0} facture(s) fournisseur(s)", "{0} supplier invoice(s)", "{0} factura(s) de proveedor")
+
+            ' Agenda : document, montant, lieu, présence
+            Case "docSoumission" : Return Choose3(lang, "Soumission", "Quote", "Cotización")
+            Case "docFacture" : Return Choose3(lang, "Facture", "Invoice", "Factura")
+            Case "docTache" : Return Choose3(lang, "Tâche", "Task", "Tarea")
+            Case "montantPrevu" : Return Choose3(lang, "Montant prévu", "Expected amount", "Importe previsto")
+            Case "presence" : Return Choose3(lang, "Présence", "Attendance", "Presencia")
+            Case "presenceAbs" : Return Choose3(lang, "{0} absence(s) aujourd'hui", "{0} absence(s) today", "{0} ausencia(s) hoy")
+            Case "presenceRet" : Return Choose3(lang, "{0} retard(s) aujourd'hui", "{0} late arrival(s) today", "{0} retraso(s) hoy")
+            Case "presAbsTitre" : Return Choose3(lang, "Absences", "Absences", "Ausencias")
+            Case "presRetTitre" : Return Choose3(lang, "Retards", "Late arrivals", "Retrasos")
+            Case "presRien" : Return Choose3(lang, "Toute l'équipe est présente aujourd'hui.", "The whole team is present today.", "Todo el equipo está presente hoy.")
+            Case "presenceAria" : Return Choose3(lang, "Présence de l'équipe : absences et retards du jour", "Team attendance: today's absences and late arrivals", "Presencia del equipo: ausencias y retrasos del día")
+            Case "lieuPlace" : Return Choose3(lang, "À votre place", "At your place", "En su local")
+            Case "lieuChez" : Return Choose3(lang, "Chez le client", "At the customer", "En el cliente")
+            Case "lieuTel" : Return Choose3(lang, "Téléphone", "Phone", "Teléfono")
+            Case "lieuVisio" : Return Choose3(lang, "Visio", "Video", "Videollamada")
 
             ' Agenda
             Case "agenda" : Return Choose3(lang, "Agenda", "Calendar", "Agenda")

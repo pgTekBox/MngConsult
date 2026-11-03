@@ -101,12 +101,14 @@ Namespace Controls
                 End If
                 sb.Append("</div>")
             End If
-            If essai <> "" Then sb.Append("<span class=""hdr-essai"">").Append(Server.HtmlEncode(essai)).Append("</span>")
+            If essai <> "" Then sb.Append("<span class=""hdr-essai").Append(If(_essaiJours <= 3, " urg", "")).Append(""">").Append(Server.HtmlEncode(essai)).Append("</span>")
             sb.Append("</div>")
             litProfilMetier.Text = sb.ToString()
         End Sub
 
-        ''' <summary>« Essai gratuit · N jours restants » (s0687) ; vide si pas en essai.</summary>
+        ''' <summary>« Essai gratuit · N jours restants » (s0687) ; vide si pas en essai.
+        ''' Pose aussi _essaiJours (pour la couleur d'urgence).</summary>
+        Private _essaiJours As Integer = 999
         Private Function EssaiLigne() As String
             Try
                 Dim p As New Collection
@@ -117,6 +119,7 @@ Namespace Controls
                 If IsDBNull(r("IsTrial")) OrElse Not Convert.ToBoolean(r("IsTrial")) OrElse IsDBNull(r("DaysRemaining")) Then Return ""
                 Dim jours As Integer = Convert.ToInt32(r("DaysRemaining"))
                 If jours < 0 Then jours = 0
+                _essaiJours = jours
                 Return Mot(CurrentLang,
                            "Essai gratuit · " & jours & " jours restants",
                            "Free trial · " & jours & " days left",

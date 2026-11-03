@@ -2,18 +2,9 @@
 
 <div class="header-right">
 
-    <%-- Pastille « fin de l'essai gratuit » (visible seulement pendant l'essai) --%>
-    <asp:Panel ID="pnlTrial" runat="server" CssClass="trial-pill" Visible="false">
-        <span class="trial-ico" aria-hidden="true"><i class="ic ic-hourglass" aria-hidden="true"></i></span>
-        <asp:Literal ID="litTrial" runat="server" />
-    </asp:Panel>
-
-    <%-- Statut Square (visible seulement si un compte Square est connecté) --%>
-    <asp:Panel ID="pnlSquare" runat="server" CssClass="square-pill" Visible="false"
-        ToolTip="Compte Square connecté">
-        <span class="square-dot" aria-hidden="true"></span>
-        <asp:Literal ID="litSquare" runat="server" />
-    </asp:Panel>
+    <%-- L'essai et le statut Square sont désormais dans l'en-tête (Header.ascx) :
+         « Essai gratuit · N jours » à côté du logo, et Square dans le bouton
+         « Fournisseurs connectés ». Les anciennes pastilles ont été retirées d'ici. --%>
 
     <%-- Sélecteur de langue (FR / EN / ES) --%>
     <div class="lang-switch">

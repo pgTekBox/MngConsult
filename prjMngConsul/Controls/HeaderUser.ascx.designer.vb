@@ -14,29 +14,9 @@ Option Explicit On
 Partial Public Class HeaderUser
 
     '''<summary>
-    '''pnlTrial control.
-    '''</summary>
-    Protected WithEvents pnlTrial As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>
     '''lnkAide control.
     '''</summary>
     Protected WithEvents lnkAide As Global.System.Web.UI.HtmlControls.HtmlAnchor
-
-    '''<summary>
-    '''litTrial control.
-    '''</summary>
-    Protected WithEvents litTrial As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>
-    '''pnlSquare control.
-    '''</summary>
-    Protected WithEvents pnlSquare As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>
-    '''litSquare control.
-    '''</summary>
-    Protected WithEvents litSquare As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''litLang control.

@@ -51,6 +51,15 @@
     .ac-pill.cpt .txt span{ font-size:12px; font-weight:800; color:#44536E; }
     .ac-pill.cpt .solde{ margin-left:4px; font-size:15px; }
     .ac-oeil{ width:34px; height:30px; padding:0; border:0; background:transparent; color:#1B4F9C; display:flex; align-items:center; justify-content:center; }
+    .ac-pill.pres{ gap:4px; }
+    .ac-pill.pres .lab{ padding:0; border:0; background:transparent; color:inherit; font:inherit; display:flex; align-items:center; }
+    .ac-pill.pres.actif{ border-color:#1B4F9C; }
+    .ac-pres .ac-presbloc{ display:flex; flex-direction:column; gap:6px; margin-top:4px; }
+    .ac-pres .ac-presbloc .tete{ display:flex; align-items:center; gap:8px; }
+    .ac-pres .ac-presbloc .tete b{ font-size:15px; }
+    .ac-pres .ac-presbloc .it{ display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:12px; background:#F2F5F9; }
+    .ac-pres .ac-presbloc .it b{ font-size:14px; }
+    .ac-pres .ac-presbloc .it span{ font-size:13px; color:#44536E; }
     .ac-brancher{ margin-left:6px; padding:4px 10px; border-radius:999px; background:#1B4F9C; color:#FFFFFF; font-size:12px; font-weight:800; text-decoration:none; }
     .ac-brancher:hover{ color:#fff; background:#143A73; }
     .a60-btn{ width:65px; height:65px; flex-shrink:0; padding:0; border:0; border-radius:50%; background:transparent; display:flex; align-items:center; justify-content:center; transition:transform .15s; animation:a60-bouge 7s ease-in-out infinite; transform-origin:50% 90%; }
@@ -98,6 +107,13 @@
     .ac-rdv .chv{ flex-shrink:0; width:28px; height:32px; padding:0; border:0; background:transparent; color:#44536E; font-size:16px; }
     .ac-rdv .plus{ flex-shrink:0; min-height:32px; padding:0 10px; border:1.5px solid #1B4F9C; border-radius:999px; background:#FFFFFF; color:#1B4F9C; font-size:13px; font-weight:800; white-space:nowrap; }
     .ac-rdv .plus:hover{ background:#E3EBF7; }
+    .ac-doc{ flex-shrink:0; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; }
+    .ac-doc.soumission{ background:#EFE7FA; color:#5B2E91; }
+    .ac-doc.facture{ background:#E3EBF7; color:#143A73; }
+    .ac-doc.tache{ background:#E8EDF5; color:#44536E; }
+    .ac-mont{ flex-shrink:0; font-size:14px; font-weight:800; white-space:nowrap; }
+    .ac-lane .it .ac-doc{ font-size:11px; padding:1px 7px; }
+    .ac-lane .it .ac-mont{ font-size:13px; }
     .ac-ini{ flex-shrink:0; min-width:28px; height:22px; padding:0 6px; box-sizing:border-box; border-radius:999px; color:#fff; font-size:11px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
     .ac-det{ padding:0 12px 12px; display:flex; flex-direction:column; gap:6px; }
     .ac-det > span{ font-size:14px; }
@@ -256,7 +272,7 @@
     var nY = acts.length - nR;
     var aEquipe = A.emps.length > 1;
     var s = {
-        a60: false, cible: -1, actOuv: -1, filtre: '', rdvOuv: '',
+        a60: false, cible: -1, actOuv: -1, filtre: '', rdvOuv: '', presOuv: false,
         agEmp: aEquipe && A.emps.some(function (e) { return e.v === choix.agEmp; }) ? choix.agEmp : '',
         avP: choix.avP || 'sem', rpJ: choix.rpJ !== false, rpV: !!choix.rpV, rpA: choix.rpA !== false, bqV: !!choix.bqV
     };
@@ -339,6 +355,20 @@
             pa.appendChild(b);
         });
         pills.appendChild(pa);
+        // Présence (équipe) : absences (rouge) et retards (jaune) du jour ; ouvre un panneau.
+        if (aEquipe) {
+            var P = M.presence || { abs: 0, ret: 0 };
+            var pp = el('span', 'ac-pill pres' + (s.presOuv ? ' actif' : ''));
+            var lab = bouton('lab'); lab.appendChild(el('b', '', T.presence));
+            lab.setAttribute('aria-expanded', s.presOuv ? 'true' : 'false'); lab.setAttribute('aria-label', T.presenceAria); lab.title = T.presenceAria;
+            lab.addEventListener('click', function () { s.presOuv = !s.presOuv; peindre(); });
+            pp.appendChild(lab);
+            var ba = el('span', 'ac-rond r' + (P.abs ? '' : ' vide'), String(P.abs)); ba.title = fmt(T.presenceAbs, P.abs); pp.appendChild(ba);
+            var by = el('span', 'ac-rond y' + (P.ret ? '' : ' vide'), String(P.ret)); by.title = fmt(T.presenceRet, P.ret); pp.appendChild(by);
+            var cvp = bouton('chv', chev(s.presOuv)); cvp.setAttribute('aria-label', T.presenceAria);
+            cvp.addEventListener('click', function () { s.presOuv = !s.presOuv; peindre(); }); pp.appendChild(cvp);
+            pills.appendChild(pp);
+        }
         // Messages : les messages du cabinet, avec le nombre de non-lus (bleu) s'il y en a.
         var pm = el('a', 'ac-pill'); pm.href = 'wbfEchangesCabinet.aspx'; pm.setAttribute('aria-label', T.msgAria); pm.title = T.msgAria;
         pm.appendChild(el('b', '', T.messages));
@@ -375,12 +405,40 @@
         return f;
     }
 
+    // Le panneau Présence : absences et retards du jour, ouvert par la pastille.
+    function peindrePresence() {
+        var P = M.presence || { abs: 0, ret: 0, absL: [], retL: [] };
+        var sec = el('section', 'ac-carte ac-pres'); sec.setAttribute('aria-label', T.presence);
+        var h = el('div', 'ac-acttete'); var t2 = el('h2', '', T.presence); h.appendChild(t2);
+        h.appendChild(boutonChev(true, function () { s.presOuv = false; peindre(); }));
+        sec.appendChild(h);
+        if (!(P.absL && P.absL.length) && !(P.retL && P.retL.length)) { sec.appendChild(el('div', 'ac-vide', T.presRien)); return sec; }
+        [['r', T.presAbsTitre, P.absL || []], ['y', T.presRetTitre, P.retL || []]].forEach(function (g) {
+            if (!g[2].length) return;
+            var bloc = el('div', 'ac-presbloc');
+            var te = el('div', 'tete'); te.appendChild(el('span', 'ac-rond ' + g[0], String(g[2].length))); te.appendChild(el('b', '', g[1])); bloc.appendChild(te);
+            g[2].forEach(function (x) {
+                var it = el('div', 'it'); it.appendChild(el('b', '', x.nom)); if (x.note) it.appendChild(el('span', '', x.note)); bloc.appendChild(it);
+            });
+            sec.appendChild(bloc);
+        });
+        return sec;
+    }
+
     // =================== 2. L'agenda ===================
     function etatChip(r) {
         var c = r.etat === 'termine' ? ['#E3F3EA', '#0F5A3A', T.stTermine] : (r.etat === 'encours' ? ['#E3EBF7', '#143A73', T.stEnCours] : ['#E8EDF5', '#44536E', T.stAVenir]);
         var sp = el('span', 'ac-chip', c[2]); sp.style.background = c[0]; sp.style.color = c[1]; return sp;
     }
     function bordure(r) { return r.etat === 'termine' ? '#43B47A' : (r.etat === 'encours' ? '#1B4F9C' : '#AEBBCD'); }
+    // Normalise le lieu en « À votre place / Chez le client / Téléphone / Visio ».
+    function lieuNorm(lieu) {
+        var x = (lieu || '').toLowerCase();
+        if (/visio|teams|zoom|meet|vid[ée]o/.test(x)) return { t: T.lieuVisio, bg: '#E3EBF7', fg: '#143A73' };
+        if (/t[ée]l[ée]phone|phone|appel/.test(x)) return { t: T.lieuTel, bg: '#E3EBF7', fg: '#143A73' };
+        if (/place|bureau|affaires|clinique|salon|local|boutique|succursale/.test(x)) return { t: T.lieuPlace, bg: '#E3F3EA', fg: '#0F5A3A' };
+        return { t: T.lieuChez, bg: '#FBF1DC', fg: '#7A5200' };
+    }
 
     // Une ligne de RDV : heure, client, Facturer (RDV terminé), lieu, état, détail, + RDV.
     function ligneRdv(r, avecIni) {
@@ -392,11 +450,14 @@
         var qui = el('span', 'qui'); qui.appendChild(el('b', '', r.client)); if (r.court) qui.appendChild(el('span', '', ' · ' + r.court)); m.appendChild(qui);
         m.addEventListener('click', basculer); li.appendChild(m);
         if (avecIni && r.ini) { var ini = el('span', 'ac-ini', r.ini); ini.style.background = r.c; ini.title = r.empNom; li.appendChild(ini); }
+        // Document produit (Soumission / Facture / Tâche) + montant prévu
+        if (r.doc) { var dcb = el('span', 'ac-doc ' + (r.docT || 'soumission'), r.doc); dcb.title = r.doc; li.appendChild(dcb); }
+        if (r.montant) { var mtb = el('b', 'ac-mont', r.montant); mtb.title = T.montantPrevu; li.appendChild(mtb); }
         if (r.etat === 'termine' && r.cli) {
             var fa = bouton('fac', T.facturer); fa.setAttribute('aria-label', fmt(T.facturerAria, r.client));
             fa.addEventListener('click', acNouvelleFacture); li.appendChild(fa);
         }
-        if (r.lieu) { var lu = el('span', 'ac-chip', r.lieu); lu.style.background = '#FBF1DC'; lu.style.color = '#7A5200'; li.appendChild(lu); }
+        if (r.lieu) { var ln = lieuNorm(r.lieu); var lu = el('span', 'ac-chip', ln.t); lu.style.background = ln.bg; lu.style.color = ln.fg; lu.title = r.lieu; li.appendChild(lu); }
         li.appendChild(etatChip(r));
         var cv = bouton('chv', chev(ouvert)); cv.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
         cv.setAttribute('aria-label', fmt(T.voirDetail, r.client)); cv.addEventListener('click', basculer); li.appendChild(cv);
@@ -497,6 +558,8 @@
                         var q = bouton('q'); q.appendChild(el('b', '', r.h + ' · ' + r.client)); if (r.court) q.appendChild(el('span', '', r.court));
                         q.title = T.ouvrirRdv; q.addEventListener('click', function () { acOuvrirRdv('wbfAppointmentEdit.aspx?id=' + r.id, T.winRdv); });
                         it.appendChild(q);
+                        if (r.doc) { var ld = el('span', 'ac-doc ' + (r.docT || 'soumission'), r.doc); ld.title = r.doc; it.appendChild(ld); }
+                        if (r.montant) { var lm = el('b', 'ac-mont', r.montant); lm.title = T.montantPrevu; it.appendChild(lm); }
                         var pl = bouton('plus', '+'); pl.title = fmt(T.nouveauRdvAvec, r.client); pl.setAttribute('aria-label', pl.title);
                         pl.addEventListener('click', function () { nouveauRdv(cle(plus(dJ(r.jour), 7)), r.deb, r.cli, r.emp); });
                         it.appendChild(pl); ln.appendChild(it);
@@ -624,6 +687,7 @@
     function peindre() {
         racine.innerHTML = '';
         racine.appendChild(peindre60());
+        if (aEquipe && s.presOuv) racine.appendChild(peindrePresence());
         racine.appendChild(peindreAgenda());
         racine.appendChild(peindreActivites());
     }
