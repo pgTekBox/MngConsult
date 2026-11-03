@@ -598,6 +598,9 @@ a{
             .cp-apercu .st{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:800;margin-bottom:6px}
             .cp-apercu .st.fait{background:#E6F4EA;color:#1E6B3A}
             .cp-apercu .st.non{background:#FFF4DF;color:#9A5B00}
+            .cp-suppr{background:#FDECEC;color:#B3261E;border:0;border-radius:999px;padding:6px 14px;font-weight:800;font-size:13px;cursor:pointer;margin-top:8px}
+            .cp-suppr:hover{background:#F8D7D5}
+            .cp-suppr[disabled]{opacity:.5;cursor:not-allowed}
             .cp-corps textarea{width:100%;min-height:120px;border:1px solid #D5DDE8;border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical;background:#F7F9FC;color:#0E1F3D}
             .cp-corps textarea:focus{outline:2px solid #1B4F9C;outline-offset:1px;background:#fff}
             .cp-pied{display:flex;align-items:center;gap:12px;margin-top:12px}
@@ -641,12 +644,12 @@ a{
             function escH(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
             function charger(){
                 if(!histo) return;
-                fetch(url+'?page='+encodeURIComponent(page),{method:'GET',credentials:'same-origin'})
+                fetch(url,{method:'GET',credentials:'same-origin'})
                     .then(function(r){return r.json().catch(function(){return {ok:false};});})
                     .then(function(j){
                         items=(j&&j.items)||[];
                         var tete='<option value="">'+(items.length?'— '+items.length+' demande'+(items.length>1?'s':'')+' —':'— aucune demande —')+'</option>';
-                        histo.innerHTML=tete+items.map(function(it,i){return '<option value="'+i+'">'+escH(it.quand+'  ·  '+(it.fait?'Fait':'Non fait'))+'</option>';}).join('');
+                        histo.innerHTML=tete+items.map(function(it,i){return '<option value="'+i+'">'+escH(it.page+'  ·  '+it.quand+'  ·  '+(it.fait?'Fait':'Non fait'))+'</option>';}).join('');
                         if(apercu) apercu.hidden=true;
                     }).catch(function(){});
             }
@@ -655,7 +658,20 @@ a{
                 if(i===''||!items[i]){ if(apercu) apercu.hidden=true; return; }
                 var it=items[i];
                 if(apercu){ apercu.hidden=false;
-                    apercu.innerHTML='<span class="st '+(it.fait?'fait':'non')+'">'+(it.fait?'Fait':'Non fait')+' · '+escH(it.quand)+'</span><br>'+escH(it.prompt); }
+                    apercu.innerHTML='<span class="st '+(it.fait?'fait':'non')+'">'+(it.fait?'Fait':'Non fait')+'</span> <b>'+escH(it.page)+'</b> · '+escH(it.quand)+'<br>'+escH(it.prompt)+
+                        (it.fait?'':'<div><button type="button" class="cp-suppr" data-id="'+it.id+'">Supprimer cette demande</button></div>'); }
+            });
+            if(apercu) apercu.addEventListener('click',function(e){
+                var b=e.target.closest('.cp-suppr'); if(!b) return;
+                var id=parseInt(b.getAttribute('data-id'),10); if(!id) return;
+                b.disabled=true; msg.className='cp-msg'; msg.textContent='';
+                fetch(url,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({op:'delete',id:id})})
+                    .then(function(r){return r.json().catch(function(){return {ok:false};});})
+                    .then(function(j){
+                        if(j&&j.ok){ apercu.hidden=true; charger(); msg.className='cp-msg ok'; msg.textContent='Demande supprimée.'; }
+                        else{ b.disabled=false; msg.className='cp-msg err'; msg.textContent='Suppression impossible.'; }
+                    })
+                    .catch(function(){ b.disabled=false; msg.className='cp-msg err'; msg.textContent='Suppression impossible.'; });
             });
             function ouvrir(){pan.hidden=false;msg.textContent='';charger();ta.focus();}
             function fermerPan(){pan.hidden=true;}

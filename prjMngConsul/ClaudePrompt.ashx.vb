@@ -81,6 +81,12 @@ Public Class ClaudePromptHandler
             Return
         End If
 
+        ' Suppression d'une demande non faite (op=delete).
+        If String.Equals(Texte(d, "op", 20), "delete", StringComparison.OrdinalIgnoreCase) Then
+            Supprimer(context, js, userId, d)
+            Return
+        End If
+
         Dim page As String = Texte(d, "page", 200)
         Dim prompt As String = Texte(d, "prompt", 100000)
         Dim url As String = Texte(d, "url", 600)
@@ -111,34 +117,53 @@ Public Class ClaudePromptHandler
         End Try
     End Sub
 
-    ''' <summary>Renvoie en JSON les demandes de la page (?page=) pour l'usager, récentes d'abord.</summary>
+    ''' <summary>Renvoie en JSON TOUTES les demandes de l'usager (toutes pages), récentes d'abord.</summary>
     Private Shared Sub Lister(context As HttpContext, js As JavaScriptSerializer, userId As Integer)
-        Dim page As String = Convert.ToString(context.Request.QueryString("page")).Trim()
         Dim items As New List(Of Object)()
-        If page <> "" Then
+        Try
+            Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
+                Using cmd As New SqlCommand("s0966GetClaudePromptsByPage", conn) With {.CommandType = CommandType.StoredProcedure}
+                    cmd.Parameters.Add(New SqlParameter("@UserId", userId))   ' @Page omis → toutes les pages
+                    conn.Open()
+                    Using rd As SqlDataReader = cmd.ExecuteReader()
+                        While rd.Read()
+                            Dim quand As Date = Convert.ToDateTime(rd("Created")).ToLocalTime()
+                            Dim statut As String = Convert.ToString(rd("Statut"))
+                            items.Add(New With {
+                                .id = Convert.ToInt32(rd("Id")),
+                                .page = Convert.ToString(rd("Page")),
+                                .quand = quand.ToString("dd/MM/yyyy HH:mm"),
+                                .fait = (statut = "fait"),
+                                .prompt = Convert.ToString(rd("Prompt"))})
+                        End While
+                    End Using
+                End Using
+            End Using
+        Catch
+        End Try
+        context.Response.Write(js.Serialize(New With {.ok = True, .items = items}))
+    End Sub
+
+    ''' <summary>Supprime une demande de l'usager (seulement si non « fait »).</summary>
+    Private Shared Sub Supprimer(context As HttpContext, js As JavaScriptSerializer, userId As Integer, d As Dictionary(Of String, Object))
+        Dim id As Integer = 0
+        Integer.TryParse(If(Texte(d, "id", 20), ""), id)
+        Dim n As Integer = 0
+        If id > 0 Then
             Try
                 Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
-                    Using cmd As New SqlCommand("s0966GetClaudePromptsByPage", conn) With {.CommandType = CommandType.StoredProcedure}
+                    Using cmd As New SqlCommand("s0967DeleteClaudePrompt", conn) With {.CommandType = CommandType.StoredProcedure}
                         cmd.Parameters.Add(New SqlParameter("@UserId", userId))
-                        cmd.Parameters.Add(New SqlParameter("@Page", page))
+                        cmd.Parameters.Add(New SqlParameter("@Id", id))
                         conn.Open()
-                        Using rd As SqlDataReader = cmd.ExecuteReader()
-                            While rd.Read()
-                                Dim quand As Date = Convert.ToDateTime(rd("Created")).ToLocalTime()
-                                Dim statut As String = Convert.ToString(rd("Statut"))
-                                items.Add(New With {
-                                    .id = Convert.ToInt32(rd("Id")),
-                                    .quand = quand.ToString("dd/MM/yyyy HH:mm"),
-                                    .fait = (statut = "fait"),
-                                    .prompt = Convert.ToString(rd("Prompt"))})
-                            End While
-                        End Using
+                        Dim o As Object = cmd.ExecuteScalar()
+                        If o IsNot Nothing AndAlso Not IsDBNull(o) Then n = Convert.ToInt32(o)
                     End Using
                 End Using
             Catch
             End Try
         End If
-        context.Response.Write(js.Serialize(New With {.ok = True, .items = items}))
+        context.Response.Write(js.Serialize(New With {.ok = (n > 0), .supprime = n}))
     End Sub
 
     Private Shared Function Texte(d As Dictionary(Of String, Object), cle As String, max As Integer) As String
