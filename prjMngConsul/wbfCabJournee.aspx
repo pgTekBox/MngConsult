@@ -351,14 +351,17 @@
 <script type="text/javascript">
 (function(){
 const MJ=document.getElementById('mj');
-const AUJ=new Date(2026,10,2); // lundi 2 novembre 2026 (démo)
-const PERS=[
+// Données réelles injectées par le serveur (tâches/membres du cabinet), ou null.
+var SRV = <asp:Literal ID="litData" runat="server" />;
+const REEL = !!(SRV && SRV.reel);
+let AUJ=new Date(2026,10,2); // démo
+let PERS=[
   {id:'lb',nom:'Louise Bérubé',role:'Associée',patron:true,cap:6},
   {id:'lg',nom:'Léa Gagné',role:'Technicienne comptable',cap:8},
   {id:'lu',nom:'Luc Charbonneau',role:'Technicien comptable',cap:8},
   {id:'mt',nom:'Marie Tremblay',role:'Technicienne comptable',cap:8,abs:"Absente jusqu'au 4 novembre · Luc la remplace",remp:'lu'},
   {id:'sg',nom:'Sophie Gagnon',role:'Adjointe',cap:8}];
-const CLI=[
+let CLI=[
  ['Marc Allard','électricien','lg'],['Annie Roy','photographe','sg'],['Luc Gendron','consultant TI','lb'],['Julie Fortin','designer','sg'],
  ['Pierre Ménard','menuisier','lu'],['Nathalie Bisson','nutritionniste','sg'],['Garage Lapointe','mécanique','lg'],['Boulangerie Côté','boulangerie','lu'],
  ['Sylvie Dion','massothérapeute','sg'],['Excavation Brodeur','excavation','lg'],['Clinique vétérinaire Sutton','vétérinaire','lb'],['Café du Mont','restaurant','mt'],
@@ -367,7 +370,7 @@ const CLI=[
  ['Gîte des Pins','hébergement','mt'],['Dre Caroline Morin','dentiste','lb'],['Transport Lussier','camionnage','lg'],['Martin Paquette','programmeur','sg'],
  ['Épicerie Tanguay','épicerie','lu'],['Isabelle Roy','physiothérapeute','sg'],['Rénovations Pelletier','rénovation','lg'],['Chocolaterie Brome','chocolaterie','mt'],
  ['Simon Lavoie','architecte','lb'],['Yoga Sutton','studio de yoga','sg']].map(([nom,metier,p],i)=>({i,nom,metier,p}));
-const A={
+let A={
  das:{t:'Déclencher la remise des retenues à la source',bloc:'Paiements',type:'gouv',verbe:'Déclencher',s60:1,lot:1,
    dit:c=>`J'ai calculé les retenues d'octobre de ${c}. Le solde bancaire couvre la remise.`,prep:(c,m)=>[['Période','Octobre 2026'],['À remettre',m],['Destinataires','Revenu Québec et ARC']],
    auto:"Déclencher automatiquement les prochaines remises de ce client, dans ses plafonds."},
@@ -437,9 +440,9 @@ const DET={
    et:[['60','Livres fermés et déclarations produites',1],['cab','Vérifier la T2 et la CO-17',0],['cli','Signer l’autorisation de transmission',0],['cab','Transmettre aux gouvernements',0]]}};
 Object.keys(DET).forEach(k=>Object.assign(A[k],DET[k]));
 const QUI={'60':['60','q60'],cab:['Vous','qcab'],cli:['Client','qcli']};
-const AMT=['das','paie','fact','tps'];
+let AMT=['das','paie','fact','tps'];
 const RANGS=['','Échéance gouvernementale proche',"L'argent attend",'Le client attend une réponse','60 signale','Le reste, par échéance'];
-let N=0; const T=[];
+let N=0; let T=[];
 const add=(c,a,j,x)=>T.push({id:++N,c,a,j,x,resp:CLI[c].p==='mt'?'lu':CLI[c].p,fait:false});
 [0,6,9,22].forEach(c=>add(c,'das',1)); add(2,'tps',2); add(21,'tps',2);
 add(7,'paie',1); add(24,'paie',1); add(11,'paie',2); add(26,'paie',4);
@@ -452,6 +455,19 @@ add(3,'seuil',14);
 add(19,'t2',27);
 const montant=t=>{const v=((t.id*7919)%4800+350)+((t.id*37)%100)/100;return v.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $'};
 
+// Bascule sur les données réelles (tâches/membres du cabinet) si présentes.
+if(REEL){
+  AUJ=new Date(SRV.auj[0],SRV.auj[1],SRV.auj[2]);
+  PERS=SRV.pers.map(p=>({id:p.id,nom:p.nom,role:p.role||'',patron:!!p.patron,cap:p.cap||8}));
+  CLI=SRV.cli.map(c=>({i:c.i,nom:c.nom,metier:c.metier||'',p:c.p}));
+  A=SRV.a; AMT=[];
+  T=SRV.t.map(x=>({id:x.id,taskId:x.taskId,c:x.c,a:x.a,j:x.j,resp:x.resp,x:x.x,fait:false}));
+  // Pas de bandeau ni de commutateur « connecté comme » en mode réel.
+  const _d=MJ.querySelector('.mj-demo'); if(_d) _d.style.display='none';
+  const _v=MJ.querySelector('.mj-vue'); if(_v) _v.style.display='none';
+  const _dn=MJ.querySelector('.mj-tuile.nuit b'); if(_dn) _dn.textContent=(SRV.demandes!=null?SRV.demandes:0);
+}
+
 const rang=t=>{const a=A[t.a];return a.type==='gouv'&&t.j<=2?1:a.type==='argent'?2:a.type==='attend'?3:a.type==='signal'?4:5};
 const coul=j=>j<=2?'rouge':j<=7?'jaune':'vert';
 const echLib=j=>j<=0?"Aujourd'hui":j===1?'Demain':`Dans ${j} jours`;
@@ -462,7 +478,7 @@ const $=s=>MJ.querySelector(s),$$=s=>[...MJ.querySelectorAll(s)];
 const AVC={rouge:'#E35D55',jaune:'#F2C14E',vert:'#6CC28A',blanc:'#FFFFFF'};
 const ava=c=>`<svg viewBox="0 0 256 256"><circle cx="128" cy="128" r="112" fill="${AVC[c]}" stroke="#D9A03C" stroke-width="16"/><circle cx="94" cy="128" r="19" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M75 128 C73 100 88 82 114 84" fill="none" stroke="#0E1F3D" stroke-width="13" stroke-linecap="round"/><ellipse cx="164" cy="118" rx="19" ry="28" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M140 62 q26 -22 50 -6" fill="none" stroke="#D9A03C" stroke-width="12" stroke-linecap="round"/><path d="M96 172 q32 30 64 0" fill="none" stroke="#0E1F3D" stroke-width="12" stroke-linecap="round"/></svg>`;
 
-let U='lb'; const F={qui:'tous',tuile:'',bloc:'tous'};
+let U=REEL?SRV.me:'lb'; const F={qui:(REEL&&!SRV.patron)?(SRV.me):'tous',tuile:'',bloc:'tous'};
 let ouverts={}, courant=null, dernier=null;
 
 function visibles(sansBloc){return T.filter(t=>!t.fait&&(F.qui==='tous'||t.resp===F.qui)&&
@@ -472,9 +488,11 @@ function visibles(sansBloc){return T.filter(t=>!t.fait&&(F.qui==='tous'||t.resp=
 function rendre(){
   const base=T.filter(t=>!t.fait&&(F.qui==='tous'||t.resp===F.qui));
   const clientsOuverts=new Set(base.map(t=>t.c)).size;
-  $('#mj-date').textContent=`Lundi 2 novembre · ${base.length} actions ouvertes pour ${clientsOuverts} clients${F.qui!=='tous'&&P(U).patron?' · '+P(F.qui).nom:''}`;
+  const _dj=AUJ.toLocaleDateString('fr-CA',{weekday:'long',day:'numeric',month:'long'});
+  const _djc=_dj.charAt(0).toUpperCase()+_dj.slice(1);
+  $('#mj-date').textContent=`${_djc} · ${base.length} actions ouvertes pour ${clientsOuverts} clients${F.qui!=='tous'&&P(U)&&P(U).patron&&P(F.qui)?' · '+P(F.qui).nom:''}`;
   $('#f-qui').innerHTML=PERS.map(p=>`<option value="${p.id}" ${U===p.id?'selected':''}>${p.nom} · ${p.patron?'associée':'employé'}${p.abs?' (absente)':''}</option>`).join('');
-  const moi=P(U), patron=!!moi.patron;
+  const moi=P(U)||{patron:false}, patron=!!moi.patron;
   $('#k-urg').textContent=base.filter(t=>t.j<=2).length;
   $('#k-sem').textContent=base.filter(t=>t.j>2&&t.j<=7).length;
   $('#k-60').textContent=base.filter(t=>A[t.a].s60).length;
@@ -503,8 +521,10 @@ function rendre(){
       const qui=lot?`<b>${noms.length} clients</b> · ${esc(noms.slice(0,2).join(', '))}${noms.length>2?` et ${noms.length-2} autre${noms.length>3?'s':''}`:''}`
                    :`<b>${esc(CLI[t.c].nom)}</b> · ${esc(CLI[t.c].metier)}`;
       const gens=[...new Set(g.map(x=>x.resp))];
-      const resp=lot?`<span class="rs">${gens.map(id=>`<span class="ini2" title="${P(id).nom}">${ini(P(id).nom)}</span>`).join('')}<span class="rs-n">${gens.length>1?gens.length+' personnes':P(gens[0]).nom.split(' ')[0]}</span></span>`
-                    :`<span class="rs"><span class="ini2">${ini(P(t.resp).nom)}</span><select data-resp="${t.id}" aria-label="Personne responsable">${PERS.map(p=>`<option value="${p.id}" ${t.resp===p.id?'selected':''}>${p.nom.split(' ')[0]}${p.abs?' (absente)':''}</option>`).join('')}</select></span>`;
+      const nomCourt=id=>{const pp=P(id);return pp?pp.nom.split(' ')[0]:'—';};
+      const resp=lot?`<span class="rs">${gens.map(id=>`<span class="ini2" title="${P(id)?P(id).nom:''}">${P(id)?ini(P(id).nom):'?'}</span>`).join('')}<span class="rs-n">${gens.length>1?gens.length+' personnes':nomCourt(gens[0])}</span></span>`
+                    :(REEL?`<span class="rs"><span class="ini2">${P(t.resp)?ini(P(t.resp).nom):'?'}</span><span class="rs-n">${nomCourt(t.resp)}</span></span>`
+                          :`<span class="rs"><span class="ini2">${ini(P(t.resp).nom)}</span><select data-resp="${t.id}" aria-label="Personne responsable">${PERS.map(p=>`<option value="${p.id}" ${t.resp===p.id?'selected':''}>${p.nom.split(' ')[0]}${p.abs?' (absente)':''}</option>`).join('')}</select></span>`);
       const key=t.a+'-'+r;
       h+=`<div class="ligne-a ${c}">
         <span class="ld-ech"><span class="pt"></span>${echLib(j)}</span>
@@ -568,49 +588,56 @@ function ouvrir(ids){
   a.k=t.a; courant=ids; exclus=new Set();
   $('#d60-ava').innerHTML=ava(c); $('#d60-ava2').innerHTML=ava(c);
   $('#d60-bloc').textContent=a.bloc+(a.s60?' · préparé par 60':'');
-  $('#d60-pq').className='dt-pq '+c; $('#d60-pq-t').textContent=a.pq;
-  $('#d60-pcs').innerHTML=a.pcs.map(n=>`<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6zM14 2v6h6"/></svg>${esc(n)}</li>`).join('');
-  $('#d60-pcs-z').hidden=!a.pcs.length;
-  $('#d60-droit').textContent=a.droit;
+  $('#d60-pq').className='dt-pq '+c; $('#d60-pq-t').textContent=a.pq||''; $('#d60-pq').style.display=a.pq?'':'none';
+  $('#d60-pcs').innerHTML=(a.pcs||[]).map(n=>`<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6zM14 2v6h6"/></svg>${esc(n)}</li>`).join('');
+  $('#d60-pcs-z').hidden=!(a.pcs&&a.pcs.length);
+  $('#d60-droit').textContent=a.droit||''; var _dr=$('.dt-droit'); if(_dr)_dr.style.display=a.droit?'':'none';
   if(g.length===1){
     const cn=CLI[t.c].nom;
     $('#d60-titre').textContent=a.t;
-    $('#d60-meta').innerHTML=`<span class="ch"><b>${esc(cn)}</b>, ${esc(CLI[t.c].metier)}</span><span class="ech ${c}">${echLib(t.j)}</span><span class="ch">Responsable : <b>${P(t.resp).nom}</b></span>`;
-    $('#d60-dit').textContent=a.dit(cn);
-    $('#d60-prep').innerHTML=a.prep(cn,montant(t),t.x).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
-    $('#d60-g-t').textContent='Les étapes';
-    $('#d60-gauche').innerHTML=etapesHtml(a);
+    $('#d60-meta').innerHTML=`<span class="ch"><b>${esc(cn)}</b>${CLI[t.c].metier?', '+esc(CLI[t.c].metier):''}</span><span class="ech ${c}">${echLib(t.j)}</span><span class="ch">Responsable : <b>${P(t.resp)?P(t.resp).nom:'—'}</b></span>`;
+    const ditTxt=(typeof a.dit==='function')?a.dit(cn):(a.dit||t.x||''); $('#d60-dit').textContent=ditTxt; var _dd=$('.dt-dit'); if(_dd)_dd.style.display=ditTxt?'':'none';
+    let prepA=(typeof a.prep==='function')?a.prep(cn,montant(t),t.x):(a.prep||[]);
+    if(!prepA.length) prepA=[['Dossier',cn],['Échéance',echLib(t.j)],['Responsable',P(t.resp)?P(t.resp).nom:'—']];
+    $('#d60-prep').innerHTML=prepA.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
+    if(a.et&&a.et.length){$('#d60-g-t').textContent='Les étapes';$('#d60-gauche').innerHTML=etapesHtml(a);}
+    else{$('#d60-g-t').textContent="Ce qu'il faut faire";$('#d60-gauche').innerHTML=`<p style="color:var(--encre2);line-height:1.5;margin:0">${esc(t.x||a.t)}</p>`;}
     $('#d60-ok').textContent=a.verbe==='Voir'?'Je m’en occupe':`${a.verbe} maintenant`;
   } else {
     $('#d60-titre').textContent=`${a.t} : ${g.length} clients`;
-    $('#d60-meta').innerHTML=`<span class="ech ${c}">${echLib(j)}</span><span class="ch">Traitement en lot</span><span class="ch">Responsables : <b>${[...new Set(g.map(x=>P(x.resp).nom.split(' ')[0]))].join(', ')}</b></span>`;
-    $('#d60-dit').textContent=`J'ai tout préparé pour les ${g.length} clients. Chaque action sera faite au nom de son client, avec ses propres chiffres, et inscrite à son journal. Décochez un client pour le garder pour plus tard.`;
+    $('#d60-meta').innerHTML=`<span class="ech ${c}">${echLib(j)}</span><span class="ch">Traitement en lot</span><span class="ch">Responsables : <b>${[...new Set(g.map(x=>P(x.resp)?P(x.resp).nom.split(' ')[0]:'—'))].join(', ')}</b></span>`;
+    $('#d60-dit').textContent=`J'ai tout préparé pour les ${g.length} clients. Chaque action sera faite au nom de son client, avec ses propres chiffres, et inscrite à son journal. Décochez un client pour le garder pour plus tard.`; var _dd2=$('.dt-dit'); if(_dd2)_dd2.style.display='';
     $('#d60-g-t').textContent='Les clients du lot';
-    $('#d60-gauche').innerHTML=`<table class="dt-lot"><thead><tr><th></th><th>Client</th>${AMT.includes(t.a)?'<th class="r">Montant</th>':''}<th>Échéance</th></tr></thead><tbody>${g.map(x=>`<tr data-tr="${x.id}"><td><input type="checkbox" checked data-inc="${x.id}" aria-label="Inclure ${esc(CLI[x.c].nom)}"></td><td><b>${esc(CLI[x.c].nom)}</b><small>${P(x.resp).nom}</small></td>${AMT.includes(t.a)?`<td class="r">${montant(x)}</td>`:''}<td><span class="ech ${coul(x.j)}">${echLib(x.j)}</span></td></tr>`).join('')}</tbody></table><h3 class="h3b">Les étapes, pour chaque client</h3>${etapesHtml(a)}`;
-    $('#d60-prep').innerHTML=a.prep(CLI[t.c].nom,montant(t),t.x).filter(([k])=>!/montant|à remettre|net|total/i.test(k)).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')||'<dt>Lot</dt><dd>Prêt</dd>';
+    $('#d60-gauche').innerHTML=`<table class="dt-lot"><thead><tr><th></th><th>Client</th>${AMT.includes(t.a)?'<th class="r">Montant</th>':''}<th>Échéance</th></tr></thead><tbody>${g.map(x=>`<tr data-tr="${x.id}"><td><input type="checkbox" checked data-inc="${x.id}" aria-label="Inclure ${esc(CLI[x.c].nom)}"></td><td><b>${esc(CLI[x.c].nom)}</b><small>${P(x.resp)?esc(P(x.resp).nom):''}</small></td>${AMT.includes(t.a)?`<td class="r">${montant(x)}</td>`:''}<td><span class="ech ${coul(x.j)}">${echLib(x.j)}</span></td></tr>`).join('')}</tbody></table>${a.et&&a.et.length?`<h3 class="h3b">Les étapes, pour chaque client</h3>${etapesHtml(a)}`:''}`;
+    const prepL=(typeof a.prep==='function')?a.prep(CLI[t.c].nom,montant(t),t.x).filter(([k])=>!/montant|à remettre|net|total/i.test(k)):[];
+    $('#d60-prep').innerHTML=prepL.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')||'<dt>Lot</dt><dd>Prêt</dd>';
   }
   majTotal(g,a);
-  $('#d60-auto').checked=false; $('#d60-auto-t').textContent=g.length>1?a.auto.replace('de ce client','de ces clients').replace('ce client','ces clients').replace('ses plafonds','leurs plafonds'):a.auto;
+  var _au=$('.d60-auto'); if(_au)_au.style.display=a.auto?'':'none';
+  $('#d60-auto').checked=false; $('#d60-auto-t').textContent=a.auto?(g.length>1?a.auto.replace('de ce client','de ces clients').replace('ce client','ces clients').replace('ses plafonds','leurs plafonds'):a.auto):'';
   $('#d60').showModal();
 }
 $('#d60').addEventListener('change',e=>{const id=e.target.dataset.inc;if(!id)return;const n=+id;e.target.checked?exclus.delete(n):exclus.add(n);e.target.closest('tr').classList.toggle('exclu',!e.target.checked);const g=courant.map(x=>T.find(t=>t.id===x));majTotal(g,A[g[0].a])});
 function toast(tx,annulable){$('#toast-tx').textContent=tx;$('#toast-annuler').hidden=!annulable;$('#toast').hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>{$('#toast').hidden=true;dernier=null},10000)}
+function poster(op,ids){if(!REEL||!ids||!ids.length)return;try{fetch(location.pathname,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'op='+op+'&ids='+encodeURIComponent(ids.filter(Boolean).join(','))}).catch(()=>{});}catch(e){}}
 $('#d60-ok').addEventListener('click',()=>{
-  const g=courant.filter(id=>!exclus.has(id)).map(id=>T.find(t=>t.id===id)); if(!g.length) return; g.forEach(t=>t.fait=true); dernier=g.map(t=>t.id);
+  const g=courant.filter(id=>!exclus.has(id)).map(id=>T.find(t=>t.id===id)); if(!g.length) return;
+  poster('done',g.map(x=>x.taskId));
+  g.forEach(t=>t.fait=true); dernier=g.map(t=>t.id);
   const auto=$('#d60-auto').checked; $('#d60').close(); rendre();
   toast(`${g.length>1?g.length+' actions faites':'Fait'} et ${g.length>1?'inscrites au journal de chaque client':'inscrit au journal du client'}.${auto?' 60 s’en chargera la prochaine fois.':''}`,true);
 });
 $('#d60-tard').addEventListener('click',()=>$('#d60').close());
 $('#d60-fermer').addEventListener('click',()=>$('#d60').close());
 $('#d60').addEventListener('click',e=>{if(e.target===$('#d60'))$('#d60').close()});
-$('#toast-annuler').addEventListener('click',()=>{if(dernier){dernier.forEach(id=>T.find(t=>t.id===id).fait=false);dernier=null;$('#toast').hidden=true;rendre()}});
+$('#toast-annuler').addEventListener('click',()=>{if(dernier){poster('undo',dernier.map(id=>{const tt=T.find(t=>t.id===id);return tt&&tt.taskId;}));dernier.forEach(id=>{const tt=T.find(t=>t.id===id);if(tt)tt.fait=false;});dernier=null;$('#toast').hidden=true;rendre()}});
 
 MJ.addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b||b.closest('#d60')) return;
   if(b.dataset.filtre){F.tuile=F.tuile===b.dataset.filtre?'':b.dataset.filtre;rendre()}
   else if(b.dataset.raz!==undefined){F.tuile='';rendre()}
   else if(b.dataset.bloc){F.bloc=b.dataset.bloc;rendre()}
-  else if(b.dataset.pers&&P(U).patron){F.qui=F.qui===b.dataset.pers?'tous':b.dataset.pers;rendre()}
+  else if(b.dataset.pers&&P(U)&&P(U).patron){F.qui=F.qui===b.dataset.pers?'tous':b.dataset.pers;rendre()}
   else if(b.dataset.voir){ouverts[b.dataset.voir]=!ouverts[b.dataset.voir];rendre()}
   else if(b.dataset.lot){ouvrir(b.dataset.lot.split(',').map(Number))}
   else if(b.dataset.ouvrir){ouvrir([+b.dataset.ouvrir])}
@@ -620,7 +647,7 @@ MJ.addEventListener('change',e=>{
   else if(e.target.dataset.resp){const t=T.find(x=>x.id==e.target.dataset.resp);t.resp=e.target.value;rendre();toast(`${A[t.a].t} : confiée à ${P(t.resp).nom}.`);dernier=null}
 });
 $('.ava60[data-c]').innerHTML=ava('vert');
-$('#n60fait').textContent=47;
+$('#n60fait').textContent=REEL?(SRV.n60!=null?SRV.n60:0):47;
 rendre();
 })();
 </script>
