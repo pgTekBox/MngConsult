@@ -27,12 +27,6 @@ Public Class ClaudePromptHandler
         context.Response.Cache.SetCacheability(HttpCacheability.NoCache)
         Dim js As New JavaScriptSerializer()
 
-        If context.Request.HttpMethod <> "POST" Then
-            context.Response.StatusCode = 405
-            context.Response.Write(js.Serialize(New With {.ok = False, .erreur = "POST attendu."}))
-            Return
-        End If
-
         ' Authentification : UserId en session (posé à la connexion).
         Dim userId As Integer = 0
         Try
@@ -44,6 +38,17 @@ Public Class ClaudePromptHandler
         If userId = 0 Then
             context.Response.StatusCode = 403
             context.Response.Write(js.Serialize(New With {.ok = False, .erreur = "Non authentifié."}))
+            Return
+        End If
+
+        ' GET : liste des demandes de la page courante (menu déroulant de la fenêtre).
+        Dim methode As String = context.Request.HttpMethod.ToUpperInvariant()
+        If methode = "GET" Then
+            Lister(context, js, userId)
+            Return
+        ElseIf methode <> "POST" Then
+            context.Response.StatusCode = 405
+            context.Response.Write(js.Serialize(New With {.ok = False, .erreur = "Méthode non permise."}))
             Return
         End If
 
@@ -104,6 +109,36 @@ Public Class ClaudePromptHandler
             context.Response.StatusCode = 500
             context.Response.Write(js.Serialize(New With {.ok = False, .erreur = "La demande n'a pas pu être enregistrée."}))
         End Try
+    End Sub
+
+    ''' <summary>Renvoie en JSON les demandes de la page (?page=) pour l'usager, récentes d'abord.</summary>
+    Private Shared Sub Lister(context As HttpContext, js As JavaScriptSerializer, userId As Integer)
+        Dim page As String = Convert.ToString(context.Request.QueryString("page")).Trim()
+        Dim items As New List(Of Object)()
+        If page <> "" Then
+            Try
+                Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
+                    Using cmd As New SqlCommand("s0966GetClaudePromptsByPage", conn) With {.CommandType = CommandType.StoredProcedure}
+                        cmd.Parameters.Add(New SqlParameter("@UserId", userId))
+                        cmd.Parameters.Add(New SqlParameter("@Page", page))
+                        conn.Open()
+                        Using rd As SqlDataReader = cmd.ExecuteReader()
+                            While rd.Read()
+                                Dim quand As Date = Convert.ToDateTime(rd("Created")).ToLocalTime()
+                                Dim statut As String = Convert.ToString(rd("Statut"))
+                                items.Add(New With {
+                                    .id = Convert.ToInt32(rd("Id")),
+                                    .quand = quand.ToString("dd/MM/yyyy HH:mm"),
+                                    .fait = (statut = "fait"),
+                                    .prompt = Convert.ToString(rd("Prompt"))})
+                            End While
+                        End Using
+                    End Using
+                End Using
+            Catch
+            End Try
+        End If
+        context.Response.Write(js.Serialize(New With {.ok = True, .items = items}))
     End Sub
 
     Private Shared Function Texte(d As Dictionary(Of String, Object), cle As String, max As Integer) As String

@@ -591,6 +591,13 @@ a{
             .cp-corps{padding:14px}
             .cp-lab{display:block;font-size:11px;letter-spacing:.06em;font-weight:800;color:#6A7891;text-transform:uppercase;margin-bottom:4px}
             .cp-page{display:inline-block;background:#E8EDF5;color:#143A73;border-radius:8px;padding:4px 10px;font-weight:800;font-size:13px;margin-bottom:12px}
+            .cp-histo{width:100%;border:1px solid #D5DDE8;border-radius:10px;height:40px;padding:0 10px;font:inherit;font-size:14px;background:#F7F9FC;color:#0E1F3D;margin-bottom:10px}
+            .cp-histo:focus{outline:2px solid #1B4F9C;outline-offset:1px;background:#fff}
+            .cp-apercu{background:#F2F5F9;border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5;color:#44536E;white-space:pre-wrap;word-break:break-word;margin-bottom:10px}
+            .cp-apercu[hidden]{display:none}
+            .cp-apercu .st{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:800;margin-bottom:6px}
+            .cp-apercu .st.fait{background:#E6F4EA;color:#1E6B3A}
+            .cp-apercu .st.non{background:#FFF4DF;color:#9A5B00}
             .cp-corps textarea{width:100%;min-height:120px;border:1px solid #D5DDE8;border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical;background:#F7F9FC;color:#0E1F3D}
             .cp-corps textarea:focus{outline:2px solid #1B4F9C;outline-offset:1px;background:#fff}
             .cp-pied{display:flex;align-items:center;gap:12px;margin-top:12px}
@@ -609,6 +616,9 @@ a{
             <div class="cp-corps">
                 <span class="cp-lab">Page</span>
                 <span class="cp-page" id="cpPage"></span>
+                <span class="cp-lab">Demandes précédentes</span>
+                <select class="cp-histo" id="cpHisto"><option value="">— aucune —</option></select>
+                <div class="cp-apercu" id="cpApercu" hidden></div>
                 <span class="cp-lab">Votre demande</span>
                 <textarea id="cpPrompt" placeholder="Décrivez la modification souhaitée sur cette page…"></textarea>
                 <div class="cp-pied">
@@ -624,9 +634,30 @@ a{
             var page=root.getAttribute('data-page')||'';
             var btn=document.getElementById('cpBouton'), pan=document.getElementById('cpPan'),
                 fermer=document.getElementById('cpFermer'), env=document.getElementById('cpEnvoyer'),
-                ta=document.getElementById('cpPrompt'), msg=document.getElementById('cpMsg');
+                ta=document.getElementById('cpPrompt'), msg=document.getElementById('cpMsg'),
+                histo=document.getElementById('cpHisto'), apercu=document.getElementById('cpApercu');
             var pg=document.getElementById('cpPage'); if(pg) pg.textContent=page;
-            function ouvrir(){pan.hidden=false;msg.textContent='';ta.focus();}
+            var items=[];
+            function escH(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+            function charger(){
+                if(!histo) return;
+                fetch(url+'?page='+encodeURIComponent(page),{method:'GET',credentials:'same-origin'})
+                    .then(function(r){return r.json().catch(function(){return {ok:false};});})
+                    .then(function(j){
+                        items=(j&&j.items)||[];
+                        var tete='<option value="">'+(items.length?'— '+items.length+' demande'+(items.length>1?'s':'')+' —':'— aucune demande —')+'</option>';
+                        histo.innerHTML=tete+items.map(function(it,i){return '<option value="'+i+'">'+escH(it.quand+'  ·  '+(it.fait?'Fait':'Non fait'))+'</option>';}).join('');
+                        if(apercu) apercu.hidden=true;
+                    }).catch(function(){});
+            }
+            if(histo) histo.addEventListener('change',function(){
+                var i=histo.value;
+                if(i===''||!items[i]){ if(apercu) apercu.hidden=true; return; }
+                var it=items[i];
+                if(apercu){ apercu.hidden=false;
+                    apercu.innerHTML='<span class="st '+(it.fait?'fait':'non')+'">'+(it.fait?'Fait':'Non fait')+' · '+escH(it.quand)+'</span><br>'+escH(it.prompt); }
+            });
+            function ouvrir(){pan.hidden=false;msg.textContent='';charger();ta.focus();}
             function fermerPan(){pan.hidden=true;}
             btn.addEventListener('click',function(){pan.hidden?ouvrir():fermerPan();});
             fermer.addEventListener('click',fermerPan);
@@ -639,7 +670,7 @@ a{
                     .then(function(r){return r.json().catch(function(){return {ok:false};});})
                     .then(function(j){
                         env.disabled=false;
-                        if(j&&j.ok){msg.className='cp-msg ok';msg.textContent='Demande envoyée. Merci !';ta.value='';setTimeout(fermerPan,1500);}
+                        if(j&&j.ok){msg.className='cp-msg ok';msg.textContent='Demande envoyée. Merci !';ta.value='';charger();}
                         else{msg.className='cp-msg err';msg.textContent=(j&&j.erreur)||"L'envoi a échoué.";}
                     })
                     .catch(function(){env.disabled=false;msg.className='cp-msg err';msg.textContent="L'envoi a échoué.";});
