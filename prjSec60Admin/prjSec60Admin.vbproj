@@ -406,6 +406,7 @@
     <Content Include="wbfSquareWebhookDiagnostic.aspx" />
     <Content Include="wbfPlaidDiagnostic.aspx" />
     <Content Include="wbfDemoReset.aspx" />
+    <Content Include="wbfClaudePrompts.aspx" />
     <Content Include="wbfReservations.aspx" />
     <Content Include="wbfPlanComptableDefaut.aspx" />
     <Content Include="wbfMail.aspx" />
@@ -641,6 +642,10 @@
     </Compile>
     <Compile Include="wbfPlaidDiagnostic.aspx.designer.vb">
       <DependentUpon>wbfPlaidDiagnostic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfClaudePrompts.aspx.vb">
+      <DependentUpon>wbfClaudePrompts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfReservations.aspx.vb">
       <DependentUpon>wbfReservations.aspx</DependentUpon>

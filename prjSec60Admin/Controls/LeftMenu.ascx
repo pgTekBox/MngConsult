@@ -30,6 +30,11 @@
                 <span class="nav-txt">Tableau de bord</span>
             </a>
 
+            <a class="nav-item" href="~/wbfClaudePrompts.aspx" runat="server" data-navlink>
+                <span class="nav-ico" aria-hidden="true">🤖</span>
+                <span class="nav-txt">Demandes à Claude</span>
+            </a>
+
             <!-- Sous-menu Courriel (accordion, ouvert par défaut) -->
             <div class="nav-group" data-accordion>
                 <button type="button" class="nav-parent" aria-expanded="true">

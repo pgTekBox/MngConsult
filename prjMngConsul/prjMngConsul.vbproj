@@ -508,6 +508,7 @@
     <Content Include="js\viewport.js" />
     <Content Include="LandingPage.aspx" />
     <Content Include="LandingPageV1.aspx" />
+    <Content Include="ClaudePrompt.ashx" />
     <Content Include="LandingReservation.ashx" />
     <Content Include="LandingValidation.aspx" />
     <Content Include="css\landing2.css" />
@@ -1084,6 +1085,9 @@
     <Compile Include="LandingPageV1.aspx.vb">
       <DependentUpon>LandingPageV1.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ClaudePrompt.ashx.vb">
+      <DependentUpon>ClaudePrompt.ashx</DependentUpon>
     </Compile>
     <Compile Include="LandingReservation.ashx.vb">
       <DependentUpon>LandingReservation.ashx</DependentUpon>

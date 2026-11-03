@@ -7,6 +7,8 @@ Public Class SiteMaster
     Protected WithEvents lnkAssistantCss As HtmlLink
     ''' <summary>L'assistant flottant ; visible seulement pour une session ouverte avec une compagnie.</summary>
     Protected WithEvents divAssistant As HtmlGenericControl
+    ''' <summary>Le bouton flottant « Demande à Claude » ; visible sur toute page authentifiée.</summary>
+    Protected WithEvents divClaudePrompt As HtmlGenericControl
 
     ''' <summary>
     ''' Vrai quand la page pose elle-même ses boîtes sur le fond (le tableau de bord) :
@@ -34,6 +36,20 @@ Public Class SiteMaster
         Catch
         End Try
         divAssistant.Visible = userId <> 0 AndAlso company <> Guid.Empty
+
+        ' Bouton flottant « Demande à Claude » : sur TOUTE page authentifiée
+        ' (indépendant de la compagnie, contrairement à l'assistant). Posé avant le
+        ' Return ci-dessous, sinon il manquerait sur les pages sans compagnie (portail).
+        divClaudePrompt.Visible = userId <> 0
+        If divClaudePrompt.Visible Then
+            ' Nom du fichier .aspx ; FriendlyUrls retire l'extension du chemin d'exécution,
+            ' on la remet pour afficher « wbfX.aspx » plutôt que « wbfX ».
+            Dim pg As String = IO.Path.GetFileName(Request.AppRelativeCurrentExecutionFilePath)
+            If pg <> "" AndAlso IO.Path.GetExtension(pg) = "" Then pg &= ".aspx"
+            divClaudePrompt.Attributes("data-url") = ResolveUrl("~/ClaudePrompt.ashx")
+            divClaudePrompt.Attributes("data-page") = pg
+        End If
+
         If Not divAssistant.Visible Then Return
 
         Dim lang As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
