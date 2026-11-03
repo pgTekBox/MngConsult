@@ -16,9 +16,21 @@ Public Class wbfClaudePrompts
     Protected WithEvents rptDemandes As System.Web.UI.WebControls.Repeater
     Protected WithEvents pnlVide As System.Web.UI.WebControls.Panel
 
+    ''' <summary>Filtre courant (?f=nouveau|tous|fait), lu de façon robuste : on passe
+    ''' par HttpContext.Current (Me.Request peut être Nothing selon le cycle de vie).</summary>
     Private ReadOnly Property Filtre As String
         Get
-            Dim f As String = Convert.ToString(Request.QueryString("f")).Trim().ToLowerInvariant()
+            Dim f As String = ""
+            Try
+                Dim ctx As System.Web.HttpContext = System.Web.HttpContext.Current
+                If ctx IsNot Nothing AndAlso ctx.Request IsNot Nothing Then
+                    ' ⚠ Request.QueryString(name) renvoie Nothing si absent, et
+                    ' Convert.ToString(String) laisse passer Nothing → .Trim() planterait.
+                    f = If(ctx.Request.QueryString("f"), "")
+                End If
+            Catch
+            End Try
+            f = f.Trim().ToLowerInvariant()
             If f <> "tous" AndAlso f <> "fait" Then f = "nouveau"
             Return f
         End Get
