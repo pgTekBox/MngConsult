@@ -141,6 +141,21 @@ Namespace Controls
         End Function
 
         ''' <summary>
+        ''' Icône « Avatar 60 » : le même visage mauve que l'assistant (bas de page,
+        ''' #iaBouton dans Site.Master), à traits blancs. On l'utilise au lieu d'une
+        ''' icône de trait pour que l'Avatar 60 ait le même visuel partout sur le site.
+        ''' </summary>
+        Private Shared Function Avatar60Ico() As String
+            Return "<svg aria-hidden=""true"" width=""18"" height=""18"" viewBox=""0 0 256 256"">" &
+                   "<circle cx=""128"" cy=""128"" r=""104"" fill=""#5E35C9""/>" &
+                   "<circle cx=""96"" cy=""120"" r=""16"" fill=""none"" stroke=""#FFFFFF"" stroke-width=""12""/>" &
+                   "<path d=""M80 120 C78 93 90 77 113 78"" fill=""none"" stroke=""#FFFFFF"" stroke-width=""12"" stroke-linecap=""round""/>" &
+                   "<ellipse cx=""162"" cy=""106"" rx=""15"" ry=""25"" fill=""none"" stroke=""#FFFFFF"" stroke-width=""12"" transform=""rotate(12 160 110)""/>" &
+                   "<path d=""M148 68 q16 -9 30 0"" fill=""none"" stroke=""#FFFFFF"" stroke-width=""9"" stroke-linecap=""round""/>" &
+                   "<path d=""M108 170 q20 6 40 -6"" fill=""none"" stroke=""#FFFFFF"" stroke-width=""10"" stroke-linecap=""round""/></svg>"
+        End Function
+
+        ''' <summary>
         ''' Le menu, rangé comme l'accueil 60secondes : Tableau de bord, puis
         ''' Mon argent, Mon entreprise, Mon accompagnement et Administration.
         ''' Les éléments qui regroupent plusieurs écrans se déplient.
@@ -246,7 +261,7 @@ Namespace Controls
             ' maquette : le traitement en lot et le journal de l'avatar 60.
             sb.Append(Section("portalSecTools"))
             sb.Append(Item("~/wbfCabTraitementLot.aspx", Ico("layers"), "portalTools"))
-            sb.Append(Item("~/wbfCabAvatar60.aspx", Ico("bot"), "portalAvatar60"))
+            sb.Append(Item("~/wbfCabAvatar60.aspx", Avatar60Ico(), "portalAvatar60"))
 
             ' Section du cabinet (réservée aux responsables)
             Select Case role

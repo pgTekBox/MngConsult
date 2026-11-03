@@ -27,7 +27,7 @@
   <form id="f" runat="server">
     <div class="carte">
       <span class="logo">
-        <svg aria-hidden="true" width="40" height="40" viewBox="0 0 256 256"><circle cx="128" cy="128" r="112" fill="#E35D55" stroke="#D9A03C" stroke-width="16"/><circle cx="94" cy="128" r="19" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M75 128 C73 100 88 82 114 84" fill="none" stroke="#0E1F3D" stroke-width="13" stroke-linecap="round"/><ellipse cx="164" cy="118" rx="19" ry="28" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M140 62 q26 -22 50 -6" fill="none" stroke="#0E1F3D" stroke-width="12" stroke-linecap="round"/><path d="M96 172 q32 30 64 0" fill="none" stroke="#0E1F3D" stroke-width="12" stroke-linecap="round"/></svg>
+        <svg aria-hidden="true" width="40" height="40" viewBox="0 0 256 256"><circle cx="128" cy="128" r="104" fill="#5E35C9"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)"/><path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/><path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></svg>
         <span style="color:#000">secondes</span>
       </span>
       <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>

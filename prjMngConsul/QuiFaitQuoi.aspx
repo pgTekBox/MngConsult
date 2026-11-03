@@ -29,7 +29,7 @@
 
 <header class="top">
   <a class="logo" href="#" aria-label="60secondes — accueil">
-    <svg aria-hidden="true" width="42" height="42" viewBox="0 0 256 256"><circle cx="128" cy="128" r="112" fill="#FFFFFF" stroke="#D9A03C" stroke-width="16"/><circle cx="96" cy="120" r="16" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#0E1F3D" stroke-width="13" stroke-linecap="round"/><ellipse cx="160" cy="110" rx="15" ry="25" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M99 166 q29 16 58 0" fill="none" stroke="#0E1F3D" stroke-width="11" stroke-linecap="round"/></svg>
+    <svg aria-hidden="true" width="42" height="42" viewBox="0 0 256 256"><circle cx="128" cy="128" r="104" fill="#5E35C9"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)"/><path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/><path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></svg>
     <span>secondes</span>
   </a>
   <span class="org"><b id="ctxEntreprise">—</b></span>
@@ -73,7 +73,7 @@
 </div>
 
 <button class="a60" id="btn60" aria-label="Ouvrir 60, votre assistant" aria-expanded="false">
-  <svg aria-hidden="true" width="50" height="50" viewBox="0 0 256 256"><circle cx="128" cy="128" r="112" fill="#FFFFFF" stroke="#D9A03C" stroke-width="16"/><circle cx="96" cy="120" r="16" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#0E1F3D" stroke-width="13" stroke-linecap="round"/><ellipse cx="160" cy="110" rx="15" ry="25" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M99 166 q29 16 58 0" fill="none" stroke="#0E1F3D" stroke-width="11" stroke-linecap="round"/></svg>
+  <svg aria-hidden="true" width="50" height="50" viewBox="0 0 256 256"><circle cx="128" cy="128" r="104" fill="#5E35C9"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)"/><path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/><path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></svg>
   <span>60, votre assistant</span>
 </button>
 <div class="bulle" id="bulle" hidden>

@@ -220,7 +220,9 @@
     function svg60(fill, taille) {
         var n = 'http://www.w3.org/2000/svg', s = document.createElementNS(n, 'svg');
         s.setAttribute('width', taille); s.setAttribute('height', taille); s.setAttribute('viewBox', '0 0 256 256'); s.setAttribute('aria-hidden', 'true');
-        s.innerHTML = '<circle cx="128" cy="128" r="112" fill="' + fill + '" stroke="#D9A03C" stroke-width="16"></circle><circle cx="96" cy="120" r="16" fill="none" stroke="#0E1F3D" stroke-width="13"></circle><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#0E1F3D" stroke-width="13" stroke-linecap="round"></path><ellipse cx="160" cy="110" rx="15" ry="25" fill="none" stroke="#0E1F3D" stroke-width="13"></ellipse><path d="M99 166 q29 16 58 0" fill="none" stroke="#0E1F3D" stroke-width="11" stroke-linecap="round"></path>';
+        // Avatar 60 : même visage que l'assistant mauve (traits blancs, sans anneau
+        // doré). Le « fill » reçu porte la priorité (rouge/jaune/vert). Cf. #iaBouton.
+        s.innerHTML = '<circle cx="128" cy="128" r="104" fill="' + fill + '"></circle><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"></circle><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"></path><ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)"></ellipse><path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"></path><path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"></path>';
         return s;
     }
     var OEIL = '<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path></svg>';

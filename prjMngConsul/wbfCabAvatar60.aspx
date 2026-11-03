@@ -42,7 +42,8 @@
 
 /* En-tête de page */
 .a60 .av-tete{display:flex;align-items:flex-start;gap:14px}
-.a60 .av60{width:52px;height:52px;border-radius:16px;background:var(--nuit);color:var(--or);display:grid;place-items:center;font-weight:800;font-size:22px;flex:none;margin-top:2px}
+.a60 .av60{width:52px;height:52px;flex:none;margin-top:2px}
+.a60 .av60 svg{width:100%;height:100%;display:block}
 .a60 .av-tete .chapeau{margin-bottom:16px}
 
 /* Tuiles de synthèse */
@@ -197,7 +198,7 @@
   </div>
 
   <div class="av-tete">
-    <span class="av60" aria-hidden="true">60</span>
+    <span class="av60" aria-hidden="true"><svg viewBox="0 0 256 256"><circle cx="128" cy="128" r="104" fill="#5E35C9"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)"/><path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/><path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></svg></span>
     <div>
       <h1>Activités de l'Avatar 60</h1>
       <p class="chapeau">Tout ce que 60 a fait seul pour vos clients, selon les droits convenus avec chacun. Touchez une ligne pour voir le détail.</p>

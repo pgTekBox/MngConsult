@@ -289,7 +289,7 @@
         <p class="mj-aide">Changez la personne d'une ligne dans la liste pour réattribuer.</p>
       </section>
       <section class="mj-carte mj-60">
-        <div class="mj-60-t"><span class="ava60" data-c="vert" aria-hidden="true"></span><h2>60 a fait aujourd'hui</h2></div>
+        <div class="mj-60-t"><span class="ava60" data-c="violet" aria-hidden="true"></span><h2>60 a fait aujourd'hui</h2></div>
         <p><b id="n60fait">0</b> activités faites seul pour vos clients : relevés importés, dépenses classées, relances envoyées.</p>
         <a href="wbfCabAvatar60.aspx" class="lien-fl">Voir les Activités de l'Avatar 60 ›</a>
       </section>
@@ -475,8 +475,12 @@ const ini=n=>n.replace(/^Dre? /,'').split(/\s+/).map(x=>x[0]).slice(0,2).join(''
 const P=id=>PERS.find(p=>p.id===id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const $=s=>MJ.querySelector(s),$$=s=>[...MJ.querySelectorAll(s)];
-const AVC={rouge:'#E35D55',jaune:'#F2C14E',vert:'#6CC28A',blanc:'#FFFFFF'};
-const ava=c=>`<svg viewBox="0 0 256 256"><circle cx="128" cy="128" r="112" fill="${AVC[c]}" stroke="#D9A03C" stroke-width="16"/><circle cx="94" cy="128" r="19" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M75 128 C73 100 88 82 114 84" fill="none" stroke="#0E1F3D" stroke-width="13" stroke-linecap="round"/><ellipse cx="164" cy="118" rx="19" ry="28" fill="none" stroke="#0E1F3D" stroke-width="13"/><path d="M140 62 q26 -22 50 -6" fill="none" stroke="#D9A03C" stroke-width="12" stroke-linecap="round"/><path d="M96 172 q32 30 64 0" fill="none" stroke="#0E1F3D" stroke-width="12" stroke-linecap="round"/></svg>`;
+// Avatar 60 : même visuel que l'assistant mauve (bas de page) — visage à traits
+// blancs, sans anneau doré. La couleur du disque indique la priorité (rouge =
+// urgent, jaune = cette semaine, vert = à jour) ; violet = neutre (identique à
+// l'assistant). Cf. le SVG de #iaBouton dans Site.Master.
+const AVC={rouge:'#E35D55',jaune:'#F2C14E',vert:'#6CC28A',violet:'#5E35C9',blanc:'#FFFFFF'};
+const ava=c=>`<svg viewBox="0 0 256 256"><circle cx="128" cy="128" r="104" fill="${AVC[c]||AVC.violet}"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)"/><path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/><path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></svg>`;
 
 let U=REEL?SRV.me:'lb'; const F={qui:(REEL&&!SRV.patron)?(SRV.me):'tous',tuile:'',bloc:'tous'};
 let ouverts={}, courant=null, dernier=null;
@@ -646,7 +650,7 @@ MJ.addEventListener('change',e=>{
   if(e.target.id==='f-qui'){U=e.target.value;F.qui=P(U).patron?'tous':U;F.tuile='';F.bloc='tous';rendre()}
   else if(e.target.dataset.resp){const t=T.find(x=>x.id==e.target.dataset.resp);t.resp=e.target.value;rendre();toast(`${A[t.a].t} : confiée à ${P(t.resp).nom}.`);dernier=null}
 });
-$('.ava60[data-c]').innerHTML=ava('vert');
+$('.ava60[data-c]').innerHTML=ava($('.ava60[data-c]').dataset.c||'violet');
 $('#n60fait').textContent=REEL?(SRV.n60!=null?SRV.n60:0):47;
 rendre();
 })();
