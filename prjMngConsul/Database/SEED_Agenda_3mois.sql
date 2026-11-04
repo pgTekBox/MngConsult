@@ -1,8 +1,8 @@
 -- =============================================================================
--- SEED — Agenda : 2 à 4 rendez-vous par jour ouvrable, 3 mois, par entreprise
+-- SEED — Agenda : 2 à 4 rendez-vous par jour (7 j/7), 3 mois, par entreprise
 --
 -- Pour chaque compagnie ayant au moins un employé actif, on crée, du jour même
--- jusqu'à ~3 mois, de 2 à 4 rendez-vous par jour ouvrable (lundi-vendredi),
+-- jusqu'à ~3 mois, de 2 à 4 rendez-vous par jour (week-ends inclus),
 -- répartis entre les employés de la compagnie. Chaque RDV a un service, un client
 -- au hasard (si la compagnie en a), un lieu, un montant prévu et un mode
 -- (soumission/facture). Les créneaux sont décalés dans la journée (pas de
@@ -27,8 +27,7 @@ DECLARE @today date = CAST(GETDATE() AS date);
     SELECT TOP (92) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) - 1 AS n FROM sys.all_objects
 ),
 Days AS (
-    SELECT DATEADD(DAY, n, @today) AS d FROM Nums
-    WHERE (DATEDIFF(DAY, '19000101', DATEADD(DAY, n, @today)) % 7) <= 4   -- lundi..vendredi
+    SELECT DATEADD(DAY, n, @today) AS d FROM Nums   -- tous les jours (week-ends inclus)
 ),
 Comp AS (
     SELECT DISTINCT CompanyGUID FROM dbo.T300Employees WHERE Active = 1 AND CompanyGUID IS NOT NULL
