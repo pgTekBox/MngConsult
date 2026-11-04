@@ -112,8 +112,6 @@
     .ac-doc.facture{ background:#E3EBF7; color:#143A73; }
     .ac-doc.tache{ background:#E8EDF5; color:#44536E; }
     .ac-mont{ flex-shrink:0; font-size:14px; font-weight:800; white-space:nowrap; }
-    .ac-lane .it .ac-doc{ font-size:11px; padding:1px 7px; }
-    .ac-lane .it .ac-mont{ font-size:13px; }
     .ac-note{ padding:4px 2px 0; font-size:12px; font-weight:700; color:#8D9CB3; }
     .ac-ini{ flex-shrink:0; min-width:28px; height:22px; padding:0 6px; box-sizing:border-box; border-radius:999px; color:#fff; font-size:11px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
     .ac-det{ padding:0 12px 12px; display:flex; flex-direction:column; gap:6px; }
@@ -125,16 +123,14 @@
     .ac-infos b{ font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .ac-infos small{ font-size:11px; color:#44536E; }
     .ac-det .ac-btn{ align-self:flex-start; min-height:38px; font-size:14px; }
-    .ac-lanes{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; }
-    .ac-lane{ padding:10px; border-radius:16px; background:#F2F5F9; display:flex; flex-direction:column; gap:6px; }
-    .ac-lane .tete{ display:flex; align-items:center; gap:8px; }
+    /* Vue « Toute l'équipe » : un groupe par employé, puis ses RDV en rangées
+       riches pleine largeur (mêmes rangées .ac-rdv que la vue solo). */
+    .ac-lanes{ display:flex; flex-direction:column; gap:16px; }
+    .ac-lane{ display:flex; flex-direction:column; gap:6px; }
+    .ac-lane .tete{ display:flex; align-items:center; gap:8px; padding-left:2px; }
     .ac-lane .tete span{ display:flex; flex-direction:column; line-height:1.15; }
+    .ac-lane .tete b{ font-size:15px; }
     .ac-lane .tete small{ font-size:12px; color:#44536E; }
-    .ac-lane .it{ padding:6px 8px; border-radius:12px; background:#FFFFFF; border-left:4px solid #AEBBCD; display:flex; align-items:center; gap:6px; }
-    .ac-lane .it button.q{ flex-grow:1; min-width:0; padding:0; border:0; background:transparent; color:#0E1F3D; text-align:left; display:flex; flex-direction:column; line-height:1.2; }
-    .ac-lane .it button.q span{ font-size:12px; color:#44536E; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .ac-lane .it .plus{ flex-shrink:0; width:28px; height:28px; padding:0; border:1.5px solid #1B4F9C; border-radius:50%; background:#FFFFFF; color:#1B4F9C; font-weight:800; }
-    .ac-lane .libre{ font-size:13px; color:#44536E; }
 
     /* 3. Activités à faire */
     .ac-acttete{ display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; }
@@ -570,17 +566,9 @@
                     var nm = el('span'); nm.appendChild(el('b', '', g.e.lab));
                     nm.appendChild(el('small', '', fmt(T.agRdvH, g.l.length, nbH(g.l.reduce(function (t, r) { return t + (r.fin - r.deb); }, 0)))));
                     lt.appendChild(nm); ln.appendChild(lt);
-                    g.l.forEach(function (r) {
-                        var it = el('div', 'it'); it.style.borderLeftColor = bordure(r);
-                        var q = bouton('q'); q.appendChild(el('b', '', r.h + ' · ' + r.client)); if (r.court) q.appendChild(el('span', '', r.court));
-                        q.title = T.ouvrirRdv; q.addEventListener('click', function () { acOuvrirRdv('wbfAppointmentEdit.aspx?id=' + r.id, T.winRdv); });
-                        it.appendChild(q);
-                        if (r.doc) { var ld = el('span', 'ac-doc ' + (r.docT || 'soumission'), r.doc); ld.title = r.doc; it.appendChild(ld); }
-                        if (r.montant) { var lm = el('b', 'ac-mont', r.montant); lm.title = T.montantPrevu; it.appendChild(lm); }
-                        var pl = bouton('plus', '+'); pl.title = fmt(T.nouveauRdvAvec, r.client); pl.setAttribute('aria-label', pl.title);
-                        pl.addEventListener('click', function () { nouveauRdv(cle(plus(dJ(r.jour), 7)), r.deb, r.cli, r.emp); });
-                        it.appendChild(pl); ln.appendChild(it);
-                    });
+                    // Chaque RDV = la même rangée riche que la vue solo (heure, client,
+                    // document, montant, Facturer, lieu, état, détail, + RDV).
+                    g.l.forEach(function (r) { ln.appendChild(ligneRdv(r, false)); });
                     lanes.appendChild(ln);
                 });
                 bj.appendChild(lanes);
