@@ -283,6 +283,27 @@ Public Class _Default
                     End If
                     Dim client As String = Txt(r("CustomerName"))
                     Dim titre As String = Txt(r("Title"))
+                    Dim svc As String = Txt(r("TypeName"))
+                    ' Texte secondaire de la rangée : on affiche le SERVICE (type de RDV)
+                    ' et, s'il y en a un, le titre libre en plus — mais seulement quand il
+                    ' ajoute de l'information (on ne répète pas le titre quand il reprend
+                    ' déjà le nom du service). Sans client, le titre reste le libellé
+                    ' principal et le service passe en secondaire.
+                    Dim titreUtile As Boolean =
+                        titre <> "" AndAlso svc <> "" AndAlso
+                        Not titre.Equals(svc, StringComparison.OrdinalIgnoreCase) AndAlso
+                        Not titre.StartsWith(svc, StringComparison.OrdinalIgnoreCase) AndAlso
+                        Not svc.StartsWith(titre, StringComparison.OrdinalIgnoreCase)
+                    Dim courtTxt As String
+                    If client = "" Then
+                        courtTxt = svc
+                    ElseIf svc = "" Then
+                        courtTxt = titre
+                    ElseIf titreUtile Then
+                        courtTxt = svc & " · " & titre
+                    Else
+                        courtTxt = svc
+                    End If
                     rdv.Add(New With {
                         .id = Convert.ToInt32(r("Id")),
                         .jour = debut.ToString("yyyy-MM-dd"),
@@ -292,7 +313,7 @@ Public Class _Default
                         .plage = Heure(debut) & " – " & Heure(fin),
                         .duree = Duree(fin - debut),
                         .client = If(client = "", titre, client),
-                        .court = If(client = "", Txt(r("TypeName")), titre),
+                        .court = courtTxt,
                         .cli = If(IsDBNull(r("CustomerId")), "", Convert.ToString(r("CustomerId"))),
                         .desc = Txt(r("Description")),
                         .lieu = Txt(r("Location")),
