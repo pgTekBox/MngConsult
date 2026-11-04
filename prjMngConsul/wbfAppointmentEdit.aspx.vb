@@ -414,9 +414,35 @@ Public Class wbfAppointmentEdit
         Dim newId As Integer = 0
         If Not SaveAppointment(newId) Then Return
 
+        ' Si un service est choisi, on crée (ou rafraîchit) une facture client EN
+        ' BROUILLON liée à ce RDV. Sans client ou service, ou si une facture est déjà
+        ' comptabilisée, la procédure ne fait rien.
+        If newId > 0 AndAlso Not String.IsNullOrEmpty(rddlType.SelectedValue) Then
+            CreerFactureBrouillon(newId)
+        End If
+
         ' Fermer la fenêtre et rafraîchir le parent
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "closewin",
             "if (typeof closeWin === 'function') closeWin();", True)
+    End Sub
+
+    ''' <summary>
+    ''' Crée (ou rafraîchit) une facture client en brouillon, liée au RDV, à partir du
+    ''' service choisi (s0970). Non bloquant : un échec de facturation n'empêche pas
+    ''' l'enregistrement du RDV.
+    ''' </summary>
+    Private Sub CreerFactureBrouillon(appointmentId As Integer)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@AppointmentId", appointmentId))
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim outDoc As New SqlParameter("@NewId", SqlDbType.Int)
+            outDoc.Direction = ParameterDirection.Output
+            p.Add(outDoc)
+            ExecuteSQL("s0970CreateDraftInvoiceFromAppointment", p)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Facture brouillon RDV : " & ex.Message)
+        End Try
     End Sub
 
     ''' <summary>
