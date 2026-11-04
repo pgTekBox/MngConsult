@@ -49,6 +49,16 @@ Public Class _Default
             Return
         End If
 
+        ' Un comptable en mode « Portail comptable » (sélecteur de l'en-tête sur
+        ' « Portail comptable ») a pour page d'accueil « Ma journée », pas le tableau
+        ' de bord d'une compagnie. Le logo et tout lien vers Default.aspx le ramènent
+        ' donc à son portail. Dès qu'il entre dans un dossier, EnPortailComptable
+        ' passe à False et le tableau de bord de la compagnie s'affiche normalement.
+        If EnPortailComptable Then
+            Response.Redirect("~/wbfCabJournee.aspx")
+            Return
+        End If
+
         Try
             ModeleJson = JsonConvert.SerializeObject(BatirModele(), New JsonSerializerSettings With {
                 .StringEscapeHandling = StringEscapeHandling.EscapeHtml
