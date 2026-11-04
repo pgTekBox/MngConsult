@@ -3,7 +3,7 @@
 --
 -- Pour chaque compagnie de T010Company SANS employé (T300Employees), on insère
 -- 5 employés fictifs (noms québécois au hasard, couleur d'agenda, poste, date
--- d'embauche). La compagnie modèle (…0001) est exclue.
+-- d'embauche). La compagnie modèle (…0001) est incluse (demande de l'usager).
 --
 -- Idempotent : ne touche que les compagnies à 0 employé → rejouable sans doublon.
 -- =============================================================================
@@ -17,8 +17,7 @@ DECLARE @g uniqueidentifier, @n int = 0;
 DECLARE cur CURSOR LOCAL FAST_FORWARD FOR
     SELECT co.CompanyGUID
     FROM dbo.T010Company co
-    WHERE co.CompanyGUID <> '00000000-0000-0000-0000-000000000001'
-      AND NOT EXISTS (SELECT 1 FROM dbo.T300Employees e WHERE e.CompanyGUID = co.CompanyGUID);
+    WHERE NOT EXISTS (SELECT 1 FROM dbo.T300Employees e WHERE e.CompanyGUID = co.CompanyGUID);
 
 OPEN cur;
 FETCH NEXT FROM cur INTO @g;
