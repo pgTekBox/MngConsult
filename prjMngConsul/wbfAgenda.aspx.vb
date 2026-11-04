@@ -208,13 +208,19 @@ Public Class wbfAgenda
                 End If
                 Dim client As String = Txt(r("CustomerName"))
                 Dim titre As String = Txt(r("Title"))
+                Dim svc As String = Txt(r("TypeName"))
+                ' Le titre est facultatif (jamais rempli automatiquement) : à l'affichage,
+                ' on montre le titre seulement s'il ajoute de l'info (différent du client),
+                ' sinon on se rabat sur le service.
+                Dim titreUtile As Boolean = titre <> "" AndAlso Not titre.Equals(client, StringComparison.OrdinalIgnoreCase)
+                Dim objetTxt As String = If(titreUtile, titre, svc)
                 rdv.Add(New With {
                     .id = Convert.ToInt32(r("Id")),
                     .jour = dDeb.ToString("yyyy-MM-dd"),
                     .deb = dDeb.Hour * 60 + dDeb.Minute,
                     .fin = If(dFin.Date > dDeb.Date, 24 * 60, dFin.Hour * 60 + dFin.Minute),
-                    .client = If(client = "", titre, client),
-                    .objet = If(client = "", Txt(r("TypeName")), titre),
+                    .client = If(client = "", objetTxt, client),
+                    .objet = If(client = "", svc, objetTxt),
                     .cli = If(IsDBNull(r("CustomerId")), "", Convert.ToString(r("CustomerId"))),
                     .lieu = Txt(r("Location")),
                     .typ = Txt(r("TypeName")),

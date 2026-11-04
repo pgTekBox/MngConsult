@@ -289,20 +289,21 @@ Public Class _Default
                     ' ajoute de l'information (on ne répète pas le titre quand il reprend
                     ' déjà le nom du service). Sans client, le titre reste le libellé
                     ' principal et le service passe en secondaire.
+                    ' Le titre libre n'est montré que s'il AJOUTE de l'info : différent du
+                    ' client ET du service (les anciens titres auto-remplis reprenaient
+                    ' l'un ou l'autre — on ne les répète pas).
                     Dim titreUtile As Boolean =
-                        titre <> "" AndAlso svc <> "" AndAlso
-                        Not titre.Equals(svc, StringComparison.OrdinalIgnoreCase) AndAlso
-                        Not titre.StartsWith(svc, StringComparison.OrdinalIgnoreCase) AndAlso
-                        Not svc.StartsWith(titre, StringComparison.OrdinalIgnoreCase)
+                        titre <> "" AndAlso
+                        Not titre.Equals(client, StringComparison.OrdinalIgnoreCase) AndAlso
+                        (svc = "" OrElse (Not titre.StartsWith(svc, StringComparison.OrdinalIgnoreCase) AndAlso
+                                          Not svc.StartsWith(titre, StringComparison.OrdinalIgnoreCase)))
                     Dim courtTxt As String
                     If client = "" Then
-                        courtTxt = svc
-                    ElseIf svc = "" Then
-                        courtTxt = titre
-                    ElseIf titreUtile Then
-                        courtTxt = svc & " · " & titre
+                        courtTxt = If(svc <> "", svc, titre)
+                    ElseIf svc <> "" Then
+                        courtTxt = If(titreUtile, svc & " · " & titre, svc)
                     Else
-                        courtTxt = svc
+                        courtTxt = If(titreUtile, titre, "")
                     End If
                     rdv.Add(New With {
                         .id = Convert.ToInt32(r("Id")),

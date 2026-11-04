@@ -174,7 +174,7 @@ Public Class wbfAppointmentEdit
                           T("Enregistrer", "Save", "Guardar"),
                           T("Confirmer le RDV", "Confirm appointment", "Confirmar la cita"))
 
-        txtTitle.EmptyMessage = T("Le service ou le client si vide", "The service or the customer if empty", "El servicio o el cliente si está vacío")
+        txtTitle.EmptyMessage = T("Titre du RDV (facultatif)", "Appointment title (optional)", "Título de la cita (opcional)")
         txtDescription.EmptyMessage = T("Note pour le RDV (facultatif)", "Note for the appointment (optional)", "Nota para la cita (opcional)")
 
         Dim sel As String = T("Sélectionner…", "Select…", "Seleccionar…")
@@ -447,18 +447,16 @@ Public Class wbfAppointmentEdit
 
         newId = 0
 
-        ' Sans titre saisi (le titre est replié dans « Plus de détails ») : le service, sinon le client
-        If String.IsNullOrWhiteSpace(txtTitle.Text) Then
-            If Not String.IsNullOrEmpty(rddlType.SelectedValue) Then
-                txtTitle.Text = Regex.Replace(rddlType.SelectedText, "\s*\(\d+ min\)$", "")
-            ElseIf Not String.IsNullOrEmpty(rddlCustomer.SelectedValue) Then
-                txtTitle.Text = rddlCustomer.SelectedText
-            End If
-        End If
-
-        ' Validations
-        If String.IsNullOrWhiteSpace(txtTitle.Text) Then
-            ShowMsg(T("Le titre est obligatoire.", "The title is required.", "El título es obligatorio."), isError:=True)
+        ' Le titre est facultatif et n'est JAMAIS rempli automatiquement : on conserve
+        ' exactement ce que l'usager a saisi (souvent rien). Les écrans dérivent le
+        ' libellé à partir du service ou du client à l'affichage. On exige seulement que
+        ' le RDV soit identifiable : un service, un client, ou un titre saisi.
+        If String.IsNullOrWhiteSpace(txtTitle.Text) AndAlso
+           String.IsNullOrEmpty(rddlType.SelectedValue) AndAlso
+           String.IsNullOrEmpty(rddlCustomer.SelectedValue) Then
+            ShowMsg(T("Indiquez un service, un client ou un titre.",
+                      "Enter a service, a customer or a title.",
+                      "Indique un servicio, un cliente o un título."), isError:=True)
             Return False
         End If
         If Not rdpStart.SelectedDate.HasValue OrElse Not rdpEnd.SelectedDate.HasValue Then
