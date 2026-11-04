@@ -524,8 +524,10 @@
         var liste = simuleJ ? DEMO_AUJ : reelJ;
         var tt = el('div', 'titre');
         tt.appendChild(el('b', '', T.agAuj + ' · ' + jLong(auj)));
+        // Comme la maquette : le compteur ne retient que les employés AYANT un RDV aujourd'hui.
+        var nbEmpRdv = A.emps.filter(function (e) { return liste.some(function (r) { return r.emp === e.v; }); }).length;
         tt.appendChild(el('span', '', fmt(T.agRdvH, liste.length, nbH(liste.reduce(function (t, r) { return t + (r.fin - r.deb); }, 0))) +
-                                      (aEquipe && !s.agEmp && !simuleJ ? ' · ' + fmt(T.agEmployes, A.emps.length) : '')));
+                                      (aEquipe && !s.agEmp && !simuleJ ? ' · ' + fmt(T.agEmployes, nbEmpRdv) : '')));
         tete.appendChild(tt);
         var lib = el('div', 'ac-libres');
         if (aEquipe) {
@@ -556,7 +558,10 @@
             if (!simuleJ && aEquipe && !s.agEmp) {
                 // Toute l'équipe : une rangée par employé
                 var lanes = el('div', 'ac-lanes');
-                var groupes = A.emps.map(function (e) { return { e: e, l: liste.filter(function (r) { return r.emp === e.v; }) }; });
+                // Comme la maquette : une rangée seulement pour les employés qui ont
+                // au moins un RDV aujourd'hui (on n'affiche pas les employés « Libre »).
+                var groupes = A.emps.map(function (e) { return { e: e, l: liste.filter(function (r) { return r.emp === e.v; }) }; })
+                                    .filter(function (g) { return g.l.length; });
                 var sans = liste.filter(function (r) { return !A.emps.some(function (e) { return e.v === r.emp; }); });
                 if (sans.length) groupes.push({ e: { v: '', lab: '—', ini: '?', c: '#5B6B86' }, l: sans });
                 groupes.forEach(function (g) {
@@ -576,7 +581,6 @@
                         pl.addEventListener('click', function () { nouveauRdv(cle(plus(dJ(r.jour), 7)), r.deb, r.cli, r.emp); });
                         it.appendChild(pl); ln.appendChild(it);
                     });
-                    if (!g.l.length) ln.appendChild(el('span', 'libre', T.libre));
                     lanes.appendChild(ln);
                 });
                 bj.appendChild(lanes);
