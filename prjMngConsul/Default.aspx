@@ -114,6 +114,8 @@
     .ac-doc.soumission{ background:#EFE7FA; color:#5B2E91; }
     .ac-doc.facture{ background:#E3EBF7; color:#143A73; }
     .ac-doc.tache{ background:#E8EDF5; color:#44536E; }
+    .ac-doc.faite{ background:#E3F3EA; color:#0F5A3A; }
+    .ac-fait{ flex-shrink:0; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; background:#0F5A3A; color:#FFFFFF; }
     .ac-mont{ flex-shrink:0; font-size:14px; font-weight:800; white-space:nowrap; }
     .ac-note{ padding:4px 2px 0; font-size:12px; font-weight:700; color:#8D9CB3; }
     .ac-ini{ flex-shrink:0; min-width:28px; height:22px; padding:0 6px; box-sizing:border-box; border-radius:999px; color:#fff; font-size:11px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
@@ -465,25 +467,30 @@
         // Document produit (Soumission / Facture / Tâche) + montant prévu.
         // Si un brouillon est lié au RDV, la pastille devient cliquable et ouvre
         // sa fiche d'édition dans un popup (même fenêtre que « Nouvelle facture »).
+        // Une fois le brouillon comptabilisé, le RDV est « facturé » : la pastille
+        // devient verte avec ✓ et ouvre la facture définitive.
         if (r.doc) {
-            var dcb;
+            var dcb, cls = 'ac-doc ' + (r.estFacture ? 'faite' : (r.docT || 'soumission'));
+            var etiq = (r.estFacture ? '✓ ' : '') + r.doc;
             if (r.docId && r.docId > 0) {
-                dcb = bouton('ac-doc clic ' + (r.docT || 'soumission'), r.doc);
-                dcb.title = fmt(T.ouvrirBrouillon, r.doc);
+                dcb = bouton(cls + ' clic', etiq);
+                dcb.title = fmt(r.estFacture ? T.voirFacture : T.ouvrirBrouillon, r.doc);
                 dcb.addEventListener('click', function (e) {
                     e.stopPropagation();
                     acOuvrirBrouillon(r.docId);
                 });
             } else {
-                dcb = el('span', 'ac-doc ' + (r.docT || 'soumission'), r.doc);
+                dcb = el('span', cls, etiq);
                 dcb.title = r.doc;
             }
             li.appendChild(dcb);
         }
-        if (r.montant) { var mtb = el('b', 'ac-mont', r.montant); mtb.title = T.montantPrevu; li.appendChild(mtb); }
+        if (r.estFacture) { var fb = el('span', 'ac-fait', T.rdvFacture); li.appendChild(fb); }
+        if (r.montant && !r.estFacture) { var mtb = el('b', 'ac-mont', r.montant); mtb.title = T.montantPrevu; li.appendChild(mtb); }
         // « Facturer » reprend le brouillon lié au RDV pour le finaliser en facture ;
         // s'il n'y en a pas (aucun service choisi), ouvre une facture vierge.
-        if (r.etat === 'termine' && (r.cli || (r.docId && r.docId > 0))) {
+        // Masqué quand le RDV est déjà facturé (brouillon comptabilisé).
+        if (r.etat === 'termine' && !r.estFacture && (r.cli || (r.docId && r.docId > 0))) {
             var fa = bouton('fac', T.facturer); fa.setAttribute('aria-label', fmt(T.facturerAria, r.client));
             fa.addEventListener('click', function () {
                 if (r.docId && r.docId > 0) acOuvrirBrouillon(r.docId);
