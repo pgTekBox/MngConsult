@@ -481,9 +481,15 @@
             li.appendChild(dcb);
         }
         if (r.montant) { var mtb = el('b', 'ac-mont', r.montant); mtb.title = T.montantPrevu; li.appendChild(mtb); }
-        if (r.etat === 'termine' && r.cli) {
+        // « Facturer » reprend le brouillon lié au RDV pour le finaliser en facture ;
+        // s'il n'y en a pas (aucun service choisi), ouvre une facture vierge.
+        if (r.etat === 'termine' && (r.cli || (r.docId && r.docId > 0))) {
             var fa = bouton('fac', T.facturer); fa.setAttribute('aria-label', fmt(T.facturerAria, r.client));
-            fa.addEventListener('click', acNouvelleFacture); li.appendChild(fa);
+            fa.addEventListener('click', function () {
+                if (r.docId && r.docId > 0) acOuvrirBrouillon(r.docId);
+                else acNouvelleFacture();
+            });
+            li.appendChild(fa);
         }
         if (r.lieu) { var ln = lieuNorm(r.lieu); var lu = el('span', 'ac-chip', ln.t); lu.style.background = ln.bg; lu.style.color = ln.fg; lu.title = r.lieu; li.appendChild(lu); }
         li.appendChild(etatChip(r));
