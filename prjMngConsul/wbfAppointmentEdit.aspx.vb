@@ -29,6 +29,7 @@ Public Class wbfAppointmentEdit
             LoadCustomers()
             LoadEmployees()
             LoadTypes()      ' ← remplit aussi hfTypeDurations
+            LoadLieux()      ' le lieu vient des lieux de la compagnie (T331Lieu, s0918)
 
             Dim id As Integer = 0
             Integer.TryParse(Request.QueryString("id"), id)
@@ -304,6 +305,26 @@ Public Class wbfAppointmentEdit
         End If
     End Sub
 
+    ''' <summary>
+    ''' Remplit le dropdown « Lieu » avec les lieux actifs de la compagnie
+    ''' (T331Lieu via s0918GetLieux). La valeur enregistrée est le nom du lieu.
+    ''' </summary>
+    Private Sub LoadLieux()
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@Search", DBNull.Value))
+        Dim ds As DataSet = ExecuteSQLds("s0918GetLieux", p)
+
+        rddlLieu.Items.Clear()
+        rddlLieu.Items.Add(New DropDownListItem(T("-- Aucun --", "-- None --", "-- Ninguno --"), ""))
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+            For Each r As DataRow In ds.Tables(0).Rows
+                If Not IsDBNull(r("Actif")) AndAlso Not CBool(r("Actif")) Then Continue For
+                rddlLieu.Items.Add(New DropDownListItem(Txt(r("Nom")), Txt(r("Nom"))))
+            Next
+        End If
+    End Sub
+
     ''' <summary>Les services du dropdown : nom, durée, prix et lieux, par Id (pour le JS).</summary>
     Private ReadOnly Services As New Dictionary(Of String, Object)
     ''' <summary>Les lieux actifs de la compagnie (Produits et services › Lieux).</summary>
@@ -388,7 +409,13 @@ Public Class wbfAppointmentEdit
         rtpEnd.SelectedDate = New Date(1980, 1, 1, eDt.Hour, eDt.Minute, 0)
 
         cbAllDay.Checked = (Not (r("IsAllDay") Is DBNull.Value)) AndAlso CBool(r("IsAllDay"))
-        txtLocation.Text = If(r("Location") Is DBNull.Value, "", r("Location").ToString())
+        ' Le lieu vient de la liste des lieux de la compagnie ; si la valeur enregistrée
+        ' n'y figure pas (ancien lieu libre), on l'ajoute pour pouvoir l'afficher.
+        Dim lieu As String = If(r("Location") Is DBNull.Value, "", r("Location").ToString())
+        If lieu <> "" AndAlso rddlLieu.FindItemByValue(lieu) Is Nothing Then
+            rddlLieu.Items.Add(New DropDownListItem(lieu, lieu))
+        End If
+        SafeSelect(rddlLieu, lieu)
 
         SafeSelect(rddlCustomer, If(r("CustomerId") Is DBNull.Value, "", r("CustomerId").ToString()))
         SafeSelect(rddlEmployee, If(r("EmployeeId") Is DBNull.Value, "", r("EmployeeId").ToString()))
@@ -555,7 +582,7 @@ Public Class wbfAppointmentEdit
         p.Add(New SqlParameter("@EmployeeId", IfDbInt(rddlEmployee.SelectedValue)))
         p.Add(New SqlParameter("@AppointmentTypeId", IfDbInt(rddlType.SelectedValue)))
         p.Add(New SqlParameter("@Status", If(String.IsNullOrEmpty(rddlStatus.SelectedValue), "Planifié", rddlStatus.SelectedValue)))
-        p.Add(New SqlParameter("@Location", If(String.IsNullOrEmpty(txtLocation.Text), CObj(DBNull.Value), txtLocation.Text)))
+        p.Add(New SqlParameter("@Location", If(String.IsNullOrEmpty(rddlLieu.SelectedValue), CObj(DBNull.Value), rddlLieu.SelectedValue)))
         p.Add(New SqlParameter("@RecurrenceRule", If(String.IsNullOrEmpty(rddlRecurrence.SelectedValue), CObj(DBNull.Value), rddlRecurrence.SelectedValue)))
         p.Add(New SqlParameter("@ReminderMinutes", IfDbInt(rddlReminder.SelectedValue)))
         p.Add(New SqlParameter("@UserName", If(User.Identity.Name, "")))

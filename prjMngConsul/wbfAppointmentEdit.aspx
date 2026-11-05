@@ -270,9 +270,10 @@
                             </div>
                             <div class="field">
                                 <label><%= T("Lieu","Location","Lugar") %></label>
-                                <telerik:RadTextBox ID="txtLocation" runat="server" RenderMode="Lightweight" CssClass="rtbLike">
-                                    <ClientEvents OnValueChanged="nrMaj" />
-                                </telerik:RadTextBox>
+                                <telerik:RadDropDownList ID="rddlLieu" runat="server" RenderMode="Lightweight"
+                                    DefaultMessage="Sélectionner…" Width="100%" Skin="Metro"
+                                    OnClientSelectedIndexChanged="nrMaj">
+                                </telerik:RadDropDownList>
                             </div>
                             <div class="field">
                                 <label><%= T("Date de début","Start date","Fecha de inicio") %> *</label>
@@ -422,7 +423,7 @@
                 rddlCustomer: '<%= rddlCustomer.ClientID %>',
                 rddlEmployee: '<%= rddlEmployee.ClientID %>',
                 rddlReminder: '<%= rddlReminder.ClientID %>',
-                txtLocation: '<%= txtLocation.ClientID %>',
+                rddlLieu: '<%= rddlLieu.ClientID %>',
                 cbAllDay: '<%= cbAllDay.ClientID %>',
                 hfTypeDurations: '<%= hfTypeDurations.ClientID %>'
             };
@@ -742,7 +743,9 @@
                     quand.className = 'nr-v attente';
                 }
 
-                var loc = $find(AE_IDS.txtLocation), lieu = loc ? loc.get_value() : '';
+                var loc = $find(AE_IDS.rddlLieu);
+                var lieuItem = loc && loc.get_selectedItem ? loc.get_selectedItem() : null;
+                var lieu = lieuItem ? (lieuItem.get_value() || '') : '';
                 document.getElementById('nrLieu').textContent = lieu || '—';
                 nrLieux(typ ? typ.get_value() : '', lieu);
                 document.getElementById('nrDuree').textContent = nrDureeTxt(duree);
@@ -783,16 +786,16 @@
                     b.textContent = l.nom;
                     if (l.adr) b.title = l.adr;
                     b.onclick = function () {
-                        var loc = $find(AE_IDS.txtLocation);
-                        if (loc) loc.set_value(l.nom);
+                        var loc = $find(AE_IDS.rddlLieu);
+                        if (loc) { var it = loc.findItemByText(l.nom) || loc.findItemByValue(l.nom); if (it) it.select(); }
                         nrMaj();
                     };
                     rangee.appendChild(b);
                 });
                 // Un seul lieu offert et aucun lieu posé : c'est celui-là
                 if (liste.length === 1 && !lieuActuel) {
-                    var loc = $find(AE_IDS.txtLocation);
-                    if (loc) { loc.set_value(liste[0].nom); document.getElementById('nrLieu').textContent = liste[0].nom; rangee.querySelector('.nr-puce').classList.add('on'); }
+                    var loc = $find(AE_IDS.rddlLieu);
+                    if (loc) { var it = loc.findItemByText(liste[0].nom) || loc.findItemByValue(liste[0].nom); if (it) it.select(); document.getElementById('nrLieu').textContent = liste[0].nom; rangee.querySelector('.nr-puce').classList.add('on'); }
                 }
             }
 

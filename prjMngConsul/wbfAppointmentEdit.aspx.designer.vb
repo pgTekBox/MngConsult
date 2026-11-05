@@ -236,6 +236,11 @@ Partial Public Class wbfAppointmentEdit
     Protected WithEvents rtpEnd As Global.Telerik.Web.UI.RadTimePicker
 
     '''<summary>
+    '''rddlLieu control.
+    '''</summary>
+    Protected WithEvents rddlLieu As Global.Telerik.Web.UI.RadDropDownList
+
+    '''<summary>
     '''txtLocation control.
     '''</summary>
     '''<remarks>
