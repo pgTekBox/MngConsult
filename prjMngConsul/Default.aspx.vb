@@ -655,6 +655,7 @@ Public Class _Default
             Case "factEncours" : Return Choose3(lang, "Facturation…", "Invoicing…", "Facturando…")
             Case "factClient" : Return Choose3(lang, "Choisissez d'abord un client sur le brouillon.", "Choose a customer on the draft first.", "Elija primero un cliente en el borrador.")
             Case "factErreur" : Return Choose3(lang, "La facture n'a pas pu être comptabilisée.", "The invoice could not be posted.", "No se pudo contabilizar la factura.")
+            Case "annuler" : Return Choose3(lang, "Annuler", "Cancel", "Cancelar")
             Case "plusRdv" : Return Choose3(lang, "+ RDV", "+ Appt", "+ Cita")
             Case "nouveauRdvAvec" : Return Choose3(lang, "Nouveau RDV avec {0}", "New appointment with {0}", "Nueva cita con {0}")
             Case "voirDetail" : Return Choose3(lang, "Voir le détail du RDV de {0}", "See the details of {0}'s appointment", "Ver el detalle de la cita de {0}")

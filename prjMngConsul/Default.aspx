@@ -116,6 +116,14 @@
     .ac-doc.tache{ background:#E8EDF5; color:#44536E; }
     .ac-doc.faite{ background:#E3F3EA; color:#0F5A3A; }
     .ac-fait{ flex-shrink:0; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; background:#0F5A3A; color:#FFFFFF; }
+    .ac-modal-ov{ position:fixed; inset:0; z-index:100000; background:rgba(16,28,51,.45); display:flex; align-items:center; justify-content:center; padding:16px; }
+    .ac-modal{ background:#FFFFFF; border-radius:16px; box-shadow:0 20px 60px rgba(16,28,51,.35); max-width:420px; width:100%; padding:24px; }
+    .ac-modal-msg{ margin:0 0 20px; font-size:15px; font-weight:600; color:#1B2B46; line-height:1.5; }
+    .ac-modal-btns{ display:flex; gap:10px; justify-content:flex-end; }
+    .ac-modal-btn{ min-height:40px; padding:0 18px; border:none; border-radius:999px; background:#1B4F9C; color:#FFFFFF; font-size:14px; font-weight:800; cursor:pointer; }
+    .ac-modal-btn:hover{ background:#163F7E; }
+    .ac-modal-btn.clair{ background:#EEF2F8; color:#1B4F9C; }
+    .ac-modal-btn.clair:hover{ background:#E0E8F4; }
     .ac-mont{ flex-shrink:0; font-size:14px; font-weight:800; white-space:nowrap; }
     .ac-note{ padding:4px 2px 0; font-size:12px; font-weight:700; color:#8D9CB3; }
     .ac-ini{ flex-shrink:0; min-width:28px; height:22px; padding:0 6px; box-sizing:border-box; border-radius:999px; color:#fff; font-size:11px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
@@ -209,6 +217,7 @@
     var L_FACT_ENCOURS = "<%= L("factEncours") %>";
     var L_FACT_CLIENT = "<%= L("factClient") %>";
     var L_FACT_ERREUR = "<%= L("factErreur") %>";
+    var L_ANNULER = "<%= L("annuler") %>";
     // Après fermeture d'une fenêtre (facture, rendez-vous), recharger le tableau de bord.
     function rwInvoice_OnClose(sender, args) {
         window.location.reload();
@@ -221,31 +230,61 @@
         if (!docId || docId <= 0) return;
         openRadWindow(docId, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE);
     }
+    // Petit popup modal (remplace alert/confirm natifs). opts : { message, confirm,
+    // okText, cancelText, onOk, onCancel }.
+    function acModal(opts) {
+        opts = opts || {};
+        var ov = document.createElement('div'); ov.className = 'ac-modal-ov';
+        var bx = document.createElement('div'); bx.className = 'ac-modal';
+        bx.setAttribute('role', 'dialog'); bx.setAttribute('aria-modal', 'true');
+        var p = document.createElement('p'); p.className = 'ac-modal-msg'; p.textContent = opts.message || ''; bx.appendChild(p);
+        var row = document.createElement('div'); row.className = 'ac-modal-btns';
+        function close() { if (ov.parentNode) ov.parentNode.removeChild(ov); document.removeEventListener('keydown', onKey); }
+        function onKey(e) { if (e.key === 'Escape') { close(); if (opts.onCancel) opts.onCancel(); } }
+        if (opts.confirm) {
+            var cancel = document.createElement('button'); cancel.type = 'button'; cancel.className = 'ac-modal-btn clair';
+            cancel.textContent = opts.cancelText || L_ANNULER;
+            cancel.addEventListener('click', function () { close(); if (opts.onCancel) opts.onCancel(); });
+            row.appendChild(cancel);
+        }
+        var ok = document.createElement('button'); ok.type = 'button'; ok.className = 'ac-modal-btn';
+        ok.textContent = opts.okText || 'OK';
+        ok.addEventListener('click', function () { close(); if (opts.onOk) opts.onOk(); });
+        row.appendChild(ok);
+        bx.appendChild(row); ov.appendChild(bx);
+        ov.addEventListener('click', function (e) { if (e.target === ov) { close(); if (opts.onCancel) opts.onCancel(); } });
+        document.addEventListener('keydown', onKey);
+        document.body.appendChild(ov); ok.focus();
+    }
     // « Facturer » : comptabilise directement le brouillon lié au RDV (crée la
     // facture définitive), puis recharge le tableau de bord. Si le brouillon n'a
-    // pas de client, on l'ouvre pour le compléter.
+    // pas de client, on l'ouvre pour le compléter. Aucun alert/confirm natif.
     function acFacturer(docId, btn) {
         if (!docId || docId <= 0) return;
-        if (!confirm(L_FACT_CONFIRM)) return;
-        if (btn) { btn.disabled = true; btn.textContent = L_FACT_ENCOURS; }
-        fetch('ComptabiliserFacture.ashx', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ docId: docId })
-        }).then(function (r) { return r.json(); }).then(function (res) {
-            if (res && res.ok) {
-                window.location.reload();
-            } else if (res && res.besoinClient) {
-                alert(res.erreur || L_FACT_CLIENT);
-                acOuvrirBrouillon(docId);
-                if (btn) { btn.disabled = false; btn.textContent = L_FACTURER; }
-            } else {
-                alert((res && res.erreur) || L_FACT_ERREUR);
-                if (btn) { btn.disabled = false; btn.textContent = L_FACTURER; }
+        acModal({
+            message: L_FACT_CONFIRM, confirm: true, okText: L_FACTURER, cancelText: L_ANNULER,
+            onOk: function () {
+                if (btn) { btn.disabled = true; btn.textContent = L_FACT_ENCOURS; }
+                function reactiver() { if (btn) { btn.disabled = false; btn.textContent = L_FACTURER; } }
+                fetch('ComptabiliserFacture.ashx', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ docId: docId })
+                }).then(function (r) { return r.json(); }).then(function (res) {
+                    if (res && res.ok) {
+                        window.location.reload();
+                    } else if (res && res.besoinClient) {
+                        reactiver();
+                        acModal({ message: res.erreur || L_FACT_CLIENT, onOk: function () { acOuvrirBrouillon(docId); } });
+                    } else {
+                        reactiver();
+                        acModal({ message: (res && res.erreur) || L_FACT_ERREUR });
+                    }
+                }).catch(function () {
+                    reactiver();
+                    acModal({ message: L_FACT_ERREUR });
+                });
             }
-        }).catch(function () {
-            alert(L_FACT_ERREUR);
-            if (btn) { btn.disabled = false; btn.textContent = L_FACTURER; }
         });
     }
     function acOuvrirRdv(url, titre) {
@@ -621,32 +660,13 @@
         tete.appendChild(boutonChev(s.rpJ, function () { s.rpJ = !s.rpJ; garder('rpJ', s.rpJ); peindre(); }));
         bj.appendChild(tete);
         if (s.rpJ) {
-            if (!simuleJ && aEquipe && !s.agEmp) {
-                // Toute l'équipe : une rangée par employé
-                var lanes = el('div', 'ac-lanes');
-                // Comme la maquette : une rangée seulement pour les employés qui ont
-                // au moins un RDV aujourd'hui (on n'affiche pas les employés « Libre »).
-                var groupes = A.emps.map(function (e) { return { e: e, l: liste.filter(function (r) { return r.emp === e.v; }) }; })
-                                    .filter(function (g) { return g.l.length; });
-                var sans = liste.filter(function (r) { return !A.emps.some(function (e) { return e.v === r.emp; }); });
-                if (sans.length) groupes.push({ e: { v: '', lab: '—', ini: '?', c: '#5B6B86' }, l: sans });
-                groupes.forEach(function (g) {
-                    var ln = el('div', 'ac-lane'), lt = el('div', 'tete');
-                    var ini = el('span', 'ac-ini', g.e.ini); ini.style.background = g.e.c; lt.appendChild(ini);
-                    var nm = el('span'); nm.appendChild(el('b', '', g.e.lab));
-                    nm.appendChild(el('small', '', fmt(T.agRdvH, g.l.length, nbH(g.l.reduce(function (t, r) { return t + (r.fin - r.deb); }, 0)))));
-                    lt.appendChild(nm); ln.appendChild(lt);
-                    // Chaque RDV = la même rangée riche que la vue solo (heure, client,
-                    // document, montant, Facturer, lieu, état, détail, + RDV).
-                    g.l.forEach(function (r) { ln.appendChild(ligneRdv(r, false)); });
-                    lanes.appendChild(ln);
-                });
-                bj.appendChild(lanes);
-            } else {
-                if (!liste.length) bj.appendChild(el('div', 'ac-vide', T.agVide));
-                liste.forEach(function (r) { bj.appendChild(ligneRdv(r, false)); });
-                if (simuleJ) bj.appendChild(el('div', 'ac-note', T.exFictifs));
-            }
+            // Tous les RDV du jour dans l'ordre chronologique (rdvDu trie par heure),
+            // sans regroupement ni en-tête par employé. En vue « Toute l'équipe », une
+            // pastille d'initiales colorée (nom de l'employé en info-bulle) distingue
+            // les ressources sans afficher leur nom.
+            if (!liste.length) bj.appendChild(el('div', 'ac-vide', T.agVide));
+            liste.forEach(function (r) { bj.appendChild(ligneRdv(r, aEquipe && !s.agEmp && !simuleJ)); });
+            if (simuleJ) bj.appendChild(el('div', 'ac-note', T.exFictifs));
         }
         sec.appendChild(bj);
 
