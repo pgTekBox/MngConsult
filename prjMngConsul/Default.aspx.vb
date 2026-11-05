@@ -324,6 +324,7 @@ Public Class _Default
                         .ini = Initiales(Txt(r("EmployeeName"))),
                         .c = If(empId <> "" AndAlso couleurs.ContainsKey(CInt(empId)), couleurs(CInt(empId)), "#1B4F9C"),
                         .doc = If(Txt(r("DocumentNumber")) <> "", Txt(r("DocumentNumber")), DocLabel(Txt(r("ModeFacturation")), etat)),
+                        .docId = If(IsDBNull(r("DocumentId")), 0, Convert.ToInt32(r("DocumentId"))),
                         .docT = DocType(Txt(r("ModeFacturation")), etat),
                         .montant = If(IsDBNull(r("MontantPrevu")), "", Montant(Dec(r("MontantPrevu")))),
                         .etat = etat
@@ -543,7 +544,7 @@ Public Class _Default
             "enPremier", "rienUrgent", "assistant60", "a60Aria", "a60Retour", "a60RetourTip",
             "activiteAFaire", "indR", "indY", "messages", "msgAria", "msgNonLuN", "rdvDemande", "rdvDemandeTip",
             "compteOp", "voirMontant", "masquerMontant", "brancher",
-            "docSoumission", "docFacture", "docTache", "montantPrevu",
+            "docSoumission", "docFacture", "docTache", "montantPrevu", "ouvrirBrouillon",
             "presence", "presenceAbs", "presenceRet", "presAbsTitre", "presRetTitre", "presRien", "presenceAria",
             "lieuPlace", "lieuChez", "lieuTel", "lieuVisio",
             "agenda", "agendaAria", "agendaTip", "agendaDe", "equipeN",
@@ -612,6 +613,7 @@ Public Class _Default
             Case "docFacture" : Return Choose3(lang, "Facture", "Invoice", "Factura")
             Case "docTache" : Return Choose3(lang, "Tâche", "Task", "Tarea")
             Case "montantPrevu" : Return Choose3(lang, "Montant prévu", "Expected amount", "Importe previsto")
+            Case "ouvrirBrouillon" : Return Choose3(lang, "Ouvrir le brouillon {0}", "Open draft {0}", "Abrir el borrador {0}")
             Case "presence" : Return Choose3(lang, "Présence", "Attendance", "Presencia")
             Case "presenceAbs" : Return Choose3(lang, "{0} absence(s) aujourd'hui", "{0} absence(s) today", "{0} ausencia(s) hoy")
             Case "presenceRet" : Return Choose3(lang, "{0} retard(s) aujourd'hui", "{0} late arrival(s) today", "{0} retraso(s) hoy")

@@ -108,6 +108,9 @@
     .ac-rdv .plus{ flex-shrink:0; min-height:32px; padding:0 10px; border:1.5px solid #1B4F9C; border-radius:999px; background:#FFFFFF; color:#1B4F9C; font-size:13px; font-weight:800; white-space:nowrap; }
     .ac-rdv .plus:hover{ background:#E3EBF7; }
     .ac-doc{ flex-shrink:0; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; }
+    button.ac-doc{ border:none; font-family:inherit; line-height:normal; }
+    .ac-doc.clic{ cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
+    .ac-doc.clic:hover{ filter:brightness(0.96); box-shadow:0 0 0 1.5px rgba(91,46,145,.35); }
     .ac-doc.soumission{ background:#EFE7FA; color:#5B2E91; }
     .ac-doc.facture{ background:#E3EBF7; color:#143A73; }
     .ac-doc.tache{ background:#E8EDF5; color:#44536E; }
@@ -205,6 +208,11 @@
     }
     function acNouvelleFacture() {
         openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE);
+    }
+    // Ouvre la fiche d'édition du brouillon lié à un RDV dans le popup facture.
+    function acOuvrirBrouillon(docId) {
+        if (!docId || docId <= 0) return;
+        openRadWindow(docId, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE);
     }
     function acOuvrirRdv(url, titre) {
         var w = $find('rwRdv'); if (!w) { window.location.href = 'wbfAgenda.aspx'; return; }
@@ -454,8 +462,24 @@
         var qui = el('span', 'qui'); qui.appendChild(el('b', '', r.client)); if (r.court) qui.appendChild(el('span', '', ' · ' + r.court)); m.appendChild(qui);
         m.addEventListener('click', basculer); li.appendChild(m);
         if (avecIni && r.ini) { var ini = el('span', 'ac-ini', r.ini); ini.style.background = r.c; ini.title = r.empNom; li.appendChild(ini); }
-        // Document produit (Soumission / Facture / Tâche) + montant prévu
-        if (r.doc) { var dcb = el('span', 'ac-doc ' + (r.docT || 'soumission'), r.doc); dcb.title = r.doc; li.appendChild(dcb); }
+        // Document produit (Soumission / Facture / Tâche) + montant prévu.
+        // Si un brouillon est lié au RDV, la pastille devient cliquable et ouvre
+        // sa fiche d'édition dans un popup (même fenêtre que « Nouvelle facture »).
+        if (r.doc) {
+            var dcb;
+            if (r.docId && r.docId > 0) {
+                dcb = bouton('ac-doc clic ' + (r.docT || 'soumission'), r.doc);
+                dcb.title = fmt(T.ouvrirBrouillon, r.doc);
+                dcb.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    acOuvrirBrouillon(r.docId);
+                });
+            } else {
+                dcb = el('span', 'ac-doc ' + (r.docT || 'soumission'), r.doc);
+                dcb.title = r.doc;
+            }
+            li.appendChild(dcb);
+        }
         if (r.montant) { var mtb = el('b', 'ac-mont', r.montant); mtb.title = T.montantPrevu; li.appendChild(mtb); }
         if (r.etat === 'termine' && r.cli) {
             var fa = bouton('fac', T.facturer); fa.setAttribute('aria-label', fmt(T.facturerAria, r.client));
