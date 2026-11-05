@@ -489,8 +489,9 @@
         if (r.montant && !r.estFacture) { var mtb = el('b', 'ac-mont', r.montant); mtb.title = T.montantPrevu; li.appendChild(mtb); }
         // « Facturer » reprend le brouillon lié au RDV pour le finaliser en facture ;
         // s'il n'y en a pas (aucun service choisi), ouvre une facture vierge.
-        // Masqué quand le RDV est déjà facturé (brouillon comptabilisé).
-        if (r.etat === 'termine' && !r.estFacture && (r.cli || (r.docId && r.docId > 0))) {
+        // Disponible quel que soit l'état du RDV (même planifié plus tard) ;
+        // masqué seulement quand le RDV est déjà facturé (brouillon comptabilisé).
+        if (!r.estFacture && (r.cli || (r.docId && r.docId > 0))) {
             var fa = bouton('fac', T.facturer); fa.setAttribute('aria-label', fmt(T.facturerAria, r.client));
             fa.addEventListener('click', function () {
                 if (r.docId && r.docId > 0) acOuvrirBrouillon(r.docId);
