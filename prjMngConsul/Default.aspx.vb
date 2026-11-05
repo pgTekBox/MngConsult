@@ -283,7 +283,11 @@ Public Class _Default
                     End If
                     Dim client As String = Txt(r("CustomerName"))
                     Dim titre As String = Txt(r("Title"))
-                    Dim svc As String = Txt(r("TypeName"))
+                    ' Le service affiché vient des LIGNES du brouillon/facture lié (suit
+                    ' un changement de service, et liste les services multiples « A · B »).
+                    ' Repli sur le type du RDV s'il n'y a pas de document.
+                    Dim docSvc As String = Txt(r("DocumentServices"))
+                    Dim svc As String = If(docSvc <> "", docSvc, Txt(r("TypeName")))
                     ' Texte secondaire de la rangée : on affiche le SERVICE (type de RDV)
                     ' et, s'il y en a un, le titre libre en plus — mais seulement quand il
                     ' ajoute de l'information (on ne répète pas le titre quand il reprend
@@ -318,7 +322,7 @@ Public Class _Default
                         .cli = If(IsDBNull(r("CustomerId")), "", Convert.ToString(r("CustomerId"))),
                         .desc = Txt(r("Description")),
                         .lieu = Txt(r("Location")),
-                        .typ = Txt(r("TypeName")),
+                        .typ = svc,
                         .emp = empId,
                         .empNom = Txt(r("EmployeeName")),
                         .ini = Initiales(Txt(r("EmployeeName"))),
