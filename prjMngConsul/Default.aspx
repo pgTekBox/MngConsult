@@ -204,6 +204,11 @@
 <script type="text/javascript">
     var L_ADD_INVOICE = "<%= L("winAddInvoice") %>";
     var L_EDIT_INVOICE = "<%= L("winEditInvoice") %>";
+    var L_FACTURER = "<%= L("facturer") %>";
+    var L_FACT_CONFIRM = "<%= L("factConfirm") %>";
+    var L_FACT_ENCOURS = "<%= L("factEncours") %>";
+    var L_FACT_CLIENT = "<%= L("factClient") %>";
+    var L_FACT_ERREUR = "<%= L("factErreur") %>";
     // Après fermeture d'une fenêtre (facture, rendez-vous), recharger le tableau de bord.
     function rwInvoice_OnClose(sender, args) {
         window.location.reload();
@@ -215,6 +220,33 @@
     function acOuvrirBrouillon(docId) {
         if (!docId || docId <= 0) return;
         openRadWindow(docId, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE);
+    }
+    // « Facturer » : comptabilise directement le brouillon lié au RDV (crée la
+    // facture définitive), puis recharge le tableau de bord. Si le brouillon n'a
+    // pas de client, on l'ouvre pour le compléter.
+    function acFacturer(docId, btn) {
+        if (!docId || docId <= 0) return;
+        if (!confirm(L_FACT_CONFIRM)) return;
+        if (btn) { btn.disabled = true; btn.textContent = L_FACT_ENCOURS; }
+        fetch('ComptabiliserFacture.ashx', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ docId: docId })
+        }).then(function (r) { return r.json(); }).then(function (res) {
+            if (res && res.ok) {
+                window.location.reload();
+            } else if (res && res.besoinClient) {
+                alert(res.erreur || L_FACT_CLIENT);
+                acOuvrirBrouillon(docId);
+                if (btn) { btn.disabled = false; btn.textContent = L_FACTURER; }
+            } else {
+                alert((res && res.erreur) || L_FACT_ERREUR);
+                if (btn) { btn.disabled = false; btn.textContent = L_FACTURER; }
+            }
+        }).catch(function () {
+            alert(L_FACT_ERREUR);
+            if (btn) { btn.disabled = false; btn.textContent = L_FACTURER; }
+        });
     }
     function acOuvrirRdv(url, titre) {
         var w = $find('rwRdv'); if (!w) { window.location.href = 'wbfAgenda.aspx'; return; }
@@ -487,14 +519,14 @@
         }
         if (r.estFacture) { var fb = el('span', 'ac-fait', T.rdvFacture); li.appendChild(fb); }
         if (r.montant && !r.estFacture) { var mtb = el('b', 'ac-mont', r.montant); mtb.title = T.montantPrevu; li.appendChild(mtb); }
-        // « Facturer » reprend le brouillon lié au RDV pour le finaliser en facture ;
-        // s'il n'y en a pas (aucun service choisi), ouvre une facture vierge.
-        // Disponible quel que soit l'état du RDV (même planifié plus tard) ;
-        // masqué seulement quand le RDV est déjà facturé (brouillon comptabilisé).
+        // « Facturer » COMPTABILISE directement le brouillon lié au RDV (crée la
+        // facture définitive) ; s'il n'y en a pas (aucun service), ouvre une facture
+        // vierge. Disponible quel que soit l'état du RDV (même planifié plus tard) ;
+        // masqué quand le RDV est déjà facturé (brouillon comptabilisé).
         if (!r.estFacture && (r.cli || (r.docId && r.docId > 0))) {
             var fa = bouton('fac', T.facturer); fa.setAttribute('aria-label', fmt(T.facturerAria, r.client));
             fa.addEventListener('click', function () {
-                if (r.docId && r.docId > 0) acOuvrirBrouillon(r.docId);
+                if (r.docId && r.docId > 0) acFacturer(r.docId, fa);
                 else acNouvelleFacture();
             });
             li.appendChild(fa);
