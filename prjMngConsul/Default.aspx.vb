@@ -327,7 +327,9 @@ Public Class _Default
                         .docId = If(IsDBNull(r("DocumentId")), 0, Convert.ToInt32(r("DocumentId"))),
                         .estFacture = (Not IsDBNull(r("EstFacture")) AndAlso Convert.ToInt32(r("EstFacture")) = 1),
                         .docT = DocType(Txt(r("ModeFacturation")), etat),
-                        .montant = If(IsDBNull(r("MontantPrevu")), "", Montant(Dec(r("MontantPrevu")))),
+                        .montant = If(Not IsDBNull(r("DocumentTotal")) AndAlso Dec(r("DocumentTotal")) <> 0D,
+                                      Montant(Dec(r("DocumentTotal"))),
+                                      If(IsDBNull(r("MontantPrevu")), "", Montant(Dec(r("MontantPrevu"))))),
                         .etat = etat
                     })
                 Next
