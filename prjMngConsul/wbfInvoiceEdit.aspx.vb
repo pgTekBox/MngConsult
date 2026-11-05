@@ -1030,9 +1030,13 @@ Public Class wbfInvoiceEdit
         dr("ProductId") = productId
         dr("Dirty") = 1
 
-        ' Exemple: si tu veux aussi vider ou reset certains champs
-        dr("Description") = AlldsProducts.Tables(0).Rows(0)("Description").ToString() ' ou "" si tu préfères
-        dr("ProductName") = AlldsProducts.Tables(0).Rows(0)("Name").ToString()
+        ' La description de la ligne : la description du produit si elle existe,
+        ' sinon son NOM (beaucoup de produits n'ont pas de description → le champ
+        ' « Produit » restait vide après un changement). Cohérent avec s0970.
+        Dim prodDesc As String = AlldsProducts.Tables(0).Rows(0)("Description").ToString()
+        Dim prodName As String = AlldsProducts.Tables(0).Rows(0)("Name").ToString()
+        dr("Description") = If(String.IsNullOrWhiteSpace(prodDesc), prodName, prodDesc)
+        dr("ProductName") = prodName
         dr("Qty") = 1
         dr("UnitPrice") = AlldsProducts.Tables(0).Rows(0)("Prix").ToString()
         dr("Amount") = 0D

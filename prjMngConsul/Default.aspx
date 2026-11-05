@@ -556,8 +556,8 @@
             }
             li.appendChild(dcb);
         }
-        if (r.estFacture) { var fb = el('span', 'ac-fait', T.rdvFacture); li.appendChild(fb); }
         if (r.montant) { var mtb = el('b', 'ac-mont', r.montant); mtb.title = T.montantPrevu; li.appendChild(mtb); }
+        if (r.estFacture) { var fb = el('span', 'ac-fait', T.rdvFacture); li.appendChild(fb); }
         // « Facturer » COMPTABILISE directement le brouillon lié au RDV (crée la
         // facture définitive) ; s'il n'y en a pas (aucun service), ouvre une facture
         // vierge. Disponible quel que soit l'état du RDV (même planifié plus tard) ;
