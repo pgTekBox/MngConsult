@@ -265,8 +265,8 @@
     // Exemples fictifs pour la boîte « Aujourd'hui » quand la compagnie n'a aucun RDV
     // ce jour-là : deux RDV terminés, prêts à facturer — comme la maquette.
     var DEMO_AUJ = [
-        { id: 'demo-a1', jour: A.aujourdhui, deb: 570, fin: 660, h: fH(570), client: 'Lise Ouellet', court: 'Massage thérapeutique', cli: '0', emp: '', etat: 'termine', lieu: 'À votre place', doc: T.docSoumission, docT: 'soumission', montant: '142,50 $', plage: fH(570) + ' – ' + fH(660), duree: '1 h 30', typ: 'Massage thérapeutique', empNom: '', desc: 'Suivi de la cliente — séance de 60 minutes.' },
-        { id: 'demo-a2', jour: A.aujourdhui, deb: 675, fin: 735, h: fH(675), client: 'Isabelle Côté', court: 'Drainage lymphatique', cli: '0', emp: '', etat: 'termine', lieu: 'À votre place', doc: T.docSoumission, docT: 'soumission', montant: '95,00 $', plage: fH(675) + ' – ' + fH(735), duree: '1 h', typ: 'Drainage lymphatique', empNom: '', desc: 'Première visite.' }
+        { id: 'demo-a1', jour: A.aujourdhui, deb: 570, fin: 660, h: fH(570), client: 'Lise Ouellet', court: 'Massage thérapeutique', cli: '0', emp: '', etat: 'termine', lieu: 'À votre place', doc: 'BROUILLON-7858', docT: 'soumission', montant: '142,50 $', plage: fH(570) + ' – ' + fH(660), duree: '1 h 30', typ: 'Massage thérapeutique', empNom: '', desc: 'Suivi de la cliente — séance de 60 minutes.' },
+        { id: 'demo-a2', jour: A.aujourdhui, deb: 675, fin: 735, h: fH(675), client: 'Isabelle Côté', court: 'Drainage lymphatique', cli: '0', emp: '', etat: 'termine', lieu: 'À votre place', doc: 'BROUILLON-7859', docT: 'soumission', montant: '95,00 $', plage: fH(675) + ' – ' + fH(735), duree: '1 h', typ: 'Drainage lymphatique', empNom: '', desc: 'Première visite.' }
     ];
 
     // --- l'état de la page ---

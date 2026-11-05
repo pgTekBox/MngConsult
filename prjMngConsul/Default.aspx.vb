@@ -323,7 +323,7 @@ Public Class _Default
                         .empNom = Txt(r("EmployeeName")),
                         .ini = Initiales(Txt(r("EmployeeName"))),
                         .c = If(empId <> "" AndAlso couleurs.ContainsKey(CInt(empId)), couleurs(CInt(empId)), "#1B4F9C"),
-                        .doc = DocLabel(Txt(r("ModeFacturation")), etat),
+                        .doc = If(Txt(r("DocumentNumber")) <> "", Txt(r("DocumentNumber")), DocLabel(Txt(r("ModeFacturation")), etat)),
                         .docT = DocType(Txt(r("ModeFacturation")), etat),
                         .montant = If(IsDBNull(r("MontantPrevu")), "", Montant(Dec(r("MontantPrevu")))),
                         .etat = etat
