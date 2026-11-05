@@ -401,6 +401,37 @@ Public Class wbfAppointmentEdit
         SafeSelect(rddlStatus, If(r("Status") Is DBNull.Value, "Planifié", r("Status").ToString()))
         SafeSelect(rddlRecurrence, If(r("RecurrenceRule") Is DBNull.Value, "", r("RecurrenceRule").ToString()))
         SafeSelect(rddlReminder, If(r("ReminderMinutes") Is DBNull.Value, "", r("ReminderMinutes").ToString()))
+
+        AfficherFactureLiee(id)
+    End Sub
+
+    ''' <summary>
+    ''' Affiche, sous la fiche du RDV, un lien vers la facture (brouillon) qui lui est
+    ''' liée, s'il en existe une (s0971). Le lien ouvre l'éditeur de facture.
+    ''' </summary>
+    Private Sub AfficherFactureLiee(appointmentId As Integer)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@AppointmentId", appointmentId))
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0971GetAppointmentInvoice", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
+
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            Dim docId As Integer = CInt(r("Id"))
+            Dim num As String = Txt(r("DocumentNumber"))
+            Dim comptab As String = Txt(r("ComptabilisationStatus"))
+            Dim etat As String = If(comptab = "COMPTABILISE",
+                                    T("facture", "invoice", "factura"),
+                                    T("brouillon", "draft", "borrador"))
+            hlFactureLiee.Text = "📄 " & T("Facture", "Invoice", "Factura") & " " &
+                                 Server.HtmlEncode(num) & " (" & etat & ") — " &
+                                 T("ouvrir", "open", "abrir")
+            hlFactureLiee.NavigateUrl = ResolveUrl("~/wbfInvoiceEdit.aspx?Id=" & docId.ToString())
+            pnlFactureLiee.Visible = True
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Facture liée RDV : " & ex.Message)
+        End Try
     End Sub
 
     Private Sub SafeSelect(ddl As RadDropDownList, value As String)

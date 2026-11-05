@@ -121,6 +121,12 @@ Partial Public Class wbfAppointmentEdit
     '''</remarks>
     Protected WithEvents pMsg As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
+    '''<summary>pnlFactureLiee control.</summary>
+    Protected WithEvents pnlFactureLiee As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>hlFactureLiee control.</summary>
+    Protected WithEvents hlFactureLiee As Global.System.Web.UI.WebControls.HyperLink
+
     '''<summary>
     '''hfId control.
     '''</summary>

@@ -384,6 +384,12 @@
                             TextMode="MultiLine" Rows="3" EmptyMessage="Note pour le RDV (facultatif)" />
                     </div>
 
+                    <asp:Panel ID="pnlFactureLiee" runat="server" Visible="false"
+                        style="margin:6px 0 2px; padding:10px 12px; border:1px solid #D5DDE8; border-radius:12px; background:#F2F5F9;">
+                        <asp:HyperLink ID="hlFactureLiee" runat="server" Target="_blank"
+                            style="font-weight:700; color:#1B4F9C; text-decoration:none;" />
+                    </asp:Panel>
+
                     <div class="nr-esp"></div>
                     <asp:Button ID="btnSave" runat="server" Text="Confirmer le RDV" CssClass="nr-cta" ClientIDMode="Static" />
                     <div class="nr-aide" id="nrAide"></div>
