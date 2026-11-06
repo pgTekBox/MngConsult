@@ -323,6 +323,7 @@ Public Class _Default
                         .desc = Txt(r("Description")),
                         .lieu = Txt(r("Location")),
                         .typ = svc,
+                        .typId = If(IsDBNull(r("AppointmentTypeId")), "", Convert.ToString(r("AppointmentTypeId"))),
                         .emp = empId,
                         .empNom = Txt(r("EmployeeName")),
                         .ini = Initiales(Txt(r("EmployeeName"))),
@@ -641,7 +642,7 @@ Public Class _Default
             Case "agendaTip" : Return Choose3(lang, "Voir et mettre à jour tout l'agenda", "See and update the whole calendar", "Ver y actualizar toda la agenda")
             Case "agendaDe" : Return Choose3(lang, "Agenda de", "Calendar of", "Agenda de")
             Case "equipeN" : Return Choose3(lang, "Toute l'équipe ({0})", "Whole team ({0})", "Todo el equipo ({0})")
-            Case "plagesLibres" : Return Choose3(lang, "Plages libres de l'agenda", "Free slots", "Huecos libres de la agenda")
+            Case "plagesLibres" : Return Choose3(lang, "Prochaines plages libres", "Next free slots", "Próximos huecos libres")
             Case "plagesAria" : Return Choose3(lang, "3 prochaines plages libres", "Next 3 free slots", "3 próximos huecos libres")
             Case "plagesVide" : Return Choose3(lang, "aucune dans les deux prochaines semaines", "none in the next two weeks", "ninguno en las dos próximas semanas")
             Case "plageTip" : Return Choose3(lang, "Libre {0} de {1} à {2} — cliquez pour réserver", "Free {0} from {1} to {2} — click to book", "Libre {0} de {1} a {2} — haga clic para reservar")

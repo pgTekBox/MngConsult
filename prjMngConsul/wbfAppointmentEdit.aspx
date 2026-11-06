@@ -544,7 +544,7 @@
             // ============================================================
             // Étapes, plages libres et résumé
             // ============================================================
-            var NR_sem = 0;          // semaine affichée (0 = celle du début du RDV)
+            var NR_sem = 0;          // semaine affichée (0 = semaine courante, ou celle du RDV s'il est passé)
             var NR_jour = null;      // jour affiché, 'yyyy-MM-dd'
             var NR_texteCta = '';    // texte du bouton une fois la plage choisie
             var NR_LOC = { fr: 'fr-CA', en: 'en-CA', es: 'es' };

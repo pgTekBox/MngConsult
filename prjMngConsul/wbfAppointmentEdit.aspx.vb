@@ -52,6 +52,14 @@ Public Class wbfAppointmentEdit
                 End If
                 Dim endDt As Date = startDt.AddHours(1)
 
+                ' Service suggéré (« + RDV » d'un RDV existant : même service) ; la fin suit sa durée
+                Dim serviceQs As String = Request.QueryString("service")
+                If Not String.IsNullOrEmpty(serviceQs) AndAlso rddlType.FindItemByValue(serviceQs) IsNot Nothing Then
+                    SafeSelect(rddlType, serviceQs)
+                    Dim durSvc As Integer = GetTypeDurationFromJson(hfTypeDurations.Value, serviceQs)
+                    If durSvc > 0 Then endDt = startDt.AddMinutes(durSvc)
+                End If
+
                 rdpStart.SelectedDate = startDt
                 rtpStart.SelectedDate = New Date(1980, 1, 1, startDt.Hour, startDt.Minute, 0)
                 rdpEnd.SelectedDate = endDt
@@ -76,8 +84,14 @@ Public Class wbfAppointmentEdit
     ''' </summary>
     Private Sub BatirPlages()
         Dim debutRdv As Date = If(rdpStart.SelectedDate.HasValue, rdpStart.SelectedDate.Value.Date, Date.Today)
-        Dim base As Date = debutRdv.AddDays(-((CInt(debutRdv.DayOfWeek) + 6) Mod 7))   ' lundi
-        Dim fin As Date = base.AddDays(7 * SEMAINES)
+        ' La liste commence toujours à la semaine courante (ou à celle du RDV s'il est passé),
+        ' même si « + RDV » propose une première plage libre la semaine prochaine.
+        Dim lundiDebut As Date = debutRdv.AddDays(-((CInt(debutRdv.DayOfWeek) + 6) Mod 7))
+        Dim lundiAuj As Date = Date.Today.AddDays(-((CInt(Date.Today.DayOfWeek) + 6) Mod 7))
+        Dim base As Date = If(lundiDebut < lundiAuj, lundiDebut, lundiAuj)
+        ' Assez de semaines pour inclure celle du début du RDV
+        Dim nbSemaines As Integer = Math.Max(SEMAINES, CInt((lundiDebut - base).TotalDays) \ 7 + 1)
+        Dim fin As Date = base.AddDays(7 * nbSemaines)
 
         Dim idOuvert As Integer = 0
         Integer.TryParse(hfId.Value, idOuvert)
@@ -111,7 +125,7 @@ Public Class wbfAppointmentEdit
             .services = Services,
             .lieux = Lieux,
             .base = base.ToString("yyyy-MM-dd"),
-            .semaines = SEMAINES,
+            .semaines = nbSemaines,
             .aujourdhui = Date.Today.ToString("yyyy-MM-dd"),
             .maintenant = Date.Now.Hour * 60 + Date.Now.Minute,
             .ouv = OUVERTURE,

@@ -371,10 +371,11 @@
         b.setAttribute('aria-expanded', ouvert ? 'true' : 'false'); b.setAttribute('aria-label', t); b.title = t;
         b.addEventListener('click', onclick); return b;
     }
-    function nouveauRdv(jour, min, client, emp) {
+    function nouveauRdv(jour, min, client, emp, service) {
         var u = 'wbfAppointmentEdit.aspx?id=0&start=' + encodeURIComponent(jour + 'T' + pad(Math.floor(min / 60)) + ':' + pad(min % 60) + ':00');
         if (client) u += '&client=' + encodeURIComponent(client);
         if (emp) u += '&emp=' + encodeURIComponent(emp);
+        if (service) u += '&service=' + encodeURIComponent(service);
         acOuvrirRdv(u, T.winRdv);
     }
 
@@ -575,7 +576,7 @@
         var cv = bouton('chv', chev(ouvert)); cv.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
         cv.setAttribute('aria-label', fmt(T.voirDetail, r.client)); cv.addEventListener('click', basculer); li.appendChild(cv);
         var pl = bouton('plus', T.plusRdv); pl.title = fmt(T.nouveauRdvAvec, r.client); pl.setAttribute('aria-label', pl.title);
-        pl.addEventListener('click', function () { nouveauRdv(cle(plus(dJ(r.jour), 7)), r.deb, r.cli, r.emp); });
+        pl.addEventListener('click', function () { nouveauRdv(cle(plus(dJ(r.jour), 7)), r.deb, r.cli, r.emp, r.typId); });
         li.appendChild(pl);
         boite.appendChild(li);
         if (ouvert) {
@@ -596,23 +597,24 @@
         return boite;
     }
 
-    // Les 3 prochaines plages libres d'au moins une heure (jours ouvrables, 9 h à 17 h, pas de 30 min).
+    // Les 3 prochains créneaux réservables d'une heure (jours ouvrables, 9 h à 17 h, à la demi-heure).
+    // Les créneaux proposés ne se chevauchent pas ; chacun retient l'employé libre à cette heure.
     function plagesLibres() {
         var cand = s.agEmp ? [s.agEmp] : (A.emps.length ? A.emps.map(function (e) { return e.v; }) : ['']);
         function libre(emp, liste, a, b) {
             return !liste.some(function (r) { return (!emp || !r.emp || r.emp === emp) && r.deb < b && r.fin > a; });
         }
-        var out = [], OUV = 9 * 60, FERM = 17 * 60, PAS = 30, MIN = 60;
+        var out = [], OUV = 9 * 60, FERM = 17 * 60, PAS = 30, DUREE = 60;
         for (var k = 0; k < 21 && out.length < 3; k++) {
             var d = plus(auj, k); if (d.getDay() === 0 || d.getDay() === 6 || d >= finRdv) continue;
             var j = cle(d), liste = A.rdv.filter(function (r) { return r.jour === j; });
             var depart = OUV;
             if (k === 0) depart = Math.max(OUV, Math.ceil(((A.maintenant || 0) + 1) / PAS) * PAS);
-            var deb = null;
-            for (var h = depart; h <= FERM; h += PAS) {
-                var ok = h + PAS <= FERM && cand.some(function (e) { return libre(e, liste, h, h + PAS); });
-                if (ok && deb === null) deb = h;
-                if (!ok && deb !== null) { if (h - deb >= MIN && out.length < 3) out.push({ d: d, deb: deb, fin: h }); deb = null; }
+            for (var h = depart; h + DUREE <= FERM && out.length < 3; h += PAS) {
+                var emp = cand.filter(function (e) { return libre(e, liste, h, h + DUREE); })[0];
+                if (emp === undefined) continue;
+                out.push({ d: d, deb: h, fin: h + DUREE, emp: emp });
+                h += DUREE - PAS;   // le prochain créneau commence après celui-ci
             }
         }
         return out;
@@ -648,9 +650,9 @@
         var pls = plagesLibres();
         pls.forEach(function (p) {
             var nom = cle(p.d) === A.aujourdhui ? T.agAujAbr : jCourt(p.d);
-            var b = bouton('', nom + ' ' + fHc(p.deb) + '–' + fH(p.fin).replace(' h ', 'h') + ' · ' + nbH(p.fin - p.deb) + ' h');
+            var b = bouton('', nom + ' · ' + fH(p.deb));
             b.title = fmt(T.plageTip, jLong(p.d), fH(p.deb), fH(p.fin));
-            b.addEventListener('click', function () { nouveauRdv(cle(p.d), p.deb, '', s.agEmp); });
+            b.addEventListener('click', function () { nouveauRdv(cle(p.d), p.deb, '', s.agEmp || p.emp); });
             chips.appendChild(b);
         });
         if (!pls.length) chips.appendChild(el('span', '', T.plagesVide));
