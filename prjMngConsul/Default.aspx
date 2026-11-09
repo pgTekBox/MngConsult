@@ -650,7 +650,8 @@
         var pls = plagesLibres();
         pls.forEach(function (p) {
             var nom = cle(p.d) === A.aujourdhui ? T.agAujAbr : jCourt(p.d);
-            var b = bouton('', nom + ' · ' + fH(p.deb));
+            // « Auj. 9–10 h · 1 h »
+            var b = bouton('', nom + ' ' + fHc(p.deb) + '–' + fH(p.fin).replace(' h ', 'h') + ' · ' + nbH(p.fin - p.deb) + ' h');
             b.title = fmt(T.plageTip, jLong(p.d), fH(p.deb), fH(p.fin));
             b.addEventListener('click', function () { nouveauRdv(cle(p.d), p.deb, '', s.agEmp || p.emp); });
             chips.appendChild(b);
