@@ -13,9 +13,11 @@ Imports Newtonsoft.Json
 '''      À venir (7 prochains jours, semaine suivante, ce mois-ci, mois prochain) ;
 '''   3. les Activités à faire, classées par couleur (rouge = date dépassée,
 '''      jaune = date qui approche) ; 60 se rend sur l'enjeu prioritaire.
-''' Tout est calculé à partir des vraies données de la compagnie (factures clients
-''' s0026, factures fournisseurs s0023, comptes bancaires T143PlaidAccount,
-''' rendez-vous s0100, tâches à approuver s0745, essai s0687). Le serveur bâtit un
+'''      Elles viennent TOUTES des tâches planifiées T204JobPlanned (s0974) :
+'''      la tâche SYNC_ACTIVITES (s0973, script T362) les y inscrit.
+''' Le reste est calculé à partir des vraies données de la compagnie (factures
+''' clients s0026, factures fournisseurs s0023, comptes bancaires T143PlaidAccount,
+''' rendez-vous s0100). Le serveur bâtit un
 ''' modèle (JSON) ; la page le dessine et gère les clics sans aller-retour.
 ''' </summary>
 Public Class _Default
@@ -80,7 +82,6 @@ Public Class _Default
         Dim ventes As DataTable = Table("s0026GetCustomersInvoices")
         Dim achats As DataTable = Table("s0023GetSuppliersInvoices")
         Dim comptes As DataTable = ComptesBancaires()
-        Dim nbApprob As Integer = CompterApprobations()
 
         ' ---------- Le compte d'opérations ----------
         Dim encaisse As Decimal = 0D, aCompte As Boolean = comptes IsNot Nothing AndAlso comptes.Rows.Count > 0
@@ -150,9 +151,32 @@ Public Class _Default
         }
 
         ' ---------- Activités à faire ----------
+        ' Toutes viennent des tâches planifiées T204JobPlanned (s0974) : les types ACT_*
+        ' qu'inscrit la tâche SYNC_ACTIVITES (s0973, service exécuteur, toutes les 30 min)
+        ' et les occurrences en attente d'approbation. Les montants de la ligne de 60
+        ' ci-dessus restent calculés en direct sur les factures.
+        Dim lignesT204 As List(Of DataRow) = ActivitesT204()
+        Dim deType = Function(code As String) lignesT204.Where(Function(r) Txt(r("JobCode")).ToUpperInvariant() = code).ToList()
+        Dim enRetardT204 = Function(r As DataRow) As Boolean
+                               Dim e As Date? = DateN(r("DueDate"))
+                               Return (e.HasValue AndAlso e.Value.Date < aujourdhui) OrElse Txt(r("StatutPaiement")).ToUpperInvariant() = "EN_RETARD"
+                           End Function
+
+        Dim factClients As List(Of DataRow) = deType("ACT_FACT_CLIENT")
+        Dim factFourn As List(Of DataRow) = deType("ACT_FACT_FOURN")
+        Dim aRetardsVentes As List(Of DataRow) = factClients.Where(enRetardT204).OrderBy(Function(r) If(DateN(r("DueDate")), aujourdhui)).ToList()
+        Dim aProchesVentes As List(Of DataRow) = factClients.Where(Function(r) Not enRetardT204(r)).ToList()
+        Dim aRetardsAchats As List(Of DataRow) = factFourn.Where(enRetardT204).ToList()
+        Dim aProchesAchats As List(Of DataRow) = factFourn.Where(Function(r) Not enRetardT204(r) AndAlso DateN(r("DueDate")).HasValue).ToList()
+        Dim aBrouillons As Integer = deType("ACT_BROUILLON").Count
+        Dim aApprob As Integer = lignesT204.Where(Function(r) Txt(r("Approbation")).ToUpperInvariant() = "A_APPROUVER").Count()
+        Dim aBanque As Boolean = deType("ACT_BANQUE").Count > 0
+        Dim aEssai As DataRow = deType("ACT_ESSAI").FirstOrDefault()
+        Dim aPayRetard As Decimal = aRetardsAchats.Sum(Function(r) Dec(r("ResteAPayer")))
+
         Dim acts As New List(Of Object)
         Dim nRetardMax As Integer = 5
-        For Each r As DataRow In retardsVentes.Take(nRetardMax)
+        For Each r As DataRow In aRetardsVentes.Take(nRetardMax)
             Dim ech As Date? = DateN(r("DueDate"))
             Dim jours As Integer = If(ech.HasValue, (aujourdhui - ech.Value).Days, 0)
             acts.Add(Activite("r", String.Format(L("aFactRetard"), NumFacture(r)),
@@ -160,40 +184,40 @@ Public Class _Default
                               String.Format(L("aFactRetardDet"), Txt(r("NameSort")), Montant(Dec(r("ResteAPayer"))), jours),
                               L("btnRelancer"), "wbfCustomersInvoices.aspx"))
         Next
-        If retardsVentes.Count > nRetardMax Then
-            acts.Add(Activite("r", String.Format(L("aAutresRetards"), retardsVentes.Count - nRetardMax),
-                              L("catVentes") & " · " & Montant(retardsVentes.Skip(nRetardMax).Sum(Function(r) Dec(r("ResteAPayer")))),
+        If aRetardsVentes.Count > nRetardMax Then
+            acts.Add(Activite("r", String.Format(L("aAutresRetards"), aRetardsVentes.Count - nRetardMax),
+                              L("catVentes") & " · " & Montant(aRetardsVentes.Skip(nRetardMax).Sum(Function(r) Dec(r("ResteAPayer")))),
                               L("aAutresRetardsDet"), L("btnVoir"), "wbfCustomersInvoices.aspx"))
         End If
-        If retardsAchats.Count > 0 Then
-            acts.Add(Activite("r", String.Format(L("aFournRetard"), retardsAchats.Count),
-                              L("catAchats") & " · " & Noms(retardsAchats) & " · " & Montant(payRetard),
+        If aRetardsAchats.Count > 0 Then
+            acts.Add(Activite("r", String.Format(L("aFournRetard"), aRetardsAchats.Count),
+                              L("catAchats") & " · " & Noms(aRetardsAchats) & " · " & Montant(aPayRetard),
                               L("aFournRetardDet"), L("btnPreparer"), "wbfSuppliersInvoices.aspx"))
         End If
-        If nbApprob > 0 Then
-            acts.Add(Activite("y", String.Format(L("aApprob"), nbApprob), L("catTaches") & " · " & L("aApprobSous"),
+        If aApprob > 0 Then
+            acts.Add(Activite("y", String.Format(L("aApprob"), aApprob), L("catTaches") & " · " & L("aApprobSous"),
                               L("aApprobDet"), L("btnApprouver"), "wbfApprobations.aspx"))
         End If
-        If prochesAchats.Count > 0 Then
-            Dim proch As Date = prochesAchats.Min(Function(r) DateN(r("DueDate")).Value)
-            acts.Add(Activite("y", String.Format(L("aFournProches"), prochesAchats.Count),
-                              L("catAchats") & " · " & String.Format(L("avantLe"), JourMois(proch)) & " · " & Noms(prochesAchats) & " · " & Montant(prochesAchats.Sum(Function(r) Dec(r("ResteAPayer")))),
+        If aProchesAchats.Count > 0 Then
+            Dim proch As Date = aProchesAchats.Min(Function(r) DateN(r("DueDate")).Value)
+            acts.Add(Activite("y", String.Format(L("aFournProches"), aProchesAchats.Count),
+                              L("catAchats") & " · " & String.Format(L("avantLe"), JourMois(proch)) & " · " & Noms(aProchesAchats) & " · " & Montant(aProchesAchats.Sum(Function(r) Dec(r("ResteAPayer")))),
                               L("aFournProchesDet"), L("btnPreparer"), "wbfSuppliersInvoices.aspx"))
         End If
-        If prochesVentes.Count > 0 Then
-            acts.Add(Activite("y", String.Format(L("aVentesProches"), prochesVentes.Count),
-                              L("catVentes") & " · " & L("dans7Jours") & " · " & Montant(prochesVentes.Sum(Function(r) Dec(r("ResteAPayer")))),
+        If aProchesVentes.Count > 0 Then
+            acts.Add(Activite("y", String.Format(L("aVentesProches"), aProchesVentes.Count),
+                              L("catVentes") & " · " & L("dans7Jours") & " · " & Montant(aProchesVentes.Sum(Function(r) Dec(r("ResteAPayer")))),
                               L("aVentesProchesDet"), L("btnVoir"), "wbfCustomersInvoices.aspx"))
         End If
-        If brouillonsVentes > 0 Then
-            acts.Add(Activite("y", String.Format(L("aBrouillons"), brouillonsVentes), L("catVentes") & " · " & L("aBrouillonsSous"),
+        If aBrouillons > 0 Then
+            acts.Add(Activite("y", String.Format(L("aBrouillons"), aBrouillons), L("catVentes") & " · " & L("aBrouillonsSous"),
                               L("aBrouillonsDet"), L("btnVoir"), "wbfCustomersInvoices.aspx"))
         End If
-        If Not aCompte Then
+        If aBanque Then
             acts.Add(Activite("y", L("aBanque"), L("catComptabilite") & " · " & L("aBanqueSous"),
                               L("aBanqueDet"), L("btnBrancher"), "PlaidAccounts.aspx"))
         End If
-        Dim essai As Object = EtatEssai()
+        Dim essai As Object = ActiviteEssai(aEssai)
         If essai IsNot Nothing Then acts.Add(essai)
 
         Dim prenom As String = ""
@@ -217,23 +241,35 @@ Public Class _Default
         Return New With {.u = u, .t = titre, .d = sous, .det = detail, .btn = bouton, .url = url}
     End Function
 
-    ''' <summary>L'essai gratuit (s0687) : une activité jaune dans les 30 derniers jours.</summary>
-    Private Function EtatEssai() As Object
+    ''' <summary>
+    ''' L'essai gratuit : la ligne ACT_ESSAI de T204 (fin de l'essai dans DueDate),
+    ''' rouge à 3 jours ou moins, jaune avant.
+    ''' </summary>
+    Private Function ActiviteEssai(r As DataRow) As Object
+        If r Is Nothing Then Return Nothing
+        Dim fin As Date? = DateN(r("DueDate"))
+        If Not fin.HasValue Then Return Nothing
+        Dim jours As Integer = (fin.Value.Date - aujourdhui).Days
+        If jours < 0 OrElse jours > 30 Then Return Nothing
+        Return Activite(If(jours <= 3, "r", "y"), String.Format(L("aEssai"), jours),
+                        L("catAbonnement") & " · " & String.Format(L("avantLe"), JourMois(fin.Value)) & " · " & L("aEssaiSous"),
+                        L("aEssaiDet"), L("btnForfait"), "wbfPayment.aspx")
+    End Function
+
+    ''' <summary>
+    ''' Les activités à faire de la compagnie, toutes lues dans T204JobPlanned (s0974) :
+    ''' types ACT_* inscrits par SYNC_ACTIVITES et occurrences à approuver.
+    ''' </summary>
+    Private Function ActivitesT204() As List(Of DataRow)
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
-            Dim ds As DataSet = ExecuteSQLds("s0687GetCompanyTrialStatus", p)
-            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return Nothing
-            Dim r As DataRow = ds.Tables(0).Rows(0)
-            If Not Vrai(r("IsTrial")) OrElse IsDBNull(r("DaysRemaining")) Then Return Nothing
-            Dim jours As Integer = Convert.ToInt32(r("DaysRemaining"))
-            If jours < 0 OrElse jours > 30 Then Return Nothing
-            Dim fin As Date? = DateN(r("TrialEndOn"))
-            Return Activite(If(jours <= 3, "r", "y"), String.Format(L("aEssai"), jours),
-                            L("catAbonnement") & If(fin.HasValue, " · " & String.Format(L("avantLe"), JourMois(fin.Value)), "") & " · " & L("aEssaiSous"),
-                            L("aEssaiDet"), L("btnForfait"), "wbfPayment.aspx")
-        Catch
-            Return Nothing
+            Dim ds As DataSet = ExecuteSQLds("s0974GetActivitesAFaire", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return New List(Of DataRow)
+            Return ds.Tables(0).Rows.Cast(Of DataRow)().ToList()
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Accueil s0974 : " & ex.Message)
+            Return New List(Of DataRow)
         End Try
     End Function
 
@@ -449,19 +485,6 @@ Public Class _Default
             Dim ds As DataSet = ExecuteSQLds("s0955CountEchangesNonLus", p)
             If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return 0
             Return Convert.ToInt32(ds.Tables(0).Rows(0)("N"))
-        Catch
-            Return 0
-        End Try
-    End Function
-
-    ''' <summary>Les tâches en attente d'une décision (même décompte que la pastille du menu, s0745).</summary>
-    Private Function CompterApprobations() As Integer
-        Try
-            Dim p As New Collection
-            p.Add(New SqlParameter("@CompanyGUID", Company))
-            Dim ds As DataSet = ExecuteSQLds("s0745GetApprobationsCount", p)
-            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return 0
-            Return Convert.ToInt32(ds.Tables(0).Rows(0)("AApprouver"))
         Catch
             Return 0
         End Try
