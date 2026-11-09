@@ -110,10 +110,7 @@
 
         /* Plus de détails (champs complets de la fiche) */
         .nr-plus { margin-top: 8px; border-top: 1px solid var(--f-line2); padding-top: 12px; }
-        .nr-plus > summary { cursor: pointer; font-weight: 800; color: var(--f-blue); font-size: 14px; list-style: none; }
-        .nr-plus > summary::-webkit-details-marker { display: none; }
-        .nr-plus > summary::before { content: "▸ "; }
-        .nr-plus[open] > summary::before { content: "▾ "; }
+        .nr-plus-t { font-weight: 800; color: var(--f-blue); font-size: 14px; }
         .nr-grille { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
         .nr-grille .large { grid-column: 1 / -1; }
         .nr-coche { display: inline-flex !important; align-items: center; gap: 8px; margin-top: 34px !important; }
@@ -241,8 +238,8 @@
                     </div>
 
                     <%-- Plus de détails : tous les champs de la fiche --%>
-                    <details class="nr-plus" id="nrPlus" <%= If(pnlMsg.Visible, "open", "") %>>
-                        <summary><%= T("Plus de détails (titre, employé, heures, récurrence…)","More details (title, employee, times, recurrence…)","Más detalles (título, empleado, horas, recurrencia…)") %></summary>
+                    <div class="nr-plus" id="nrPlus">
+                        <div class="nr-plus-t"><%= T("Plus de détails (titre, employé, heures, récurrence…)","More details (title, employee, times, recurrence…)","Más detalles (título, empleado, horas, recurrencia…)") %></div>
                         <div class="nr-grille">
                             <div class="field large">
                                 <label><%= T("Titre","Title","Título") %></label>
@@ -345,7 +342,7 @@
                                 </telerik:RadDropDownList>
                             </div>
                         </div>
-                    </details>
+                    </div>
 
                 </div>
 
