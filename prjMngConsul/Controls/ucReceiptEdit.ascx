@@ -34,6 +34,11 @@
             background: #fff;
             border-top: 1px solid var(--line);
             padding: 8px 14px;
+            /* Totaux à droite, bouton d'enregistrement en dessous, aligné à droite */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
         }
 
         .customer-selector,
@@ -527,9 +532,9 @@
                             <asp:Label ID="lblDiff" runat="server" Text="0.00" CssClass="diff-ok" /></strong>
                     </div>
                 </div>
+                <%-- Le bouton d'enregistrement, dans la même boîte que les totaux --%>
+                <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked" BackColor="lightgrey" Text="Enregistrer l'encaissement" />
             </div>
-
-            <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked" BackColor="lightgrey" Text="Enregistrer l'encaissement" />
 
             <%-- OVERLAY PICKER CLIENTS --%>
             <asp:HiddenField ID="hidSelectedCustomerId" runat="server" />
