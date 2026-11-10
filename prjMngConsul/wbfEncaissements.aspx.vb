@@ -70,7 +70,8 @@ Public Class wbfEncaissements
         ' Les indicateurs comptent tout, quelle que soit la recherche.
         Dim tous As List(Of DataRow) = Lire("")
         Dim debutMois As Date = New Date(Date.Today.Year, Date.Today.Month, 1)
-        Dim duMois = tous.Where(Function(r) Not IsDBNull(r("DateReglement")) AndAlso CDate(r("DateReglement")) >= debutMois).ToList()
+        Dim actifs = tous.Where(Function(r) Convert.ToString(r("Statut")) <> "ANNULE").ToList()
+        Dim duMois = actifs.Where(Function(r) Not IsDBNull(r("DateReglement")) AndAlso CDate(r("DateReglement")) >= debutMois).ToList()
         Dim rapproches As Integer = tous.Where(Function(r) Convert.ToInt32(r("Rapproche")) = 1).Count()
 
         ' Encore à recevoir : les factures comptabilisées non soldées (même source que les factures clients).
@@ -125,12 +126,16 @@ Public Class wbfEncaissements
         If client = "" Then client = L("sansClient")
 
         Dim sb As New StringBuilder()
-        sb.Append("<div class=""en-ligne"">")
+        sb.Append("<div class=""en-ligne").Append(If(Convert.ToString(r("Statut")) = "ANNULE", " annule", "")).Append(""">")
         sb.Append("<span class=""en-ico"" aria-hidden=""true""><svg viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2.2"" stroke-linecap=""round"" stroke-linejoin=""round""><path d=""M12 3v18M7 8a4 3 0 0 1 4-3h2a4 3 0 0 1 0 6h-2a4 3 0 0 0 0 6h2a4 3 0 0 0 4-3""></path></svg></span>")
         sb.Append("<span class=""en-qui""><b>").Append(Server.HtmlEncode(client)).Append("</b><span>").Append(Server.HtmlEncode(det)).Append("</span></span>")
         sb.Append("<span class=""en-fact"">").Append(Server.HtmlEncode(Convert.ToString(r("Factures")))).Append("</span>")
         sb.Append("<span class=""en-montant"">").Append(Server.HtmlEncode(Montant(r, "Montant").ToString("C2"))).Append("</span>")
-        sb.Append("<span class=""en-par ").Append(If(rapproche, "banque", "vous")).Append(""">").Append(Server.HtmlEncode(If(rapproche, L("parBanque"), L("parVous")))).Append("</span>")
+        If Convert.ToString(r("Statut")) = "ANNULE" Then
+            sb.Append("<span class=""en-par annule"">").Append(Server.HtmlEncode(L("annule"))).Append("</span>")
+        Else
+            sb.Append("<span class=""en-par ").Append(If(rapproche, "banque", "vous")).Append(""">").Append(Server.HtmlEncode(If(rapproche, L("parBanque"), L("parVous")))).Append("</span>")
+        End If
         ' Imprimer : le reçu PDF avec le détail des factures (EncaissementPdf.ashx, T369).
         Dim id As Integer = Convert.ToInt32(r("Id"))
         Dim titre As String = L("recu") & " ENC-" & id.ToString("000000") & " — " & client
@@ -190,6 +195,7 @@ Public Class wbfEncaissements
             Case "tCarte" : Return Choose3(lang, "Carte", "Card", "Tarjeta")
             Case "tAutre" : Return Choose3(lang, "Paiement", "Payment", "Pago")
             Case "imprimer" : Return Choose3(lang, "Imprimer", "Print", "Imprimir")
+            Case "annule" : Return Choose3(lang, "Annulé", "Cancelled", "Anulado")
             Case "imprimerTip" : Return Choose3(lang, "Ouvrir le reçu avec le détail des factures, pour l'imprimer ou l'enregistrer", "Open the receipt with the invoice details, to print or save it", "Abrir el recibo con el detalle de las facturas, para imprimirlo o guardarlo")
             Case "recu" : Return Choose3(lang, "Reçu", "Receipt", "Recibo")
             Case Else : Return ""

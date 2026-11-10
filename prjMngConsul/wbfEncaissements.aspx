@@ -49,6 +49,9 @@
     .en-par { padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; white-space: nowrap }
     .en-par.banque { background: #FBF1DC; color: #7A5200 }
     .en-par.vous { background: #E8EDF5; color: #143A73 }
+    .en-par.annule { background: #F2F5F9; color: #5B6B86 }
+    .en-ligne.annule .en-montant { text-decoration: line-through; color: #8A97AB }
+    .en-ligne.annule .en-qui b { color: #5B6B86 }
     .en-imp { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer }
     .en-imp:hover { background: #F2F5F9 }
     .en-imp svg { width: 16px; height: 16px }
