@@ -304,9 +304,13 @@
     // « Paiement déjà reçu » : la fenêtre d'encaissement du client (même page que la
     // liste des factures clients). À la fermeture, les activités de la compagnie sont
     // réinscrites tout de suite (s0973) pour que la facture payée disparaisse.
-    function acPaiementRecu(partyId, titre) {
-        if (!partyId || partyId <= 0 || !$find('rwEncaissement')) { window.location.href = 'wbfCustomersInvoices.aspx'; return; }
-        openRadWindowParam(partyId, '&PartyId=' + partyId + '&sens=ENCAISSEMENT', 'rwEncaissement', 'wbfReceiptEditPopup.aspx', titre, titre);
+    // sens : ENCAISSEMENT (client, par défaut) ou DECAISSEMENT (payer un fournisseur).
+    function acPaiementRecu(partyId, titre, sens) {
+        sens = sens || 'ENCAISSEMENT';
+        if (!partyId || partyId <= 0 || !$find('rwEncaissement')) {
+            window.location.href = sens === 'DECAISSEMENT' ? 'wbfSuppliersInvoices.aspx' : 'wbfCustomersInvoices.aspx'; return;
+        }
+        openRadWindowParam(partyId, '&PartyId=' + partyId + '&sens=' + sens, 'rwEncaissement', 'wbfReceiptEditPopup.aspx', titre, titre);
     }
     function rwEncaissement_OnClose(sender, args) {
         function recharger() { window.location.reload(); }
@@ -786,7 +790,8 @@
             if (ouvert) {
                 var d = el('div', 'det');
                 // Facture en retard : « Je la place en premier : » quand 60 la propose en haut.
-                var conseil = a.k === 'factRetard' ? (i === 0 ? T.jePremier + a.det : maj(a.det)) : a.det;
+                var parFacture = a.k === 'factRetard' || a.k === 'factFournRetard';
+                var conseil = parFacture ? (i === 0 ? T.jePremier + a.det : maj(a.det)) : a.det;
                 if (s.a60 && s.cible === i) {
                     var ar = el('div', 'a60-arrive'); ar.appendChild(svg60(a.u === 'r' ? '#E35D55' : '#E3B341', 44));
                     var tx = el('span', 'txt'); tx.appendChild(el('b', '', T.a60Ici)); tx.appendChild(el('span', '', conseil)); tx.appendChild(el('span', '', T.a60Choisir));
@@ -809,6 +814,16 @@
                     var bCo = bouton('ac-btn clair', T.btnCourriel); bCo.addEventListener('click', function () { rappeler(a, 'courriel', bCo); }); gx.appendChild(bCo);
                     var bPa = bouton('ac-btn clair', T.btnPaiementRecu); bPa.addEventListener('click', function () { acPaiementRecu(a.partyId, T.winEncaissement); }); gx.appendChild(bPa);
                     d.appendChild(gx);
+                } else if (a.k === 'factFournRetard') {
+                    // Fournisseur · Facture (retard, montant), puis le décaissement du fournisseur.
+                    var ff = el('div', 'fiche');
+                    [[T.lFournisseur, a.client, ''], [fmt(T.lFacture, a.numero), a.retard, a.montant]].forEach(function (x) {
+                        var lg = el('div', 'ligne'); lg.appendChild(el('b', '', x[0])); lg.appendChild(el('span', '', x[1])); lg.appendChild(el('strong', '', x[2])); ff.appendChild(lg);
+                    });
+                    d.appendChild(ff);
+                    var gf = el('div', 'actions');
+                    var bPf = bouton('ac-btn', T.btnPayerFacture); bPf.addEventListener('click', function () { acPaiementRecu(a.partyId, T.winDecaissement, 'DECAISSEMENT'); }); gf.appendChild(bPf);
+                    d.appendChild(gf);
                 } else if (a.btn && a.url) {
                     var ac = el('div', 'actions'); var go = el('a', 'ac-btn', a.btn); go.href = a.url; ac.appendChild(go); d.appendChild(ac);
                 }

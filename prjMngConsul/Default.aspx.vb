@@ -176,7 +176,6 @@ Public Class _Default
         Dim aApprob As Integer = lignesT204.Where(Function(r) Txt(r("Approbation")).ToUpperInvariant() = "A_APPROUVER").Count()
         Dim aBanque As Boolean = deType("ACT_BANQUE").Count > 0
         Dim aEssai As DataRow = deType("ACT_ESSAI").FirstOrDefault()
-        Dim aPayRetard As Decimal = aRetardsAchats.Sum(Function(r) Dec(r("ResteAPayer")))
 
         Dim acts As New List(Of Object)
         Dim nRetardMax As Integer = 5
@@ -212,9 +211,32 @@ Public Class _Default
                               L("catVentes") & " · " & Montant(aRetardsVentes.Skip(nRetardMax).Sum(Function(r) Dec(r("ResteAPayer")))),
                               L("aAutresRetardsDet"), L("btnVoir"), "wbfCustomersInvoices.aspx"))
         End If
-        If aRetardsAchats.Count > 0 Then
-            acts.Add(Activite("r", String.Format(L("aFournRetard"), aRetardsAchats.Count),
-                              L("catAchats") & " · " & Noms(aRetardsAchats) & " · " & Montant(aPayRetard),
+        ' Factures fournisseurs en retard : une activité par facture (les 5 plus vieilles),
+        ' comme les factures clients. Ouverte : fournisseur, facture, retard, montant et
+        ' « Payer la facture » (fenêtre de décaissement du fournisseur).
+        Dim retardsAchatsTries As List(Of DataRow) = aRetardsAchats.OrderBy(Function(r) If(DateN(r("DueDate")), aujourdhui)).ToList()
+        For Each r As DataRow In retardsAchatsTries.Take(nRetardMax)
+            Dim ech As Date? = DateN(r("DueDate"))
+            Dim jours As Integer = If(ech.HasValue, (aujourdhui - ech.Value).Days, 0)
+            acts.Add(New With {
+                .u = "r",
+                .t = String.Format(L("aFactFournRetard"), NumFacture(r)),
+                .d = L("catAchats") & " · " & If(ech.HasValue, String.Format(L("echueLe"), JourMois(ech.Value)) & " · ", "") & Txt(r("NameSort")) & " · " & Montant(Dec(r("ResteAPayer"))),
+                .det = L("aFactFournConseil"),
+                .btn = "", .url = "",
+                .k = "factFournRetard",
+                .docId = If(IsDBNull(r("DocumentId")), 0, Convert.ToInt32(r("DocumentId"))),
+                .partyId = If(IsDBNull(r("PartyId")), 0, Convert.ToInt32(r("PartyId"))),
+                .client = Txt(r("NameSort")),
+                .numero = NumFacture(r),
+                .retard = String.Format(L("echueDepuisJ"), jours),
+                .montant = Montant(Dec(r("ResteAPayer")))
+            })
+        Next
+        If retardsAchatsTries.Count > nRetardMax Then
+            Dim autres As List(Of DataRow) = retardsAchatsTries.Skip(nRetardMax).ToList()
+            acts.Add(Activite("r", String.Format(L("aAutresFournRetard"), autres.Count),
+                              L("catAchats") & " · " & Noms(autres) & " · " & Montant(autres.Sum(Function(r) Dec(r("ResteAPayer")))),
                               L("aFournRetardDet"), L("btnPreparer"), "wbfSuppliersInvoices.aspx"))
         End If
         If aApprob > 0 Then
@@ -625,7 +647,8 @@ Public Class _Default
             "jePremier", "lClient", "lFacture", "lDernierRappel", "btnTexto", "btnCourriel", "btnPaiementRecu",
             "rappelCourrielConfirm", "rappelCourrielEnvoye", "rappelTextoOuvert", "rappelErreur", "envoyer",
             "canalTexto", "canalCourriel", "aujourdhuiMin", "winEncaissement",
-            "texteSimule", "courrielSimule", "voirCourriel", "fermer"
+            "texteSimule", "courrielSimule", "voirCourriel", "fermer",
+            "lFournisseur", "btnPayerFacture", "winDecaissement"
         }
         Dim t As New Dictionary(Of String, String)
         For Each k As String In cles : t(k) = L(k) : Next
@@ -772,6 +795,12 @@ Public Class _Default
             Case "aFactRetardDet" : Return Choose3(lang, "{0} doit encore {1}. La facture est échue depuis {2} jour(s) : un rappel courtois suffit souvent.", "{0} still owes {1}. The invoice is {2} day(s) overdue: a polite reminder is often enough.", "{0} todavía debe {1}. La factura venció hace {2} día(s): un recordatorio cortés suele bastar.")
             Case "aAutresRetards" : Return Choose3(lang, "{0} autres factures en retard", "{0} more overdue invoices", "{0} facturas atrasadas más")
             Case "aAutresRetardsDet" : Return Choose3(lang, "Voyez-les toutes dans les factures clients, filtrées « En retard ».", "See them all in customer invoices, filtered « Overdue ».", "Véalas todas en las facturas de clientes, filtradas « Atrasada ».")
+            Case "aFactFournRetard" : Return Choose3(lang, "Facture fournisseur {0} en retard", "Supplier invoice {0} overdue", "Factura de proveedor {0} atrasada")
+            Case "aAutresFournRetard" : Return Choose3(lang, "{0} autres factures fournisseurs en retard", "{0} more overdue supplier invoices", "{0} facturas de proveedor atrasadas más")
+            Case "aFactFournConseil" : Return Choose3(lang, "un fournisseur payé en retard peut suspendre vos commandes ou ajouter des frais. Réglez-la dès que possible.", "a supplier paid late may hold your orders or add fees. Pay it as soon as possible.", "un proveedor pagado con retraso puede suspender sus pedidos o añadir cargos. Páguela lo antes posible.")
+            Case "lFournisseur" : Return Choose3(lang, "Fournisseur", "Supplier", "Proveedor")
+            Case "btnPayerFacture" : Return Choose3(lang, "Payer la facture", "Pay the invoice", "Pagar la factura")
+            Case "winDecaissement" : Return Choose3(lang, "Payer un fournisseur", "Pay a supplier", "Pagar a un proveedor")
             Case "aFournRetard" : Return Choose3(lang, "{0} facture(s) fournisseur(s) en retard", "{0} overdue supplier invoice(s)", "{0} factura(s) de proveedor atrasada(s)")
             Case "aFournRetardDet" : Return Choose3(lang, "La date d'échéance est passée. 60secondes prépare le paiement ; vous l'autorisez.", "The due date has passed. 60secondes prepares the payment; you authorize it.", "La fecha de vencimiento pasó. 60secondes prepara el pago; usted lo autoriza.")
             Case "aFournProches" : Return Choose3(lang, "{0} facture(s) fournisseur(s) à suivre", "{0} supplier invoice(s) to follow", "{0} factura(s) de proveedor por seguir")
