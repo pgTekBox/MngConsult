@@ -223,6 +223,48 @@ Public Class wbfReleve
         End Select
     End Function
 
+    ''' <summary>L'état, et dessous le règlement relié (« Dépôt · Samuel Cloutier · FCD-0030 »).</summary>
+    Public Function StatutCell(statut As Object, info As Object) As String
+        Dim html As String = StatutPill(statut)
+        Dim s As String = Convert.ToString(info)
+        If s <> "" Then
+            Dim p As String() = s.Split("|"c)
+            If p.Length >= 4 Then
+                Dim morceaux As New List(Of String)
+                morceaux.Add(If(p(0) = "ENC", L("lienEnc"), L("lienDec")))
+                If p(2).Trim() <> "" Then morceaux.Add(p(2).Trim())
+                If p(3).Trim() <> "" Then morceaux.Add(p(3).Trim())
+                html &= "<span class=""rb-lien"">" & Server.HtmlEncode(String.Join(" · ", morceaux)) & "</span>"
+            End If
+        End If
+        Return html
+    End Function
+
+    ''' <summary>Les gestes d'une ligne : Relier + Ignorer, Délier (reliée) ou Rétablir (ignorée).</summary>
+    Public Function ActionsCell(id As Object, statut As Object, reglementId As Object) As String
+        Dim n As String = Convert.ToInt32(id).ToString()
+        If reglementId IsNot Nothing AndAlso Not IsDBNull(reglementId) Then
+            Return "<button type=""button"" class=""rb-act"" onclick=""rbAction('delier'," & n & ")"">" & Server.HtmlEncode(L("aDelier")) & "</button>"
+        End If
+        If Cle(statut) = "ignore" Then
+            Return "<button type=""button"" class=""rb-act"" onclick=""rbAction('retablir'," & n & ")"">" & Server.HtmlEncode(L("aRetablir")) & "</button>"
+        End If
+        Return "<button type=""button"" class=""rb-act primaire"" onclick=""rbRelier(" & n & ")"">" & Server.HtmlEncode(L("aRelier")) & "</button>" &
+               "<button type=""button"" class=""rb-act"" onclick=""rbAction('ignorer'," & n & ")"">" & Server.HtmlEncode(L("aIgnorer")) & "</button>"
+    End Function
+
+    ''' <summary>Les libellés de la fenêtre « Relier », en JSON pour le script.</summary>
+    Protected Function LibellesRelier() As String
+        Dim cles As String() = {"mTitre", "mDepot", "mSortie", "mRegs", "mRegsVide", "mFactsCli", "mFactsFour", "mFactsVide",
+                                "mProbable", "mRelier", "mEncaisser", "mPayer", "mFermer", "mEchue", "mReste", "mErreur",
+                                "mConfDelier", "mRegleOk", "mPartiel", "mChargement"}
+        Dim d As New Dictionary(Of String, String)
+        For Each c As String In cles
+            d(c) = L(c)
+        Next
+        Return New System.Web.Script.Serialization.JavaScriptSerializer().Serialize(d)
+    End Function
+
     Protected Function FormatDateOnly(value As Object) As String
         If value Is Nothing OrElse value Is DBNull.Value Then Return ""
         Return Convert.ToDateTime(value).ToString("d MMM yyyy").ToLower()
@@ -334,6 +376,33 @@ Public Class wbfReleve
             Case "jsConnected" : Return Choose3(lang, "Compte bancaire connecté avec succès.", "Bank account connected successfully.", "Cuenta bancaria conectada con éxito.")
             Case "jsLinkTokenError" : Return Choose3(lang, "Erreur lors de la création du link token.", "Error while creating the link token.", "Error al crear el link token.")
             Case "jsPlaidError" : Return Choose3(lang, "Erreur Plaid.", "Plaid error.", "Error de Plaid.")
+            ' Rapprochement (T367)
+            Case "lienEnc" : Return Choose3(lang, "Encaissement", "Receipt", "Cobro")
+            Case "lienDec" : Return Choose3(lang, "Paiement", "Payment", "Pago")
+            Case "aRelier" : Return Choose3(lang, "Relier", "Link", "Vincular")
+            Case "aIgnorer" : Return Choose3(lang, "Ignorer", "Ignore", "Ignorar")
+            Case "aDelier" : Return Choose3(lang, "Délier", "Unlink", "Desvincular")
+            Case "aRetablir" : Return Choose3(lang, "Rétablir", "Restore", "Restablecer")
+            Case "mTitre" : Return Choose3(lang, "Relier la ligne du relevé", "Link the statement line", "Vincular la línea del estado")
+            Case "mDepot" : Return Choose3(lang, "Dépôt", "Deposit", "Depósito")
+            Case "mSortie" : Return Choose3(lang, "Sortie", "Withdrawal", "Salida")
+            Case "mRegs" : Return Choose3(lang, "Un règlement déjà saisi", "A payment already entered", "Un pago ya registrado")
+            Case "mRegsVide" : Return Choose3(lang, "Aucun règlement libre dans ce sens.", "No free payment in this direction.", "Ningún pago libre en este sentido.")
+            Case "mFactsCli" : Return Choose3(lang, "Une facture client encore ouverte", "A customer invoice still open", "Una factura de cliente aún abierta")
+            Case "mFactsFour" : Return Choose3(lang, "Une facture fournisseur encore ouverte", "A supplier invoice still open", "Una factura de proveedor aún abierta")
+            Case "mFactsVide" : Return Choose3(lang, "Aucune facture ouverte.", "No open invoice.", "Ninguna factura abierta.")
+            Case "mProbable" : Return Choose3(lang, "Probable", "Likely", "Probable")
+            Case "mRelier" : Return Choose3(lang, "Relier", "Link", "Vincular")
+            Case "mEncaisser" : Return Choose3(lang, "Encaisser et relier", "Receive and link", "Cobrar y vincular")
+            Case "mPayer" : Return Choose3(lang, "Payer et relier", "Pay and link", "Pagar y vincular")
+            Case "mFermer" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
+            Case "mEchue" : Return Choose3(lang, "échéance", "due", "vencimiento")
+            Case "mReste" : Return Choose3(lang, "reste", "balance", "saldo")
+            Case "mErreur" : Return Choose3(lang, "Erreur", "Error", "Error")
+            Case "mConfDelier" : Return Choose3(lang, "Délier cette ligne ? Le règlement reste enregistré dans les livres.", "Unlink this line? The payment stays recorded in the books.", "¿Desvincular esta línea? El pago sigue registrado en los libros.")
+            Case "mRegleOk" : Return Choose3(lang, "Règlement enregistré et relié : {0}", "Payment recorded and linked: {0}", "Pago registrado y vinculado: {0}")
+            Case "mPartiel" : Return Choose3(lang, "Il reste {0} à payer sur la facture.", "{0} is still owed on the invoice.", "Quedan {0} por pagar en la factura.")
+            Case "mChargement" : Return Choose3(lang, "Chargement…", "Loading…", "Cargando…")
             Case Else : Return ""
         End Select
     End Function

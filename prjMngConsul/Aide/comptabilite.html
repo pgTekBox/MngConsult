@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -394,7 +394,19 @@
                     <li><span class="msg">« Erreur Plaid. »</span> — erreur générale du service ; réessayez plus tard.</li>
                 </ul>
                 <h3>Trucs et pièges</h3>
-                <div class="attention" data-titre="Attention">Cet écran est en <strong>lecture seule</strong>. Il ne propose aucune action de rapprochement ni de lettrage. Le statut « Réglé » est rempli ailleurs, lors des règlements de factures (voir <a href="ventes.html">Ventes</a> et <a href="achats.html">Achats</a>).</div>
+                <h3>Rapprocher une ligne</h3>
+                <p>Chaque ligne porte ses boutons à droite :</p>
+                <ul>
+                    <li><kbd>Relier</kbd> ouvre une fenêtre qui rappelle la ligne (date, libellé, dépôt ou sortie) et propose deux choix :
+                        <ul>
+                            <li><strong>Un règlement déjà saisi</strong> : les encaissements (pour un dépôt) ou les paiements (pour une sortie) qui ne sont encore reliés à aucune ligne, le plus proche en montant et en date en premier. « Probable » marque le même montant à 7 jours près. <kbd>Relier</kbd> pose le lien, sans nouvelle écriture.</li>
+                            <li><strong>Une facture encore ouverte</strong> (client pour un dépôt, fournisseur pour une sortie) : « Probable » marque le même montant, ou le nom du client ou le numéro de facture trouvé dans le libellé. <kbd>Encaisser et relier</kbd> (ou <kbd>Payer et relier</kbd>) enregistre le règlement de la facture à la date du relevé, sur le compte de banque 101x du plan comptable, avec la référence de la ligne, puis relie la ligne. Si le montant est inférieur au solde de la facture, le règlement est partiel et le reste est indiqué.</li>
+                        </ul>
+                    </li>
+                    <li>Une ligne reliée passe à « <strong>Réglé</strong> » ; sous la pastille, le règlement : « Encaissement · Samuel Cloutier · FCD-0030 ». <kbd>Délier</kbd> la remet « Importé » : <strong>le règlement reste enregistré</strong> dans les livres.</li>
+                    <li><kbd>Ignorer</kbd> range une ligne sans règlement (frais bancaires, loyer, paie…) dans « Ignorés » ; <kbd>Rétablir</kbd> la remet à apparier.</li>
+                </ul>
+                <div class="attention" data-titre="Attention">Un règlement ne se relie qu’à une seule ligne du relevé, et une ligne à un seul règlement. Pour un dépôt qui couvre plusieurs factures, saisissez d’abord l’encaissement de toutes les factures dans <a href="ventes.html">Ventes</a>, puis reliez-le.</div>
                 <div class="piege" data-titre="Piège">Avec la convention Plaid, un montant positif est un débit bancaire (sortie d’argent). Ne l’interprétez pas comme un dépôt.</div>
                 <div class="attention" data-titre="Compte simulé">Tant que Plaid est en pause, une compagnie peut recevoir un <strong>compte simulé</strong> : « Banque simulée — Compte chèques ••••4821 ». Son relevé couvre 90 jours. Il contient vos encaissements et paiements réels, quelques virements Interac de clients pour des factures encore ouvertes (à apparier), et les mouvements courants d’une petite entreprise : dépôts du terminal, loyer, Hydro-Québec, téléphone, paie, retenues à la source, fournitures et frais bancaires. Les références commencent par <strong>SIM-</strong>. Sur ce compte, le bouton <kbd>Importer</kbd> de <span class="chemin">Comptes bancaires</span> ajoute les jours manquants jusqu’à aujourd’hui sans appeler Plaid, et la synchronisation automatique l’ignore.</div>
             </section>
@@ -575,7 +587,7 @@
                 <details><summary>Quelle différence entre un modèle « pré-rempli » et un modèle « structure » ?</summary><p>Le modèle pré-rempli mémorise les montants et doit être équilibré ; le modèle structure ne mémorise que les comptes et leur sens, et vous saisissez les montants à chaque utilisation.</p></details>
                 <details><summary>Le bouton « Connecter une banque » ne fait rien dans Comptes bancaires. Que faire ?</summary><p>Utilisez le bouton du même nom dans <span class="chemin">Comptabilité › Relevé bancaire</span> : c’est là que le parcours Plaid est chargé.</p></details>
                 <details><summary>Pourquoi un dépôt s’affiche-t-il en négatif dans le relevé bancaire ?</summary><p>Les montants suivent la convention de Plaid : positif = sortie d’argent, négatif = entrée d’argent.</p></details>
-                <details><summary>Puis-je rapprocher mes mouvements bancaires dans le Relevé bancaire ?</summary><p>Non. Cet écran est en lecture seule ; il ne propose ni rapprochement ni lettrage. Le statut « Réglé » est mis à jour lors des règlements de factures.</p></details>
+                <details><summary>Puis-je rapprocher mes mouvements bancaires dans le Relevé bancaire ?</summary><p>Oui. Le bouton <kbd>Relier</kbd> de la ligne la relie à un règlement déjà saisi, ou enregistre le règlement d’une facture encore ouverte puis la relie. <kbd>Ignorer</kbd> écarte les lignes sans facture (frais, loyer).</p></details>
                 <details><summary>« Marquer comme remis » est grisé dans le Rapport de taxes. Pourquoi ?</summary><p>Le bouton est désactivé si le total à remettre est inférieur ou égal à 0 (solde en votre faveur) ou si la période est déjà remise.</p></details>
                 <details><summary>Comment changer la fréquence du rapport de taxes ?</summary><p>Modifiez le paramètre TAX_FREQ dans <span class="chemin">Paramètres › Taxes</span> : MENSUELLE, TRIMESTRIELLE ou ANNUELLE.</p></details>
                 <details><summary>Puis-je rouvrir un exercice fermé ?</summary><p>Non. Après la fermeture, l’exercice disparaît de la liste et l’écran ne permet pas de le rouvrir. Vérifiez soigneusement l’aperçu avant de confirmer.</p></details>
@@ -984,7 +996,19 @@
                     <li><span class="msg">“Plaid error.”</span> — general service error; try again later.</li>
                 </ul>
                 <h3>Tips and pitfalls</h3>
-                <div class="attention" data-titre="Warning">This screen is <strong>read-only</strong>. It offers no reconciliation or matching action. The “Settled” status is set elsewhere, when invoices are paid (see <a href="ventes.html">Sales</a> and <a href="achats.html">Purchases</a>).</div>
+                <h3>Matching a line</h3>
+                <p>Each line has its buttons on the right:</p>
+                <ul>
+                    <li><kbd>Link</kbd> opens a window that recalls the line (date, label, deposit or withdrawal) and offers two choices:
+                        <ul>
+                            <li><strong>A payment already entered</strong>: the receipts (for a deposit) or payments (for a withdrawal) not yet linked to any line, closest in amount and date first. “Likely” marks the same amount within 7 days. <kbd>Link</kbd> sets the link, with no new entry.</li>
+                            <li><strong>An invoice still open</strong> (customer for a deposit, supplier for a withdrawal): “Likely” marks the same amount, or the customer name or invoice number found in the label. <kbd>Receive and link</kbd> (or <kbd>Pay and link</kbd>) records the invoice payment on the statement date, on the 101x bank account of the chart of accounts, with the line reference, then links the line. If the amount is less than the invoice balance, the payment is partial and the balance is shown.</li>
+                        </ul>
+                    </li>
+                    <li>A linked line becomes “<strong>Settled</strong>”; under the badge, the payment: “Receipt · Samuel Cloutier · FCD-0030”. <kbd>Unlink</kbd> sets it back to “Imported”: <strong>the payment stays recorded</strong> in the books.</li>
+                    <li><kbd>Ignore</kbd> moves a line with no payment (bank fees, rent, payroll…) to “Ignored”; <kbd>Restore</kbd> puts it back to match.</li>
+                </ul>
+                <div class="attention" data-titre="Warning">A payment links to only one statement line, and a line to only one payment. For a deposit that covers several invoices, first enter the receipt of all the invoices in <a href="ventes.html">Sales</a>, then link it.</div>
                 <div class="piege" data-titre="Pitfall">With the Plaid convention, a positive amount is a bank debit (money going out). Do not read it as a deposit.</div>
                 <div class="attention" data-titre="Simulated account">While Plaid is paused, a company can receive a <strong>simulated account</strong>: “Banque simulée — Compte chèques ••••4821”. Its statement covers 90 days. It holds your real receipts and payments, a few customer Interac transfers for invoices that are still open (to match), and the usual movements of a small business: terminal deposits, rent, Hydro-Québec, phone, payroll, source deductions, supplies and bank fees. References start with <strong>SIM-</strong>. On this account, the <kbd>Import</kbd> button in <span class="chemin">Bank accounts</span> adds the missing days up to today without calling Plaid, and automatic sync skips it.</div>
             </section>
@@ -1165,7 +1189,7 @@
                 <details><summary>What is the difference between a “pre-filled” and a “structure” template?</summary><p>A pre-filled template stores the amounts and must be balanced; a structure template only stores the accounts and their side, and you enter the amounts at each use.</p></details>
                 <details><summary>The “Connect a bank” button does nothing in Bank accounts. What now?</summary><p>Use the button of the same name in <span class="chemin">Accounting › Bank statement</span>: that is where the Plaid flow is loaded.</p></details>
                 <details><summary>Why does a deposit show as negative in the bank statement?</summary><p>Amounts follow the Plaid convention: positive = money going out, negative = money coming in.</p></details>
-                <details><summary>Can I reconcile my bank transactions in the Bank statement?</summary><p>No. This screen is read-only; it offers no reconciliation or matching. The “Settled” status is updated when invoices are paid.</p></details>
+                <details><summary>Can I reconcile my bank transactions in the Bank statement?</summary><p>Yes. The line’s <kbd>Link</kbd> button links it to a payment already entered, or records the payment of an invoice still open and then links it. <kbd>Ignore</kbd> sets aside lines with no invoice (fees, rent).</p></details>
                 <details><summary>“Mark as remitted” is greyed out in the Tax report. Why?</summary><p>The button is disabled when the total to remit is less than or equal to 0 (balance in your favour) or when the period is already remitted.</p></details>
                 <details><summary>How do I change the tax report frequency?</summary><p>Change the TAX_FREQ parameter in <span class="chemin">Settings › Taxes</span>: MONTHLY, QUARTERLY or ANNUAL.</p></details>
                 <details><summary>Can I reopen a closed fiscal year?</summary><p>No. After closing, the year disappears from the list and the screen does not let you reopen it. Check the preview carefully before confirming.</p></details>
@@ -1574,7 +1598,19 @@
                     <li><span class="msg">«Error de Plaid.»</span> — error general del servicio; inténtelo más tarde.</li>
                 </ul>
                 <h3>Trucos y trampas</h3>
-                <div class="attention" data-titre="Atención">Esta pantalla es de <strong>solo lectura</strong>. No ofrece ninguna acción de conciliación ni de punteo. El estado «Conciliado» se rellena en otro lugar, al pagar las facturas (vea <a href="ventes.html">Ventas</a> y <a href="achats.html">Compras</a>).</div>
+                <h3>Conciliar una línea</h3>
+                <p>Cada línea tiene sus botones a la derecha:</p>
+                <ul>
+                    <li><kbd>Vincular</kbd> abre una ventana que recuerda la línea (fecha, concepto, depósito o salida) y propone dos opciones:
+                        <ul>
+                            <li><strong>Un pago ya registrado</strong>: los cobros (para un depósito) o pagos (para una salida) aún no vinculados a ninguna línea, el más cercano en importe y fecha primero. «Probable» marca el mismo importe con 7 días de margen. <kbd>Vincular</kbd> crea el vínculo, sin nuevo asiento.</li>
+                            <li><strong>Una factura aún abierta</strong> (de cliente para un depósito, de proveedor para una salida): «Probable» marca el mismo importe, o el nombre del cliente o el número de factura presente en el concepto. <kbd>Cobrar y vincular</kbd> (o <kbd>Pagar y vincular</kbd>) registra el pago de la factura en la fecha del extracto, en la cuenta bancaria 101x del plan contable, con la referencia de la línea, y luego vincula la línea. Si el importe es menor que el saldo de la factura, el pago es parcial y se indica el saldo.</li>
+                        </ul>
+                    </li>
+                    <li>Una línea vinculada pasa a «<strong>Conciliado</strong>»; bajo la etiqueta, el pago: «Cobro · Samuel Cloutier · FCD-0030». <kbd>Desvincular</kbd> la devuelve a «Importado»: <strong>el pago sigue registrado</strong> en los libros.</li>
+                    <li><kbd>Ignorar</kbd> deja de lado una línea sin pago (cargos bancarios, alquiler, nómina…) en «Ignorados»; <kbd>Restablecer</kbd> la devuelve a conciliar.</li>
+                </ul>
+                <div class="attention" data-titre="Atención">Un pago solo se vincula a una línea del extracto, y una línea a un solo pago. Para un depósito que cubre varias facturas, registre primero el cobro de todas las facturas en <a href="ventes.html">Ventas</a> y luego vincúlelo.</div>
                 <div class="piege" data-titre="Trampa">Con la convención Plaid, un importe positivo es un débito bancario (salida de dinero). No lo interprete como un depósito.</div>
                 <div class="attention" data-titre="Cuenta simulada">Mientras Plaid está en pausa, una empresa puede recibir una <strong>cuenta simulada</strong>: «Banque simulée — Compte chèques ••••4821». Su extracto cubre 90 días. Contiene sus cobros y pagos reales, algunas transferencias Interac de clientes para facturas aún abiertas (por conciliar) y los movimientos habituales de una pequeña empresa: depósitos del terminal, alquiler, Hydro-Québec, teléfono, nómina, retenciones en la fuente, suministros y cargos bancarios. Las referencias empiezan por <strong>SIM-</strong>. En esta cuenta, el botón <kbd>Importar</kbd> de <span class="chemin">Cuentas bancarias</span> añade los días que faltan hasta hoy sin llamar a Plaid, y la sincronización automática la omite.</div>
             </section>
@@ -1755,7 +1791,7 @@
                 <details><summary>¿Qué diferencia hay entre una plantilla «pre-rellenada» y una plantilla «estructura»?</summary><p>La plantilla pre-rellenada memoriza los importes y debe estar cuadrada; la plantilla estructura solo memoriza las cuentas y su sentido, y usted introduce los importes en cada uso.</p></details>
                 <details><summary>El botón «Conectar un banco» no hace nada en Cuentas bancarias. ¿Qué hago?</summary><p>Use el botón del mismo nombre en <span class="chemin">Contabilidad › Extracto bancario</span>: ahí es donde se carga el recorrido Plaid.</p></details>
                 <details><summary>¿Por qué un depósito aparece en negativo en el extracto bancario?</summary><p>Los importes siguen la convención de Plaid: positivo = salida de dinero, negativo = entrada de dinero.</p></details>
-                <details><summary>¿Puedo conciliar mis movimientos bancarios en el Extracto bancario?</summary><p>No. Esta pantalla es de solo lectura; no ofrece conciliación ni punteo. El estado «Conciliado» se actualiza al pagar las facturas.</p></details>
+                <details><summary>¿Puedo conciliar mis movimientos bancarios en el Extracto bancario?</summary><p>Sí. El botón <kbd>Vincular</kbd> de la línea la vincula a un pago ya registrado, o registra el pago de una factura aún abierta y luego la vincula. <kbd>Ignorar</kbd> deja de lado las líneas sin factura (cargos, alquiler).</p></details>
                 <details><summary>«Marcar como remitido» está en gris en el Informe de impuestos. ¿Por qué?</summary><p>El botón está desactivado si el total a remitir es inferior o igual a 0 (saldo a su favor) o si el período ya está remitido.</p></details>
                 <details><summary>¿Cómo cambio la frecuencia del informe de impuestos?</summary><p>Modifique el parámetro TAX_FREQ en <span class="chemin">Parámetros › Impuestos</span>: MENSUAL, TRIMESTRAL o ANUAL.</p></details>
                 <details><summary>¿Puedo reabrir un ejercicio cerrado?</summary><p>No. Después del cierre, el ejercicio desaparece de la lista y la pantalla no permite reabrirlo. Compruebe cuidadosamente la vista previa antes de confirmar.</p></details>

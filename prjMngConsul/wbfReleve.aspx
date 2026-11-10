@@ -90,7 +90,34 @@
     .fc-pied { padding: 12px 6px 0; color: #44536E; font-size: 14px }
     /* Les colonnes : date, description, compte, état, montant. */
     .fc-liste .listview-list { min-width: 900px }
-    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: 130px minmax(0, 2.2fr) minmax(0, 1.3fr) 130px 150px }
+    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: 120px minmax(0, 2.2fr) minmax(0, 1.1fr) minmax(150px, 1fr) 130px 180px }
+    /* Rapprochement (T367) : le règlement relié sous l'état, les gestes de la ligne. */
+    .rb-lien { display: block; margin-top: 4px; font-size: 12px; color: #44536E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+    .rb-actions { display: flex; justify-content: flex-end; gap: 6px }
+    .rb-act { min-height: 34px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer }
+    .rb-act:hover { background: #F2F5F9 }
+    .rb-act.primaire { border-color: #1B4F9C; background: #1B4F9C; color: #fff }
+    .rb-act.primaire:hover { background: #143A73 }
+    .rb-act:disabled { opacity: .55; cursor: default }
+    /* La fenêtre « Relier » */
+    .rb-fond { position: fixed; inset: 0; background: rgba(14,31,61,.45); display: none; align-items: flex-start; justify-content: center; z-index: 10000; padding: 6vh 16px; box-sizing: border-box; overflow: auto }
+    .rb-fond.ouvert { display: flex }
+    .rb-boite { width: 100%; max-width: 760px; background: #fff; border-radius: 24px; padding: 22px 24px; box-shadow: 0 20px 60px rgba(14,31,61,.3); color: #0E1F3D }
+    .rb-boite h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800 }
+    .rb-ligne { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; padding: 12px 14px; border-radius: 16px; background: #F2F5F9; margin: 10px 0 16px }
+    .rb-ligne b { font-size: 16px }
+    .rb-ligne .m { margin-left: auto; font-size: 18px; font-weight: 800 }
+    .rb-ligne .m.entree { color: #0F5A3A } .rb-ligne .m.sortie { color: #A3261C }
+    .rb-boite h3 { margin: 14px 0 6px; font-size: 14px; font-weight: 800; color: #5B6B86; text-transform: uppercase; letter-spacing: .04em }
+    .rb-cand { display: grid; grid-template-columns: 90px minmax(0, 1fr) 120px 170px; gap: 10px; align-items: center; padding: 9px 6px; border-top: 1px solid #E3E9F1; font-size: 14px }
+    .rb-cand .t { min-width: 0 } .rb-cand .t b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+    .rb-cand .t span { font-size: 12px; color: #44536E }
+    .rb-cand .mt { text-align: right; font-weight: 800 }
+    .rb-cand .go { text-align: right }
+    .rb-prob { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #E3F3EA; color: #0F5A3A; font-size: 11px; font-weight: 800; vertical-align: middle }
+    .rb-vide { padding: 10px 6px; color: #44536E; border-top: 1px solid #E3E9F1; font-size: 14px }
+    .rb-msg { margin-top: 12px; padding: 10px 14px; border-radius: 12px; background: #FDECEA; color: #A3261C; font-weight: 700; display: none }
+    .rb-pied { display: flex; justify-content: flex-end; margin-top: 16px }
     .fc-liste .c-date { white-space: nowrap; font-weight: 700 }
     .fc-liste .c-desc { display: flex; flex-direction: column; min-width: 0 }
     .fc-liste .c-desc b { font-weight: 800; color: #0E1F3D; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
@@ -158,6 +185,7 @@
                                 <div><asp:Literal ID="litColRef" runat="server" /></div>
                                 <div><asp:Literal ID="litColStatus" runat="server" /></div>
                                 <div class="adroite"><asp:Literal ID="litColAmount" runat="server" /></div>
+                                <div></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -172,8 +200,9 @@
                             <div class="c-date"><%# FormatDateOnly(Eval("DateMouvement")) %></div>
                             <div class="c-desc"><%# DescCell(Eval("Description"), Eval("Reference")) %></div>
                             <div class="c-compte"><%# Server.HtmlEncode(Convert.ToString(Eval("FullName"))) %></div>
-                            <div><%# StatutPill(Eval("Statut")) %></div>
+                            <div style="min-width:0"><%# StatutCell(Eval("Statut"), Eval("ReglementInfo")) %></div>
                             <div class='<%# "c-montant " & GetMontantCss(Eval("Montant")) %>'><%# FormatMontant(Eval("Montant")) %></div>
+                            <div class="rb-actions"><%# ActionsCell(Eval("Id"), Eval("Statut"), Eval("ReglementId")) %></div>
                         </div>
                     </ItemTemplate>
 
@@ -191,6 +220,18 @@
         </div>
 
     </telerik:RadAjaxPanel>
+
+    <%-- La fenêtre « Relier » (hors du RadAjaxPanel) : remplie par rbRelier()
+         à partir de ReleveRapprochement.ashx (action « candidats »). --%>
+    <div id="rbFond" class="rb-fond" onclick="if (event.target === this) rbFermer();">
+        <div class="rb-boite" role="dialog" aria-modal="true" aria-labelledby="rbTitre">
+            <h2 id="rbTitre"></h2>
+            <div id="rbCorps"></div>
+            <div id="rbMsg" class="rb-msg"></div>
+            <div class="rb-pied"><button type="button" class="rb-act" id="rbFermerBtn" onclick="rbFermer()"></button></div>
+        </div>
+    </div>
+
       <%-- =====================================================
        JAVASCRIPT
   ===================================================== --%>
@@ -203,6 +244,92 @@
             document.getElementById("btnChip").click();
         }
 
+
+      // ── Rapprochement (T367) : Relier / Délier / Ignorer une ligne du relevé ──
+      var RB = <%= LibellesRelier() %>;
+      var rbLigneId = 0;
+
+      function rbEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+      function rbMontant(n) { return Number(n || 0).toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $'; }
+      function rbJour(d) {
+          if (!d) return '';
+          var p = d.split('-'); var dt = new Date(+p[0], +p[1] - 1, +p[2]);
+          return dt.toLocaleDateString(document.documentElement.lang || 'fr-CA', { day: 'numeric', month: 'short' });
+      }
+      async function rbAppel(corps) {
+          var r = await fetch('ReleveRapprochement.ashx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corps), credentials: 'same-origin' });
+          var d = null;
+          try { d = await r.json(); } catch (e) { }
+          if (!d) d = { ok: false, erreur: RB.mErreur + ' ' + r.status };
+          return d;
+      }
+      function rbMessage(t) { var m = document.getElementById('rbMsg'); m.textContent = t || ''; m.style.display = t ? 'block' : 'none'; }
+      function rbRafraichir() { fcChip('refresh', '1'); }
+      function rbFermer() { document.getElementById('rbFond').classList.remove('ouvert'); rbLigneId = 0; }
+
+      async function rbRelier(id) {
+          rbLigneId = id;
+          document.getElementById('rbTitre').textContent = RB.mTitre;
+          document.getElementById('rbFermerBtn').textContent = RB.mFermer;
+          document.getElementById('rbCorps').innerHTML = '<div class="rb-vide">' + rbEsc(RB.mChargement) + '</div>';
+          rbMessage('');
+          document.getElementById('rbFond').classList.add('ouvert');
+
+          var d = await rbAppel({ action: 'candidats', id: id });
+          if (!d.ok) { document.getElementById('rbCorps').innerHTML = ''; rbMessage(d.erreur); return; }
+
+          var l = d.ligne, h = '';
+          h += '<div class="rb-ligne"><span>' + rbEsc(rbJour(l.date)) + '</span><b>' + rbEsc(l.description) + '</b>' +
+               '<span class="m ' + (l.entree ? 'entree' : 'sortie') + '">' + rbEsc(l.entree ? RB.mDepot : RB.mSortie) + ' ' + rbMontant(Math.abs(l.montant)) + '</span></div>';
+
+          h += '<h3>' + rbEsc(RB.mRegs) + '</h3>';
+          if (!d.reglements.length) h += '<div class="rb-vide">' + rbEsc(RB.mRegsVide) + '</div>';
+          d.reglements.forEach(function (r) {
+              var sous = [r.numeros, r.type, r.reference].filter(function (x) { return x; }).join(' · ');
+              h += '<div class="rb-cand"><span>' + rbEsc(rbJour(r.date)) + '</span>' +
+                   '<span class="t"><b>' + rbEsc(r.tiers || '—') + (r.probable ? '<span class="rb-prob">' + rbEsc(RB.mProbable) + '</span>' : '') + '</b><span>' + rbEsc(sous) + '</span></span>' +
+                   '<span class="mt">' + rbMontant(r.montant) + '</span>' +
+                   '<span class="go"><button type="button" class="rb-act' + (r.probable ? ' primaire' : '') + '" onclick="rbLier(' + r.id + ', this)">' + rbEsc(RB.mRelier) + '</button></span></div>';
+          });
+
+          h += '<h3>' + rbEsc(l.entree ? RB.mFactsCli : RB.mFactsFour) + '</h3>';
+          if (!d.factures.length) h += '<div class="rb-vide">' + rbEsc(RB.mFactsVide) + '</div>';
+          d.factures.forEach(function (f) {
+              h += '<div class="rb-cand"><span>' + rbEsc(f.numero) + '</span>' +
+                   '<span class="t"><b>' + rbEsc(f.tiers || '—') + (f.probable ? '<span class="rb-prob">' + rbEsc(RB.mProbable) + '</span>' : '') + '</b><span>' + rbEsc(RB.mEchue + ' ' + rbJour(f.echeance)) + '</span></span>' +
+                   '<span class="mt">' + rbEsc(RB.mReste) + ' ' + rbMontant(f.reste) + '</span>' +
+                   '<span class="go"><button type="button" class="rb-act' + (f.probable ? ' primaire' : '') + '" onclick="rbRegler(' + f.id + ', this)">' + rbEsc(l.entree ? RB.mEncaisser : RB.mPayer) + '</button></span></div>';
+          });
+          document.getElementById('rbCorps').innerHTML = h;
+      }
+
+      function rbOccupe(btn, oui) { document.querySelectorAll('#rbCorps button').forEach(function (b) { b.disabled = oui; }); }
+
+      async function rbLier(reglementId, btn) {
+          rbOccupe(btn, true); rbMessage('');
+          var d = await rbAppel({ action: 'lier', id: rbLigneId, reglementId: reglementId });
+          if (!d.ok) { rbOccupe(btn, false); rbMessage(d.erreur); return; }
+          rbFermer(); rbRafraichir();
+      }
+
+      async function rbRegler(docId, btn) {
+          rbOccupe(btn, true); rbMessage('');
+          var d = await rbAppel({ action: 'regler', id: rbLigneId, docId: docId });
+          if (!d.ok) { rbOccupe(btn, false); rbMessage(d.erreur); return; }
+          rbFermer(); rbRafraichir();
+          if (d.reste > 0.005) alert(RB.mRegleOk.replace('{0}', rbMontant(d.montant)) + '\n' + RB.mPartiel.replace('{0}', rbMontant(d.reste)));
+      }
+
+      async function rbAction(action, id) {
+          if (action === 'delier' && !confirm(RB.mConfDelier)) return;
+          var corps = { action: action === 'retablir' ? 'ignorer' : action, id: id };
+          if (action === 'ignorer') corps.ignorer = true;
+          if (action === 'retablir') corps.ignorer = false;
+          var d = await rbAppel(corps);
+          if (!d.ok) { alert(d.erreur); return; }
+          rbRafraichir();
+      }
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && rbLigneId) rbFermer(); });
 
       var L_EXCHANGE_ERROR  = "<%= L("jsExchangeError") %>";
       var L_CONNECTED       = "<%= L("jsConnected") %>";
