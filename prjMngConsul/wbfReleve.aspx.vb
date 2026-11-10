@@ -18,9 +18,339 @@ Public Class wbfReleve
         ApplyLocalization()
 
         If Not IsPostBack Then
+            InitPeriode()
             rlvReleve.Rebind()
         End If
     End Sub
+
+    ' =====================================================================
+    ' Période du relevé et conciliation bancaire (script T368, s0983-s0986).
+    ' La période (du / au) et le compte vivent en session ; ils bornent la
+    ' liste, les indicateurs et la boîte de conciliation.
+    ' =====================================================================
+
+    Private Property Du As Date
+        Get
+            Return If(TypeOf Session("Releve.Du") Is Date, CDate(Session("Releve.Du")), Date.Today.AddDays(1 - Date.Today.Day).AddMonths(-1))
+        End Get
+        Set(value As Date)
+            Session("Releve.Du") = value
+        End Set
+    End Property
+
+    Private Property Au As Date
+        Get
+            Return If(TypeOf Session("Releve.Au") Is Date, CDate(Session("Releve.Au")), Date.Today.AddDays(-Date.Today.Day))
+        End Get
+        Set(value As Date)
+            Session("Releve.Au") = value
+        End Set
+    End Property
+
+    Private Property CompteCourant As String
+        Get
+            Return If(TryCast(Session("Releve.Compte"), String), "")
+        End Get
+        Set(value As String)
+            Session("Releve.Compte") = value
+        End Set
+    End Property
+
+    ''' <summary>Message d'une action de conciliation, affiché une fois (ok|… ou err|…).</summary>
+    Private MessageConcil As String = ""
+
+    Private Sub InitPeriode()
+        ' Les comptes du relevé ; la liste n'apparaît que s'il y en a plusieurs.
+        ddlCompte.Items.Clear()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@DateDebut", Date.Today))
+            p.Add(New SqlParameter("@DateFin", Date.Today))
+            Dim ds As DataSet = ExecuteSQLds("s0983GetConciliation", p)
+            For Each r As DataRow In ds.Tables(3).Rows
+                ddlCompte.Items.Add(New ListItem(Convert.ToString(r("Nom")), Convert.ToString(r("AccountId"))))
+            Next
+            If CompteCourant = "" OrElse ddlCompte.Items.FindByValue(CompteCourant) Is Nothing Then
+                CompteCourant = Convert.ToString(ds.Tables(0).Rows(0)("CompteBanque"))
+            End If
+        Catch
+        End Try
+        ddlCompte.Visible = ddlCompte.Items.Count > 1
+        If ddlCompte.Items.FindByValue(CompteCourant) IsNot Nothing Then ddlCompte.SelectedValue = CompteCourant
+
+        ' Période par défaut : le lendemain de la dernière conciliation clôturée jusqu'à la
+        ' fin de ce mois-là ; sinon le mois précédent.
+        If Not (TypeOf Session("Releve.Du") Is Date) Then
+            Dim verrou As Date? = DerniereCloture()
+            If verrou.HasValue Then
+                Dim d As Date = verrou.Value.AddDays(1)
+                Du = d
+                Au = Min(New Date(d.Year, d.Month, Date.DaysInMonth(d.Year, d.Month)), Date.Today)
+            Else
+                Du = Date.Today.AddDays(1 - Date.Today.Day).AddMonths(-1)
+                Au = Date.Today.AddDays(-Date.Today.Day)
+            End If
+        End If
+        AfficherPeriode()
+    End Sub
+
+    Private Shared Function Min(a As Date, b As Date) As Date
+        Return If(a < b, a, b)
+    End Function
+
+    Private Sub AfficherPeriode()
+        tbDu.Text = Du.ToString("yyyy-MM-dd")
+        tbAu.Text = Au.ToString("yyyy-MM-dd")
+    End Sub
+
+    Private Function Historique() As DataTable
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@CompteBanque", If(CompteCourant = "", CObj(DBNull.Value), CompteCourant)))
+            Return ExecuteSQLds("s0985GetConciliations", p).Tables(0)
+        Catch
+            Return Nothing
+        End Try
+    End Function
+
+    Private Function DerniereCloture() As Date?
+        Dim h As DataTable = Historique()
+        If h Is Nothing OrElse h.Rows.Count = 0 Then Return Nothing
+        Return CDate(h.Rows(0)("DateFin"))
+    End Function
+
+    Private Sub btnPeriode_Click(sender As Object, e As EventArgs) Handles btnPeriode.Click
+        Dim d1, d2 As Date
+        If Date.TryParse(tbDu.Text, d1) AndAlso Date.TryParse(tbAu.Text, d2) Then
+            If d2 < d1 Then
+                MessageConcil = "err|" & L("cErrDates")
+            Else
+                Du = d1 : Au = d2
+            End If
+        End If
+        If ddlCompte.Visible AndAlso ddlCompte.SelectedValue <> "" Then CompteCourant = ddlCompte.SelectedValue
+        AfficherPeriode()
+        rlvReleve.Rebind()
+    End Sub
+
+    ''' <summary>Les puces de période : mois précédent, ce mois-ci, après la dernière clôture.</summary>
+    Private Function PeriodeChips() As String
+        Dim sb As New StringBuilder()
+        sb.Append("<button type=""button"" class=""fc-chip"" onclick=""fcChip('periode','prec')"">" & Server.HtmlEncode(L("pPrec")) & "</button>")
+        sb.Append("<button type=""button"" class=""fc-chip"" onclick=""fcChip('periode','courant')"">" & Server.HtmlEncode(L("pCourant")) & "</button>")
+        If DerniereCloture().HasValue Then
+            sb.Append("<button type=""button"" class=""fc-chip"" onclick=""fcChip('periode','suite')"">" & Server.HtmlEncode(L("pSuite")) & "</button>")
+        End If
+        Return sb.ToString()
+    End Function
+
+    Private Sub ActionPeriode(valeur As String)
+        Dim t As Date = Date.Today
+        Select Case valeur
+            Case "prec"
+                Du = t.AddDays(1 - t.Day).AddMonths(-1) : Au = t.AddDays(-t.Day)
+            Case "courant"
+                Du = t.AddDays(1 - t.Day) : Au = t
+            Case "suite"
+                Dim v As Date? = DerniereCloture()
+                If v.HasValue Then
+                    Dim d As Date = v.Value.AddDays(1)
+                    Du = d : Au = Min(New Date(d.Year, d.Month, Date.DaysInMonth(d.Year, d.Month)), t)
+                End If
+            Case Else
+                ' « aaaa-mm-jj_aaaa-mm-jj » : une conciliation de l'historique
+                Dim parts As String() = valeur.Split("_"c)
+                Dim d1, d2 As Date
+                If parts.Length = 2 AndAlso Date.TryParse(parts(0), d1) AndAlso Date.TryParse(parts(1), d2) Then Du = d1 : Au = d2
+        End Select
+        AfficherPeriode()
+    End Sub
+
+    Private Sub ActionConciliation(valeur As String)
+        Try
+            If valeur = "cloturer" Then
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", Company))
+                p.Add(New SqlParameter("@DateDebut", Du))
+                p.Add(New SqlParameter("@DateFin", Au))
+                p.Add(New SqlParameter("@CompteBanque", CompteCourant))
+                p.Add(New SqlParameter("@UserId", UserId))
+                ExecuteSQLds("s0984CloturerConciliation", p)
+                MessageConcil = "ok|" & L("cClotureOk")
+            ElseIf valeur.StartsWith("rouvrir:") Then
+                Dim id As Integer
+                If Integer.TryParse(valeur.Substring(8), id) Then
+                    Dim p As New Collection
+                    p.Add(New SqlParameter("@CompanyGUID", Company))
+                    p.Add(New SqlParameter("@Id", id))
+                    ExecuteSQLds("s0986RouvrirConciliation", p)
+                    MessageConcil = "ok|" & L("cRouvertOk")
+                End If
+            End If
+        Catch ex As Exception
+            MessageConcil = "err|" & If(ex.InnerException IsNot Nothing, ex.InnerException.Message, ex.Message)
+        End Try
+    End Sub
+
+    Private Function FmtM(o As Object) As String
+        Return Server.HtmlEncode(FormatMontant(If(o Is Nothing OrElse IsDBNull(o), 0D, Math.Abs(Convert.ToDecimal(o)))))
+    End Function
+
+    Private Function FmtJ(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return ""
+        Return Server.HtmlEncode(Convert.ToDateTime(o).ToString("d MMM", Globalization.CultureInfo.GetCultureInfo(If(CurrentLang = "en", "en-CA", If(CurrentLang = "es", "es-ES", "fr-CA")))))
+    End Function
+
+    Private Function FmtJA(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return ""
+        Return Server.HtmlEncode(Convert.ToDateTime(o).ToString("d MMM yyyy", Globalization.CultureInfo.GetCultureInfo(If(CurrentLang = "en", "en-CA", If(CurrentLang = "es", "es-ES", "fr-CA")))))
+    End Function
+
+    Private Shared Function Ligne(lib_ As String, montant As String, Optional total As Boolean = False) As String
+        Return "<div class=""cb-l" & If(total, " tot", "") & """><span>" & lib_ & "</span><b>" & montant & "</b></div>"
+    End Function
+
+    ''' <summary>La boîte de conciliation de la période.</summary>
+    Private Sub ChargerConciliation()
+        SetLiteral(Me, "litPeriodeChips", PeriodeChips())
+        Dim sb As New StringBuilder()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@DateDebut", Du))
+            p.Add(New SqlParameter("@DateFin", Au))
+            p.Add(New SqlParameter("@CompteBanque", If(CompteCourant = "", CObj(DBNull.Value), CompteCourant)))
+            Dim ds As DataSet = ExecuteSQLds("s0983GetConciliation", p)
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            If CompteCourant = "" Then CompteCourant = Convert.ToString(r("CompteBanque"))
+
+            Dim ecart As Decimal = Convert.ToDecimal(r("Ecart"))
+            Dim conciliee As Boolean = Math.Abs(ecart) < 0.005D
+            Dim idClot As Integer = If(IsDBNull(r("ConciliationId")), 0, Convert.ToInt32(r("ConciliationId")))
+            Dim verrou As Date? = If(IsDBNull(r("VerrouJusquau")), CType(Nothing, Date?), CDate(r("VerrouJusquau")))
+            Dim h As DataTable = Historique()
+
+            sb.Append("<section class=""cb-carte""><div class=""cb-tete""><h2>" & Server.HtmlEncode(L("cTitre")) & "</h2>")
+            sb.Append("<span class=""sous"">" & Server.HtmlEncode(String.Format(L("cSous"), FmtJA(r("DateDebut")), FmtJA(r("DateFin")), Convert.ToString(r("NomCompte")), Convert.ToString(r("CompteGL")) & " " & Convert.ToString(r("NomGL")))) & "</span>")
+            If idClot > 0 Then
+                sb.Append("<span class=""cb-etat close"">" & Server.HtmlEncode(L("cCloturee")) & "</span>")
+            ElseIf conciliee Then
+                sb.Append("<span class=""cb-etat ok"">" & Server.HtmlEncode(L("cOk")) & "</span>")
+            Else
+                sb.Append("<span class=""cb-etat ecart"">" & Server.HtmlEncode(L("cEcartEtat")) & "</span>")
+            End If
+            sb.Append("</div>")
+
+            ' Les deux colonnes : relevé et livres
+            sb.Append("<div class=""cb-cols""><div class=""cb-col""><h3>" & Server.HtmlEncode(L("cReleve")) & "</h3>")
+            sb.Append(Ligne(Server.HtmlEncode(String.Format(L("cOuverture"), FmtJA(r("DateDebut")))), FmtM(r("SoldeOuverture"))))
+            sb.Append(Ligne("+ " & Server.HtmlEncode(String.Format(L("cEntrees"), r("NbMouvements"))), FmtM(r("Entrees"))))
+            sb.Append(Ligne("− " & Server.HtmlEncode(L("cSorties")), FmtM(r("Sorties"))))
+            sb.Append(Ligne(Server.HtmlEncode(String.Format(L("cFermeture"), FmtJA(r("DateFin")))), FmtM(r("SoldeFermeture")), True))
+            sb.Append(Ligne("+ " & Server.HtmlEncode(L("cDepCirc")), FmtM(r("DepotsCirculation"))))
+            sb.Append(Ligne("− " & Server.HtmlEncode(L("cPaieCirc")), FmtM(r("PaiementsCirculation"))))
+            sb.Append(Ligne(Server.HtmlEncode(L("cBanqueRaj")), FmtM(r("BanqueRajuste")), True))
+            sb.Append("</div><div class=""cb-col""><h3>" & Server.HtmlEncode(L("cLivres")) & "</h3>")
+            sb.Append(Ligne(Server.HtmlEncode(String.Format(L("cSoldeLivres"), FmtJA(r("DateFin")))), FmtM(r("SoldeLivres"))))
+            sb.Append(Ligne("+ " & Server.HtmlEncode(L("cEntNI")), FmtM(r("EntreesNonInscrites"))))
+            sb.Append(Ligne("− " & Server.HtmlEncode(L("cSorNI")), FmtM(r("SortiesNonInscrites"))))
+            sb.Append(Ligne(Server.HtmlEncode(L("cLivresRaj")), FmtM(r("LivresRajuste")), True))
+            sb.Append("</div></div>")
+
+            ' L'écart et le geste de clôture
+            sb.Append("<div class=""cb-bas""><span>" & Server.HtmlEncode(L("cEcart")) & "</span><span class=""ecart " & If(conciliee, "zero", "non") & """>" &
+                      Server.HtmlEncode(FormatMontant(ecart)) & "</span>")
+            If idClot > 0 Then
+                Dim estDerniere As Boolean = h IsNot Nothing AndAlso h.Rows.Count > 0 AndAlso Convert.ToInt32(h.Rows(0)("Id")) = idClot
+                Dim ligneH As DataRow = If(h Is Nothing, Nothing, h.Select("Id = " & idClot).FirstOrDefault())
+                Dim par As String = If(ligneH Is Nothing, "", String.Format(L("cClotureePar"), FmtJA(ligneH("Created")), Convert.ToString(ligneH("Par")).Trim()))
+                sb.Append("<span class=""note"">" & Server.HtmlEncode(par) & "</span>")
+                If estDerniere Then
+                    sb.Append("<button type=""button"" class=""fc-btn"" onclick=""if (confirm(" & JsStr(L("cConfRouvrir")) & ")) { fcChip('concil','rouvrir:" & idClot & "'); }"">" & Server.HtmlEncode(L("cRouvrir")) & "</button>")
+                End If
+            Else
+                Dim raison As String = ""
+                If Au > Date.Today Then
+                    raison = L("cPasFinie")
+                ElseIf verrou.HasValue AndAlso Du <= verrou.Value Then
+                    raison = String.Format(L("cChevauche"), FmtJA(verrou.Value))
+                ElseIf verrou.HasValue AndAlso Du > verrou.Value.AddDays(1) Then
+                    raison = String.Format(L("cTrou"), FmtJA(verrou.Value.AddDays(1)))
+                End If
+                If raison <> "" Then
+                    sb.Append("<span class=""note"">" & Server.HtmlEncode(raison) & "</span>")
+                Else
+                    sb.Append("<span class=""note"">" & Server.HtmlEncode(If(conciliee, L("cNoteOk"), L("cNoteEcart"))) & "</span>")
+                    Dim conf As String = If(conciliee, L("cConfCloturer"), String.Format(L("cConfCloturerEcart"), FormatMontant(ecart)))
+                    sb.Append("<button type=""button"" class=""fc-btn primaire"" onclick=""if (confirm(" & JsStr(conf) & ")) { fcChip('concil','cloturer'); }"">" & Server.HtmlEncode(L("cCloturer")) & "</button>")
+                End If
+            End If
+            sb.Append("</div>")
+
+            If MessageConcil <> "" Then
+                Dim i As Integer = MessageConcil.IndexOf("|"c)
+                sb.Append("<div class=""cb-msg " & MessageConcil.Substring(0, i) & """>" & Server.HtmlEncode(MessageConcil.Substring(i + 1)) & "</div>")
+            End If
+
+            ' Ce qui fait l'écart : en circulation, et au relevé mais pas aux livres
+            sb.Append("<div class=""cb-listes""><div><h4>" & Server.HtmlEncode(String.Format(L("cListeCirc"), r("NbCirculation"))) & "</h4>")
+            sb.Append(ListeItems(ds.Tables(1), "DateReglement", Function(x) (If(Convert.ToString(x("Sens")) = "ENCAISSEMENT", L("lienEnc"), L("lienDec")) & " · " & Convert.ToString(x("Tiers")) & If(Convert.ToString(x("Numeros")) <> "", " · " & Convert.ToString(x("Numeros")), "")), "Montant"))
+            sb.Append("</div><div><h4>" & Server.HtmlEncode(String.Format(L("cListeNI"), r("NbNonInscrits"))) & "</h4>")
+            sb.Append(ListeItems(ds.Tables(2), "DateMouvement", Function(x) Convert.ToString(x("Description")) & If(Cle(x("Statut")) = "ignore", " (" & L("stIgnored") & ")", ""), "Montant", True))
+            sb.Append("</div></div>")
+
+            ' L'historique
+            If h IsNot Nothing AndAlso h.Rows.Count > 0 Then
+                sb.Append("<div class=""cb-hist""><h4>" & Server.HtmlEncode(L("cHist")) & "</h4>")
+                For Each x As DataRow In h.Rows
+                    Dim clePeriode As String = CDate(x("DateDebut")).ToString("yyyy-MM-dd") & "_" & CDate(x("DateFin")).ToString("yyyy-MM-dd")
+                    sb.Append("<button type=""button"" onclick=""fcChip('periode','" & clePeriode & "')""><span>" & FmtJA(x("DateDebut")) & " – " & FmtJA(x("DateFin")) & "</span>" &
+                              "<span>" & Server.HtmlEncode(L("cEcart")) & " " & Server.HtmlEncode(FormatMontant(x("Ecart"))) & "</span>" &
+                              "<span>" & Server.HtmlEncode(Convert.ToString(x("Par")).Trim()) & "</span></button>")
+                Next
+                sb.Append("</div>")
+            End If
+            sb.Append("</section>")
+        Catch ex As Exception
+            sb.Clear()
+            sb.Append("<section class=""cb-carte""><div class=""cb-msg err"">" & Server.HtmlEncode(If(ex.InnerException IsNot Nothing, ex.InnerException.Message, ex.Message)) & "</div></section>")
+        End Try
+        SetLiteral(Me, "litConcil", sb.ToString())
+    End Sub
+
+    Private Function ListeItems(t As DataTable, colDate As String, libelle As Func(Of DataRow, String), colMontant As String, Optional signe As Boolean = False) As String
+        If t Is Nothing OrElse t.Rows.Count = 0 Then Return "<div class=""cb-vide"">" & Server.HtmlEncode(L("cRien")) & "</div>"
+        Dim sb As New StringBuilder()
+        Dim n As Integer = 0
+        For Each x As DataRow In t.Rows
+            n += 1
+            If n > 8 Then Exit For
+            Dim montant As Decimal = Convert.ToDecimal(x(colMontant))
+            ' Au relevé (convention Plaid), un montant négatif est une entrée
+            Dim txt As String = If(signe, If(montant < 0, "+ ", "− "), "") & FormatMontant(Math.Abs(montant))
+            sb.Append("<div class=""cb-it""><span>" & FmtJ(x(colDate)) & "</span><span>" & Server.HtmlEncode(libelle(x)) & "</span><b>" & Server.HtmlEncode(txt) & "</b></div>")
+        Next
+        If t.Rows.Count > 8 Then sb.Append("<div class=""cb-vide"">" & Server.HtmlEncode(String.Format(L("cAutres"), t.Rows.Count - 8)) & "</div>")
+        Return sb.ToString()
+    End Function
+
+    Private Shared Function JsStr(s As String) As String
+        Return Server_JsEncode(s)
+    End Function
+
+    Private Shared Function Server_JsEncode(s As String) As String
+        Return System.Web.HttpUtility.HtmlAttributeEncode(System.Web.HttpUtility.JavaScriptStringEncode(s, True))
+    End Function
+
+    Private Function DansPeriode(r As DataRow) As Boolean
+        If r Is Nothing OrElse IsDBNull(r("DateMouvement")) Then Return False
+        Dim d As Date = CDate(r("DateMouvement")).Date
+        If d < Du OrElse d > Au Then Return False
+        If CompteCourant <> "" AndAlso Convert.ToString(r("CompteBanque")) <> CompteCourant Then Return False
+        Return True
+    End Function
 
     ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de la page.</summary>
     Private Sub ApplyLocalization()
@@ -29,6 +359,10 @@ Public Class wbfReleve
         SetLiteral(Me, "litConnectBtn", L("connectBank"))
         SetLiteral(Me, "litRubrique", L("rubrique"))
         SetLiteral(Me, "litComptesBtn", L("comptesBtn"))
+        SetLiteral(Me, "litPeriode", L("pTitre"))
+        SetLiteral(Me, "litDu", L("pDu"))
+        SetLiteral(Me, "litAu", L("pAu"))
+        btnPeriode.Text = L("pAppliquer")
         tbSearch.Attributes("placeholder") = L("searchPh")
         btnClear.ToolTip = L("clear")
     End Sub
@@ -45,6 +379,7 @@ Public Class wbfReleve
 
     Private Sub rlvReleve_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvReleve.NeedDataSource
         ChargerIndicateurs()
+        ChargerConciliation()
         Dim dt As DataTable = Filtrer(GetData())
         rlvReleve.DataSource = dt
         SetLiteral(Me, "litPied", Server.HtmlEncode(String.Format(L("pied"), If(dt Is Nothing, 0, dt.Rows.Count), TotalMouvements)))
@@ -130,7 +465,11 @@ Public Class wbfReleve
         Dim i As Integer = v.IndexOf("|"c)
         If i < 0 Then Return
         Dim valeur As String = v.Substring(i + 1).Trim().ToLowerInvariant()
-        If v.Substring(0, i) = "kpi" Then FiltreCourant = If(FiltreCourant = valeur, "", valeur)
+        Select Case v.Substring(0, i)
+            Case "kpi" : FiltreCourant = If(FiltreCourant = valeur, "", valeur)
+            Case "periode" : ActionPeriode(valeur)
+            Case "concil" : ActionConciliation(valeur)
+        End Select
         rlvReleve.Rebind()
     End Sub
 
@@ -162,7 +501,7 @@ Public Class wbfReleve
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
             p.Add(New SqlClient.SqlParameter("@Search", ""))
             Dim ds As DataSet = ExecuteSQLds("s0047GetReleveBancaire", p)
-            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then Return ds.Tables(0).Rows.Cast(Of DataRow)().ToList()
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then Return ds.Tables(0).Rows.Cast(Of DataRow)().Where(Function(r) DansPeriode(r)).ToList()
         Catch
         End Try
         Return New List(Of DataRow)
@@ -197,10 +536,10 @@ Public Class wbfReleve
     End Function
 
     Private Function Filtrer(dt As DataTable) As DataTable
-        If dt Is Nothing OrElse FiltreCourant = "" Then Return dt
+        If dt Is Nothing Then Return dt
         Dim copie As DataTable = dt.Clone()
         For Each r As DataRow In dt.Rows
-            If Cle(r("Statut")) = FiltreCourant Then copie.ImportRow(r)
+            If DansPeriode(r) AndAlso (FiltreCourant = "" OrElse Cle(r("Statut")) = FiltreCourant) Then copie.ImportRow(r)
         Next
         Return copie
     End Function
@@ -376,6 +715,52 @@ Public Class wbfReleve
             Case "jsConnected" : Return Choose3(lang, "Compte bancaire connecté avec succès.", "Bank account connected successfully.", "Cuenta bancaria conectada con éxito.")
             Case "jsLinkTokenError" : Return Choose3(lang, "Erreur lors de la création du link token.", "Error while creating the link token.", "Error al crear el link token.")
             Case "jsPlaidError" : Return Choose3(lang, "Erreur Plaid.", "Plaid error.", "Error de Plaid.")
+            ' Période et conciliation (T368)
+            Case "pTitre" : Return Choose3(lang, "Période du relevé", "Statement period", "Período del extracto")
+            Case "pDu" : Return Choose3(lang, "Du", "From", "Del")
+            Case "pAu" : Return Choose3(lang, "au", "to", "al")
+            Case "pAppliquer" : Return Choose3(lang, "Appliquer", "Apply", "Aplicar")
+            Case "pPrec" : Return Choose3(lang, "Mois précédent", "Previous month", "Mes anterior")
+            Case "pCourant" : Return Choose3(lang, "Ce mois-ci", "This month", "Este mes")
+            Case "pSuite" : Return Choose3(lang, "Après la dernière conciliation", "After the last reconciliation", "Tras la última conciliación")
+            Case "cErrDates" : Return Choose3(lang, "La date de fin précède la date de début.", "The end date is before the start date.", "La fecha de fin es anterior a la de inicio.")
+            Case "cClotureOk" : Return Choose3(lang, "Conciliation clôturée. Les lignes de la période sont verrouillées.", "Reconciliation closed. The period's lines are locked.", "Conciliación cerrada. Las líneas del período quedan bloqueadas.")
+            Case "cRouvertOk" : Return Choose3(lang, "Conciliation rouverte. Les lignes de la période peuvent de nouveau être modifiées.", "Reconciliation reopened. The period's lines can be changed again.", "Conciliación reabierta. Las líneas del período pueden modificarse de nuevo.")
+            Case "cTitre" : Return Choose3(lang, "Conciliation bancaire", "Bank reconciliation", "Conciliación bancaria")
+            Case "cSous" : Return Choose3(lang, "du {0} au {1} · {2} ↔ {3}", "{0} to {1} · {2} ↔ {3}", "del {0} al {1} · {2} ↔ {3}")
+            Case "cCloturee" : Return Choose3(lang, "Clôturée", "Closed", "Cerrada")
+            Case "cOk" : Return Choose3(lang, "Conciliée", "Reconciled", "Conciliada")
+            Case "cEcartEtat" : Return Choose3(lang, "Écart à expliquer", "Difference to explain", "Diferencia por explicar")
+            Case "cReleve" : Return Choose3(lang, "Relevé de la banque", "Bank statement", "Extracto del banco")
+            Case "cOuverture" : Return Choose3(lang, "Solde d'ouverture ({0})", "Opening balance ({0})", "Saldo inicial ({0})")
+            Case "cEntrees" : Return Choose3(lang, "Entrées de la période", "Period deposits", "Entradas del período")
+            Case "cSorties" : Return Choose3(lang, "Sorties de la période", "Period withdrawals", "Salidas del período")
+            Case "cFermeture" : Return Choose3(lang, "Solde de fermeture ({0})", "Closing balance ({0})", "Saldo final ({0})")
+            Case "cDepCirc" : Return Choose3(lang, "Dépôts en circulation", "Deposits in transit", "Depósitos en tránsito")
+            Case "cPaieCirc" : Return Choose3(lang, "Paiements en circulation", "Outstanding payments", "Pagos en tránsito")
+            Case "cBanqueRaj" : Return Choose3(lang, "Solde bancaire rajusté", "Adjusted bank balance", "Saldo bancario ajustado")
+            Case "cLivres" : Return Choose3(lang, "Livres comptables", "Books", "Libros contables")
+            Case "cSoldeLivres" : Return Choose3(lang, "Solde aux livres ({0})", "Book balance ({0})", "Saldo en libros ({0})")
+            Case "cEntNI" : Return Choose3(lang, "Entrées du relevé non inscrites", "Statement deposits not recorded", "Entradas del extracto no registradas")
+            Case "cSorNI" : Return Choose3(lang, "Sorties du relevé non inscrites", "Statement withdrawals not recorded", "Salidas del extracto no registradas")
+            Case "cLivresRaj" : Return Choose3(lang, "Solde aux livres rajusté", "Adjusted book balance", "Saldo en libros ajustado")
+            Case "cEcart" : Return Choose3(lang, "Écart", "Difference", "Diferencia")
+            Case "cClotureePar" : Return Choose3(lang, "Clôturée le {0} par {1}.", "Closed on {0} by {1}.", "Cerrada el {0} por {1}.")
+            Case "cConfRouvrir" : Return Choose3(lang, "Rouvrir cette conciliation ? Les lignes de la période pourront de nouveau être modifiées.", "Reopen this reconciliation? The period's lines can be changed again.", "¿Reabrir esta conciliación? Las líneas del período podrán modificarse de nuevo.")
+            Case "cRouvrir" : Return Choose3(lang, "Rouvrir", "Reopen", "Reabrir")
+            Case "cPasFinie" : Return Choose3(lang, "La période n'est pas terminée : elle se clôture une fois la date de fin passée.", "The period is not over: it can be closed once the end date has passed.", "El período no ha terminado: se cierra una vez pasada la fecha de fin.")
+            Case "cChevauche" : Return Choose3(lang, "Cette période chevauche la conciliation clôturée jusqu'au {0}.", "This period overlaps the reconciliation closed up to {0}.", "Este período se solapa con la conciliación cerrada hasta el {0}.")
+            Case "cTrou" : Return Choose3(lang, "Pour clôturer, la période doit commencer le {0}, lendemain de la dernière conciliation clôturée.", "To close, the period must start on {0}, the day after the last closed reconciliation.", "Para cerrar, el período debe empezar el {0}, día siguiente a la última conciliación cerrada.")
+            Case "cNoteOk" : Return Choose3(lang, "Le relevé et les livres concordent.", "The statement and the books agree.", "El extracto y los libros coinciden.")
+            Case "cNoteEcart" : Return Choose3(lang, "Reliez les lignes à leurs règlements ou inscrivez les mouvements manquants pour ramener l'écart à zéro.", "Link the lines to their payments or record the missing movements to bring the difference to zero.", "Vincule las líneas a sus pagos o registre los movimientos que faltan para llevar la diferencia a cero.")
+            Case "cConfCloturer" : Return Choose3(lang, "Clôturer la conciliation de cette période ? Ses lignes seront verrouillées.", "Close this period's reconciliation? Its lines will be locked.", "¿Cerrar la conciliación de este período? Sus líneas quedarán bloqueadas.")
+            Case "cConfCloturerEcart" : Return Choose3(lang, "Il reste un écart de {0}. Clôturer quand même ? Les lignes de la période seront verrouillées.", "A difference of {0} remains. Close anyway? The period's lines will be locked.", "Queda una diferencia de {0}. ¿Cerrar de todos modos? Las líneas del período quedarán bloqueadas.")
+            Case "cCloturer" : Return Choose3(lang, "Clôturer la conciliation", "Close the reconciliation", "Cerrar la conciliación")
+            Case "cListeCirc" : Return Choose3(lang, "En circulation : aux livres, pas encore au relevé ({0})", "In transit: in the books, not yet on the statement ({0})", "En tránsito: en libros, aún no en el extracto ({0})")
+            Case "cListeNI" : Return Choose3(lang, "Au relevé, pas aux livres ({0})", "On the statement, not in the books ({0})", "En el extracto, no en libros ({0})")
+            Case "cHist" : Return Choose3(lang, "Conciliations clôturées", "Closed reconciliations", "Conciliaciones cerradas")
+            Case "cRien" : Return Choose3(lang, "Rien.", "None.", "Nada.")
+            Case "cAutres" : Return Choose3(lang, "+ {0} autres", "+ {0} more", "+ {0} más")
             ' Rapprochement (T367)
             Case "lienEnc" : Return Choose3(lang, "Encaissement", "Receipt", "Cobro")
             Case "lienDec" : Return Choose3(lang, "Paiement", "Payment", "Pago")

@@ -91,6 +91,41 @@
     /* Les colonnes : date, description, compte, état, montant. */
     .fc-liste .listview-list { min-width: 900px }
     .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: 120px minmax(0, 2.2fr) minmax(0, 1.1fr) minmax(150px, 1fr) 130px 180px }
+    /* Période et conciliation (T368) */
+    .cb-ligne { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px }
+    .cb-lab { font-size: 13px; font-weight: 800; color: #5B6B86; text-transform: uppercase; letter-spacing: .04em }
+    .cb-date { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #44536E; font-size: 14px }
+    .cb-champ { min-height: 40px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 12px; background: #fff; color: #0E1F3D; font: inherit; font-size: 14px }
+    .cb-carte { padding: 18px 20px; border-radius: 24px; background: #fff; margin-bottom: 16px; color: #0E1F3D }
+    .cb-tete { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 12px }
+    .cb-tete h2 { margin: 0; font-size: 20px; font-weight: 800 }
+    .cb-tete .sous { color: #44536E; font-size: 14px }
+    .cb-etat { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 800 }
+    .cb-etat.ok { background: #E3F3EA; color: #0F5A3A } .cb-etat.ecart { background: #FBF1DC; color: #7A5200 } .cb-etat.close { background: #E8EEF8; color: #1B4F9C }
+    .cb-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
+    .cb-col { border: 1px solid #E3E9F1; border-radius: 18px; padding: 12px 14px }
+    .cb-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 800; color: #5B6B86; text-transform: uppercase; letter-spacing: .04em }
+    .cb-l { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 14px }
+    .cb-l span:first-child { color: #44536E }
+    .cb-l b { white-space: nowrap }
+    .cb-l.tot { border-top: 1px solid #E3E9F1; margin-top: 4px; padding-top: 8px; font-weight: 800 }
+    .cb-l.tot span:first-child { color: #0E1F3D }
+    .cb-bas { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 14px; padding: 12px 14px; border-radius: 18px; background: #F2F5F9 }
+    .cb-bas .ecart { font-size: 20px; font-weight: 800 }
+    .cb-bas .ecart.zero { color: #0F5A3A } .cb-bas .ecart.non { color: #A3261C }
+    .cb-bas .note { flex: 1 1 260px; font-size: 13px; color: #44536E }
+    .cb-msg { margin-top: 10px; padding: 10px 14px; border-radius: 12px; font-weight: 700 }
+    .cb-msg.err { background: #FDECEA; color: #A3261C } .cb-msg.ok { background: #E3F3EA; color: #0F5A3A }
+    .cb-listes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px }
+    .cb-listes h4 { margin: 0 0 4px; font-size: 13px; font-weight: 800; color: #5B6B86 }
+    .cb-it { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 8px; padding: 5px 0; border-top: 1px solid #EEF2F7; font-size: 13px }
+    .cb-it span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+    .cb-it b { white-space: nowrap }
+    .cb-vide { font-size: 13px; color: #44536E; padding: 5px 0 }
+    .cb-hist { margin-top: 14px }
+    .cb-hist h4 { margin: 0 0 4px; font-size: 13px; font-weight: 800; color: #5B6B86 }
+    .cb-hist button { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; width: 100%; padding: 6px 4px; border: 0; border-top: 1px solid #EEF2F7; background: none; font: inherit; font-size: 13px; color: #0E1F3D; text-align: left; cursor: pointer }
+    .cb-hist button:hover { background: #FAFCFF }
     /* Rapprochement (T367) : le règlement relié sous l'état, les gestes de la ligne. */
     .rb-lien { display: block; margin-top: 4px; font-size: 12px; color: #44536E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
     .rb-actions { display: flex; justify-content: flex-end; gap: 6px }
@@ -157,6 +192,22 @@
              le bouton caché, qui renvoie au serveur (btnChip_Click). --%>
         <asp:HiddenField ID="hfChip" runat="server" ClientIDMode="Static" />
         <asp:Button ID="btnChip" runat="server" ClientIDMode="Static" CausesValidation="false" Text="" style="display:none" />
+
+        <%-- La période du relevé (date de début et de fin) : elle borne la liste, les
+             indicateurs et la conciliation ci-dessous. --%>
+        <section class="fc-filtres cb-periode">
+            <div class="cb-ligne">
+                <span class="cb-lab"><asp:Literal ID="litPeriode" runat="server" /></span>
+                <asp:DropDownList ID="ddlCompte" runat="server" CssClass="cb-champ" Visible="false" />
+                <label class="cb-date"><asp:Literal ID="litDu" runat="server" /> <asp:TextBox ID="tbDu" runat="server" TextMode="Date" CssClass="cb-champ" /></label>
+                <label class="cb-date"><asp:Literal ID="litAu" runat="server" /> <asp:TextBox ID="tbAu" runat="server" TextMode="Date" CssClass="cb-champ" /></label>
+                <asp:Button ID="btnPeriode" runat="server" CssClass="fc-btn primaire" CausesValidation="false" />
+                <span class="fc-chips"><asp:Literal ID="litPeriodeChips" runat="server" /></span>
+            </div>
+        </section>
+
+        <%-- La conciliation de la période : relevé ↔ livres, écart, clôture, historique. --%>
+        <asp:Literal ID="litConcil" runat="server" />
 
         <section class="fc-filtres">
             <asp:Panel ID="pnlRecherche" runat="server" CssClass="fc-recherche" DefaultButton="btnSearch">

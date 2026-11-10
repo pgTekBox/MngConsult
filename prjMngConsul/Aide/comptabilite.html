@@ -394,6 +394,22 @@
                     <li><span class="msg">« Erreur Plaid. »</span> — erreur générale du service ; réessayez plus tard.</li>
                 </ul>
                 <h3>Trucs et pièges</h3>
+                <h3>Période et conciliation bancaire</h3>
+                <p>La barre <strong>Période du relevé</strong> fixe la date de début (<em>Du</em>) et de fin (<em>au</em>) du relevé ; <kbd>Appliquer</kbd> borne la liste, les indicateurs et la conciliation à cette période. Raccourcis : <kbd>Mois précédent</kbd>, <kbd>Ce mois-ci</kbd>, <kbd>Après la dernière conciliation</kbd>. À l’ouverture, la période proposée est le mois qui suit la dernière conciliation clôturée (sinon le mois précédent). S’il y a plusieurs comptes connectés, une liste permet de choisir le compte.</p>
+                <p>La boîte <strong>Conciliation bancaire</strong> compare le relevé au compte de banque du grand livre (101x) :</p>
+                <table>
+                    <tr><th>Relevé de la banque</th><th>Livres comptables</th></tr>
+                    <tr><td>Solde d’ouverture + entrées − sorties de la période = <strong>solde de fermeture</strong></td><td><strong>Solde aux livres</strong> à la date de fin (écritures validées)</td></tr>
+                    <tr><td>+ dépôts en circulation − paiements en circulation (règlements aux livres, pas encore au relevé)</td><td>+ entrées − sorties du relevé non inscrites aux livres (lignes non reliées, ignorées comprises)</td></tr>
+                    <tr><td>= <strong>solde bancaire rajusté</strong></td><td>= <strong>solde aux livres rajusté</strong></td></tr>
+                </table>
+                <p>L’<strong>écart</strong> est la différence entre les deux soldes rajustés : « Conciliée » à 0,00 $, sinon « Écart à expliquer ». Sous l’écart, deux listes montrent ce qui le compose : les règlements en circulation et les lignes du relevé absentes des livres.</p>
+                <ul>
+                    <li><kbd>Clôturer la conciliation</kbd> enregistre les soldes de la période (une confirmation signale l’écart restant). Les lignes datées jusqu’à la date de fin sont alors <strong>verrouillées</strong> : Relier, Délier et Ignorer sont refusés.</li>
+                    <li>Les périodes se suivent : une clôture doit commencer le lendemain de la précédente, et la date de fin doit être passée (ou être aujourd’hui).</li>
+                    <li><strong>Conciliations clôturées</strong> : l’historique ; un clic recharge la période. <kbd>Rouvrir</kbd> (dernière conciliation seulement) lève le verrou.</li>
+                </ul>
+                <div class="astuce" data-titre="Astuce">Avec le compte simulé, un écart de 18 500,00 $ subsiste même une fois tout relié : c’est le solde d’ouverture du compte simulé, qui n’a pas d’écriture d’ouverture aux livres.</div>
                 <h3>Rapprocher une ligne</h3>
                 <p>Chaque ligne porte ses boutons à droite :</p>
                 <ul>
@@ -996,6 +1012,22 @@
                     <li><span class="msg">“Plaid error.”</span> — general service error; try again later.</li>
                 </ul>
                 <h3>Tips and pitfalls</h3>
+                <h3>Period and bank reconciliation</h3>
+                <p>The <strong>Statement period</strong> bar sets the statement start (<em>From</em>) and end (<em>to</em>) dates; <kbd>Apply</kbd> limits the list, the indicators and the reconciliation to that period. Shortcuts: <kbd>Previous month</kbd>, <kbd>This month</kbd>, <kbd>After the last reconciliation</kbd>. On opening, the suggested period is the month after the last closed reconciliation (otherwise the previous month). With several connected accounts, a list lets you pick the account.</p>
+                <p>The <strong>Bank reconciliation</strong> box compares the statement with the general ledger bank account (101x):</p>
+                <table>
+                    <tr><th>Bank statement</th><th>Books</th></tr>
+                    <tr><td>Opening balance + deposits − withdrawals of the period = <strong>closing balance</strong></td><td><strong>Book balance</strong> on the end date (validated entries)</td></tr>
+                    <tr><td>+ deposits in transit − outstanding payments (payments in the books, not yet on the statement)</td><td>+ deposits − withdrawals on the statement not recorded in the books (unlinked lines, ignored ones included)</td></tr>
+                    <tr><td>= <strong>adjusted bank balance</strong></td><td>= <strong>adjusted book balance</strong></td></tr>
+                </table>
+                <p>The <strong>difference</strong> is the gap between the two adjusted balances: “Reconciled” at $0.00, otherwise “Difference to explain”. Below it, two lists show what makes it up: payments in transit and statement lines missing from the books.</p>
+                <ul>
+                    <li><kbd>Close the reconciliation</kbd> records the period’s balances (a confirmation flags any remaining difference). Lines dated up to the end date are then <strong>locked</strong>: Link, Unlink and Ignore are refused.</li>
+                    <li>Periods follow each other: a closing must start the day after the previous one, and the end date must be past (or today).</li>
+                    <li><strong>Closed reconciliations</strong>: the history; a click reloads the period. <kbd>Reopen</kbd> (last reconciliation only) lifts the lock.</li>
+                </ul>
+                <div class="astuce" data-titre="Tip">With the simulated account, a $18,500.00 difference remains even once everything is linked: it is the simulated account’s opening balance, which has no opening entry in the books.</div>
                 <h3>Matching a line</h3>
                 <p>Each line has its buttons on the right:</p>
                 <ul>
@@ -1598,6 +1630,22 @@
                     <li><span class="msg">«Error de Plaid.»</span> — error general del servicio; inténtelo más tarde.</li>
                 </ul>
                 <h3>Trucos y trampas</h3>
+                <h3>Período y conciliación bancaria</h3>
+                <p>La barra <strong>Período del extracto</strong> fija la fecha de inicio (<em>Del</em>) y de fin (<em>al</em>) del extracto; <kbd>Aplicar</kbd> limita la lista, los indicadores y la conciliación a ese período. Atajos: <kbd>Mes anterior</kbd>, <kbd>Este mes</kbd>, <kbd>Tras la última conciliación</kbd>. Al abrir, el período propuesto es el mes siguiente a la última conciliación cerrada (si no, el mes anterior). Con varias cuentas conectadas, una lista permite elegir la cuenta.</p>
+                <p>El cuadro <strong>Conciliación bancaria</strong> compara el extracto con la cuenta bancaria del libro mayor (101x):</p>
+                <table>
+                    <tr><th>Extracto del banco</th><th>Libros contables</th></tr>
+                    <tr><td>Saldo inicial + entradas − salidas del período = <strong>saldo final</strong></td><td><strong>Saldo en libros</strong> en la fecha de fin (asientos validados)</td></tr>
+                    <tr><td>+ depósitos en tránsito − pagos en tránsito (pagos en libros, aún no en el extracto)</td><td>+ entradas − salidas del extracto no registradas en libros (líneas no vinculadas, ignoradas incluidas)</td></tr>
+                    <tr><td>= <strong>saldo bancario ajustado</strong></td><td>= <strong>saldo en libros ajustado</strong></td></tr>
+                </table>
+                <p>La <strong>diferencia</strong> es la distancia entre los dos saldos ajustados: «Conciliada» en 0,00 $, si no «Diferencia por explicar». Debajo, dos listas muestran su composición: los pagos en tránsito y las líneas del extracto ausentes de los libros.</p>
+                <ul>
+                    <li><kbd>Cerrar la conciliación</kbd> guarda los saldos del período (una confirmación señala la diferencia restante). Las líneas con fecha hasta la fecha de fin quedan <strong>bloqueadas</strong>: Vincular, Desvincular e Ignorar se rechazan.</li>
+                    <li>Los períodos se encadenan: un cierre debe empezar el día siguiente al anterior, y la fecha de fin debe haber pasado (o ser hoy).</li>
+                    <li><strong>Conciliaciones cerradas</strong>: el historial; un clic recarga el período. <kbd>Reabrir</kbd> (solo la última conciliación) levanta el bloqueo.</li>
+                </ul>
+                <div class="astuce" data-titre="Consejo">Con la cuenta simulada, queda una diferencia de 18 500,00 $ aun con todo vinculado: es el saldo inicial de la cuenta simulada, que no tiene asiento de apertura en los libros.</div>
                 <h3>Conciliar una línea</h3>
                 <p>Cada línea tiene sus botones a la derecha:</p>
                 <ul>

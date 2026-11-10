@@ -72,4 +72,10 @@ Partial Public Class wbfReleve
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rlvReleve As Global.Telerik.Web.UI.RadListView
+
+    '''<summary>Période et conciliation (T368).</summary>
+    Protected WithEvents ddlCompte As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents tbDu As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbAu As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents btnPeriode As Global.System.Web.UI.WebControls.Button
 End Class

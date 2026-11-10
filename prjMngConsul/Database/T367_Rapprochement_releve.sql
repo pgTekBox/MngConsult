@@ -161,6 +161,8 @@ CREATE OR ALTER PROCEDURE dbo.s0979LierReleveReglement
 AS
 BEGIN
     SET NOCOUNT ON;
+    -- Période déjà conciliée et clôturée (T368) : la ligne ne bouge plus
+    EXEC dbo.s0987VerifierVerrouReleve @CompanyGUID, @ReleveId;
 
     DECLARE @Montant DECIMAL(15, 2), @Lie INT;
     SELECT @Montant = Montant, @Lie = ReglementId
@@ -196,6 +198,8 @@ CREATE OR ALTER PROCEDURE dbo.s0980ReglerFactureDepuisReleve
 AS
 BEGIN
     SET NOCOUNT ON;
+    -- Période déjà conciliée et clôturée (T368) : la ligne ne bouge plus
+    EXEC dbo.s0987VerifierVerrouReleve @CompanyGUID, @ReleveId;
 
     DECLARE @Montant DECIMAL(15, 2), @Lie INT, @Date DATE, @Ref VARCHAR(200), @Statut VARCHAR(120);
     SELECT @Montant = Montant, @Lie = ReglementId, @Date = DateMouvement,
@@ -265,6 +269,8 @@ CREATE OR ALTER PROCEDURE dbo.s0981DelierReleve
 AS
 BEGIN
     SET NOCOUNT ON;
+    -- Période déjà conciliée et clôturée (T368) : la ligne ne bouge plus
+    EXEC dbo.s0987VerifierVerrouReleve @CompanyGUID, @ReleveId;
     UPDATE dbo.T142ReleveBancaire
     SET ReglementId = NULL, Statut = 'Importé'
     WHERE Id = @ReleveId AND CompanyGUID = @CompanyGUID;
@@ -281,6 +287,8 @@ CREATE OR ALTER PROCEDURE dbo.s0982IgnorerReleve
 AS
 BEGIN
     SET NOCOUNT ON;
+    -- Période déjà conciliée et clôturée (T368) : la ligne ne bouge plus
+    EXEC dbo.s0987VerifierVerrouReleve @CompanyGUID, @ReleveId;
     IF EXISTS (SELECT 1 FROM dbo.T142ReleveBancaire
                WHERE Id = @ReleveId AND CompanyGUID = @CompanyGUID AND ReglementId IS NOT NULL)
         THROW 51031, 'Cette ligne est reliée à un règlement : déliez-la d''abord.', 1;
