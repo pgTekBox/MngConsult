@@ -23,9 +23,25 @@ Imports System.Web.Script.Serialization
 '''   canal = "sync"     → relance tout de suite l'inscription des activités de la compagnie
 '''                        (s0973), par exemple après l'enregistrement d'un paiement.
 ''' En cas d'erreur : { ok:false, erreur }.
+'''
+''' MODE SIMULÉ (par défaut, pour l'instant) : rien ne part. Le texto est renvoyé à la
+''' page pour affichage (pas de lien sms:) ; le courriel est rangé en Session
+''' (« FakeEmail ») pour l'aperçu wbfFakeEmail.aspx au lieu d'être déposé dans
+''' MailService. Le rappel est quand même inscrit (T206, destinataire préfixé
+''' « SIMULÉ : »). Web.config : RappelFactureSimule = "false" pour envoyer pour vrai.
+''' Réponse simulée : { ok, simule:true, tel, message } ou { ok, simule:true, email, apercu }.
 ''' </summary>
 Public Class RappelFactureHandler
-    Implements IHttpHandler, IReadOnlySessionState
+    Implements IHttpHandler, IRequiresSessionState
+
+    ''' <summary>Vrai tant que Web.config ne dit pas RappelFactureSimule = "false".</summary>
+    Private Shared ReadOnly Property Simule As Boolean
+        Get
+            Return Not String.Equals(ConfigurationManager.AppSettings("RappelFactureSimule"), "false", StringComparison.OrdinalIgnoreCase)
+        End Get
+    End Property
+
+    Private Const PrefixeSimule As String = "SIMULÉ : "
 
     Public ReadOnly Property IsReusable As Boolean Implements IHttpHandler.IsReusable
         Get
@@ -152,6 +168,12 @@ Public Class RappelFactureHandler
             Txt(f("Client")), LireNumero(f), Montant(Dec(f("ResteAPayer"))), DateLongue(f("DueDate")))
         If Txt(f("CompanyName")) <> "" Then message &= " — " & Txt(f("CompanyName"))
 
+        If Simule Then
+            Inscrire(company, docId, "TEXTO", PrefixeSimule & tel, userId, Nothing)
+            Repondre(context, js, 200, New With {.ok = True, .simule = True, .tel = tel, .message = message})
+            Return
+        End If
+
         Inscrire(company, docId, "TEXTO", tel, userId, Nothing)
         Repondre(context, js, 200, New With {.ok = True, .tel = tel, .message = message})
     End Sub
@@ -187,6 +209,18 @@ Public Class RappelFactureHandler
             "Si el pago ya fue enviado, ignore este mensaje."))).Append("</p>")
         If compagnie <> "" Then corps.Append("<p>").Append(enc(compagnie)).Append("</p>")
         corps.Append("</div>")
+
+        If Simule Then
+            ' Aperçu seulement : wbfFakeEmail.aspx affiche le dernier courriel simulé de la session.
+            context.Session("FakeEmail") = New FakeEmailMessage With {
+                .ToEmail = email,
+                .Subject = sujet,
+                .HtmlBody = corps.ToString()
+            }
+            Inscrire(company, docId, "COURRIEL", PrefixeSimule & email, userId, Nothing)
+            Repondre(context, js, 200, New With {.ok = True, .simule = True, .email = email, .apercu = "wbfFakeEmail.aspx"})
+            Return
+        End If
 
         Dim pm As New Collection
         pm.Add(New SqlParameter("@To", email))

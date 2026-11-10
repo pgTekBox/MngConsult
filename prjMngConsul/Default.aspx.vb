@@ -624,7 +624,8 @@ Public Class _Default
             "toutFait", "tous", "segR", "segY",
             "jePremier", "lClient", "lFacture", "lDernierRappel", "btnTexto", "btnCourriel", "btnPaiementRecu",
             "rappelCourrielConfirm", "rappelCourrielEnvoye", "rappelTextoOuvert", "rappelErreur", "envoyer",
-            "canalTexto", "canalCourriel", "aujourdhuiMin", "winEncaissement"
+            "canalTexto", "canalCourriel", "aujourdhuiMin", "winEncaissement",
+            "texteSimule", "courrielSimule", "voirCourriel", "fermer"
         }
         Dim t As New Dictionary(Of String, String)
         For Each k As String In cles : t(k) = L(k) : Next
@@ -810,6 +811,11 @@ Public Class _Default
             Case "rappelTextoOuvert" : Return Choose3(lang, "Votre application de messagerie s'ouvre avec le texto prêt à envoyer à {0}.", "Your messaging app opens with the text ready to send to {0}.", "Su aplicación de mensajes se abre con el SMS listo para enviar a {0}.")
             Case "rappelErreur" : Return Choose3(lang, "Le rappel n'a pas pu être envoyé.", "The reminder could not be sent.", "No se pudo enviar el recordatorio.")
             Case "winEncaissement" : Return Choose3(lang, "Ajouter un encaissement", "Add cash receipt", "Agregar cobro")
+            ' Rappels en mode simulé (RappelFacture.ashx) : rien n'est envoyé
+            Case "texteSimule" : Return Choose3(lang, "Texto simulé pour {0} : rien n'a été envoyé. Voici le message qui serait parti :", "Simulated text to {0}: nothing was sent. Here is the message that would have gone out:", "SMS simulado para {0}: no se envió nada. Este es el mensaje que habría salido:")
+            Case "courrielSimule" : Return Choose3(lang, "Courriel simulé pour {0} : rien n'a été envoyé. Vous pouvez voir le courriel qui serait parti.", "Simulated email to {0}: nothing was sent. You can view the email that would have gone out.", "Correo simulado para {0}: no se envió nada. Puede ver el correo que habría salido.")
+            Case "voirCourriel" : Return Choose3(lang, "Voir le courriel", "View the email", "Ver el correo")
+            Case "fermer" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
             Case "btnVoir" : Return Choose3(lang, "Voir", "View", "Ver")
             Case "btnPreparer" : Return Choose3(lang, "Préparer le paiement", "Prepare the payment", "Preparar el pago")
             Case "btnApprouver" : Return Choose3(lang, "Voir et approuver", "See and approve", "Ver y aprobar")

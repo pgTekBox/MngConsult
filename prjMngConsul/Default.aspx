@@ -118,7 +118,7 @@
     .ac-fait{ flex-shrink:0; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; background:#0F5A3A; color:#FFFFFF; }
     .ac-modal-ov{ position:fixed; inset:0; z-index:100000; background:rgba(16,28,51,.45); display:flex; align-items:center; justify-content:center; padding:16px; }
     .ac-modal{ background:#FFFFFF; border-radius:16px; box-shadow:0 20px 60px rgba(16,28,51,.35); max-width:420px; width:100%; padding:24px; }
-    .ac-modal-msg{ margin:0 0 20px; font-size:15px; font-weight:600; color:#1B2B46; line-height:1.5; }
+    .ac-modal-msg{ margin:0 0 20px; font-size:15px; font-weight:600; color:#1B2B46; line-height:1.5; white-space:pre-line; }
     .ac-modal-btns{ display:flex; gap:10px; justify-content:flex-end; }
     .ac-modal-btn{ min-height:40px; padding:0 18px; border:none; border-radius:999px; background:#1B4F9C; color:#FFFFFF; font-size:14px; font-weight:800; cursor:pointer; }
     .ac-modal-btn:hover{ background:#163F7E; }
@@ -838,6 +838,16 @@
                 if (!res || !res.ok) { acModal({ message: (res && res.erreur) || T.rappelErreur }); return; }
                 a.rappel = (canal === 'texto' ? T.canalTexto : T.canalCourriel) + ' · ' + T.aujourdhuiMin;
                 peindre();
+                if (res.simule) {
+                    // Mode simulé : rien ne part. Texto affiché ; courriel visible dans l'aperçu.
+                    if (canal === 'texto') acModal({ message: fmt(T.texteSimule, res.tel) + '\n\n« ' + res.message + ' »' });
+                    else acModal({
+                        message: fmt(T.courrielSimule, res.email), confirm: true,
+                        okText: T.voirCourriel, cancelText: T.fermer,
+                        onOk: function () { window.open(res.apercu, '_blank'); }
+                    });
+                    return;
+                }
                 if (canal === 'texto') {
                     acModal({ message: fmt(T.rappelTextoOuvert, res.tel) });
                     window.location.href = 'sms:' + res.tel + '?body=' + encodeURIComponent(res.message);
