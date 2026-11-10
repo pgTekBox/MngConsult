@@ -179,10 +179,29 @@ Public Class _Default
         For Each r As DataRow In aRetardsVentes.Take(nRetardMax)
             Dim ech As Date? = DateN(r("DueDate"))
             Dim jours As Integer = If(ech.HasValue, (aujourdhui - ech.Value).Days, 0)
-            acts.Add(Activite("r", String.Format(L("aFactRetard"), NumFacture(r)),
-                              L("catVentes") & " · " & If(ech.HasValue, String.Format(L("echueLe"), JourMois(ech.Value)) & " · ", "") & Txt(r("NameSort")) & " · " & Montant(Dec(r("ResteAPayer"))),
-                              String.Format(L("aFactRetardDet"), Txt(r("NameSort")), Montant(Dec(r("ResteAPayer"))), jours),
-                              L("btnRelancer"), "wbfCustomersInvoices.aspx"))
+            ' Ouverte, l'activité montre client, facture, retard, montant, dernier rappel
+            ' et les boutons Texto / Courriel / Paiement déjà reçu (RappelFacture.ashx).
+            Dim rap As Date? = DateN(r("DernierRappel"))
+            Dim rappel As String = L("rappelAucun")
+            If rap.HasValue Then
+                rappel = If(Txt(r("DernierRappelCanal")).ToUpperInvariant() = "TEXTO", L("canalTexto"), L("canalCourriel")) & " · " &
+                         If(rap.Value.Date = aujourdhui, L("aujourdhuiMin"), JourMois(rap.Value))
+            End If
+            acts.Add(New With {
+                .u = "r",
+                .t = String.Format(L("aFactRetard"), NumFacture(r)),
+                .d = L("catVentes") & " · " & If(ech.HasValue, String.Format(L("echueLe"), JourMois(ech.Value)) & " · ", "") & Txt(r("NameSort")) & " · " & Montant(Dec(r("ResteAPayer"))),
+                .det = L("aFactRetardConseil"),
+                .btn = "", .url = "",
+                .k = "factRetard",
+                .docId = If(IsDBNull(r("DocumentId")), 0, Convert.ToInt32(r("DocumentId"))),
+                .partyId = If(IsDBNull(r("PartyId")), 0, Convert.ToInt32(r("PartyId"))),
+                .client = Txt(r("NameSort")),
+                .numero = NumFacture(r),
+                .retard = String.Format(L("echueDepuisJ"), jours),
+                .montant = Montant(Dec(r("ResteAPayer"))),
+                .rappel = rappel
+            })
         Next
         If aRetardsVentes.Count > nRetardMax Then
             acts.Add(Activite("r", String.Format(L("aAutresRetards"), aRetardsVentes.Count - nRetardMax),
@@ -586,7 +605,10 @@ Public Class _Default
             "aVenir", "aVenirPlanif", "toutEquipe", "pSem", "pProch", "pMois", "pMoisP", "periode", "avVide",
             "replier", "deplier",
             "activites", "lRouge", "lJaune", "dateDepassee", "propose60", "a60Ici", "a60Choisir", "merci60", "conseil60",
-            "toutFait", "tous", "segR", "segY"
+            "toutFait", "tous", "segR", "segY",
+            "jePremier", "lClient", "lFacture", "lDernierRappel", "btnTexto", "btnCourriel", "btnPaiementRecu",
+            "rappelCourrielConfirm", "rappelCourrielEnvoye", "rappelTextoOuvert", "rappelErreur", "envoyer",
+            "canalTexto", "canalCourriel", "aujourdhuiMin", "winEncaissement"
         }
         Dim t As New Dictionary(Of String, String)
         For Each k As String In cles : t(k) = L(k) : Next
@@ -752,6 +774,26 @@ Public Class _Default
             Case "aEssaiSous" : Return Choose3(lang, "fin de l'essai · choisissez votre forfait", "end of trial · choose your plan", "fin de la prueba · elija su plan")
             Case "aEssaiDet" : Return Choose3(lang, "Choisissez votre forfait avant la fin de l'essai pour garder vos données et vos branchements.", "Choose your plan before the trial ends to keep your data and connections.", "Elija su plan antes del fin de la prueba para conservar sus datos y conexiones.")
             Case "btnRelancer" : Return Choose3(lang, "Relancer", "Follow up", "Recordar")
+            ' Activité « Facture en retard » ouverte
+            Case "aFactRetardConseil" : Return Choose3(lang, "plus un retard s'allonge, plus le paiement devient difficile. Un texto poli suffit souvent.", "the longer a payment is late, the harder it gets to collect. A polite text is often enough.", "cuanto más se alarga un retraso, más difícil es cobrar. Un mensaje de texto cortés suele bastar.")
+            Case "jePremier" : Return Choose3(lang, "Je la place en premier : ", "I put it first: ", "La pongo en primer lugar: ")
+            Case "lClient" : Return Choose3(lang, "Client", "Customer", "Cliente")
+            Case "lFacture" : Return Choose3(lang, "Facture {0}", "Invoice {0}", "Factura {0}")
+            Case "echueDepuisJ" : Return Choose3(lang, "échue depuis {0} jour(s)", "{0} day(s) overdue", "vencida hace {0} día(s)")
+            Case "lDernierRappel" : Return Choose3(lang, "Dernier rappel", "Last reminder", "Último recordatorio")
+            Case "rappelAucun" : Return Choose3(lang, "aucun", "none", "ninguno")
+            Case "canalTexto" : Return Choose3(lang, "texto", "text", "SMS")
+            Case "canalCourriel" : Return Choose3(lang, "courriel", "email", "correo")
+            Case "aujourdhuiMin" : Return Choose3(lang, "aujourd'hui", "today", "hoy")
+            Case "btnTexto" : Return Choose3(lang, "Envoyer un texto", "Send a text", "Enviar un SMS")
+            Case "btnCourriel" : Return Choose3(lang, "Envoyer un courriel", "Send an email", "Enviar un correo")
+            Case "btnPaiementRecu" : Return Choose3(lang, "Paiement déjà reçu", "Payment already received", "Pago ya recibido")
+            Case "envoyer" : Return Choose3(lang, "Envoyer", "Send", "Enviar")
+            Case "rappelCourrielConfirm" : Return Choose3(lang, "Envoyer un rappel par courriel à {0} pour la facture {1} ?", "Send an email reminder to {0} for invoice {1}?", "¿Enviar un recordatorio por correo a {0} por la factura {1}?")
+            Case "rappelCourrielEnvoye" : Return Choose3(lang, "Rappel déposé pour {0}. Il partira dans quelques minutes.", "Reminder queued for {0}. It will go out in a few minutes.", "Recordatorio en cola para {0}. Saldrá en unos minutos.")
+            Case "rappelTextoOuvert" : Return Choose3(lang, "Votre application de messagerie s'ouvre avec le texto prêt à envoyer à {0}.", "Your messaging app opens with the text ready to send to {0}.", "Su aplicación de mensajes se abre con el SMS listo para enviar a {0}.")
+            Case "rappelErreur" : Return Choose3(lang, "Le rappel n'a pas pu être envoyé.", "The reminder could not be sent.", "No se pudo enviar el recordatorio.")
+            Case "winEncaissement" : Return Choose3(lang, "Ajouter un encaissement", "Add cash receipt", "Agregar cobro")
             Case "btnVoir" : Return Choose3(lang, "Voir", "View", "Ver")
             Case "btnPreparer" : Return Choose3(lang, "Préparer le paiement", "Prepare the payment", "Preparar el pago")
             Case "btnApprouver" : Return Choose3(lang, "Voir et approuver", "See and approve", "Ver y aprobar")

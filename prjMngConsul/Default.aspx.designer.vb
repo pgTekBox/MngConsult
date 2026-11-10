@@ -16,6 +16,9 @@ Partial Public Class _Default
     '''<summary>rwInvoice control.</summary>
     Protected WithEvents rwInvoice As Global.Telerik.Web.UI.RadWindow
 
+    '''<summary>rwEncaissement control.</summary>
+    Protected WithEvents rwEncaissement As Global.Telerik.Web.UI.RadWindow
+
     '''<summary>rwRdv control.</summary>
     Protected WithEvents rwRdv As Global.Telerik.Web.UI.RadWindow
 End Class

@@ -169,6 +169,11 @@
     .ac-act .det{ padding:0 14px 14px 58px; display:flex; flex-direction:column; gap:10px; }
     .ac-act .conseil{ padding:10px 12px; border-radius:14px; background:#FFFFFF; border:1px solid #E7C377; font-size:14px; }
     .ac-act .actions{ display:flex; flex-wrap:wrap; gap:8px; }
+    .ac-act .fiche{ padding:2px 12px; border-radius:14px; background:#FFFFFF; }
+    .ac-act .fiche .ligne{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:12px; align-items:center; padding:9px 0; font-size:15px; }
+    .ac-act .fiche .ligne + .ligne{ border-top:1px solid #E3E9F1; }
+    .ac-act .fiche .ligne span{ color:#44536E; }
+    .ac-act .fiche .ligne strong{ text-align:right; white-space:nowrap; }
 
     @media (max-width: 760px){
         .ac-carte{ padding:10px; }
@@ -196,6 +201,15 @@
     DestroyOnClose="true"
     Title="Facture"
     OnClientClose="rwInvoice_OnClose"
+    ClientIDMode="Static">
+</telerik:RadWindow>
+<telerik:RadWindow ID="rwEncaissement" runat="server"
+    Modal="true"
+    VisibleOnPageLoad="false"
+    Behaviors="Close,Move,Resize"
+    DestroyOnClose="true"
+    Title="Encaissement"
+    OnClientClose="rwEncaissement_OnClose"
     ClientIDMode="Static">
 </telerik:RadWindow>
 <telerik:RadWindow ID="rwRdv" runat="server"
@@ -286,6 +300,20 @@
                 });
             }
         });
+    }
+    // « Paiement déjà reçu » : la fenêtre d'encaissement du client (même page que la
+    // liste des factures clients). À la fermeture, les activités de la compagnie sont
+    // réinscrites tout de suite (s0973) pour que la facture payée disparaisse.
+    function acPaiementRecu(partyId, titre) {
+        if (!partyId || partyId <= 0 || !$find('rwEncaissement')) { window.location.href = 'wbfCustomersInvoices.aspx'; return; }
+        openRadWindowParam(partyId, '&PartyId=' + partyId + '&sens=ENCAISSEMENT', 'rwEncaissement', 'wbfReceiptEditPopup.aspx', titre, titre);
+    }
+    function rwEncaissement_OnClose(sender, args) {
+        function recharger() { window.location.reload(); }
+        fetch('RappelFacture.ashx', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ canal: 'sync' })
+        }).then(recharger, recharger);
     }
     function acOuvrirRdv(url, titre) {
         var w = $find('rwRdv'); if (!w) { window.location.href = 'wbfAgenda.aspx'; return; }
@@ -757,17 +785,31 @@
             boite.appendChild(b);
             if (ouvert) {
                 var d = el('div', 'det');
+                // Facture en retard : « Je la place en premier : » quand 60 la propose en haut.
+                var conseil = a.k === 'factRetard' ? (i === 0 ? T.jePremier + a.det : maj(a.det)) : a.det;
                 if (s.a60 && s.cible === i) {
                     var ar = el('div', 'a60-arrive'); ar.appendChild(svg60(a.u === 'r' ? '#E35D55' : '#E3B341', 44));
-                    var tx = el('span', 'txt'); tx.appendChild(el('b', '', T.a60Ici)); tx.appendChild(el('span', '', a.det)); tx.appendChild(el('span', '', T.a60Choisir));
+                    var tx = el('span', 'txt'); tx.appendChild(el('b', '', T.a60Ici)); tx.appendChild(el('span', '', conseil)); tx.appendChild(el('span', '', T.a60Choisir));
                     ar.appendChild(tx);
                     var mc = bouton('', T.merci60); mc.addEventListener('click', ramener60); ar.appendChild(mc);
                     d.appendChild(ar);
                 } else {
-                    var cs = el('div', 'conseil'); cs.appendChild(el('b', '', T.conseil60 + ' ')); cs.appendChild(document.createTextNode(a.det));
+                    var cs = el('div', 'conseil'); cs.appendChild(el('b', '', T.conseil60 + ' ')); cs.appendChild(document.createTextNode(conseil));
                     d.appendChild(cs);
                 }
-                if (a.btn && a.url) {
+                if (a.k === 'factRetard') {
+                    // Client · Facture (retard, montant) · Dernier rappel, puis les trois gestes.
+                    var fi = el('div', 'fiche');
+                    [[T.lClient, a.client, ''], [fmt(T.lFacture, a.numero), a.retard, a.montant], [T.lDernierRappel, a.rappel, '']].forEach(function (x) {
+                        var lg = el('div', 'ligne'); lg.appendChild(el('b', '', x[0])); lg.appendChild(el('span', '', x[1])); lg.appendChild(el('strong', '', x[2])); fi.appendChild(lg);
+                    });
+                    d.appendChild(fi);
+                    var gx = el('div', 'actions');
+                    var bTx = bouton('ac-btn', T.btnTexto); bTx.addEventListener('click', function () { rappeler(a, 'texto', bTx); }); gx.appendChild(bTx);
+                    var bCo = bouton('ac-btn clair', T.btnCourriel); bCo.addEventListener('click', function () { rappeler(a, 'courriel', bCo); }); gx.appendChild(bCo);
+                    var bPa = bouton('ac-btn clair', T.btnPaiementRecu); bPa.addEventListener('click', function () { acPaiementRecu(a.partyId, T.winEncaissement); }); gx.appendChild(bPa);
+                    d.appendChild(gx);
+                } else if (a.btn && a.url) {
                     var ac = el('div', 'actions'); var go = el('a', 'ac-btn', a.btn); go.href = a.url; ac.appendChild(go); d.appendChild(ac);
                 }
                 boite.appendChild(d);
@@ -780,6 +822,32 @@
         }
         sec.appendChild(liste);
         return sec;
+    }
+
+    // Rappel d'une facture en retard (RappelFacture.ashx). Texto : le rappel est noté
+    // et l'application de messagerie s'ouvre avec le texte prêt (lien sms:) — aucun
+    // fournisseur SMS n'est branché. Courriel : confirmation, puis dépôt dans MailService.
+    function rappeler(a, canal, btn) {
+        function envoyer() {
+            btn.disabled = true;
+            fetch('RappelFacture.ashx', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ docId: a.docId, canal: canal })
+            }).then(function (r) { return r.json(); }).then(function (res) {
+                btn.disabled = false;
+                if (!res || !res.ok) { acModal({ message: (res && res.erreur) || T.rappelErreur }); return; }
+                a.rappel = (canal === 'texto' ? T.canalTexto : T.canalCourriel) + ' · ' + T.aujourdhuiMin;
+                peindre();
+                if (canal === 'texto') {
+                    acModal({ message: fmt(T.rappelTextoOuvert, res.tel) });
+                    window.location.href = 'sms:' + res.tel + '?body=' + encodeURIComponent(res.message);
+                } else {
+                    acModal({ message: fmt(T.rappelCourrielEnvoye, res.email) });
+                }
+            }).catch(function () { btn.disabled = false; acModal({ message: T.rappelErreur }); });
+        }
+        if (canal === 'courriel') acModal({ message: fmt(T.rappelCourrielConfirm, a.client, a.numero), confirm: true, okText: T.envoyer, onOk: envoyer });
+        else envoyer();
     }
 
     function peindre() {
