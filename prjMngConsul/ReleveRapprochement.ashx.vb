@@ -70,6 +70,7 @@ Public Class ReleveRapprochementHandler
         End If
 
         Dim action As String = "", id As Integer = 0, reglementId As Integer = 0, docId As Integer = 0, ignorer As Boolean = True
+        Dim compteId As Integer = 0, lienId As Integer = 0, montant As Decimal = 0D, libelle As String = ""
         Try
             If context.Request.ContentLength > 10000 Then
                 Repondre(context, js, 413, New With {.ok = False, .erreur = "413"})
@@ -86,11 +87,18 @@ Public Class ReleveRapprochementHandler
                 If d.ContainsKey("reglementId") AndAlso d("reglementId") IsNot Nothing Then Integer.TryParse(Convert.ToString(d("reglementId")), reglementId)
                 If d.ContainsKey("docId") AndAlso d("docId") IsNot Nothing Then Integer.TryParse(Convert.ToString(d("docId")), docId)
                 If d.ContainsKey("ignorer") AndAlso d("ignorer") IsNot Nothing Then Boolean.TryParse(Convert.ToString(d("ignorer")), ignorer)
+                If d.ContainsKey("compteId") AndAlso d("compteId") IsNot Nothing Then Integer.TryParse(Convert.ToString(d("compteId")), compteId)
+                If d.ContainsKey("lienId") AndAlso d("lienId") IsNot Nothing Then Integer.TryParse(Convert.ToString(d("lienId")), lienId)
+                If d.ContainsKey("montant") AndAlso d("montant") IsNot Nothing Then
+                    Decimal.TryParse(Convert.ToString(d("montant"), System.Globalization.CultureInfo.InvariantCulture).Replace(",", "."),
+                                     System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, montant)
+                End If
+                If d.ContainsKey("libelle") AndAlso d("libelle") IsNot Nothing Then libelle = Convert.ToString(d("libelle")).Trim()
             End If
         Catch
         End Try
 
-        If id <= 0 Then
+        If id <= 0 AndAlso action <> "retirer" Then
             Repondre(context, js, 400, New With {.ok = False, .erreur = T("Ligne invalide.", "Invalid line.", "Línea no válida.")})
             Return
         End If
@@ -100,30 +108,42 @@ Public Class ReleveRapprochementHandler
                 Case "candidats"
                     Dim ds As DataSet = Executer("s0978GetReleveCandidats", company, id)
                     Dim l As DataRow = ds.Tables(0).Rows(0)
-                    Dim regs As New List(Of Object)
+                    Dim liens As New List(Of Object)
                     For Each r As DataRow In ds.Tables(1).Rows
+                        liens.Add(New With {
+                            .id = CInt(r("LienId")), .montant = Dec(r("Montant")), .genre = Txt(r("Genre")),
+                            .libelle = Txt(r("Libelle")), .detail = Txt(r("Detail"))})
+                    Next
+                    Dim regs As New List(Of Object)
+                    For Each r As DataRow In ds.Tables(2).Rows
                         regs.Add(New With {
                             .id = CInt(r("Id")), .date = Jour(r("DateReglement")), .montant = Dec(r("Montant")),
                             .tiers = Txt(r("Tiers")), .numeros = Txt(r("Numeros")), .reference = Txt(r("Reference")),
-                            .type = Txt(r("TypeReglement")), .probable = CInt(r("Probable")) = 1})
+                            .type = Txt(r("TypeReglement")), .probable = CInt(r("Probable")) = 1, .possible = CInt(r("Possible")) = 1})
                     Next
                     Dim facts As New List(Of Object)
-                    For Each r As DataRow In ds.Tables(2).Rows
+                    For Each r As DataRow In ds.Tables(3).Rows
                         facts.Add(New With {
                             .id = CInt(r("Id")), .numero = Txt(r("DocumentNumber")), .echeance = Jour(r("DueDate")),
                             .tiers = Txt(r("Tiers")), .reste = Dec(r("Reste")),
                             .probable = CInt(r("MontantExact")) = 1 OrElse CInt(r("NomTrouve")) = 1})
                     Next
+                    Dim comptes As New List(Of Object)
+                    For Each r As DataRow In ds.Tables(4).Rows
+                        comptes.Add(New With {.id = CInt(r("Id")), .compte = Txt(r("Compte")), .nom = Txt(r("Nom")), .suggere = CInt(r("Suggere")) = 1})
+                    Next
                     Repondre(context, js, 200, New With {
                         .ok = True,
                         .ligne = New With {.id = id, .date = Jour(l("DateMouvement")), .description = Txt(l("Description")),
-                                           .montant = Dec(l("Montant")), .entree = CBool(l("Entree"))},
-                        .reglements = regs, .factures = facts})
+                                           .montant = Dec(l("Montant")), .entree = CBool(l("Entree")),
+                                           .relie = Dec(l("Relie")), .reste = Dec(l("Reste")), .verrouillee = CInt(l("Verrouillee")) = 1},
+                        .liens = liens, .reglements = regs, .factures = facts, .comptes = comptes})
 
                 Case "lier"
                     If reglementId <= 0 Then Throw New ArgumentException(T("Règlement invalide.", "Invalid payment.", "Pago no válido."))
-                    Executer("s0979LierReleveReglement", company, id, New SqlParameter("@ReglementId", reglementId))
-                    Repondre(context, js, 200, New With {.ok = True})
+                    Dim ds As DataSet = Executer("s0979LierReleveReglement", company, id,
+                                                 New SqlParameter("@ReglementId", reglementId), New SqlParameter("@UserId", userId))
+                    Repondre(context, js, 200, New With {.ok = True, .reste = Dec(ds.Tables(ds.Tables.Count - 1).Rows(0)("Reste"))})
 
                 Case "regler"
                     If docId <= 0 Then Throw New ArgumentException(T("Facture invalide.", "Invalid invoice.", "Factura no válida."))
@@ -131,7 +151,23 @@ Public Class ReleveRapprochementHandler
                                                  New SqlParameter("@DocumentId", docId), New SqlParameter("@UserId", userId))
                     ' La procédure de règlement renvoie aussi son propre résultat : le nôtre est le dernier.
                     Dim r As DataRow = ds.Tables(ds.Tables.Count - 1).Rows(0)
-                    Repondre(context, js, 200, New With {.ok = True, .montant = Dec(r("MontantRegle")), .reste = Dec(r("ResteFacture"))})
+                    Repondre(context, js, 200, New With {.ok = True, .montant = Dec(r("MontantRegle")),
+                                                         .resteFacture = Dec(r("ResteFacture")), .reste = Dec(r("Reste"))})
+
+                Case "inscrire"
+                    If compteId <= 0 Then Throw New ArgumentException(T("Choisissez un compte.", "Choose an account.", "Elija una cuenta."))
+                    Dim ds As DataSet = Executer("s0989InscrireReleveEcriture", company, id,
+                                                 New SqlParameter("@CompteId", compteId),
+                                                 New SqlParameter("@Montant", If(montant > 0D, CObj(montant), DBNull.Value)),
+                                                 New SqlParameter("@Libelle", If(libelle = "", CObj(DBNull.Value), libelle)),
+                                                 New SqlParameter("@UserId", userId))
+                    Dim r As DataRow = ds.Tables(ds.Tables.Count - 1).Rows(0)
+                    Repondre(context, js, 200, New With {.ok = True, .piece = Txt(r("NumeroPiece")), .montant = Dec(r("Montant")), .reste = Dec(r("Reste"))})
+
+                Case "retirer"
+                    If lienId <= 0 Then Throw New ArgumentException(T("Lien invalide.", "Invalid link.", "Vínculo no válido."))
+                    Dim ds As DataSet = ExecuterSans("s0990RetirerLienReleve", company, New SqlParameter("@LienId", lienId))
+                    Repondre(context, js, 200, New With {.ok = True, .reste = Dec(ds.Tables(ds.Tables.Count - 1).Rows(0)("Reste"))})
 
                 Case "delier"
                     Executer("s0981DelierReleve", company, id)
@@ -160,6 +196,25 @@ Public Class ReleveRapprochementHandler
                 cmd.CommandTimeout = 120
                 cmd.Parameters.Add(New SqlParameter("@CompanyGUID", company))
                 cmd.Parameters.Add(New SqlParameter("@ReleveId", id))
+                For Each p As SqlParameter In autres
+                    cmd.Parameters.Add(p)
+                Next
+                Dim ds As New DataSet()
+                Using da As New SqlDataAdapter(cmd)
+                    da.Fill(ds)
+                End Using
+                Return ds
+            End Using
+        End Using
+    End Function
+
+    ''' <summary>Une procédure sans @ReleveId (retirer un lien).</summary>
+    Private Shared Function ExecuterSans(proc As String, company As Guid, ParamArray autres As SqlParameter()) As DataSet
+        Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
+            Using cmd As New SqlCommand(proc, conn)
+                cmd.CommandType = CommandType.StoredProcedure
+                cmd.CommandTimeout = 120
+                cmd.Parameters.Add(New SqlParameter("@CompanyGUID", company))
                 For Each p As SqlParameter In autres
                     cmd.Parameters.Add(p)
                 Next

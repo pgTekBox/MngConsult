@@ -151,6 +151,17 @@
     .rb-cand .go { text-align: right }
     .rb-prob { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #E3F3EA; color: #0F5A3A; font-size: 11px; font-weight: 800; vertical-align: middle }
     .rb-vide { padding: 10px 6px; color: #44536E; border-top: 1px solid #E3E9F1; font-size: 14px }
+    .rb-bilan { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: -6px 0 10px; padding: 10px 14px; border: 1px solid #E3E9F1; border-radius: 14px; font-size: 14px; color: #44536E }
+    .rb-bilan b { color: #0E1F3D } .rb-bilan .reste b { color: #A3261C } .rb-bilan .ok b { color: #0F5A3A }
+    .rb-ok { margin: 4px 0 10px; padding: 9px 14px; border-radius: 12px; background: #E3F3EA; color: #0F5A3A; font-weight: 700; font-size: 14px }
+    .rb-cand.trop { opacity: .6 }
+    .rb-trop { font-size: 12px; color: #7A5200 }
+    .rb-reste { color: #7A5200 !important; font-weight: 700 }
+    .rb-inscrire { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr) 120px auto; gap: 8px 10px; align-items: end; padding: 10px 0 0; border-top: 1px solid #E3E9F1 }
+    .rb-inscrire p { grid-column: 1 / -1; margin: 0; font-size: 13px; color: #44536E }
+    .rb-inscrire label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 800; color: #5B6B86; min-width: 0 }
+    .rb-inscrire select, .rb-inscrire input { min-height: 36px; padding: 0 10px; border: 1px solid #AEBBCD; border-radius: 10px; font: inherit; font-size: 14px; color: #0E1F3D; background: #fff; min-width: 0 }
+    .rb-inscrire .mt input { text-align: right }
     .rb-msg { margin-top: 12px; padding: 10px 14px; border-radius: 12px; background: #FDECEA; color: #A3261C; font-weight: 700; display: none }
     .rb-pied { display: flex; justify-content: flex-end; margin-top: 16px }
     .fc-liste .c-date { white-space: nowrap; font-weight: 700 }
@@ -252,10 +263,10 @@
                             <div class="c-date"><%# FormatDateOnly(Eval("DateMouvement")) %></div>
                             <div class="c-desc"><%# DescCell(Eval("Description"), Eval("Reference")) %></div>
                             <div class="c-compte"><%# Server.HtmlEncode(Convert.ToString(Eval("FullName"))) %></div>
-                            <div style="min-width:0"><%# StatutCell(Eval("Statut"), Eval("ReglementInfo")) %></div>
+                            <div style="min-width:0"><%# StatutCell(Eval("Statut"), Eval("ReglementInfo"), Eval("Montant"), Eval("Relie")) %></div>
                             <div class="c-montant sortie"><%# MontantSortie(Eval("Montant")) %></div>
                             <div class="c-montant entree"><%# MontantEntree(Eval("Montant")) %></div>
-                            <div class="rb-actions"><%# ActionsCell(Eval("Id"), Eval("Statut"), Eval("ReglementId")) %></div>
+                            <div class="rb-actions"><%# ActionsCell(Eval("Id"), Eval("Statut"), Eval("NbLiens"), Eval("Montant"), Eval("Relie")) %></div>
                         </div>
                     </ItemTemplate>
 
@@ -318,59 +329,127 @@
       }
       function rbMessage(t) { var m = document.getElementById('rbMsg'); m.textContent = t || ''; m.style.display = t ? 'block' : 'none'; }
       function rbRafraichir() { fcChip('refresh', '1'); }
-      function rbFermer() { document.getElementById('rbFond').classList.remove('ouvert'); rbLigneId = 0; }
+      // La fenêtre reste ouverte tant qu'il reste un montant à relier ; la liste se
+      // recharge à la fermeture si quelque chose a changé.
+      var rbChange = false;
+      function rbFermer() {
+          document.getElementById('rbFond').classList.remove('ouvert'); rbLigneId = 0;
+          if (rbChange) { rbChange = false; rbRafraichir(); }
+      }
 
-      async function rbRelier(id) {
+      async function rbRelier(id, message) {
           rbLigneId = id;
           document.getElementById('rbTitre').textContent = RB.mTitre;
           document.getElementById('rbFermerBtn').textContent = RB.mFermer;
-          document.getElementById('rbCorps').innerHTML = '<div class="rb-vide">' + rbEsc(RB.mChargement) + '</div>';
+          if (!document.getElementById('rbFond').classList.contains('ouvert'))
+              document.getElementById('rbCorps').innerHTML = '<div class="rb-vide">' + rbEsc(RB.mChargement) + '</div>';
           rbMessage('');
           document.getElementById('rbFond').classList.add('ouvert');
 
           var d = await rbAppel({ action: 'candidats', id: id });
           if (!d.ok) { document.getElementById('rbCorps').innerHTML = ''; rbMessage(d.erreur); return; }
 
-          var l = d.ligne, h = '';
+          var l = d.ligne, h = '', reste = l.reste;
           h += '<div class="rb-ligne"><span>' + rbEsc(rbJour(l.date)) + '</span><b>' + rbEsc(l.description) + '</b>' +
                '<span class="m ' + (l.entree ? 'entree' : 'sortie') + '">' + rbEsc(l.entree ? RB.mDepot : RB.mSortie) + ' ' + rbMontant(Math.abs(l.montant)) + '</span></div>';
+
+          // Le compte : montant de la ligne, déjà relié, reste à relier
+          h += '<div class="rb-bilan"><span>' + rbEsc(RB.mLigneMontant) + ' <b>' + rbMontant(Math.abs(l.montant)) + '</b></span>' +
+               '<span>' + rbEsc(RB.mDejaRelie) + ' <b>' + rbMontant(l.relie) + '</b></span>' +
+               '<span class="' + (reste > 0.005 ? 'reste' : 'ok') + '">' + rbEsc(RB.mResteARelier) + ' <b>' + rbMontant(reste) + '</b></span></div>';
+          if (message) h += '<div class="rb-ok">' + rbEsc(message) + '</div>';
+
+          if (d.liens.length) {
+              h += '<h3>' + rbEsc(RB.mDejaRelie) + '</h3>';
+              d.liens.forEach(function (x) {
+                  h += '<div class="rb-cand"><span>' + rbEsc(x.genre === 'REG' ? (l.entree ? '↘' : '↗') : '✎') + '</span>' +
+                       '<span class="t"><b>' + rbEsc(x.libelle || '—') + '</b><span>' + rbEsc(x.detail) + '</span></span>' +
+                       '<span class="mt">' + rbMontant(x.montant) + '</span>' +
+                       '<span class="go">' + (l.verrouillee ? '' : '<button type="button" class="rb-act" onclick="rbRetirer(' + x.id + ', this)">' + rbEsc(RB.mRetirer) + '</button>') + '</span></div>';
+              });
+          }
+
+          if (l.verrouillee) { h += '<div class="rb-vide">' + rbEsc(RB.mVerrou) + '</div>'; document.getElementById('rbCorps').innerHTML = h; return; }
+          if (reste <= 0.005) { h += '<div class="rb-ok">' + rbEsc(RB.mToutRelie) + '</div>'; document.getElementById('rbCorps').innerHTML = h; return; }
 
           h += '<h3>' + rbEsc(RB.mRegs) + '</h3>';
           if (!d.reglements.length) h += '<div class="rb-vide">' + rbEsc(RB.mRegsVide) + '</div>';
           d.reglements.forEach(function (r) {
               var sous = [r.numeros, r.type, r.reference].filter(function (x) { return x; }).join(' · ');
-              h += '<div class="rb-cand"><span>' + rbEsc(rbJour(r.date)) + '</span>' +
+              h += '<div class="rb-cand' + (r.possible ? '' : ' trop') + '"><span>' + rbEsc(rbJour(r.date)) + '</span>' +
                    '<span class="t"><b>' + rbEsc(r.tiers || '—') + (r.probable ? '<span class="rb-prob">' + rbEsc(RB.mProbable) + '</span>' : '') + '</b><span>' + rbEsc(sous) + '</span></span>' +
                    '<span class="mt">' + rbMontant(r.montant) + '</span>' +
-                   '<span class="go"><button type="button" class="rb-act' + (r.probable ? ' primaire' : '') + '" onclick="rbLier(' + r.id + ', this)">' + rbEsc(RB.mRelier) + '</button></span></div>';
+                   '<span class="go">' + (r.possible
+                        ? '<button type="button" class="rb-act' + (r.probable ? ' primaire' : '') + '" onclick="rbLier(' + r.id + ', this)">' + rbEsc(RB.mRelier) + '</button>'
+                        : '<span class="rb-trop">' + rbEsc(RB.mTropGrand) + '</span>') + '</span></div>';
           });
 
           h += '<h3>' + rbEsc(l.entree ? RB.mFactsCli : RB.mFactsFour) + '</h3>';
           if (!d.factures.length) h += '<div class="rb-vide">' + rbEsc(RB.mFactsVide) + '</div>';
           d.factures.forEach(function (f) {
+              var part = Math.min(f.reste, reste);
               h += '<div class="rb-cand"><span>' + rbEsc(f.numero) + '</span>' +
-                   '<span class="t"><b>' + rbEsc(f.tiers || '—') + (f.probable ? '<span class="rb-prob">' + rbEsc(RB.mProbable) + '</span>' : '') + '</b><span>' + rbEsc(RB.mEchue + ' ' + rbJour(f.echeance)) + '</span></span>' +
-                   '<span class="mt">' + rbEsc(RB.mReste) + ' ' + rbMontant(f.reste) + '</span>' +
+                   '<span class="t"><b>' + rbEsc(f.tiers || '—') + (f.probable ? '<span class="rb-prob">' + rbEsc(RB.mProbable) + '</span>' : '') + '</b><span>' + rbEsc(RB.mEchue + ' ' + rbJour(f.echeance) + ' · ' + RB.mReste + ' ' + rbMontant(f.reste)) + '</span></span>' +
+                   '<span class="mt">' + rbMontant(part) + '</span>' +
                    '<span class="go"><button type="button" class="rb-act' + (f.probable ? ' primaire' : '') + '" onclick="rbRegler(' + f.id + ', this)">' + rbEsc(l.entree ? RB.mEncaisser : RB.mPayer) + '</button></span></div>';
           });
+
+          // Inscrire le reste aux livres sur un compte choisi
+          var opts = '<option value="">' + rbEsc(RB.mChoisirCompte) + '</option>';
+          d.comptes.forEach(function (c) {
+              opts += '<option value="' + c.id + '"' + (c.suggere ? ' selected' : '') + '>' + rbEsc(c.compte + ' ' + c.nom + (c.suggere ? ' — ' + RB.mSuggere : '')) + '</option>';
+          });
+          h += '<h3>' + rbEsc(RB.mInscrire) + '</h3>' +
+               '<div class="rb-inscrire"><p>' + rbEsc(RB.mInscrireAide) + '</p>' +
+               '<label>' + rbEsc(RB.mCompte) + '<select id="rbCompte">' + opts + '</select></label>' +
+               '<label>' + rbEsc(RB.mLibelle) + '<input type="text" id="rbLibelle" maxlength="250" value="' + rbEsc(l.description) + '" /></label>' +
+               '<label class="mt">' + rbEsc(RB.mMontant) + '<input type="number" id="rbMontantIns" step="0.01" min="0.01" max="' + reste.toFixed(2) + '" value="' + reste.toFixed(2) + '" /></label>' +
+               '<button type="button" class="rb-act primaire" onclick="rbInscrire(this)">' + rbEsc(RB.mInscrireBtn) + '</button></div>';
+
           document.getElementById('rbCorps').innerHTML = h;
       }
 
       function rbOccupe(btn, oui) { document.querySelectorAll('#rbCorps button').forEach(function (b) { b.disabled = oui; }); }
 
+      // Après chaque geste : la fenêtre se recharge ; elle se ferme quand tout est relié.
+      async function rbApres(d, btn, message) {
+          if (!d.ok) { rbOccupe(btn, false); rbMessage(d.erreur); return; }
+          rbChange = true;
+          if (d.reste !== undefined && d.reste <= 0.005) { rbFermer(); return; }
+          await rbRelier(rbLigneId, message);
+      }
+
       async function rbLier(reglementId, btn) {
           rbOccupe(btn, true); rbMessage('');
-          var d = await rbAppel({ action: 'lier', id: rbLigneId, reglementId: reglementId });
-          if (!d.ok) { rbOccupe(btn, false); rbMessage(d.erreur); return; }
-          rbFermer(); rbRafraichir();
+          await rbApres(await rbAppel({ action: 'lier', id: rbLigneId, reglementId: reglementId }), btn);
       }
 
       async function rbRegler(docId, btn) {
           rbOccupe(btn, true); rbMessage('');
           var d = await rbAppel({ action: 'regler', id: rbLigneId, docId: docId });
+          var msg = d.ok && d.resteFacture > 0.005 ? RB.mRegleOk.replace('{0}', rbMontant(d.montant)) + ' — ' + RB.mPartiel.replace('{0}', rbMontant(d.resteFacture)) : '';
+          if (d.ok && d.reste <= 0.005 && msg) alert(msg);
+          await rbApres(d, btn, msg);
+      }
+
+      async function rbInscrire(btn) {
+          var compte = document.getElementById('rbCompte').value;
+          var montant = parseFloat(document.getElementById('rbMontantIns').value);
+          var max = parseFloat(document.getElementById('rbMontantIns').max);
+          if (!compte) { rbMessage(RB.mChoisirCompte); return; }
+          if (!(montant > 0) || montant > max + 0.005) { rbMessage(RB.mDepasse); return; }
+          rbOccupe(btn, true); rbMessage('');
+          await rbApres(await rbAppel({ action: 'inscrire', id: rbLigneId, compteId: +compte, montant: montant.toFixed(2),
+                                         libelle: document.getElementById('rbLibelle').value }), btn);
+      }
+
+      async function rbRetirer(lienId, btn) {
+          if (!confirm(RB.mConfRetirer)) return;
+          rbOccupe(btn, true); rbMessage('');
+          var d = await rbAppel({ action: 'retirer', lienId: lienId });
           if (!d.ok) { rbOccupe(btn, false); rbMessage(d.erreur); return; }
-          rbFermer(); rbRafraichir();
-          if (d.reste > 0.005) alert(RB.mRegleOk.replace('{0}', rbMontant(d.montant)) + '\n' + RB.mPartiel.replace('{0}', rbMontant(d.reste)));
+          rbChange = true;
+          await rbRelier(rbLigneId);
       }
 
       async function rbAction(action, id) {

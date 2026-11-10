@@ -63,7 +63,8 @@ BEGIN
     IF @Reinitialiser = 1
         DELETE FROM dbo.T142ReleveBancaire
         WHERE CompanyGUID = @CompanyGUID AND CompteBanque = @Compte
-          AND Reference LIKE 'SIM-%' AND ReglementId IS NULL;
+          AND Reference LIKE 'SIM-%'
+          AND NOT EXISTS (SELECT 1 FROM dbo.T208ReleveLien l WHERE l.ReleveId = T142ReleveBancaire.Id);
 
     -- ── 2. La période à simuler ────────────────────────────────────────────
     DECLARE @Debut DATE = (SELECT DATEADD(DAY, 1, MAX(DateMouvement)) FROM dbo.T142ReleveBancaire

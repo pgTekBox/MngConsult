@@ -580,27 +580,46 @@ Public Class wbfReleve
     End Function
 
     ''' <summary>L'état, et dessous le règlement relié (« Dépôt · Samuel Cloutier · FCD-0030 »).</summary>
-    Public Function StatutCell(statut As Object, info As Object) As String
+    ''' <summary>L'état, et dessous les pièces reliées (« Encaissement · Samuel Cloutier · FCD-0030 »,
+    ''' « Écriture REL-8879-1 · 4000 Ventes ») ; une ligne partielle dit aussi ce qui reste.</summary>
+    Public Function StatutCell(statut As Object, info As Object, montant As Object, relie As Object) As String
         Dim html As String = StatutPill(statut)
         Dim s As String = Convert.ToString(info)
         If s <> "" Then
-            Dim p As String() = s.Split("|"c)
-            If p.Length >= 4 Then
+            Dim pieces As New List(Of String)
+            For Each piece As String In s.Split(New String() {" | "}, StringSplitOptions.RemoveEmptyEntries)
+                Dim p As String() = piece.Split("~"c)
+                If p.Length < 3 Then Continue For
                 Dim morceaux As New List(Of String)
-                morceaux.Add(If(p(0) = "ENC", L("lienEnc"), L("lienDec")))
+                Select Case p(0)
+                    Case "ENC" : morceaux.Add(L("lienEnc"))
+                    Case "DEC" : morceaux.Add(L("lienDec"))
+                    Case Else : morceaux.Add(L("lienEcr") & If(p(1).Trim() <> "", " " & p(1).Trim(), ""))
+                End Select
+                If p(0) <> "ECR" AndAlso p(1).Trim() <> "" Then morceaux.Add(p(1).Trim())
                 If p(2).Trim() <> "" Then morceaux.Add(p(2).Trim())
-                If p(3).Trim() <> "" Then morceaux.Add(p(3).Trim())
-                html &= "<span class=""rb-lien"">" & Server.HtmlEncode(String.Join(" · ", morceaux)) & "</span>"
-            End If
+                pieces.Add(String.Join(" · ", morceaux))
+            Next
+            For Each piece As String In pieces
+                html &= "<span class=""rb-lien"">" & Server.HtmlEncode(piece) & "</span>"
+            Next
+        End If
+        Dim reste As Decimal = Math.Abs(Nombre(montant)) - Nombre(relie)
+        If Nombre(relie) > 0D AndAlso reste > 0.005D Then
+            html &= "<span class=""rb-lien rb-reste"">" & Server.HtmlEncode(String.Format(L("resteARelier"), FormatMontant(reste))) & "</span>"
         End If
         Return html
     End Function
 
-    ''' <summary>Les gestes d'une ligne : Relier + Ignorer, Délier (reliée) ou Rétablir (ignorée).</summary>
-    Public Function ActionsCell(id As Object, statut As Object, reglementId As Object) As String
+    ''' <summary>Les gestes d'une ligne : Relier + Ignorer ; Délier quand elle a des pièces
+    ''' (et Relier tant qu'il reste un montant) ; Rétablir quand elle est ignorée.</summary>
+    Public Function ActionsCell(id As Object, statut As Object, nbLiens As Object, montant As Object, relie As Object) As String
         Dim n As String = Convert.ToInt32(id).ToString()
-        If reglementId IsNot Nothing AndAlso Not IsDBNull(reglementId) Then
-            Return "<button type=""button"" class=""rb-act"" onclick=""rbAction('delier'," & n & ")"">" & Server.HtmlEncode(L("aDelier")) & "</button>"
+        Dim aDesLiens As Boolean = Nombre(nbLiens) > 0D
+        If aDesLiens Then
+            Dim reste As Decimal = Math.Abs(Nombre(montant)) - Nombre(relie)
+            Return If(reste > 0.005D, "<button type=""button"" class=""rb-act primaire"" onclick=""rbRelier(" & n & ")"">" & Server.HtmlEncode(L("aRelier")) & "</button>", "") &
+                   "<button type=""button"" class=""rb-act"" onclick=""rbAction('delier'," & n & ")"">" & Server.HtmlEncode(L("aDelier")) & "</button>"
         End If
         If Cle(statut) = "ignore" Then
             Return "<button type=""button"" class=""rb-act"" onclick=""rbAction('retablir'," & n & ")"">" & Server.HtmlEncode(L("aRetablir")) & "</button>"
@@ -613,7 +632,10 @@ Public Class wbfReleve
     Protected Function LibellesRelier() As String
         Dim cles As String() = {"mTitre", "mDepot", "mSortie", "mRegs", "mRegsVide", "mFactsCli", "mFactsFour", "mFactsVide",
                                 "mProbable", "mRelier", "mEncaisser", "mPayer", "mFermer", "mEchue", "mReste", "mErreur",
-                                "mConfDelier", "mRegleOk", "mPartiel", "mChargement"}
+                                "mConfDelier", "mRegleOk", "mPartiel", "mChargement",
+                                "mLigneMontant", "mDejaRelie", "mResteARelier", "mRetirer", "mConfRetirer", "mTropGrand",
+                                "mInscrire", "mInscrireAide", "mCompte", "mChoisirCompte", "mLibelle", "mMontant", "mInscrireBtn",
+                                "mToutRelie", "mVerrou", "mSuggere", "mDepasse"}
         Dim d As New Dictionary(Of String, String)
         For Each c As String In cles
             d(c) = L(c)
@@ -686,6 +708,8 @@ Public Class wbfReleve
                 Return L("stImported")
             Case "réglé", "reglé", "regle", "payé", "paye", "traité", "traite", "settled", "reconciled", "conciliado", "pagado"
                 Return L("stSettled")
+            Case "partiel", "partial", "parcial"
+                Return L("stPartial")
             Case "en attente", "attente", "a traiter", "à traiter", "pending", "pendiente"
                 Return L("stPending")
             Case "ignoré", "ignore", "ignored", "ignorado"
@@ -781,6 +805,27 @@ Public Class wbfReleve
             Case "cRien" : Return Choose3(lang, "Rien.", "None.", "Nada.")
             Case "cAutres" : Return Choose3(lang, "+ {0} autres", "+ {0} more", "+ {0} más")
             ' Rapprochement (T367)
+            ' Liens multiples et inscription aux livres (T370)
+            Case "lienEcr" : Return Choose3(lang, "Écriture", "Entry", "Asiento")
+            Case "resteARelier" : Return Choose3(lang, "Reste à relier : {0}", "Left to link: {0}", "Queda por vincular: {0}")
+            Case "stPartial" : Return Choose3(lang, "Partiel", "Partial", "Parcial")
+            Case "mLigneMontant" : Return Choose3(lang, "Montant de la ligne", "Line amount", "Importe de la línea")
+            Case "mDejaRelie" : Return Choose3(lang, "Déjà relié", "Already linked", "Ya vinculado")
+            Case "mResteARelier" : Return Choose3(lang, "Reste à relier", "Left to link", "Queda por vincular")
+            Case "mRetirer" : Return Choose3(lang, "Retirer", "Remove", "Quitar")
+            Case "mConfRetirer" : Return Choose3(lang, "Retirer cette pièce de la ligne ? Elle reste enregistrée dans les livres.", "Remove this item from the line? It stays recorded in the books.", "¿Quitar esta partida de la línea? Sigue registrada en los libros.")
+            Case "mTropGrand" : Return Choose3(lang, "Plus grand que le reste à relier", "Larger than what is left to link", "Mayor que lo que queda por vincular")
+            Case "mInscrire" : Return Choose3(lang, "Inscrire aux livres", "Record in the books", "Registrar en los libros")
+            Case "mInscrireAide" : Return Choose3(lang, "Pour ce qui ne correspond à aucune facture (vente au comptoir, frais bancaires, loyer, paie…) : une écriture au journal de banque, à la date du relevé, contre le compte choisi.", "For what matches no invoice (counter sale, bank fees, rent, payroll…): an entry in the bank journal, on the statement date, against the chosen account.", "Para lo que no corresponde a ninguna factura (venta en mostrador, cargos bancarios, alquiler, nómina…): un asiento en el diario de banco, en la fecha del extracto, contra la cuenta elegida.")
+            Case "mCompte" : Return Choose3(lang, "Compte", "Account", "Cuenta")
+            Case "mChoisirCompte" : Return Choose3(lang, "— Choisir un compte —", "— Choose an account —", "— Elegir una cuenta —")
+            Case "mLibelle" : Return Choose3(lang, "Libellé", "Description", "Concepto")
+            Case "mMontant" : Return Choose3(lang, "Montant", "Amount", "Importe")
+            Case "mInscrireBtn" : Return Choose3(lang, "Inscrire et relier", "Record and link", "Registrar y vincular")
+            Case "mToutRelie" : Return Choose3(lang, "La ligne est entièrement reliée.", "The line is fully linked.", "La línea está totalmente vinculada.")
+            Case "mVerrou" : Return Choose3(lang, "Cette ligne fait partie d'une conciliation clôturée : elle ne peut plus être modifiée.", "This line belongs to a closed reconciliation: it can no longer be changed.", "Esta línea pertenece a una conciliación cerrada: ya no puede modificarse.")
+            Case "mSuggere" : Return Choose3(lang, "déjà utilisé pour ce genre de ligne", "already used for this kind of line", "ya usado para este tipo de línea")
+            Case "mDepasse" : Return Choose3(lang, "Le montant dépasse le reste à relier.", "The amount exceeds what is left to link.", "El importe supera lo que queda por vincular.")
             Case "lienEnc" : Return Choose3(lang, "Encaissement", "Receipt", "Cobro")
             Case "lienDec" : Return Choose3(lang, "Paiement", "Payment", "Pago")
             Case "aRelier" : Return Choose3(lang, "Relier", "Link", "Vincular")

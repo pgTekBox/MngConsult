@@ -10,7 +10,7 @@
 --                           compte, ligne du relevé reliée) ; 1 = les factures.
 -- s0905GetEncaissements   : « Rapproché avec la banque » vient désormais du
 --                           lien posé par le rapprochement du relevé
---                           (T142ReleveBancaire.ReglementId, script T367) ;
+--                           (T208ReleveLien, scripts T367 et T370) ;
 --                           l'ancienne colonne de T140 n'a jamais été remplie.
 -- =============================================================================
 
@@ -58,8 +58,8 @@ BEGIN
                  ORDER BY x.AddressTypeId) a
     OUTER APPLY (SELECT TOP 1 c.Nom FROM dbo.T121PlanComptable c
                  WHERE c.CompanyGUID = r.CompanyGUID AND c.compte = r.CompteBanque) gl
-    OUTER APPLY (SELECT TOP 1 t.DateMouvement, t.Description FROM dbo.T142ReleveBancaire t
-                 WHERE t.CompanyGUID = r.CompanyGUID AND t.ReglementId = r.Id) rb
+    OUTER APPLY (SELECT TOP 1 t.DateMouvement, t.Description FROM dbo.T208ReleveLien l JOIN dbo.T142ReleveBancaire t ON t.Id = l.ReleveId
+                 WHERE l.ReglementId = r.Id) rb
     WHERE r.Id = @ReglementId AND r.CompanyGUID = @CompanyGUID;
 
     -- 1. Les factures payées par ce règlement
@@ -88,8 +88,8 @@ BEGIN
     SELECT r.[Id], r.[DateReglement], r.[Montant], ISNULL(r.[Reference], '') AS [Reference],
            ISNULL(r.[TypeReglement], '') AS [TypeReglement], ISNULL(r.[Statut], '') AS [Statut],
            ISNULL(r.[CompteBanque], '') AS [CompteBanque],
-           CASE WHEN EXISTS (SELECT 1 FROM dbo.T142ReleveBancaire t
-                             WHERE t.CompanyGUID = r.CompanyGUID AND t.ReglementId = r.Id) THEN 1 ELSE 0 END AS [Rapproche],
+           CASE WHEN EXISTS (SELECT 1 FROM dbo.T208ReleveLien t
+                             WHERE t.ReglementId = r.Id) THEN 1 ELSE 0 END AS [Rapproche],
            r.[PartyId], ISNULL(p.[Name], '') AS [PartyName],
            ISNULL(f.[Factures], '') AS [Factures],
            r.[Created]

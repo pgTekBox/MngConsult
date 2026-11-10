@@ -142,16 +142,19 @@ BEGIN
     LEFT JOIN dbo.T050Party p ON p.Id = r.PartyId
     WHERE r.CompanyGUID = @CompanyGUID AND r.Statut <> 'ANNULE' AND r.EcrituresId IS NOT NULL
       AND r.CompteBanque = @GL AND r.DateReglement <= @DateFin
-      AND NOT EXISTS (SELECT 1 FROM dbo.T142ReleveBancaire x
-                      WHERE x.CompanyGUID = @CompanyGUID AND x.ReglementId = r.Id AND x.DateMouvement <= @DateFin);
+      AND NOT EXISTS (SELECT 1 FROM dbo.T208ReleveLien l JOIN dbo.T142ReleveBancaire x ON x.Id = l.ReleveId
+                      WHERE l.ReglementId = r.Id AND x.DateMouvement <= @DateFin);
 
     -- Non inscrits aux livres : lignes du relevé datées au plus tard à la fin, sans règlement
     DECLARE @NonInscrits TABLE (Id INT, DateMouvement DATE, Description VARCHAR(500), Montant DECIMAL(15, 2), Statut VARCHAR(120));
     INSERT INTO @NonInscrits
-    SELECT Id, DateMouvement, Description, Montant, Statut
+    -- la part de chaque ligne que ses pièces (T208, T370) ne couvrent pas, avec le signe de la ligne
+    SELECT Id, DateMouvement, Description,
+           Montant - SIGN(Montant) * dbo.fReleveRelieAu(Id, @DateFin) AS Montant, Statut
     FROM dbo.T142ReleveBancaire
     WHERE CompanyGUID = @CompanyGUID AND CompteBanque = @CompteBanque
-      AND DateMouvement <= @DateFin AND ReglementId IS NULL;
+      AND DateMouvement <= @DateFin
+      AND ABS(Montant) - dbo.fReleveRelieAu(Id, @DateFin) > 0.005;
 
     DECLARE @DepCirc DECIMAL(15, 2) = ISNULL((SELECT SUM(Montant) FROM @Circ WHERE Sens = 'ENCAISSEMENT'), 0);
     DECLARE @PaieCirc DECIMAL(15, 2) = ISNULL((SELECT SUM(Montant) FROM @Circ WHERE Sens <> 'ENCAISSEMENT'), 0);
@@ -232,14 +235,15 @@ BEGIN
     FROM dbo.T140Reglement r
     WHERE r.CompanyGUID = @CompanyGUID AND r.Statut <> 'ANNULE' AND r.EcrituresId IS NOT NULL
       AND r.CompteBanque = @GL AND r.DateReglement <= @DateFin
-      AND NOT EXISTS (SELECT 1 FROM dbo.T142ReleveBancaire x
-                      WHERE x.CompanyGUID = @CompanyGUID AND x.ReglementId = r.Id AND x.DateMouvement <= @DateFin);
+      AND NOT EXISTS (SELECT 1 FROM dbo.T208ReleveLien l JOIN dbo.T142ReleveBancaire x ON x.Id = l.ReleveId
+                      WHERE l.ReglementId = r.Id AND x.DateMouvement <= @DateFin);
     DECLARE @EntNI DECIMAL(15, 2), @SorNI DECIMAL(15, 2);
-    SELECT @EntNI = ISNULL(SUM(CASE WHEN Montant < 0 THEN -Montant ELSE 0 END), 0),
-           @SorNI = ISNULL(SUM(CASE WHEN Montant > 0 THEN Montant ELSE 0 END), 0)
+    SELECT @EntNI = ISNULL(SUM(CASE WHEN Montant < 0 THEN ABS(Montant) - dbo.fReleveRelieAu(Id, @DateFin) ELSE 0 END), 0),
+           @SorNI = ISNULL(SUM(CASE WHEN Montant > 0 THEN Montant - dbo.fReleveRelieAu(Id, @DateFin) ELSE 0 END), 0)
     FROM dbo.T142ReleveBancaire
     WHERE CompanyGUID = @CompanyGUID AND CompteBanque = @CompteBanque
-      AND DateMouvement <= @DateFin AND ReglementId IS NULL;
+      AND DateMouvement <= @DateFin
+      AND ABS(Montant) - dbo.fReleveRelieAu(Id, @DateFin) > 0.005;
 
     DECLARE @Ecart DECIMAL(15, 2) = (@SoldeFin + @DepCirc - @PaieCirc) - (@Livres + @EntNI - @SorNI);
 
