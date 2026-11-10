@@ -280,6 +280,18 @@ Public Class _Default
     ''' types ACT_* inscrits par SYNC_ACTIVITES et occurrences à approuver.
     ''' </summary>
     Private Function ActivitesT204() As List(Of DataRow)
+        ' Réinscription immédiate des activités de la compagnie (s0973, ~100-150 ms) :
+        ' une facture payée, un brouillon comptabilisé ou une banque branchée ailleurs
+        ' dans l'ERP disparaît dès l'affichage, sans attendre la tâche SYNC_ACTIVITES
+        ' du service exécuteur (qui reste le moteur de fond, toutes compagnies).
+        Try
+            Dim ps As New Collection
+            ps.Add(New SqlParameter("@CompanyGUID", Company))
+            ExecuteSQLds("s0973SyncActivitesAFaire", ps)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Accueil s0973 : " & ex.Message)
+        End Try
+
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
