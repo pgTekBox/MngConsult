@@ -232,6 +232,18 @@ Public Class PlaidAccounts
                 Return
             End If
 
+            ' Compte simulé (Plaid en pause, script T366) : la simulation ajoute les
+            ' mouvements jusqu'à aujourd'hui au lieu d'appeler Plaid.
+            If accessToken = "SIMULATION" Then
+                Dim ps As New Collection
+                ps.Add(New SqlParameter("@CompanyGUID", Company))
+                Dim dsSim As DataSet = ExecuteSQLds("s0977SimulerReleveBancaire", ps)
+                lbl.Text = String.Format(L("txImported"), Convert.ToInt32(dsSim.Tables(0).Rows(0)("MouvementsAjoutes")))
+                lbl.CssClass = "import-result text-success"
+                lbl.Visible = True
+                Return
+            End If
+
             Dim svc As New Plaid()
             Dim tx As JObject = Await svc.GetTransactionsAsync(accessToken, startDate, endDate)
 

@@ -49,7 +49,8 @@ Public Class PlaidDailySync
                 "SELECT a.CompanyGUID, a.AccessToken, a.ItemId, a.BankName " &
                 "FROM dbo.T143PlaidAccount a " &
                 "INNER JOIN dbo.T010Company c ON c.CompanyGUID = a.CompanyGUID " &
-                "WHERE a.Active = 1 AND ISNULL(c.PlaidAutoImport, 1) = 1"
+                "WHERE a.Active = 1 AND ISNULL(c.PlaidAutoImport, 1) = 1 " &
+                "AND a.AccessToken <> 'SIMULATION'"  ' compte simulé (T366) : rien à demander à Plaid
             Using cmd As New SqlCommand(sql, cn)
                 Using dr = cmd.ExecuteReader()
                     While dr.Read()
