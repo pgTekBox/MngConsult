@@ -237,7 +237,7 @@ Public Class _Default
             Dim autres As List(Of DataRow) = retardsAchatsTries.Skip(nRetardMax).ToList()
             acts.Add(Activite("r", String.Format(L("aAutresFournRetard"), autres.Count),
                               L("catAchats") & " · " & Noms(autres) & " · " & Montant(autres.Sum(Function(r) Dec(r("ResteAPayer")))),
-                              L("aFournRetardDet"), L("btnPreparer"), "wbfSuppliersInvoices.aspx"))
+                              L("aFournRetardDet"), L("btnPreparer"), UrlFacturesFournisseurs(autres)))
         End If
         If aApprob > 0 Then
             acts.Add(Activite("y", String.Format(L("aApprob"), aApprob), L("catTaches") & " · " & L("aApprobSous"),
@@ -247,7 +247,7 @@ Public Class _Default
             Dim proch As Date = aProchesAchats.Min(Function(r) DateN(r("DueDate")).Value)
             acts.Add(Activite("y", String.Format(L("aFournProches"), aProchesAchats.Count),
                               L("catAchats") & " · " & String.Format(L("avantLe"), JourMois(proch)) & " · " & Noms(aProchesAchats) & " · " & Montant(aProchesAchats.Sum(Function(r) Dec(r("ResteAPayer")))),
-                              L("aFournProchesDet"), L("btnPreparer"), "wbfSuppliersInvoices.aspx"))
+                              L("aFournProchesDet"), L("btnPreparer"), UrlFacturesFournisseurs(aProchesAchats)))
         End If
         If aProchesVentes.Count > 0 Then
             acts.Add(Activite("y", String.Format(L("aVentesProches"), aProchesVentes.Count),
@@ -284,6 +284,17 @@ Public Class _Default
 
     Private Function Activite(u As String, titre As String, sous As String, detail As String, bouton As String, url As String) As Object
         Return New With {.u = u, .t = titre, .d = sous, .det = detail, .btn = bouton, .url = url}
+    End Function
+
+    ''' <summary>
+    ''' La liste des factures fournisseurs ouverte sur ces factures seulement :
+    ''' wbfSuppliersInvoices.aspx?factures=FFD-0012,FFD-0018 (recherche par numéros, T364).
+    ''' Sans numéro, la liste complète.
+    ''' </summary>
+    Private Function UrlFacturesFournisseurs(rows As List(Of DataRow)) As String
+        Dim nums As List(Of String) = rows.Select(Function(r) Txt(r("NumeroSort"))).Where(Function(n) n <> "").Distinct().ToList()
+        If nums.Count = 0 Then Return "wbfSuppliersInvoices.aspx"
+        Return "wbfSuppliersInvoices.aspx?factures=" & HttpUtility.UrlEncode(String.Join(",", nums))
     End Function
 
     ''' <summary>

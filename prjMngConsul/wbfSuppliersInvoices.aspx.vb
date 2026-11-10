@@ -21,6 +21,13 @@ Public Class wbfSuppliersInvoices
         ApplyLocalization()
 
         If Not IsPostBack Then
+            ' ?factures=FFD-0012,FFD-0018 (bouton « Préparer le paiement » du tableau de
+            ' bord) : la liste s'ouvre sur ces factures seulement, sans autre filtre.
+            Dim factures As String = If(Request.QueryString("factures"), "").Trim()
+            If factures <> "" Then
+                tbSearch.Text = If(factures.Length > 1000, factures.Substring(0, 1000), factures)
+                EtatsCsv = "" : PaiementsCsv = ""
+            End If
             rgFournisseursFactures.Rebind()
         End If
     End Sub
@@ -372,7 +379,7 @@ Public Class wbfSuppliersInvoices
             Case "pageTitle" : Return Choose3(lang, "Factures fournisseurs — 60Sec-AI", "Supplier invoices — 60Sec-AI", "Facturas de proveedores — 60Sec-AI")
             Case "pageTitleShort" : Return Choose3(lang, "Factures fournisseurs", "Supplier invoices", "Facturas de proveedor")
             Case "addInvoice" : Return Choose3(lang, "+ Nouvelle facture fournisseur", "+ New supplier invoice", "+ Nueva factura de proveedor")
-            Case "searchPh" : Return Choose3(lang, "Chercher un fournisseur", "Search a supplier", "Buscar un proveedor")
+            Case "searchPh" : Return Choose3(lang, "Chercher un fournisseur ou des n° de facture (FFD-0012, FFD-0018)", "Search a supplier or invoice no. (FFD-0012, FFD-0018)", "Buscar un proveedor o n.º de factura (FFD-0012, FFD-0018)")
             Case "colNum" : Return Choose3(lang, "Numéro", "Number", "Número")
             Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
             Case "colDueDate" : Return Choose3(lang, "Échéance", "Due date", "Vencimiento")
