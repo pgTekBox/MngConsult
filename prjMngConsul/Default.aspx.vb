@@ -209,7 +209,7 @@ Public Class _Default
         If aRetardsVentes.Count > nRetardMax Then
             acts.Add(Activite("r", String.Format(L("aAutresRetards"), aRetardsVentes.Count - nRetardMax),
                               L("catVentes") & " · " & Montant(aRetardsVentes.Skip(nRetardMax).Sum(Function(r) Dec(r("ResteAPayer")))),
-                              L("aAutresRetardsDet"), L("btnVoir"), "wbfCustomersInvoices.aspx"))
+                              L("aAutresRetardsDet"), L("btnVoir"), UrlFactures("wbfCustomersInvoices.aspx", aRetardsVentes.Skip(nRetardMax).ToList())))
         End If
         ' Factures fournisseurs en retard : une activité par facture (les 5 plus vieilles),
         ' comme les factures clients. Ouverte : fournisseur, facture, retard, montant et
@@ -252,11 +252,11 @@ Public Class _Default
         If aProchesVentes.Count > 0 Then
             acts.Add(Activite("y", String.Format(L("aVentesProches"), aProchesVentes.Count),
                               L("catVentes") & " · " & L("dans7Jours") & " · " & Montant(aProchesVentes.Sum(Function(r) Dec(r("ResteAPayer")))),
-                              L("aVentesProchesDet"), L("btnVoir"), "wbfCustomersInvoices.aspx"))
+                              L("aVentesProchesDet"), L("btnVoir"), UrlFactures("wbfCustomersInvoices.aspx", aProchesVentes)))
         End If
         If aBrouillons > 0 Then
             acts.Add(Activite("y", String.Format(L("aBrouillons"), aBrouillons), L("catVentes") & " · " & L("aBrouillonsSous"),
-                              L("aBrouillonsDet"), L("btnVoir"), "wbfCustomersInvoices.aspx"))
+                              L("aBrouillonsDet"), L("btnVoir"), "wbfCustomersInvoices.aspx?etat=Brouillon"))
         End If
         If aBanque Then
             acts.Add(Activite("y", L("aBanque"), L("catComptabilite") & " · " & L("aBanqueSous"),
@@ -292,9 +292,14 @@ Public Class _Default
     ''' Sans numéro, la liste complète.
     ''' </summary>
     Private Function UrlFacturesFournisseurs(rows As List(Of DataRow)) As String
+        Return UrlFactures("wbfSuppliersInvoices.aspx", rows)
+    End Function
+
+    ''' <summary>Une liste de factures (clients ou fournisseurs) ouverte sur ces numéros seulement (T364/T365).</summary>
+    Private Function UrlFactures(page As String, rows As List(Of DataRow)) As String
         Dim nums As List(Of String) = rows.Select(Function(r) Txt(r("NumeroSort"))).Where(Function(n) n <> "").Distinct().ToList()
-        If nums.Count = 0 Then Return "wbfSuppliersInvoices.aspx"
-        Return "wbfSuppliersInvoices.aspx?factures=" & HttpUtility.UrlEncode(String.Join(",", nums))
+        If nums.Count = 0 Then Return page
+        Return page & "?factures=" & HttpUtility.UrlEncode(String.Join(",", nums))
     End Function
 
     ''' <summary>

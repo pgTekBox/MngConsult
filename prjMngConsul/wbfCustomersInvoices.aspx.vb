@@ -21,6 +21,18 @@ Public Class wbfCustomersInvoices
         ApplyLocalization()
 
         If Not IsPostBack Then
+            ' Liens des activités du tableau de bord :
+            '   ?etat=Brouillon            → la liste filtrée sur cet état comptable ;
+            '   ?factures=FCD-0012,FCD-0018 → ces factures seulement (recherche par numéros, T365).
+            Dim etat As String = If(Request.QueryString("etat"), "").Trim()
+            Dim factures As String = If(Request.QueryString("factures"), "").Trim()
+            If etat.Equals("Brouillon", StringComparison.OrdinalIgnoreCase) OrElse etat.Equals("Comptabilise", StringComparison.OrdinalIgnoreCase) Then
+                EtatsCsv = If(etat.Equals("Brouillon", StringComparison.OrdinalIgnoreCase), "Brouillon", "Comptabilise")
+                PaiementsCsv = "" : tbSearch.Text = ""
+            ElseIf factures <> "" Then
+                tbSearch.Text = If(factures.Length > 1000, factures.Substring(0, 1000), factures)
+                EtatsCsv = "" : PaiementsCsv = ""
+            End If
             rlvClientsFactures.Rebind()
         End If
     End Sub
@@ -314,7 +326,7 @@ Public Class wbfCustomersInvoices
             Case "addInvoice" : Return Choose3(lang, "+ Nouvelle facture", "+ New invoice", "+ Nueva factura")
             Case "importSquare" : Return Choose3(lang, "Importer de Square", "Import from Square", "Importar de Square")
             Case "importSquareTip" : Return Choose3(lang, "Rapatrier les factures et paiements Square comme factures clients", "Bring back Square invoices and payments as customer invoices", "Traer facturas y pagos de Square como facturas de clientes")
-            Case "searchPh" : Return Choose3(lang, "Chercher un client", "Search a customer", "Buscar un cliente")
+            Case "searchPh" : Return Choose3(lang, "Chercher un client ou des n° de facture (FCD-0012, FCD-0018)", "Search a customer or invoice no. (FCD-0012, FCD-0018)", "Buscar un cliente o n.º de factura (FCD-0012, FCD-0018)")
             Case "colNum" : Return Choose3(lang, "Numéro", "Number", "Número")
             Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
             Case "colDueDate" : Return Choose3(lang, "Échéance", "Due date", "Vencimiento")
