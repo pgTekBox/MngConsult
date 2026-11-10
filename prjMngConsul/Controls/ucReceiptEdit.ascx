@@ -34,11 +34,32 @@
             background: #fff;
             border-top: 1px solid var(--line);
             padding: 8px 14px;
-            /* Totaux puis, à leur droite, le bouton d'enregistrement */
+            /* Bouton d'enregistrement à gauche (toute la largeur libre), totaux à droite ;
+               le bouton prend la hauteur du bloc des totaux. */
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
+            align-items: stretch;
             gap: 24px;
+        }
+
+        .footerbar .btn-save {
+            flex: 1 1 auto;
+            width: auto !important;
+            height: auto !important;
+            min-height: 44px;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .footerbar .btn-save .rbDecorated,
+        .footerbar .btn-save input {
+            width: 100% !important;
+            height: 100% !important;
+            font-size: 15px;
+            font-weight: 700;
         }
 
         .customer-selector,
@@ -513,6 +534,9 @@
 
             <%-- FOOTER TOTAUX --%>
             <div class="footerbar">
+                <%-- Le bouton d'enregistrement, à gauche, sur toute la largeur libre et à la
+                     hauteur du bloc des totaux (à droite) --%>
+                <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked" BackColor="lightgrey" Text="Enregistrer l'encaissement" CssClass="btn-save" />
                 <div class="totals">
                     <div class="tot"><asp:Literal ID="litTotalDuLabel" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
@@ -532,8 +556,6 @@
                             <asp:Label ID="lblDiff" runat="server" Text="0.00" CssClass="diff-ok" /></strong>
                     </div>
                 </div>
-                <%-- Le bouton d'enregistrement, dans la même boîte que les totaux --%>
-                <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked" BackColor="lightgrey" Text="Enregistrer l'encaissement" />
             </div>
 
             <%-- OVERLAY PICKER CLIENTS --%>
