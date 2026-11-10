@@ -90,7 +90,7 @@
     .fc-pied { padding: 12px 6px 0; color: #44536E; font-size: 14px }
     /* Les colonnes : date, description, compte, état, montant. */
     .fc-liste .listview-list { min-width: 900px }
-    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: 120px minmax(0, 2.2fr) minmax(0, 1.1fr) minmax(150px, 1fr) 130px 180px }
+    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: 110px minmax(0, 2.2fr) minmax(0, 1fr) minmax(140px, 1fr) 115px 115px 180px }
     /* Période et conciliation (T368) */
     .cb-ligne { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px }
     .cb-lab { font-size: 13px; font-weight: 800; color: #5B6B86; text-transform: uppercase; letter-spacing: .04em }
@@ -236,6 +236,7 @@
                                 <div><asp:Literal ID="litColRef" runat="server" /></div>
                                 <div><asp:Literal ID="litColStatus" runat="server" /></div>
                                 <div class="adroite"><asp:Literal ID="litColAmount" runat="server" /></div>
+                                <div class="adroite"><asp:Literal ID="litColEntrees" runat="server" /></div>
                                 <div></div>
                             </div>
 
@@ -252,7 +253,8 @@
                             <div class="c-desc"><%# DescCell(Eval("Description"), Eval("Reference")) %></div>
                             <div class="c-compte"><%# Server.HtmlEncode(Convert.ToString(Eval("FullName"))) %></div>
                             <div style="min-width:0"><%# StatutCell(Eval("Statut"), Eval("ReglementInfo")) %></div>
-                            <div class='<%# "c-montant " & GetMontantCss(Eval("Montant")) %>'><%# FormatMontant(Eval("Montant")) %></div>
+                            <div class="c-montant sortie"><%# MontantSortie(Eval("Montant")) %></div>
+                            <div class="c-montant entree"><%# MontantEntree(Eval("Montant")) %></div>
                             <div class="rb-actions"><%# ActionsCell(Eval("Id"), Eval("Statut"), Eval("ReglementId")) %></div>
                         </div>
                     </ItemTemplate>

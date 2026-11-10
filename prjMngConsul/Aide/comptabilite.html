@@ -370,11 +370,12 @@
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>Date</td><td>Format « jj mmm aaaa ».</td></tr>
+                        <tr><td>Date</td><td>Format « jj mmm aaaa ». Les lignes vont du plus ancien au plus récent, comme sur un relevé de banque.</td></tr>
                         <tr><td>Description</td><td>Le libellé transmis par la banque, en gras ; en dessous, l’identifiant de transaction Plaid (la référence, qui sert à écarter les doublons).</td></tr>
                         <tr><td>Compte</td><td>Le compte bancaire d’où vient le mouvement.</td></tr>
                         <tr><td>Statut</td><td>Une pastille : <strong>Importé</strong> (nouvelle ligne) et <strong>En attente</strong> en ambre, <strong>Réglé</strong> (associée à un règlement) en vert, <strong>Ignoré</strong> en gris.</td></tr>
-                        <tr><td>Montant</td><td>En gras ; rouge pour une sortie (montant positif), vert pour une entrée.</td></tr>
+                        <tr><td>Sorties</td><td>Argent sorti du compte, en rouge, sans signe.</td></tr>
+                        <tr><td>Entrées</td><td>Argent entré dans le compte (dépôts), en vert, sans signe.</td></tr>
                     </tbody>
                 </table>
                 <h3>Marche à suivre</h3>
@@ -988,11 +989,12 @@
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Date</td><td>“dd mmm yyyy” format.</td></tr>
+                        <tr><td>Date</td><td>“dd mmm yyyy” format. Lines run from oldest to newest, like a bank statement.</td></tr>
                         <tr><td>Description</td><td>The label sent by the bank, in bold; underneath, the Plaid transaction identifier (the reference, used to discard duplicates).</td></tr>
                         <tr><td>Account</td><td>The bank account the movement comes from.</td></tr>
                         <tr><td>Status</td><td>A pill: <strong>Imported</strong> (new line) and <strong>Pending</strong> in amber, <strong>Settled</strong> (matched to a payment) in green, <strong>Ignored</strong> in grey.</td></tr>
-                        <tr><td>Amount</td><td>In bold; red for money out (positive amount), green for money in.</td></tr>
+                        <tr><td>Withdrawals</td><td>Money out of the account, in red, unsigned.</td></tr>
+                        <tr><td>Deposits</td><td>Money into the account, in green, unsigned.</td></tr>
                     </tbody>
                 </table>
                 <h3>Step by step</h3>
@@ -1606,11 +1608,12 @@
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Fecha</td><td>Formato «dd mmm aaaa».</td></tr>
+                        <tr><td>Fecha</td><td>Formato «dd mmm aaaa». Las líneas van de la más antigua a la más reciente, como en un extracto bancario.</td></tr>
                         <tr><td>Descripción</td><td>La etiqueta transmitida por el banco, en negrita; debajo, el identificador de transacción Plaid (la referencia, que sirve para descartar duplicados).</td></tr>
                         <tr><td>Cuenta</td><td>La cuenta bancaria de la que proviene el movimiento.</td></tr>
                         <tr><td>Estado</td><td>Una píldora: <strong>Importado</strong> (línea nueva) y <strong>Pendiente</strong> en ámbar, <strong>Conciliado</strong> (asociado a un pago) en verde, <strong>Ignorado</strong> en gris.</td></tr>
-                        <tr><td>Importe</td><td>En negrita; rojo para una salida (importe positivo), verde para una entrada.</td></tr>
+                        <tr><td>Salidas</td><td>Dinero que sale de la cuenta, en rojo, sin signo.</td></tr>
+                        <tr><td>Entradas</td><td>Dinero que entra en la cuenta (depósitos), en verde, sin signo.</td></tr>
                     </tbody>
                 </table>
                 <h3>Paso a paso</h3>

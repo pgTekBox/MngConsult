@@ -373,7 +373,8 @@ Public Class wbfReleve
         SetLiteral(rlvReleve, "litColDesc", L("colDesc"))
         SetLiteral(rlvReleve, "litColRef", L("colRef"))
         SetLiteral(rlvReleve, "litColStatus", L("colStatus"))
-        SetLiteral(rlvReleve, "litColAmount", L("colAmount"))
+        SetLiteral(rlvReleve, "litColAmount", L("colSorties"))
+        SetLiteral(rlvReleve, "litColEntrees", L("colEntrees"))
         SetLiteral(rlvReleve, "litEmpty", L("empty"))
     End Sub
 
@@ -541,7 +542,23 @@ Public Class wbfReleve
         For Each r As DataRow In dt.Rows
             If DansPeriode(r) AndAlso (FiltreCourant = "" OrElse Cle(r("Statut")) = FiltreCourant) Then copie.ImportRow(r)
         Next
-        Return copie
+        ' Comme un relevé de banque : du plus ancien au plus récent.
+        copie.DefaultView.Sort = "DateMouvement ASC, Id ASC"
+        Return copie.DefaultView.ToTable()
+    End Function
+
+    ''' <summary>La colonne Sorties : un montant positif (convention Plaid), sans signe.</summary>
+    Protected Function MontantSortie(value As Object) As String
+        If value Is Nothing OrElse IsDBNull(value) Then Return ""
+        Dim m As Decimal = Convert.ToDecimal(value)
+        Return If(m > 0D, FormatMontant(m), "")
+    End Function
+
+    ''' <summary>La colonne Entrées : un montant négatif (convention Plaid), sans signe.</summary>
+    Protected Function MontantEntree(value As Object) As String
+        If value Is Nothing OrElse IsDBNull(value) Then Return ""
+        Dim m As Decimal = Convert.ToDecimal(value)
+        Return If(m < 0D, FormatMontant(-m), "")
     End Function
 
     ''' <summary>La description en gras, la référence Plaid dessous.</summary>
@@ -715,6 +732,8 @@ Public Class wbfReleve
             Case "jsConnected" : Return Choose3(lang, "Compte bancaire connecté avec succès.", "Bank account connected successfully.", "Cuenta bancaria conectada con éxito.")
             Case "jsLinkTokenError" : Return Choose3(lang, "Erreur lors de la création du link token.", "Error while creating the link token.", "Error al crear el link token.")
             Case "jsPlaidError" : Return Choose3(lang, "Erreur Plaid.", "Plaid error.", "Error de Plaid.")
+            Case "colSorties" : Return Choose3(lang, "Sorties", "Withdrawals", "Salidas")
+            Case "colEntrees" : Return Choose3(lang, "Entrées", "Deposits", "Entradas")
             ' Période et conciliation (T368)
             Case "pTitre" : Return Choose3(lang, "Période du relevé", "Statement period", "Período del extracto")
             Case "pDu" : Return Choose3(lang, "Du", "From", "Del")
