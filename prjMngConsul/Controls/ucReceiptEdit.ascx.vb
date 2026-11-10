@@ -450,11 +450,27 @@ Public Class ucReceiptEdit
 
                     tx.Commit()
 
-                    Dim Mypdf As New clsGenerateInvoicePDF
-                    For Each myrow As DataRow In linesToPost
-                        Dim docId As Integer = Convert.ToInt32(myrow("DocumentId"))
-                        Mypdf.GenerateAndDownloadPdf(docId)
-                    Next
+                    ' Le PDF des factures réglées est régénéré EN ARRIÈRE-PLAN : la génération
+                    ' QuestPDF prend plusieurs secondes par facture (davantage au premier appel
+                    ' après un redémarrage d'IIS) et la fenêtre attendait la fin pour se fermer.
+                    ' clsGenerateInvoicePDF ne dépend pas de la requête (connexion lue dans la
+                    ' configuration) ; InvoicePdf.ashx régénère de toute façon un PDF absent.
+                    Dim docIds As List(Of Integer) = linesToPost.Select(Function(r) Convert.ToInt32(r("DocumentId"))).ToList()
+                    Try
+                        System.Web.Hosting.HostingEnvironment.QueueBackgroundWorkItem(
+                            Sub(ct)
+                                Dim pdf As New clsGenerateInvoicePDF()
+                                For Each id As Integer In docIds
+                                    Try
+                                        pdf.GenerateAndDownloadPdf(id)
+                                    Catch exPdf As Exception
+                                        System.Diagnostics.Trace.TraceWarning("PDF facture " & id & " : " & exPdf.Message)
+                                    End Try
+                                Next
+                            End Sub)
+                    Catch exFile As Exception
+                        System.Diagnostics.Trace.TraceWarning("PDF en arrière-plan : " & exFile.Message)
+                    End Try
 
 
 
