@@ -145,6 +145,11 @@ Public Class EncaissementPdfBuilder
                                                                      T("AVIS DE PAIEMENT", "PAYMENT ADVICE", "AVISO DE PAGO"))).
                             FontSize(24).Bold().FontColor(CLR_PRIMARY)
                         c.Item().AlignRight().Text(T("N° ", "No. ", "N.º ") & Numero(_h)).FontSize(11).FontColor(CLR_TEXT_MUTED)
+                        ' Un paiement annulé (s0992) : le reçu le dit, en rouge.
+                        If S("Statut") = "ANNULE" Then
+                            c.Item().AlignRight().PaddingTop(4).Border(1.5F).BorderColor("#dc2626").PaddingVertical(2).PaddingHorizontal(8).
+                                Text(T("ANNULÉ", "CANCELLED", "ANULADO")).FontSize(12).Bold().FontColor("#dc2626")
+                        End If
                     End Sub)
             End Sub)
     End Sub

@@ -47,8 +47,29 @@ Public Class wbfEncaissements
 
     Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
         If e.Argument = "refresh" Then Charger()
+        If e.Argument.StartsWith("annuler:") Then Annuler(e.Argument.Substring(8))
     End Sub
 
+    ''' <summary>Annuler un encaissement saisi par erreur (s0992, T371) : le règlement passe
+    ''' « Annulé », son écriture « Extournée », la facture redevient ouverte. Refusé s'il est
+    ''' relié au relevé bancaire ou si sa période est clôturée (message de la procédure).</summary>
+    Private Sub Annuler(arg As String)
+        Dim id As Integer
+        If Not Integer.TryParse(arg, id) OrElse id <= 0 Then Return
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@ReglementId", id))
+            p.Add(New SqlParameter("@UserId", UserId))
+            ExecuteSQLds("s0992AnnulerReglement", p)
+            Message = "ok|" & String.Format(L("annuleOk"), "ENC-" & id.ToString("000000"))
+        Catch ex As Exception
+            Message = "err|" & If(ex.InnerException IsNot Nothing, ex.InnerException.Message, ex.Message)
+        End Try
+        Charger()
+    End Sub
+
+    Private Message As String = ""
     ' ---------------------------------------------------------------------
     ' Données
     ' ---------------------------------------------------------------------
@@ -105,6 +126,11 @@ Public Class wbfEncaissements
             sb.Append(Ligne(r))
         Next
         If lignes.Count = 0 Then sb.Append("<p class=""en-vide"">").Append(Server.HtmlEncode(L("vide"))).Append("</p>")
+        If Message <> "" Then
+            Dim i As Integer = Message.IndexOf("|"c)
+            sb.Insert(0, "<div class=""en-msg " & Message.Substring(0, i) & """>" & Server.HtmlEncode(Message.Substring(i + 1)) & "</div>")
+            Message = ""
+        End If
         litLignes.Text = sb.ToString()
         litPied.Text = Server.HtmlEncode(String.Format(L("pied"), lignes.Count, tous.Count))
     End Sub
@@ -143,6 +169,11 @@ Public Class wbfEncaissements
         sb.Append(Server.HtmlEncode(System.Web.HttpUtility.JavaScriptStringEncode(titre, True))).Append(")"">")
         sb.Append("<svg viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2"" stroke-linecap=""round"" stroke-linejoin=""round"" aria-hidden=""true""><path d=""M6 9V3h12v6""></path><rect x=""6"" y=""14"" width=""12"" height=""7""></rect><path d=""M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2""></path></svg>")
         sb.Append(Server.HtmlEncode(L("imprimer"))).Append("</button>")
+        If Convert.ToString(r("Statut")) <> "ANNULE" Then
+            Dim conf As String = String.Format(L("annulerConf"), "ENC-" & id.ToString("000000"), client, Montant(r, "Montant").ToString("C2"))
+            sb.Append("<button type=""button"" class=""en-imp en-annuler"" title=""").Append(Server.HtmlEncode(L("annulerTip"))).Append(""" onclick=""annulerEncaissement(").Append(id).Append(", ")
+            sb.Append(Server.HtmlEncode(System.Web.HttpUtility.JavaScriptStringEncode(conf, True))).Append(")"">").Append(Server.HtmlEncode(L("annuler"))).Append("</button>")
+        End If
         sb.Append("</div>")
         Return sb.ToString()
     End Function
@@ -196,6 +227,12 @@ Public Class wbfEncaissements
             Case "tAutre" : Return Choose3(lang, "Paiement", "Payment", "Pago")
             Case "imprimer" : Return Choose3(lang, "Imprimer", "Print", "Imprimir")
             Case "annule" : Return Choose3(lang, "Annulé", "Cancelled", "Anulado")
+            Case "annuler" : Return Choose3(lang, "Annuler", "Cancel", "Anular")
+            Case "annulerTip" : Return Choose3(lang, "Annuler ce paiement saisi par erreur : la facture redevient ouverte", "Cancel this payment entered by mistake: the invoice becomes open again", "Anular este pago registrado por error: la factura vuelve a quedar abierta")
+            Case "annulerConf" : Return Choose3(lang, "Annuler le paiement {0} de {1} ({2}) ?" & vbLf & vbLf & "Le paiement ne comptera plus, son écriture sera extournée et la facture redeviendra ouverte. Il reste visible dans la liste, marqué « Annulé ».",
+                                                "Cancel payment {0} from {1} ({2})?" & vbLf & vbLf & "The payment will no longer count, its entry will be reversed and the invoice will become open again. It stays visible in the list, marked 'Cancelled'.",
+                                                "¿Anular el pago {0} de {1} ({2})?" & vbLf & vbLf & "El pago dejará de contar, su asiento se reversará y la factura volverá a quedar abierta. Sigue visible en la lista, marcado «Anulado».")
+            Case "annuleOk" : Return Choose3(lang, "Le paiement {0} est annulé. La facture est de nouveau ouverte.", "Payment {0} is cancelled. The invoice is open again.", "El pago {0} está anulado. La factura vuelve a estar abierta.")
             Case "imprimerTip" : Return Choose3(lang, "Ouvrir le reçu avec le détail des factures, pour l'imprimer ou l'enregistrer", "Open the receipt with the invoice details, to print or save it", "Abrir el recibo con el detalle de las facturas, para imprimirlo o guardarlo")
             Case "recu" : Return Choose3(lang, "Reçu", "Receipt", "Recibo")
             Case Else : Return ""

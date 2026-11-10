@@ -55,6 +55,11 @@
     .en-imp { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer }
     .en-imp:hover { background: #F2F5F9 }
     .en-imp svg { width: 16px; height: 16px }
+    .en-annuler { color: #A3261C; border-color: #E8B4AE }
+    .en-annuler:hover { background: #FDECEA }
+    .en-msg { margin: 6px 0 10px; padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 14px }
+    .en-msg.ok { background: #E3F3EA; color: #0F5A3A }
+    .en-msg.err { background: #FDECEA; color: #A3261C }
     .en-vide { padding: 20px 6px; color: #44536E; font-weight: 700 }
     .fc-pied { padding: 12px 0 0; color: #44536E; font-size: 14px }
     </style>
@@ -64,7 +69,7 @@
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
     <%-- Le RadWindowManager reste HORS du RadAjaxPanel (même règle que les factures). --%>
     <telerik:RadWindowManager ID="rwmEncaissements" runat="server" EnableShadow="true"></telerik:RadWindowManager>
-    <telerik:RadAjaxManager ID="Ram1" runat="server" ClientIDMode="Static">
+    <telerik:RadAjaxManager ID="Ram1" runat="server">
         <AjaxSettings>
             <telerik:AjaxSetting AjaxControlID="Ram1">
                 <UpdatedControls>
@@ -131,6 +136,8 @@
     <telerik:RadCodeBlock ID="rcbLang" runat="server">
         <script type="text/javascript">
             var L_NOUVEL_ENC = "<%= L("winNouveau") %>";
+            // L id client réel du gestionnaire Ajax (un ClientIDMode="Static" cassait ajaxRequest : postBackElement introuvable).
+            var RAM_ID = "<%= Ram1.ClientID %>";
         </script>
     </telerik:RadCodeBlock>
 
@@ -146,9 +153,15 @@
             w.show();
             w.center();
         }
+        // Annuler un paiement saisi par erreur : confirmation, puis le serveur (s0992) et la liste se recharge.
+        function annulerEncaissement(id, question) {
+            if (!confirm(question)) { return; }
+            var am = $find(RAM_ID);
+            if (am) { am.ajaxRequest("annuler:" + id); }
+        }
         // À la fermeture, la liste et les indicateurs se rechargent.
         function rwEncaissement_OnClose(sender, args) {
-            var am = $find("Ram1");
+            var am = $find(RAM_ID);
             if (am) { am.ajaxRequest("refresh"); }
         }
     </script>
