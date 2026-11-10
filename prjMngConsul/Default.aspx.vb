@@ -61,6 +61,10 @@ Public Class _Default
             Return
         End If
 
+        ' Mesure temporaire : un passage du service exécuteur (planning, promotion,
+        ' exécutions) en arrière-plan, au plus une fois par minute — voir clsExecuteurTaches.
+        clsExecuteurTaches.Lancer()
+
         Try
             ModeleJson = JsonConvert.SerializeObject(BatirModele(), New JsonSerializerSettings With {
                 .StringEscapeHandling = StringEscapeHandling.EscapeHtml
