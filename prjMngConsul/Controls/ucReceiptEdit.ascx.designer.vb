@@ -60,11 +60,8 @@ Partial Public Class ucReceiptEdit
     '''<summary>litCompteBanqueLabel control.</summary>
     Protected WithEvents litCompteBanqueLabel As Global.System.Web.UI.WebControls.Literal
 
-    '''<summary>lblBank control.</summary>
-    Protected WithEvents lblBank As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>hidBankCompte control.</summary>
-    Protected WithEvents hidBankCompte As Global.System.Web.UI.WebControls.HiddenField
+    '''<summary>ddlBank control.</summary>
+    Protected WithEvents ddlBank As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>lblMontantLabel control.</summary>
     Protected WithEvents lblMontantLabel As Global.System.Web.UI.WebControls.Label
@@ -126,9 +123,4 @@ Partial Public Class ucReceiptEdit
     '''<summary>rlvCustomers control.</summary>
     Protected WithEvents rlvCustomers As Global.Telerik.Web.UI.RadListView
 
-    '''<summary>hidSelectedBankId control.</summary>
-    Protected WithEvents hidSelectedBankId As Global.System.Web.UI.WebControls.HiddenField
-
-    '''<summary>rlvBanks control.</summary>
-    Protected WithEvents rlvBanks As Global.Telerik.Web.UI.RadListView
 End Class

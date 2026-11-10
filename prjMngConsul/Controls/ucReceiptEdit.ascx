@@ -61,6 +61,20 @@
             background: #f1f5f9;
         }
 
+        .bank-select {
+            display: block;
+            width: 100%;
+            min-height: 38px;
+            padding: 8px 10px;
+            border: 1px solid #D5DDE8;
+            border-radius: 10px;
+            background: #fff;
+            font: inherit;
+            color: inherit;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
         .customer-picker-overlay,
         .bank-picker-overlay {
             position: fixed;
@@ -397,8 +411,9 @@
                             <div class="row2">
                                 <div>
                                     <label><asp:Literal ID="litCompteBanqueLabel" runat="server" /></label>
-                                    <asp:Label ID="lblBank" runat="server" CssClass="bank-selector"></asp:Label>
-                                    <asp:HiddenField ID="hidBankCompte" runat="server" />
+                                    <%-- Liste déroulante simple des comptes banque (s0091) ;
+                                         un seul compte : il est choisi d'office. --%>
+                                    <asp:DropDownList ID="ddlBank" runat="server" CssClass="bank-select" />
                                 </div>
 
                                 <div>
@@ -553,43 +568,6 @@
                 </div>
             </div>
 
-            <%-- OVERLAY PICKER COMPTES BANQUE --%>
-            <asp:HiddenField ID="hidSelectedBankId" runat="server" />
-            <div id="bankPickerOverlay" class="bank-picker-overlay" style="display: none;">
-                <div class="bank-picker-shell">
-                    <div class="bank-picker-searchbar">
-                        <input type="text" id="bankPickerSearch" oninput="filterBanksClient()" class="bank-picker-input" />
-                        <button type="button" class="bank-picker-close-inline" onclick="closeBankPicker()">✕</button>
-                    </div>
-
-                    <div id="bankPickerList" class="bank-picker-list">
-                        <div class="list-shell">
-                            <telerik:RadListView ID="rlvBanks" runat="server"
-                                AllowPaging="false"
-                                ItemPlaceholderID="itembankPlaceholder">
-
-                                <LayoutTemplate>
-                                    <div class="items-wrap">
-                                        <asp:PlaceHolder ID="itembankPlaceholder" runat="server"></asp:PlaceHolder>
-                                    </div>
-                                </LayoutTemplate>
-
-                                <ItemTemplate>
-                                    <div class="bank-card" data-search='<%# Eval("search").ToString().ToLower() %>' onclick="selectBank('<%# Eval("NoCompte") %>')">
-                                        <div class="bank-code"><%# Eval("NoCompte") %></div>
-                                        <div class="bank-name"><%# Eval("Name") %></div>
-                                    </div>
-                                </ItemTemplate>
-
-                                <EmptyDataTemplate>
-                                    <div class="empty"><asp:Literal ID="litEmptyBanks" runat="server" /></div>
-                                </EmptyDataTemplate>
-                            </telerik:RadListView>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </asp:Panel>
 
     </telerik:RadAjaxPanel>
@@ -609,7 +587,6 @@
 
             function localizeReceiptPickers() {
                 var c = document.getElementById("customerPickerSearch"); if (c) c.placeholder = L_SEARCH_TIERS;
-                var b = document.getElementById("bankPickerSearch"); if (b) b.placeholder = L_SEARCH_BANK;
                 document.querySelectorAll(".customer-picker-close-inline,.bank-picker-close-inline")
                     .forEach(function (x) { x.setAttribute("aria-label", L_CLOSE); });
             }
@@ -632,9 +609,12 @@
             }
 
             /* Ferme la fenêtre courante */
+            /* Une seule fermeture, même si deux scripts de réponse la demandent. */
+            var fenetreFermee = false;
             function closeWin() {
+                if (fenetreFermee) return;
                 var oWnd = GetRadWindow();
-                if (oWnd) oWnd.close();
+                if (oWnd) { fenetreFermee = true; oWnd.close(); }
             }
 
             function trimZeros(s) {
@@ -825,42 +805,6 @@
                     if (show) visibleCount++;
                 });
                 toggleEmptyMsg("customerPickerEmptyJs", "customerPickerList", L_EMPTY_TIERS, visibleCount === 0);
-            }
-
-            /* ============== PICKER BANQUES ============== */
-            var currentBankLabel = null;
-
-            function closeBankPicker() {
-                var overlay = document.getElementById("bankPickerOverlay");
-                if (overlay) overlay.style.display = "none";
-            }
-
-            function openBankPicker(label) {
-                if (IS_READONLY) return;
-                currentBankLabel = label;
-                var overlay = document.getElementById("bankPickerOverlay");
-                if (overlay) overlay.style.display = "block";
-            }
-
-            function selectBank(noCompte) {
-                document.getElementById("<%= hidSelectedBankId.ClientID %>").value = noCompte;
-                closeBankPicker();
-                var ajaxManager = $find("<%= rapReceipt.ClientID %>");
-                ajaxManager.ajaxRequest('BANK|' + noCompte.toString());
-            }
-
-            function filterBanksClient() {
-                var tb = document.getElementById("bankPickerSearch");
-                var q = (tb ? tb.value : "").toLowerCase().trim();
-                var cards = document.querySelectorAll("#bankPickerList .bank-card");
-                var visibleCount = 0;
-                cards.forEach(function (card) {
-                    var text = normalizeText(card.getAttribute("data-search"));
-                    var show = q === "" || text.indexOf(q) !== -1;
-                    card.style.display = show ? "" : "none";
-                    if (show) visibleCount++;
-                });
-                toggleEmptyMsg("bankPickerEmptyJs", "bankPickerList", L_EMPTY_BANK, visibleCount === 0);
             }
 
             /* ============== HELPER message vide ============== */

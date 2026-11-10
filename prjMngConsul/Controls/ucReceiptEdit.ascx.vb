@@ -132,7 +132,7 @@ Public Class ucReceiptEdit
 
             BindInvoiceGrid()
             SetTiersClickHandler()
-            SetBankClickHandler()
+            ChargerComptesBanque()
         End If
 
         ApplyReadOnlyMode()
@@ -172,7 +172,6 @@ Public Class ucReceiptEdit
         litReferenceLabel.Text = L("reference")
         litComptabiliseLabel.Text = L("posted")
         litCompteBanqueLabel.Text = L("bankAccount")
-        lblBank.Text = L("selectBank")
         lblPostedBadge.Text = L("postedBadge")
         btnAutoImpute.Text = L("autoImpute")
         litColNoFacture.Text = L("colNoInvoice")
@@ -318,8 +317,23 @@ Public Class ucReceiptEdit
         lblCustomer.Attributes.Add("onclick", "openCustomerPicker(this)")
     End Sub
 
-    Sub SetBankClickHandler()
-        lblBank.Attributes.Add("onclick", "openBankPicker(this)")
+    ''' <summary>
+    ''' La liste déroulante des comptes banque de la compagnie (s0091). Un seul compte :
+    ''' il est choisi d'office ; sinon « Sélectionner un compte banque » en tête.
+    ''' </summary>
+    Private Sub ChargerComptesBanque()
+        ddlBank.Items.Clear()
+        Dim dt As DataTable = GetBanksTable()
+        If dt Is Nothing OrElse dt.Rows.Count <> 1 Then
+            ddlBank.Items.Add(New ListItem(If(dt Is Nothing OrElse dt.Rows.Count = 0, L("emptyBank"), L("selectBank")), ""))
+        End If
+        If dt IsNot Nothing Then
+            For Each r As DataRow In dt.Rows
+                Dim no As String = Convert.ToString(r("NoCompte"))
+                ddlBank.Items.Add(New ListItem(no & " - " & Convert.ToString(r("Name")), no))
+            Next
+        End If
+        ddlBank.SelectedIndex = 0
     End Sub
 
     ' =========================================================
@@ -332,7 +346,7 @@ Public Class ucReceiptEdit
             chkPost.Enabled = False
             pnlMain.CssClass &= " readonly"
             lblCustomer.CssClass &= " readonly-click-block"
-            lblBank.CssClass &= " readonly-click-block"
+            ddlBank.Enabled = False
             dpDateEncaissement.Enabled = False
             cbTypeReglement.Enabled = False
             txtReference.Enabled = False
@@ -367,7 +381,7 @@ Public Class ucReceiptEdit
             Return
         End If
 
-        Dim noCompteBanque As String = hidSelectedBankId.Value
+        Dim noCompteBanque As String = ddlBank.SelectedValue
         If String.IsNullOrWhiteSpace(noCompteBanque) Then
             RegisterAlert(L("alertSelBank"))
             Return
@@ -486,7 +500,10 @@ Public Class ucReceiptEdit
         End Using
 
         If IsPopup Then
-            ' Hébergé en RadWindow : fermer la fenêtre parente.
+            ' Hébergé en RadWindow : fermer la fenêtre dès l'encaissement enregistré.
+            ' Script de réponse de la RadAjaxPanel (exécuté à coup sûr après un retour
+            ' AJAX) + script de démarrage en filet ; closeWin ne ferme qu'une fois.
+            rapReceipt.ResponseScripts.Add("setTimeout(closeWin, 0);")
             Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
             ScriptManager.RegisterStartupScript(Page, Page.GetType(), "close", script, True)
         Else
@@ -495,9 +512,7 @@ Public Class ucReceiptEdit
             PartyId = 0
             TiersGUID = New Guid("00000000-0000-0000-0000-000000000000")
             lblCustomer.Text = If(IsEncaissement(), L("selectClient"), L("selectSupplier"))
-            lblBank.Text = L("selectBank")
-            hidSelectedBankId.Value = ""
-            hidBankCompte.Value = ""
+            ChargerComptesBanque()
             txtMontantRecu.Text = "0.00"
             txtReference.Text = ""
             CreateInvoicesTable()
@@ -562,17 +577,8 @@ Public Class ucReceiptEdit
         rlvCustomers.DataSource = dt
     End Sub
 
-    Private Sub rlvBanks_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvBanks.NeedDataSource
-        Dim dt As DataTable = GetBanksTable()
-        rlvBanks.DataSource = dt
-    End Sub
-
     Private Sub rlvCustomers_PreRender(sender As Object, e As EventArgs) Handles rlvCustomers.PreRender
         SetLiteral(rlvCustomers, "litEmptyCustomers", L("emptyTiers"))
-    End Sub
-
-    Private Sub rlvBanks_PreRender(sender As Object, e As EventArgs) Handles rlvBanks.PreRender
-        SetLiteral(rlvBanks, "litEmptyBanks", L("emptyBank"))
     End Sub
 
     Private Shared Sub SetLiteral(root As Control, id As String, text As String)
@@ -617,10 +623,6 @@ Public Class ucReceiptEdit
                     LoadOpenInvoicesFromBD(tiersId)
                     BindInvoiceGrid()
                 End If
-
-            Case "BANK"
-                Dim noCompte As String = AllParam(1)
-                UpdateBankDisplay(noCompte)
 
         End Select
     End Sub
@@ -693,21 +695,5 @@ Public Class ucReceiptEdit
             Case Else : Return fr
         End Select
     End Function
-
-    Sub UpdateBankDisplay(noCompte As String)
-        Dim p As New Collection
-        p.Add(New SqlParameter("@NoCompte", noCompte))
-        p.Add(New SqlParameter("@CompanyGUID", Company))
-        Dim ds As DataSet = ExecuteSQLds("s0092Get_GLAccountByNoCompte", p)
-
-        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
-            Dim orow As DataRow = ds.Tables(0).Rows(0)
-            lblBank.Text = orow("NoCompte").ToString() & " - " & orow("Name").ToString()
-            hidBankCompte.Value = noCompte
-        Else
-            lblBank.Text = noCompte
-            hidBankCompte.Value = noCompte
-        End If
-    End Sub
 
 End Class
