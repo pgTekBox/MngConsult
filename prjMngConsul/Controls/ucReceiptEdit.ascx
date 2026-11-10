@@ -34,11 +34,11 @@
             background: #fff;
             border-top: 1px solid var(--line);
             padding: 8px 14px;
-            /* Totaux à droite, bouton d'enregistrement en dessous, aligné à droite */
+            /* Totaux puis, à leur droite, le bouton d'enregistrement */
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 8px;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 24px;
         }
 
         .customer-selector,
