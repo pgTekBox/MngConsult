@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="Encaissements" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     MaintainScrollPositionOnPostback="true" CodeBehind="wbfEncaissements.aspx.vb" Inherits="MngConsul.wbfEncaissements" %>
+<%@ Register Src="~/Controls/PdfViewer.ascx" TagPrefix="uc1" TagName="PdfViewer" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Encaissements — 60Sec-AI
@@ -48,6 +49,9 @@
     .en-par { padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; white-space: nowrap }
     .en-par.banque { background: #FBF1DC; color: #7A5200 }
     .en-par.vous { background: #E8EDF5; color: #143A73 }
+    .en-imp { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer }
+    .en-imp:hover { background: #F2F5F9 }
+    .en-imp svg { width: 16px; height: 16px }
     .en-vide { padding: 20px 6px; color: #44536E; font-weight: 700 }
     .fc-pied { padding: 12px 0 0; color: #44536E; font-size: 14px }
     </style>
@@ -107,6 +111,8 @@
         </section>
 
     </asp:Panel>
+
+    <uc1:PdfViewer runat="server" ID="PdfViewer" />
 
     <%-- La fenêtre de saisie d'un paiement reçu : l'usercontrol d'encaissement, sens ENCAISSEMENT. --%>
     <telerik:RadWindow ID="rwEncaissement" runat="server"

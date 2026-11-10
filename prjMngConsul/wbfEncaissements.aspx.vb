@@ -131,6 +131,13 @@ Public Class wbfEncaissements
         sb.Append("<span class=""en-fact"">").Append(Server.HtmlEncode(Convert.ToString(r("Factures")))).Append("</span>")
         sb.Append("<span class=""en-montant"">").Append(Server.HtmlEncode(Montant(r, "Montant").ToString("C2"))).Append("</span>")
         sb.Append("<span class=""en-par ").Append(If(rapproche, "banque", "vous")).Append(""">").Append(Server.HtmlEncode(If(rapproche, L("parBanque"), L("parVous")))).Append("</span>")
+        ' Imprimer : le reçu PDF avec le détail des factures (EncaissementPdf.ashx, T369).
+        Dim id As Integer = Convert.ToInt32(r("Id"))
+        Dim titre As String = L("recu") & " ENC-" & id.ToString("000000") & " — " & client
+        sb.Append("<button type=""button"" class=""en-imp"" title=""").Append(Server.HtmlEncode(L("imprimerTip"))).Append(""" onclick=""openPdfOverlay('EncaissementPdf.ashx?id=").Append(id).Append("', ")
+        sb.Append(Server.HtmlEncode(System.Web.HttpUtility.JavaScriptStringEncode(titre, True))).Append(")"">")
+        sb.Append("<svg viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2"" stroke-linecap=""round"" stroke-linejoin=""round"" aria-hidden=""true""><path d=""M6 9V3h12v6""></path><rect x=""6"" y=""14"" width=""12"" height=""7""></rect><path d=""M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2""></path></svg>")
+        sb.Append(Server.HtmlEncode(L("imprimer"))).Append("</button>")
         sb.Append("</div>")
         Return sb.ToString()
     End Function
@@ -182,6 +189,9 @@ Public Class wbfEncaissements
             Case "tInterac" : Return Choose3(lang, "Virement Interac", "Interac transfer", "Transferencia Interac")
             Case "tCarte" : Return Choose3(lang, "Carte", "Card", "Tarjeta")
             Case "tAutre" : Return Choose3(lang, "Paiement", "Payment", "Pago")
+            Case "imprimer" : Return Choose3(lang, "Imprimer", "Print", "Imprimir")
+            Case "imprimerTip" : Return Choose3(lang, "Ouvrir le reçu avec le détail des factures, pour l'imprimer ou l'enregistrer", "Open the receipt with the invoice details, to print or save it", "Abrir el recibo con el detalle de las facturas, para imprimirlo o guardarlo")
+            Case "recu" : Return Choose3(lang, "Reçu", "Receipt", "Recibo")
             Case Else : Return ""
         End Select
     End Function

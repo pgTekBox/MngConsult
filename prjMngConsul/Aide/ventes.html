@@ -275,7 +275,7 @@
                     <thead><tr><th>Indicateur</th><th>Contenu</th></tr></thead>
                     <tbody>
                         <tr><td>Reçu en {mois}</td><td>La somme des paiements reçus depuis le 1er du mois courant, et leur nombre.</td></tr>
-                        <tr><td>Rapprochés avec la banque</td><td>Le nombre de paiements rattachés à une ligne de relevé bancaire.</td></tr>
+                        <tr><td>Rapprochés avec la banque</td><td>Le nombre de paiements reliés à une ligne du relevé bancaire (bouton <kbd>Relier</kbd> du <a href="comptabilite.html">Relevé bancaire</a>).</td></tr>
                         <tr><td>Encore à recevoir</td><td>Le reste à payer des factures comptabilisées non soldées, et leur nombre — le même chiffre que l’indicateur « À recevoir » des factures clients.</td></tr>
                     </tbody>
                 </table>
@@ -284,6 +284,7 @@
                 <ul>
                     <li><kbd>+ Enregistrer un paiement reçu</kbd> (pastille bleue) : ouvre la fenêtre « Enregistrer un paiement reçu » — la même fenêtre d’encaissement que le bouton <kbd>Encaissement</kbd> d’une facture, mais sans client présélectionné : choisissez le client, la date, le type, la référence, le compte de banque et le montant, puis imputez les factures ouvertes. À la fermeture, la liste et les indicateurs se rechargent.</li>
                     <li>Champ « Chercher un client, une référence ou une facture », loupe ou touche Entrée ; <kbd>✕</kbd> vide la recherche.</li>
+                    <li><kbd>Imprimer</kbd> (au bout de chaque ligne) : ouvre le <strong>reçu de paiement</strong> en PDF (n° ENC-000053) : la compagnie et son logo, le client et son adresse, la date, le mode et la référence, le montant reçu, puis le <strong>détail des factures payées</strong> (n°, date, total, montant appliqué, solde restant ou « Payée »), le total appliqué et, s’il y a lieu, la part non appliquée, le compte de banque où le paiement a été déposé et la ligne du relevé bancaire reliée. La barre de la visionneuse permet de l’imprimer ou de le télécharger.</li>
                 </ul>
 
                 <h3>Lignes</h3>
@@ -795,7 +796,7 @@
                     <thead><tr><th>Indicator</th><th>Content</th></tr></thead>
                     <tbody>
                         <tr><td>Received in {month}</td><td>The sum of payments received since the 1st of the current month, and their count.</td></tr>
-                        <tr><td>Matched with the bank</td><td>The number of payments attached to a bank statement line.</td></tr>
+                        <tr><td>Matched with the bank</td><td>The number of payments linked to a bank statement line (<kbd>Link</kbd> button of the <a href="comptabilite.html">Bank statement</a>).</td></tr>
                         <tr><td>Still to receive</td><td>The balance due of posted, unsettled invoices, and their count — the same figure as the “À recevoir” indicator of customer invoices.</td></tr>
                     </tbody>
                 </table>
@@ -804,6 +805,7 @@
                 <ul>
                     <li><kbd>+ Enregistrer un paiement reçu</kbd> (+ Record a received payment, blue pill): opens the “Enregistrer un paiement reçu” window — the same receipt window as the <kbd>Encaissement</kbd> button of an invoice, but with no customer preselected: choose the customer, date, type, reference, bank account and amount, then apply the open invoices. When it closes, the list and the indicators reload.</li>
                     <li>“Chercher un client, une référence ou une facture” field, magnifier or Enter key; <kbd>✕</kbd> clears the search.</li>
+                    <li><kbd>Imprimer</kbd> (Print, at the end of each line): opens the <strong>payment receipt</strong> as a PDF (no. ENC-000053): the company and its logo, the customer and address, the date, method and reference, the amount received, then the <strong>details of the invoices paid</strong> (no., date, total, amount applied, balance due or “Paid”), the total applied and, if any, the unapplied part, the bank account the payment was deposited to and the linked bank statement line. The viewer bar lets you print or download it.</li>
                 </ul>
 
                 <h3>Rows</h3>
@@ -1315,7 +1317,7 @@
                     <thead><tr><th>Indicador</th><th>Contenido</th></tr></thead>
                     <tbody>
                         <tr><td>Recibido en {mes}</td><td>La suma de los pagos recibidos desde el 1 del mes en curso, y su número.</td></tr>
-                        <tr><td>Conciliados con el banco</td><td>El número de pagos vinculados a una línea de extracto bancario.</td></tr>
+                        <tr><td>Conciliados con el banco</td><td>El número de pagos vinculados a una línea del extracto bancario (botón <kbd>Vincular</kbd> del <a href="comptabilite.html">Extracto bancario</a>).</td></tr>
                         <tr><td>Aún por cobrar</td><td>El saldo pendiente de las facturas contabilizadas no saldadas, y su número — la misma cifra que el indicador « À recevoir » de las facturas de clientes.</td></tr>
                     </tbody>
                 </table>
@@ -1324,6 +1326,7 @@
                 <ul>
                     <li><kbd>+ Enregistrer un paiement reçu</kbd> (+ Registrar un pago recibido, píldora azul): abre la ventana « Enregistrer un paiement reçu » — la misma ventana de cobro que el botón <kbd>Encaissement</kbd> de una factura, pero sin cliente preseleccionado: elija el cliente, la fecha, el tipo, la referencia, la cuenta bancaria y el importe, y luego impute las facturas abiertas. Al cerrarla, la lista y los indicadores se recargan.</li>
                     <li>Campo « Chercher un client, une référence ou une facture », lupa o tecla Intro; <kbd>✕</kbd> vacía la búsqueda.</li>
+                    <li><kbd>Imprimer</kbd> (Imprimir, al final de cada línea): abre el <strong>recibo de pago</strong> en PDF (n.º ENC-000053): la empresa y su logotipo, el cliente y su dirección, la fecha, el método y la referencia, el importe recibido, y luego el <strong>detalle de las facturas pagadas</strong> (n.º, fecha, total, importe aplicado, saldo pendiente o «Pagada»), el total aplicado y, si procede, la parte no aplicada, la cuenta bancaria donde se depositó el pago y la línea del extracto bancario vinculada. La barra del visor permite imprimirlo o descargarlo.</li>
                 </ul>
 
                 <h3>Líneas</h3>
