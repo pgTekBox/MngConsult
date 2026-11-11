@@ -165,6 +165,8 @@ Partial Public Class wbfRapportTaxe
             Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
             Case "colPiece" : Return Choose3(lang, "Pièce", "Voucher", "Comprobante")
             Case "voirFacture" : Return Choose3(lang, "Afficher la facture", "Show the invoice", "Mostrar la factura")
+            Case "detailFige" : Return Choose3(lang, "Rapport finalisé : ses montants sont figés. Le détail montre les écritures de la période, qui concordent avec ces montants.", "Finalized report: its amounts are frozen. The detail shows the period’s entries, which agree with these amounts.", "Informe finalizado: sus importes están fijados. El detalle muestra los asientos del período, que coinciden con esos importes.")
+            Case "detailEcart" : Return Choose3(lang, "Rapport finalisé : ses montants sont figés, mais les écritures de la période ont changé depuis (écart TPS {0}, TVQ {1}). Le détail montre les écritures actuelles.", "Finalized report: its amounts are frozen, but the period’s entries have changed since (GST difference {0}, QST {1}). The detail shows the current entries.", "Informe finalizado: sus importes están fijados, pero los asientos del período han cambiado desde entonces (diferencia TPS {0}, TVQ {1}). El detalle muestra los asientos actuales.")
             Case "titreFactClient" : Return Choose3(lang, "Facture client {0}", "Customer invoice {0}", "Factura de cliente {0}")
             Case "titreFactFourn" : Return Choose3(lang, "Facture fournisseur {0}", "Supplier invoice {0}", "Factura de proveedor {0}")
             Case "colLibelle" : Return Choose3(lang, "Libellé", "Description", "Descripción")
@@ -418,15 +420,62 @@ Partial Public Class wbfRapportTaxe
             btnRemettre.Enabled = (Convert.ToDecimal(r("TotalARemettre")) > 0)
         End If
 
-        ' Détail
-        If ds.Tables.Count >= 2 AndAlso ds.Tables(1).Rows.Count > 0 Then
-            rpDetail.DataSource = ds.Tables(1)
+        ' Détail : toujours lu par s0993 (T374), même quand le rapport est finalisé ou
+        ' remis (sp_GenererRapportTaxe n'en renvoie plus dans ce cas).
+        Dim detail As DataTable = LireDetail()
+        If detail IsNot Nothing AndAlso detail.Rows.Count > 0 Then
+            rpDetail.DataSource = detail
             rpDetail.DataBind()
             phDetail.Visible = True
+            SetLiteral(Me, "litDetailNote", NoteDetail(statut, r, detail))
         Else
             phDetail.Visible = False
         End If
     End Sub
+
+    Private Function LireDetail() As DataTable
+        Try
+            Using cn As New SqlConnection(ConnectionString)
+                Using cmd As New SqlCommand("dbo.s0993GetRapportTaxeDetail", cn)
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.Parameters.AddWithValue("@CompanyGUID", Company)
+                    cmd.Parameters.AddWithValue("@RapportId", RapportId)
+                    Dim dt As New DataTable()
+                    Using da As New SqlDataAdapter(cmd)
+                        da.Fill(dt)
+                    End Using
+                    Return dt
+                End Using
+            End Using
+        Catch
+            Return Nothing
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Rapport finalisé ou remis : ses montants sont figés. On le dit, et on signale
+    ''' quand les écritures actuelles de la période ne donnent plus les mêmes taxes nettes.
+    ''' </summary>
+    Private Function NoteDetail(statut As String, r As DataRow, detail As DataTable) As String
+        If statut <> "FINALISE" AndAlso statut <> "PAYE" Then Return ""
+        Dim net = Function(vte As String, ach As String) As Decimal
+                      Dim s As Decimal = 0D
+                      For Each x As DataRow In detail.Rows
+                          Dim d As Decimal = Convert.ToDecimal(x("MontantDebit")), c As Decimal = Convert.ToDecimal(x("MontantCredit"))
+                          Select Case Convert.ToString(x("CodeCategorie"))
+                              Case vte : s += c - d
+                              Case ach : s -= d - c
+                          End Select
+                      Next
+                      Return s
+                  End Function
+        Dim ecartTps As Decimal = net("TPS_VTE", "TPS_ACH") - Convert.ToDecimal(r("TPS_Nette"))
+        Dim ecartTvq As Decimal = net("TVQ_VTE", "TVQ_ACH") - Convert.ToDecimal(r("TVQ_Nette"))
+        If Math.Abs(ecartTps) < 0.005D AndAlso Math.Abs(ecartTvq) < 0.005D Then
+            Return "<p class=""detail-note"">" & Server.HtmlEncode(L("detailFige")) & "</p>"
+        End If
+        Return "<p class=""detail-note ecart"">" & Server.HtmlEncode(String.Format(L("detailEcart"), FormatMontant(ecartTps), FormatMontant(ecartTvq))) & "</p>"
+    End Function
 
     ''' <summary>
     ''' Marque le rapport comme remis via sp_MarquerRapportTaxePaye.

@@ -86,6 +86,8 @@
             padding: 6px 10px; border-bottom: 1px solid #D5DDE8; text-align: left;
         }
         .detail-table th { background: #f1f5f9; color: #44536E; font-weight: 600; }
+        .detail-note { margin: -4px 0 10px; padding: 8px 12px; border-radius: 10px; background: #E8EEF8; color: #143A73; font-size: 13px; font-weight: 600; }
+        .detail-note.ecart { background: #FBF1DC; color: #7A5200; }
         .detail-table .lien-piece { color: #1B4F9C; font-weight: 700; text-decoration: none; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
         .detail-table .lien-piece:hover { text-decoration: underline; }
         .detail-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
@@ -261,6 +263,7 @@
             <asp:PlaceHolder ID="phDetail" runat="server" Visible="false">
                 <div class="tax-card">
                     <h3><asp:Literal ID="litDetailEcrituresTitre" runat="server" /></h3>
+                    <asp:Literal ID="litDetailNote" runat="server" />
                     <table class="detail-table">
                         <thead>
                             <tr>
