@@ -102,7 +102,10 @@
     /* Repliable : l'en-tête (titre, période, état, écart) reste ; le corps se cache. */
     .cb-ecart-mini { margin-left: auto; font-weight: 800; font-size: 15px; white-space: nowrap }
     .cb-ecart-mini.zero { color: #0F5A3A } .cb-ecart-mini.non { color: #A3261C }
-    .cb-bascule { width: 36px; height: 36px; flex: none; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #AEBBCD; border-radius: 50%; background: #fff; color: #0E1F3D; cursor: pointer }
+    /* Le bouton est fixé dans le coin supérieur droit de la boîte ; l'en-tête lui laisse la place. */
+    .cb-carte { position: relative }
+    .cb-carte .cb-tete { padding-right: 52px }
+    .cb-bascule { position: absolute; top: 16px; right: 18px; width: 36px; height: 36px; flex: none; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #AEBBCD; border-radius: 50%; background: #fff; color: #0E1F3D; cursor: pointer }
     .cb-bascule:hover { background: #F2F5F9 }
     .cb-bascule svg { transition: transform .15s }
     .cb-carte.replie .cb-bascule svg { transform: rotate(-90deg) }
