@@ -92,6 +92,14 @@ Public Class wbfReleve
                 Au = Date.Today.AddDays(-Date.Today.Day)
             End If
         End If
+        ' Ouvert depuis l'activité « Faire la conciliation bancaire » du tableau de bord
+        ' (ACT_CONCILIATION, T372) : ?du=aaaa-mm-jj&au=aaaa-mm-jj impose la période.
+        Dim qDu, qAu As Date
+        If Date.TryParseExact(Request.QueryString("du"), "yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, qDu) AndAlso
+           Date.TryParseExact(Request.QueryString("au"), "yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, qAu) AndAlso
+           qAu >= qDu Then
+            Du = qDu : Au = qAu
+        End If
         AfficherPeriode()
     End Sub
 

@@ -262,6 +262,8 @@ Public Class _Default
             acts.Add(Activite("y", L("aBanque"), L("catComptabilite") & " · " & L("aBanqueSous"),
                               L("aBanqueDet"), L("btnBrancher"), "PlaidAccounts.aspx"))
         End If
+        Dim concil As Object = ActiviteConciliation(deType("ACT_CONCILIATION").FirstOrDefault())
+        If concil IsNot Nothing Then acts.Add(concil)
         Dim essai As Object = ActiviteEssai(aEssai)
         If essai IsNot Nothing Then acts.Add(essai)
 
@@ -300,6 +302,32 @@ Public Class _Default
         Dim nums As List(Of String) = rows.Select(Function(r) Txt(r("NumeroSort"))).Where(Function(n) n <> "").Distinct().ToList()
         If nums.Count = 0 Then Return page
         Return page & "?factures=" & HttpUtility.UrlEncode(String.Join(",", nums))
+    End Function
+
+    ''' <summary>
+    ''' La conciliation bancaire du mois terminé : la ligne ACT_CONCILIATION de T204
+    ''' (T372). Beneficiaire = « aaaa-mm-jj_aaaa-mm-jj » (la période), Montant = lignes
+    ''' encore à apparier, DueDate = 10 jours après la fin du mois (rouge une fois dépassée).
+    ''' Le bouton ouvre le relevé sur cette période : wbfReleve.aspx?du=…&au=….
+    ''' </summary>
+    Private Function ActiviteConciliation(r As DataRow) As Object
+        If r Is Nothing Then Return Nothing
+        Dim p As String() = Txt(r("NameSort")).Split("_"c)
+        Dim du, au As Date
+        If p.Length <> 2 OrElse Not Date.TryParse(p(0), du) OrElse Not Date.TryParse(p(1), au) Then Return Nothing
+        Dim ech As Date? = DateN(r("DueDate"))
+        Dim ci As Globalization.CultureInfo = Globalization.CultureInfo.GetCultureInfo(If(CurrentLang = "en", "en-CA", If(CurrentLang = "es", "es-ES", "fr-CA")))
+        Dim moisComplet As Boolean = du.Day = 1 AndAlso au = New Date(du.Year, du.Month, Date.DaysInMonth(du.Year, du.Month))
+        Dim titre As String = If(moisComplet,
+                                 String.Format(L("aConcil"), du.ToString("MMMM yyyy", ci)),
+                                 String.Format(L("aConcilPeriode"), JourMois(du), JourMois(au)))
+        Dim nb As Integer = CInt(Dec(r("ResteAPayer")))
+        Dim sous As String = L("catComptabilite") &
+                             If(ech.HasValue, " · " & String.Format(L("avantLe"), JourMois(ech.Value)), "") &
+                             " · " & If(nb > 0, String.Format(L("aConcilLignes"), nb), L("aConcilPret"))
+        Dim retard As Boolean = ech.HasValue AndAlso ech.Value.Date < aujourdhui
+        Return Activite(If(retard, "r", "y"), titre, sous, L("aConcilDet"), L("btnConcilier"),
+                        "wbfReleve.aspx?du=" & du.ToString("yyyy-MM-dd") & "&au=" & au.ToString("yyyy-MM-dd"))
     End Function
 
     ''' <summary>
@@ -865,6 +893,13 @@ Public Class _Default
             Case "btnPreparer" : Return Choose3(lang, "Préparer le paiement", "Prepare the payment", "Preparar el pago")
             Case "btnApprouver" : Return Choose3(lang, "Voir et approuver", "See and approve", "Ver y aprobar")
             Case "btnBrancher" : Return Choose3(lang, "Brancher ma banque", "Connect my bank", "Conectar mi banco")
+            ' Conciliation bancaire du mois terminé (ACT_CONCILIATION, T372)
+            Case "aConcil" : Return Choose3(lang, "Conciliation bancaire à faire : {0}", "Bank reconciliation to do: {0}", "Conciliación bancaria pendiente: {0}")
+            Case "aConcilPeriode" : Return Choose3(lang, "Faire la conciliation bancaire du {0} au {1}", "Do the bank reconciliation from {0} to {1}", "Hacer la conciliación bancaria del {0} al {1}")
+            Case "aConcilLignes" : Return Choose3(lang, "{0} ligne(s) du relevé à apparier", "{0} statement line(s) to match", "{0} línea(s) del extracto por conciliar")
+            Case "aConcilPret" : Return Choose3(lang, "toutes les lignes sont appariées", "all lines are matched", "todas las líneas están conciliadas")
+            Case "aConcilDet" : Return Choose3(lang, "Reliez les lignes du relevé à leurs paiements ou inscrivez-les aux livres, vérifiez que l'écart est à zéro, puis clôturez la conciliation du mois.", "Link the statement lines to their payments or record them in the books, check that the difference is zero, then close the month's reconciliation.", "Vincule las líneas del extracto a sus pagos o regístrelas en los libros, compruebe que la diferencia es cero y cierre la conciliación del mes.")
+            Case "btnConcilier" : Return Choose3(lang, "Concilier", "Reconcile", "Conciliar")
             Case "btnForfait" : Return Choose3(lang, "Choisir mon forfait", "Choose my plan", "Elegir mi plan")
             Case Else : Return ""
         End Select
