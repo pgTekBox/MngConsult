@@ -424,6 +424,7 @@ Partial Public Class wbfRapportTaxe
         ' remis (sp_GenererRapportTaxe n'en renvoie plus dans ce cas).
         Dim detail As DataTable = LireDetail()
         If detail IsNot Nothing AndAlso detail.Rows.Count > 0 Then
+            MarquerGroupes(detail)
             rpDetail.DataSource = detail
             rpDetail.DataBind()
             phDetail.Visible = True
@@ -432,6 +433,46 @@ Partial Public Class wbfRapportTaxe
             phDetail.Visible = False
         End If
     End Sub
+
+    ''' <summary>
+    ''' Regroupe les lignes d'une même pièce (même date, même numéro, consécutives) :
+    ''' colonne RangPiece = nombre de lignes de la pièce sur sa première ligne, 0 sur
+    ''' les suivantes. La Date et la Pièce s'affichent une fois (rowspan), le reste
+    ''' (libellé, compte, catégorie, débit, crédit) garde une ligne par compte de taxe.
+    ''' </summary>
+    Private Shared Sub MarquerGroupes(dt As DataTable)
+        If Not dt.Columns.Contains("RangPiece") Then dt.Columns.Add("RangPiece", GetType(Integer))
+        Dim cle = Function(r As DataRow) Convert.ToString(r("DateEcriture")) & "|" & Convert.ToString(r("NumeroPiece"))
+        Dim i As Integer = 0
+        While i < dt.Rows.Count
+            Dim j As Integer = i + 1
+            While j < dt.Rows.Count AndAlso cle(dt.Rows(j)) = cle(dt.Rows(i))
+                dt.Rows(j)("RangPiece") = 0
+                j += 1
+            End While
+            dt.Rows(i)("RangPiece") = j - i
+            i = j
+        End While
+    End Sub
+
+    ''' <summary>Les cellules Date et Pièce, seulement sur la première ligne de la pièce.</summary>
+    Protected Function CellulesPiece(item As Object) As String
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing Then Return ""
+        Dim rang As Integer = If(IsDBNull(r("RangPiece")), 1, Convert.ToInt32(r("RangPiece")))
+        If rang = 0 Then Return ""
+        Dim span As String = If(rang > 1, " rowspan=""" & rang & """", "")
+        Dim dateTxt As String = If(IsDBNull(r("DateEcriture")), "", Convert.ToDateTime(r("DateEcriture")).ToString("yyyy-MM-dd"))
+        Return "<td class=""piece-groupe""" & span & ">" & dateTxt & "</td>" &
+               "<td class=""piece-groupe""" & span & ">" & PieceCell(r("NumeroPiece"), r("SourceType"), r("DocumentId")) & "</td>"
+    End Function
+
+    ''' <summary>La première ligne d'une pièce porte un filet plus marqué.</summary>
+    Protected Function ClassePiece(item As Object) As String
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing OrElse IsDBNull(r("RangPiece")) Then Return ""
+        Return If(Convert.ToInt32(r("RangPiece")) > 0, "piece-debut", "")
+    End Function
 
     Private Function LireDetail() As DataTable
         Try

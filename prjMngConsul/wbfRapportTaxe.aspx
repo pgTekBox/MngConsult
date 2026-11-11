@@ -86,6 +86,9 @@
             padding: 6px 10px; border-bottom: 1px solid #D5DDE8; text-align: left;
         }
         .detail-table th { background: #f1f5f9; color: #44536E; font-weight: 600; }
+        /* Date et Pièce une fois par pièce (rowspan) ; une ligne par compte de taxe à droite. */
+        .detail-table td.piece-groupe { vertical-align: top; background: #fff; white-space: nowrap; }
+        .detail-table tr.piece-debut td { border-top: 2px solid #C7D2E0; }
         .detail-note { margin: -4px 0 10px; padding: 8px 12px; border-radius: 10px; background: #E8EEF8; color: #143A73; font-size: 13px; font-weight: 600; }
         .detail-note.ecart { background: #FBF1DC; color: #7A5200; }
         .detail-table .lien-piece { color: #1B4F9C; font-weight: 700; text-decoration: none; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
@@ -279,9 +282,8 @@
                         <tbody>
                             <asp:Repeater ID="rpDetail" runat="server">
                                 <ItemTemplate>
-                                    <tr>
-                                        <td><%# Eval("DateEcriture", "{0:yyyy-MM-dd}") %></td>
-                                        <td><%# PieceCell(Eval("NumeroPiece"), Eval("SourceType"), Eval("DocumentId")) %></td>
+                                    <tr class="<%# ClassePiece(Container.DataItem) %>">
+                                        <%# CellulesPiece(Container.DataItem) %>
                                         <td><%# Eval("LibelleLigne") %></td>
                                         <td><strong><%# Eval("Compte") %></strong> <%# Eval("NomCompte") %></td>
                                         <td><%# Eval("Categorie") %></td>
