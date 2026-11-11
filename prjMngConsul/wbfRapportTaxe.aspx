@@ -86,6 +86,8 @@
             padding: 6px 10px; border-bottom: 1px solid #D5DDE8; text-align: left;
         }
         .detail-table th { background: #f1f5f9; color: #44536E; font-weight: 600; }
+        .detail-table .lien-piece { color: #1B4F9C; font-weight: 700; text-decoration: none; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
+        .detail-table .lien-piece:hover { text-decoration: underline; }
         .detail-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
         .detail-table .cat-tps-vte { color: #16a34a; }
         .detail-table .cat-tps-ach { color: #dc2626; }
@@ -276,7 +278,7 @@
                                 <ItemTemplate>
                                     <tr>
                                         <td><%# Eval("DateEcriture", "{0:yyyy-MM-dd}") %></td>
-                                        <td><%# Eval("NumeroPiece") %></td>
+                                        <td><%# PieceCell(Eval("NumeroPiece"), Eval("SourceType"), Eval("DocumentId")) %></td>
                                         <td><%# Eval("LibelleLigne") %></td>
                                         <td><strong><%# Eval("Compte") %></strong> <%# Eval("NomCompte") %></td>
                                         <td><%# Eval("Categorie") %></td>
@@ -337,7 +339,28 @@
         </ContentTemplate>
     </telerik:RadWindow>
 
+    <%-- La facture d'une pièce du détail (lien sur le numéro de pièce, T373). --%>
+    <telerik:RadWindow ID="rwFacture" runat="server"
+        Modal="true"
+        VisibleOnPageLoad="false"
+        Behaviors="Close,Move,Resize"
+        DestroyOnClose="false" ReloadOnShow="true"
+        ClientIDMode="Static">
+    </telerik:RadWindow>
+
     <script type="text/javascript">
+        // Ouvre la facture (client : wbfInvoiceEdit, fournisseur : wbfSupplierInvoinceEdit)
+        // dans la fenêtre, à la même taille que dans les listes de factures.
+        function ouvrirFacture(id, page, titre) {
+            var w = $find('rwFacture');
+            if (!w || !id) { return; }
+            w.set_title(titre);
+            w.set_width(Math.min(window.innerWidth - 20, 1100));
+            w.set_height(Math.min(window.innerHeight - 20, 720));
+            w.setUrl(page + '?Id=' + id);
+            w.show();
+            w.center();
+        }
         function confirmRemise(sender, args) {
             args.set_cancel(true);
             var win = $find('winRemise');

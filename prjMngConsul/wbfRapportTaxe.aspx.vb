@@ -115,6 +115,24 @@ Partial Public Class wbfRapportTaxe
     End Sub
 
     ''' <summary>Traductions de l'interface Rapport de remise de taxes (fr/en/es).</summary>
+    ''' <summary>
+    ''' Le numéro de pièce du détail : un lien qui ouvre la facture d'origine quand
+    ''' l'écriture vient d'une facture (SourceType FACTURE_CLIENT / FACTURE_FOURN,
+    ''' DocumentId renvoyé par sp_GenererRapportTaxe, T373) ; sinon le texte seul
+    ''' (règlement, écriture manuelle).
+    ''' </summary>
+    Protected Function PieceCell(numero As Object, sourceType As Object, documentId As Object) As String
+        Dim num As String = If(numero Is Nothing OrElse IsDBNull(numero), "", Convert.ToString(numero))
+        Dim id As Integer = 0
+        If documentId IsNot Nothing AndAlso Not IsDBNull(documentId) Then id = Convert.ToInt32(documentId)
+        Dim src As String = If(sourceType Is Nothing OrElse IsDBNull(sourceType), "", Convert.ToString(sourceType).ToUpperInvariant())
+        If id <= 0 OrElse (src <> "FACTURE_CLIENT" AndAlso src <> "FACTURE_FOURN") Then Return Server.HtmlEncode(num)
+        Dim page As String = If(src = "FACTURE_CLIENT", "wbfInvoiceEdit.aspx", "wbfSupplierInvoinceEdit.aspx")
+        Dim titre As String = String.Format(L(If(src = "FACTURE_CLIENT", "titreFactClient", "titreFactFourn")), num)
+        Return "<button type=""button"" class=""lien-piece"" title=""" & Server.HtmlEncode(L("voirFacture")) & """ onclick=""ouvrirFacture(" & id & ", '" & page & "', " &
+               Server.HtmlEncode(System.Web.HttpUtility.JavaScriptStringEncode(titre, True)) & ")"">" & Server.HtmlEncode(num) & "</button>"
+    End Function
+
     Protected Function L(key As String) As String
         Dim lang As String = CurrentLang
         Select Case key
@@ -146,6 +164,9 @@ Partial Public Class wbfRapportTaxe
             Case "detailEcritures" : Return Choose3(lang, "Détail des écritures incluses dans le calcul", "Details of entries included in the calculation", "Detalle de los asientos incluidos en el cálculo")
             Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
             Case "colPiece" : Return Choose3(lang, "Pièce", "Voucher", "Comprobante")
+            Case "voirFacture" : Return Choose3(lang, "Afficher la facture", "Show the invoice", "Mostrar la factura")
+            Case "titreFactClient" : Return Choose3(lang, "Facture client {0}", "Customer invoice {0}", "Factura de cliente {0}")
+            Case "titreFactFourn" : Return Choose3(lang, "Facture fournisseur {0}", "Supplier invoice {0}", "Factura de proveedor {0}")
             Case "colLibelle" : Return Choose3(lang, "Libellé", "Description", "Descripción")
             Case "colCompte" : Return Choose3(lang, "Compte", "Account", "Cuenta")
             Case "colCategorie" : Return Choose3(lang, "Catégorie", "Category", "Categoría")
