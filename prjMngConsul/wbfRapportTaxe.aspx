@@ -134,6 +134,10 @@
         .detail-table th { background: transparent; color: #5B6B86; font-weight: 800; border-bottom: 1px solid #E3E9F1 }
         .detail-table td { border-bottom-color: #E3E9F1 }
         .action-bar { border-top-color: #E3E9F1 }
+        .action-note { flex: 1 1 260px; font-size: 13px; color: #44536E; }
+        .period-deadline { display: block; margin-top: 2px; font-size: 13px; font-weight: 600; color: #44536E; }
+        .period-deadline.retard { color: #A3261C; }
+        .period-deadline.fait { color: #0F5A3A; }
 
     </style>
 
@@ -156,6 +160,13 @@
             <telerik:AjaxSetting AjaxControlID="btnRecalcul">
                 <UpdatedControls>
                     <telerik:AjaxUpdatedControl ControlID="phReport" LoadingPanelID="ralp" />
+                    <telerik:AjaxUpdatedControl ControlID="phStatus" />
+                </UpdatedControls>
+            </telerik:AjaxSetting>
+            <telerik:AjaxSetting AjaxControlID="btnProduite">
+                <UpdatedControls>
+                    <telerik:AjaxUpdatedControl ControlID="phReport" LoadingPanelID="ralp" />
+                    <telerik:AjaxUpdatedControl ControlID="lblPeriode" />
                     <telerik:AjaxUpdatedControl ControlID="phStatus" />
                 </UpdatedControls>
             </telerik:AjaxSetting>
@@ -305,6 +316,13 @@
                         OnClick="btnRemettre_Click"
                         Icon-PrimaryIconCssClass="rbCheck"
                         OnClientClicking="confirmRemise" />
+                    <%-- Rien à remettre (remboursement ou solde nul) : la déclaration se marque produite (s0994, T375). --%>
+                    <telerik:RadButton ID="btnProduite" runat="server"
+                        Skin="Bootstrap" Visible="false"
+                        OnClick="btnProduite_Click"
+                        Icon-PrimaryIconCssClass="rbCheck"
+                        OnClientClicking="confirmProduite" />
+                    <asp:Literal ID="litActionNote" runat="server" />
                 </div>
             </div>
 
@@ -365,6 +383,10 @@
             w.setUrl(page + '?Id=' + id);
             w.show();
             w.center();
+        }
+        // Déclaration en remboursement ou à solde nul : confirmation, puis s0994 côté serveur.
+        function confirmProduite(sender, args) {
+            if (!confirm(sender.get_commandArgument())) { args.set_cancel(true); }
         }
         function confirmRemise(sender, args) {
             args.set_cancel(true);

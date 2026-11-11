@@ -64,7 +64,10 @@ Partial Public Class wbfSetting
         ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
         DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
-        If Not IsPostBack Then LoadCompanyLogo()
+        If Not IsPostBack Then
+            LoadCompanyLogo()
+            RestaurerApresEnregistrement()
+        End If
     End Sub
 
     ''' <summary>Applique la langue courante aux contrôles serveur (titre, boutons, onglets).</summary>
@@ -828,11 +831,31 @@ Partial Public Class wbfSetting
             Return
         End Try
 
-        ' Rafraîchir l'affichage avec les valeurs effectivement en BD
-        LoadAllSettings()
-        chkRemoveLogo.Checked = False
-        LoadCompanyLogo()
-        ShowOk(L("savedOk"))
+        ' Rafraîchir l'affichage avec les valeurs effectivement en BD : on recharge la page
+        ' (Post/Redirect/Get) au lieu de rebinder ici. Rebinder dans le même cycle recréait
+        ' les listes déroulantes, qui reprenaient l'ANCIEN ViewState : après « Enregistrer »,
+        ' Fréquence de remise = Trimestrielle réaffichait Mensuelle, et l'enregistrement
+        ' suivant remettait Mensuelle en base. L'onglet courant et le message suivent.
+        Session("Setting.Ok") = L("savedOk")
+        Session("Setting.Onglet") = tsSettings.SelectedIndex
+        Response.Redirect(Request.RawUrl, False)
+        Context.ApplicationInstance.CompleteRequest()
+    End Sub
+
+    ''' <summary>Après un enregistrement (PRG) : message et onglet de l'appel précédent.</summary>
+    Private Sub RestaurerApresEnregistrement()
+        Dim msg As String = TryCast(Session("Setting.Ok"), String)
+        If String.IsNullOrEmpty(msg) Then Return
+        Session.Remove("Setting.Ok")
+        If TypeOf Session("Setting.Onglet") Is Integer Then
+            Dim i As Integer = CInt(Session("Setting.Onglet"))
+            Session.Remove("Setting.Onglet")
+            If i >= 0 AndAlso i < tsSettings.Tabs.Count Then
+                tsSettings.SelectedIndex = i
+                mpSettings.SelectedIndex = i
+            End If
+        End If
+        ShowOk(msg)
     End Sub
 
     ' =========================================================
@@ -911,8 +934,12 @@ Partial Public Class wbfSetting
     End Function
 
     Protected Sub btnReload_Click(sender As Object, e As EventArgs)
-        LoadAllSettings()
-        ShowOk(L("reloadedOk"))
+        ' Même raison que l'enregistrement : un rebind dans ce cycle reprendrait l'ancien
+        ' ViewState des listes déroulantes. On recharge la page.
+        Session("Setting.Ok") = L("reloadedOk")
+        Session("Setting.Onglet") = tsSettings.SelectedIndex
+        Response.Redirect(Request.RawUrl, False)
+        Context.ApplicationInstance.CompleteRequest()
     End Sub
 
     ' =========================================================

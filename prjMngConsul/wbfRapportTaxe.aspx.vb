@@ -59,6 +59,12 @@ Partial Public Class wbfRapportTaxe
 
         If Not IsPostBack Then
             DateReference = Date.Today
+            ' Ouvert depuis l'activité « Déclaration de taxes à produire » (ACT_TAXES, T375) :
+            ' ?date=aaaa-mm-jj = une date de la période à afficher.
+            Dim qDate As Date
+            If Date.TryParseExact(Request.QueryString("date"), "yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, qDate) Then
+                DateReference = qDate
+            End If
             dpDatePaiement.SelectedDate = Date.Today
             LoadFrequence()
             ChargerRapport()
@@ -165,6 +171,15 @@ Partial Public Class wbfRapportTaxe
             Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
             Case "colPiece" : Return Choose3(lang, "Pièce", "Voucher", "Comprobante")
             Case "voirFacture" : Return Choose3(lang, "Afficher la facture", "Show the invoice", "Mostrar la factura")
+            Case "echeance" : Return Choose3(lang, "Déclaration et paiement avant le {0}", "Return and payment due by {0}", "Declaración y pago antes del {0}")
+            Case "echeanceRetard" : Return Choose3(lang, "en retard", "overdue", "atrasado")
+            Case "btnProduite" : Return Choose3(lang, "Marquer comme produite", "Mark as filed", "Marcar como presentada")
+            Case "confProduiteRemb" : Return Choose3(lang, "Marquer la déclaration comme produite ? Remboursement à recevoir : {0}. Le rapport sera finalisé et ne changera plus.", "Mark the return as filed? Refund to receive: {0}. The report will be finalized and will no longer change.", "¿Marcar la declaración como presentada? Reembolso por recibir: {0}. El informe quedará finalizado y no cambiará.")
+            Case "confProduiteNul" : Return Choose3(lang, "Marquer la déclaration comme produite (solde nul) ? Le rapport sera finalisé et ne changera plus.", "Mark the return as filed (nil balance)? The report will be finalized and will no longer change.", "¿Marcar la declaración como presentada (saldo cero)? El informe quedará finalizado y no cambiará.")
+            Case "noteRemb" : Return Choose3(lang, "Rien à remettre : un remboursement de {0} est à réclamer. Produisez quand même la déclaration auprès de Revenu Québec, puis marquez-la produite.", "Nothing to remit: a refund of {0} is to be claimed. File the return with Revenu Québec anyway, then mark it as filed.", "Nada que remitir: hay un reembolso de {0} por reclamar. Presente igualmente la declaración ante Revenu Québec y márquela como presentada.")
+            Case "noteNul" : Return Choose3(lang, "Rien à remettre (solde nul). La déclaration doit quand même être produite, puis marquée produite.", "Nothing to remit (nil balance). The return must still be filed, then marked as filed.", "Nada que remitir (saldo cero). La declaración debe presentarse igualmente y marcarse como presentada.")
+            Case "notePasFinie" : Return Choose3(lang, "La période n’est pas terminée : le montant peut encore changer.", "The period is not over: the amount may still change.", "El período no ha terminado: el importe aún puede cambiar.")
+            Case "msgProduiteOk" : Return Choose3(lang, "Déclaration marquée produite : le rapport est finalisé.", "Return marked as filed: the report is finalized.", "Declaración marcada como presentada: el informe está finalizado.")
             Case "detailFige" : Return Choose3(lang, "Rapport finalisé : ses montants sont figés. Le détail montre les écritures de la période, qui concordent avec ces montants.", "Finalized report: its amounts are frozen. The detail shows the period’s entries, which agree with these amounts.", "Informe finalizado: sus importes están fijados. El detalle muestra los asientos del período, que coinciden con esos importes.")
             Case "detailEcart" : Return Choose3(lang, "Rapport finalisé : ses montants sont figés, mais les écritures de la période ont changé depuis (écart TPS {0}, TVQ {1}). Le détail montre les écritures actuelles.", "Finalized report: its amounts are frozen, but the period’s entries have changed since (GST difference {0}, QST {1}). The detail shows the current entries.", "Informe finalizado: sus importes están fijados, pero los asientos del período han cambiado desde entonces (diferencia TPS {0}, TVQ {1}). El detalle muestra los asientos actuales.")
             Case "titreFactClient" : Return Choose3(lang, "Facture client {0}", "Customer invoice {0}", "Factura de cliente {0}")
@@ -292,20 +307,87 @@ Partial Public Class wbfRapportTaxe
         End Select
     End Function
 
-    Private Function FormaterLibellePeriode(debut As Date, fin As Date) As String
+    ''' <summary>
+    ''' Le nom de la période, dans l'EXERCICE de la compagnie (T375) : un exercice civil
+    ''' s'appelle « 2026 », un exercice décalé « 2026-2027 » ; le trimestre est celui de
+    ''' l'exercice (T1 = les trois premiers mois de l'exercice).
+    ''' </summary>
+    Private Function FormaterLibellePeriode(debut As Date, fin As Date, per As DataRow) As String
         Dim ci = System.Globalization.CultureInfo.GetCultureInfo(PeriodeCulture())
+        Dim exDebut As Date = If(per Is Nothing, New Date(debut.Year, 1, 1), CDate(per("ExerciceDebut")))
+        Dim exFin As Date = If(per Is Nothing, New Date(debut.Year, 12, 31), CDate(per("ExerciceFin")))
+        Dim exercice As String = If(exDebut.Month = 1, exFin.Year.ToString(), exDebut.Year & "-" & exFin.Year)
         Select Case Frequence
             Case "MENSUELLE"
                 Return CapitalizeFirst(debut.ToString("MMMM yyyy", ci))
             Case "ANNUELLE"
-                Return L("periodeAnnee") & " " & debut.Year.ToString()
+                Return L("periodeAnnee") & " " & exercice &
+                    If(exDebut.Month = 1, "", " (" & exDebut.ToString("dd MMM yyyy", ci) & " — " & exFin.ToString("dd MMM yyyy", ci) & ")")
             Case Else  ' TRIMESTRIELLE
-                Dim trim As Integer = ((debut.Month - 1) \ 3) + 1
-                Return L("periodeTrim") & trim & " " & debut.Year.ToString() &
+                Dim trim As Integer = If(per Is Nothing, ((debut.Month - 1) \ 3) + 1, Convert.ToInt32(per("NoPeriode")))
+                Return L("periodeTrim") & trim & " " & exercice &
                     " (" & debut.ToString("dd MMM", ci) &
                     " — " & fin.ToString("dd MMM yyyy", ci) & ")"
         End Select
     End Function
+
+    ''' <summary>La période de taxes d'une date (s0995 → fPeriodeTaxe) : exercice, n°, date limite.</summary>
+    Private Function LirePeriode(d As Date) As DataRow
+        Try
+            Using cn As New SqlConnection(ConnectionString)
+                Using cmd As New SqlCommand("dbo.s0995GetPeriodeTaxe", cn)
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.Parameters.AddWithValue("@CompanyGUID", Company)
+                    cmd.Parameters.AddWithValue("@Date", d)
+                    Dim dt As New DataTable()
+                    Using da As New SqlDataAdapter(cmd)
+                        da.Fill(dt)
+                    End Using
+                    If dt.Rows.Count > 0 Then Return dt.Rows(0)
+                End Using
+            End Using
+        Catch
+        End Try
+        Return Nothing
+    End Function
+
+    ''' <summary>
+    ''' « Déclaration et paiement avant le 31 janvier 2027 » sous le nom de la période :
+    ''' rouge si la date est passée et que le rapport n'est ni finalisé ni remis.
+    ''' </summary>
+    Private Function LigneEcheance(per As DataRow, statut As String) As String
+        If per Is Nothing OrElse IsDBNull(per("DateLimite")) Then Return ""
+        Dim ci = System.Globalization.CultureInfo.GetCultureInfo(PeriodeCulture())
+        Dim limite As Date = CDate(per("DateLimite"))
+        Dim fait As Boolean = (statut = "PAYE" OrElse statut = "FINALISE")
+        Dim retard As Boolean = Not fait AndAlso limite < Date.Today
+        Dim txt As String = String.Format(L("echeance"), limite.ToString("d MMMM yyyy", ci)) & If(retard, " — " & L("echeanceRetard"), "")
+        Return "<span class=""period-deadline" & If(retard, " retard", If(fait, " fait", "")) & """>" & Server.HtmlEncode(txt) & "</span>"
+    End Function
+
+    ''' <summary>Rien à remettre : marquer la déclaration produite (s0994, T375).</summary>
+    Protected Sub btnProduite_Click(sender As Object, e As EventArgs)
+        If RapportId = 0 Then
+            ShowStatus("warning", L("msgAucunRapport"))
+            Return
+        End If
+        Try
+            Using cn As New SqlConnection(ConnectionString)
+                Using cmd As New SqlCommand("dbo.s0994MarquerRapportTaxeProduit", cn)
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.Parameters.AddWithValue("@CompanyGUID", Company)
+                    cmd.Parameters.AddWithValue("@RapportId", RapportId)
+                    cmd.Parameters.AddWithValue("@UserId", UserId)
+                    cn.Open()
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+            ShowStatus("success", L("msgProduiteOk"))
+            ChargerRapport()
+        Catch ex As Exception
+            ShowStatus("danger", ex.Message)
+        End Try
+    End Sub
 
     ''' <summary>Culture d'affichage des dates/mois selon la langue courante.</summary>
     Private Function PeriodeCulture() As String
@@ -381,8 +463,6 @@ Partial Public Class wbfRapportTaxe
         Dim debut = Convert.ToDateTime(r("DebutPeriode"))
         Dim fin = Convert.ToDateTime(r("FinPeriode"))
 
-        ' Libellé période
-        lblPeriode.Text = FormaterLibellePeriode(debut, fin)
 
         ' Montants TPS
         litTPSPercue.Text = FormatMontant(Convert.ToDecimal(r("TPS_Percue")))
@@ -419,6 +499,22 @@ Partial Public Class wbfRapportTaxe
             pnlPaye.Visible = False
             btnRemettre.Enabled = (Convert.ToDecimal(r("TotalARemettre")) > 0)
         End If
+
+        ' Période de l'exercice et date limite (fPeriodeTaxe, T375), puis le geste possible
+        ' quand il n'y a rien à remettre (remboursement ou solde nul).
+        Dim per As DataRow = LirePeriode(DateReference)
+        lblPeriode.Text = FormaterLibellePeriode(debut, fin, per) & LigneEcheance(per, statut)
+        Dim total As Decimal = Convert.ToDecimal(r("TotalARemettre"))
+        Dim terminee As Boolean = fin < Date.Today
+        btnProduite.Visible = (statut = "BROUILLON" AndAlso total <= 0D AndAlso terminee)
+        btnProduite.Text = L("btnProduite")
+        btnProduite.CommandArgument = If(total < 0D, String.Format(L("confProduiteRemb"), FormatMontant(-total)), L("confProduiteNul"))
+        Dim note As String = ""
+        If statut = "BROUILLON" AndAlso total <= 0D Then
+            note = If(total < 0D, String.Format(L("noteRemb"), FormatMontant(-total)), L("noteNul"))
+            If Not terminee Then note &= " " & L("notePasFinie")
+        End If
+        litActionNote.Text = If(note = "", "", "<span class=""action-note"">" & Server.HtmlEncode(note) & "</span>")
 
         ' Détail : toujours lu par s0993 (T374), même quand le rapport est finalisé ou
         ' remis (sp_GenererRapportTaxe n'en renvoie plus dans ce cas).

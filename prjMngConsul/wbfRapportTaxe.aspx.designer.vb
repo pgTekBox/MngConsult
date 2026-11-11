@@ -238,6 +238,10 @@ Partial Public Class wbfRapportTaxe
     '''</remarks>
     Protected WithEvents btnRemettre As Global.Telerik.Web.UI.RadButton
 
+    '''<summary>Déclaration en remboursement ou à solde nul : marquer produite (T375).</summary>
+    Protected WithEvents btnProduite As Global.Telerik.Web.UI.RadButton
+    Protected WithEvents litActionNote As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>
     '''winRemise control.
     '''</summary>

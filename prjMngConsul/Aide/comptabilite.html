@@ -451,6 +451,7 @@
                 </ul>
                 <h3>Période</h3>
                 <p>La période dépend du paramètre <strong>TAX_FREQ</strong> (<span class="chemin">Paramètres › Taxes</span>) : MENSUELLE, TRIMESTRIELLE (par défaut) ou ANNUELLE. Le sous-titre rappelle « Fréquence configurée : trimestrielle. ». Les libellés de période ont la forme « Avril 2026 », « T2 2026 (01 avr — 30 juin 2026) » ou « Année 2026 ».</p>
+                <p><strong>Périodes de l’exercice</strong> : les périodes suivent l’<strong>exercice financier</strong> de la compagnie (paramètre <strong>FISCAL_YEAR_END</strong>, <span class="chemin">Paramètres › Entreprise</span>) : mois ou trimestres de l’exercice (T1 = les trois premiers mois de l’exercice), ou l’exercice entier. Un exercice décalé s’appelle « 2026-2027 ». Sous la période, la <strong>date limite</strong> de déclaration et de paiement : 1 mois après la fin de la période (mensuelle, trimestrielle), 3 mois après la fin de l’exercice (annuelle) ; en rouge « en retard » si elle est passée et que le rapport n’est ni finalisé ni remis. Une activité « Déclaration de taxes à produire » au Tableau de bord rappelle la plus ancienne période non déclarée.</p>
                 <h3>Contenu</h3>
                 <table>
                     <thead><tr><th>Bloc</th><th>Contenu</th></tr></thead>
@@ -465,6 +466,7 @@
                 <h3>Règles</h3>
                 <ul>
                     <li><kbd>Marquer comme remis</kbd> est <strong>désactivé</strong> si le total est inférieur ou égal à 0, ou si la période est déjà remise.</li>
+                    <li><strong>Rien à remettre</strong> (remboursement ou solde nul) : une note l’indique et, une fois la période terminée, <kbd>Marquer comme produite</kbd> finalise le rapport (la confirmation rappelle le remboursement à recevoir). La déclaration doit quand même être produite auprès de Revenu Québec.</li>
                     <li>Une fois la remise confirmée, un bandeau vert affiche « Remise effectuée le aaaa-mm-jj — Référence : … » et la déclaration est verrouillée.</li>
                 </ul>
                 <h3>Marche à suivre</h3>
@@ -1080,6 +1082,7 @@
                 </ul>
                 <h3>Period</h3>
                 <p>The period depends on the <strong>TAX_FREQ</strong> parameter (<span class="chemin">Settings › Taxes</span>): MONTHLY, QUARTERLY (default) or ANNUAL. The subtitle reminds you: “Configured frequency: quarterly.”. Period labels look like “April 2026”, “Q2 2026 (01 Apr — 30 Jun 2026)” or “Year 2026”.</p>
+                <p><strong>Fiscal-year periods</strong>: periods follow the company’s <strong>fiscal year</strong> (<strong>FISCAL_YEAR_END</strong> setting, <span class="chemin">Settings › Company</span>): months or quarters of the fiscal year (Q1 = the first three months of the fiscal year), or the whole fiscal year. A shifted fiscal year is named “2026-2027”. Under the period, the return and payment <strong>due date</strong>: 1 month after the end of the period (monthly, quarterly), 3 months after the fiscal year end (annual); red “overdue” once passed while the report is neither finalized nor remitted. A “Tax return to file” activity on the Dashboard reminds you of the oldest period not yet filed.</p>
                 <h3>Content</h3>
                 <table>
                     <thead><tr><th>Block</th><th>Content</th></tr></thead>
@@ -1094,6 +1097,7 @@
                 <h3>Rules</h3>
                 <ul>
                     <li><kbd>Mark as remitted</kbd> is <strong>disabled</strong> when the total is less than or equal to 0, or when the period is already remitted.</li>
+                    <li><strong>Nothing to remit</strong> (refund or nil balance): a note says so and, once the period is over, <kbd>Mark as filed</kbd> finalizes the report (confirmation shows the refund to receive). The return must still be filed with Revenu Québec.</li>
                     <li>Once the remittance is confirmed, a green banner shows “Remittance made on yyyy-mm-dd — Reference: …” and the return is locked.</li>
                 </ul>
                 <h3>Step by step</h3>
@@ -1709,6 +1713,7 @@
                 </ul>
                 <h3>Período</h3>
                 <p>El período depende del parámetro <strong>TAX_FREQ</strong> (<span class="chemin">Parámetros › Impuestos</span>): MENSUAL, TRIMESTRAL (por defecto) o ANUAL. El subtítulo recuerda «Frecuencia configurada: trimestral.». Las etiquetas de período tienen la forma «Abril 2026», «T2 2026 (01 abr — 30 jun 2026)» o «Año 2026».</p>
+                <p><strong>Períodos del ejercicio</strong>: los períodos siguen el <strong>ejercicio financiero</strong> de la empresa (parámetro <strong>FISCAL_YEAR_END</strong>, <span class="chemin">Ajustes › Empresa</span>): meses o trimestres del ejercicio (T1 = los tres primeros meses del ejercicio), o el ejercicio completo. Un ejercicio desfasado se llama «2026-2027». Bajo el período, la <strong>fecha límite</strong> de declaración y de pago: 1 mes después del fin del período (mensual, trimestral), 3 meses después del fin del ejercicio (anual); en rojo «atrasado» si ha pasado y el informe no está finalizado ni remitido. Una actividad «Declaración de impuestos por presentar» en el Panel recuerda el período más antiguo no declarado.</p>
                 <h3>Contenido</h3>
                 <table>
                     <thead><tr><th>Bloque</th><th>Contenido</th></tr></thead>
@@ -1723,6 +1728,7 @@
                 <h3>Reglas</h3>
                 <ul>
                     <li><kbd>Marcar como remitido</kbd> está <strong>desactivado</strong> si el total es inferior o igual a 0, o si el período ya está remitido.</li>
+                    <li><strong>Nada que remitir</strong> (reembolso o saldo cero): una nota lo indica y, una vez terminado el período, <kbd>Marcar como presentada</kbd> finaliza el informe (confirmación con el reembolso por recibir). La declaración debe presentarse igualmente ante Revenu Québec.</li>
                     <li>Una vez confirmada la remesa, un banner verde muestra «Remesa efectuada el aaaa-mm-dd — Referencia: …» y la declaración queda bloqueada.</li>
                 </ul>
                 <h3>Paso a paso</h3>

@@ -262,6 +262,8 @@ Public Class _Default
             acts.Add(Activite("y", L("aBanque"), L("catComptabilite") & " · " & L("aBanqueSous"),
                               L("aBanqueDet"), L("btnBrancher"), "PlaidAccounts.aspx"))
         End If
+        Dim taxes As Object = ActiviteTaxes(deType("ACT_TAXES").FirstOrDefault())
+        If taxes IsNot Nothing Then acts.Add(taxes)
         Dim concil As Object = ActiviteConciliation(deType("ACT_CONCILIATION").FirstOrDefault())
         If concil IsNot Nothing Then acts.Add(concil)
         Dim essai As Object = ActiviteEssai(aEssai)
@@ -302,6 +304,34 @@ Public Class _Default
         Dim nums As List(Of String) = rows.Select(Function(r) Txt(r("NumeroSort"))).Where(Function(n) n <> "").Distinct().ToList()
         If nums.Count = 0 Then Return page
         Return page & "?factures=" & HttpUtility.UrlEncode(String.Join(",", nums))
+    End Function
+
+    ''' <summary>
+    ''' La déclaration de taxes à produire : la ligne ACT_TAXES de T204 (T375).
+    ''' Beneficiaire = « aaaa-mm-jj_aaaa-mm-jj » (la période de l'exercice), DueDate = date
+    ''' limite de déclaration et de paiement, Montant = total net du rapport s'il existe
+    ''' (positif = à remettre, négatif = remboursement). Rouge une fois la date dépassée.
+    ''' Le bouton ouvre le rapport sur cette période : wbfRapportTaxe.aspx?date=….
+    ''' </summary>
+    Private Function ActiviteTaxes(r As DataRow) As Object
+        If r Is Nothing Then Return Nothing
+        Dim p As String() = Txt(r("NameSort")).Split("_"c)
+        Dim du, au As Date
+        If p.Length <> 2 OrElse Not Date.TryParse(p(0), du) OrElse Not Date.TryParse(p(1), au) Then Return Nothing
+        Dim ech As Date? = DateN(r("DueDate"))
+        Dim net As Decimal? = If(IsDBNull(r("ResteAPayer")), CType(Nothing, Decimal?), Dec(r("ResteAPayer")))
+        Dim quoi As String
+        If net.HasValue AndAlso net.Value > 0.005D Then
+            quoi = String.Format(L("aTaxesRemettre"), Montant(net.Value))
+        ElseIf net.HasValue AndAlso net.Value < -0.005D Then
+            quoi = String.Format(L("aTaxesRemb"), Montant(-net.Value))
+        Else
+            quoi = L("aTaxesCalculer")
+        End If
+        Dim sous As String = L("catTaxes") & If(ech.HasValue, " · " & String.Format(L("avantLe"), JourMois(ech.Value)), "") & " · " & quoi
+        Dim retard As Boolean = ech.HasValue AndAlso ech.Value.Date < aujourdhui
+        Return Activite(If(retard, "r", "y"), String.Format(L("aTaxes"), JourMois(du), JourMois(au)), sous,
+                        L("aTaxesDet"), L("btnDeclarer"), "wbfRapportTaxe.aspx?date=" & du.ToString("yyyy-MM-dd"))
     End Function
 
     ''' <summary>
@@ -900,6 +930,14 @@ Public Class _Default
             Case "aConcilPret" : Return Choose3(lang, "toutes les lignes sont appariées", "all lines are matched", "todas las líneas están conciliadas")
             Case "aConcilDet" : Return Choose3(lang, "Reliez les lignes du relevé à leurs paiements ou inscrivez-les aux livres, vérifiez que l'écart est à zéro, puis clôturez la conciliation du mois.", "Link the statement lines to their payments or record them in the books, check that the difference is zero, then close the month's reconciliation.", "Vincule las líneas del extracto a sus pagos o regístrelas en los libros, compruebe que la diferencia es cero y cierre la conciliación del mes.")
             Case "btnConcilier" : Return Choose3(lang, "Concilier", "Reconcile", "Conciliar")
+            ' Déclaration de taxes à produire (ACT_TAXES, T375)
+            Case "aTaxes" : Return Choose3(lang, "Déclaration de taxes à produire : du {0} au {1}", "Tax return to file: {0} to {1}", "Declaración de impuestos por presentar: del {0} al {1}")
+            Case "catTaxes" : Return Choose3(lang, "Taxes", "Taxes", "Impuestos")
+            Case "btnDeclarer" : Return Choose3(lang, "Préparer la déclaration", "Prepare the return", "Preparar la declaración")
+            Case "aTaxesRemettre" : Return Choose3(lang, "à remettre {0}", "to remit {0}", "por remitir {0}")
+            Case "aTaxesRemb" : Return Choose3(lang, "remboursement {0}", "refund {0}", "reembolso {0}")
+            Case "aTaxesCalculer" : Return Choose3(lang, "ouvrez le rapport pour le calculer", "open the report to calculate it", "abra el informe para calcularlo")
+            Case "aTaxesDet" : Return Choose3(lang, "La TPS et la TVQ de cette période doivent être déclarées à Revenu Québec, et payées s’il y a un solde, au plus tard à cette date. Vérifiez le rapport, produisez la déclaration, puis marquez-la remise ou produite.", "The GST and QST for this period must be reported to Revenu Québec, and paid if there is a balance, by this date. Check the report, file the return, then mark it as remitted or filed.", "La TPS y la TVQ de este período deben declararse a Revenu Québec, y pagarse si hay saldo, a más tardar en esta fecha. Revise el informe, presente la declaración y márquela como remitida o presentada.")
             Case "btnForfait" : Return Choose3(lang, "Choisir mon forfait", "Choose my plan", "Elegir mi plan")
             Case Else : Return ""
         End Select
