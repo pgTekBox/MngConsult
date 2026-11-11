@@ -99,6 +99,16 @@
     .cb-carte { padding: 18px 20px; border-radius: 24px; background: #fff; margin-bottom: 16px; color: #0E1F3D }
     .cb-tete { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 12px }
     .cb-tete h2 { margin: 0; font-size: 20px; font-weight: 800 }
+    /* Repliable : l'en-tête (titre, période, état, écart) reste ; le corps se cache. */
+    .cb-ecart-mini { margin-left: auto; font-weight: 800; font-size: 15px; white-space: nowrap }
+    .cb-ecart-mini.zero { color: #0F5A3A } .cb-ecart-mini.non { color: #A3261C }
+    .cb-bascule { width: 36px; height: 36px; flex: none; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #AEBBCD; border-radius: 50%; background: #fff; color: #0E1F3D; cursor: pointer }
+    .cb-bascule:hover { background: #F2F5F9 }
+    .cb-bascule svg { transition: transform .15s }
+    .cb-carte.replie .cb-bascule svg { transform: rotate(-90deg) }
+    .cb-carte.replie .cb-corps { display: none }
+    .cb-carte.replie .cb-tete { margin-bottom: 0 }
+    .cb-carte .cb-tete { cursor: default }
     .cb-tete .sous { color: #44536E; font-size: 14px }
     .cb-etat { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 800 }
     .cb-etat.ok { background: #E3F3EA; color: #0F5A3A } .cb-etat.ecart { background: #FBF1DC; color: #7A5200 } .cb-etat.close { background: #E8EEF8; color: #1B4F9C }
@@ -303,6 +313,28 @@
   <script type="text/javascript">
         // Un indicateur ou une puce de filtre : « groupe|valeur » dans le champ caché,
         // puis le bouton caché renvoie au serveur (btnChip_Click) par le RadAjaxPanel.
+        // La boîte « Conciliation bancaire » se replie et se déplie ; le choix est
+        // retenu dans ce navigateur et réappliqué après chaque rechargement Ajax.
+        var CB_CLE = 'releve.conciliation.repliee';
+        function cbAppliquer() {
+            var carte = document.querySelector('.cb-carte'); if (!carte) return;
+            var replie = false;
+            try { replie = localStorage.getItem(CB_CLE) === '1'; } catch (e) { }
+            if (carte.querySelector('.cb-msg')) replie = false;   // un message à lire : on montre
+            carte.classList.toggle('replie', replie);
+            var b = carte.querySelector('.cb-bascule');
+            if (b) { b.setAttribute('aria-expanded', replie ? 'false' : 'true'); b.title = b.getAttribute(replie ? 'data-deplier' : 'data-replier'); }
+        }
+        function cbBascule() {
+            var carte = document.querySelector('.cb-carte'); if (!carte) return;
+            var replie = !carte.classList.contains('replie');
+            try { localStorage.setItem(CB_CLE, replie ? '1' : '0'); } catch (e) { }
+            var msg = carte.querySelector('.cb-msg'); if (msg) msg.remove();
+            cbAppliquer();
+        }
+        if (window.Sys && Sys.Application) { Sys.Application.add_load(cbAppliquer); }
+        else { document.addEventListener('DOMContentLoaded', cbAppliquer); }
+
         function fcChip(g, v) {
             document.getElementById("hfChip").value = g + "|" + v;
             document.getElementById("btnChip").click();

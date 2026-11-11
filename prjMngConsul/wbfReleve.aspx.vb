@@ -249,7 +249,12 @@ Public Class wbfReleve
             Else
                 sb.Append("<span class=""cb-etat ecart"">" & Server.HtmlEncode(L("cEcartEtat")) & "</span>")
             End If
-            sb.Append("</div>")
+            ' Repliée, la boîte garde son en-tête : l'état et l'écart restent visibles.
+            sb.Append("<span class=""cb-ecart-mini " & If(conciliee, "zero", "non") & """>" & Server.HtmlEncode(L("cEcart") & " " & FormatMontant(ecart)) & "</span>")
+            sb.Append("<button type=""button"" class=""cb-bascule"" onclick=""cbBascule()"" aria-expanded=""true"" title=""" & Server.HtmlEncode(L("cReplier")) &
+                      """ data-replier=""" & Server.HtmlEncode(L("cReplier")) & """ data-deplier=""" & Server.HtmlEncode(L("cDeplier")) & """>" &
+                      "<svg viewBox=""0 0 24 24"" width=""18"" height=""18"" fill=""none"" stroke=""currentColor"" stroke-width=""2.4"" stroke-linecap=""round"" stroke-linejoin=""round"" aria-hidden=""true""><path d=""M6 9l6 6 6-6""></path></svg></button>")
+            sb.Append("</div><div class=""cb-corps"">")
 
             ' Les deux colonnes : relevé et livres
             sb.Append("<div class=""cb-cols""><div class=""cb-col""><h3>" & Server.HtmlEncode(L("cReleve")) & "</h3>")
@@ -320,7 +325,7 @@ Public Class wbfReleve
                 Next
                 sb.Append("</div>")
             End If
-            sb.Append("</section>")
+            sb.Append("</div></section>")
         Catch ex As Exception
             sb.Clear()
             sb.Append("<section class=""cb-carte""><div class=""cb-msg err"">" & Server.HtmlEncode(If(ex.InnerException IsNot Nothing, ex.InnerException.Message, ex.Message)) & "</div></section>")
@@ -809,6 +814,8 @@ Public Class wbfReleve
             Case "cCloturer" : Return Choose3(lang, "Clôturer la conciliation", "Close the reconciliation", "Cerrar la conciliación")
             Case "cListeCirc" : Return Choose3(lang, "En circulation : aux livres, pas encore au relevé ({0})", "In transit: in the books, not yet on the statement ({0})", "En tránsito: en libros, aún no en el extracto ({0})")
             Case "cListeNI" : Return Choose3(lang, "Au relevé, pas aux livres ({0})", "On the statement, not in the books ({0})", "En el extracto, no en libros ({0})")
+            Case "cReplier" : Return Choose3(lang, "Replier la conciliation", "Collapse the reconciliation", "Contraer la conciliación")
+            Case "cDeplier" : Return Choose3(lang, "Déplier la conciliation", "Expand the reconciliation", "Expandir la conciliación")
             Case "cHist" : Return Choose3(lang, "Conciliations clôturées", "Closed reconciliations", "Conciliaciones cerradas")
             Case "cRien" : Return Choose3(lang, "Rien.", "None.", "Nada.")
             Case "cAutres" : Return Choose3(lang, "+ {0} autres", "+ {0} more", "+ {0} más")
