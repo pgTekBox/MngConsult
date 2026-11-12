@@ -5,15 +5,17 @@ Imports System.Web.Script.Serialization
 Imports BCrypt.Net
 
 ''' <summary>
-''' Techniciens du cabinet (Portail comptable, script T379). Un technicien est un
-''' membre au rôle « technicien » : il ne voit que les dossiers qui lui sont
-''' confiés et travaille sous un superviseur (employé ou administrateur).
-'''   - admin / solo : tous les techniciens ; inviter, changer le superviseur,
-'''     confier ou retirer des dossiers, retirer le technicien du cabinet ;
-'''   - employé : les techniciens qu'il supervise, en lecture.
-''' Données : s0997 (techniciens + superviseurs possibles), s0999 (dossiers cochés),
-''' écritures : s0923 (invitation), s0998 (superviseur), s0930 (dossier), s0924 (retrait).
-''' Actions par POST léger op=… (réponse JSON), rendu côté client (JSON injecté).
+''' Comptables et techniciens du cabinet (Portail comptable, scripts T379/T380).
+''' Les comptables sont les membres au rôle admin / employé (solo) ; un technicien
+''' (rôle « technicien ») ne voit que les dossiers qui lui sont confiés et travaille
+''' sous un superviseur (comptable ou administrateur).
+'''   - admin / solo : tous les membres ; inviter (rôle au choix), changer le rôle,
+'''     changer le superviseur d'un technicien, confier ou retirer des dossiers,
+'''     retirer un membre du cabinet ;
+'''   - employé : lui-même et les techniciens qu'il supervise, en lecture.
+''' Données : s1000 (membres + superviseurs possibles), s1001 (dossiers cochés),
+''' écritures : s0923 (invitation), s0924 (rôle / retrait), s0998 (superviseur),
+''' s0930 (dossier). Actions par POST léger op=… (réponse JSON), rendu côté client.
 ''' </summary>
 Public Class wbfCabTechniciens
     Inherits clsData
@@ -83,22 +85,36 @@ Public Class wbfCabTechniciens
         End Select
     End Function
 
+    ''' <summary>Rôle affiché / modifiable : admin, solo, employe (comptable), technicien.</summary>
+    Private Shared Function RoleNormal(r As String) As String
+        r = r.Trim().ToLowerInvariant()
+        If r = "responsable" Then Return "employe"
+        If r = "admin" OrElse r = "solo" OrElse r = "technicien" Then Return r
+        Return "employe"
+    End Function
+
     ' ---------------------------------------------------------------------
     ' Lecture
     ' ---------------------------------------------------------------------
+    Private Function LireEquipe() As DataSet
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        Return ExecuteSQLds("s1000ListEquipeCabinet", p)
+    End Function
+
     Private Function Charger() As Object
-        Dim techs As New List(Of Object)
+        Dim membres As New List(Of Object)
         Dim sups As New List(Of Object)
         Try
-            Dim p As New Collection
-            p.Add(New SqlParameter("@UserId", UserEmail))
-            Dim ds As DataSet = ExecuteSQLds("s0997ListTechniciens", p)
+            Dim ds As DataSet = LireEquipe()
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
                 Dim ci = Globalization.CultureInfo.GetCultureInfo(If(CurrentLang = "en", "en-CA", If(CurrentLang = "es", "es-ES", "fr-CA")))
                 For Each r As DataRow In ds.Tables(0).Rows
                     Dim nom As String = (Txt(r("FirstName")) & " " & Txt(r("LastName"))).Trim()
-                    techs.Add(New With {
+                    membres.Add(New With {
                         .id = CInt(r("MembreId")),
+                        .role = RoleNormal(Txt(r("Role"))),
+                        .moi = CBool(r("IsMe")),
                         .nom = If(nom = "", Txt(r("Email")), nom),
                         .email = Txt(r("Email")),
                         .attente = CBool(r("Pending")),
@@ -108,7 +124,8 @@ Public Class wbfCabTechniciens
                         .nbDossiers = CInt(r("NbDossiers")),
                         .dossiers = Txt(r("Dossiers")),
                         .taches = CInt(r("NbTaches")),
-                        .retard = CInt(r("NbRetard"))})
+                        .retard = CInt(r("NbRetard")),
+                        .nbTechs = CInt(r("NbTechniciens"))})
                 Next
             End If
             If ds IsNot Nothing AndAlso ds.Tables.Count > 1 Then
@@ -119,7 +136,18 @@ Public Class wbfCabTechniciens
             End If
         Catch
         End Try
-        Return New With {.gerer = PeutGerer, .techs = techs, .sups = sups}
+        Return New With {.gerer = PeutGerer, .membres = membres, .sups = sups}
+    End Function
+
+    ''' <summary>Le membre (GUID, rôle, en attente) lu dans s1000 ; Nothing s'il n'est pas du cabinet.</summary>
+    Private Function LireMembre(membreId As Integer) As DataRow
+        Dim ds As DataSet = LireEquipe()
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+            For Each r As DataRow In ds.Tables(0).Rows
+                If CInt(r("MembreId")) = membreId Then Return r
+            Next
+        End If
+        Return Nothing
     End Function
 
     ' ---------------------------------------------------------------------
@@ -133,6 +161,7 @@ Public Class wbfCabTechniciens
             Else
                 Select Case op
                     Case "invite" : res = Inviter()
+                    Case "role" : res = ChangerRole(CInt(Val(Request.Form("id"))), Txt(Request.Form("role")))
                     Case "sup" : res = ChangerSuperviseur(CInt(Val(Request.Form("id"))), Txt(Request.Form("sup")))
                     Case "dossiers" : res = LireDossiers(CInt(Val(Request.Form("id"))))
                     Case "assign" : res = Confier(CInt(Val(Request.Form("id"))), Txt(Request.Form("guids")))
@@ -152,13 +181,15 @@ Public Class wbfCabTechniciens
     Private Function Inviter() As Object
         Dim email As String = Txt(Request.Form("email"))
         If email = "" OrElse Not email.Contains("@") Then Return New With {.ok = False, .erreur = T("Courriel invalide.", "Invalid email.", "Correo no válido.")}
+        Dim role As String = RoleNormal(Txt(Request.Form("role")))
+        If role = "solo" Then role = "employe"
 
         Dim p As New Collection
         p.Add(New SqlParameter("@UserId", UserEmail))
         p.Add(New SqlParameter("@Email", email))
         p.Add(New SqlParameter("@FirstName", Nz(Txt(Request.Form("prenom")))))
         p.Add(New SqlParameter("@LastName", Nz(Txt(Request.Form("nom")))))
-        p.Add(New SqlParameter("@Role", "technicien"))
+        p.Add(New SqlParameter("@Role", role))
         p.Add(New SqlParameter("@EquipeId", DBNull.Value))
         p.Add(New SqlParameter("@HomeCompanyGUID", Guid.Empty))
         p.Add(New SqlParameter("@PlaceholderHash", BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString(), 11)))
@@ -174,27 +205,57 @@ Public Class wbfCabTechniciens
             Return New With {.ok = False, .erreur = T("L'invitation n'a pas pu être créée.", "The invitation could not be created.", "No se pudo crear la invitación.")}
         End If
 
-        ' Le superviseur choisi, posé sur le nouveau membre
+        ' Un technicien : le superviseur choisi, posé sur le nouveau membre
         Dim sup As String = Txt(Request.Form("sup"))
-        If sup <> "" Then
+        If role = "technicien" AndAlso sup <> "" Then
             Dim membreId As Integer = TrouverMembre(email)
             If membreId > 0 Then ChangerSuperviseur(membreId, sup)
         End If
 
         Dim lien As String = Request.Url.GetLeftPart(UriPartial.Authority) & ResolveUrl("~/wbfCabInvitation.aspx?token=" & CType(outTok.Value, Guid).ToString())
-        EnvoyerCourrielInvitation(email, lien)
+        EnvoyerCourrielInvitation(email, lien, role)
         Return New With {.ok = True, .lien = lien}
     End Function
 
     Private Function TrouverMembre(email As String) As Integer
-        Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", UserEmail))
-        Dim ds As DataSet = ExecuteSQLds("s0922ListCabinetMembres", p)
+        Dim ds As DataSet = LireEquipe()
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return 0
         For Each r As DataRow In ds.Tables(0).Rows
             If String.Equals(Txt(r("Email")), email, StringComparison.OrdinalIgnoreCase) Then Return CInt(r("MembreId"))
         Next
         Return 0
+    End Function
+
+    ''' <summary>Appelle s0924 en gardant l'état du compte (un membre en attente reste en attente).</summary>
+    Private Function MajMembre(membreId As Integer, role As String, actif As Boolean) As Integer
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@MembreId", membreId))
+        p.Add(New SqlParameter("@Role", role))
+        p.Add(New SqlParameter("@EquipeId", DBNull.Value))
+        p.Add(New SqlParameter("@IsActive", actif))
+        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+        p.Add(outErr)
+        ExecuteSQL("s0924UpdateCabinetMembre", p)
+        Return If(outErr.Value Is Nothing OrElse IsDBNull(outErr.Value), -1, CInt(outErr.Value))
+    End Function
+
+    Private Function MessageErreur(err As Integer) As String
+        Select Case err
+            Case 3 : Return T("Le cabinet doit garder au moins un administrateur.", "The firm must keep at least one administrator.", "El despacho debe conservar al menos un administrador.")
+            Case 4 : Return T("Vous ne pouvez pas vous retirer vous-même.", "You cannot remove yourself.", "No puede retirarse a sí mismo.")
+            Case 5 : Return T("Membre introuvable.", "Member not found.", "Miembro no encontrado.")
+            Case Else : Return T("La modification n'a pas pu être faite.", "The change could not be made.", "No se pudo realizar el cambio.")
+        End Select
+    End Function
+
+    Private Function ChangerRole(membreId As Integer, role As String) As Object
+        Dim m As DataRow = LireMembre(membreId)
+        If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
+        role = RoleNormal(role)
+        If role = "solo" Then role = "employe"
+        Dim err As Integer = MajMembre(membreId, role, Not CBool(m("Pending")))
+        Return New With {.ok = (err = 0), .erreur = If(err = 0, "", MessageErreur(err))}
     End Function
 
     Private Function ChangerSuperviseur(membreId As Integer, sup As String) As Object
@@ -210,23 +271,23 @@ Public Class wbfCabTechniciens
         Return New With {.ok = (err = 0), .erreur = If(err = 0, "", T("Le superviseur n'a pas pu être changé.", "The supervisor could not be changed.", "No se pudo cambiar el supervisor."))}
     End Function
 
-    Private Class DossierTech
+    Private Class DossierMembre
         Public id As String
         Public nom As String
         Public confie As Boolean
         Public autre As String
     End Class
 
-    Private Function ListeDossiers(membreId As Integer) As List(Of DossierTech)
-        Dim lst As New List(Of DossierTech)
+    Private Function ListeDossiers(membreId As Integer) As List(Of DossierMembre)
+        Dim lst As New List(Of DossierMembre)
         Dim p As New Collection
         p.Add(New SqlParameter("@UserId", UserEmail))
         p.Add(New SqlParameter("@MembreId", membreId))
-        Dim ds As DataSet = ExecuteSQLds("s0999ListDossiersTechnicien", p)
+        Dim ds As DataSet = ExecuteSQLds("s1001ListDossiersMembre", p)
         If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
             For Each r As DataRow In ds.Tables(0).Rows
-                lst.Add(New DossierTech With {.id = Txt(r("CompanyGUID")).ToLowerInvariant(), .nom = Txt(r("Nom")),
-                                              .confie = CBool(r("Confie")), .autre = If(CBool(r("Confie")), "", Txt(r("AssigneA")))})
+                lst.Add(New DossierMembre With {.id = Txt(r("CompanyGUID")).ToLowerInvariant(), .nom = Txt(r("Nom")),
+                                                .confie = CBool(r("Confie")), .autre = If(CBool(r("Confie")), "", Txt(r("AssigneA")))})
             Next
         End If
         Return lst
@@ -236,20 +297,20 @@ Public Class wbfCabTechniciens
         Return New With {.ok = True, .dossiers = ListeDossiers(membreId)}
     End Function
 
-    ''' <summary>Confie au technicien les dossiers cochés, retire ceux décochés qui étaient à lui.</summary>
+    ''' <summary>Confie au membre les dossiers cochés, retire ceux décochés qui étaient à lui.</summary>
     Private Function Confier(membreId As Integer, guids As String) As Object
         Dim voulus As New HashSet(Of String)(guids.ToLowerInvariant().Split(New Char() {","c}, StringSplitOptions.RemoveEmptyEntries))
-        Dim techGuid As Guid = TechnicienGuid(membreId)
-        If techGuid = Guid.Empty Then Return New With {.ok = False, .erreur = T("Technicien introuvable.", "Technician not found.", "Técnico no encontrado.")}
+        Dim m As DataRow = LireMembre(membreId)
+        If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
+        Dim membreGuid As Guid = CType(m("UserGUID"), Guid)
         Dim n As Integer = 0
-        For Each d As DossierTech In ListeDossiers(membreId)
-            Dim id As String = d.id, confie As Boolean = d.confie
-            Dim veut As Boolean = voulus.Contains(id)
-            If veut = confie Then Continue For
+        For Each d As DossierMembre In ListeDossiers(membreId)
+            Dim veut As Boolean = voulus.Contains(d.id)
+            If veut = d.confie Then Continue For
             Dim p As New Collection
             p.Add(New SqlParameter("@UserId", UserEmail))
-            p.Add(New SqlParameter("@CompanyGUID", New Guid(id)))
-            p.Add(New SqlParameter("@AssignedUserGUID", If(veut, CObj(techGuid), DBNull.Value)))
+            p.Add(New SqlParameter("@CompanyGUID", New Guid(d.id)))
+            p.Add(New SqlParameter("@AssignedUserGUID", If(veut, CObj(membreGuid), DBNull.Value)))
             p.Add(New SqlParameter("@EquipeId", DBNull.Value))
             Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
             p.Add(outErr)
@@ -259,40 +320,26 @@ Public Class wbfCabTechniciens
         Return New With {.ok = True, .n = n}
     End Function
 
-    Private Function TechnicienGuid(membreId As Integer) As Guid
-        Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", UserEmail))
-        Dim ds As DataSet = ExecuteSQLds("s0922ListCabinetMembres", p)
-        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
-            For Each r As DataRow In ds.Tables(0).Rows
-                If CInt(r("MembreId")) = membreId AndAlso Txt(r("Role")).ToLowerInvariant() = "technicien" Then Return CType(r("UserGUID"), Guid)
-            Next
-        End If
-        Return Guid.Empty
-    End Function
-
     Private Function Retirer(membreId As Integer) As Object
-        If TechnicienGuid(membreId) = Guid.Empty Then Return New With {.ok = False, .erreur = T("Technicien introuvable.", "Technician not found.", "Técnico no encontrado.")}
-        Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", UserEmail))
-        p.Add(New SqlParameter("@MembreId", membreId))
-        p.Add(New SqlParameter("@Role", "technicien"))
-        p.Add(New SqlParameter("@EquipeId", DBNull.Value))
-        p.Add(New SqlParameter("@IsActive", False))
-        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
-        p.Add(outErr)
-        ExecuteSQL("s0924UpdateCabinetMembre", p)
-        Dim err As Integer = If(outErr.Value Is Nothing OrElse IsDBNull(outErr.Value), -1, CInt(outErr.Value))
-        Return New With {.ok = (err = 0), .erreur = If(err = 0, "", T("Le technicien n'a pas pu être retiré.", "The technician could not be removed.", "No se pudo retirar al técnico."))}
+        Dim m As DataRow = LireMembre(membreId)
+        If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
+        Dim err As Integer = MajMembre(membreId, Txt(m("Role")).ToLowerInvariant(), False)
+        Return New With {.ok = (err = 0), .erreur = If(err = 0, "", MessageErreur(err))}
     End Function
 
     ''' <summary>Dépose le courriel d'invitation dans MailService (best-effort), comme Membres.</summary>
-    Private Sub EnvoyerCourrielInvitation(email As String, lien As String)
+    Private Sub EnvoyerCourrielInvitation(email As String, lien As String, role As String)
         Try
+            Dim qui As String
+            Select Case role
+                Case "technicien" : qui = T("technicien", "a technician", "técnico")
+                Case "admin" : qui = T("administrateur", "an administrator", "administrador")
+                Case Else : qui = T("comptable", "an accountant", "contador")
+            End Select
             Dim sujet As String = T("Invitation à rejoindre un cabinet sur 60Sec-AI", "Invitation to join a firm on 60Sec-AI", "Invitación para unirse a un despacho en 60Sec-AI")
-            Dim corps As String = T("Vous avez été invité à rejoindre un cabinet comptable sur 60Sec-AI comme technicien. Cliquez sur le lien pour activer votre compte :",
-                                     "You have been invited to join an accounting firm on 60Sec-AI as a technician. Click the link to activate your account:",
-                                     "Se le ha invitado a unirse a un despacho contable en 60Sec-AI como técnico. Haga clic en el enlace para activar su cuenta:")
+            Dim corps As String = T("Vous avez été invité à rejoindre un cabinet comptable sur 60Sec-AI comme " & qui & ". Cliquez sur le lien pour activer votre compte :",
+                                     "You have been invited to join an accounting firm on 60Sec-AI as " & qui & ". Click the link to activate your account:",
+                                     "Se le ha invitado a unirse a un despacho contable en 60Sec-AI como " & qui & ". Haga clic en el enlace para activar su cuenta:")
             Dim p As New Collection
             p.Add(New SqlParameter("@To", email))
             p.Add(New SqlParameter("@Subject", sujet))
@@ -313,25 +360,36 @@ Public Class wbfCabTechniciens
     ' ---------------------------------------------------------------------
     Private Function Libelles() As Object
         Return New With {
-            .titre = T("Techniciens", "Technicians", "Técnicos"),
+            .titre = T("Comptables et techniciens", "Accountants and technicians", "Contadores y técnicos"),
             .sous = If(PeutGerer,
-                       T("Les techniciens comptables du cabinet : ils ne voient que les dossiers qui leur sont confiés et travaillent sous un superviseur.",
-                         "The firm's accounting technicians: they only see the files assigned to them and work under a supervisor.",
-                         "Los técnicos contables del despacho: solo ven los expedientes que se les confían y trabajan bajo un supervisor."),
-                       T("Les techniciens que vous supervisez et leurs dossiers.", "The technicians you supervise and their files.", "Los técnicos que supervisa y sus expedientes.")),
+                       T("Les membres du cabinet : les comptables suivent leurs dossiers et supervisent des techniciens ; un technicien ne voit que les dossiers qui lui sont confiés.",
+                         "The firm's members: accountants handle their files and supervise technicians; a technician only sees the files assigned to them.",
+                         "Los miembros del despacho: los contadores llevan sus expedientes y supervisan técnicos; un técnico solo ve los expedientes que se le confían."),
+                       T("Votre charge et les techniciens que vous supervisez.", "Your workload and the technicians you supervise.", "Su carga y los técnicos que supervisa.")),
+            .kComptables = T("Comptables", "Accountants", "Contadores"),
             .kTech = T("Techniciens", "Technicians", "Técnicos"),
             .kAttente = T("En attente d'activation", "Awaiting activation", "Pendientes de activación"),
             .kTaches = T("Tâches ouvertes", "Open tasks", "Tareas abiertas"),
             .kRetard = T("En retard", "Overdue", "Atrasadas"),
-            .inviter = T("Inviter un technicien", "Invite a technician", "Invitar a un técnico"),
+            .inviter = T("Inviter un membre", "Invite a member", "Invitar a un miembro"),
             .prenom = T("Prénom", "First name", "Nombre"),
             .nom = T("Nom", "Last name", "Apellido"),
             .courriel = T("Courriel", "Email", "Correo"),
+            .role = T("Rôle", "Role", "Rol"),
+            .rAdmin = T("Administrateur", "Administrator", "Administrador"),
+            .rEmploye = T("Comptable", "Accountant", "Contador"),
+            .rTech = T("Technicien", "Technician", "Técnico"),
+            .rSolo = T("Comptable solo", "Solo accountant", "Contador independiente"),
+            .moi = T("vous", "you", "usted"),
             .superviseur = T("Superviseur", "Supervisor", "Supervisor"),
             .aucunSup = T("— Aucun superviseur —", "— No supervisor —", "— Sin supervisor —"),
+            .supervise = T("Techniciens supervisés", "Supervised technicians", "Técnicos supervisados"),
             .envoyer = T("Envoyer l'invitation", "Send the invitation", "Enviar la invitación"),
             .invOk = T("Invitation envoyée. Lien d'activation :", "Invitation sent. Activation link:", "Invitación enviada. Enlace de activación:"),
             .copier = T("Copier le lien", "Copy link", "Copiar enlace"),
+            .secComptables = T("Comptables", "Accountants", "Contadores"),
+            .secTech = T("Techniciens", "Technicians", "Técnicos"),
+            .videComptables = T("Aucun comptable.", "No accountant.", "Ningún contador."),
             .vide = T("Aucun technicien pour l'instant.", "No technician yet.", "Todavía no hay técnicos."),
             .attente = T("en attente d'activation", "awaiting activation", "pendiente de activación"),
             .dossiers = T("Dossiers", "Files", "Expedientes"),
@@ -345,6 +403,7 @@ Public Class wbfCabTechniciens
             .confRetirer = T("Retirer {0} du cabinet ? Son compte sera désactivé ; ses dossiers restent confiés jusqu'à ce que vous les réattribuiez.",
                              "Remove {0} from the firm? Their account will be deactivated; their files stay assigned until you reassign them.",
                              "¿Retirar a {0} del despacho? Su cuenta se desactivará; sus expedientes siguen confiados hasta que los reasigne."),
+            .confRole = T("Changer le rôle de {0} ?", "Change {0}'s role?", "¿Cambiar el rol de {0}?"),
             .dossiersDe = T("Dossiers confiés à {0}", "Files assigned to {0}", "Expedientes confiados a {0}"),
             .dejaA = T("actuellement suivi par {0}", "currently handled by {0}", "actualmente a cargo de {0}"),
             .enregistrer = T("Enregistrer", "Save", "Guardar"),

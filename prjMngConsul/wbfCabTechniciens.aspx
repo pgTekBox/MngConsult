@@ -1,26 +1,26 @@
-﻿<%@ Page Title="Techniciens" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Title="Comptables et techniciens" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="wbfCabTechniciens.aspx.vb" Inherits="MngConsul.wbfCabTechniciens" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Techniciens — Portail comptable
+    Comptables et techniciens — Portail comptable
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    /* Techniciens du cabinet (T379) — confiné sous #tec */
+    /* Comptables et techniciens du cabinet (T379/T380) — confiné sous #tec */
     #tec { color: #0E1F3D }
     #tec .boite { background: #fff; border-radius: 24px; padding: 20px 24px; margin-bottom: 16px }
     #tec .tete { display: flex; align-items: center; gap: 14px }
     #tec .tete .ico { width: 46px; height: 46px; border-radius: 50%; flex: 0 0 46px; background: #E8EDF5; color: #1B4F9C; display: flex; align-items: center; justify-content: center }
     #tec .tete h1 { font-size: 21px; font-weight: 800; margin: 0 }
     #tec .tete .sous { font-size: 13px; color: #44536E; margin-top: 2px }
-    #tec .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px }
+    #tec .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px }
     #tec .kpi { background: #fff; border-radius: 22px; padding: 14px 16px }
     #tec .kpi .lab { font-size: 13px; font-weight: 700; color: #44536E }
     #tec .kpi .val { font-size: 24px; font-weight: 800 }
     #tec .kpi.rouge .val { color: #A3261C }
     #tec h2 { font-size: 16px; font-weight: 800; margin: 0 0 10px }
-    #tec .frm { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 10px 12px; align-items: end }
+    #tec .frm { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)) auto; gap: 10px 12px; align-items: end }
     #tec .frm label { display: block; font-weight: 700; font-size: 12.5px; margin-bottom: 5px }
     #tec .frm input, #tec select { width: 100%; height: 40px; padding: 0 10px; border: 1px solid #D5DDE8; border-radius: 12px; font: inherit; font-size: 14px; background: #fff; color: #0E1F3D; box-sizing: border-box }
     #tec .btn { height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: #1B4F9C; color: #fff; font: inherit; font-weight: 800; font-size: 13.5px; cursor: pointer; white-space: nowrap }
@@ -43,6 +43,8 @@
     #tec .charge { font-size: 12.5px; color: #44536E; margin-top: 3px }
     #tec .charge b.r { color: #A3261C }
     #tec .acts { display: flex; gap: 8px }
+    #tec .tag.moi { background: #E3EBF7; color: #143A73 }
+    #tec h2 .nb { font-weight: 700; color: #5B6B86; font-size: 14px; margin-left: 4px }
     #tec .vide { padding: 14px 4px; color: #44536E; font-weight: 700 }
     #tec .fond { position: fixed; inset: 0; background: rgba(14,31,61,.45); display: none; align-items: flex-start; justify-content: center; padding: 8vh 16px; z-index: 10000; overflow: auto }
     #tec .fond.ouvert { display: flex }
@@ -65,6 +67,7 @@
     </section>
     <div class="kpis" id="tecKpis"></div>
     <section class="boite" id="tecInvite" hidden></section>
+    <section class="boite" id="tecComptables"></section>
     <section class="boite" id="tecListe"></section>
 
     <div class="fond" id="tecFond" onclick="if (event.target === this) tecFermer();">
@@ -99,15 +102,52 @@
         }).join('');
     }
 
+    function tRoleNom(r) { return r === 'admin' ? TL.rAdmin : r === 'solo' ? TL.rSolo : r === 'technicien' ? TL.rTech : TL.rEmploye; }
+    function tRoleOptions(sel) {
+        return [['admin', TL.rAdmin], ['employe', TL.rEmploye], ['technicien', TL.rTech]].map(function (o) {
+            return '<option value="' + o[0] + '"' + (o[0] === sel ? ' selected' : '') + '>' + tEsc(o[1]) + '</option>';
+        }).join('');
+    }
+    function tMembre(id) { return TEC.membres.find(function (t) { return t.id === id; }); }
+
+    function tCarte(x) {
+        var tech = x.role === 'technicien';
+        var roleHtml = (TEC.gerer && x.role !== 'solo')
+            ? '<select onchange="tecRole(' + x.id + ', this)">' + tRoleOptions(x.role) + '</select>'
+            : '<div>' + tEsc(tRoleNom(x.role)) + '</div>';
+        var second;
+        if (tech) {
+            second = '<div class="lab2" style="margin-top:8px">' + tEsc(TL.superviseur) + '</div>' +
+                (TEC.gerer ? '<select onchange="tecSup(' + x.id + ', this)">' + tSupOptions(x.sup) + '</select>' : '<div>' + tEsc(x.supNom || '—') + '</div>');
+        } else {
+            second = '<div class="lab2" style="margin-top:8px">' + tEsc(TL.supervise) + '</div><div>' + x.nbTechs + '</div>';
+        }
+        return '<div class="carte"><div class="av">' + tEsc(tInit(x.nom)) + '</div>' +
+             '<div><div class="nm">' + tEsc(x.nom) + (x.moi ? '<span class="tag moi">' + tEsc(TL.moi) + '</span>' : '') +
+             (x.attente ? '<span class="tag">' + tEsc(TL.attente) + '</span>' : '') + '</div>' +
+             '<div class="em">' + tEsc(x.email) + '</div>' +
+             '<div class="pt">' + tEsc(TL.connexion) + ' : ' + tEsc(x.connexion || TL.jamais) + '</div></div>' +
+             '<div><div class="lab2">' + tEsc(TL.role) + '</div>' + roleHtml + second + '</div>' +
+             '<div><div class="lab2">' + tEsc(TL.dossiers) + ' (' + x.nbDossiers + ')</div>' +
+             '<div class="doss" title="' + tEsc(x.dossiers) + '">' + tEsc(x.dossiers || TL.aucunDossier) + '</div>' +
+             '<div class="charge">' + x.taches + ' ' + tEsc(TL.taches) + (x.retard ? ' · <b class="r">' + x.retard + ' ' + tEsc(TL.retard) + '</b>' : '') + '</div></div>' +
+             '<div class="acts">' + (TEC.gerer
+                ? '<button type="button" class="btn sec" onclick="tecDossiers(' + x.id + ')">' + tEsc(TL.gererDossiers) + '</button>' +
+                  (x.moi ? '' : '<button type="button" class="btn danger" onclick="tecRetirer(' + x.id + ')">' + tEsc(TL.retirer) + '</button>')
+                : '') + '</div></div>';
+    }
+
     function tecPeindre() {
         document.getElementById('tecTitre').textContent = TL.titre;
         document.getElementById('tecSous').textContent = TL.sous;
-        var t = TEC.techs;
-        var att = t.filter(function (x) { return x.attente; }).length;
-        var tac = t.reduce(function (s, x) { return s + x.taches; }, 0);
-        var ret = t.reduce(function (s, x) { return s + x.retard; }, 0);
+        var tous = TEC.membres;
+        var cpt = tous.filter(function (x) { return x.role !== 'technicien'; });
+        var t = tous.filter(function (x) { return x.role === 'technicien'; });
+        var att = tous.filter(function (x) { return x.attente; }).length;
+        var tac = tous.reduce(function (s, x) { return s + x.taches; }, 0);
+        var ret = tous.reduce(function (s, x) { return s + x.retard; }, 0);
         document.getElementById('tecKpis').innerHTML =
-            [[TL.kTech, t.length, ''], [TL.kAttente, att, ''], [TL.kTaches, tac, ''], [TL.kRetard, ret, ret > 0 ? 'rouge' : '']]
+            [[TL.kComptables, cpt.length, ''], [TL.kTech, t.length, ''], [TL.kAttente, att, ''], [TL.kTaches, tac, ''], [TL.kRetard, ret, ret > 0 ? 'rouge' : '']]
             .map(function (k) { return '<div class="kpi ' + k[2] + '"><div class="lab">' + tEsc(k[0]) + '</div><div class="val">' + k[1] + '</div></div>'; }).join('');
 
         var inv = document.getElementById('tecInvite');
@@ -117,39 +157,46 @@
                 '<div><label>' + tEsc(TL.prenom) + '</label><input type="text" id="tecPrenom" /></div>' +
                 '<div><label>' + tEsc(TL.nom) + '</label><input type="text" id="tecNom" /></div>' +
                 '<div><label>' + tEsc(TL.courriel) + '</label><input type="email" id="tecEmail" /></div>' +
-                '<div><label>' + tEsc(TL.superviseur) + '</label><select id="tecSup">' + tSupOptions('') + '</select></div>' +
+                '<div><label>' + tEsc(TL.role) + '</label><select id="tecRoleInv" onchange="tecRoleInvChange()">' + tRoleOptions('employe') + '</select></div>' +
+                '<div><label>' + tEsc(TL.superviseur) + '</label><select id="tecSup" disabled>' + tSupOptions('') + '</select></div>' +
                 '<div><button type="button" class="btn" id="tecInvBtn" onclick="tecInviter()">' + tEsc(TL.envoyer) + '</button></div>' +
                 '</div><div id="tecInvMsg"></div>';
         }
 
-        var h = '';
-        if (!t.length) h = '<div class="vide">' + tEsc(TL.vide) + '</div>';
-        t.forEach(function (x) {
-            h += '<div class="carte"><div class="av">' + tEsc(tInit(x.nom)) + '</div>' +
-                 '<div><div class="nm">' + tEsc(x.nom) + (x.attente ? '<span class="tag">' + tEsc(TL.attente) + '</span>' : '') + '</div>' +
-                 '<div class="em">' + tEsc(x.email) + '</div>' +
-                 '<div class="pt">' + tEsc(TL.connexion) + ' : ' + tEsc(x.connexion || TL.jamais) + '</div></div>' +
-                 '<div><div class="lab2">' + tEsc(TL.superviseur) + '</div>' +
-                 (TEC.gerer ? '<select onchange="tecSup(' + x.id + ', this)">' + tSupOptions(x.sup) + '</select>' : '<div>' + tEsc(x.supNom || '—') + '</div>') + '</div>' +
-                 '<div><div class="lab2">' + tEsc(TL.dossiers) + ' (' + x.nbDossiers + ')</div>' +
-                 '<div class="doss" title="' + tEsc(x.dossiers) + '">' + tEsc(x.dossiers || TL.aucunDossier) + '</div>' +
-                 '<div class="charge">' + x.taches + ' ' + tEsc(TL.taches) + (x.retard ? ' · <b class="r">' + x.retard + ' ' + tEsc(TL.retard) + '</b>' : '') + '</div></div>' +
-                 '<div class="acts">' + (TEC.gerer
-                    ? '<button type="button" class="btn sec" onclick="tecDossiers(' + x.id + ')">' + tEsc(TL.gererDossiers) + '</button>' +
-                      '<button type="button" class="btn danger" onclick="tecRetirer(' + x.id + ')">' + tEsc(TL.retirer) + '</button>'
-                    : '') + '</div></div>';
-        });
-        document.getElementById('tecListe').innerHTML = h;
+        document.getElementById('tecComptables').innerHTML =
+            '<h2>' + tEsc(TL.secComptables) + '<span class="nb">(' + cpt.length + ')</span></h2>' +
+            (cpt.length ? cpt.map(tCarte).join('') : '<div class="vide">' + tEsc(TL.videComptables) + '</div>');
+        document.getElementById('tecListe').innerHTML =
+            '<h2>' + tEsc(TL.secTech) + '<span class="nb">(' + t.length + ')</span></h2>' +
+            (t.length ? t.map(tCarte).join('') : '<div class="vide">' + tEsc(TL.vide) + '</div>');
+    }
+
+    function tecRoleInvChange() {
+        var s = document.getElementById('tecSup');
+        s.disabled = document.getElementById('tecRoleInv').value !== 'technicien';
+        if (s.disabled) s.value = '';
     }
 
     async function tecInviter() {
         var b = document.getElementById('tecInvBtn'), m = document.getElementById('tecInvMsg');
         b.disabled = true; m.innerHTML = '';
         var d = await tPost({ op: 'invite', prenom: document.getElementById('tecPrenom').value, nom: document.getElementById('tecNom').value,
-                              email: document.getElementById('tecEmail').value, sup: document.getElementById('tecSup').value });
+                              email: document.getElementById('tecEmail').value, role: document.getElementById('tecRoleInv').value,
+                              sup: document.getElementById('tecSup').value });
         b.disabled = false;
         if (!d.ok) { m.innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
         sessionStorage.setItem('tecLien', d.lien);
+        location.reload();
+    }
+
+    async function tecRole(id, sel) {
+        var x = tMembre(id);
+        if (!x) return;
+        if (!confirm(tFmt(TL.confRole, x.nom))) { sel.value = x.role; return; }
+        sel.disabled = true;
+        var d = await tPost({ op: 'role', id: id, role: sel.value });
+        sel.disabled = false;
+        if (!d.ok) { alert(d.erreur); sel.value = x.role; return; }
         location.reload();
     }
 
@@ -158,11 +205,11 @@
         var d = await tPost({ op: 'sup', id: id, sup: sel.value });
         sel.disabled = false;
         if (!d.ok) { alert(d.erreur); return; }
-        var x = TEC.techs.find(function (t) { return t.id === id; }); if (x) x.sup = sel.value;
+        var x = tMembre(id); if (x) x.sup = sel.value;
     }
 
     async function tecRetirer(id) {
-        var x = TEC.techs.find(function (t) { return t.id === id; });
+        var x = tMembre(id);
         if (!x || !confirm(tFmt(TL.confRetirer, x.nom))) return;
         var d = await tPost({ op: 'retirer', id: id });
         if (!d.ok) { alert(d.erreur); return; }
@@ -171,7 +218,7 @@
 
     async function tecDossiers(id) {
         tecMembre = id;
-        var x = TEC.techs.find(function (t) { return t.id === id; });
+        var x = tMembre(id);
         document.getElementById('tecFenTitre').textContent = tFmt(TL.dossiersDe, x ? x.nom : '');
         document.getElementById('tecFenFermer').textContent = TL.fermer;
         document.getElementById('tecFenOk').textContent = TL.enregistrer;

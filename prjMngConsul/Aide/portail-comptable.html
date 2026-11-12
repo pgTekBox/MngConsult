@@ -132,27 +132,28 @@
             </section>
 
             <section id="fr-techniciens">
-                <h2>Techniciens</h2>
-                <p>Un <strong>technicien</strong> est un membre du cabinet au rôle « Technicien » (technicien comptable) : il ne voit et n’entre que dans les <strong>dossiers qui lui sont confiés</strong>, et travaille sous un <strong>superviseur</strong> (un employé ou un administrateur du cabinet). Menu <span class="chemin">Mon cabinet › Techniciens</span>.</p>
+                <h2>Comptables et techniciens</h2>
+                <p>La page <span class="chemin">Mon cabinet › Comptables et techniciens</span> gère les membres du cabinet en deux groupes : les <strong>comptables</strong> (administrateurs et comptables) et les <strong>techniciens</strong>. Un comptable suit ses dossiers et peut superviser des techniciens ; un technicien ne voit et n’entre que dans les <strong>dossiers qui lui sont confiés</strong> et travaille sous un <strong>superviseur</strong>.</p>
                 <h3>Indicateurs</h3>
-                <p>Techniciens, En attente d’activation, Tâches ouvertes (de leurs dossiers) et En retard (en rouge s’il y en a).</p>
-                <h3>Inviter un technicien (administrateur, solo)</h3>
+                <p>Comptables, Techniciens, En attente d’activation, Tâches ouvertes (de leurs dossiers) et En retard (en rouge s’il y en a).</p>
+                <h3>Inviter un membre (administrateur, solo)</h3>
                 <ol>
-                    <li>Prénom, nom, courriel et <strong>superviseur</strong>, puis <kbd>Envoyer l’invitation</kbd>.</li>
+                    <li>Prénom, nom, courriel et <strong>rôle</strong> : Administrateur, Comptable ou Technicien. Pour un technicien, choisissez aussi son <strong>superviseur</strong> (la liste n’est active que pour ce rôle). Puis <kbd>Envoyer l’invitation</kbd>.</li>
                     <li>Le compte est créé, <strong>en attente d’activation</strong> ; le courriel d’invitation part et le <strong>lien d’activation</strong> s’affiche, à copier.</li>
-                    <li>Le technicien ouvre le lien et choisit son mot de passe : il entre dans le portail et ne voit que ses dossiers.</li>
+                    <li>Le membre ouvre le lien et choisit son mot de passe : il entre dans le portail avec les droits de son rôle.</li>
                 </ol>
-                <h3>Chaque technicien</h3>
+                <h3>Chaque membre</h3>
                 <ul>
-                    <li>Nom, courriel, « en attente d’activation » tant que le compte n’est pas activé, dernière connexion.</li>
-                    <li><strong>Superviseur</strong> : la liste le change aussitôt. Le superviseur voit aussi les dossiers de ses techniciens.</li>
+                    <li>Nom, courriel, « vous » sur votre propre fiche, « en attente d’activation » tant que le compte n’est pas activé, dernière connexion.</li>
+                    <li><strong>Rôle</strong> : la liste le change après confirmation (Administrateur, Comptable, Technicien). Passer un comptable en technicien le déplace dans le groupe Techniciens, et inversement. Le cabinet doit garder au moins un administrateur. Un compte en attente reste en attente.</li>
+                    <li>Comptable : nombre de <strong>techniciens supervisés</strong>. Technicien : son <strong>superviseur</strong>, que la liste change aussitôt ; le superviseur voit aussi les dossiers de ses techniciens.</li>
                     <li><strong>Dossiers</strong> confiés et nombre de tâches ouvertes et en retard.</li>
-                    <li><kbd>Gérer les dossiers</kbd> : les dossiers du cabinet, cochés quand ils sont confiés au technicien ; « actuellement suivi par … » indique la personne actuelle. Cocher un dossier le lui confie (un dossier n’a qu’un responsable) ; le décocher le laisse sans responsable. <kbd>Enregistrer</kbd>.</li>
-                    <li><kbd>Retirer</kbd> : après confirmation, désactive le compte du technicien. Ses dossiers restent confiés jusqu’à ce que vous les réattribuiez.</li>
+                    <li><kbd>Gérer les dossiers</kbd> : les dossiers du cabinet, cochés quand ils sont confiés au membre ; « actuellement suivi par … » indique la personne actuelle. Cocher un dossier le lui confie (un dossier n’a qu’un responsable) ; le décocher le laisse sans responsable. <kbd>Enregistrer</kbd>.</li>
+                    <li><kbd>Retirer</kbd> : après confirmation, désactive le compte du membre. Ses dossiers restent confiés jusqu’à ce que vous les réattribuiez. Vous ne pouvez pas vous retirer vous-même.</li>
                 </ul>
-                <h3>Superviseur (employé)</h3>
-                <p>Un employé voit <span class="chemin">Mon cabinet › Mes techniciens</span> : les techniciens qu’il supervise, leurs dossiers et leur charge, en lecture. Seul un administrateur invite, change le superviseur, confie des dossiers ou retire un technicien.</p>
-                <div class="note" data-titre="Bon à savoir">Le rôle « Technicien » se choisit aussi dans <span class="chemin">Membres et sécurité</span>.</div>
+                <h3>Comptable (employé)</h3>
+                <p>Un comptable voit <span class="chemin">Mon cabinet › Mes techniciens</span> : sa propre charge et les techniciens qu’il supervise, leurs dossiers et leur charge, en lecture. Seul un administrateur invite, change un rôle ou un superviseur, confie des dossiers ou retire un membre.</p>
+                <div class="note" data-titre="Bon à savoir">Les rôles se changent aussi dans <span class="chemin">Membres et sécurité</span>.</div>
             </section>
 
             <section id="fr-affectation">
@@ -382,27 +383,28 @@
             </section>
 
             <section id="en-technicians">
-                <h2>Technicians</h2>
-                <p>A <strong>technician</strong> is a firm member with the “Technician” role (accounting technician): they only see and enter the <strong>files assigned to them</strong>, and work under a <strong>supervisor</strong> (an employee or an administrator of the firm). Menu <span class="chemin">My firm › Technicians</span>.</p>
+                <h2>Accountants and technicians</h2>
+                <p>The <span class="chemin">My firm › Accountants and technicians</span> page manages the firm’s members in two groups: <strong>accountants</strong> (administrators and accountants) and <strong>technicians</strong>. An accountant handles their files and can supervise technicians; a technician only sees and enters the <strong>files assigned to them</strong> and works under a <strong>supervisor</strong>.</p>
                 <h3>Indicators</h3>
-                <p>Technicians, Awaiting activation, Open tasks (on their files) and Overdue (red when there are any).</p>
-                <h3>Invite a technician (administrator, solo)</h3>
+                <p>Accountants, Technicians, Awaiting activation, Open tasks (on their files) and Overdue (red when there are any).</p>
+                <h3>Invite a member (administrator, solo)</h3>
                 <ol>
-                    <li>First name, last name, email and <strong>supervisor</strong>, then <kbd>Send the invitation</kbd>.</li>
+                    <li>First name, last name, email and <strong>role</strong>: Administrator, Accountant or Technician. For a technician, also choose their <strong>supervisor</strong> (the list is only active for that role). Then <kbd>Send the invitation</kbd>.</li>
                     <li>The account is created, <strong>awaiting activation</strong>; the invitation email goes out and the <strong>activation link</strong> is shown, ready to copy.</li>
-                    <li>The technician opens the link and chooses a password: they enter the portal and only see their files.</li>
+                    <li>The member opens the link and chooses a password: they enter the portal with their role’s rights.</li>
                 </ol>
-                <h3>Each technician</h3>
+                <h3>Each member</h3>
                 <ul>
-                    <li>Name, email, “awaiting activation” while the account is not activated, last sign-in.</li>
-                    <li><strong>Supervisor</strong>: the list changes it right away. The supervisor also sees their technicians’ files.</li>
+                    <li>Name, email, “you” on your own card, “awaiting activation” while the account is not activated, last sign-in.</li>
+                    <li><strong>Role</strong>: the list changes it after confirmation (Administrator, Accountant, Technician). Turning an accountant into a technician moves them to the Technicians group, and vice versa. The firm must keep at least one administrator. An account awaiting activation stays so.</li>
+                    <li>Accountant: number of <strong>supervised technicians</strong>. Technician: their <strong>supervisor</strong>, which the list changes right away; the supervisor also sees their technicians’ files.</li>
                     <li>Assigned <strong>files</strong> and the number of open and overdue tasks.</li>
-                    <li><kbd>Manage files</kbd>: the firm’s files, checked when assigned to the technician; “currently handled by …” shows the current person. Checking a file assigns it (a file has a single assignee); unchecking it leaves it unassigned. <kbd>Save</kbd>.</li>
-                    <li><kbd>Remove</kbd>: after confirmation, deactivates the technician’s account. Their files stay assigned until you reassign them.</li>
+                    <li><kbd>Manage files</kbd>: the firm’s files, checked when assigned to the member; “currently handled by …” shows the current person. Checking a file assigns it (a file has a single assignee); unchecking it leaves it unassigned. <kbd>Save</kbd>.</li>
+                    <li><kbd>Remove</kbd>: after confirmation, deactivates the member’s account. Their files stay assigned until you reassign them. You cannot remove yourself.</li>
                 </ul>
-                <h3>Supervisor (employee)</h3>
-                <p>An employee sees <span class="chemin">My firm › My technicians</span>: the technicians they supervise, their files and workload, read-only. Only an administrator invites, changes the supervisor, assigns files or removes a technician.</p>
-                <div class="note" data-titre="Good to know">The “Technician” role can also be chosen in <span class="chemin">Members and security</span>.</div>
+                <h3>Accountant (employee)</h3>
+                <p>An accountant sees <span class="chemin">My firm › My technicians</span>: their own workload and the technicians they supervise, their files and workload, read-only. Only an administrator invites, changes a role or a supervisor, assigns files or removes a member.</p>
+                <div class="note" data-titre="Good to know">Roles can also be changed in <span class="chemin">Members and security</span>.</div>
             </section>
 
             <section id="en-assignment">
@@ -632,27 +634,28 @@
             </section>
 
             <section id="es-tecnicos">
-                <h2>Técnicos</h2>
-                <p>Un <strong>técnico</strong> es un miembro del despacho con el rol «Técnico» (técnico contable): solo ve y solo entra en los <strong>expedientes que se le confían</strong>, y trabaja bajo un <strong>supervisor</strong> (un empleado o un administrador del despacho). Menú <span class="chemin">Mi despacho › Técnicos</span>.</p>
+                <h2>Contadores y técnicos</h2>
+                <p>La página <span class="chemin">Mi despacho › Contadores y técnicos</span> gestiona los miembros del despacho en dos grupos: los <strong>contadores</strong> (administradores y contadores) y los <strong>técnicos</strong>. Un contador lleva sus expedientes y puede supervisar técnicos; un técnico solo ve y solo entra en los <strong>expedientes que se le confían</strong> y trabaja bajo un <strong>supervisor</strong>.</p>
                 <h3>Indicadores</h3>
-                <p>Técnicos, Pendientes de activación, Tareas abiertas (de sus expedientes) y Atrasadas (en rojo cuando hay alguna).</p>
-                <h3>Invitar a un técnico (administrador, solo)</h3>
+                <p>Contadores, Técnicos, Pendientes de activación, Tareas abiertas (de sus expedientes) y Atrasadas (en rojo cuando hay alguna).</p>
+                <h3>Invitar a un miembro (administrador, solo)</h3>
                 <ol>
-                    <li>Nombre, apellido, correo y <strong>supervisor</strong>, luego <kbd>Enviar la invitación</kbd>.</li>
+                    <li>Nombre, apellido, correo y <strong>rol</strong>: Administrador, Contador o Técnico. Para un técnico, elija también su <strong>supervisor</strong> (la lista solo está activa para ese rol). Luego <kbd>Enviar la invitación</kbd>.</li>
                     <li>Se crea la cuenta, <strong>pendiente de activación</strong>; sale el correo de invitación y se muestra el <strong>enlace de activación</strong>, listo para copiar.</li>
-                    <li>El técnico abre el enlace y elige su contraseña: entra al portal y solo ve sus expedientes.</li>
+                    <li>El miembro abre el enlace y elige su contraseña: entra al portal con los derechos de su rol.</li>
                 </ol>
-                <h3>Cada técnico</h3>
+                <h3>Cada miembro</h3>
                 <ul>
-                    <li>Nombre, correo, «pendiente de activación» mientras la cuenta no esté activada, última conexión.</li>
-                    <li><strong>Supervisor</strong>: la lista lo cambia de inmediato. El supervisor ve también los expedientes de sus técnicos.</li>
+                    <li>Nombre, correo, «usted» en su propia ficha, «pendiente de activación» mientras la cuenta no esté activada, última conexión.</li>
+                    <li><strong>Rol</strong>: la lista lo cambia tras confirmar (Administrador, Contador, Técnico). Pasar un contador a técnico lo mueve al grupo Técnicos, y al revés. El despacho debe conservar al menos un administrador. Una cuenta pendiente sigue pendiente.</li>
+                    <li>Contador: número de <strong>técnicos supervisados</strong>. Técnico: su <strong>supervisor</strong>, que la lista cambia de inmediato; el supervisor ve también los expedientes de sus técnicos.</li>
                     <li><strong>Expedientes</strong> confiados y número de tareas abiertas y atrasadas.</li>
-                    <li><kbd>Gestionar expedientes</kbd>: los expedientes del despacho, marcados cuando están confiados al técnico; «actualmente a cargo de …» indica la persona actual. Marcar un expediente se lo confía (un expediente tiene un solo responsable); desmarcarlo lo deja sin responsable. <kbd>Guardar</kbd>.</li>
-                    <li><kbd>Retirar</kbd>: tras confirmar, desactiva la cuenta del técnico. Sus expedientes siguen confiados hasta que los reasigne.</li>
+                    <li><kbd>Gestionar expedientes</kbd>: los expedientes del despacho, marcados cuando están confiados al miembro; «actualmente a cargo de …» indica la persona actual. Marcar un expediente se lo confía (un expediente tiene un solo responsable); desmarcarlo lo deja sin responsable. <kbd>Guardar</kbd>.</li>
+                    <li><kbd>Retirar</kbd>: tras confirmar, desactiva la cuenta del miembro. Sus expedientes siguen confiados hasta que los reasigne. No puede retirarse a sí mismo.</li>
                 </ul>
-                <h3>Supervisor (empleado)</h3>
-                <p>Un empleado ve <span class="chemin">Mi despacho › Mis técnicos</span>: los técnicos que supervisa, sus expedientes y su carga, en lectura. Solo un administrador invita, cambia el supervisor, confía expedientes o retira a un técnico.</p>
-                <div class="note" data-titre="Bueno saber">El rol «Técnico» también se puede elegir en <span class="chemin">Miembros y seguridad</span>.</div>
+                <h3>Contador (empleado)</h3>
+                <p>Un contador ve <span class="chemin">Mi despacho › Mis técnicos</span>: su propia carga y los técnicos que supervisa, sus expedientes y su carga, en lectura. Solo un administrador invita, cambia un rol o un supervisor, confía expedientes o retira a un miembro.</p>
+                <div class="note" data-titre="Bueno saber">Los roles también se cambian en <span class="chemin">Miembros y seguridad</span>.</div>
             </section>
 
             <section id="es-asignacion">
