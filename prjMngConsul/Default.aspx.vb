@@ -262,6 +262,8 @@ Public Class _Default
             acts.Add(Activite("y", L("aBanque"), L("catComptabilite") & " · " & L("aBanqueSous"),
                               L("aBanqueDet"), L("btnBrancher"), "PlaidAccounts.aspx"))
         End If
+        Dim das As Object = ActiviteDAS(deType("ACT_DAS").FirstOrDefault())
+        If das IsNot Nothing Then acts.Add(das)
         Dim taxes As Object = ActiviteTaxes(deType("ACT_TAXES").FirstOrDefault())
         If taxes IsNot Nothing Then acts.Add(taxes)
         Dim concil As Object = ActiviteConciliation(deType("ACT_CONCILIATION").FirstOrDefault())
@@ -304,6 +306,32 @@ Public Class _Default
         Dim nums As List(Of String) = rows.Select(Function(r) Txt(r("NumeroSort"))).Where(Function(n) n <> "").Distinct().ToList()
         If nums.Count = 0 Then Return page
         Return page & "?factures=" & HttpUtility.UrlEncode(String.Join(",", nums))
+    End Function
+
+    ''' <summary>
+    ''' La remise des retenues à la source : la ligne ACT_DAS de T204 (T377).
+    ''' Beneficiaire = « aaaa-mm-jj_aaaa-mm-jj » (la période de remise selon SAL_REMISE_FREQ),
+    ''' DueDate = date limite. Ouverte : période et date limite, « Marquer comme remise »
+    ''' (RemiseDAS.ashx → s0996) et un lien vers l'onglet Salaires des Paramètres.
+    ''' </summary>
+    Private Function ActiviteDAS(r As DataRow) As Object
+        If r Is Nothing Then Return Nothing
+        Dim p As String() = Txt(r("NameSort")).Split("_"c)
+        Dim du, au As Date
+        If p.Length <> 2 OrElse Not Date.TryParse(p(0), du) OrElse Not Date.TryParse(p(1), au) Then Return Nothing
+        Dim ech As Date? = DateN(r("DueDate"))
+        Dim retard As Boolean = ech.HasValue AndAlso ech.Value.Date < aujourdhui
+        Return New With {
+            .u = If(retard, "r", "y"),
+            .t = String.Format(L("aDAS"), JourMois(du), JourMois(au)),
+            .d = L("catSalaires") & If(ech.HasValue, " · " & String.Format(L("avantLe"), JourMois(ech.Value)), "") & " · " & L("aDASSous"),
+            .det = L("aDASDet"),
+            .btn = "", .url = "",
+            .k = "das",
+            .debut = du.ToString("yyyy-MM-dd"),
+            .periode = String.Format(L("duAu"), JourMois(du), JourMois(au)),
+            .limite = If(ech.HasValue, JourMois(ech.Value), "")
+        }
     End Function
 
     ''' <summary>
@@ -712,6 +740,7 @@ Public Class _Default
             "agenda", "agendaAria", "agendaTip", "agendaDe", "equipeN",
             "plagesLibres", "plagesAria", "plagesVide", "plageTip", "agAuj", "agAujAbr", "agRdvH", "agEmployes",
             "agVide", "libre", "exFictifs", "stTermine", "stEnCours", "stAVenir",
+            "lPeriode", "lDateLimite", "btnRemiseFaite", "btnFreqRemise", "confRemiseDAS", "remiseDASErreur",
             "facturer", "facturerAria", "plusRdv", "nouveauRdvAvec", "voirDetail",
             "iHeure", "iEmploye", "iType", "iLieu", "ouvrirRdv", "winRdv",
             "aVenir", "aVenirPlanif", "toutEquipe", "pSem", "pProch", "pMois", "pMoisP", "periode", "avVide",
@@ -933,6 +962,18 @@ Public Class _Default
             ' Déclaration de taxes à produire (ACT_TAXES, T375)
             Case "aTaxes" : Return Choose3(lang, "Déclaration de taxes à produire : du {0} au {1}", "Tax return to file: {0} to {1}", "Declaración de impuestos por presentar: del {0} al {1}")
             Case "catTaxes" : Return Choose3(lang, "Taxes", "Taxes", "Impuestos")
+            ' Remise des retenues à la source (ACT_DAS, T377)
+            Case "aDAS" : Return Choose3(lang, "Remise des retenues à la source : du {0} au {1}", "Source deductions remittance: {0} to {1}", "Remesa de retenciones en la fuente: del {0} al {1}")
+            Case "catSalaires" : Return Choose3(lang, "Salaires", "Payroll", "Salarios")
+            Case "aDASSous" : Return Choose3(lang, "Revenu Québec et ARC", "Revenu Québec and CRA", "Revenu Québec y ARC")
+            Case "aDASDet" : Return Choose3(lang, "Les retenues de la paie de cette période (impôts, RRQ, RQAP, assurance-emploi) et vos cotisations d’employeur doivent être remises au plus tard à cette date. Une fois le paiement fait, marquez la remise.", "The payroll deductions for this period (income tax, QPP, QPIP, EI) and your employer contributions must be remitted by this date. Once paid, mark the remittance.", "Las retenciones de la nómina de este período (impuestos, RRQ, RQAP, seguro de empleo) y sus cotizaciones de empleador deben remitirse a más tardar en esta fecha. Una vez pagado, marque la remesa.")
+            Case "duAu" : Return Choose3(lang, "du {0} au {1}", "{0} to {1}", "del {0} al {1}")
+            Case "lPeriode" : Return Choose3(lang, "Période", "Period", "Período")
+            Case "lDateLimite" : Return Choose3(lang, "Date limite", "Due date", "Fecha límite")
+            Case "btnRemiseFaite" : Return Choose3(lang, "Marquer comme remise", "Mark as remitted", "Marcar como remitida")
+            Case "btnFreqRemise" : Return Choose3(lang, "Changer la fréquence", "Change the frequency", "Cambiar la frecuencia")
+            Case "confRemiseDAS" : Return Choose3(lang, "Noter la remise des retenues à la source pour la période {0} ? L’activité disparaîtra.", "Record the source deductions remittance for {0}? The activity will disappear.", "¿Anotar la remesa de retenciones en la fuente del período {0}? La actividad desaparecerá.")
+            Case "remiseDASErreur" : Return Choose3(lang, "La remise n’a pas pu être notée.", "The remittance could not be recorded.", "No se pudo anotar la remesa.")
             Case "btnDeclarer" : Return Choose3(lang, "Préparer la déclaration", "Prepare the return", "Preparar la declaración")
             Case "aTaxesRemettre" : Return Choose3(lang, "à remettre {0}", "to remit {0}", "por remitir {0}")
             Case "aTaxesRemb" : Return Choose3(lang, "remboursement {0}", "refund {0}", "reembolso {0}")

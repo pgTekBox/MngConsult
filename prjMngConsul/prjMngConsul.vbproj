@@ -513,6 +513,7 @@
     <Content Include="RappelFacture.ashx" />
     <Content Include="ReleveRapprochement.ashx" />
     <Content Include="EncaissementPdf.ashx" />
+    <Content Include="RemiseDAS.ashx" />
     <Content Include="LandingReservation.ashx" />
     <Content Include="LandingValidation.aspx" />
     <Content Include="css\landing2.css" />
@@ -1096,6 +1097,9 @@
     </Compile>
     <Compile Include="ComptabiliserFacture.ashx.vb">
       <DependentUpon>ComptabiliserFacture.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="RemiseDAS.ashx.vb">
+      <DependentUpon>RemiseDAS.ashx</DependentUpon>
     </Compile>
     <Compile Include="EncaissementPdf.ashx.vb">
       <DependentUpon>EncaissementPdf.ashx</DependentUpon>

@@ -824,6 +824,18 @@
                     var gf = el('div', 'actions');
                     var bPf = bouton('ac-btn', T.btnPayerFacture); bPf.addEventListener('click', function () { acPaiementRecu(a.partyId, T.winDecaissement, 'DECAISSEMENT'); }); gf.appendChild(bPf);
                     d.appendChild(gf);
+                } else if (a.k === 'das') {
+                    // Remise des retenues à la source (ACT_DAS, T377) : période, date limite,
+                    // « Marquer comme remise » (RemiseDAS.ashx) et la fréquence dans Paramètres.
+                    var fd = el('div', 'fiche');
+                    [[T.lPeriode, a.periode, ''], [T.lDateLimite, a.limite, '']].forEach(function (x) {
+                        var lg = el('div', 'ligne'); lg.appendChild(el('b', '', x[0])); lg.appendChild(el('span', '', x[1])); lg.appendChild(el('strong', '', x[2])); fd.appendChild(lg);
+                    });
+                    d.appendChild(fd);
+                    var gd = el('div', 'actions');
+                    var bRd = bouton('ac-btn', T.btnRemiseFaite); bRd.addEventListener('click', function () { remiseDAS(a, bRd); }); gd.appendChild(bRd);
+                    var lf = el('a', 'ac-btn clair', T.btnFreqRemise); lf.href = 'wbfsetting.aspx'; gd.appendChild(lf);
+                    d.appendChild(gd);
                 } else if (a.btn && a.url) {
                     var ac = el('div', 'actions'); var go = el('a', 'ac-btn', a.btn); go.href = a.url; ac.appendChild(go); d.appendChild(ac);
                 }
@@ -842,6 +854,24 @@
     // Rappel d'une facture en retard (RappelFacture.ashx). Texto : le rappel est noté
     // et l'application de messagerie s'ouvre avec le texte prêt (lien sms:) — aucun
     // fournisseur SMS n'est branché. Courriel : confirmation, puis dépôt dans MailService.
+    // Note la remise des DAS de la période (s0996), puis recharge le tableau de bord :
+    // la synchronisation des activités retire alors l'activité.
+    function remiseDAS(a, btn) {
+        acModal({
+            message: fmt(T.confRemiseDAS, a.periode), confirm: true, okText: T.btnRemiseFaite,
+            onOk: function () {
+                btn.disabled = true;
+                fetch('RemiseDAS.ashx', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ debut: a.debut })
+                }).then(function (r) { return r.json(); }).then(function (res) {
+                    if (!res || !res.ok) { btn.disabled = false; acModal({ message: (res && res.erreur) || T.remiseDASErreur }); return; }
+                    window.location.reload();
+                }).catch(function () { btn.disabled = false; acModal({ message: T.remiseDASErreur }); });
+            }
+        });
+    }
+
     function rappeler(a, canal, btn) {
         function envoyer() {
             btn.disabled = true;
