@@ -271,6 +271,11 @@ Namespace Controls
                     sb.Append(Section("portalSecFirm"))
                     sb.Append(Item("~/wbfCabDemandes.aspx", Ico("tag"), "portalDemandes", "nav-item", GetDemandesCount(), "y"))
                     sb.Append(Item("~/wbfCabProfil.aspx", Ico("firm"), "portalProfile"))
+                    sb.Append(Item("~/wbfCabTechniciens.aspx", Ico("user-cog"), "portalTechniciens"))
+                Case "employe"
+                    ' Un employé suit les techniciens qu'il supervise (T379).
+                    sb.Append(Section("portalSecFirm"))
+                    sb.Append(Item("~/wbfCabTechniciens.aspx", Ico("user-cog"), "portalTechniciensMiens"))
             End Select
 
             ' Administration
@@ -411,6 +416,8 @@ Namespace Controls
                 Case "portalAssign" : Return Choose3(lang, "Affectation des dossiers", "File assignment", "Asignación de expedientes")
                 Case "portalActivities" : Return Choose3(lang, "Activités à attribuer", "Activities to assign", "Actividades por asignar")
                 Case "portalProfile" : Return Choose3(lang, "Profil du cabinet", "Firm profile", "Perfil del despacho")
+                Case "portalTechniciens" : Return Choose3(lang, "Techniciens", "Technicians", "Técnicos")
+                Case "portalTechniciensMiens" : Return Choose3(lang, "Mes techniciens", "My technicians", "Mis técnicos")
                 Case "portalTools" : Return Choose3(lang, "Traitement en lot", "Batch processing", "Procesamiento por lotes")
                 Case "comingSoon" : Return Choose3(lang, "À venir", "Soon", "Pronto")
                 Case Else : Return ""

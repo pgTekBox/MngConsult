@@ -101,6 +101,7 @@ Public Class wbfCabMembres
     Private Sub BindRoleDropdown()
         ddlRole.Items.Clear()
         ddlRole.Items.Add(New ListItem(T("Employé", "Employee", "Empleado"), "employe"))
+        ddlRole.Items.Add(New ListItem(T("Technicien", "Technician", "Técnico"), "technicien"))
         ddlRole.Items.Add(New ListItem(T("Administrateur", "Administrator", "Administrador"), "admin"))
     End Sub
 
@@ -373,6 +374,7 @@ Public Class wbfCabMembres
             Case "admin" : Return Server.HtmlEncode(T("Administrateur", "Administrator", "Administrador"))
             Case "responsable" : Return Server.HtmlEncode(T("Responsable", "Team lead", "Responsable"))
             Case "solo" : Return Server.HtmlEncode(T("Solo", "Solo", "Solo"))
+            Case "technicien" : Return Server.HtmlEncode(T("Technicien", "Technician", "Técnico"))
             Case Else : Return Server.HtmlEncode(T("Employé", "Employee", "Empleado"))
         End Select
     End Function

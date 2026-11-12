@@ -131,6 +131,30 @@
                 <div class="attention" data-titre="Attention">La livraison du courriel d’invitation dépend du service d’envoi. Si le courriel tarde, utilisez le <strong>lien d’invitation affiché</strong> : copiez-le et transmettez-le directement à la personne.</div>
             </section>
 
+            <section id="fr-techniciens">
+                <h2>Techniciens</h2>
+                <p>Un <strong>technicien</strong> est un membre du cabinet au rôle « Technicien » (technicien comptable) : il ne voit et n’entre que dans les <strong>dossiers qui lui sont confiés</strong>, et travaille sous un <strong>superviseur</strong> (un employé ou un administrateur du cabinet). Menu <span class="chemin">Mon cabinet › Techniciens</span>.</p>
+                <h3>Indicateurs</h3>
+                <p>Techniciens, En attente d’activation, Tâches ouvertes (de leurs dossiers) et En retard (en rouge s’il y en a).</p>
+                <h3>Inviter un technicien (administrateur, solo)</h3>
+                <ol>
+                    <li>Prénom, nom, courriel et <strong>superviseur</strong>, puis <kbd>Envoyer l’invitation</kbd>.</li>
+                    <li>Le compte est créé, <strong>en attente d’activation</strong> ; le courriel d’invitation part et le <strong>lien d’activation</strong> s’affiche, à copier.</li>
+                    <li>Le technicien ouvre le lien et choisit son mot de passe : il entre dans le portail et ne voit que ses dossiers.</li>
+                </ol>
+                <h3>Chaque technicien</h3>
+                <ul>
+                    <li>Nom, courriel, « en attente d’activation » tant que le compte n’est pas activé, dernière connexion.</li>
+                    <li><strong>Superviseur</strong> : la liste le change aussitôt. Le superviseur voit aussi les dossiers de ses techniciens.</li>
+                    <li><strong>Dossiers</strong> confiés et nombre de tâches ouvertes et en retard.</li>
+                    <li><kbd>Gérer les dossiers</kbd> : les dossiers du cabinet, cochés quand ils sont confiés au technicien ; « actuellement suivi par … » indique la personne actuelle. Cocher un dossier le lui confie (un dossier n’a qu’un responsable) ; le décocher le laisse sans responsable. <kbd>Enregistrer</kbd>.</li>
+                    <li><kbd>Retirer</kbd> : après confirmation, désactive le compte du technicien. Ses dossiers restent confiés jusqu’à ce que vous les réattribuiez.</li>
+                </ul>
+                <h3>Superviseur (employé)</h3>
+                <p>Un employé voit <span class="chemin">Mon cabinet › Mes techniciens</span> : les techniciens qu’il supervise, leurs dossiers et leur charge, en lecture. Seul un administrateur invite, change le superviseur, confie des dossiers ou retire un technicien.</p>
+                <div class="note" data-titre="Bon à savoir">Le rôle « Technicien » se choisit aussi dans <span class="chemin">Membres et sécurité</span>.</div>
+            </section>
+
             <section id="fr-affectation">
                 <h2>Confier les dossiers</h2>
                 <h3>Affectation des dossiers</h3>
@@ -232,7 +256,9 @@
                         <tr><td>Portail comptable</td><td>L’espace de travail du cabinet, distinct des dossiers des clients, atteint par l’option « — Portail comptable — » du sélecteur.</td></tr>
                         <tr><td>Cabinet</td><td>La firme comptable : un ensemble de membres et de dossiers.</td></tr>
                         <tr><td>Membre</td><td>Un compte comptable rattaché au cabinet, avec un rôle.</td></tr>
-                        <tr><td>Rôle</td><td>Administrateur, employé, ou solo — détermine ce que le membre voit et peut faire.</td></tr>
+                        <tr><td>Rôle</td><td>Administrateur, employé, technicien, ou solo — détermine ce que le membre voit et peut faire.</td></tr>
+                        <tr><td>Technicien</td><td>Un membre qui ne voit que les dossiers qui lui sont confiés et travaille sous un superviseur.</td></tr>
+                        <tr><td>Superviseur</td><td>L’employé ou l’administrateur responsable d’un technicien ; il voit aussi ses dossiers.</td></tr>
                         <tr><td>Dossier</td><td>Une compagnie cliente du cabinet.</td></tr>
                         <tr><td>Périmètre</td><td>L’ensemble des dossiers qu’un membre peut voir, selon son rôle et ses affectations.</td></tr>
                         <tr><td>Affectation</td><td>Le fait de confier un dossier à un membre.</td></tr>
@@ -355,6 +381,30 @@
                 <div class="attention" data-titre="Warning">Delivery of the invitation email depends on the mail service. If the email is slow, use the <strong>invitation link shown on screen</strong>: copy it and pass it directly to the person.</div>
             </section>
 
+            <section id="en-technicians">
+                <h2>Technicians</h2>
+                <p>A <strong>technician</strong> is a firm member with the “Technician” role (accounting technician): they only see and enter the <strong>files assigned to them</strong>, and work under a <strong>supervisor</strong> (an employee or an administrator of the firm). Menu <span class="chemin">My firm › Technicians</span>.</p>
+                <h3>Indicators</h3>
+                <p>Technicians, Awaiting activation, Open tasks (on their files) and Overdue (red when there are any).</p>
+                <h3>Invite a technician (administrator, solo)</h3>
+                <ol>
+                    <li>First name, last name, email and <strong>supervisor</strong>, then <kbd>Send the invitation</kbd>.</li>
+                    <li>The account is created, <strong>awaiting activation</strong>; the invitation email goes out and the <strong>activation link</strong> is shown, ready to copy.</li>
+                    <li>The technician opens the link and chooses a password: they enter the portal and only see their files.</li>
+                </ol>
+                <h3>Each technician</h3>
+                <ul>
+                    <li>Name, email, “awaiting activation” while the account is not activated, last sign-in.</li>
+                    <li><strong>Supervisor</strong>: the list changes it right away. The supervisor also sees their technicians’ files.</li>
+                    <li>Assigned <strong>files</strong> and the number of open and overdue tasks.</li>
+                    <li><kbd>Manage files</kbd>: the firm’s files, checked when assigned to the technician; “currently handled by …” shows the current person. Checking a file assigns it (a file has a single assignee); unchecking it leaves it unassigned. <kbd>Save</kbd>.</li>
+                    <li><kbd>Remove</kbd>: after confirmation, deactivates the technician’s account. Their files stay assigned until you reassign them.</li>
+                </ul>
+                <h3>Supervisor (employee)</h3>
+                <p>An employee sees <span class="chemin">My firm › My technicians</span>: the technicians they supervise, their files and workload, read-only. Only an administrator invites, changes the supervisor, assigns files or removes a technician.</p>
+                <div class="note" data-titre="Good to know">The “Technician” role can also be chosen in <span class="chemin">Members and security</span>.</div>
+            </section>
+
             <section id="en-assignment">
                 <h2>Assigning files</h2>
                 <h3>File assignment</h3>
@@ -456,7 +506,9 @@
                         <tr><td>Accountant portal</td><td>The firm’s workspace, distinct from clients’ files, reached through the picker’s “— Accountant portal —” option.</td></tr>
                         <tr><td>Firm</td><td>The accounting firm: a set of members and files.</td></tr>
                         <tr><td>Member</td><td>An accountant account attached to the firm, with a role.</td></tr>
-                        <tr><td>Role</td><td>Administrator, employee, or solo — governs what the member sees and can do.</td></tr>
+                        <tr><td>Role</td><td>Administrator, employee, technician, or solo — governs what the member sees and can do.</td></tr>
+                        <tr><td>Technician</td><td>A member who only sees the files assigned to them and works under a supervisor.</td></tr>
+                        <tr><td>Supervisor</td><td>The employee or administrator in charge of a technician; they also see the technician’s files.</td></tr>
                         <tr><td>File</td><td>A client company of the firm.</td></tr>
                         <tr><td>Perimeter</td><td>The set of files a member can see, based on role and assignments.</td></tr>
                         <tr><td>Assignment</td><td>Giving a file to a member.</td></tr>
@@ -579,6 +631,30 @@
                 <div class="attention" data-titre="Atención">La entrega del correo de invitación depende del servicio de envío. Si el correo tarda, use el <strong>enlace de invitación mostrado en pantalla</strong>: cópielo y páselo directamente a la persona.</div>
             </section>
 
+            <section id="es-tecnicos">
+                <h2>Técnicos</h2>
+                <p>Un <strong>técnico</strong> es un miembro del despacho con el rol «Técnico» (técnico contable): solo ve y solo entra en los <strong>expedientes que se le confían</strong>, y trabaja bajo un <strong>supervisor</strong> (un empleado o un administrador del despacho). Menú <span class="chemin">Mi despacho › Técnicos</span>.</p>
+                <h3>Indicadores</h3>
+                <p>Técnicos, Pendientes de activación, Tareas abiertas (de sus expedientes) y Atrasadas (en rojo cuando hay alguna).</p>
+                <h3>Invitar a un técnico (administrador, solo)</h3>
+                <ol>
+                    <li>Nombre, apellido, correo y <strong>supervisor</strong>, luego <kbd>Enviar la invitación</kbd>.</li>
+                    <li>Se crea la cuenta, <strong>pendiente de activación</strong>; sale el correo de invitación y se muestra el <strong>enlace de activación</strong>, listo para copiar.</li>
+                    <li>El técnico abre el enlace y elige su contraseña: entra al portal y solo ve sus expedientes.</li>
+                </ol>
+                <h3>Cada técnico</h3>
+                <ul>
+                    <li>Nombre, correo, «pendiente de activación» mientras la cuenta no esté activada, última conexión.</li>
+                    <li><strong>Supervisor</strong>: la lista lo cambia de inmediato. El supervisor ve también los expedientes de sus técnicos.</li>
+                    <li><strong>Expedientes</strong> confiados y número de tareas abiertas y atrasadas.</li>
+                    <li><kbd>Gestionar expedientes</kbd>: los expedientes del despacho, marcados cuando están confiados al técnico; «actualmente a cargo de …» indica la persona actual. Marcar un expediente se lo confía (un expediente tiene un solo responsable); desmarcarlo lo deja sin responsable. <kbd>Guardar</kbd>.</li>
+                    <li><kbd>Retirar</kbd>: tras confirmar, desactiva la cuenta del técnico. Sus expedientes siguen confiados hasta que los reasigne.</li>
+                </ul>
+                <h3>Supervisor (empleado)</h3>
+                <p>Un empleado ve <span class="chemin">Mi despacho › Mis técnicos</span>: los técnicos que supervisa, sus expedientes y su carga, en lectura. Solo un administrador invita, cambia el supervisor, confía expedientes o retira a un técnico.</p>
+                <div class="note" data-titre="Bueno saber">El rol «Técnico» también se puede elegir en <span class="chemin">Miembros y seguridad</span>.</div>
+            </section>
+
             <section id="es-asignacion">
                 <h2>Asignar los expedientes</h2>
                 <h3>Asignación de expedientes</h3>
@@ -680,7 +756,9 @@
                         <tr><td>Portal del contador</td><td>El espacio de trabajo del despacho, distinto de los expedientes de los clientes, al que se llega por la opción « — Portal del contador — » del selector.</td></tr>
                         <tr><td>Despacho</td><td>La firma contable: un conjunto de miembros y expedientes.</td></tr>
                         <tr><td>Miembro</td><td>Una cuenta de contador vinculada al despacho, con un rol.</td></tr>
-                        <tr><td>Rol</td><td>Administrador, empleado, o solo — determina lo que el miembro ve y puede hacer.</td></tr>
+                        <tr><td>Rol</td><td>Administrador, empleado, técnico o solo: determina lo que el miembro ve y puede hacer.</td></tr>
+                        <tr><td>Técnico</td><td>Un miembro que solo ve los expedientes que se le confían y trabaja bajo un supervisor.</td></tr>
+                        <tr><td>Supervisor</td><td>El empleado o administrador a cargo de un técnico; ve también sus expedientes.</td></tr>
                         <tr><td>Expediente</td><td>Una empresa cliente del despacho.</td></tr>
                         <tr><td>Perímetro</td><td>El conjunto de expedientes que un miembro puede ver, según su rol y sus asignaciones.</td></tr>
                         <tr><td>Asignación</td><td>El hecho de confiar un expediente a un miembro.</td></tr>
