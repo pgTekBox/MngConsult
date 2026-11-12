@@ -76,15 +76,16 @@ Partial Public Class wbfSetting
         btnSave.Text = L("save")
         btnReload.Text = L("reload")
         btnScanExtract.Text = L("scanBtn")
-        If tsSettings.Tabs.Count >= 8 Then
+        If tsSettings.Tabs.Count >= 9 Then
             tsSettings.Tabs(0).Text = L("tabCompany")
             tsSettings.Tabs(1).Text = L("tabTaxes")
-            tsSettings.Tabs(2).Text = L("tabEmail")
-            tsSettings.Tabs(3).Text = L("tabInvoice")
-            tsSettings.Tabs(4).Text = L("tabProcessing")
-            tsSettings.Tabs(5).Text = L("tabAccounting")
-            tsSettings.Tabs(6).Text = L("tabBank")
-            tsSettings.Tabs(7).Text = L("tabAccountant")
+            tsSettings.Tabs(2).Text = L("tabSalaires")
+            tsSettings.Tabs(3).Text = L("tabEmail")
+            tsSettings.Tabs(4).Text = L("tabInvoice")
+            tsSettings.Tabs(5).Text = L("tabProcessing")
+            tsSettings.Tabs(6).Text = L("tabAccounting")
+            tsSettings.Tabs(7).Text = L("tabBank")
+            tsSettings.Tabs(8).Text = L("tabAccountant")
         End If
     End Sub
 
@@ -101,6 +102,12 @@ Partial Public Class wbfSetting
             Case "reload" : Return Choose3(lang, "Recharger", "Reload", "Recargar")
             Case "tabCompany" : Return Choose3(lang, "Entreprise", "Company", "Empresa")
             Case "tabTaxes" : Return Choose3(lang, "Taxes", "Taxes", "Impuestos")
+            Case "tabSalaires" : Return Choose3(lang, "Salaires", "Payroll", "Salarios")
+            Case "introSalaires" : Return Choose3(lang, "Retenues à la source (impôts, RRQ, RQAP, assurance-emploi, FSS, CNESST…) : à quelle fréquence vous les remettez à Revenu Québec et à l’ARC. C’est le type de remettant que les gouvernements vous ont attribué, selon la moyenne mensuelle de vos retenues.", "Source deductions (income tax, QPP, QPIP, EI, HSF, CNESST…): how often you remit them to Revenu Québec and the CRA. This is the remitter type the governments assigned you, based on your average monthly withholding.", "Retenciones en la fuente (impuestos, RRQ, RQAP, seguro de empleo, FSS, CNESST…): con qué frecuencia las remite a Revenu Québec y a la ARC. Es el tipo de remitente que le asignaron los gobiernos, según el promedio mensual de sus retenciones.")
+            Case "remTrim" : Return Choose3(lang, "Trimestrielle — remettant trimestriel (petit employeur)", "Quarterly — quarterly remitter (small employer)", "Trimestral — remitente trimestral (pequeño empleador)")
+            Case "remMens" : Return Choose3(lang, "Mensuelle — remettant régulier (le 15 du mois suivant)", "Monthly — regular remitter (15th of the following month)", "Mensual — remitente regular (el 15 del mes siguiente)")
+            Case "remBimens" : Return Choose3(lang, "Deux fois par mois — remettant accéléré, seuil 1", "Twice a month — accelerated remitter, threshold 1", "Dos veces al mes — remitente acelerado, umbral 1")
+            Case "remHebdo" : Return Choose3(lang, "Jusqu’à quatre fois par mois — remettant accéléré, seuil 2", "Up to four times a month — accelerated remitter, threshold 2", "Hasta cuatro veces al mes — remitente acelerado, umbral 2")
             Case "tabEmail" : Return Choose3(lang, "Email", "Email", "Correo")
             Case "tabInvoice" : Return Choose3(lang, "Facture", "Invoice", "Factura")
             Case "tabProcessing" : Return Choose3(lang, "Traitement", "Processing", "Procesamiento")
@@ -189,6 +196,7 @@ Partial Public Class wbfSetting
         m_MailStatus = Nothing
         BindCategory("ENTREPRISE", rpEntreprise, pnlEmptyEntreprise)
         BindCategory("TAXES", rpTaxes, pnlEmptyTaxes)
+        BindCategory("SALAIRES", rpSalaires, pnlEmptySalaires)
         BindCategory("EMAIL", rpEmail, pnlEmptyEmail)
         BindCategory("PDF", rpPdf, pnlEmptyPdf)
         BindCategory("TRAITEMENT", rpTraitement, pnlEmptyTraitement)
@@ -281,6 +289,9 @@ Partial Public Class wbfSetting
                 Return
             Case "METIER"
                 phControl.Controls.Add(BuildMetierCombo(sVal))
+                Return
+            Case "SAL_REMISE_FREQ"
+                phControl.Controls.Add(BuildSalRemiseFreqCombo(sVal))
                 Return
             Case "TAX_FREQ"
                 phControl.Controls.Add(BuildTaxFreqCombo(sVal))
@@ -509,6 +520,20 @@ Partial Public Class wbfSetting
         cb.Items.Add(New RadComboBoxItem("2026-0001", "{AAAA}-{NUMERO}"))
         cb.Items.Add(New RadComboBoxItem("0001", "{NUMERO}"))
         If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value Else cb.SelectedValue = "{PREFIXE}-{AAAA}-{NUMERO}"
+        Return cb
+    End Function
+
+    ''' <summary>Fréquence de remise des retenues à la source (DAS), onglet Salaires (T376) :
+    ''' le type de remettant attribué par Revenu Québec et l'ARC. Défaut : MENSUELLE.</summary>
+    Private Function BuildSalRemiseFreqCombo(value As String) As RadComboBox
+        Dim cb As New RadComboBox()
+        cb.ID = "txtValue"
+        cb.Width = Unit.Percentage(100)
+        cb.Items.Add(New RadComboBoxItem(L("remTrim"), "TRIMESTRIELLE"))
+        cb.Items.Add(New RadComboBoxItem(L("remMens"), "MENSUELLE"))
+        cb.Items.Add(New RadComboBoxItem(L("remBimens"), "BIMENSUELLE"))
+        cb.Items.Add(New RadComboBoxItem(L("remHebdo"), "HEBDOMADAIRE"))
+        If cb.FindItemByValue(If(value, "")) IsNot Nothing Then cb.SelectedValue = value Else cb.SelectedValue = "MENSUELLE"
         Return cb
     End Function
 
@@ -807,6 +832,7 @@ Partial Public Class wbfSetting
 
             SaveRepeater(rpEntreprise)
             SaveRepeater(rpTaxes)
+            SaveRepeater(rpSalaires)
             SaveRepeater(rpEmail)
             SaveRepeater(rpPdf)
             SaveRepeater(rpTraitement)

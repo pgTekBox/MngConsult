@@ -152,6 +152,8 @@ Partial Public Class wbfSetting
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents pnlEmptyTaxes As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents rpSalaires As Global.System.Web.UI.WebControls.Repeater
+    Protected WithEvents pnlEmptySalaires As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
     '''pvEmail control.
