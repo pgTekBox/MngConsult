@@ -89,7 +89,7 @@
     .fc-pied { padding: 12px 6px 0; color: #44536E; font-size: 14px }
     /* Les colonnes : avatar, nom, courriel, rôle, état, dernière connexion, actions. */
     .fc-liste .listview-list { min-width: 980px }
-    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: 56px minmax(0, 2fr) minmax(0, 1.6fr) 130px 120px 160px 100px }
+    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: 56px minmax(0, 2fr) minmax(0, 1.6fr) 160px 120px 160px 100px }
     .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: #1B4F9C; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px }
     .c-user { display: flex; flex-direction: column; min-width: 0 }
     .c-user b { font-weight: 800; color: #0E1F3D; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
@@ -201,7 +201,7 @@
                         <div><div class="user-avatar"><%# GetInitials(Eval("FirstName"), Eval("LastName"), Eval("Email")) %></div></div>
                         <div class="c-user"><%# NomCell(Eval("FullName"), Eval("Email"), Eval("Id")) %></div>
                         <div class="user-email col-email"><%# Server.HtmlEncode(Convert.ToString(Eval("Email"))) %></div>
-                        <div><%# RolePill(Eval("IsAdmin")) %></div>
+                        <div><%# RolePill(Eval("IsAdmin"), Eval("IsAccountant")) %></div>
                         <div><%# EtatCell(Eval("IsActive")) %></div>
                         <div class="user-meta col-lastlogin"><%# DateCell(Eval("LastLoginOn")) %></div>
 

@@ -157,7 +157,7 @@ Public Class wbfUsers
     Private Sub ChoisirIndicateur(arg As String)
         Dim parts As String() = If(arg, "").Split("|"c)
         Dim valeur As String = If(parts.Length >= 3, parts(2), "").Trim().ToLowerInvariant()
-        If valeur <> "actifs" AndAlso valeur <> "inactifs" AndAlso valeur <> "admins" AndAlso valeur <> "recents" Then Return
+        If valeur <> "actifs" AndAlso valeur <> "inactifs" AndAlso valeur <> "admins" AndAlso valeur <> "comptables" AndAlso valeur <> "recents" Then Return
         FiltreCourant = If(FiltreCourant = valeur, "", valeur)
         rlvUsers.Rebind()
     End Sub
@@ -182,6 +182,7 @@ Public Class wbfUsers
             Case "actifs" : Return Vrai(r("IsActive"))
             Case "inactifs" : Return Not Vrai(r("IsActive"))
             Case "admins" : Return Vrai(r("IsAdmin"))
+            Case "comptables" : Return r.Table.Columns.Contains("IsAccountant") AndAlso Vrai(r("IsAccountant"))
             Case "recents" : Return Recent(r("LastLoginOn"))
             Case Else : Return True
         End Select
@@ -204,11 +205,13 @@ Public Class wbfUsers
         TotalUtilisateurs = rows.Count
         Dim actifs As Integer = rows.Where(Function(r) Garde(r, "actifs")).Count()
         Dim admins As Integer = rows.Where(Function(r) Garde(r, "admins")).Count()
+        Dim comptables As Integer = rows.Where(Function(r) Garde(r, "comptables")).Count()
         Dim recents As Integer = rows.Where(Function(r) Garde(r, "recents")).Count()
         Dim sb As New StringBuilder()
         sb.Append(Kpi("actifs", T("Utilisateurs actifs", "Active users", "Usuarios activos"), actifs & " / " & rows.Count, T("peuvent se connecter", "can sign in", "pueden conectarse"), "#43B47A"))
         sb.Append(Kpi("inactifs", T("Inactifs", "Inactive", "Inactivos"), (rows.Count - actifs).ToString(), T("accès suspendu", "access suspended", "acceso suspendido"), "#AEBBCD"))
         sb.Append(Kpi("admins", T("Administrateurs", "Administrators", "Administradores"), admins.ToString(), T("gèrent la compagnie", "manage the company", "gestionan la compañía"), "#1B4F9C"))
+        sb.Append(Kpi("comptables", T("Comptables", "Accountants", "Contadores"), comptables.ToString(), T("du cabinet comptable", "from the accounting firm", "del despacho contable"), "#7C4DCC"))
         sb.Append(Kpi("recents", T("Connectés (30 jours)", "Signed in (30 days)", "Conectados (30 días)"), recents.ToString(), T("au moins une connexion", "at least one sign-in", "al menos una conexión"), "#E3B341"))
         SetLiteral(Me, "litKpis", sb.ToString())
     End Sub
@@ -238,8 +241,15 @@ Public Class wbfUsers
         Return "<b>" & Server.HtmlEncode(n) & "</b><span>ID: " & Server.HtmlEncode(Convert.ToString(id)) & "</span>"
     End Function
 
-    Public Function RolePill(estAdmin As Object) As String
-        If Vrai(estAdmin) Then Return "<span class=""fc-pay"" style=""background:#E3EBF7;color:#143A73"">" & Server.HtmlEncode(T("Admin", "Admin", "Admin")) & "</span>"
+    ''' <summary>Le rôle, comme l'en-tête du site : Comptable · Admin, Comptable, Admin ou Utilisateur
+    ''' (cases T015User.IsAdmin et isAccountant, T378).</summary>
+    Public Function RolePill(estAdmin As Object, estComptable As Object) As String
+        Dim admin As Boolean = Vrai(estAdmin), comptable As Boolean = Vrai(estComptable)
+        If comptable Then
+            Return "<span class=""fc-pay"" style=""background:#EFE7FB;color:#5B2DA8"">" &
+                   Server.HtmlEncode(If(admin, T("Comptable · Admin", "Accountant · Admin", "Contador · Admin"), T("Comptable", "Accountant", "Contador"))) & "</span>"
+        End If
+        If admin Then Return "<span class=""fc-pay"" style=""background:#E3EBF7;color:#143A73"">" & Server.HtmlEncode(T("Admin", "Admin", "Admin")) & "</span>"
         Return "<span class=""fc-pay"" style=""background:#F2F5F9;color:#5B6B86"">" & Server.HtmlEncode(T("Utilisateur", "User", "Usuario")) & "</span>"
     End Function
 
