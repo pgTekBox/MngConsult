@@ -126,6 +126,7 @@ Namespace Controls
             {"user-cog", "<circle cx=""10"" cy=""7"" r=""4""/><path d=""M2 21v-2a4 4 0 0 1 4-4h5""/><circle cx=""18"" cy=""17"" r=""3""/><path d=""M18 12.5v1.5M18 20v1.5M22.5 17H21M15 17h-1.5M21.2 13.8l-1.1 1.1M15.9 19.1l-1.1 1.1M21.2 20.2l-1.1-1.1M15.9 14.9l-1.1-1.1""/>"},
             {"settings", "<circle cx=""12"" cy=""12"" r=""3""/><path d=""M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z""/>"},
             {"firm", "<path d=""M4 21V5l8-3 8 3v16M9 21v-5h6v5""/>"},
+            {"shield", "<path d=""M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z""/><path d=""M9 12l2 2 4-4""/>"},
             {"layers", "<path d=""M12 2 2 7l10 5 10-5z""/><path d=""M2 17l10 5 10-5M2 12l10 5 10-5""/>"},
             {"payments", "<path d=""M3 7h18v10H3zM3 11h18M7 15h3""/>"},
             {"card", "<rect x=""2"" y=""5"" width=""20"" height=""14"" rx=""2""/><path d=""M2 10h20""/>"},
@@ -272,6 +273,7 @@ Namespace Controls
                     sb.Append(Item("~/wbfCabDemandes.aspx", Ico("tag"), "portalDemandes", "nav-item", GetDemandesCount(), "y"))
                     sb.Append(Item("~/wbfCabProfil.aspx", Ico("firm"), "portalProfile"))
                     sb.Append(Item("~/wbfCabTechniciens.aspx", Ico("user-cog"), "portalTechniciens"))
+                    sb.Append(Item("~/wbfCabRoles.aspx", Ico("shield"), "portalRoles"))
                 Case "employe"
                     ' Un employé suit les techniciens qu'il supervise (T379).
                     sb.Append(Section("portalSecFirm"))
@@ -417,6 +419,7 @@ Namespace Controls
                 Case "portalActivities" : Return Choose3(lang, "Activités à attribuer", "Activities to assign", "Actividades por asignar")
                 Case "portalProfile" : Return Choose3(lang, "Profil du cabinet", "Firm profile", "Perfil del despacho")
                 Case "portalTechniciens" : Return Choose3(lang, "Comptables et techniciens", "Accountants and technicians", "Contadores y técnicos")
+                Case "portalRoles" : Return Choose3(lang, "Rôles", "Roles", "Roles")
                 Case "portalTechniciensMiens" : Return Choose3(lang, "Mes techniciens", "My technicians", "Mis técnicos")
                 Case "portalTools" : Return Choose3(lang, "Traitement en lot", "Batch processing", "Procesamiento por lotes")
                 Case "comingSoon" : Return Choose3(lang, "À venir", "Soon", "Pronto")

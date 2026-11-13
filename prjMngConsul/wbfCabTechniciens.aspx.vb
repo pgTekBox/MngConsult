@@ -114,6 +114,8 @@ Public Class wbfCabTechniciens
                     membres.Add(New With {
                         .id = CInt(r("MembreId")),
                         .role = RoleNormal(Txt(r("Role"))),
+                        .roleId = If(IsDBNull(r("RoleId")), 0, CInt(r("RoleId"))),
+                        .roleNom = Txt(r("RoleNom")),
                         .moi = CBool(r("IsMe")),
                         .nom = If(nom = "", Txt(r("Email")), nom),
                         .email = Txt(r("Email")),
@@ -139,7 +141,43 @@ Public Class wbfCabTechniciens
             End If
         Catch
         End Try
-        Return New With {.gerer = PeutGerer, .membres = membres, .sups = sups}
+        Dim roles As New List(Of Object)
+        Try
+            For Each r As DataRow In LireRoles().Rows
+                roles.Add(New With {.id = CInt(r("Id")), .nom = Txt(r("Nom")), .acces = Txt(r("Acces"))})
+            Next
+        Catch
+        End Try
+        Return New With {.gerer = PeutGerer, .membres = membres, .sups = sups, .roles = roles}
+    End Function
+
+    ''' <summary>Les rôles du cabinet (s1003, T382) : Id, Nom, Acces.</summary>
+    Private Function LireRoles() As DataTable
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        Dim ds As DataSet = ExecuteSQLds("s1003ListRolesCabinet", p)
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then Return ds.Tables(0)
+        Return New DataTable()
+    End Function
+
+    ''' <summary>Le niveau d'accès d'un rôle du cabinet ("" s'il est introuvable).</summary>
+    Private Function AccesDuRole(roleId As Integer) As String
+        For Each r As DataRow In LireRoles().Rows
+            If CInt(r("Id")) = roleId Then Return Txt(r("Acces")).ToLowerInvariant()
+        Next
+        Return ""
+    End Function
+
+    ''' <summary>Donne un rôle du cabinet à un membre (s1006 : niveau d'accès recopié, dernier admin protégé).</summary>
+    Private Function AttribuerRole(membreId As Integer, roleId As Integer) As Integer
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@MembreId", membreId))
+        p.Add(New SqlParameter("@RoleId", roleId))
+        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+        p.Add(outErr)
+        ExecuteSQL("s1006SetRoleMembre", p)
+        Return If(outErr.Value Is Nothing OrElse IsDBNull(outErr.Value), -1, CInt(outErr.Value))
     End Function
 
     ''' <summary>Le membre (GUID, rôle, en attente) lu dans s1000 ; Nothing s'il n'est pas du cabinet.</summary>
@@ -185,8 +223,10 @@ Public Class wbfCabTechniciens
     Private Function Inviter() As Object
         Dim email As String = Txt(Request.Form("email"))
         If email = "" OrElse Not email.Contains("@") Then Return New With {.ok = False, .erreur = T("Courriel invalide.", "Invalid email.", "Correo no válido.")}
-        Dim role As String = RoleNormal(Txt(Request.Form("role")))
-        If role = "solo" Then role = "employe"
+        ' Le rôle choisi (T382) ; son niveau d'accès est le rôle technique du membre
+        Dim roleId As Integer = CInt(Val(Request.Form("roleId")))
+        Dim role As String = AccesDuRole(roleId)
+        If role = "" Then role = "employe" : roleId = 0
 
         Dim p As New Collection
         p.Add(New SqlParameter("@UserId", UserEmail))
@@ -209,11 +249,12 @@ Public Class wbfCabTechniciens
             Return New With {.ok = False, .erreur = T("L'invitation n'a pas pu être créée.", "The invitation could not be created.", "No se pudo crear la invitación.")}
         End If
 
-        ' Un technicien : le superviseur choisi, posé sur le nouveau membre
-        Dim sup As String = Txt(Request.Form("sup"))
-        If role = "technicien" AndAlso sup <> "" Then
-            Dim membreId As Integer = TrouverMembre(email)
-            If membreId > 0 Then ChangerSuperviseur(membreId, sup)
+        ' Le rôle choisi et, pour un technicien, le superviseur, posés sur le nouveau membre
+        Dim membreId As Integer = TrouverMembre(email)
+        If membreId > 0 Then
+            If roleId > 0 Then AttribuerRole(membreId, roleId)
+            Dim sup As String = Txt(Request.Form("sup"))
+            If role = "technicien" AndAlso sup <> "" Then ChangerSuperviseur(membreId, sup)
         End If
 
         Dim lien As String = Request.Url.GetLeftPart(UriPartial.Authority) & ResolveUrl("~/wbfCabInvitation.aspx?token=" & CType(outTok.Value, Guid).ToString())
@@ -292,15 +333,17 @@ Public Class wbfCabTechniciens
         ' 2. Rôle et état actif (le solo garde son rôle ; un compte en attente reste en attente)
         Dim role As String = RoleNormal(Txt(m("Role")))
         If role <> "solo" Then
-            role = RoleNormal(Txt(Request.Form("role")))
-            If role = "solo" Then role = "employe"
+            ' Le rôle du cabinet (T382) : s1006 recopie son niveau d'accès et
+            ' retire le superviseur d'un technicien qui change de niveau.
+            Dim roleId As Integer = CInt(Val(Request.Form("roleId")))
+            Dim acces As String = AccesDuRole(roleId)
+            If acces = "" Then Return New With {.ok = False, .erreur = T("Rôle introuvable.", "Role not found.", "Rol no encontrado.")}
+            err = AttribuerRole(membreId, roleId)
+            If err <> 0 Then Return New With {.ok = False, .erreur = MessageErreur(err)}
+            role = acces
         End If
         Dim actif As Boolean = (Txt(Request.Form("actif")) = "1")
         If CBool(m("Pending")) Then actif = False
-        ' Un technicien qui change de rôle quitte son superviseur
-        If RoleNormal(Txt(m("Role"))) = "technicien" AndAlso role <> "technicien" AndAlso Txt(m("SuperviseurUserGUID")) <> "" Then
-            ChangerSuperviseur(membreId, "")
-        End If
         err = MajMembre(membreId, role, actif)
         If err <> 0 Then Return New With {.ok = False, .erreur = MessageErreur(err)}
 

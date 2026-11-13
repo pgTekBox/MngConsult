@@ -534,6 +534,7 @@
     <Content Include="wbfCabDossiers.aspx" />
     <Content Include="wbfCabMembres.aspx" />
     <Content Include="wbfCabTechniciens.aspx" />
+    <Content Include="wbfCabRoles.aspx" />
     <Content Include="wbfCabAffectation.aspx" />
     <Content Include="wbfCabInvitation.aspx" />
     <Content Include="wbfCabProfil.aspx" />
@@ -849,6 +850,10 @@
     </Compile>
     <Compile Include="wbfCabMembres.aspx.vb">
       <DependentUpon>wbfCabMembres.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabRoles.aspx.vb">
+      <DependentUpon>wbfCabRoles.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfCabTechniciens.aspx.vb">

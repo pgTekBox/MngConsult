@@ -79,7 +79,7 @@ Public NotInheritable Class clsAide
             Case "wbfmailbox" : Return "courriel"
             Case "wbfapprobations" : Return "approbations"
             Case "wbfcabtableaubord", "wbfcabdossiers", "wbfcabmembres", "wbfcabequipes", "wbfcabaffectation",
-                 "wbfcabnonassocies", "wbfcabprofil", "wbfcabfiche", "wbfcabactivites", "wbfcabinvitation", "wbfcabtechniciens" : Return "portail-comptable"
+                 "wbfcabnonassocies", "wbfcabprofil", "wbfcabfiche", "wbfcabactivites", "wbfcabinvitation", "wbfcabtechniciens", "wbfcabroles" : Return "portail-comptable"
             Case "wbfusers", "wbfuseredit", "wbfsetting", "wbfpaymentprocessors", "squareoauth",
                  "wbfautopayauthorizations", "wbfautopayschedule", "wbfautopayhistory", "wbfscheduleautopay",
                  "wbfpayment", "wbfpaymentsuccess", "wbflogin", "wbfregister", "wbfforgotpassword", "wbfresetpassword",

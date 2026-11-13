@@ -127,11 +127,14 @@
     }
 
     function tRoleNom(r) { return r === 'admin' ? TL.rAdmin : r === 'solo' ? TL.rSolo : r === 'technicien' ? TL.rTech : TL.rEmploye; }
-    function tRoleOptions(sel) {
-        return [['admin', TL.rAdmin], ['employe', TL.rEmploye], ['technicien', TL.rTech]].map(function (o) {
-            return '<option value="' + o[0] + '"' + (o[0] === sel ? ' selected' : '') + '>' + tEsc(o[1]) + '</option>';
+    // Les rôles du cabinet (T382) : value = Id du rôle, data-acces = niveau d'accès
+    function tRoleOptions(selId) {
+        return TEC.roles.map(function (o) {
+            return '<option value="' + o.id + '" data-acces="' + o.acces + '"' + (o.id === selId ? ' selected' : '') + '>' + tEsc(o.nom) + '</option>';
         }).join('');
     }
+    function tAcces(idSel) { var s = document.getElementById(idSel), o = s && s.options[s.selectedIndex]; return o ? (o.getAttribute('data-acces') || o.value) : ''; }
+    function tRoleDefaut() { var r = TEC.roles.find(function (x) { return x.acces === 'employe'; }); return r ? r.id : 0; }
     function tMembre(id) { return TEC.membres.find(function (t) { return t.id === id; }); }
 
     function tCarte(x) {
@@ -145,7 +148,7 @@
              (x.inactif ? '<span class="tag off">' + tEsc(TL.inactif) + '</span>' : '') + '</div>' +
              '<div class="em">' + tEsc(x.email) + '</div>' +
              '<div class="pt">' + tEsc(TL.connexion) + ' : ' + tEsc(x.connexion || TL.jamais) + '</div></div>' +
-             '<div><div class="lab2">' + tEsc(TL.role) + '</div><div>' + tEsc(tRoleNom(x.role)) + '</div>' + second + '</div>' +
+             '<div><div class="lab2">' + tEsc(TL.role) + '</div><div>' + tEsc(x.role === 'solo' ? TL.rSolo : (x.roleNom || tRoleNom(x.role))) + '</div>' + second + '</div>' +
              '<div><div class="lab2">' + tEsc(TL.dossiers) + ' (' + x.nbDossiers + ')</div>' +
              '<div class="doss" title="' + tEsc(x.dossiers) + '">' + tEsc(x.dossiers || TL.aucunDossier) + '</div>' +
              '<div class="charge">' + x.taches + ' ' + tEsc(TL.taches) + (x.retard ? ' · <b class="r">' + x.retard + ' ' + tEsc(TL.retard) + '</b>' : '') + '</div></div>' +
@@ -173,7 +176,7 @@
                 (x.moi ? '<div class="aide">' + tEsc(TL.emailMoi) + '</div>' : '') + '</div>' +
             '<div><label for="tecEdRole">' + tEsc(TL.role) + '</label>' + (solo
                 ? '<select id="tecEdRole" disabled><option value="solo">' + tEsc(TL.rSolo) + '</option></select>'
-                : '<select id="tecEdRole" onchange="tecEdRoleChange()">' + tRoleOptions(x.role) + '</select>') + '</div>' +
+                : '<select id="tecEdRole" onchange="tecEdRoleChange()">' + tRoleOptions(x.roleId) + '</select>') + '</div>' +
             '<div><label for="tecEdSup">' + tEsc(TL.superviseur) + '</label><select id="tecEdSup">' + tSupOptions(x.sup) + '</select></div>' +
             '<div class="large"><label class="coche"><input type="checkbox" id="tecEdActif"' + (!x.inactif && !x.attente ? ' checked' : '') +
                 (x.attente || x.moi ? ' disabled' : '') + ' /> ' + tEsc(TL.actif) + '</label>' +
@@ -186,13 +189,13 @@
     }
     function tecEdRoleChange() {
         var s = document.getElementById('tecEdSup');
-        s.disabled = document.getElementById('tecEdRole').value !== 'technicien';
+        s.disabled = tAcces('tecEdRole') !== 'technicien';
     }
     async function tecEdEnregistrer() {
         var b = document.getElementById('tecEdOk'); b.disabled = true;
         var d = await tPost({ op: 'modifier', id: tecEditId,
             prenom: document.getElementById('tecEdPrenom').value, nom: document.getElementById('tecEdNom').value,
-            email: document.getElementById('tecEdEmail').value, role: document.getElementById('tecEdRole').value,
+            email: document.getElementById('tecEdEmail').value, roleId: document.getElementById('tecEdRole').value,
             sup: document.getElementById('tecEdSup').value, actif: document.getElementById('tecEdActif').checked ? '1' : '0' });
         b.disabled = false;
         if (!d.ok) { document.getElementById('tecEdMsg').innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
@@ -220,7 +223,7 @@
                 '<div><label>' + tEsc(TL.prenom) + '</label><input type="text" id="tecPrenom" /></div>' +
                 '<div><label>' + tEsc(TL.nom) + '</label><input type="text" id="tecNom" /></div>' +
                 '<div><label>' + tEsc(TL.courriel) + '</label><input type="email" id="tecEmail" /></div>' +
-                '<div><label>' + tEsc(TL.role) + '</label><select id="tecRoleInv" onchange="tecRoleInvChange()">' + tRoleOptions('employe') + '</select></div>' +
+                '<div><label>' + tEsc(TL.role) + '</label><select id="tecRoleInv" onchange="tecRoleInvChange()">' + tRoleOptions(tRoleDefaut()) + '</select></div>' +
                 '<div><label>' + tEsc(TL.superviseur) + '</label><select id="tecSup" disabled>' + tSupOptions('') + '</select></div>' +
                 '<div><button type="button" class="btn" id="tecInvBtn" onclick="tecInviter()">' + tEsc(TL.envoyer) + '</button></div>' +
                 '</div><div id="tecInvMsg"></div>';
@@ -236,7 +239,7 @@
 
     function tecRoleInvChange() {
         var s = document.getElementById('tecSup');
-        s.disabled = document.getElementById('tecRoleInv').value !== 'technicien';
+        s.disabled = tAcces('tecRoleInv') !== 'technicien';
         if (s.disabled) s.value = '';
     }
 
@@ -244,7 +247,7 @@
         var b = document.getElementById('tecInvBtn'), m = document.getElementById('tecInvMsg');
         b.disabled = true; m.innerHTML = '';
         var d = await tPost({ op: 'invite', prenom: document.getElementById('tecPrenom').value, nom: document.getElementById('tecNom').value,
-                              email: document.getElementById('tecEmail').value, role: document.getElementById('tecRoleInv').value,
+                              email: document.getElementById('tecEmail').value, roleId: document.getElementById('tecRoleInv').value,
                               sup: document.getElementById('tecSup').value });
         b.disabled = false;
         if (!d.ok) { m.innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
