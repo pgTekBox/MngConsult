@@ -54,6 +54,18 @@
     #tec .fen .ligne input { width: 18px; height: 18px }
     #tec .fen .ligne span.autre { margin-left: auto; font-size: 12px; color: #7A5200 }
     #tec .fen .pied { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px }
+    #tec .crayon { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #D5DDE8; background: #fff; color: #1B4F9C; cursor: pointer; display: inline-flex; align-items: center; justify-content: center }
+    #tec .crayon:hover { background: #E3EBF7 }
+    #tec .carte.off { opacity: .6 }
+    #tec .tag.off { background: #ECEFF3; color: #44536E }
+    #tec .fen .grille { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px }
+    #tec .fen .grille .large { grid-column: 1 / -1 }
+    #tec .fen .grille label { display: block; font-weight: 700; font-size: 12.5px; margin-bottom: 5px }
+    #tec .fen .grille input[type=text], #tec .fen .grille input[type=email] { width: 100%; height: 40px; padding: 0 10px; border: 1px solid #D5DDE8; border-radius: 12px; font: inherit; font-size: 14px; box-sizing: border-box }
+    #tec .fen .grille input:disabled, #tec select:disabled { background: #F2F5F9; color: #7A879C }
+    #tec .fen .grille label.coche { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer }
+    #tec .fen .grille label.coche input { width: 18px; height: 18px }
+    #tec .fen .aide { font-size: 12px; color: #5B6B86; margin-top: 4px }
 </style>
 </asp:Content>
 
@@ -78,6 +90,18 @@
             <div class="pied">
                 <button type="button" class="btn sec" id="tecFenFermer" onclick="tecFermer()"></button>
                 <button type="button" class="btn" id="tecFenOk" onclick="tecEnregistrerDossiers()"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fond" id="tecEdit" onclick="if (event.target === this) tecEdFermer();">
+        <div class="fen" role="dialog" aria-modal="true" aria-labelledby="tecEdTitre">
+            <h3 id="tecEdTitre"></h3>
+            <div id="tecEdCorps"></div>
+            <div id="tecEdMsg"></div>
+            <div class="pied">
+                <button type="button" class="btn sec" id="tecEdFermerBtn" onclick="tecEdFermer()"></button>
+                <button type="button" class="btn" id="tecEdOk" onclick="tecEdEnregistrer()"></button>
             </div>
         </div>
     </div>
@@ -112,30 +136,69 @@
 
     function tCarte(x) {
         var tech = x.role === 'technicien';
-        var roleHtml = (TEC.gerer && x.role !== 'solo')
-            ? '<select onchange="tecRole(' + x.id + ', this)">' + tRoleOptions(x.role) + '</select>'
-            : '<div>' + tEsc(tRoleNom(x.role)) + '</div>';
-        var second;
-        if (tech) {
-            second = '<div class="lab2" style="margin-top:8px">' + tEsc(TL.superviseur) + '</div>' +
-                (TEC.gerer ? '<select onchange="tecSup(' + x.id + ', this)">' + tSupOptions(x.sup) + '</select>' : '<div>' + tEsc(x.supNom || '—') + '</div>');
-        } else {
-            second = '<div class="lab2" style="margin-top:8px">' + tEsc(TL.supervise) + '</div><div>' + x.nbTechs + '</div>';
-        }
-        return '<div class="carte"><div class="av">' + tEsc(tInit(x.nom)) + '</div>' +
+        var second = tech
+            ? '<div class="lab2" style="margin-top:8px">' + tEsc(TL.superviseur) + '</div><div>' + tEsc(x.supNom || '—') + '</div>'
+            : '<div class="lab2" style="margin-top:8px">' + tEsc(TL.supervise) + '</div><div>' + x.nbTechs + '</div>';
+        return '<div class="carte' + (x.inactif ? ' off' : '') + '"><div class="av">' + tEsc(tInit(x.nom)) + '</div>' +
              '<div><div class="nm">' + tEsc(x.nom) + (x.moi ? '<span class="tag moi">' + tEsc(TL.moi) + '</span>' : '') +
-             (x.attente ? '<span class="tag">' + tEsc(TL.attente) + '</span>' : '') + '</div>' +
+             (x.attente ? '<span class="tag">' + tEsc(TL.attente) + '</span>' : '') +
+             (x.inactif ? '<span class="tag off">' + tEsc(TL.inactif) + '</span>' : '') + '</div>' +
              '<div class="em">' + tEsc(x.email) + '</div>' +
              '<div class="pt">' + tEsc(TL.connexion) + ' : ' + tEsc(x.connexion || TL.jamais) + '</div></div>' +
-             '<div><div class="lab2">' + tEsc(TL.role) + '</div>' + roleHtml + second + '</div>' +
+             '<div><div class="lab2">' + tEsc(TL.role) + '</div><div>' + tEsc(tRoleNom(x.role)) + '</div>' + second + '</div>' +
              '<div><div class="lab2">' + tEsc(TL.dossiers) + ' (' + x.nbDossiers + ')</div>' +
              '<div class="doss" title="' + tEsc(x.dossiers) + '">' + tEsc(x.dossiers || TL.aucunDossier) + '</div>' +
              '<div class="charge">' + x.taches + ' ' + tEsc(TL.taches) + (x.retard ? ' · <b class="r">' + x.retard + ' ' + tEsc(TL.retard) + '</b>' : '') + '</div></div>' +
              '<div class="acts">' + (TEC.gerer
                 ? '<button type="button" class="btn sec" onclick="tecDossiers(' + x.id + ')">' + tEsc(TL.gererDossiers) + '</button>' +
-                  (x.moi ? '' : '<button type="button" class="btn danger" onclick="tecRetirer(' + x.id + ')">' + tEsc(TL.retirer) + '</button>')
+                  '<button type="button" class="crayon" title="' + tEsc(TL.modifier) + '" aria-label="' + tEsc(TL.modifier) + '" onclick="tecModifier(' + x.id + ')">' +
+                  '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
                 : '') + '</div></div>';
     }
+
+    // Fenêtre « Modifier le membre »
+    var tecEditId = 0;
+    function tecModifier(id) {
+        var x = tMembre(id); if (!x) return;
+        tecEditId = id;
+        var solo = x.role === 'solo';
+        document.getElementById('tecEdTitre').textContent = tFmt(TL.modifierTitre, x.nom);
+        document.getElementById('tecEdFermerBtn').textContent = TL.fermer;
+        document.getElementById('tecEdOk').textContent = TL.enregistrer;
+        document.getElementById('tecEdCorps').innerHTML =
+            '<div class="grille">' +
+            '<div><label for="tecEdPrenom">' + tEsc(TL.prenom) + '</label><input type="text" id="tecEdPrenom" value="' + tEsc(x.prenom) + '" /></div>' +
+            '<div><label for="tecEdNom">' + tEsc(TL.nom) + '</label><input type="text" id="tecEdNom" value="' + tEsc(x.nomFam) + '" /></div>' +
+            '<div class="large"><label for="tecEdEmail">' + tEsc(TL.courriel) + '</label><input type="email" id="tecEdEmail" value="' + tEsc(x.email) + '"' + (x.moi ? ' disabled' : '') + ' />' +
+                (x.moi ? '<div class="aide">' + tEsc(TL.emailMoi) + '</div>' : '') + '</div>' +
+            '<div><label for="tecEdRole">' + tEsc(TL.role) + '</label>' + (solo
+                ? '<select id="tecEdRole" disabled><option value="solo">' + tEsc(TL.rSolo) + '</option></select>'
+                : '<select id="tecEdRole" onchange="tecEdRoleChange()">' + tRoleOptions(x.role) + '</select>') + '</div>' +
+            '<div><label for="tecEdSup">' + tEsc(TL.superviseur) + '</label><select id="tecEdSup">' + tSupOptions(x.sup) + '</select></div>' +
+            '<div class="large"><label class="coche"><input type="checkbox" id="tecEdActif"' + (!x.inactif && !x.attente ? ' checked' : '') +
+                (x.attente || x.moi ? ' disabled' : '') + ' /> ' + tEsc(TL.actif) + '</label>' +
+                '<div class="aide">' + tEsc(x.attente ? TL.actifAttente : TL.actifAide) + '</div></div>' +
+            '</div>';
+        document.getElementById('tecEdMsg').innerHTML = '';
+        tecEdRoleChange();
+        document.getElementById('tecEdit').classList.add('ouvert');
+        document.getElementById('tecEdPrenom').focus();
+    }
+    function tecEdRoleChange() {
+        var s = document.getElementById('tecEdSup');
+        s.disabled = document.getElementById('tecEdRole').value !== 'technicien';
+    }
+    async function tecEdEnregistrer() {
+        var b = document.getElementById('tecEdOk'); b.disabled = true;
+        var d = await tPost({ op: 'modifier', id: tecEditId,
+            prenom: document.getElementById('tecEdPrenom').value, nom: document.getElementById('tecEdNom').value,
+            email: document.getElementById('tecEdEmail').value, role: document.getElementById('tecEdRole').value,
+            sup: document.getElementById('tecEdSup').value, actif: document.getElementById('tecEdActif').checked ? '1' : '0' });
+        b.disabled = false;
+        if (!d.ok) { document.getElementById('tecEdMsg').innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
+        location.reload();
+    }
+    function tecEdFermer() { document.getElementById('tecEdit').classList.remove('ouvert'); }
 
     function tecPeindre() {
         document.getElementById('tecTitre').textContent = TL.titre;
@@ -243,7 +306,7 @@
     }
 
     function tecFermer() { document.getElementById('tecFond').classList.remove('ouvert'); }
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') tecFermer(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { tecFermer(); tecEdFermer(); } });
 
     tecPeindre();
     // Après une invitation : le lien d'activation, copiable.

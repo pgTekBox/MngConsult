@@ -118,6 +118,9 @@ Public Class wbfCabTechniciens
                         .nom = If(nom = "", Txt(r("Email")), nom),
                         .email = Txt(r("Email")),
                         .attente = CBool(r("Pending")),
+                        .inactif = CBool(r("Inactif")),
+                        .prenom = Txt(r("FirstName")),
+                        .nomFam = Txt(r("LastName")),
                         .connexion = If(IsDBNull(r("LastLoginOn")), "", CDate(r("LastLoginOn")).ToString("d MMM yyyy", ci)),
                         .sup = Txt(r("SuperviseurUserGUID")).ToLowerInvariant(),
                         .supNom = Txt(r("SuperviseurNom")),
@@ -162,6 +165,7 @@ Public Class wbfCabTechniciens
                 Select Case op
                     Case "invite" : res = Inviter()
                     Case "role" : res = ChangerRole(CInt(Val(Request.Form("id"))), Txt(Request.Form("role")))
+                    Case "modifier" : res = Modifier(CInt(Val(Request.Form("id"))))
                     Case "sup" : res = ChangerSuperviseur(CInt(Val(Request.Form("id"))), Txt(Request.Form("sup")))
                     Case "dossiers" : res = LireDossiers(CInt(Val(Request.Form("id"))))
                     Case "assign" : res = Confier(CInt(Val(Request.Form("id"))), Txt(Request.Form("guids")))
@@ -254,8 +258,58 @@ Public Class wbfCabTechniciens
         If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
         role = RoleNormal(role)
         If role = "solo" Then role = "employe"
-        Dim err As Integer = MajMembre(membreId, role, Not CBool(m("Pending")))
+        Dim err As Integer = MajMembre(membreId, role, Not (CBool(m("Pending")) OrElse CBool(m("Inactif"))))
         Return New With {.ok = (err = 0), .erreur = If(err = 0, "", MessageErreur(err))}
+    End Function
+
+    ''' <summary>
+    ''' Fenêtre « Modifier » : identité (s1002), rôle + actif (s0924), superviseur
+    ''' d'un technicien (s0998). Un compte en attente d'activation reste en attente.
+    ''' </summary>
+    Private Function Modifier(membreId As Integer) As Object
+        Dim m As DataRow = LireMembre(membreId)
+        If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
+
+        ' 1. Identité
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@MembreId", membreId))
+        p.Add(New SqlParameter("@FirstName", Txt(Request.Form("prenom"))))
+        p.Add(New SqlParameter("@LastName", Txt(Request.Form("nom"))))
+        p.Add(New SqlParameter("@Email", Txt(Request.Form("email"))))
+        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+        p.Add(outErr)
+        ExecuteSQL("s1002UpdateMembreIdentite", p)
+        Dim err As Integer = If(outErr.Value Is Nothing OrElse IsDBNull(outErr.Value), -1, CInt(outErr.Value))
+        Select Case err
+            Case 0
+            Case 1 : Return New With {.ok = False, .erreur = T("Ce courriel est déjà utilisé.", "This email is already in use.", "Este correo ya está en uso.")}
+            Case 6 : Return New With {.ok = False, .erreur = T("Courriel invalide.", "Invalid email.", "Correo no válido.")}
+            Case 7 : Return New With {.ok = False, .erreur = T("Vous ne pouvez pas changer votre propre courriel ici.", "You cannot change your own email here.", "No puede cambiar su propio correo aquí.")}
+            Case Else : Return New With {.ok = False, .erreur = MessageErreur(err)}
+        End Select
+
+        ' 2. Rôle et état actif (le solo garde son rôle ; un compte en attente reste en attente)
+        Dim role As String = RoleNormal(Txt(m("Role")))
+        If role <> "solo" Then
+            role = RoleNormal(Txt(Request.Form("role")))
+            If role = "solo" Then role = "employe"
+        End If
+        Dim actif As Boolean = (Txt(Request.Form("actif")) = "1")
+        If CBool(m("Pending")) Then actif = False
+        ' Un technicien qui change de rôle quitte son superviseur
+        If RoleNormal(Txt(m("Role"))) = "technicien" AndAlso role <> "technicien" AndAlso Txt(m("SuperviseurUserGUID")) <> "" Then
+            ChangerSuperviseur(membreId, "")
+        End If
+        err = MajMembre(membreId, role, actif)
+        If err <> 0 Then Return New With {.ok = False, .erreur = MessageErreur(err)}
+
+        ' 3. Superviseur d'un technicien
+        If role = "technicien" Then
+            Dim r As Object = ChangerSuperviseur(membreId, Txt(Request.Form("sup")))
+            If Not CBool(r.ok) Then Return r
+        End If
+        Return New With {.ok = True}
     End Function
 
     Private Function ChangerSuperviseur(membreId As Integer, sup As String) As Object
@@ -403,6 +457,18 @@ Public Class wbfCabTechniciens
             .confRetirer = T("Retirer {0} du cabinet ? Son compte sera désactivé ; ses dossiers restent confiés jusqu'à ce que vous les réattribuiez.",
                              "Remove {0} from the firm? Their account will be deactivated; their files stay assigned until you reassign them.",
                              "¿Retirar a {0} del despacho? Su cuenta se desactivará; sus expedientes siguen confiados hasta que los reasigne."),
+            .modifier = T("Modifier", "Edit", "Modificar"),
+            .modifierTitre = T("Modifier {0}", "Edit {0}", "Modificar a {0}"),
+            .actif = T("Compte actif", "Active account", "Cuenta activa"),
+            .actifAide = T("Décoché : le membre ne peut plus se connecter ; ses dossiers restent confiés.",
+                           "Unchecked: the member can no longer sign in; their files stay assigned.",
+                           "Sin marcar: el miembro ya no puede conectarse; sus expedientes siguen confiados."),
+            .actifAttente = T("En attente d'activation : le compte s'active quand le membre ouvre son lien d'invitation.",
+                              "Awaiting activation: the account becomes active when the member opens their invitation link.",
+                              "Pendiente de activación: la cuenta se activa cuando el miembro abre su enlace de invitación."),
+            .emailMoi = T("Votre propre courriel ne se change pas ici.", "Your own email cannot be changed here.", "Su propio correo no se cambia aquí."),
+            .inactif = T("inactif", "inactive", "inactivo"),
+            .kInactifs = T("Inactifs", "Inactive", "Inactivos"),
             .confRole = T("Changer le rôle de {0} ?", "Change {0}'s role?", "¿Cambiar el rol de {0}?"),
             .dossiersDe = T("Dossiers confiés à {0}", "Files assigned to {0}", "Expedientes confiados a {0}"),
             .dejaA = T("actuellement suivi par {0}", "currently handled by {0}", "actualmente a cargo de {0}"),

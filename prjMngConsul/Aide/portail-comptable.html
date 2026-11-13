@@ -145,15 +145,15 @@
                 <h3>Chaque membre</h3>
                 <ul>
                     <li>Nom, courriel, « vous » sur votre propre fiche, « en attente d’activation » tant que le compte n’est pas activé, dernière connexion.</li>
-                    <li><strong>Rôle</strong> : la liste le change après confirmation (Administrateur, Comptable, Technicien). Passer un comptable en technicien le déplace dans le groupe Techniciens, et inversement. Le cabinet doit garder au moins un administrateur. Un compte en attente reste en attente.</li>
-                    <li>Comptable : nombre de <strong>techniciens supervisés</strong>. Technicien : son <strong>superviseur</strong>, que la liste change aussitôt ; le superviseur voit aussi les dossiers de ses techniciens.</li>
+                    <li><strong>Rôle</strong> (Administrateur, Comptable, Technicien) et, pour un technicien, son <strong>superviseur</strong> : affichés sur la fiche, modifiés par le crayon. Le superviseur voit aussi les dossiers de ses techniciens. Pour un comptable, la fiche indique le nombre de <strong>techniciens supervisés</strong>.</li>
+                    <li>Le <strong>crayon</strong> ouvre la fenêtre <strong>Modifier</strong> : prénom, nom, courriel, rôle, superviseur (actif seulement pour un technicien) et <strong>Compte actif</strong>. Décoché, le membre ne peut plus se connecter (étiquette « inactif ») ; recoché, il peut se reconnecter. <kbd>Enregistrer</kbd>. Passer un comptable en technicien le déplace dans le groupe Techniciens, et inversement ; un technicien qui redevient comptable quitte son superviseur.</li>
                     <li><strong>Dossiers</strong> confiés et nombre de tâches ouvertes et en retard.</li>
                     <li><kbd>Gérer les dossiers</kbd> : les dossiers du cabinet, cochés quand ils sont confiés au membre ; « actuellement suivi par … » indique la personne actuelle. Cocher un dossier le lui confie (un dossier n’a qu’un responsable) ; le décocher le laisse sans responsable. <kbd>Enregistrer</kbd>.</li>
-                    <li><kbd>Retirer</kbd> : après confirmation, désactive le compte du membre. Ses dossiers restent confiés jusqu’à ce que vous les réattribuiez. Vous ne pouvez pas vous retirer vous-même.</li>
+                    <li>Règles : le cabinet garde au moins un administrateur ; vous ne pouvez ni vous désactiver ni changer votre propre courriel ici ; un courriel déjà utilisé est refusé ; un compte en attente d’activation reste en attente jusqu’à ce que le membre ouvre son lien. Un membre inactif garde ses dossiers jusqu’à ce que vous les réattribuiez.</li>
                 </ul>
                 <h3>Comptable (employé)</h3>
                 <p>Un comptable voit <span class="chemin">Mon cabinet › Mes techniciens</span> : sa propre charge et les techniciens qu’il supervise, leurs dossiers et leur charge, en lecture. Seul un administrateur invite, change un rôle ou un superviseur, confie des dossiers ou retire un membre.</p>
-                <div class="note" data-titre="Bon à savoir">Les rôles se changent aussi dans <span class="chemin">Membres et sécurité</span>.</div>
+                <div class="note" data-titre="Bon à savoir">Le courriel est l’identifiant de connexion : après un changement, le membre se connecte avec son nouveau courriel et son mot de passe actuel.</div>
             </section>
 
             <section id="fr-affectation">
@@ -396,15 +396,15 @@
                 <h3>Each member</h3>
                 <ul>
                     <li>Name, email, “you” on your own card, “awaiting activation” while the account is not activated, last sign-in.</li>
-                    <li><strong>Role</strong>: the list changes it after confirmation (Administrator, Accountant, Technician). Turning an accountant into a technician moves them to the Technicians group, and vice versa. The firm must keep at least one administrator. An account awaiting activation stays so.</li>
-                    <li>Accountant: number of <strong>supervised technicians</strong>. Technician: their <strong>supervisor</strong>, which the list changes right away; the supervisor also sees their technicians’ files.</li>
+                    <li><strong>Role</strong> (Administrator, Accountant, Technician) and, for a technician, their <strong>supervisor</strong>: shown on the card, changed with the pencil. The supervisor also sees their technicians’ files. For an accountant, the card shows the number of <strong>supervised technicians</strong>.</li>
+                    <li>The <strong>pencil</strong> opens the <strong>Edit</strong> window: first name, last name, email, role, supervisor (only active for a technician) and <strong>Active account</strong>. Unchecked, the member can no longer sign in (“inactive” tag); checked again, they can sign in again. <kbd>Save</kbd>. Turning an accountant into a technician moves them to the Technicians group, and vice versa; a technician who becomes an accountant again leaves their supervisor.</li>
                     <li>Assigned <strong>files</strong> and the number of open and overdue tasks.</li>
                     <li><kbd>Manage files</kbd>: the firm’s files, checked when assigned to the member; “currently handled by …” shows the current person. Checking a file assigns it (a file has a single assignee); unchecking it leaves it unassigned. <kbd>Save</kbd>.</li>
-                    <li><kbd>Remove</kbd>: after confirmation, deactivates the member’s account. Their files stay assigned until you reassign them. You cannot remove yourself.</li>
+                    <li>Rules: the firm keeps at least one administrator; you can neither deactivate yourself nor change your own email here; an email already in use is refused; an account awaiting activation stays so until the member opens their link. An inactive member keeps their files until you reassign them.</li>
                 </ul>
                 <h3>Accountant (employee)</h3>
                 <p>An accountant sees <span class="chemin">My firm › My technicians</span>: their own workload and the technicians they supervise, their files and workload, read-only. Only an administrator invites, changes a role or a supervisor, assigns files or removes a member.</p>
-                <div class="note" data-titre="Good to know">Roles can also be changed in <span class="chemin">Members and security</span>.</div>
+                <div class="note" data-titre="Good to know">The email is the sign-in identifier: after a change, the member signs in with their new email and current password.</div>
             </section>
 
             <section id="en-assignment">
@@ -647,15 +647,15 @@
                 <h3>Cada miembro</h3>
                 <ul>
                     <li>Nombre, correo, «usted» en su propia ficha, «pendiente de activación» mientras la cuenta no esté activada, última conexión.</li>
-                    <li><strong>Rol</strong>: la lista lo cambia tras confirmar (Administrador, Contador, Técnico). Pasar un contador a técnico lo mueve al grupo Técnicos, y al revés. El despacho debe conservar al menos un administrador. Una cuenta pendiente sigue pendiente.</li>
-                    <li>Contador: número de <strong>técnicos supervisados</strong>. Técnico: su <strong>supervisor</strong>, que la lista cambia de inmediato; el supervisor ve también los expedientes de sus técnicos.</li>
+                    <li><strong>Rol</strong> (Administrador, Contador, Técnico) y, para un técnico, su <strong>supervisor</strong>: se muestran en la ficha y se cambian con el lápiz. El supervisor ve también los expedientes de sus técnicos. Para un contador, la ficha indica el número de <strong>técnicos supervisados</strong>.</li>
+                    <li>El <strong>lápiz</strong> abre la ventana <strong>Modificar</strong>: nombre, apellido, correo, rol, supervisor (activo solo para un técnico) y <strong>Cuenta activa</strong>. Sin marcar, el miembro ya no puede conectarse (etiqueta «inactivo»); marcada de nuevo, puede volver a conectarse. <kbd>Guardar</kbd>. Pasar un contador a técnico lo mueve al grupo Técnicos, y al revés; un técnico que vuelve a ser contador deja a su supervisor.</li>
                     <li><strong>Expedientes</strong> confiados y número de tareas abiertas y atrasadas.</li>
                     <li><kbd>Gestionar expedientes</kbd>: los expedientes del despacho, marcados cuando están confiados al miembro; «actualmente a cargo de …» indica la persona actual. Marcar un expediente se lo confía (un expediente tiene un solo responsable); desmarcarlo lo deja sin responsable. <kbd>Guardar</kbd>.</li>
-                    <li><kbd>Retirar</kbd>: tras confirmar, desactiva la cuenta del miembro. Sus expedientes siguen confiados hasta que los reasigne. No puede retirarse a sí mismo.</li>
+                    <li>Reglas: el despacho conserva al menos un administrador; no puede desactivarse ni cambiar su propio correo aquí; un correo ya en uso se rechaza; una cuenta pendiente de activación sigue pendiente hasta que el miembro abra su enlace. Un miembro inactivo conserva sus expedientes hasta que los reasigne.</li>
                 </ul>
                 <h3>Contador (empleado)</h3>
                 <p>Un contador ve <span class="chemin">Mi despacho › Mis técnicos</span>: su propia carga y los técnicos que supervisa, sus expedientes y su carga, en lectura. Solo un administrador invita, cambia un rol o un supervisor, confía expedientes o retira a un miembro.</p>
-                <div class="note" data-titre="Bueno saber">Los roles también se cambian en <span class="chemin">Miembros y seguridad</span>.</div>
+                <div class="note" data-titre="Bueno saber">El correo es el identificador de conexión: tras un cambio, el miembro se conecta con su nuevo correo y su contraseña actual.</div>
             </section>
 
             <section id="es-asignacion">
