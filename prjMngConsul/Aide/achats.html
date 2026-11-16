@@ -22,11 +22,11 @@
 
         <article class="langue" lang="fr">
             <h1>Achats</h1>
-            <p class="intro">Fournisseurs, factures fournisseurs, paiements par Stripe ou par décaissement manuel, et lecture des reçus par l’intelligence artificielle. Le menu <span class="chemin">Achats</span> contient trois entrées : « Fournisseurs », « Factures fournisseurs » et « Reçus ». Les autres écrans décrits ici s’ouvrent depuis ces trois pages, dans une fenêtre ou dans un nouvel onglet.</p>
+            <p class="intro">Fournisseurs, factures fournisseurs, paiements par Stripe ou par décaissement manuel, et lecture des reçus par l’intelligence artificielle. Le menu <span class="chemin">Paiements</span> contient trois entrées : « Fournisseurs », « Factures fournisseurs » et « Reçus ». Les autres écrans décrits ici s’ouvrent depuis ces trois pages, dans une fenêtre ou dans un nouvel onglet.</p>
 
             <section id="fr-fournisseurs">
                 <h2>Fournisseurs (liste)</h2>
-                <p>L’écran <span class="chemin">Achats › Fournisseurs</span> sert à consulter, rechercher, créer, modifier et supprimer vos fournisseurs. Il montre aussi, pour chacun, le solde que vous lui devez et l’état de son compte Stripe (peut-il recevoir vos paiements en ligne ou non).</p>
+                <p>L’écran <span class="chemin">Paiements › Fournisseurs</span> sert à consulter, rechercher, créer, modifier et supprimer vos fournisseurs. Il montre aussi, pour chacun, le solde que vous lui devez et l’état de son compte Stripe (peut-il recevoir vos paiements en ligne ou non).</p>
                 <h3>Boutons et actions</h3>
                 <ul>
                     <li><kbd>+ Ajouter un fournisseur</kbd> (pastille bleue, en haut à droite) : ouvre la fenêtre « Ajouter un fournisseur ». Quand la fenêtre se ferme, la liste se recharge.</li>
@@ -59,7 +59,7 @@
                     <li><span class="msg">« Aucun fournisseur ne correspond. »</span> — la recherche ou la pastille ne renvoient rien ; cliquez sur <kbd>✕</kbd> ou vérifiez l’orthographe.</li>
                 </ul>
                 <div class="piege" data-titre="Piège"><kbd>Supprimer</kbd> agit tout de suite, sans demander de confirmation. Vérifiez la ligne avant de cliquer.</div>
-                <div class="astuce" data-titre="Astuce">Le solde « À payer » se met à jour dès qu’une facture fournisseur est comptabilisée ou réglée. Pour voir le détail, ouvrez <span class="chemin">Achats › Factures fournisseurs</span> et recherchez le fournisseur.</div>
+                <div class="astuce" data-titre="Astuce">Le solde « À payer » se met à jour dès qu’une facture fournisseur est comptabilisée ou réglée. Pour voir le détail, ouvrez <span class="chemin">Paiements › Factures fournisseurs</span> et recherchez le fournisseur.</div>
             </section>
 
             <section id="fr-fiche-fournisseur">
@@ -165,7 +165,7 @@
 
             <section id="fr-factures-fournisseurs">
                 <h2>Factures fournisseurs (liste)</h2>
-                <p>L’écran <span class="chemin">Achats › Factures fournisseurs</span> permet de suivre vos factures d’achat : leur saisie, leur comptabilisation et leur paiement (par Stripe, par paiement automatique ou par décaissement manuel).</p>
+                <p>L’écran <span class="chemin">Paiements › Factures fournisseurs</span> permet de suivre vos factures d’achat : leur saisie, leur comptabilisation et leur paiement (par Stripe, par paiement automatique ou par décaissement manuel).</p>
                 <h3>Boutons et actions</h3>
                 <ul>
                     <li><kbd>+ Nouvelle facture fournisseur</kbd> (pastille bleue, en haut à droite, ou <kbd>+</kbd>) : ouvre la fenêtre « Ajouter une facture ».</li>
@@ -212,7 +212,7 @@
 
             <section id="fr-facture-fournisseur">
                 <h2>Facture fournisseur</h2>
-                <p>La fenêtre « Facture fournisseur — Édition » sert à saisir une facture d’achat : le fournisseur, les dates, les lignes de dépense et les taxes. Elle s’ouvre depuis <span class="chemin">Achats › Factures fournisseurs</span> par <kbd>Ajouter Facture</kbd> ou <kbd>Modifier</kbd>.</p>
+                <p>La fenêtre « Facture fournisseur — Édition » sert à saisir une facture d’achat : le fournisseur, les dates, les lignes de dépense et les taxes. Elle s’ouvre depuis <span class="chemin">Paiements › Factures fournisseurs</span> par <kbd>Ajouter Facture</kbd> ou <kbd>Modifier</kbd>.</p>
                 <h3>Champs de l’en-tête</h3>
                 <table>
                     <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
@@ -315,7 +315,7 @@
                 </ul>
                 <p>Pour payer une facture par Stripe :</p>
                 <ol>
-                    <li>Dans <span class="chemin">Achats › Factures fournisseurs</span>, cliquez sur <kbd>Payer avec Stripe</kbd> sur une facture comptabilisée et non payée.</li>
+                    <li>Dans <span class="chemin">Paiements › Factures fournisseurs</span>, cliquez sur <kbd>Payer avec Stripe</kbd> sur une facture comptabilisée et non payée.</li>
                     <li>Ajustez au besoin le « Montant à payer maintenant ».</li>
                     <li>Choisissez la méthode (carte ou ACSS) et vérifiez le « Total à débourser ».</li>
                     <li>Cochez, si vous le souhaitez, l’autorisation de paiement automatique et fixez le plafond mensuel.</li>
@@ -425,7 +425,7 @@
                 <p>Pour inscrire un fournisseur par invitation :</p>
                 <ol>
                     <li>Vérifiez que le courriel de facturation est renseigné dans la fiche du fournisseur.</li>
-                    <li>Dans <span class="chemin">Achats › Fournisseurs</span>, cliquez sur « Configurer paiements Stripe Connect ».</li>
+                    <li>Dans <span class="chemin">Paiements › Fournisseurs</span>, cliquez sur « Configurer paiements Stripe Connect ».</li>
                     <li>Choisissez <kbd>✉️ Envoyer une invitation par courriel</kbd>, contrôlez l’adresse, puis cliquez sur <kbd>Envoyer l’invitation par courriel ✉️</kbd>.</li>
                     <li>Suivez l’état ; s’il passe à « ⚠ Action requise », demandez au fournisseur de fournir les documents indiqués.</li>
                 </ol>
@@ -503,7 +503,7 @@
 
             <section id="fr-recus">
                 <h2>Reçus et lecture IA</h2>
-                <p>L’écran <span class="chemin">Achats › Reçus</span> transforme des reçus ou des factures reçus sous forme de fichiers (photo JPEG, PDF ou texte de courriel) en données comptables : l’IA lit le document, puis 60Sec-AI crée le marchand (fournisseur) et le document d’achat.</p>
+                <p>L’écran <span class="chemin">Paiements › Reçus</span> transforme des reçus ou des factures reçus sous forme de fichiers (photo JPEG, PDF ou texte de courriel) en données comptables : l’IA lit le document, puis 60Sec-AI crée le marchand (fournisseur) et le document d’achat.</p>
                 <h3>Filtres et recherche</h3>
                 <ul>
                     <li>Trois indicateurs sous le titre : <strong>À lire par l’IA</strong> (les reçus en attente de lecture ; point ambre s’il y en a), <strong>Lus par l’IA</strong> (résultat à contrôler ou à comptabiliser) et <strong>Reçus en {mois}</strong> (les fichiers arrivés ce mois).</li>
@@ -538,7 +538,7 @@
                     <li>Le scanner du téléphone s’ouvre (« Ouverture du scanner… »). Cadrez le reçu ; vous pouvez numériser plusieurs pages à la suite.</li>
                     <li>À la validation, l’application affiche « Envoi au serveur… » et envoie chaque page comme un reçu distinct, en JPEG.</li>
                     <li>Le résultat s’affiche : « ✓ Reçu enregistré avec succès. », ou « ✓ N reçus enregistrés avec succès. » pour plusieurs pages. Le bouton devient <kbd>📄 Scanner un autre reçu</kbd>.</li>
-                    <li>Le reçu apparaît dans <span class="chemin">Achats › Reçus</span>, où il se traite comme les autres : <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
+                    <li>Le reçu apparaît dans <span class="chemin">Paiements › Reçus</span>, où il se traite comme les autres : <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
                 </ol>
                 <table>
                     <thead><tr><th>Ce qu’il faut savoir</th><th>Détail</th></tr></thead>
@@ -556,7 +556,7 @@
                 </ul>
                 <div class="note" data-titre="Bon à savoir">Si vous êtes comptable de plusieurs compagnies, le reçu déposé depuis l’application va dans la compagnie de votre propre compte. Pour un reçu destiné à une autre compagnie, envoyez-le par courriel à la boîte @60sec.ca de cette compagnie.</div>
                 <h3>Reçus arrivés par courriel et reçus orphelins</h3>
-                <p>Un reçu peut arriver par courriel : un fournisseur (ou vous-même) envoie la facture à la boîte <b>@60sec.ca</b> de la compagnie, ou à celle d’un de ses employés (voir <a href="courriel.html">Courriel</a> et <a href="employes.html">Employés</a>). Le courriel est lu, ses pièces jointes deviennent des reçus, et le reçu est rattaché à la compagnie dont la boîte était destinataire. Il apparaît alors ici, dans <span class="chemin">Achats › Reçus</span>, comme un reçu déposé à la main.</p>
+                <p>Un reçu peut arriver par courriel : un fournisseur (ou vous-même) envoie la facture à la boîte <b>@60sec.ca</b> de la compagnie, ou à celle d’un de ses employés (voir <a href="courriel.html">Courriel</a> et <a href="employes.html">Employés</a>). Le courriel est lu, ses pièces jointes deviennent des reçus, et le reçu est rattaché à la compagnie dont la boîte était destinataire. Il apparaît alors ici, dans <span class="chemin">Paiements › Reçus</span>, comme un reçu déposé à la main.</p>
                 <p>La liste ne montre que les reçus de la <b>compagnie active</b> : un comptable qui change de compagnie dans l’en-tête voit une autre liste.</p>
                 <p>Un courriel adressé à une boîte @60sec.ca qui n’appartient à aucune compagnie ni à aucun employé produit un <b>reçu orphelin</b> : il n’a pas de compagnie, il n’apparaît dans aucune liste et une remise à zéro ne l’efface pas. L’équipe 60Sec le voit dans sa console d’administration (bloc « Reçus orphelins »), où elle peut le <b>rattacher</b> à la bonne compagnie ou le <b>supprimer</b>. Si un reçu envoyé par courriel n’apparaît pas, vérifiez l’adresse utilisée, puis demandez à votre soutien de le rattacher.</p>
                 <div class="note" data-titre="Bon à savoir">L’adresse @60sec.ca de la compagnie s’affiche dans <span class="chemin">Courriel</span> ; celle d’un employé, dans <span class="chemin">Employés</span>. Un reçu envoyé à l’une ou l’autre arrive dans la même liste.</div>
@@ -610,11 +610,11 @@
 
         <article class="langue" lang="en">
             <h1>Purchases</h1>
-            <p class="intro">Suppliers, supplier invoices, payments through Stripe or manual disbursement, and receipt reading by artificial intelligence. The <span class="chemin">Purchases</span> menu has three entries: “Suppliers”, “Supplier invoices” and “Receipts”. The other screens described here open from those three pages, in a dialog or in a new tab.</p>
+            <p class="intro">Suppliers, supplier invoices, payments through Stripe or manual disbursement, and receipt reading by artificial intelligence. The <span class="chemin">Payments</span> menu has three entries: “Suppliers”, “Supplier invoices” and “Receipts”. The other screens described here open from those three pages, in a dialog or in a new tab.</p>
 
             <section id="en-suppliers">
                 <h2>Suppliers (list)</h2>
-                <p>The <span class="chemin">Purchases › Suppliers</span> screen lets you browse, search, create, edit and delete your suppliers. For each one it also shows the balance you owe and the state of its Stripe account (whether it can receive your online payments or not).</p>
+                <p>The <span class="chemin">Payments › Suppliers</span> screen lets you browse, search, create, edit and delete your suppliers. For each one it also shows the balance you owe and the state of its Stripe account (whether it can receive your online payments or not).</p>
                 <h3>Buttons and actions</h3>
                 <ul>
                     <li><kbd>+ Ajouter un fournisseur</kbd> (+ Add a supplier, blue pill at the top right): opens the “Add a supplier” dialog. When the dialog closes, the list reloads.</li>
@@ -647,7 +647,7 @@
                     <li><span class="msg">“No supplier matches.”</span> — the search or the pill returns nothing; click <kbd>✕</kbd> or check the spelling.</li>
                 </ul>
                 <div class="piege" data-titre="Pitfall"><kbd>Delete</kbd> acts immediately, without asking for confirmation. Check the row before clicking.</div>
-                <div class="astuce" data-titre="Tip">The “Payable” balance updates as soon as a supplier invoice is posted or settled. For details, open <span class="chemin">Purchases › Supplier invoices</span> and search for the supplier.</div>
+                <div class="astuce" data-titre="Tip">The “Payable” balance updates as soon as a supplier invoice is posted or settled. For details, open <span class="chemin">Payments › Supplier invoices</span> and search for the supplier.</div>
             </section>
 
             <section id="en-supplier-record">
@@ -753,7 +753,7 @@
 
             <section id="en-supplier-invoices">
                 <h2>Supplier invoices (list)</h2>
-                <p>The <span class="chemin">Purchases › Supplier invoices</span> screen tracks your purchase invoices: entry, posting and payment (through Stripe, automatic payment or manual disbursement).</p>
+                <p>The <span class="chemin">Payments › Supplier invoices</span> screen tracks your purchase invoices: entry, posting and payment (through Stripe, automatic payment or manual disbursement).</p>
                 <h3>Buttons and actions</h3>
                 <ul>
                     <li><kbd>+ Nouvelle facture fournisseur</kbd> (+ New supplier invoice, blue pill at the top right, or <kbd>+</kbd>): opens the “Add an invoice” dialog.</li>
@@ -800,7 +800,7 @@
 
             <section id="en-supplier-invoice">
                 <h2>Supplier invoice</h2>
-                <p>The “Supplier invoice — Edit” dialog is where you enter a purchase invoice: supplier, dates, expense lines and taxes. It opens from <span class="chemin">Purchases › Supplier invoices</span> through <kbd>Add invoice</kbd> or <kbd>Edit</kbd>.</p>
+                <p>The “Supplier invoice — Edit” dialog is where you enter a purchase invoice: supplier, dates, expense lines and taxes. It opens from <span class="chemin">Payments › Supplier invoices</span> through <kbd>Add invoice</kbd> or <kbd>Edit</kbd>.</p>
                 <h3>Header fields</h3>
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
@@ -903,7 +903,7 @@
                 </ul>
                 <p>To pay an invoice with Stripe:</p>
                 <ol>
-                    <li>In <span class="chemin">Purchases › Supplier invoices</span>, click <kbd>Pay with Stripe</kbd> on a posted, unpaid invoice.</li>
+                    <li>In <span class="chemin">Payments › Supplier invoices</span>, click <kbd>Pay with Stripe</kbd> on a posted, unpaid invoice.</li>
                     <li>Adjust the “Amount to pay now” if needed.</li>
                     <li>Choose the method (card or ACSS) and check the “Total to disburse”.</li>
                     <li>Optionally check the automatic-payment authorization and set the monthly cap.</li>
@@ -1013,7 +1013,7 @@
                 <p>To onboard a supplier by invitation:</p>
                 <ol>
                     <li>Check that the billing email is filled in the supplier record.</li>
-                    <li>In <span class="chemin">Purchases › Suppliers</span>, click “Configure Stripe Connect payments”.</li>
+                    <li>In <span class="chemin">Payments › Suppliers</span>, click “Configure Stripe Connect payments”.</li>
                     <li>Choose <kbd>✉️ Send an email invitation</kbd>, check the address, then click <kbd>Send email invitation ✉️</kbd>.</li>
                     <li>Follow the state; if it becomes “⚠ Action required”, ask the supplier to provide the listed documents.</li>
                 </ol>
@@ -1091,7 +1091,7 @@
 
             <section id="en-receipts">
                 <h2>Receipts and AI reading</h2>
-                <p>The <span class="chemin">Purchases › Receipts</span> screen turns receipts or invoices received as files (JPEG photo, PDF or email text) into accounting data: the AI reads the document, then 60Sec-AI creates the merchant (supplier) and the purchase document.</p>
+                <p>The <span class="chemin">Payments › Receipts</span> screen turns receipts or invoices received as files (JPEG photo, PDF or email text) into accounting data: the AI reads the document, then 60Sec-AI creates the merchant (supplier) and the purchase document.</p>
                 <h3>Filters and search</h3>
                 <ul>
                     <li>Three indicators under the title: <strong>À lire par l’IA</strong> (receipts waiting to be read; amber dot when there are some), <strong>Lus par l’IA</strong> (result to check or to post) and <strong>Reçus en {month}</strong> (files received this month).</li>
@@ -1126,7 +1126,7 @@
                     <li>The phone’s scanner opens (“Opening the scanner…”). Frame the receipt; you can scan several pages in a row.</li>
                     <li>On confirmation, the app shows “Uploading to the server…” and sends each page as a separate receipt, as JPEG.</li>
                     <li>The result is shown: “✓ Receipt saved successfully.”, or “✓ N receipts saved successfully.” for several pages. The button becomes <kbd>📄 Scan another receipt</kbd>.</li>
-                    <li>The receipt appears in <span class="chemin">Purchases › Receipts</span>, where it is processed like the others: <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
+                    <li>The receipt appears in <span class="chemin">Payments › Receipts</span>, where it is processed like the others: <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
                 </ol>
                 <table>
                     <thead><tr><th>What to know</th><th>Detail</th></tr></thead>
@@ -1144,7 +1144,7 @@
                 </ul>
                 <div class="note" data-titre="Good to know">If you are the accountant of several companies, a receipt uploaded from the app goes to the company of your own account. For a receipt meant for another company, send it by email to that company’s @60sec.ca mailbox.</div>
                 <h3>Receipts received by email and orphan receipts</h3>
-                <p>A receipt can arrive by email: a supplier (or you) sends the invoice to the company’s <b>@60sec.ca</b> mailbox, or to one of its employees’ (see <a href="courriel.html">Mail</a> and <a href="employes.html">Employees</a>). The email is read, its attachments become receipts, and the receipt is attached to the company whose mailbox was the recipient. It then shows here, in <span class="chemin">Purchases › Receipts</span>, like a receipt uploaded by hand.</p>
+                <p>A receipt can arrive by email: a supplier (or you) sends the invoice to the company’s <b>@60sec.ca</b> mailbox, or to one of its employees’ (see <a href="courriel.html">Mail</a> and <a href="employes.html">Employees</a>). The email is read, its attachments become receipts, and the receipt is attached to the company whose mailbox was the recipient. It then shows here, in <span class="chemin">Payments › Receipts</span>, like a receipt uploaded by hand.</p>
                 <p>The list only shows the receipts of the <b>active company</b>: an accountant who switches company in the header sees another list.</p>
                 <p>An email sent to a @60sec.ca mailbox that belongs to no company and no employee produces an <b>orphan receipt</b>: it has no company, appears in no list, and a reset does not erase it. The 60Sec team sees it in its administration console (“Orphan receipts” block), where it can <b>attach</b> it to the right company or <b>delete</b> it. If a receipt sent by email does not show up, check the address used, then ask your support to attach it.</p>
                 <div class="note" data-titre="Good to know">The company’s @60sec.ca address is shown in <span class="chemin">Mail</span>; an employee’s, in <span class="chemin">Employees</span>. A receipt sent to either one lands in the same list.</div>
@@ -1198,11 +1198,11 @@
 
         <article class="langue" lang="es">
             <h1>Compras</h1>
-            <p class="intro">Proveedores, facturas de proveedores, pagos por Stripe o por desembolso manual, y lectura de recibos por inteligencia artificial. El menú <span class="chemin">Compras</span> tiene tres entradas: «Proveedores», «Facturas de proveedores» y «Recibos». Las demás pantallas descritas aquí se abren desde esas tres páginas, en una ventana o en una pestaña nueva.</p>
+            <p class="intro">Proveedores, facturas de proveedores, pagos por Stripe o por desembolso manual, y lectura de recibos por inteligencia artificial. El menú <span class="chemin">Pagos</span> tiene tres entradas: «Proveedores», «Facturas de proveedores» y «Recibos». Las demás pantallas descritas aquí se abren desde esas tres páginas, en una ventana o en una pestaña nueva.</p>
 
             <section id="es-proveedores">
                 <h2>Proveedores (lista)</h2>
-                <p>La pantalla <span class="chemin">Compras › Proveedores</span> sirve para consultar, buscar, crear, modificar y eliminar sus proveedores. También muestra, para cada uno, el saldo que usted le debe y el estado de su cuenta Stripe (si puede recibir o no sus pagos en línea).</p>
+                <p>La pantalla <span class="chemin">Pagos › Proveedores</span> sirve para consultar, buscar, crear, modificar y eliminar sus proveedores. También muestra, para cada uno, el saldo que usted le debe y el estado de su cuenta Stripe (si puede recibir o no sus pagos en línea).</p>
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>+ Ajouter un fournisseur</kbd> (+ Agregar un proveedor, píldora azul arriba a la derecha): abre la ventana «Agregar un proveedor». Al cerrarse la ventana, la lista se recarga.</li>
@@ -1235,7 +1235,7 @@
                     <li><span class="msg">«Ningún proveedor coincide.»</span> — la búsqueda o la píldora no devuelven nada; haga clic en <kbd>✕</kbd> o revise la ortografía.</li>
                 </ul>
                 <div class="piege" data-titre="Trampa"><kbd>Eliminar</kbd> actúa de inmediato, sin pedir confirmación. Verifique la fila antes de hacer clic.</div>
-                <div class="astuce" data-titre="Consejo">El saldo «Por pagar» se actualiza en cuanto una factura de proveedor se contabiliza o se paga. Para ver el detalle, abra <span class="chemin">Compras › Facturas de proveedores</span> y busque el proveedor.</div>
+                <div class="astuce" data-titre="Consejo">El saldo «Por pagar» se actualiza en cuanto una factura de proveedor se contabiliza o se paga. Para ver el detalle, abra <span class="chemin">Pagos › Facturas de proveedores</span> y busque el proveedor.</div>
             </section>
 
             <section id="es-ficha-proveedor">
@@ -1341,7 +1341,7 @@
 
             <section id="es-facturas-proveedores">
                 <h2>Facturas de proveedores (lista)</h2>
-                <p>La pantalla <span class="chemin">Compras › Facturas de proveedores</span> permite seguir sus facturas de compra: su captura, su contabilización y su pago (por Stripe, por pago automático o por desembolso manual).</p>
+                <p>La pantalla <span class="chemin">Pagos › Facturas de proveedores</span> permite seguir sus facturas de compra: su captura, su contabilización y su pago (por Stripe, por pago automático o por desembolso manual).</p>
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>+ Nouvelle facture fournisseur</kbd> (+ Nueva factura de proveedor, píldora azul arriba a la derecha, o <kbd>+</kbd>): abre la ventana «Agregar una factura».</li>
@@ -1388,7 +1388,7 @@
 
             <section id="es-factura-proveedor">
                 <h2>Factura de proveedor</h2>
-                <p>La ventana «Factura de proveedor — Edición» sirve para capturar una factura de compra: el proveedor, las fechas, las líneas de gasto y los impuestos. Se abre desde <span class="chemin">Compras › Facturas de proveedores</span> con <kbd>Agregar factura</kbd> o <kbd>Editar</kbd>.</p>
+                <p>La ventana «Factura de proveedor — Edición» sirve para capturar una factura de compra: el proveedor, las fechas, las líneas de gasto y los impuestos. Se abre desde <span class="chemin">Pagos › Facturas de proveedores</span> con <kbd>Agregar factura</kbd> o <kbd>Editar</kbd>.</p>
                 <h3>Campos del encabezado</h3>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
@@ -1491,7 +1491,7 @@
                 </ul>
                 <p>Para pagar una factura por Stripe:</p>
                 <ol>
-                    <li>En <span class="chemin">Compras › Facturas de proveedores</span>, haga clic en <kbd>Pagar con Stripe</kbd> en una factura contabilizada y no pagada.</li>
+                    <li>En <span class="chemin">Pagos › Facturas de proveedores</span>, haga clic en <kbd>Pagar con Stripe</kbd> en una factura contabilizada y no pagada.</li>
                     <li>Ajuste si hace falta el «Monto a pagar ahora».</li>
                     <li>Elija el método (tarjeta o ACSS) y verifique el «Total a desembolsar».</li>
                     <li>Marque, si lo desea, la autorización de pago automático y fije el tope mensual.</li>
@@ -1601,7 +1601,7 @@
                 <p>Para inscribir a un proveedor por invitación:</p>
                 <ol>
                     <li>Verifique que el correo de facturación esté indicado en la ficha del proveedor.</li>
-                    <li>En <span class="chemin">Compras › Proveedores</span>, haga clic en «Configurar pagos Stripe Connect».</li>
+                    <li>En <span class="chemin">Pagos › Proveedores</span>, haga clic en «Configurar pagos Stripe Connect».</li>
                     <li>Elija <kbd>✉️ Enviar una invitación por correo</kbd>, revise la dirección y haga clic en <kbd>Enviar invitación por correo ✉️</kbd>.</li>
                     <li>Siga el estado; si pasa a «⚠ Acción requerida», pida al proveedor los documentos indicados.</li>
                 </ol>
@@ -1679,7 +1679,7 @@
 
             <section id="es-recibos">
                 <h2>Recibos y lectura por IA</h2>
-                <p>La pantalla <span class="chemin">Compras › Recibos</span> transforma recibos o facturas recibidos como archivos (foto JPEG, PDF o texto de correo) en datos contables: la IA lee el documento y luego 60Sec-AI crea el comerciante (proveedor) y el documento de compra.</p>
+                <p>La pantalla <span class="chemin">Pagos › Recibos</span> transforma recibos o facturas recibidos como archivos (foto JPEG, PDF o texto de correo) en datos contables: la IA lee el documento y luego 60Sec-AI crea el comerciante (proveedor) y el documento de compra.</p>
                 <h3>Filtros y búsqueda</h3>
                 <ul>
                     <li>Tres indicadores bajo el título: <strong>À lire par l’IA</strong> (recibos en espera de lectura; punto ámbar si los hay), <strong>Lus par l’IA</strong> (resultado por revisar o contabilizar) y <strong>Reçus en {mes}</strong> (archivos recibidos este mes).</li>
@@ -1714,7 +1714,7 @@
                     <li>Se abre el escáner del teléfono. Encuadre el recibo; puede escanear varias páginas seguidas.</li>
                     <li>Al confirmar, la aplicación muestra « Enviando al servidor… » y envía cada página como un recibo distinto, en JPEG.</li>
                     <li>Se muestra el resultado: « ✓ Recibo guardado con éxito. », o « ✓ N recibos guardados con éxito. » para varias páginas. El botón pasa a <kbd>📄 Escanear otro recibo</kbd>.</li>
-                    <li>El recibo aparece en <span class="chemin">Compras › Recibos</span>, donde se trata como los demás: <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
+                    <li>El recibo aparece en <span class="chemin">Pagos › Recibos</span>, donde se trata como los demás: <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
                 </ol>
                 <table>
                     <thead><tr><th>Lo que conviene saber</th><th>Detalle</th></tr></thead>
@@ -1732,7 +1732,7 @@
                 </ul>
                 <div class="note" data-titre="Conviene saber">Si es contador de varias compañías, un recibo enviado desde la aplicación va a la compañía de su propia cuenta. Para un recibo destinado a otra compañía, envíelo por correo al buzón @60sec.ca de esa compañía.</div>
                 <h3>Recibos recibidos por correo y recibos huérfanos</h3>
-                <p>Un recibo puede llegar por correo: un proveedor (o usted mismo) envía la factura al buzón <b>@60sec.ca</b> de la compañía, o al de uno de sus empleados (vea <a href="courriel.html">Correo</a> y <a href="employes.html">Empleados</a>). El correo se lee, sus adjuntos se convierten en recibos y el recibo se vincula a la compañía cuyo buzón era el destinatario. Aparece entonces aquí, en <span class="chemin">Compras › Recibos</span>, como un recibo depositado a mano.</p>
+                <p>Un recibo puede llegar por correo: un proveedor (o usted mismo) envía la factura al buzón <b>@60sec.ca</b> de la compañía, o al de uno de sus empleados (vea <a href="courriel.html">Correo</a> y <a href="employes.html">Empleados</a>). El correo se lee, sus adjuntos se convierten en recibos y el recibo se vincula a la compañía cuyo buzón era el destinatario. Aparece entonces aquí, en <span class="chemin">Pagos › Recibos</span>, como un recibo depositado a mano.</p>
                 <p>La lista solo muestra los recibos de la <b>compañía activa</b>: un contador que cambia de compañía en el encabezado ve otra lista.</p>
                 <p>Un correo dirigido a un buzón @60sec.ca que no pertenece a ninguna compañía ni a ningún empleado produce un <b>recibo huérfano</b>: no tiene compañía, no aparece en ninguna lista y un reinicio a cero no lo borra. El equipo de 60Sec lo ve en su consola de administración (bloque «Recibos huérfanos»), donde puede <b>vincularlo</b> a la compañía correcta o <b>eliminarlo</b>. Si un recibo enviado por correo no aparece, revise la dirección usada y pida a su soporte que lo vincule.</p>
                 <div class="note" data-titre="Conviene saber">La dirección @60sec.ca de la compañía se muestra en <span class="chemin">Correo</span>; la de un empleado, en <span class="chemin">Empleados</span>. Un recibo enviado a cualquiera de las dos llega a la misma lista.</div>

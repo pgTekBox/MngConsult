@@ -124,12 +124,12 @@
                     <tbody>
                         <tr><td><span class="chemin">Tableau de bord</span></td><td>La page d’accueil : bienvenue, indicateurs, accès rapides (voir plus bas).</td><td>Cette page</td></tr>
                         <tr><td colspan="3"><strong>Mon argent</strong></td></tr>
-                        <tr><td><span class="chemin">Ventes › Clients</span></td><td>La liste de vos clients et leurs fiches (adresse, courriel de facturation, coordonnées).</td><td><a href="ventes.html#fr-clients">Ventes</a></td></tr>
-                        <tr><td><span class="chemin">Ventes › Factures clients</span></td><td>Les factures que vous émettez : brouillons, factures comptabilisées, encaissements, PDF, liens de paiement Square.</td><td><a href="ventes.html#fr-factures">Ventes</a></td></tr>
-                        <tr><td><span class="chemin">Ventes › Encaissements</span></td><td>Les paiements reçus de vos clients.</td><td><a href="ventes.html#fr-encaissements">Ventes</a></td></tr>
-                        <tr><td><span class="chemin">Achats › Fournisseurs</span></td><td>La liste de vos fournisseurs et leurs fiches, dont le paiement par Stripe.</td><td><a href="achats.html">Achats</a></td></tr>
-                        <tr><td><span class="chemin">Achats › Factures fournisseurs</span></td><td>Les factures reçues de vos fournisseurs, leur comptabilisation et leur paiement.</td><td><a href="achats.html">Achats</a></td></tr>
-                        <tr><td><span class="chemin">Achats › Reçus</span></td><td>Les reçus de dépenses (photo ou PDF lus par l’IA) et leur comptabilisation.</td><td><a href="achats.html">Achats</a></td></tr>
+                        <tr><td><span class="chemin">Revenus › Clients</span></td><td>La liste de vos clients et leurs fiches (adresse, courriel de facturation, coordonnées).</td><td><a href="ventes.html#fr-clients">Ventes</a></td></tr>
+                        <tr><td><span class="chemin">Revenus › Factures clients</span></td><td>Les factures que vous émettez : brouillons, factures comptabilisées, encaissements, PDF, liens de paiement Square.</td><td><a href="ventes.html#fr-factures">Ventes</a></td></tr>
+                        <tr><td><span class="chemin">Revenus › Encaissements</span></td><td>Les paiements reçus de vos clients.</td><td><a href="ventes.html#fr-encaissements">Ventes</a></td></tr>
+                        <tr><td><span class="chemin">Paiements › Fournisseurs</span></td><td>La liste de vos fournisseurs et leurs fiches, dont le paiement par Stripe.</td><td><a href="achats.html">Achats</a></td></tr>
+                        <tr><td><span class="chemin">Paiements › Factures fournisseurs</span></td><td>Les factures reçues de vos fournisseurs, leur comptabilisation et leur paiement.</td><td><a href="achats.html">Achats</a></td></tr>
+                        <tr><td><span class="chemin">Paiements › Reçus</span></td><td>Les reçus de dépenses (photo ou PDF lus par l’IA) et leur comptabilisation.</td><td><a href="achats.html">Achats</a></td></tr>
                         <tr><td><span class="chemin">Paiements › Processeur de paiement</span></td><td>La connexion de Square, de Plaid et de Stripe.</td><td><a href="administration.html#fr-processeurs">Administration</a></td></tr>
                         <tr><td><span class="chemin">Paiements › Paiements automatiques</span></td><td>Les autorisations, le calendrier et l’historique des paiements automatiques aux fournisseurs.</td><td><a href="administration.html#fr-paiements-automatiques">Administration</a></td></tr>
                         <tr><td><span class="chemin">Rapports › Plan comptable</span></td><td>Le plan comptable imprimable avec les soldes.</td><td><a href="rapports.html">Rapports</a></td></tr>
@@ -254,8 +254,8 @@
                     <li><strong>RDV demandé</strong> (bordure rouge, seulement s’il y en a) : le nombre de demandes de clients en attente — nouveau RDV, déplacement ou annulation ; un clic ouvre l’<a href="agenda.html">Agenda</a>, où vous les acceptez ou les refusez.</li>
                     <li><strong>Activité à faire</strong> : le rond rouge compte les activités en retard, le rond jaune celles dont la date approche ; un clic envoie 60 sur la première de cette couleur.</li>
                     <li><strong>Messages</strong> : ouvre la messagerie.</li>
-                    <li><strong>Revenu en retard</strong> : le solde des factures clients échues (bordure rouge s’il y en a) ; l’info-bulle donne le nombre de factures et le plus vieux retard. Ouvre <span class="chemin">Ventes › Factures clients</span>.</li>
-                    <li><strong>Paiements en retard</strong> : le solde des factures fournisseurs échues ; ouvre <span class="chemin">Achats › Factures fournisseurs</span>.</li>
+                    <li><strong>Revenu en retard</strong> : le solde des factures clients échues (bordure rouge s’il y en a) ; l’info-bulle donne le nombre de factures et le plus vieux retard. Ouvre <span class="chemin">Revenus › Factures clients</span>.</li>
+                    <li><strong>Paiements en retard</strong> : le solde des factures fournisseurs échues ; ouvre <span class="chemin">Paiements › Factures fournisseurs</span>.</li>
                     <li><strong>Compte d’opérations</strong> : votre compte bancaire branché (banque et derniers chiffres). L’œil montre ou masque le solde ; le choix est mémorisé dans votre navigateur. Sans compte branché, <kbd>Brancher</kbd> ouvre les comptes bancaires.</li>
                 </ul>
 
@@ -350,13 +350,13 @@
 
                 <h3>Étape 5 : Clients et produits</h3>
                 <ol>
-                    <li>Dans <span class="chemin">Ventes › Clients</span>, cliquez <kbd>Ajouter Client</kbd> pour chaque client : nom, adresse de facturation et courriel (c’est à ce courriel que partent les factures).</li>
+                    <li>Dans <span class="chemin">Revenus › Clients</span>, cliquez <kbd>Ajouter Client</kbd> pour chaque client : nom, adresse de facturation et courriel (c’est à ce courriel que partent les factures).</li>
                     <li>Dans <span class="chemin">Produits et services › Produits</span>, créez vos produits et services avec leur prix, leurs taxes et leur compte de vente. Regroupez-les au besoin par <span class="chemin">Catégorie de produit</span>.</li>
                 </ol>
 
                 <h3>Étape 6 : Première facture</h3>
                 <ol>
-                    <li>Depuis le Tableau de bord, cliquez <kbd>Nouvelle facture</kbd> (ou <span class="chemin">Ventes › Factures clients</span>).</li>
+                    <li>Depuis le Tableau de bord, cliquez <kbd>Nouvelle facture</kbd> (ou <span class="chemin">Revenus › Factures clients</span>).</li>
                     <li>Choisissez le client, ajoutez les lignes de produits ou de services, vérifiez la TPS et la TVQ calculées.</li>
                     <li>Enregistrez : la facture est un <strong>brouillon</strong> (numéro « BRO-… »). Comptabilisez-la pour obtenir son numéro définitif selon le format choisi dans <span class="chemin">Paramètres</span>, onglet « Facture » (par exemple PREFIXE-2026-0001).</li>
                     <li>Envoyez le PDF par courriel ou, si Square est connecté, joignez un lien de paiement.</li>
@@ -379,7 +379,7 @@
                 <details><summary>Pourquoi « Facturer » n’apparaît-il pas sur un RDV ?</summary><p>Le bouton apparaît sur tout RDV ayant un client ou un brouillon lié, quel que soit son horaire (même planifié plus tard). Il disparaît seulement quand le RDV est déjà facturé. Ouvrez le RDV pour choisir son client ou son service.</p></details>
                 <details><summary>Que fait « Facturer » dans la boîte « Aujourd’hui » ?</summary><p>S’il existe un brouillon lié au RDV (créé quand un service est choisi), <kbd>Facturer</kbd> le <strong>comptabilise directement</strong> (après confirmation) : la facture définitive est créée, le RDV passe à « Facturé » et le tableau de bord se rafraîchit. Si le brouillon n’a pas encore de client, il s’ouvre pour que vous l’ajoutiez. S’il n’y a aucun brouillon (aucun service choisi), une facture vierge s’ouvre. Pour seulement consulter ou modifier le brouillon sans le comptabiliser, cliquez sa pastille (ex. <strong>BROUILLON-7858</strong>).</p></details>
                 <details><summary>Que devient le RDV une fois le brouillon comptabilisé ?</summary><p>Le RDV passe à « Facturé » : sa pastille devient verte avec ✓ et le numéro définitif de la facture (ex. <strong>FAC-0001</strong>), un badge « Facturé » s’affiche et le bouton <kbd>Facturer</kbd> disparaît. La pastille reste cliquable pour revoir la facture.</p></details>
-                <details><summary>Où sont passés « Mon argent », « + Facture » et la tuile noire ?</summary><p>Ils ont été retirés de la nouvelle page. Les montants en retard sont sur la ligne de 60, les factures se créent depuis <span class="chemin">Ventes › Factures clients</span> ou depuis un RDV terminé (<kbd>Facturer</kbd>), et tous les écrans restent dans le menu de gauche.</p></details>
+                <details><summary>Où sont passés « Mon argent », « + Facture » et la tuile noire ?</summary><p>Ils ont été retirés de la nouvelle page. Les montants en retard sont sur la ligne de 60, les factures se créent depuis <span class="chemin">Revenus › Factures clients</span> ou depuis un RDV terminé (<kbd>Facturer</kbd>), et tous les écrans restent dans le menu de gauche.</p></details>
                 <details><summary>Comment savoir combien de jours d’essai il me reste ?</summary><p>La pastille d’essai de l’en-tête indique « Essai · N jours » et son info-bulle donne la date exacte. La ligne de forfait de la boîte de bienvenue affiche aussi « Essai gratuit jusqu’au [date] ».</p></details>
                 <details><summary>Je suis comptable : comment passer d’une compagnie à l’autre ?</summary><p>Utilisez la liste déroulante de compagnie dans l’en-tête. Après vérification de votre accès, vous êtes ramené au Tableau de bord de la compagnie choisie et tous les écrans affichent ses données.</p></details>
                 <details><summary>Le sélecteur de compagnie n’apparaît pas dans mon en-tête.</summary><p>Il n’apparaît que si vous êtes relié à plusieurs compagnies. Avec une seule compagnie, l’en-tête affiche simplement son nom. Pour être relié à une autre compagnie, obtenez sa clé comptable auprès de son propriétaire.</p></details>
@@ -530,12 +530,12 @@
                     <tbody>
                         <tr><td><span class="chemin">Dashboard</span></td><td>The home page: welcome, indicators, shortcuts (see below).</td><td>This page</td></tr>
                         <tr><td colspan="3"><strong>My money</strong></td></tr>
-                        <tr><td><span class="chemin">Sales › Customers</span></td><td>The list of your customers and their records (address, billing e-mail, contact details).</td><td><a href="ventes.html#en-customers">Sales</a></td></tr>
-                        <tr><td><span class="chemin">Sales › Customer invoices</span></td><td>The invoices you issue: drafts, posted invoices, receipts, PDFs, Square payment links.</td><td><a href="ventes.html#en-invoices">Sales</a></td></tr>
-                        <tr><td><span class="chemin">Sales › Cash receipts</span></td><td>The payments received from your customers.</td><td><a href="ventes.html#en-cash-receipts">Sales</a></td></tr>
-                        <tr><td><span class="chemin">Purchases › Suppliers</span></td><td>The list of your suppliers and their records, including payment through Stripe.</td><td><a href="achats.html">Purchases</a></td></tr>
-                        <tr><td><span class="chemin">Purchases › Supplier invoices</span></td><td>The invoices received from your suppliers, their posting and their payment.</td><td><a href="achats.html">Purchases</a></td></tr>
-                        <tr><td><span class="chemin">Purchases › Receipts</span></td><td>Expense receipts (photo or PDF read by the AI) and their posting.</td><td><a href="achats.html">Purchases</a></td></tr>
+                        <tr><td><span class="chemin">Revenue › Customers</span></td><td>The list of your customers and their records (address, billing e-mail, contact details).</td><td><a href="ventes.html#en-customers">Sales</a></td></tr>
+                        <tr><td><span class="chemin">Revenue › Customer invoices</span></td><td>The invoices you issue: drafts, posted invoices, receipts, PDFs, Square payment links.</td><td><a href="ventes.html#en-invoices">Sales</a></td></tr>
+                        <tr><td><span class="chemin">Revenue › Cash receipts</span></td><td>The payments received from your customers.</td><td><a href="ventes.html#en-cash-receipts">Sales</a></td></tr>
+                        <tr><td><span class="chemin">Payments › Suppliers</span></td><td>The list of your suppliers and their records, including payment through Stripe.</td><td><a href="achats.html">Purchases</a></td></tr>
+                        <tr><td><span class="chemin">Payments › Supplier invoices</span></td><td>The invoices received from your suppliers, their posting and their payment.</td><td><a href="achats.html">Purchases</a></td></tr>
+                        <tr><td><span class="chemin">Payments › Receipts</span></td><td>Expense receipts (photo or PDF read by the AI) and their posting.</td><td><a href="achats.html">Purchases</a></td></tr>
                         <tr><td><span class="chemin">Payments › Payment processor</span></td><td>Connecting Square, Plaid and Stripe.</td><td><a href="administration.html#en-payment-processors">Administration</a></td></tr>
                         <tr><td><span class="chemin">Payments › Automatic payments</span></td><td>Authorisations, calendar and history of automatic payments to suppliers.</td><td><a href="administration.html#en-automatic-payments">Administration</a></td></tr>
                         <tr><td><span class="chemin">Reports › Chart of accounts</span></td><td>The printable chart of accounts with balances.</td><td><a href="rapports.html">Reports</a></td></tr>
@@ -660,8 +660,8 @@
                     <li><strong>Requested appt</strong> (red border, only when there are some): the number of pending customer requests — new appointment, move or cancellation; a click opens the <a href="agenda.html">Agenda</a>, where you accept or decline them.</li>
                     <li><strong>Activities to do</strong>: the red circle counts overdue activities, the yellow one those coming due; a click sends 60 to the first one of that colour.</li>
                     <li><strong>Messages</strong>: opens the mailbox.</li>
-                    <li><strong>Overdue revenue</strong>: the balance of overdue customer invoices (red border if any); the tooltip gives the number of invoices and the oldest delay. Opens <span class="chemin">Sales › Customer invoices</span>.</li>
-                    <li><strong>Overdue payments</strong>: the balance of overdue supplier invoices; opens <span class="chemin">Purchases › Supplier invoices</span>.</li>
+                    <li><strong>Overdue revenue</strong>: the balance of overdue customer invoices (red border if any); the tooltip gives the number of invoices and the oldest delay. Opens <span class="chemin">Revenue › Customer invoices</span>.</li>
+                    <li><strong>Overdue payments</strong>: the balance of overdue supplier invoices; opens <span class="chemin">Payments › Supplier invoices</span>.</li>
                     <li><strong>Operating account</strong>: your connected bank account (bank and last digits). The eye shows or hides the balance; the choice is remembered in your browser. Without a connected account, <kbd>Connect</kbd> opens the bank accounts.</li>
                 </ul>
 
@@ -756,13 +756,13 @@
 
                 <h3>Step 5: Customers and products</h3>
                 <ol>
-                    <li>In <span class="chemin">Sales › Customers</span>, click <kbd>Add Customer</kbd> for each customer: name, billing address and e-mail (invoices are sent to this e-mail).</li>
+                    <li>In <span class="chemin">Revenue › Customers</span>, click <kbd>Add Customer</kbd> for each customer: name, billing address and e-mail (invoices are sent to this e-mail).</li>
                     <li>In <span class="chemin">Products and services › Products</span>, create your products and services with their price, taxes and sales account. Group them by <span class="chemin">Product category</span> if needed.</li>
                 </ol>
 
                 <h3>Step 6: First invoice</h3>
                 <ol>
-                    <li>From the Dashboard, click <kbd>New invoice</kbd> (or <span class="chemin">Sales › Customer invoices</span>).</li>
+                    <li>From the Dashboard, click <kbd>New invoice</kbd> (or <span class="chemin">Revenue › Customer invoices</span>).</li>
                     <li>Choose the customer, add the product or service lines, check the calculated GST and QST.</li>
                     <li>Save: the invoice is a <strong>draft</strong> (number “BRO-…”). Post it to get its final number according to the format chosen in <span class="chemin">Settings</span>, “Invoice” tab (for example PREFIX-2026-0001).</li>
                     <li>Send the PDF by e-mail or, if Square is connected, attach a payment link.</li>
@@ -785,7 +785,7 @@
                 <details><summary>Why doesn’t “Invoice” appear on an appointment?</summary><p>The button appears on any appointment that has a customer or a linked draft, whatever its time (even scheduled later). It only disappears once the appointment is invoiced. Open the appointment to choose its customer or service.</p></details>
                 <details><summary>What does “Invoice” do in the “Today” box?</summary><p>If a draft is linked to the appointment (created when a service is chosen), <kbd>Invoice</kbd> <strong>posts it directly</strong> (after confirmation): the final invoice is created, the appointment becomes “Invoiced” and the dashboard refreshes. If the draft has no customer yet, it opens so you can add one. If there is no draft (no service chosen), a blank invoice opens. To just view or edit the draft without posting it, click its badge (e.g. <strong>BROUILLON-7858</strong>).</p></details>
                 <details><summary>What happens to the appointment once the draft is posted?</summary><p>The appointment becomes “Invoiced”: its badge turns green with ✓ and the final invoice number (e.g. <strong>FAC-0001</strong>), an “Invoiced” badge appears and the <kbd>Invoice</kbd> button disappears. The badge stays clickable to review the invoice.</p></details>
-                <details><summary>Where did “My money”, “+ Invoice” and the black tile go?</summary><p>They were removed from the new page. Overdue amounts are on 60’s row, invoices are created from <span class="chemin">Sales › Customer invoices</span> or from a completed appointment (<kbd>Invoice</kbd>), and every screen remains in the left menu.</p></details>
+                <details><summary>Where did “My money”, “+ Invoice” and the black tile go?</summary><p>They were removed from the new page. Overdue amounts are on 60’s row, invoices are created from <span class="chemin">Revenue › Customer invoices</span> or from a completed appointment (<kbd>Invoice</kbd>), and every screen remains in the left menu.</p></details>
                 <details><summary>How do I know how many trial days I have left?</summary><p>The trial badge in the header reads “Trial · N days” and its tooltip gives the exact date. The plan line of the welcome box also shows “Free trial until [date]”.</p></details>
                 <details><summary>I am an accountant: how do I switch from one company to another?</summary><p>Use the company drop-down list in the header. After your access is checked, you are taken to the Dashboard of the chosen company and every screen shows its data.</p></details>
                 <details><summary>The company selector does not appear in my header.</summary><p>It only appears if you are linked to several companies. With a single company, the header simply shows its name. To be linked to another company, get its accountant key from its owner.</p></details>
@@ -936,12 +936,12 @@
                     <tbody>
                         <tr><td><span class="chemin">Panel de control</span></td><td>La página de inicio: bienvenida, indicadores, accesos rápidos (vea más abajo).</td><td>Esta página</td></tr>
                         <tr><td colspan="3"><strong>Mi dinero</strong></td></tr>
-                        <tr><td><span class="chemin">Ventas › Clientes</span></td><td>La lista de sus clientes y sus fichas (dirección, correo de facturación, datos de contacto).</td><td><a href="ventes.html#es-clientes">Ventas</a></td></tr>
-                        <tr><td><span class="chemin">Ventas › Facturas de clientes</span></td><td>Las facturas que emite: borradores, facturas contabilizadas, cobros, PDF, enlaces de pago Square.</td><td><a href="ventes.html#es-facturas">Ventas</a></td></tr>
-                        <tr><td><span class="chemin">Ventas › Cobros</span></td><td>Los pagos recibidos de sus clientes.</td><td><a href="ventes.html#es-cobros">Ventas</a></td></tr>
-                        <tr><td><span class="chemin">Compras › Proveedores</span></td><td>La lista de sus proveedores y sus fichas, incluido el pago por Stripe.</td><td><a href="achats.html">Compras</a></td></tr>
-                        <tr><td><span class="chemin">Compras › Facturas de proveedores</span></td><td>Las facturas recibidas de sus proveedores, su contabilización y su pago.</td><td><a href="achats.html">Compras</a></td></tr>
-                        <tr><td><span class="chemin">Compras › Recibos</span></td><td>Los recibos de gastos (foto o PDF leídos por la IA) y su contabilización.</td><td><a href="achats.html">Compras</a></td></tr>
+                        <tr><td><span class="chemin">Ingresos › Clientes</span></td><td>La lista de sus clientes y sus fichas (dirección, correo de facturación, datos de contacto).</td><td><a href="ventes.html#es-clientes">Ventas</a></td></tr>
+                        <tr><td><span class="chemin">Ingresos › Facturas de clientes</span></td><td>Las facturas que emite: borradores, facturas contabilizadas, cobros, PDF, enlaces de pago Square.</td><td><a href="ventes.html#es-facturas">Ventas</a></td></tr>
+                        <tr><td><span class="chemin">Ingresos › Cobros</span></td><td>Los pagos recibidos de sus clientes.</td><td><a href="ventes.html#es-cobros">Ventas</a></td></tr>
+                        <tr><td><span class="chemin">Pagos › Proveedores</span></td><td>La lista de sus proveedores y sus fichas, incluido el pago por Stripe.</td><td><a href="achats.html">Compras</a></td></tr>
+                        <tr><td><span class="chemin">Pagos › Facturas de proveedores</span></td><td>Las facturas recibidas de sus proveedores, su contabilización y su pago.</td><td><a href="achats.html">Compras</a></td></tr>
+                        <tr><td><span class="chemin">Pagos › Recibos</span></td><td>Los recibos de gastos (foto o PDF leídos por la IA) y su contabilización.</td><td><a href="achats.html">Compras</a></td></tr>
                         <tr><td><span class="chemin">Pagos › Procesador de pago</span></td><td>La conexión de Square, Plaid y Stripe.</td><td><a href="administration.html#es-procesadores-pago">Administración</a></td></tr>
                         <tr><td><span class="chemin">Pagos › Pagos automáticos</span></td><td>Las autorizaciones, el calendario y el historial de los pagos automáticos a proveedores.</td><td><a href="administration.html#es-pagos-automaticos">Administración</a></td></tr>
                         <tr><td><span class="chemin">Informes › Plan contable</span></td><td>El plan de cuentas imprimible con los saldos.</td><td><a href="rapports.html">Informes</a></td></tr>
@@ -1066,8 +1066,8 @@
                     <li><strong>Cita solicitada</strong> (borde rojo, solo si las hay): el número de solicitudes de clientes pendientes — nueva cita, cambio o cancelación; un clic abre la <a href="agenda.html">Agenda</a>, donde las acepta o las rechaza.</li>
                     <li><strong>Actividades por hacer</strong>: el círculo rojo cuenta las actividades atrasadas, el amarillo las que se acercan; un clic envía a 60 a la primera de ese color.</li>
                     <li><strong>Mensajes</strong>: abre la mensajería.</li>
-                    <li><strong>Ingresos atrasados</strong>: el saldo de las facturas de cliente vencidas (borde rojo si las hay); la información indica el número de facturas y el retraso más antiguo. Abre <span class="chemin">Ventas › Facturas de clientes</span>.</li>
-                    <li><strong>Pagos atrasados</strong>: el saldo de las facturas de proveedor vencidas; abre <span class="chemin">Compras › Facturas de proveedores</span>.</li>
+                    <li><strong>Ingresos atrasados</strong>: el saldo de las facturas de cliente vencidas (borde rojo si las hay); la información indica el número de facturas y el retraso más antiguo. Abre <span class="chemin">Ingresos › Facturas de clientes</span>.</li>
+                    <li><strong>Pagos atrasados</strong>: el saldo de las facturas de proveedor vencidas; abre <span class="chemin">Pagos › Facturas de proveedores</span>.</li>
                     <li><strong>Cuenta operativa</strong>: su cuenta bancaria conectada (banco y últimos dígitos). El ojo muestra u oculta el saldo; la elección se guarda en su navegador. Sin cuenta conectada, <kbd>Conectar</kbd> abre las cuentas bancarias.</li>
                 </ul>
 
@@ -1162,13 +1162,13 @@
 
                 <h3>Paso 5: Clientes y productos</h3>
                 <ol>
-                    <li>En <span class="chemin">Ventas › Clientes</span>, pulse <kbd>Añadir cliente</kbd> para cada cliente: nombre, dirección de facturación y correo (a ese correo se envían las facturas).</li>
+                    <li>En <span class="chemin">Ingresos › Clientes</span>, pulse <kbd>Añadir cliente</kbd> para cada cliente: nombre, dirección de facturación y correo (a ese correo se envían las facturas).</li>
                     <li>En <span class="chemin">Productos y servicios › Productos</span>, cree sus productos y servicios con su precio, sus impuestos y su cuenta de ventas. Agrúpelos si lo desea por <span class="chemin">Categoría de producto</span>.</li>
                 </ol>
 
                 <h3>Paso 6: Primera factura</h3>
                 <ol>
-                    <li>Desde el Panel de control, pulse <kbd>Nueva factura</kbd> (o <span class="chemin">Ventas › Facturas de clientes</span>).</li>
+                    <li>Desde el Panel de control, pulse <kbd>Nueva factura</kbd> (o <span class="chemin">Ingresos › Facturas de clientes</span>).</li>
                     <li>Elija el cliente, añada las líneas de productos o servicios, verifique la GST/TPS y la QST/TVQ calculadas.</li>
                     <li>Guarde: la factura es un <strong>borrador</strong> (número «BRO-…»). Contabilícela para obtener su número definitivo según el formato elegido en <span class="chemin">Ajustes</span>, pestaña «Factura» (por ejemplo PREFIJO-2026-0001).</li>
                     <li>Envíe el PDF por correo o, si Square está conectado, adjunte un enlace de pago.</li>
@@ -1191,7 +1191,7 @@
                 <details><summary>¿Por qué no aparece «Facturar» en una cita?</summary><p>El botón aparece en cualquier cita que tenga un cliente o un borrador vinculado, sea cual sea su horario (aunque esté programada más tarde). Solo desaparece cuando la cita ya está facturada. Abra la cita para elegir su cliente o su servicio.</p></details>
                 <details><summary>¿Qué hace «Facturar» en la caja «Hoy»?</summary><p>Si hay un borrador vinculado a la cita (creado al elegir un servicio), <kbd>Facturar</kbd> lo <strong>contabiliza directamente</strong> (tras confirmar): se crea la factura definitiva, la cita pasa a «Facturado» y el tablero se actualiza. Si el borrador aún no tiene cliente, se abre para que lo añada. Si no hay borrador (ningún servicio elegido), se abre una factura en blanco. Para solo consultar o modificar el borrador sin contabilizarlo, pulse su etiqueta (p. ej. <strong>BROUILLON-7858</strong>).</p></details>
                 <details><summary>¿Qué pasa con la cita una vez contabilizado el borrador?</summary><p>La cita pasa a «Facturado»: su etiqueta se vuelve verde con ✓ y el número definitivo de la factura (p. ej. <strong>FAC-0001</strong>), aparece una insignia «Facturado» y el botón <kbd>Facturar</kbd> desaparece. La etiqueta sigue siendo pulsable para revisar la factura.</p></details>
-                <details><summary>¿Dónde quedaron «Mi dinero», «+ Factura» y el mosaico negro?</summary><p>Se retiraron de la nueva página. Los importes atrasados están en la fila de 60, las facturas se crean desde <span class="chemin">Ventas › Facturas de clientes</span> o desde una cita terminada (<kbd>Facturar</kbd>), y todas las pantallas siguen en el menú de la izquierda.</p></details>
+                <details><summary>¿Dónde quedaron «Mi dinero», «+ Factura» y el mosaico negro?</summary><p>Se retiraron de la nueva página. Los importes atrasados están en la fila de 60, las facturas se crean desde <span class="chemin">Ingresos › Facturas de clientes</span> o desde una cita terminada (<kbd>Facturar</kbd>), y todas las pantallas siguen en el menú de la izquierda.</p></details>
                 <details><summary>¿Cómo sé cuántos días de prueba me quedan?</summary><p>El indicador de prueba de la cabecera muestra «Prueba · N días» y su descripción emergente da la fecha exacta. La línea de plan del cuadro de bienvenida muestra también «Prueba gratuita hasta el [fecha]».</p></details>
                 <details><summary>Soy contador: ¿cómo paso de una empresa a otra?</summary><p>Use la lista desplegable de empresa en la cabecera. Tras verificar su acceso, se le lleva al Panel de control de la empresa elegida y todas las pantallas muestran sus datos.</p></details>
                 <details><summary>El selector de empresa no aparece en mi cabecera.</summary><p>Solo aparece si está vinculado a varias empresas. Con una sola empresa, la cabecera muestra simplemente su nombre. Para vincularse a otra empresa, obtenga su clave de contador de su propietario.</p></details>
