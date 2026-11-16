@@ -418,7 +418,7 @@ Namespace Controls
                 Case "portalAssign" : Return Choose3(lang, "Affectation des dossiers", "File assignment", "Asignación de expedientes")
                 Case "portalActivities" : Return Choose3(lang, "Activités à attribuer", "Activities to assign", "Actividades por asignar")
                 Case "portalProfile" : Return Choose3(lang, "Profil du cabinet", "Firm profile", "Perfil del despacho")
-                Case "portalTechniciens" : Return Choose3(lang, "Comptables et techniciens", "Accountants and technicians", "Contadores y técnicos")
+                Case "portalTechniciens" : Return Choose3(lang, "Employés", "Employees", "Empleados")
                 Case "portalRoles" : Return Choose3(lang, "Rôles", "Roles", "Roles")
                 Case "portalTechniciensMiens" : Return Choose3(lang, "Mes techniciens", "My technicians", "Mis técnicos")
                 Case "portalTools" : Return Choose3(lang, "Traitement en lot", "Batch processing", "Procesamiento por lotes")
