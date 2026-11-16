@@ -14,7 +14,7 @@
     #tec .tete .ico { width: 46px; height: 46px; border-radius: 50%; flex: 0 0 46px; background: #E8EDF5; color: #1B4F9C; display: flex; align-items: center; justify-content: center }
     #tec .tete h1 { font-size: 21px; font-weight: 800; margin: 0 }
     #tec .tete .sous { font-size: 13px; color: #44536E; margin-top: 2px }
-    #tec .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px }
+    #tec .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px }
     #tec .kpi { background: #fff; border-radius: 22px; padding: 14px 16px }
     #tec .kpi .lab { font-size: 13px; font-weight: 700; color: #44536E }
     #tec .kpi .val { font-size: 24px; font-weight: 800 }
@@ -84,7 +84,6 @@
     </section>
     <div class="kpis" id="tecKpis"></div>
     <section class="boite" id="tecInvite" hidden></section>
-    <section class="boite" id="tecComptables"></section>
     <section class="boite" id="tecListe"></section>
 
     <div class="fond" id="tecFond" onclick="if (event.target === this) tecFermer();">
@@ -245,15 +244,14 @@
     function tecPeindre() {
         document.getElementById('tecTitre').textContent = TL.titre;
         document.getElementById('tecSous').textContent = TL.sous;
-        var tous = TEC.membres;
-        var cpt = tous.filter(function (x) { return x.role !== 'technicien'; });
-        var t = tous.filter(function (x) { return x.role === 'technicien'; });
+        // Tout le monde est un employé : une seule liste, triée par nom (le rôle reste affiché sur la fiche)
+        var tous = TEC.membres.slice().sort(function (a, b) { return String(a.nom).localeCompare(String(b.nom), 'fr', { sensitivity: 'base' }); });
         var att = tous.filter(function (x) { return x.attente; }).length;
         var tac = tous.reduce(function (s, x) { return s + x.taches; }, 0);
         var ret = tous.reduce(function (s, x) { return s + x.retard; }, 0);
         var sansRecup = tous.filter(function (x) { return !x.recup; }).length;
         document.getElementById('tecKpis').innerHTML =
-            [[TL.kComptables, cpt.length, ''], [TL.kTech, t.length, ''], [TL.kAttente, att, ''], [TL.kTaches, tac, ''], [TL.kRetard, ret, ret > 0 ? 'rouge' : ''], [TL.kSansRecup, sansRecup, sansRecup > 0 ? 'rouge' : '']]
+            [[TL.kEmployes, tous.length, ''], [TL.kAttente, att, ''], [TL.kTaches, tac, ''], [TL.kRetard, ret, ret > 0 ? 'rouge' : ''], [TL.kSansRecup, sansRecup, sansRecup > 0 ? 'rouge' : '']]
             .map(function (k) { return '<div class="kpi ' + k[2] + '"><div class="lab">' + tEsc(k[0]) + '</div><div class="val">' + k[1] + '</div></div>'; }).join('');
 
         var inv = document.getElementById('tecInvite');
@@ -263,12 +261,9 @@
                 '<button type="button" class="btn" onclick="tecNouveau()">+ ' + tEsc(TL.nouveau) + '</button></div><div id="tecInvMsg"></div>';
         }
 
-        document.getElementById('tecComptables').innerHTML =
-            '<h2>' + tEsc(TL.secComptables) + '<span class="nb">(' + cpt.length + ')</span></h2>' +
-            (cpt.length ? cpt.map(tCarte).join('') : '<div class="vide">' + tEsc(TL.videComptables) + '</div>');
         document.getElementById('tecListe').innerHTML =
-            '<h2>' + tEsc(TL.secTech) + '<span class="nb">(' + t.length + ')</span></h2>' +
-            (t.length ? t.map(tCarte).join('') : '<div class="vide">' + tEsc(TL.vide) + '</div>');
+            '<h2>' + tEsc(TL.secEmployes) + '<span class="nb">(' + tous.length + ')</span></h2>' +
+            (tous.length ? tous.map(tCarte).join('') : '<div class="vide">' + tEsc(TL.videEmployes) + '</div>');
     }
 
     // Fenêtre « Nouveau membre » : courriel par défaut prenom.nom@60sec.ca (T383)

@@ -133,12 +133,12 @@
 
             <section id="fr-techniciens">
                 <h2>Employés</h2>
-                <p>La page <span class="chemin">Mon cabinet › Employés</span> gère les membres du cabinet en deux groupes : les <strong>comptables</strong> (administrateurs et comptables) et les <strong>techniciens</strong>. Un comptable suit ses dossiers et peut superviser des techniciens ; un technicien ne voit et n’entre que dans les <strong>dossiers qui lui sont confiés</strong> et travaille sous un <strong>superviseur</strong>.</p>
+                <p>La page <span class="chemin">Mon cabinet › Employés</span> gère les employés du cabinet, dans une seule liste triée par nom. Il n’y a plus de groupes : chacun est un <strong>employé</strong>, et son <strong>rôle</strong> (voir <span class="chemin">Mon cabinet › Rôles</span>) décide des dossiers qu’il voit et de ce qu’il peut faire. Un employé au niveau Technicien ne voit que les <strong>dossiers qui lui sont confiés</strong> et travaille sous un <strong>superviseur</strong>.</p>
                 <h3>Indicateurs</h3>
-                <p>Comptables, Techniciens, En attente d’activation, Tâches ouvertes (de leurs dossiers) et En retard (en rouge s’il y en a).</p>
-                <h3>Créer un membre (administrateur, solo)</h3>
+                <p>Employés, En attente d’activation, Tâches ouvertes (de leurs dossiers), En retard et Sans courriel de récupération (en rouge s’il y en a).</p>
+                <h3>Ajouter un employé (administrateur, solo)</h3>
                 <ol>
-                    <li><kbd>+ Nouveau membre</kbd> ouvre la fenêtre de création. Tapez le <strong>prénom</strong> et le <strong>nom</strong> : le <strong>courriel</strong> (identifiant de connexion) se remplit tout seul en <code>prenom.nom@60sec.ca</code>, sans accents (par exemple Jean Gagnon → jean.gagnon@60sec.ca ; si l’adresse est prise, <code>-2</code>, <code>-3</code>… est ajouté). Vous pouvez le modifier, ou mettre une autre adresse.</li>
+                    <li><kbd>+ Nouvel employé</kbd> ouvre la fenêtre de création. Tapez le <strong>prénom</strong> et le <strong>nom</strong> : le <strong>courriel</strong> (identifiant de connexion) se remplit tout seul en <code>prenom.nom@60sec.ca</code>, sans accents (par exemple Jean Gagnon → jean.gagnon@60sec.ca ; si l’adresse est prise, <code>-2</code>, <code>-3</code>… est ajouté). Vous pouvez le modifier, ou mettre une autre adresse.</li>
                     <li><strong>Créer la boîte courriel @60sec.ca</strong> (coché par défaut pour une adresse @60sec.ca) crée la boîte qui recevra ses courriels. Son mot de passe sera celui que le membre choisit en activant son compte.</li>
                     <li><strong>Courriel de récupération</strong> (obligatoire) : l’adresse externe du membre (personnelle, pas @60sec.ca, différente du courriel de connexion). L’invitation y est envoyée, puisque la nouvelle boîte n’est pas encore accessible ; le lien d’activation s’affiche aussi, à copier.</li>
                     <li><strong>Rôle</strong> (un des rôles du cabinet) et, pour un technicien, son <strong>superviseur</strong>, puis <kbd>Envoyer l’invitation</kbd>. Le compte est créé <strong>en attente d’activation</strong> ; le membre ouvre le lien, choisit son mot de passe et entre dans le portail avec les droits de son rôle.</li>
@@ -412,12 +412,12 @@
 
             <section id="en-technicians">
                 <h2>Employees</h2>
-                <p>The <span class="chemin">My firm › Employees</span> page manages the firm’s members in two groups: <strong>accountants</strong> (administrators and accountants) and <strong>technicians</strong>. An accountant handles their files and can supervise technicians; a technician only sees and enters the <strong>files assigned to them</strong> and works under a <strong>supervisor</strong>.</p>
+                <p>The <span class="chemin">My firm › Employees</span> page manages the firm’s employees in a single list sorted by name. There are no groups anymore: everyone is an <strong>employee</strong>, and their <strong>role</strong> (see <span class="chemin">My firm › Roles</span>) decides which files they see and what they can do. An employee at the Technician level only sees the <strong>files assigned to them</strong> and works under a <strong>supervisor</strong>.</p>
                 <h3>Indicators</h3>
-                <p>Accountants, Technicians, Awaiting activation, Open tasks (on their files) and Overdue (red when there are any).</p>
-                <h3>Create a member (administrator, solo)</h3>
+                <p>Employees, Awaiting activation, Open tasks (on their files), Overdue and No recovery email (red when there are any).</p>
+                <h3>Add an employee (administrator, solo)</h3>
                 <ol>
-                    <li><kbd>+ New member</kbd> opens the creation window. Type the <strong>first name</strong> and <strong>last name</strong>: the <strong>email</strong> (sign-in identifier) fills itself in as <code>firstname.lastname@60sec.ca</code>, without accents (for example Jean Gagnon → jean.gagnon@60sec.ca; if the address is taken, <code>-2</code>, <code>-3</code>… is added). You can change it, or use another address.</li>
+                    <li><kbd>+ New employee</kbd> opens the creation window. Type the <strong>first name</strong> and <strong>last name</strong>: the <strong>email</strong> (sign-in identifier) fills itself in as <code>firstname.lastname@60sec.ca</code>, without accents (for example Jean Gagnon → jean.gagnon@60sec.ca; if the address is taken, <code>-2</code>, <code>-3</code>… is added). You can change it, or use another address.</li>
                     <li><strong>Create the @60sec.ca mailbox</strong> (checked by default for an @60sec.ca address) creates the mailbox that will receive their emails. Its password will be the one the member chooses when activating their account.</li>
                     <li><strong>Recovery email</strong> (required): the member’s external address (personal, not @60sec.ca, different from the sign-in email). The invitation is sent there, since the new mailbox is not accessible yet; the activation link is also shown, ready to copy.</li>
                     <li><strong>Role</strong> (one of the firm’s roles) and, for a technician, their <strong>supervisor</strong>, then <kbd>Send the invitation</kbd>. The account is created <strong>awaiting activation</strong>; the member opens the link, chooses a password and enters the portal with their role’s rights.</li>
@@ -691,12 +691,12 @@
 
             <section id="es-tecnicos">
                 <h2>Empleados</h2>
-                <p>La página <span class="chemin">Mi despacho › Empleados</span> gestiona los miembros del despacho en dos grupos: los <strong>contadores</strong> (administradores y contadores) y los <strong>técnicos</strong>. Un contador lleva sus expedientes y puede supervisar técnicos; un técnico solo ve y solo entra en los <strong>expedientes que se le confían</strong> y trabaja bajo un <strong>supervisor</strong>.</p>
+                <p>La página <span class="chemin">Mi despacho › Empleados</span> gestiona los empleados del despacho en una sola lista ordenada por nombre. Ya no hay grupos: cada uno es un <strong>empleado</strong>, y su <strong>rol</strong> (vea <span class="chemin">Mi despacho › Roles</span>) decide qué expedientes ve y qué puede hacer. Un empleado de nivel Técnico solo ve los <strong>expedientes que se le confían</strong> y trabaja bajo un <strong>supervisor</strong>.</p>
                 <h3>Indicadores</h3>
-                <p>Contadores, Técnicos, Pendientes de activación, Tareas abiertas (de sus expedientes) y Atrasadas (en rojo cuando hay alguna).</p>
-                <h3>Crear un miembro (administrador, solo)</h3>
+                <p>Empleados, Pendientes de activación, Tareas abiertas (de sus expedientes), Atrasadas y Sin correo de recuperación (en rojo cuando hay alguno).</p>
+                <h3>Agregar un empleado (administrador, solo)</h3>
                 <ol>
-                    <li><kbd>+ Nuevo miembro</kbd> abre la ventana de creación. Escriba el <strong>nombre</strong> y el <strong>apellido</strong>: el <strong>correo</strong> (identificador de conexión) se rellena solo como <code>nombre.apellido@60sec.ca</code>, sin acentos (por ejemplo Jean Gagnon → jean.gagnon@60sec.ca; si la dirección está ocupada, se añade <code>-2</code>, <code>-3</code>…). Puede modificarlo o usar otra dirección.</li>
+                    <li><kbd>+ Nuevo empleado</kbd> abre la ventana de creación. Escriba el <strong>nombre</strong> y el <strong>apellido</strong>: el <strong>correo</strong> (identificador de conexión) se rellena solo como <code>nombre.apellido@60sec.ca</code>, sin acentos (por ejemplo Jean Gagnon → jean.gagnon@60sec.ca; si la dirección está ocupada, se añade <code>-2</code>, <code>-3</code>…). Puede modificarlo o usar otra dirección.</li>
                     <li><strong>Crear el buzón @60sec.ca</strong> (marcado por defecto para una dirección @60sec.ca) crea el buzón que recibirá sus correos. Su contraseña será la que el miembro elija al activar su cuenta.</li>
                     <li><strong>Correo de recuperación</strong> (obligatorio): la dirección externa del miembro (personal, no @60sec.ca, distinta del correo de conexión). La invitación se envía allí, ya que el nuevo buzón aún no es accesible; el enlace de activación también se muestra, listo para copiar.</li>
                     <li><strong>Rol</strong> (uno de los roles del despacho) y, para un técnico, su <strong>supervisor</strong>, luego <kbd>Enviar la invitación</kbd>. La cuenta se crea <strong>pendiente de activación</strong>; el miembro abre el enlace, elige su contraseña y entra al portal con los derechos de su rol.</li>
