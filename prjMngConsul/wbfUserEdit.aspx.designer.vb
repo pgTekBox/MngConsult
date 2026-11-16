@@ -112,6 +112,11 @@ Partial Public Class wbfUserEdit
     '''</remarks>
     Protected WithEvents txtEmail As Global.Telerik.Web.UI.RadTextBox
 
+    '''<summary>txtRecoveryEmail / litRecupOblig / litRecupHint (T390).</summary>
+    Protected WithEvents txtRecoveryEmail As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents litRecupOblig As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litRecupHint As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>
     '''txtFirstName control.
     '''</summary>

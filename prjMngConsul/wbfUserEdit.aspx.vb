@@ -54,7 +54,31 @@ Public Class wbfUserEdit
         txtLastName.Text = If(r("LastName") Is DBNull.Value, "", r("LastName").ToString())
         cbAdmin.Checked = (Not r("IsAdmin") Is DBNull.Value) AndAlso CBool(r("IsAdmin"))
         cbActive.Checked = (Not r("IsActive") Is DBNull.Value) AndAlso CBool(r("IsActive"))
+
+        ' T390 : courriel de récupération (obligatoire pour un membre de cabinet comptable)
+        txtRecoveryEmail.Text = If(r("RecoveryEmail") Is DBNull.Value, "", r("RecoveryEmail").ToString())
+        Dim membre As Boolean = (Not r("EstMembreCabinet") Is DBNull.Value) AndAlso CBool(r("EstMembreCabinet"))
+        ViewState("EstMembreCabinet") = membre
+        If membre Then
+            litRecupOblig.Text = " *"
+            litRecupHint.Text = " Obligatoire : cet utilisateur est membre d'un cabinet comptable."
+        End If
     End Sub
+
+    ''' <summary>
+    ''' Courriel de récupération (T389/T390) : "" si correct, sinon le message.
+    ''' Obligatoire pour un membre de cabinet ; externe (pas @60sec.ca) ; différent du courriel de connexion.
+    ''' </summary>
+    Private Function ValiderRecuperation(recup As String, connexion As String, obligatoire As Boolean) As String
+        If recup = "" Then
+            Return If(obligatoire, "Le courriel de récupération est obligatoire pour un membre d'un cabinet comptable.", "")
+        End If
+        Dim at As Integer = recup.IndexOf("@"c)
+        If at < 1 OrElse recup.IndexOf("."c, at) < 0 OrElse recup.Contains(" ") Then Return "Le courriel de récupération n'est pas valide."
+        If recup.EndsWith("@60sec.ca", StringComparison.OrdinalIgnoreCase) Then Return "Le courriel de récupération doit être une adresse externe (pas @60sec.ca)."
+        If String.Equals(recup, connexion, StringComparison.OrdinalIgnoreCase) Then Return "Le courriel de récupération doit être différent du courriel de connexion."
+        Return ""
+    End Function
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
 
@@ -70,6 +94,13 @@ Public Class wbfUserEdit
         End If
         If Not email.Contains("@") OrElse Not email.Contains(".") Then
             ShowMsg("Le courriel n'est pas valide.", isError:=True)
+            Return
+        End If
+
+        Dim recup As String = txtRecoveryEmail.Text.Trim().ToLower()
+        Dim errRecup As String = ValiderRecuperation(recup, email, CBool(If(ViewState("EstMembreCabinet"), False)))
+        If errRecup <> "" Then
+            ShowMsg(errRecup, isError:=True)
             Return
         End If
 
@@ -126,6 +157,7 @@ Public Class wbfUserEdit
             p.Add(New SqlParameter("@IsAdmin", cbAdmin.Checked))
             p.Add(New SqlParameter("@IsActive", cbActive.Checked))
             p.Add(New SqlParameter("@ModifiedBy", If(Session("UserEmail"), "")))
+            p.Add(New SqlParameter("@RecoveryEmail", recup))   ' T390 : "" = effacer
 
             Dim outNew As New SqlParameter("@NewId", SqlDbType.Int)
             outNew.Direction = ParameterDirection.Output
@@ -140,6 +172,8 @@ Public Class wbfUserEdit
             ' Dernier administrateur actif d'un cabinet comptable (T384)
             ShowMsg("Impossible de désactiver cet utilisateur : c'est le seul administrateur de son cabinet comptable. Nommez d'abord un autre administrateur.", isError:=True)
             cbActive.Checked = True
+        Catch ex As SqlException When ex.Number = 51170
+            ShowMsg("Le courriel de récupération n'est pas valide (adresse externe, différente du courriel de connexion).", isError:=True)
         Catch ex As SqlException When ex.Number = 2601 OrElse ex.Number = 2627
             ' Violation d'index unique = email déjà utilisé
             ShowMsg("Ce courriel est déjà utilisé par un autre utilisateur.", isError:=True)

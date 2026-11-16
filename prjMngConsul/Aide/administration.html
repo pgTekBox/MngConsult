@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -81,6 +81,7 @@
                         <tr><td>Avatar</td><td>Un rond bleu avec les initiales de l’utilisateur.</td></tr>
                         <tr><td>Nom</td><td>Nom en gras (ou courriel s’il est absent) avec « ID: n » en dessous.</td></tr>
                         <tr><td>Courriel</td><td>Adresse de connexion.</td></tr>
+                        <tr><td>Courriel de récupération</td><td>Sous le courriel : « Récupération : … », ou « sans courriel de récupération » en rouge pour un membre de cabinet qui n’en a pas.</td></tr>
                         <tr><td>Rôle</td><td>Pastille <strong>Admin</strong> (bleu), <strong>Comptable</strong> ou <strong>Comptable · Admin</strong> (mauve) ou <strong>Utilisateur</strong> (gris) — le même rôle que l’en-tête du site. « Comptable » vient de la case comptable de l’utilisateur : elle donne accès au portail comptable.</td></tr>
                         <tr><td>Statut</td><td>Un point vert « Actif » ou gris « Inactif ».</td></tr>
                         <tr><td>Dernière conn.</td><td>Date de la dernière connexion, ou « — ».</td></tr>
@@ -99,6 +100,7 @@
                     <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
                     <tbody>
                         <tr><td>Courriel</td><td>Oui</td><td>200 caractères au maximum, converti en minuscules ; unique dans tout le système.</td></tr>
+                        <tr><td>Courriel de récupération</td><td>Oui pour un membre d’un cabinet comptable</td><td>Adresse externe (personnelle) : pas @60sec.ca et différente du courriel de connexion. Les liens « Mot de passe oublié » y sont envoyés. La liste l’affiche sous le courriel, ou « sans courriel de récupération » en rouge pour un membre de cabinet qui n’en a pas.</td></tr>
                         <tr><td>Prénom, Nom</td><td>Non</td><td>100 caractères chacun.</td></tr>
                         <tr><td>Mot de passe</td><td>Oui à la création</td><td>En modification : « Nouveau mot de passe » — « Laissez vide pour conserver le mot de passe actuel. Minimum 8 caractères si modifié. »</td></tr>
                         <tr><td>Confirmation</td><td>Si mot de passe saisi</td><td>Doit être identique.</td></tr>
@@ -650,6 +652,7 @@
                         <tr><td>Avatar</td><td>A blue circle with the user’s initials.</td></tr>
                         <tr><td>Name</td><td>Name in bold (or email if missing) with “ID: n” underneath.</td></tr>
                         <tr><td>Email</td><td>Sign-in address.</td></tr>
+                        <tr><td>Recovery email</td><td>Under the email: “Recovery: …”, or “no recovery email” in red for a firm member without one.</td></tr>
                         <tr><td>Role</td><td><strong>Admin</strong> (blue), <strong>Accountant</strong> or <strong>Accountant · Admin</strong> (purple) or <strong>User</strong> (grey) pill — the same role as the site header. “Accountant” comes from the user’s accountant box: it gives access to the accountant portal.</td></tr>
                         <tr><td>Status</td><td>A green dot “Active” or a grey dot “Inactive”.</td></tr>
                         <tr><td>Last sign-in</td><td>Date of last sign-in, or “—”.</td></tr>
@@ -668,6 +671,7 @@
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
                         <tr><td>Email</td><td>Yes</td><td>200 characters max, converted to lowercase; unique across the whole system.</td></tr>
+                        <tr><td>Recovery email</td><td>Yes for an accounting-firm member</td><td>External (personal) address: not @60sec.ca and different from the sign-in email. “Forgot password” links are sent there. The list shows it under the email, or “no recovery email” in red for a firm member without one.</td></tr>
                         <tr><td>First name, Last name</td><td>No</td><td>100 characters each.</td></tr>
                         <tr><td>Password</td><td>Yes on creation</td><td>When editing: “New password” — “Leave empty to keep the current password. Minimum 8 characters if changed.”</td></tr>
                         <tr><td>Confirmation</td><td>If a password is typed</td><td>Must match.</td></tr>
@@ -1219,6 +1223,7 @@
                         <tr><td>Avatar</td><td>Un círculo azul con las iniciales del usuario.</td></tr>
                         <tr><td>Nombre</td><td>Nombre en negrita (o correo si falta) con «ID: n» debajo.</td></tr>
                         <tr><td>Correo</td><td>Dirección de conexión.</td></tr>
+                        <tr><td>Correo de recuperación</td><td>Bajo el correo: «Recuperación: …», o «sin correo de recuperación» en rojo para un miembro de despacho que no lo tenga.</td></tr>
                         <tr><td>Rol</td><td>Píldora <strong>Admin</strong> (azul), <strong>Contador</strong> o <strong>Contador · Admin</strong> (malva) o <strong>Usuario</strong> (gris): el mismo rol que el encabezado del sitio. «Contador» viene de la casilla de contador del usuario: da acceso al portal contable.</td></tr>
                         <tr><td>Estado</td><td>Un punto verde «Activo» o gris «Inactivo».</td></tr>
                         <tr><td>Última conexión</td><td>Fecha de la última conexión, o «—».</td></tr>
@@ -1237,6 +1242,7 @@
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
                         <tr><td>Correo</td><td>Sí</td><td>200 caracteres máx., convertido a minúsculas; único en todo el sistema.</td></tr>
+                        <tr><td>Correo de recuperación</td><td>Sí para un miembro de un despacho contable</td><td>Dirección externa (personal): no @60sec.ca y distinta del correo de conexión. Los enlaces «Contraseña olvidada» se envían allí. La lista lo muestra bajo el correo, o «sin correo de recuperación» en rojo para un miembro de despacho que no lo tenga.</td></tr>
                         <tr><td>Nombre, Apellido</td><td>No</td><td>100 caracteres cada uno.</td></tr>
                         <tr><td>Contraseña</td><td>Sí al crear</td><td>Al modificar: «Nueva contraseña» — «Déjela vacía para conservar la contraseña actual. Mínimo 8 caracteres si se modifica.»</td></tr>
                         <tr><td>Confirmación</td><td>Si se escribe contraseña</td><td>Debe coincidir.</td></tr>

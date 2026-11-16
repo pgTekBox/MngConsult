@@ -248,6 +248,22 @@ Public Class wbfUsers
         Return "<b>" & Server.HtmlEncode(n) & "</b><span>ID: " & Server.HtmlEncode(Convert.ToString(id)) & "</span>"
     End Function
 
+    ''' <summary>
+    ''' Le courriel de connexion et, dessous, le courriel de récupération (T390) ;
+    ''' en rouge « sans courriel de récupération » pour un membre de cabinet qui n'en a pas.
+    ''' </summary>
+    Public Function CourrielCell(courriel As Object, recup As Object, membreCabinet As Object) As String
+        Dim r As String = If(recup Is Nothing OrElse IsDBNull(recup), "", Convert.ToString(recup).Trim())
+        Dim html As String = Server.HtmlEncode(Convert.ToString(courriel))
+        If r <> "" Then
+            html &= "<span class=""recup"" title=""" & Server.HtmlEncode(T("Courriel de récupération", "Recovery email", "Correo de recuperación")) & """>" &
+                    Server.HtmlEncode(T("Récupération : ", "Recovery: ", "Recuperación: ") & r) & "</span>"
+        ElseIf Vrai(membreCabinet) Then
+            html &= "<span class=""recup manque"">" & Server.HtmlEncode(T("sans courriel de récupération", "no recovery email", "sin correo de recuperación")) & "</span>"
+        End If
+        Return html
+    End Function
+
     ''' <summary>Le rôle, comme l'en-tête du site : Comptable · Admin, Comptable, Admin ou Utilisateur
     ''' (cases T015User.IsAdmin et isAccountant, T378).</summary>
     Public Function RolePill(estAdmin As Object, estComptable As Object) As String

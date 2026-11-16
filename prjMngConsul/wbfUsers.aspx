@@ -95,6 +95,8 @@
     .c-user b { font-weight: 800; color: #0E1F3D; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
     .c-user span { font-size: 13px; color: #44536E }
     .user-email { color: #44536E; font-size: 14px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+    .user-email .recup { display: block; font-size: 12px; color: #7A879C; overflow: hidden; text-overflow: ellipsis }
+    .user-email .recup.manque { color: #A3261C; font-weight: 700 }
     .user-meta { font-size: 14px; color: #44536E; white-space: nowrap }
     .fc-etat .pt { width: 10px; height: 10px; border-radius: 50%; display: inline-block }
     </style>
@@ -200,7 +202,7 @@
                              la dernière connexion, puis les actions. --%>
                         <div><div class="user-avatar"><%# GetInitials(Eval("FirstName"), Eval("LastName"), Eval("Email")) %></div></div>
                         <div class="c-user"><%# NomCell(Eval("FullName"), Eval("Email"), Eval("Id")) %></div>
-                        <div class="user-email col-email"><%# Server.HtmlEncode(Convert.ToString(Eval("Email"))) %></div>
+                        <div class="user-email col-email"><%# CourrielCell(Eval("Email"), Eval("RecoveryEmail"), Eval("EstMembreCabinet")) %></div>
                         <div><%# RolePill(Eval("IsAdmin"), Eval("IsAccountant")) %></div>
                         <div><%# EtatCell(Eval("IsActive")) %></div>
                         <div class="user-meta col-lastlogin"><%# DateCell(Eval("LastLoginOn")) %></div>

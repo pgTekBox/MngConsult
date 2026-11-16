@@ -155,6 +155,18 @@
                         </div>
                     </div>
 
+                    <div class="grid1" style="margin-top:12px;">
+                        <div class="field">
+                            <label>Courriel de récupération<asp:Literal ID="litRecupOblig" runat="server" /></label>
+                            <telerik:RadTextBox ID="txtRecoveryEmail" runat="server"
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="200" />
+                            <div class="hint">
+                                Adresse externe (personnelle), différente du courriel de connexion et hors @60sec.ca :
+                                les liens de mot de passe y sont envoyés.<asp:Literal ID="litRecupHint" runat="server" />
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="grid" style="margin-top:12px;">
                         <div class="field">
                             <label>Prénom</label>
