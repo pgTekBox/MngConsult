@@ -66,6 +66,7 @@
     #tec .fen .grille label.coche { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer }
     #tec .fen .grille label.coche input { width: 18px; height: 18px }
     #tec .fen .aide { font-size: 12px; color: #5B6B86; margin-top: 4px }
+    #tec .fen .grille .mdp { border-top: 1px solid #E3E9F1; padding-top: 12px }
 </style>
 </asp:Content>
 
@@ -181,6 +182,9 @@
             '<div class="large"><label class="coche"><input type="checkbox" id="tecEdActif"' + (!x.inactif && !x.attente ? ' checked' : '') +
                 (x.attente || x.moi ? ' disabled' : '') + ' /> ' + tEsc(TL.actif) + '</label>' +
                 '<div class="aide">' + tEsc(x.attente ? TL.actifAttente : TL.actifAide) + '</div></div>' +
+            '<div class="large mdp"><label>' + tEsc(TL.mdp) + '</label>' +
+                '<button type="button" class="btn sec" id="tecEdMdp" onclick="tecEdMotDePasse()"' + (x.inactif ? ' disabled' : '') + '>' + tEsc(TL.mdpEnvoyer) + '</button>' +
+                '<div class="aide">' + tEsc(x.attente ? TL.mdpAideAttente : TL.mdpAide) + '</div><div id="tecEdMdpMsg"></div></div>' +
             '</div>';
         document.getElementById('tecEdMsg').innerHTML = '';
         tecEdRoleChange();
@@ -202,6 +206,17 @@
         location.reload();
     }
     function tecEdFermer() { document.getElementById('tecEdit').classList.remove('ouvert'); }
+    async function tecEdMotDePasse() {
+        var x = tMembre(tecEditId); if (!x) return;
+        if (!confirm(tFmt(TL.mdpConf, x.email))) return;
+        var b = document.getElementById('tecEdMdp'), m = document.getElementById('tecEdMdpMsg');
+        b.disabled = true; m.innerHTML = '';
+        var d = await tPost({ op: 'motdepasse', id: tecEditId });
+        b.disabled = false;
+        if (!d.ok) { m.innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
+        m.innerHTML = '<div class="msg ok">' + tEsc(d.message) + '<div class="lien"><input type="text" readonly value="' + tEsc(d.lien) + '" onclick="this.select()" />' +
+            '<button type="button" class="btn sec" onclick="navigator.clipboard.writeText(this.previousSibling.value)">' + tEsc(TL.copier) + '</button></div></div>';
+    }
 
     function tecPeindre() {
         document.getElementById('tecTitre').textContent = TL.titre;

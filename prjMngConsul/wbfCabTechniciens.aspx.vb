@@ -204,6 +204,7 @@ Public Class wbfCabTechniciens
                     Case "invite" : res = Inviter()
                     Case "role" : res = ChangerRole(CInt(Val(Request.Form("id"))), Txt(Request.Form("role")))
                     Case "modifier" : res = Modifier(CInt(Val(Request.Form("id"))))
+                    Case "motdepasse" : res = EnvoyerMotDePasse(CInt(Val(Request.Form("id"))))
                     Case "sup" : res = ChangerSuperviseur(CInt(Val(Request.Form("id"))), Txt(Request.Form("sup")))
                     Case "dossiers" : res = LireDossiers(CInt(Val(Request.Form("id"))))
                     Case "assign" : res = Confier(CInt(Val(Request.Form("id"))), Txt(Request.Form("guids")))
@@ -424,6 +425,100 @@ Public Class wbfCabTechniciens
         Return New With {.ok = (err = 0), .erreur = If(err = 0, "", MessageErreur(err))}
     End Function
 
+    ' Validité du lien de changement de mot de passe envoyé par l'administrateur (24 h).
+    Private Const RESET_MINUTES As Integer = 1440
+
+    ''' <summary>
+    ''' Envoie au membre un courriel pour changer son mot de passe :
+    '''   - compte actif : jeton de réinitialisation (s0679, 24 h) → wbfResetPassword ;
+    '''   - en attente d'activation : nouvelle invitation (s0927) → wbfCabInvitation ;
+    '''   - inactif : refusé (il faut d'abord réactiver le compte).
+    ''' Le lien est aussi renvoyé à l'écran, à copier si le courriel tarde.
+    ''' </summary>
+    Private Function EnvoyerMotDePasse(membreId As Integer) As Object
+        Dim m As DataRow = LireMembre(membreId)
+        If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
+        Dim email As String = Txt(m("Email"))
+
+        If CBool(m("Inactif")) Then
+            Return New With {.ok = False, .erreur = T("Ce compte est inactif : cochez « Compte actif » et enregistrez avant d'envoyer le courriel.",
+                                                      "This account is inactive: check ""Active account"" and save before sending the email.",
+                                                      "Esta cuenta está inactiva: marque «Cuenta activa» y guarde antes de enviar el correo.")}
+        End If
+
+        If CBool(m("Pending")) Then
+            Dim p As New Collection
+            p.Add(New SqlParameter("@UserId", UserEmail))
+            p.Add(New SqlParameter("@MembreId", membreId))
+            Dim outTok As New SqlParameter("@Token", SqlDbType.UniqueIdentifier) With {.Direction = ParameterDirection.Output}
+            Dim outMail As New SqlParameter("@Email", SqlDbType.NVarChar, 200) With {.Direction = ParameterDirection.Output}
+            Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+            p.Add(outTok) : p.Add(outMail) : p.Add(outErr)
+            ExecuteSQL("s0927ResendInvite", p)
+            Dim err As Integer = If(outErr.Value Is Nothing OrElse IsDBNull(outErr.Value), -1, CInt(outErr.Value))
+            If err <> 0 OrElse outTok.Value Is Nothing OrElse IsDBNull(outTok.Value) Then
+                Return New With {.ok = False, .erreur = T("L'invitation n'a pas pu être renvoyée.", "The invitation could not be resent.", "No se pudo reenviar la invitación.")}
+            End If
+            Dim lienInv As String = Request.Url.GetLeftPart(UriPartial.Authority) & ResolveUrl("~/wbfCabInvitation.aspx?token=" & CType(outTok.Value, Guid).ToString())
+            EnvoyerCourrielInvitation(email, lienInv, RoleNormal(Txt(m("Role"))))
+            Return New With {.ok = True, .lien = lienInv,
+                             .message = T("Le compte est en attente d'activation : une nouvelle invitation a été envoyée à " & email & " pour choisir son mot de passe.",
+                                          "The account is awaiting activation: a new invitation was sent to " & email & " to choose a password.",
+                                          "La cuenta está pendiente de activación: se envió una nueva invitación a " & email & " para elegir su contraseña.")}
+        End If
+
+        Dim pr As New Collection
+        pr.Add(New SqlParameter("@Email", email))
+        pr.Add(New SqlParameter("@ExpiresMinutes", RESET_MINUTES))
+        Dim ds As DataSet = ExecuteSQLds("s0679CreateUserResetToken", pr)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            Return New With {.ok = False, .erreur = T("Le lien n'a pas pu être créé.", "The link could not be created.", "No se pudo crear el enlace.")}
+        End If
+        Dim token As Guid = CType(ds.Tables(0).Rows(0)("Token"), Guid)
+        Dim lien As String = Request.Url.GetLeftPart(UriPartial.Authority) & ResolveUrl("~/wbfResetPassword.aspx") &
+                             "?token=" & token.ToString("D") & "&lang=" & CurrentLang
+        EnvoyerCourrielMotDePasse(email, Txt(m("FirstName")), lien)
+        Return New With {.ok = True, .lien = lien,
+                         .message = T("Courriel de changement de mot de passe envoyé à " & email & ". Le lien est valide 24 heures.",
+                                      "Password change email sent to " & email & ". The link is valid for 24 hours.",
+                                      "Correo de cambio de contraseña enviado a " & email & ". El enlace es válido 24 horas.")}
+    End Function
+
+    ''' <summary>Courriel « changer votre mot de passe » (MailService, best-effort), même gabarit que Mot de passe oublié.</summary>
+    Private Sub EnvoyerCourrielMotDePasse(email As String, prenom As String, lien As String)
+        Try
+            Dim salut As String = If(prenom = "", T("Bonjour,", "Hello,", "Hola:"), T("Bonjour " & prenom & ",", "Hello " & prenom & ",", "Hola " & prenom & ":"))
+            Dim intro As String = T("L'administrateur de votre cabinet vous invite à choisir un nouveau mot de passe pour votre compte 60Sec-AI.",
+                                    "Your firm's administrator invites you to choose a new password for your 60Sec-AI account.",
+                                    "El administrador de su despacho le invita a elegir una nueva contraseña para su cuenta 60Sec-AI.")
+            Dim bouton As String = T("Changer mon mot de passe", "Change my password", "Cambiar mi contraseña")
+            Dim validite As String = T("Le lien est valide pendant 24 heures. Votre mot de passe actuel reste valable tant que vous ne l'avez pas changé.",
+                                       "The link is valid for 24 hours. Your current password still works until you change it.",
+                                       "El enlace es válido durante 24 horas. Su contraseña actual sigue siendo válida hasta que la cambie.")
+            Dim secours As String = T("Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :", "If the button doesn't work, copy this link into your browser:", "Si el botón no funciona, copie este enlace en su navegador:")
+            Dim sb As New StringBuilder()
+            sb.Append("<!DOCTYPE html><html><body style=""font-family:Arial,sans-serif;background:#f6f7fb;margin:0;padding:20px;"">")
+            sb.Append("<div style=""max-width:560px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;"">")
+            sb.Append("<div style=""background:linear-gradient(135deg,#2563eb,#06b6d4);padding:32px;text-align:center;""><h1 style=""color:#fff;margin:0;font-size:22px;"">60Sec-AI</h1></div>")
+            sb.Append("<div style=""padding:32px;color:#0f172a;"">")
+            sb.Append("<p style=""font-size:16px;"">").Append(Server.HtmlEncode(salut)).Append("</p>")
+            sb.Append("<p>").Append(Server.HtmlEncode(intro)).Append("</p>")
+            sb.Append("<div style=""text-align:center;margin:28px 0;""><a href=""").Append(lien).Append(""" target=""_blank"" style=""display:inline-block;background:linear-gradient(135deg,#2563eb,#06b6d4);color:#fff;padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:800;font-size:15px;"">").Append(Server.HtmlEncode(bouton)).Append("</a></div>")
+            sb.Append("<p style=""font-size:13px;color:#64748b;"">").Append(Server.HtmlEncode(validite)).Append("</p>")
+            sb.Append("<p style=""font-size:13px;color:#64748b;"">").Append(Server.HtmlEncode(secours)).Append("<br/><span style=""word-break:break-all;color:#2563eb;"">").Append(Server.HtmlEncode(lien)).Append("</span></p>")
+            sb.Append("</div></div></body></html>")
+
+            Dim p As New Collection
+            p.Add(New SqlParameter("@To", email))
+            p.Add(New SqlParameter("@Subject", T("Changement de votre mot de passe 60Sec-AI", "Change your 60Sec-AI password", "Cambio de su contraseña 60Sec-AI")))
+            p.Add(New SqlParameter("@HTMLBody", sb.ToString()))
+            p.Add(New SqlParameter("@TextBody", salut & vbCrLf & intro & vbCrLf & lien))
+            ExecuteSQLMail("s0610InsertOutboundMail", p)
+        Catch
+            ' Le lien copiable reste disponible si le courriel ne part pas.
+        End Try
+    End Sub
+
     ''' <summary>Dépose le courriel d'invitation dans MailService (best-effort), comme Membres.</summary>
     Private Sub EnvoyerCourrielInvitation(email As String, lien As String, role As String)
         Try
@@ -506,6 +601,11 @@ Public Class wbfCabTechniciens
             .actifAide = T("Décoché : le membre ne peut plus se connecter ; ses dossiers restent confiés.",
                            "Unchecked: the member can no longer sign in; their files stay assigned.",
                            "Sin marcar: el miembro ya no puede conectarse; sus expedientes siguen confiados."),
+            .mdp = T("Mot de passe", "Password", "Contraseña"),
+            .mdpEnvoyer = T("Envoyer un courriel de changement de mot de passe", "Send a password change email", "Enviar un correo de cambio de contraseña"),
+            .mdpAide = T("Le membre reçoit un lien valide 24 heures pour choisir un nouveau mot de passe ; l'actuel reste valable d'ici là.", "The member receives a link valid for 24 hours to choose a new password; the current one keeps working until then.", "El miembro recibe un enlace válido 24 horas para elegir una nueva contraseña; la actual sigue siendo válida hasta entonces."),
+            .mdpAideAttente = T("Compte en attente d'activation : une nouvelle invitation sera envoyée pour choisir son mot de passe.", "Account awaiting activation: a new invitation will be sent to choose a password.", "Cuenta pendiente de activación: se enviará una nueva invitación para elegir su contraseña."),
+            .mdpConf = T("Envoyer à {0} un courriel pour changer son mot de passe ?", "Send {0} an email to change their password?", "¿Enviar a {0} un correo para cambiar su contraseña?"),
             .actifAttente = T("En attente d'activation : le compte s'active quand le membre ouvre son lien d'invitation.",
                               "Awaiting activation: the account becomes active when the member opens their invitation link.",
                               "Pendiente de activación: la cuenta se activa cuando el miembro abre su enlace de invitación."),
