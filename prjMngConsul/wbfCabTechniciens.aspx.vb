@@ -202,6 +202,7 @@ Public Class wbfCabTechniciens
             Else
                 Select Case op
                     Case "invite" : res = Inviter()
+                    Case "suggerer" : res = SuggererCourriel(Txt(Request.Form("prenom")), Txt(Request.Form("nom")))
                     Case "role" : res = ChangerRole(CInt(Val(Request.Form("id"))), Txt(Request.Form("role")))
                     Case "modifier" : res = Modifier(CInt(Val(Request.Form("id"))))
                     Case "motdepasse" : res = EnvoyerMotDePasse(CInt(Val(Request.Form("id"))))
@@ -221,9 +222,55 @@ Public Class wbfCabTechniciens
         Response.End()
     End Sub
 
+    ''' <summary>Adresse @60sec.ca libre proposée pour un prénom / nom (s1008, T383).</summary>
+    Private Function SuggererCourriel(prenom As String, nom As String) As Object
+        Dim p As New Collection
+        p.Add(New SqlParameter("@Prenom", prenom))
+        p.Add(New SqlParameter("@Nom", nom))
+        Dim ds As DataSet = ExecuteSQLds("s1008SuggererCourriel60Sec", p)
+        Dim email As String = ""
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then email = Txt(ds.Tables(0).Rows(0)("Email"))
+        Return New With {.ok = (email <> ""), .email = email}
+    End Function
+
+    Private Shared Function Est60Sec(email As String) As Boolean
+        Return email.EndsWith("@60sec.ca", StringComparison.OrdinalIgnoreCase)
+    End Function
+
+    ''' <summary>Crée la boîte @60sec.ca dans MailService (s1009) ; renvoie le code d'erreur.</summary>
+    Private Function CreerBoite(email As String) As Integer
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@Email", email))
+        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+        p.Add(outErr)
+        ExecuteSQL("s1009CreerBoite60Sec", p)
+        Return If(outErr.Value Is Nothing OrElse IsDBNull(outErr.Value), -1, CInt(outErr.Value))
+    End Function
+
+    ''' <summary>
+    ''' Fenêtre « Nouveau membre » : crée le compte (s0923) avec son courriel de
+    ''' connexion — par défaut prenom.nom@60sec.ca — et, si demandé, la boîte
+    ''' @60sec.ca (s1009). L'invitation part au courriel personnel s'il est donné
+    ''' (la nouvelle boîte n'a pas encore de mot de passe), sinon au courriel du compte.
+    ''' </summary>
     Private Function Inviter() As Object
-        Dim email As String = Txt(Request.Form("email"))
-        If email = "" OrElse Not email.Contains("@") Then Return New With {.ok = False, .erreur = T("Courriel invalide.", "Invalid email.", "Correo no válido.")}
+        Dim email As String = Txt(Request.Form("email")).ToLowerInvariant()
+        If email = "" OrElse Not email.Contains("@") OrElse email.Contains(" ") Then Return New With {.ok = False, .erreur = T("Courriel invalide.", "Invalid email.", "Correo no válido.")}
+        Dim perso As String = Txt(Request.Form("emailPerso"))
+        If perso <> "" AndAlso (Not perso.Contains("@") OrElse perso.Contains(" ")) Then
+            Return New With {.ok = False, .erreur = T("Courriel personnel invalide.", "Invalid personal email.", "Correo personal no válido.")}
+        End If
+        Dim boite As Boolean = Est60Sec(email) AndAlso Txt(Request.Form("boite")) = "1"
+        If boite Then
+            ' Vérifier avant de créer le compte que l'adresse est libre
+            Dim pchk As New Collection
+            pchk.Add(New SqlParameter("@Email", email))
+            Dim dsChk As DataSet = ExecuteSQLds("s1010Courriel60SecPris", pchk)
+            If dsChk IsNot Nothing AndAlso dsChk.Tables.Count > 0 AndAlso dsChk.Tables(0).Rows.Count > 0 AndAlso CBool(dsChk.Tables(0).Rows(0)("Pris")) Then
+                Return New With {.ok = False, .erreur = T("Cette adresse @60sec.ca est déjà utilisée.", "This @60sec.ca address is already in use.", "Esta dirección @60sec.ca ya está en uso.")}
+            End If
+        End If
         ' Le rôle choisi (T382) ; son niveau d'accès est le rôle technique du membre
         Dim roleId As Integer = CInt(Val(Request.Form("roleId")))
         Dim role As String = AccesDuRole(roleId)
@@ -258,9 +305,14 @@ Public Class wbfCabTechniciens
             If role = "technicien" AndAlso sup <> "" Then ChangerSuperviseur(membreId, sup)
         End If
 
+        ' La boîte @60sec.ca (son mot de passe sera celui choisi à l'activation)
+        Dim boiteOk As Boolean = False
+        If boite Then boiteOk = (CreerBoite(email) = 0)
+
         Dim lien As String = Request.Url.GetLeftPart(UriPartial.Authority) & ResolveUrl("~/wbfCabInvitation.aspx?token=" & CType(outTok.Value, Guid).ToString())
-        EnvoyerCourrielInvitation(email, lien, role)
-        Return New With {.ok = True, .lien = lien}
+        Dim dest As String = If(perso <> "", perso, email)
+        EnvoyerCourrielInvitation(dest, lien, role)
+        Return New With {.ok = True, .lien = lien, .dest = dest, .boite = If(boiteOk, email, "")}
     End Function
 
     Private Function TrouverMembre(email As String) As Integer
@@ -564,6 +616,24 @@ Public Class wbfCabTechniciens
             .kTaches = T("Tâches ouvertes", "Open tasks", "Tareas abiertas"),
             .kRetard = T("En retard", "Overdue", "Atrasadas"),
             .inviter = T("Inviter un membre", "Invite a member", "Invitar a un miembro"),
+            .nouveau = T("Nouveau membre", "New member", "Nuevo miembro"),
+            .nouvSous = T("Créez un comptable, un technicien ou un autre rôle ; son courriel @60sec.ca est proposé à partir de son nom.",
+                          "Create an accountant, a technician or another role; their @60sec.ca email is suggested from their name.",
+                          "Cree un contador, un técnico u otro rol; su correo @60sec.ca se propone a partir de su nombre."),
+            .courriel60 = T("Courriel (identifiant de connexion)", "Email (sign-in identifier)", "Correo (identificador de conexión)"),
+            .courriel60Aide = T("Proposé automatiquement : prenom.nom@60sec.ca. Vous pouvez le modifier.",
+                                "Suggested automatically: firstname.lastname@60sec.ca. You can change it.",
+                                "Propuesto automáticamente: nombre.apellido@60sec.ca. Puede modificarlo."),
+            .creerBoite = T("Créer la boîte courriel @60sec.ca", "Create the @60sec.ca mailbox", "Crear el buzón @60sec.ca"),
+            .creerBoiteAide = T("La boîte reçoit les courriels ; son mot de passe sera celui que le membre choisit en activant son compte.",
+                                "The mailbox receives emails; its password will be the one the member chooses when activating their account.",
+                                "El buzón recibe correos; su contraseña será la que el miembro elija al activar su cuenta."),
+            .courrielPerso = T("Courriel personnel (facultatif)", "Personal email (optional)", "Correo personal (opcional)"),
+            .courrielPersoAide = T("L'invitation y est envoyée, puisque la nouvelle boîte n'est pas encore accessible. Sans courriel personnel, copiez le lien d'activation et remettez-le au membre.",
+                                   "The invitation is sent there, since the new mailbox is not accessible yet. Without a personal email, copy the activation link and give it to the member.",
+                                   "La invitación se envía allí, ya que el nuevo buzón aún no es accesible. Sin correo personal, copie el enlace de activación y entrégueselo al miembro."),
+            .invEnvoyee = T("Invitation envoyée à {0}.", "Invitation sent to {0}.", "Invitación enviada a {0}."),
+            .boiteCreee = T("Boîte {0} créée.", "Mailbox {0} created.", "Buzón {0} creado."),
             .prenom = T("Prénom", "First name", "Nombre"),
             .nom = T("Nom", "Last name", "Apellido"),
             .courriel = T("Courriel", "Email", "Correo"),

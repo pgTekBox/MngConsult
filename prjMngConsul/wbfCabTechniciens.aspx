@@ -67,6 +67,8 @@
     #tec .fen .grille label.coche input { width: 18px; height: 18px }
     #tec .fen .aide { font-size: 12px; color: #5B6B86; margin-top: 4px }
     #tec .fen .grille .mdp { border-top: 1px solid #E3E9F1; padding-top: 12px }
+    #tec .invtete { display: flex; align-items: center; justify-content: space-between; gap: 12px }
+    #tec .invtete h2 { margin: 0 }
 </style>
 </asp:Content>
 
@@ -95,6 +97,18 @@
         </div>
     </div>
 
+
+    <div class="fond" id="tecNouv" onclick="if (event.target === this) tecNvFermer();">
+        <div class="fen" role="dialog" aria-modal="true" aria-labelledby="tecNvTitre">
+            <h3 id="tecNvTitre"></h3>
+            <div id="tecNvCorps"></div>
+            <div id="tecNvMsg"></div>
+            <div class="pied">
+                <button type="button" class="btn sec" id="tecNvFermerBtn" onclick="tecNvFermer()"></button>
+                <button type="button" class="btn" id="tecNvOk" onclick="tecInviter()"></button>
+            </div>
+        </div>
+    </div>
     <div class="fond" id="tecEdit" onclick="if (event.target === this) tecEdFermer();">
         <div class="fen" role="dialog" aria-modal="true" aria-labelledby="tecEdTitre">
             <h3 id="tecEdTitre"></h3>
@@ -234,14 +248,8 @@
         var inv = document.getElementById('tecInvite');
         if (TEC.gerer) {
             inv.hidden = false;
-            inv.innerHTML = '<h2>' + tEsc(TL.inviter) + '</h2><div class="frm">' +
-                '<div><label>' + tEsc(TL.prenom) + '</label><input type="text" id="tecPrenom" /></div>' +
-                '<div><label>' + tEsc(TL.nom) + '</label><input type="text" id="tecNom" /></div>' +
-                '<div><label>' + tEsc(TL.courriel) + '</label><input type="email" id="tecEmail" /></div>' +
-                '<div><label>' + tEsc(TL.role) + '</label><select id="tecRoleInv" onchange="tecRoleInvChange()">' + tRoleOptions(tRoleDefaut()) + '</select></div>' +
-                '<div><label>' + tEsc(TL.superviseur) + '</label><select id="tecSup" disabled>' + tSupOptions('') + '</select></div>' +
-                '<div><button type="button" class="btn" id="tecInvBtn" onclick="tecInviter()">' + tEsc(TL.envoyer) + '</button></div>' +
-                '</div><div id="tecInvMsg"></div>';
+            inv.innerHTML = '<div class="invtete"><div><h2>' + tEsc(TL.inviter) + '</h2><div class="pt">' + tEsc(TL.nouvSous) + '</div></div>' +
+                '<button type="button" class="btn" onclick="tecNouveau()">+ ' + tEsc(TL.nouveau) + '</button></div><div id="tecInvMsg"></div>';
         }
 
         document.getElementById('tecComptables').innerHTML =
@@ -252,6 +260,47 @@
             (t.length ? t.map(tCarte).join('') : '<div class="vide">' + tEsc(TL.vide) + '</div>');
     }
 
+    // Fenêtre « Nouveau membre » : courriel par défaut prenom.nom@60sec.ca (T383)
+    var tecCourrielManuel = false, tecSuggTimer = null;
+    function tecNouveau() {
+        tecCourrielManuel = false;
+        document.getElementById('tecNvTitre').textContent = TL.nouveau;
+        document.getElementById('tecNvFermerBtn').textContent = TL.fermer;
+        document.getElementById('tecNvOk').textContent = TL.envoyer;
+        document.getElementById('tecNvCorps').innerHTML =
+            '<div class="grille">' +
+            '<div><label for="tecPrenom">' + tEsc(TL.prenom) + '</label><input type="text" id="tecPrenom" oninput="tecSuggerer()" /></div>' +
+            '<div><label for="tecNom">' + tEsc(TL.nom) + '</label><input type="text" id="tecNom" oninput="tecSuggerer()" /></div>' +
+            '<div class="large"><label for="tecEmail">' + tEsc(TL.courriel60) + '</label><input type="email" id="tecEmail" oninput="tecCourrielManuel = true; tecBoiteEtat()" />' +
+                '<div class="aide">' + tEsc(TL.courriel60Aide) + '</div></div>' +
+            '<div class="large"><label class="coche"><input type="checkbox" id="tecBoite" checked /> ' + tEsc(TL.creerBoite) + '</label>' +
+                '<div class="aide">' + tEsc(TL.creerBoiteAide) + '</div></div>' +
+            '<div class="large"><label for="tecPerso">' + tEsc(TL.courrielPerso) + '</label><input type="email" id="tecPerso" />' +
+                '<div class="aide">' + tEsc(TL.courrielPersoAide) + '</div></div>' +
+            '<div><label for="tecRoleInv">' + tEsc(TL.role) + '</label><select id="tecRoleInv" onchange="tecRoleInvChange()">' + tRoleOptions(tRoleDefaut()) + '</select></div>' +
+            '<div><label for="tecSup">' + tEsc(TL.superviseur) + '</label><select id="tecSup" disabled>' + tSupOptions('') + '</select></div>' +
+            '</div>';
+        document.getElementById('tecNvMsg').innerHTML = '';
+        document.getElementById('tecNouv').classList.add('ouvert');
+        document.getElementById('tecPrenom').focus();
+    }
+    function tecSuggerer() {
+        if (tecCourrielManuel) return;
+        clearTimeout(tecSuggTimer);
+        tecSuggTimer = setTimeout(async function () {
+            var pr = document.getElementById('tecPrenom').value.trim(), nm = document.getElementById('tecNom').value.trim();
+            if (!pr && !nm) { document.getElementById('tecEmail').value = ''; return; }
+            var d = await tPost({ op: 'suggerer', prenom: pr, nom: nm });
+            if (d.ok && !tecCourrielManuel) { document.getElementById('tecEmail').value = d.email; tecBoiteEtat(); }
+        }, 300);
+    }
+    function tecBoiteEtat() {
+        var e = document.getElementById('tecEmail').value.trim().toLowerCase(), c = document.getElementById('tecBoite');
+        var est = /@60sec\.ca$/.test(e);
+        c.disabled = !est; if (!est) c.checked = false;
+    }
+    function tecNvFermer() { document.getElementById('tecNouv').classList.remove('ouvert'); }
+
     function tecRoleInvChange() {
         var s = document.getElementById('tecSup');
         s.disabled = tAcces('tecRoleInv') !== 'technicien';
@@ -259,14 +308,15 @@
     }
 
     async function tecInviter() {
-        var b = document.getElementById('tecInvBtn'), m = document.getElementById('tecInvMsg');
+        var b = document.getElementById('tecNvOk'), m = document.getElementById('tecNvMsg');
         b.disabled = true; m.innerHTML = '';
         var d = await tPost({ op: 'invite', prenom: document.getElementById('tecPrenom').value, nom: document.getElementById('tecNom').value,
-                              email: document.getElementById('tecEmail').value, roleId: document.getElementById('tecRoleInv').value,
-                              sup: document.getElementById('tecSup').value });
+                              email: document.getElementById('tecEmail').value, emailPerso: document.getElementById('tecPerso').value,
+                              boite: document.getElementById('tecBoite').checked ? '1' : '0',
+                              roleId: document.getElementById('tecRoleInv').value, sup: document.getElementById('tecSup').value });
         b.disabled = false;
         if (!d.ok) { m.innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
-        sessionStorage.setItem('tecLien', d.lien);
+        try { sessionStorage.setItem('tecLien', JSON.stringify({ lien: d.lien, dest: d.dest, boite: d.boite })); } catch (e) { }
         location.reload();
     }
 
@@ -324,14 +374,16 @@
     }
 
     function tecFermer() { document.getElementById('tecFond').classList.remove('ouvert'); }
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { tecFermer(); tecEdFermer(); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { tecFermer(); tecEdFermer(); tecNvFermer(); } });
 
     tecPeindre();
-    // Après une invitation : le lien d'activation, copiable.
+    // Après une invitation : à qui elle est partie, la boîte créée, le lien d'activation copiable.
     (function () {
-        var lien = null; try { lien = sessionStorage.getItem('tecLien'); sessionStorage.removeItem('tecLien'); } catch (e) { }
+        var info = null; try { info = JSON.parse(sessionStorage.getItem('tecLien') || 'null'); sessionStorage.removeItem('tecLien'); } catch (e) { }
         var m = document.getElementById('tecInvMsg');
-        if (lien && m) m.innerHTML = '<div class="msg ok">' + tEsc(TL.invOk) + '<div class="lien"><input type="text" readonly value="' + tEsc(lien) + '" onclick="this.select()" />' +
+        if (!info || !m) return;
+        var txt = tFmt(TL.invEnvoyee, info.dest) + (info.boite ? ' ' + tFmt(TL.boiteCreee, info.boite) : '');
+        m.innerHTML = '<div class="msg ok">' + tEsc(txt) + ' ' + tEsc(TL.invOk) + '<div class="lien"><input type="text" readonly value="' + tEsc(info.lien) + '" onclick="this.select()" />' +
             '<button type="button" class="btn sec" onclick="navigator.clipboard.writeText(this.previousSibling.value)">' + tEsc(TL.copier) + '</button></div></div>';
     })();
 </script>

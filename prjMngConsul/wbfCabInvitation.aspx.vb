@@ -122,6 +122,18 @@ Public Class wbfCabInvitation
             Dim res As Integer = If(outRes.Value Is Nothing OrElse IsDBNull(outRes.Value), 0, CInt(outRes.Value))
             Select Case res
                 Case 1
+                    ' Boîte @60sec.ca créée avec le membre (T383) : même mot de passe
+                    Dim mail As String = If(outMail.Value Is Nothing OrElse IsDBNull(outMail.Value), "", Convert.ToString(outMail.Value).Trim())
+                    If mail.EndsWith("@60sec.ca", StringComparison.OrdinalIgnoreCase) Then
+                        Try
+                            Dim pm As New Collection
+                            pm.Add(New SqlParameter("@Email", mail))
+                            pm.Add(New SqlParameter("@PasswordHash", hash))
+                            ExecuteSQLMail("s0629SetLocalRecipientPassword", pm)
+                        Catch
+                            ' La boîte garde son état ; le compte est activé quand même.
+                        End Try
+                    End If
                     Response.Redirect("~/wbfLogin.aspx?invited=1")
                 Case -1
                     Invalide()
