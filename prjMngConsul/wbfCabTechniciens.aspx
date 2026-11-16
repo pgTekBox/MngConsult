@@ -150,7 +150,7 @@
         }).join('');
     }
     function tAcces(idSel) { var s = document.getElementById(idSel), o = s && s.options[s.selectedIndex]; return o ? (o.getAttribute('data-acces') || o.value) : ''; }
-    function tRoleDefaut() { var r = TEC.roles.find(function (x) { return x.acces === 'employe'; }); return r ? r.id : 0; }
+    function tRoleDefaut() { var r = TEC.roles.find(function (x) { return x.acces !== 'admin'; }) || TEC.roles[0]; return r ? r.id : 0; }
     function tMembre(id) { return TEC.membres.find(function (t) { return t.id === id; }); }
 
     function tCarte(x) {

@@ -133,7 +133,7 @@
 
             <section id="fr-techniciens">
                 <h2>Employés</h2>
-                <p>La page <span class="chemin">Mon cabinet › Employés</span> gère les employés du cabinet, dans une seule liste triée par nom. Il n’y a plus de groupes : chacun est un <strong>employé</strong>, et son <strong>rôle</strong> (voir <span class="chemin">Mon cabinet › Rôles</span>) décide des dossiers qu’il voit et de ce qu’il peut faire. Un employé au niveau Technicien ne voit que les <strong>dossiers qui lui sont confiés</strong> et travaille sous un <strong>superviseur</strong>.</p>
+                <p>La page <span class="chemin">Mon cabinet › Employés</span> gère les employés du cabinet, dans une seule liste triée par nom. Il n’y a plus de groupes : chacun est un <strong>employé</strong>, et son <strong>rôle</strong> (voir <span class="chemin">Mon cabinet › Rôles</span>) décide des dossiers qu’il voit et de ce qu’il peut faire. Un employé au niveau Restreint ne voit que les <strong>dossiers qui lui sont confiés</strong> et travaille sous un <strong>superviseur</strong>.</p>
                 <h3>Indicateurs</h3>
                 <p>Employés, En attente d’activation, Tâches ouvertes (de leurs dossiers), En retard et Sans courriel de récupération (en rouge s’il y en a).</p>
                 <h3>Ajouter un employé (administrateur, solo)</h3>
@@ -165,8 +165,8 @@
                 <p>La page <span class="chemin">Mon cabinet › Rôles</span> (administrateur, solo) liste les rôles que vous donnez aux membres du cabinet. Chaque rôle a un <strong>nom</strong>, une <strong>description</strong> et un <strong>niveau d’accès</strong> qui décide de ce que voit le membre :</p>
                 <ul>
                     <li><strong>Administrateur</strong> : gère le cabinet et voit tous les dossiers.</li>
-                    <li><strong>Comptable</strong> : ses dossiers et ceux des techniciens qu’il supervise.</li>
-                    <li><strong>Technicien</strong> : seulement les dossiers qui lui sont confiés, sous un superviseur.</li>
+                    <li><strong>Superviseur</strong> : ses dossiers et ceux des employés qu’il supervise.</li>
+                    <li><strong>Restreint</strong> : seulement les dossiers qui lui sont confiés, sous un superviseur.</li>
                 </ul>
                 <h3>Ajouter ou modifier un rôle</h3>
                 <ol>
@@ -179,7 +179,7 @@
                 <ul>
                     <li>La corbeille supprime un rôle <strong>que personne n’utilise</strong>, après confirmation.</li>
                     <li>Un rôle <strong>utilisé</strong> par au moins un membre (même inactif ou en attente d’activation) ne peut pas être supprimé : la corbeille est grisée et indique combien de membres l’utilisent. Donnez d’abord un autre rôle à ces membres.</li>
-                    <li>Les trois <strong>rôles de base</strong> (Administrateur, Comptable, Technicien) ne se suppriment pas et gardent leur niveau d’accès ; leur nom et leur description se modifient.</li>
+                    <li>Le seul <strong>rôle de base</strong> est <strong>Administrateur</strong> : il ne se supprime pas et garde son niveau d’accès ; son nom et sa description se modifient. Tous les autres rôles sont ceux que vous créez (il n’y a plus de rôles « Comptable » ni « Technicien » imposés).</li>
                 </ul>
                 <div class="note" data-titre="Bon à savoir">Un comptable (employé) voit la page en lecture seulement.</div>
             </section>
@@ -412,7 +412,7 @@
 
             <section id="en-technicians">
                 <h2>Employees</h2>
-                <p>The <span class="chemin">My firm › Employees</span> page manages the firm’s employees in a single list sorted by name. There are no groups anymore: everyone is an <strong>employee</strong>, and their <strong>role</strong> (see <span class="chemin">My firm › Roles</span>) decides which files they see and what they can do. An employee at the Technician level only sees the <strong>files assigned to them</strong> and works under a <strong>supervisor</strong>.</p>
+                <p>The <span class="chemin">My firm › Employees</span> page manages the firm’s employees in a single list sorted by name. There are no groups anymore: everyone is an <strong>employee</strong>, and their <strong>role</strong> (see <span class="chemin">My firm › Roles</span>) decides which files they see and what they can do. An employee at the Restricted level only sees the <strong>files assigned to them</strong> and works under a <strong>supervisor</strong>.</p>
                 <h3>Indicators</h3>
                 <p>Employees, Awaiting activation, Open tasks (on their files), Overdue and No recovery email (red when there are any).</p>
                 <h3>Add an employee (administrator, solo)</h3>
@@ -444,8 +444,8 @@
                 <p>The <span class="chemin">My firm › Roles</span> page (administrator, solo) lists the roles you give to the firm’s members. Each role has a <strong>name</strong>, a <strong>description</strong> and an <strong>access level</strong> that decides what the member sees:</p>
                 <ul>
                     <li><strong>Administrator</strong>: manages the firm and sees all files.</li>
-                    <li><strong>Accountant</strong>: their files and those of the technicians they supervise.</li>
-                    <li><strong>Technician</strong>: only the files assigned to them, under a supervisor.</li>
+                    <li><strong>Supervisor</strong>: their files and those of the employees they supervise.</li>
+                    <li><strong>Restricted</strong>: only the files assigned to them, under a supervisor.</li>
                 </ul>
                 <h3>Add or edit a role</h3>
                 <ol>
@@ -458,7 +458,7 @@
                 <ul>
                     <li>The trash can deletes a role <strong>nobody uses</strong>, after confirmation.</li>
                     <li>A role <strong>in use</strong> by at least one member (even inactive or awaiting activation) cannot be deleted: the trash can is greyed out and shows how many members use it. First give those members another role.</li>
-                    <li>The three <strong>base roles</strong> (Administrator, Accountant, Technician) cannot be deleted and keep their access level; their name and description can be edited.</li>
+                    <li>The only <strong>base role</strong> is <strong>Administrator</strong>: it cannot be deleted and keeps its access level; its name and description can be edited. All other roles are the ones you create (there are no imposed “Accountant” or “Technician” roles anymore).</li>
                 </ul>
                 <div class="note" data-titre="Good to know">An accountant (employee) sees the page read-only.</div>
             </section>
@@ -691,7 +691,7 @@
 
             <section id="es-tecnicos">
                 <h2>Empleados</h2>
-                <p>La página <span class="chemin">Mi despacho › Empleados</span> gestiona los empleados del despacho en una sola lista ordenada por nombre. Ya no hay grupos: cada uno es un <strong>empleado</strong>, y su <strong>rol</strong> (vea <span class="chemin">Mi despacho › Roles</span>) decide qué expedientes ve y qué puede hacer. Un empleado de nivel Técnico solo ve los <strong>expedientes que se le confían</strong> y trabaja bajo un <strong>supervisor</strong>.</p>
+                <p>La página <span class="chemin">Mi despacho › Empleados</span> gestiona los empleados del despacho en una sola lista ordenada por nombre. Ya no hay grupos: cada uno es un <strong>empleado</strong>, y su <strong>rol</strong> (vea <span class="chemin">Mi despacho › Roles</span>) decide qué expedientes ve y qué puede hacer. Un empleado de nivel Restringido solo ve los <strong>expedientes que se le confían</strong> y trabaja bajo un <strong>supervisor</strong>.</p>
                 <h3>Indicadores</h3>
                 <p>Empleados, Pendientes de activación, Tareas abiertas (de sus expedientes), Atrasadas y Sin correo de recuperación (en rojo cuando hay alguno).</p>
                 <h3>Agregar un empleado (administrador, solo)</h3>
@@ -723,8 +723,8 @@
                 <p>La página <span class="chemin">Mi despacho › Roles</span> (administrador, solo) lista los roles que da a los miembros del despacho. Cada rol tiene un <strong>nombre</strong>, una <strong>descripción</strong> y un <strong>nivel de acceso</strong> que decide lo que ve el miembro:</p>
                 <ul>
                     <li><strong>Administrador</strong>: gestiona el despacho y ve todos los expedientes.</li>
-                    <li><strong>Contador</strong>: sus expedientes y los de los técnicos que supervisa.</li>
-                    <li><strong>Técnico</strong>: solo los expedientes que se le confían, bajo un supervisor.</li>
+                    <li><strong>Supervisor</strong>: sus expedientes y los de los empleados que supervisa.</li>
+                    <li><strong>Restringido</strong>: solo los expedientes que se le confían, bajo un supervisor.</li>
                 </ul>
                 <h3>Agregar o modificar un rol</h3>
                 <ol>
@@ -737,7 +737,7 @@
                 <ul>
                     <li>La papelera elimina un rol <strong>que nadie usa</strong>, tras confirmar.</li>
                     <li>Un rol <strong>en uso</strong> por al menos un miembro (incluso inactivo o pendiente de activación) no se puede eliminar: la papelera aparece en gris e indica cuántos miembros lo usan. Primero dé otro rol a esos miembros.</li>
-                    <li>Los tres <strong>roles base</strong> (Administrador, Contador, Técnico) no se eliminan y conservan su nivel de acceso; su nombre y descripción se pueden modificar.</li>
+                    <li>El único <strong>rol base</strong> es <strong>Administrador</strong>: no se elimina y conserva su nivel de acceso; su nombre y descripción se pueden modificar. Todos los demás roles son los que usted crea (ya no hay roles «Contador» ni «Técnico» impuestos).</li>
                 </ul>
                 <div class="note" data-titre="Bueno saber">Un contador (empleado) ve la página solo en lectura.</div>
             </section>

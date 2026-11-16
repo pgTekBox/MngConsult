@@ -420,7 +420,7 @@ Namespace Controls
                 Case "portalProfile" : Return Choose3(lang, "Profil du cabinet", "Firm profile", "Perfil del despacho")
                 Case "portalTechniciens" : Return Choose3(lang, "Employés", "Employees", "Empleados")
                 Case "portalRoles" : Return Choose3(lang, "Rôles", "Roles", "Roles")
-                Case "portalTechniciensMiens" : Return Choose3(lang, "Mes techniciens", "My technicians", "Mis técnicos")
+                Case "portalTechniciensMiens" : Return Choose3(lang, "Mes employés", "My employees", "Mis empleados")
                 Case "portalTools" : Return Choose3(lang, "Traitement en lot", "Batch processing", "Procesamiento por lotes")
                 Case "comingSoon" : Return Choose3(lang, "À venir", "Soon", "Pronto")
                 Case Else : Return ""

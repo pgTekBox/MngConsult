@@ -645,9 +645,9 @@ Public Class wbfCabTechniciens
         Try
             Dim qui As String
             Select Case role
-                Case "technicien" : qui = T("technicien", "a technician", "técnico")
+                Case "technicien" : qui = T("employé", "an employee", "empleado")
                 Case "admin" : qui = T("administrateur", "an administrator", "administrador")
-                Case Else : qui = T("comptable", "an accountant", "contador")
+                Case Else : qui = T("employé", "an employee", "empleado")
             End Select
             Dim sujet As String = T("Invitation à rejoindre un cabinet sur 60Sec-AI", "Invitation to join a firm on 60Sec-AI", "Invitación para unirse a un despacho en 60Sec-AI")
             Dim corps As String = T("Vous avez été invité à rejoindre un cabinet comptable sur 60Sec-AI comme " & qui & ". Cliquez sur le lien pour activer votre compte :",
@@ -714,13 +714,13 @@ Public Class wbfCabTechniciens
             .courriel = T("Courriel", "Email", "Correo"),
             .role = T("Rôle", "Role", "Rol"),
             .rAdmin = T("Administrateur", "Administrator", "Administrador"),
-            .rEmploye = T("Comptable", "Accountant", "Contador"),
-            .rTech = T("Technicien", "Technician", "Técnico"),
-            .rSolo = T("Comptable solo", "Solo accountant", "Contador independiente"),
+            .rEmploye = T("Employé", "Employee", "Empleado"),
+            .rTech = T("Accès restreint", "Restricted access", "Acceso restringido"),
+            .rSolo = T("Solo", "Solo", "Independiente"),
             .moi = T("vous", "you", "usted"),
             .superviseur = T("Superviseur", "Supervisor", "Supervisor"),
             .aucunSup = T("— Aucun superviseur —", "— No supervisor —", "— Sin supervisor —"),
-            .supervise = T("Techniciens supervisés", "Supervised technicians", "Técnicos supervisados"),
+            .supervise = T("Employés supervisés", "Supervised employees", "Empleados supervisados"),
             .envoyer = T("Envoyer l'invitation", "Send the invitation", "Enviar la invitación"),
             .invOk = T("Invitation envoyée. Lien d'activation :", "Invitation sent. Activation link:", "Invitación enviada. Enlace de activación:"),
             .copier = T("Copier le lien", "Copy link", "Copiar enlace"),

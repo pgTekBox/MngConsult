@@ -5,8 +5,8 @@ Imports System.Web.Script.Serialization
 ''' <summary>
 ''' Rôles du cabinet (Portail comptable, script T382). Chaque rôle a un nom, une
 ''' description et un niveau d'accès (admin / employe / technicien) recopié sur
-''' les membres qui le portent. Les rôles de base (Administrateur, Comptable,
-''' Technicien) ne se suppriment pas ; un rôle utilisé par un membre non plus.
+''' les membres qui le portent. Le seul rôle de base est Administrateur (T391 :
+''' plus de Comptable / Technicien) ; un rôle utilisé par un membre ne se supprime pas.
 '''   - admin / solo : ajouter, modifier, supprimer ;
 '''   - employé : lecture.
 ''' Procs : s1003 (liste), s1004 (enregistrer), s1005 (supprimer).
@@ -174,11 +174,11 @@ Public Class wbfCabRoles
             .description = T("Description", "Description", "Descripción"),
             .acces = T("Niveau d'accès", "Access level", "Nivel de acceso"),
             .aAdmin = T("Administrateur — gère le cabinet, voit tous les dossiers", "Administrator — manages the firm, sees all files", "Administrador — gestiona el despacho, ve todos los expedientes"),
-            .aEmploye = T("Comptable — ses dossiers et ceux des techniciens qu'il supervise", "Accountant — their files and those of the technicians they supervise", "Contador — sus expedientes y los de los técnicos que supervisa"),
-            .aTech = T("Technicien — seulement les dossiers confiés, sous un superviseur", "Technician — only assigned files, under a supervisor", "Técnico — solo los expedientes confiados, bajo un supervisor"),
+            .aEmploye = T("Superviseur — ses dossiers et ceux des employés qu'il supervise", "Supervisor — their files and those of the employees they supervise", "Supervisor — sus expedientes y los de los empleados que supervisa"),
+            .aTech = T("Restreint — seulement les dossiers confiés, sous un superviseur", "Restricted — only assigned files, under a supervisor", "Restringido — solo los expedientes confiados, bajo un supervisor"),
             .aAdminC = T("Administrateur", "Administrator", "Administrador"),
-            .aEmployeC = T("Comptable", "Accountant", "Contador"),
-            .aTechC = T("Technicien", "Technician", "Técnico"),
+            .aEmployeC = T("Superviseur", "Supervisor", "Supervisor"),
+            .aTechC = T("Restreint", "Restricted", "Restringido"),
             .base = T("Rôle de base", "Base role", "Rol base"),
             .baseAide = T("Rôle de base : son niveau d'accès ne change pas et il ne peut pas être supprimé.", "Base role: its access level does not change and it cannot be deleted.", "Rol base: su nivel de acceso no cambia y no se puede eliminar."),
             .membres = T("Membres", "Members", "Miembros"),
