@@ -24,6 +24,7 @@ Public Class wbfCabTechniciens
     Protected WithEvents litLabels As System.Web.UI.WebControls.Literal
 
     Private _role As String = ""
+    Private _cabinetId As Integer = 0
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not isAuthenticated OrElse Not IsAccountant Then
@@ -44,6 +45,7 @@ Public Class wbfCabTechniciens
         End If
 
         If Not IsPostBack Then
+            If PeutGerer Then CreerBoitesManquantes()
             litData.Text = Json(Charger())
             litLabels.Text = Json(Libelles())
         End If
@@ -61,6 +63,7 @@ Public Class wbfCabTechniciens
             p.Add(New SqlParameter("@UserId", UserEmail))
             Dim ds As DataSet = ExecuteSQLds("s0919GetUserCabinet", p)
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                _cabinetId = CInt(Val(Convert.ToString(ds.Tables(0).Rows(0)("CabinetId"))))
                 Return Convert.ToString(ds.Tables(0).Rows(0)("Role")).Trim().ToLowerInvariant()
             End If
         Catch
@@ -405,8 +408,27 @@ Public Class wbfCabTechniciens
             Dim r As Object = ChangerSuperviseur(membreId, Txt(Request.Form("sup")))
             If Not CBool(r.ok) Then Return r
         End If
+
+        ' 4. Nouveau courriel @60sec.ca : sa boîte est créée si elle n'existe pas (T387)
+        CreerBoitesManquantes()
         Return New With {.ok = True}
     End Function
+
+    ''' <summary>
+    ''' Crée les boîtes @60sec.ca manquantes des membres du cabinet (s1012, T387) :
+    ''' mot de passe du compte pour un membre actif, aucun s'il est en attente.
+    ''' Idempotent ; appelé à l'ouverture de la page (administrateur) et après une modification.
+    ''' </summary>
+    Private Sub CreerBoitesManquantes()
+        If _cabinetId <= 0 Then Return
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CabinetId", _cabinetId))
+            ExecuteSQL("s1012CreerBoitesCabinet", p)
+        Catch
+            ' Best-effort : la gestion des membres ne dépend pas du serveur de courriel.
+        End Try
+    End Sub
 
     Private Function ChangerSuperviseur(membreId As Integer, sup As String) As Object
         Dim g As Guid
