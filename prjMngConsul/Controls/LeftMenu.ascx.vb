@@ -348,7 +348,7 @@ Namespace Controls
                 Case "secBusiness" : Return Choose3(lang, "Mon entreprise", "My business", "Mi empresa")
                 Case "secSupport" : Return Choose3(lang, "Mon accompagnement", "My support", "Mi acompañamiento")
                 Case "secAdmin" : Return Choose3(lang, "Administration", "Administration", "Administración")
-                Case "payments" : Return Choose3(lang, "Paiements", "Payments", "Pagos")
+                Case "payments" : Return Choose3(lang, "Processeurs", "Processors", "Procesadores")
                 Case "myFirm" : Return Choose3(lang, "Mon cabinet comptable", "My accounting firm", "Mi despacho contable")
                 Case "firmMessages" : Return Choose3(lang, "Messages du cabinet", "Firm messages", "Mensajes del despacho")
                 Case "welcome" : Return Choose3(lang, "Bienvenue", "Welcome", "Bienvenida")
