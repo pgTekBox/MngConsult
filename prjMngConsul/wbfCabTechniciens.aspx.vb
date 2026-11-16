@@ -673,7 +673,7 @@ Public Class wbfCabTechniciens
     ' ---------------------------------------------------------------------
     Private Function Libelles() As Object
         Return New With {
-            .titre = T("Comptables et techniciens", "Accountants and technicians", "Contadores y técnicos"),
+            .titre = T("Employés", "Employees", "Empleados"),
             .sous = If(PeutGerer,
                        T("Les membres du cabinet : les comptables suivent leurs dossiers et supervisent des techniciens ; un technicien ne voit que les dossiers qui lui sont confiés.",
                          "The firm's members: accountants handle their files and supervise technicians; a technician only sees the files assigned to them.",

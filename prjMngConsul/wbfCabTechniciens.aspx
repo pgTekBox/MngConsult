@@ -1,8 +1,8 @@
-﻿<%@ Page Title="Comptables et techniciens" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Title="Employés" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="wbfCabTechniciens.aspx.vb" Inherits="MngConsul.wbfCabTechniciens" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Comptables et techniciens — Portail comptable
+    Employés — Portail comptable
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
