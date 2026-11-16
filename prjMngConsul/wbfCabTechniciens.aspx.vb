@@ -214,6 +214,7 @@ Public Class wbfCabTechniciens
                     Case "sup" : res = ChangerSuperviseur(CInt(Val(Request.Form("id"))), Txt(Request.Form("sup")))
                     Case "dossiers" : res = LireDossiers(CInt(Val(Request.Form("id"))))
                     Case "assign" : res = Confier(CInt(Val(Request.Form("id"))), Txt(Request.Form("guids")))
+                    Case "actions" : res = PoserActions(CInt(Val(Request.Form("id"))), Txt(Request.Form("guid")), Txt(Request.Form("actions")))
                     Case "retirer" : res = Retirer(CInt(Val(Request.Form("id"))))
                     Case Else : res = New With {.ok = False, .erreur = "op"}
                 End Select
@@ -510,8 +511,54 @@ Public Class wbfCabTechniciens
         Return lst
     End Function
 
+    ''' <summary>
+    ''' Les dossiers (cochés s'ils sont confiés) + les actions permises dans
+    ''' chacun (T393 : liste vide = toutes) + le catalogue des actions.
+    ''' </summary>
     Private Function LireDossiers(membreId As Integer) As Object
-        Return New With {.ok = True, .dossiers = ListeDossiers(membreId)}
+        Dim parDossier As New Dictionary(Of String, List(Of String))(StringComparer.OrdinalIgnoreCase)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@UserId", UserEmail))
+            p.Add(New SqlParameter("@MembreId", membreId))
+            Dim ds As DataSet = ExecuteSQLds("s1014ListActionsMembre", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                For Each r As DataRow In ds.Tables(0).Rows
+                    Dim g As String = Txt(r("CompanyGUID")).ToLowerInvariant()
+                    If Not parDossier.ContainsKey(g) Then parDossier(g) = New List(Of String)
+                    parDossier(g).Add(Txt(r("Action")))
+                Next
+            End If
+        Catch
+        End Try
+        Dim dossiers As New List(Of Object)
+        For Each d As DossierMembre In ListeDossiers(membreId)
+            Dim acts As List(Of String) = Nothing
+            parDossier.TryGetValue(d.id, acts)
+            dossiers.Add(New With {.id = d.id, .nom = d.nom, .confie = d.confie, .autre = d.autre,
+                                   .restreint = acts IsNot Nothing, .actions = If(acts, New List(Of String))})
+        Next
+        Dim catalogue As New List(Of Object)
+        For Each a As String In clsActionsDossier.Actions
+            catalogue.Add(New With {.code = a, .nom = clsActionsDossier.Libelle(a, CurrentLang)})
+        Next
+        Return New With {.ok = True, .dossiers = dossiers, .catalogue = catalogue}
+    End Function
+
+    ''' <summary>Actions permises à un employé dans un dossier (s1015) ; "*" = toutes.</summary>
+    Private Function PoserActions(membreId As Integer, guid As String, actions As String) As Object
+        Dim g As Guid
+        If Not System.Guid.TryParse(guid, g) Then Return New With {.ok = False, .erreur = MessageErreur(5)}
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@MembreId", membreId))
+        p.Add(New SqlParameter("@CompanyGUID", g))
+        p.Add(New SqlParameter("@Actions", actions))
+        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+        p.Add(outErr)
+        ExecuteSQL("s1015SetActionsDossier", p)
+        Dim err As Integer = If(outErr.Value Is Nothing OrElse IsDBNull(outErr.Value), -1, CInt(outErr.Value))
+        Return New With {.ok = (err = 0), .erreur = If(err = 0, "", MessageErreur(err))}
     End Function
 
     ''' <summary>Confie au membre les dossiers cochés, retire ceux décochés qui étaient à lui.</summary>
@@ -762,6 +809,13 @@ Public Class wbfCabTechniciens
             .inactif = T("inactif", "inactive", "inactivo"),
             .kInactifs = T("Inactifs", "Inactive", "Inactivos"),
             .confRole = T("Changer le rôle de {0} ?", "Change {0}'s role?", "¿Cambiar el rol de {0}?"),
+            .actionsLab = T("Actions permises", "Allowed actions", "Acciones permitidas"),
+            .actionsToutes = T("Toutes les actions", "All actions", "Todas las acciones"),
+            .actionsN = T("{0} action(s) sur 10", "{0} action(s) of 10", "{0} acción(es) de 10"),
+            .actionsAucune = T("Aucune action", "No action", "Ninguna acción"),
+            .actionsAide = T("Ce que cet employé peut faire dans ce dossier (les zones de l'ERP du client). Tout coché = aucune restriction.",
+                             "What this employee can do in this file (areas of the client's ERP). All checked = no restriction.",
+                             "Lo que este empleado puede hacer en este expediente (zonas del ERP del cliente). Todo marcado = sin restricción."),
             .dossiersDe = T("Dossiers confiés à {0}", "Files assigned to {0}", "Expedientes confiados a {0}"),
             .dejaA = T("actuellement suivi par {0}", "currently handled by {0}", "actualmente a cargo de {0}"),
             .enregistrer = T("Enregistrer", "Save", "Guardar"),

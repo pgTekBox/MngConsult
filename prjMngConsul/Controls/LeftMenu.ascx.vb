@@ -27,6 +27,7 @@ Namespace Controls
                               Optional cls As String = "nav-item",
                               Optional badge As Integer = 0,
                               Optional ton As String = "y") As String
+            If Not clsActionsDossier.PagePermise(UserEmail, Company, url) Then Return ""   ' T393 : action non permise dans ce dossier
 
             ' Une pastille à zéro ne se dessine pas : elle ferait du bruit sur
             ' chaque ligne du menu sans rien signaler. Ton : y = à faire (jaune),
@@ -89,6 +90,7 @@ Namespace Controls
 
 
         Private Function Child(url As String, labelKey As String) As String
+            If Not clsActionsDossier.PagePermise(UserEmail, Company, url) Then Return ""   ' T393
             Dim ici As String = If(EstPageCourante(url), " ici"" aria-current=""page", "")
             Return "<a class=""nav-child" & ici & """ href=""" & ResolveUrl(url) & """ data-navlink>" &
                    L(labelKey) & "</a>"
@@ -240,7 +242,10 @@ Namespace Controls
             sb.Append(Item("~/Importations.aspx", Ico("import"), "importations"))
             sb.Append(Item("~/wbfLogout.aspx", Ico("logout"), "logout"))
 
-            Return sb.ToString()
+            ' T393 : un groupe dont aucune entrée n'est permise disparaît
+            Return System.Text.RegularExpressions.Regex.Replace(sb.ToString(),
+                "<div class=""nav-group"" data-accordion>(?:(?!<div class=""nav-group"").)*?<div class=""nav-children""></div></div>", "",
+                System.Text.RegularExpressions.RegexOptions.Singleline)
         End Function
 
         ''' <summary>

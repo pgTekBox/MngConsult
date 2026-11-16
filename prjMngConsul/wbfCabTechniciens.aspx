@@ -53,6 +53,17 @@
     #tec .fen .ligne { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-top: 1px solid #E3E9F1; font-size: 14px; cursor: pointer }
     #tec .fen .ligne input { width: 18px; height: 18px }
     #tec .fen .ligne span.autre { margin-left: auto; font-size: 12px; color: #7A5200 }
+    #tec .fen { max-width: 640px }
+    #tec .fen .dos { border-top: 1px solid #E3E9F1 }
+    #tec .fen .dos .ligne { border-top: 0 }
+    #tec .fen .ligne label.nomd { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; min-width: 0 }
+    #tec .fen .actbtn { margin-left: 8px; border: 1px solid #D5DDE8; background: #fff; color: #143A73; border-radius: 999px; padding: 4px 10px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap }
+    #tec .fen .actbtn:hover { background: #E3EBF7 }
+    #tec .fen .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; padding: 4px 4px 10px 32px }
+    #tec .fen .actions label.act { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer }
+    #tec .fen .actions label.act input { width: 16px; height: 16px }
+    #tec .fen .actions[hidden], #tec .fen .actbtn[hidden] { display: none }
+    #tec .fen > .aide, #tec #tecFenCorps > .aide { font-size: 12px; color: #5B6B86; margin-bottom: 8px }
     #tec .fen .pied { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px }
     #tec .crayon { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #D5DDE8; background: #fff; color: #1B4F9C; cursor: pointer; display: inline-flex; align-items: center; justify-content: center }
     #tec .crayon:hover { background: #E3EBF7 }
@@ -355,6 +366,24 @@
         location.reload();
     }
 
+    // « Gérer les dossiers » : dossiers confiés + actions permises dans chacun (T393)
+    var tecCatalogue = [], tecActionsInit = {};
+    function tecResumeActions(guid) {
+        var cases = document.querySelectorAll('#act-' + guid + ' input[type=checkbox]');
+        var n = Array.prototype.filter.call(cases, function (c) { return c.checked; }).length;
+        return n === cases.length ? TL.actionsToutes : (n === 0 ? TL.actionsAucune : tFmt(TL.actionsN, n));
+    }
+    function tecMajResume(guid) {
+        var r = document.getElementById('res-' + guid); if (r) r.textContent = tecResumeActions(guid);
+    }
+    function tecBasculerActions(guid) {
+        var z = document.getElementById('act-' + guid); if (z) z.hidden = !z.hidden;
+    }
+    function tecMajLigne(cb) {
+        var b = document.getElementById('btn-' + cb.value); if (b) b.hidden = !cb.checked;
+        var z = document.getElementById('act-' + cb.value); if (z && !cb.checked) z.hidden = true;
+    }
+
     async function tecDossiers(id) {
         tecMembre = id;
         var x = tMembre(id);
@@ -366,16 +395,42 @@
         document.getElementById('tecFond').classList.add('ouvert');
         var d = await tPost({ op: 'dossiers', id: id });
         if (!d.ok) { document.getElementById('tecFenMsg').innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
-        document.getElementById('tecFenCorps').innerHTML = d.dossiers.map(function (o) {
-            return '<label class="ligne"><input type="checkbox" value="' + o.id + '"' + (o.confie ? ' checked' : '') + ' /><span>' + tEsc(o.nom) + '</span>' +
-                   (o.autre ? '<span class="autre">' + tEsc(tFmt(TL.dejaA, o.autre)) + '</span>' : '') + '</label>';
-        }).join('') || '<div class="vide">' + tEsc(TL.aucunDossier) + '</div>';
+        tecCatalogue = d.catalogue || []; tecActionsInit = {};
+        // Les actions ne concernent que les employés restreints : un administrateur voit tout
+        var limitable = !x || x.role !== 'admin';
+        document.getElementById('tecFenCorps').innerHTML = (limitable ? '<div class="aide">' + tEsc(TL.actionsAide) + '</div>' : '') +
+            (d.dossiers.map(function (o) {
+                var permises = o.restreint ? o.actions : tecCatalogue.map(function (c) { return c.code; });
+                tecActionsInit[o.id] = permises.slice().sort().join(',');
+                var cases = tecCatalogue.map(function (c) {
+                    return '<label class="act"><input type="checkbox" value="' + c.code + '"' + (permises.indexOf(c.code) >= 0 ? ' checked' : '') +
+                           ' onchange="tecMajResume(\'' + o.id + '\')" /> ' + tEsc(c.nom) + '</label>';
+                }).join('');
+                return '<div class="dos"><div class="ligne"><label class="nomd"><input type="checkbox" value="' + o.id + '"' + (o.confie ? ' checked' : '') +
+                       ' onchange="tecMajLigne(this)" /><span>' + tEsc(o.nom) + '</span></label>' +
+                       (o.autre ? '<span class="autre">' + tEsc(tFmt(TL.dejaA, o.autre)) + '</span>' : '') +
+                       (limitable ? '<button type="button" class="actbtn" id="btn-' + o.id + '"' + (o.confie ? '' : ' hidden') +
+                                    ' onclick="tecBasculerActions(\'' + o.id + '\')"><span id="res-' + o.id + '"></span> ▾</button>' : '') +
+                       '</div>' + (limitable ? '<div class="actions" id="act-' + o.id + '" hidden>' + cases + '</div>' : '') + '</div>';
+            }).join('') || '<div class="vide">' + tEsc(TL.aucunDossier) + '</div>');
+        if (limitable) d.dossiers.forEach(function (o) { tecMajResume(o.id); });
     }
 
     async function tecEnregistrerDossiers() {
-        var ids = Array.prototype.map.call(document.querySelectorAll('#tecFenCorps input:checked'), function (c) { return c.value; });
+        var ids = Array.prototype.map.call(document.querySelectorAll('#tecFenCorps .nomd input:checked'), function (c) { return c.value; });
         var b = document.getElementById('tecFenOk'); b.disabled = true;
         var d = await tPost({ op: 'assign', id: tecMembre, guids: ids.join(',') });
+        if (d.ok) {
+            // Les actions des dossiers confiés qui ont changé
+            for (var i = 0; i < ids.length && d.ok; i++) {
+                var cases = document.querySelectorAll('#act-' + ids[i] + ' input[type=checkbox]');
+                if (!cases.length) continue;
+                var coches = Array.prototype.filter.call(cases, function (c) { return c.checked; }).map(function (c) { return c.value; });
+                var cle = coches.slice().sort().join(',');
+                if (cle === tecActionsInit[ids[i]]) continue;
+                d = await tPost({ op: 'actions', id: tecMembre, guid: ids[i], actions: coches.length === cases.length ? '*' : coches.join(',') });
+            }
+        }
         b.disabled = false;
         if (!d.ok) { document.getElementById('tecFenMsg').innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
         location.reload();

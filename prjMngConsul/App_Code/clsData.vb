@@ -1034,4 +1034,47 @@ Public Class clsData
         ExecuteSQL("s0662SaveCompanySquareTokens", col)
     End Sub
 
+
+    ' ══════════════════════════════════════════════════════════════════════
+    '  Actions permises dans un dossier (T393)
+    '  Un employé du cabinet entré dans l'ERP d'un client n'ouvre que les
+    '  pages des actions que l'administrateur lui a cochées pour ce dossier
+    '  (« Gérer les dossiers »). Sinon : retour à l'accueil, avec un message.
+    ' ══════════════════════════════════════════════════════════════════════
+    Protected Overrides Sub OnLoad(e As EventArgs)
+        Dim refus As String = ""
+        Try
+            If Session IsNot Nothing AndAlso Session("UserId") IsNot Nothing AndAlso IsAccountant AndAlso Company <> Guid.Empty Then
+                Dim action As String = clsActionsDossier.ActionDePage(Me.AppRelativeVirtualPath)
+                If action <> "" AndAlso Not clsActionsDossier.PagePermise(UserEmail, Company, Me.AppRelativeVirtualPath) Then
+                    refus = clsActionsDossier.Libelle(action, CurrentLang)
+                End If
+            End If
+        Catch
+            refus = ""
+        End Try
+
+        If refus <> "" Then
+            Session("ActionRefusee") = refus
+            Response.Redirect("~/Default.aspx", True)
+            Return
+        End If
+
+        ' Le message du refus, affiché sur la page d'arrivée
+        Try
+            If Session IsNot Nothing AndAlso Session("ActionRefusee") IsNot Nothing Then
+                Dim zone As String = Convert.ToString(Session("ActionRefusee"))
+                Session.Remove("ActionRefusee")
+                Dim l As String = CurrentLang
+                Dim msg As String = If(l = "en", "Your firm has not given you access to """ & zone & """ in this file.",
+                                    If(l = "es", "Su despacho no le dio acceso a «" & zone & "» en este expediente.",
+                                       "Votre cabinet ne vous a pas donné accès à « " & zone & " » dans ce dossier."))
+                ShowMessageBox(msg, If(l = "en", "Access", If(l = "es", "Acceso", "Accès")))
+            End If
+        Catch
+        End Try
+
+        MyBase.OnLoad(e)
+    End Sub
+
 End Class
