@@ -182,7 +182,7 @@ Public Class ucJournalList
                 Dim safe As String = ex.Message.Replace("'", "\'").Replace(Chr(13), " ").Replace(Chr(10), " ")
                 ScriptManager.RegisterStartupScript(Page, Page.GetType(),
                     "alert_" & Guid.NewGuid().ToString("N"),
-                    "alert('" & L("errorPrefix").Replace("'", "\'") & safe & "');", True)
+                    "showAppMessage('" & L("errorPrefix").Replace("'", "\'") & safe & "');", True)
                 Return
             End Try
 

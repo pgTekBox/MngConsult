@@ -4,6 +4,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <title>Connexion Square…</title>
+    <script src="js/appPopup.js?v=2026111602"></script>
 </head>
 <body style="font-family:Arial,sans-serif;color:#0E1F3D;padding:40px;">
     <form id="form1" runat="server">

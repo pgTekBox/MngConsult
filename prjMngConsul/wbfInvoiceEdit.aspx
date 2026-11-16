@@ -513,6 +513,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
     <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
+    <script src="js/appPopup.js?v=2026111602"></script>
 </head>
 <body class="f60 f60-facture">
     <form id="form1" runat="server">

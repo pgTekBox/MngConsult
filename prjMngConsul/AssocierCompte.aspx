@@ -137,7 +137,7 @@
         var coche = document.querySelector('input[name="cible"]:checked');
         if (!coche) {
             if (window.showAppMessage) { showAppMessage('Choisissez un compte de 60secondes, ou « Créer un nouveau compte », avant d\'associer.', 'Attention'); }
-            else { alert('Choisissez un compte de 60secondes, ou « Créer un nouveau compte », avant d\'associer.'); }
+            else { showAppMessage('Choisissez un compte de 60secondes, ou « Créer un nouveau compte », avant d\'associer.'); }
             return false;
         }
         return true;

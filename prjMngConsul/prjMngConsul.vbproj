@@ -498,6 +498,7 @@
     <Content Include="Images\rondplus45.png" />
     <Content Include="Images\trash.png" />
     <Content Include="ImportBalanceVerification.aspx" />
+    <Content Include="js\appPopup.js" />
     <Content Include="js\JsonView.js" />
     <Content Include="js\RadWindows.js" />
     <Content Include="js\cabinet-60s.js" />

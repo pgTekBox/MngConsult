@@ -11,7 +11,7 @@ function closeJsonModal() {
 
 function openImageViewer(src) {
     const w = window.open("", "_blank", "width=1100,height=800,resizable=yes,scrollbars=no");
-    if (!w) return alert("Popup bloquée. Autorise les popups pour ce site.");
+    if (!w) return showAppMessage("Popup bloquée. Autorise les popups pour ce site.");
 
     w.document.write(`<!doctype html>
 <html lang="fr">

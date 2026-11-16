@@ -531,7 +531,7 @@ Public Class wbfJournalEntryEdit
         Dim safe As String = msg.Replace("'", "\'").Replace(Chr(13), " ").Replace(Chr(10), " ")
         ScriptManager.RegisterStartupScript(Page, Page.GetType(),
             "alert_" & Guid.NewGuid().ToString("N"),
-            "alert('" & safe & "');", True)
+            "showAppMessage('" & safe & "');", True)
     End Sub
 
     ' =========================================================

@@ -223,6 +223,7 @@ a{
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <%-- Menu masqué par ☰ (choix gardé par navigateur) : appliqué avant l'affichage, sans clignement --%>
 <script>try { if (window.localStorage.getItem('60s-menu') === '0') document.documentElement.classList.add('menu-ferme'); } catch (e) { }</script>
+<script src="js/appPopup.js?v=2026111602"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
@@ -336,13 +337,19 @@ a{
     <script type="text/javascript">
         // textContent et non innerHTML : les messages contiennent des données
         // (nom de client, courriel, message d'erreur d'API).
-        function showAppMessage(text, title) {
+        // Remplace alert() partout dans l'ERP (js/appPopup.js redirige window.alert ici).
+        // onClose : ce qui doit attendre la fermeture (rechargement, fermeture de fenêtre…).
+        // Un message qui arrive pendant qu'un autre est affiché attend son tour.
+        var mcMsgRappel = null, mcMsgFile = [];
+        function showAppMessage(text, title, onClose) {
             var o = document.getElementById("mcMsgOverlay");
             var t = document.getElementById("mcMsgText");
             var h = document.getElementById("mcMsgTitle");
             if (!o || !t) { return; }
-            t.textContent = text || "";
+            if (o.style.display === "flex") { mcMsgFile.push([text, title, onClose]); return; }
+            t.textContent = text == null ? "" : String(text);
             if (h) { h.textContent = title || "Information"; }
+            mcMsgRappel = typeof onClose === "function" ? onClose : null;
             var b = document.getElementById("mcMsgBox");
             if (b && h) { rendreDeplacable(b, h); b.recentrer(); }
             o.style.display = "flex";
@@ -350,6 +357,9 @@ a{
         function closeAppMessage() {
             var o = document.getElementById("mcMsgOverlay");
             if (o) { o.style.display = "none"; }
+            var f = mcMsgRappel; mcMsgRappel = null;
+            if (f) { try { f(); } catch (e) { } }
+            if (mcMsgFile.length) { var s = mcMsgFile.shift(); showAppMessage(s[0], s[1], s[2]); }
         }
         document.addEventListener("keydown", function (e) {
             if (e.key === "Escape") { closeAppMessage(); }
@@ -488,7 +498,7 @@ a{
                     }
                     zone.value = (finale + ' ' + courant).trim();
                 };
-                rec.onerror = function (e) { finEcoute(); if (e.error === 'not-allowed' || e.error === 'service-not-allowed') alert(txt('refuse')); };
+                rec.onerror = function (e) { finEcoute(); if (e.error === 'not-allowed' || e.error === 'service-not-allowed') showAppMessage(txt('refuse')); };
                 rec.onend = function () { finEcoute(); if (finale.trim()) { zone.value = finale.trim(); demander(true); } };
                 ecoute = true; micro.classList.add('actif'); zone.setAttribute('placeholder', txt('ecoute')); zone.value = '';
                 try { rec.start(); } catch (err) { finEcoute(); }

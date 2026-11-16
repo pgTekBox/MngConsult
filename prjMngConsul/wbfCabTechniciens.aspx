@@ -338,7 +338,7 @@
         sel.disabled = true;
         var d = await tPost({ op: 'role', id: id, role: sel.value });
         sel.disabled = false;
-        if (!d.ok) { alert(d.erreur); sel.value = x.role; return; }
+        if (!d.ok) { showAppMessage(d.erreur); sel.value = x.role; return; }
         location.reload();
     }
 
@@ -346,7 +346,7 @@
         sel.disabled = true;
         var d = await tPost({ op: 'sup', id: id, sup: sel.value });
         sel.disabled = false;
-        if (!d.ok) { alert(d.erreur); return; }
+        if (!d.ok) { showAppMessage(d.erreur); return; }
         var x = tMembre(id); if (x) x.sup = sel.value;
     }
 
@@ -354,7 +354,7 @@
         var x = tMembre(id);
         if (!x || !confirm(tFmt(TL.confRetirer, x.nom))) return;
         var d = await tPost({ op: 'retirer', id: id });
-        if (!d.ok) { alert(d.erreur); return; }
+        if (!d.ok) { showAppMessage(d.erreur); return; }
         location.reload();
     }
 

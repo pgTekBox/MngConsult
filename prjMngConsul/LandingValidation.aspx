@@ -22,6 +22,7 @@
   .btn:hover{background:var(--marine-fonce)}
   footer{margin-top:22px;color:#6A7891;font-size:13px}
 </style>
+    <script src="js/appPopup.js?v=2026111602"></script>
 </head>
 <body>
   <form id="f" runat="server">

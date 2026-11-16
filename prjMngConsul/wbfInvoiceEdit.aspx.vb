@@ -1231,7 +1231,7 @@ Public Class wbfInvoiceEdit
     ''' <summary>Affiche un message simple à l'utilisateur (fenêtre du navigateur).</summary>
     Private Sub ShowMsg(msg As String)
         Dim safe As String = msg.Replace("\", "\\").Replace("'", "\'").Replace(ControlChars.Cr, " ").Replace(ControlChars.Lf, " ")
-        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "invMsg", "alert('" & safe & "');", True)
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "invMsg", "showAppMessage('" & safe & "');", True)
     End Sub
 
 

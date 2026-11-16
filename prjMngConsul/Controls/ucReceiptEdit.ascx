@@ -734,7 +734,7 @@
             function onAutoImputeClicked(sender, args) {
                 var recu = toNum(document.getElementById("<%= txtMontantRecu.ClientID %>").value);
                 if (recu <= 0) {
-                    alert(L_AMOUNT_FIRST);
+                    showAppMessage(L_AMOUNT_FIRST);
                     return;
                 }
 

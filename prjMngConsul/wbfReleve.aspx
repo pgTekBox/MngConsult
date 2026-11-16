@@ -463,7 +463,7 @@
           rbOccupe(btn, true); rbMessage('');
           var d = await rbAppel({ action: 'regler', id: rbLigneId, docId: docId });
           var msg = d.ok && d.resteFacture > 0.005 ? RB.mRegleOk.replace('{0}', rbMontant(d.montant)) + ' — ' + RB.mPartiel.replace('{0}', rbMontant(d.resteFacture)) : '';
-          if (d.ok && d.reste <= 0.005 && msg) alert(msg);
+          if (d.ok && d.reste <= 0.005 && msg) showAppMessage(msg);
           await rbApres(d, btn, msg);
       }
 
@@ -493,7 +493,7 @@
           if (action === 'ignorer') corps.ignorer = true;
           if (action === 'retablir') corps.ignorer = false;
           var d = await rbAppel(corps);
-          if (!d.ok) { alert(d.erreur); return; }
+          if (!d.ok) { showAppMessage(d.erreur); return; }
           rbRafraichir();
       }
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && rbLigneId) rbFermer(); });
@@ -524,12 +524,11 @@
                   try { localStorage.removeItem('plaid_link_token'); } catch (e) { }
 
                   if (!exData.success) {
-                      alert(exData.message || L_EXCHANGE_ERROR);
+                      showAppMessage(exData.message || L_EXCHANGE_ERROR);
                       return;
                   }
 
-                  alert(L_CONNECTED);
-                  window.location.reload();
+                  showAppMessage(L_CONNECTED, "", function () { window.location.reload(); });
               },
 
               onExit: function (err, metadata) {
@@ -554,7 +553,7 @@
 
               const data = await res.json();
               if (!data.success) {
-                  alert(data.message || L_LINKTOKEN_ERROR);
+                  showAppMessage(data.message || L_LINKTOKEN_ERROR);
                   return;
               }
 
@@ -567,7 +566,7 @@
 
           } catch (e) {
               console.error(e);
-              alert(L_PLAID_ERROR);
+              showAppMessage(L_PLAID_ERROR);
           }
       }
 

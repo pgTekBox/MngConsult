@@ -146,7 +146,7 @@
         var r = ROL.roles.find(function (x) { return x.id === id; });
         if (!r || !confirm(rFmt(RL.confSupprimer, r.nom))) return;
         var d = await rPost({ op: 'delete', id: id });
-        if (!d.ok) { alert(d.erreur); return; }
+        if (!d.ok) { showAppMessage(d.erreur); return; }
         location.reload();
     }
 

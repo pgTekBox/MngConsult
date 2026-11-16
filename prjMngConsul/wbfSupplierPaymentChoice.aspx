@@ -394,6 +394,7 @@
             font-style: italic;
         }
     </style>
+    <script src="js/appPopup.js?v=2026111602"></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -757,16 +758,16 @@
             function validateBeforeSubmit() {
                 var selected = document.getElementById('hfSelectedMethod').value;
                 if (!selected) {
-                    alert('Veuillez choisir une méthode de paiement.');
+                    showAppMessage('Veuillez choisir une méthode de paiement.');
                     return false;
                 }
                 var amt = parseFloat(document.getElementById('hfAmountToPay').value);
                 if (isNaN(amt) || amt <= 0) {
-                    alert('Veuillez saisir un montant valide.');
+                    showAppMessage('Veuillez saisir un montant valide.');
                     return false;
                 }
                 if (amt > window.maxAmount + 0.001) {
-                    alert('Le montant dépasse le reste à payer.');
+                    showAppMessage('Le montant dépasse le reste à payer.');
                     return false;
                 }
                 return true;

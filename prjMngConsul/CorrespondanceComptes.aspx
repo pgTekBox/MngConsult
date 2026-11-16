@@ -202,7 +202,7 @@
                     </asp:DropDownList>
                     <asp:Button ID="btnLierIA" runat="server" CssClass="btn btn-s" CausesValidation="false"
                         Text="Lier selon l'IA"
-                        OnClientClick="var sIA = document.querySelector('select.act-seuil'); if (!sIA || !sIA.value) { alert('Choisissez un seuil : lier à 90, 80 ou 70 % de confiance et plus.'); return false; } if (!confirm('Lier tous les comptes encore à décider dont la proposition de l&#39;IA atteint ' + sIA.value + ' % de confiance ou plus ?\n\nLes comptes déjà décidés et les comptes cibles déjà pris ne bougent pas.')) { return false; }" />
+                        OnClientClick="var sIA = document.querySelector('select.act-seuil'); if (!sIA || !sIA.value) { showAppMessage('Choisissez un seuil : lier à 90, 80 ou 70 % de confiance et plus.'); return false; } if (!confirm('Lier tous les comptes encore à décider dont la proposition de l&#39;IA atteint ' + sIA.value + ' % de confiance ou plus ?\n\nLes comptes déjà décidés et les comptes cibles déjà pris ne bougent pas.')) { return false; }" />
                 </span>
             </div>
         </div>
