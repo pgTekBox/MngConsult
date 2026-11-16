@@ -126,6 +126,7 @@ Public Class wbfCabTechniciens
                         .inactif = CBool(r("Inactif")),
                         .prenom = Txt(r("FirstName")),
                         .nomFam = Txt(r("LastName")),
+                        .recup = Txt(r("RecoveryEmail")),
                         .connexion = If(IsDBNull(r("LastLoginOn")), "", CDate(r("LastLoginOn")).ToString("d MMM yyyy", ci)),
                         .sup = Txt(r("SuperviseurUserGUID")).ToLowerInvariant(),
                         .supNom = Txt(r("SuperviseurNom")),
@@ -254,16 +255,16 @@ Public Class wbfCabTechniciens
     ''' <summary>
     ''' Fenêtre « Nouveau membre » : crée le compte (s0923) avec son courriel de
     ''' connexion — par défaut prenom.nom@60sec.ca — et, si demandé, la boîte
-    ''' @60sec.ca (s1009). L'invitation part au courriel personnel s'il est donné
-    ''' (la nouvelle boîte n'a pas encore de mot de passe), sinon au courriel du compte.
+    ''' @60sec.ca (s1009). Le courriel de récupération (obligatoire, T389) est
+    ''' enregistré et reçoit l'invitation : la nouvelle boîte n'est pas encore accessible.
     ''' </summary>
     Private Function Inviter() As Object
         Dim email As String = Txt(Request.Form("email")).ToLowerInvariant()
         If email = "" OrElse Not email.Contains("@") OrElse email.Contains(" ") Then Return New With {.ok = False, .erreur = T("Courriel invalide.", "Invalid email.", "Correo no válido.")}
-        Dim perso As String = Txt(Request.Form("emailPerso"))
-        If perso <> "" AndAlso (Not perso.Contains("@") OrElse perso.Contains(" ")) Then
-            Return New With {.ok = False, .erreur = T("Courriel personnel invalide.", "Invalid personal email.", "Correo personal no válido.")}
-        End If
+        ' Courriel de récupération obligatoire (T389) ; l'invitation y est envoyée
+        Dim perso As String = Txt(Request.Form("emailPerso")).ToLowerInvariant()
+        Dim errRecup As String = ValiderRecuperation(perso, email)
+        If errRecup <> "" Then Return New With {.ok = False, .erreur = errRecup}
         Dim boite As Boolean = Est60Sec(email) AndAlso Txt(Request.Form("boite")) = "1"
         If boite Then
             ' Vérifier avant de créer le compte que l'adresse est libre
@@ -304,6 +305,7 @@ Public Class wbfCabTechniciens
         Dim membreId As Integer = TrouverMembre(email)
         If membreId > 0 Then
             If roleId > 0 Then AttribuerRole(membreId, roleId)
+            PoserRecuperation(membreId, perso)
             Dim sup As String = Txt(Request.Form("sup"))
             If role = "technicien" AndAlso sup <> "" Then ChangerSuperviseur(membreId, sup)
         End If
@@ -313,9 +315,42 @@ Public Class wbfCabTechniciens
         If boite Then boiteOk = (CreerBoite(email) = 0)
 
         Dim lien As String = Request.Url.GetLeftPart(UriPartial.Authority) & ResolveUrl("~/wbfCabInvitation.aspx?token=" & CType(outTok.Value, Guid).ToString())
-        Dim dest As String = If(perso <> "", perso, email)
+        Dim dest As String = perso
         EnvoyerCourrielInvitation(dest, lien, role)
         Return New With {.ok = True, .lien = lien, .dest = dest, .boite = If(boiteOk, email, "")}
+    End Function
+
+    ''' <summary>
+    ''' Courriel de récupération (T389) : obligatoire, valide, externe (pas @60sec.ca,
+    ''' dont la boîte partage le mot de passe) et différent du courriel de connexion.
+    ''' Renvoie "" s'il est correct, sinon le message d'erreur.
+    ''' </summary>
+    Private Function ValiderRecuperation(recup As String, connexion As String) As String
+        recup = recup.Trim().ToLowerInvariant()
+        If recup = "" Then Return T("Le courriel de récupération est obligatoire.", "The recovery email is required.", "El correo de recuperación es obligatorio.")
+        Dim at As Integer = recup.IndexOf("@"c)
+        If at < 1 OrElse recup.IndexOf("."c, at) < 0 OrElse recup.Contains(" ") Then
+            Return T("Courriel de récupération invalide.", "Invalid recovery email.", "Correo de recuperación no válido.")
+        End If
+        If Est60Sec(recup) Then
+            Return T("Le courriel de récupération doit être une adresse externe (pas @60sec.ca).", "The recovery email must be an external address (not @60sec.ca).", "El correo de recuperación debe ser una dirección externa (no @60sec.ca).")
+        End If
+        If String.Equals(recup, connexion.Trim(), StringComparison.OrdinalIgnoreCase) Then
+            Return T("Le courriel de récupération doit être différent du courriel de connexion.", "The recovery email must differ from the sign-in email.", "El correo de recuperación debe ser distinto del correo de conexión.")
+        End If
+        Return ""
+    End Function
+
+    ''' <summary>Enregistre le courriel de récupération d'un membre (s1013) ; renvoie le code d'erreur.</summary>
+    Private Function PoserRecuperation(membreId As Integer, recup As String) As Integer
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", UserEmail))
+        p.Add(New SqlParameter("@MembreId", membreId))
+        p.Add(New SqlParameter("@Email", recup))
+        Dim outErr As New SqlParameter("@ErrorCode", SqlDbType.Int) With {.Direction = ParameterDirection.Output}
+        p.Add(outErr)
+        ExecuteSQL("s1013SetCourrielRecuperation", p)
+        Return If(outErr.Value Is Nothing OrElse IsDBNull(outErr.Value), -1, CInt(outErr.Value))
     End Function
 
     Private Function TrouverMembre(email As String) As Integer
@@ -367,6 +402,12 @@ Public Class wbfCabTechniciens
         Dim m As DataRow = LireMembre(membreId)
         If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
 
+        ' 0. Courriel de récupération, obligatoire (T389) — vérifié avant toute écriture
+        Dim recup As String = Txt(Request.Form("recup")).ToLowerInvariant()
+        Dim connexion As String = If(Txt(Request.Form("email")) <> "", Txt(Request.Form("email")), Txt(m("Email")))
+        Dim errRecup As String = ValiderRecuperation(recup, connexion)
+        If errRecup <> "" Then Return New With {.ok = False, .erreur = errRecup}
+
         ' 1. Identité
         Dim p As New Collection
         p.Add(New SqlParameter("@UserId", UserEmail))
@@ -385,6 +426,9 @@ Public Class wbfCabTechniciens
             Case 7 : Return New With {.ok = False, .erreur = T("Vous ne pouvez pas changer votre propre courriel ici.", "You cannot change your own email here.", "No puede cambiar su propio correo aquí.")}
             Case Else : Return New With {.ok = False, .erreur = MessageErreur(err)}
         End Select
+        If PoserRecuperation(membreId, recup) <> 0 Then
+            Return New With {.ok = False, .erreur = T("Le courriel de récupération n'a pas pu être enregistré.", "The recovery email could not be saved.", "No se pudo guardar el correo de recuperación.")}
+        End If
 
         ' 2. Rôle et état actif (le solo garde son rôle ; un compte en attente reste en attente)
         Dim role As String = RoleNormal(Txt(m("Role")))
@@ -513,6 +557,9 @@ Public Class wbfCabTechniciens
         Dim m As DataRow = LireMembre(membreId)
         If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
         Dim email As String = Txt(m("Email"))
+        ' T389 : les liens partent au courriel de récupération (la boîte @60sec.ca partage le mot de passe)
+        Dim dest As String = Txt(m("RecoveryEmail"))
+        If dest = "" Then dest = email
 
         If CBool(m("Inactif")) Then
             Return New With {.ok = False, .erreur = T("Ce compte est inactif : cochez « Compte actif » et enregistrez avant d'envoyer le courriel.",
@@ -534,11 +581,11 @@ Public Class wbfCabTechniciens
                 Return New With {.ok = False, .erreur = T("L'invitation n'a pas pu être renvoyée.", "The invitation could not be resent.", "No se pudo reenviar la invitación.")}
             End If
             Dim lienInv As String = Request.Url.GetLeftPart(UriPartial.Authority) & ResolveUrl("~/wbfCabInvitation.aspx?token=" & CType(outTok.Value, Guid).ToString())
-            EnvoyerCourrielInvitation(email, lienInv, RoleNormal(Txt(m("Role"))))
+            EnvoyerCourrielInvitation(dest, lienInv, RoleNormal(Txt(m("Role"))))
             Return New With {.ok = True, .lien = lienInv,
-                             .message = T("Le compte est en attente d'activation : une nouvelle invitation a été envoyée à " & email & " pour choisir son mot de passe.",
-                                          "The account is awaiting activation: a new invitation was sent to " & email & " to choose a password.",
-                                          "La cuenta está pendiente de activación: se envió una nueva invitación a " & email & " para elegir su contraseña.")}
+                             .message = T("Le compte est en attente d'activation : une nouvelle invitation a été envoyée à " & dest & " pour choisir son mot de passe.",
+                                          "The account is awaiting activation: a new invitation was sent to " & dest & " to choose a password.",
+                                          "La cuenta está pendiente de activación: se envió una nueva invitación a " & dest & " para elegir su contraseña.")}
         End If
 
         Dim pr As New Collection
@@ -551,11 +598,11 @@ Public Class wbfCabTechniciens
         Dim token As Guid = CType(ds.Tables(0).Rows(0)("Token"), Guid)
         Dim lien As String = Request.Url.GetLeftPart(UriPartial.Authority) & ResolveUrl("~/wbfResetPassword.aspx") &
                              "?token=" & token.ToString("D") & "&lang=" & CurrentLang
-        EnvoyerCourrielMotDePasse(email, Txt(m("FirstName")), lien)
+        EnvoyerCourrielMotDePasse(dest, Txt(m("FirstName")), lien)
         Return New With {.ok = True, .lien = lien,
-                         .message = T("Courriel de changement de mot de passe envoyé à " & email & ". Le lien est valide 24 heures.",
-                                      "Password change email sent to " & email & ". The link is valid for 24 hours.",
-                                      "Correo de cambio de contraseña enviado a " & email & ". El enlace es válido 24 horas.")}
+                         .message = T("Courriel de changement de mot de passe envoyé à " & dest & ". Le lien est valide 24 heures.",
+                                      "Password change email sent to " & dest & ". The link is valid for 24 hours.",
+                                      "Correo de cambio de contraseña enviado a " & dest & ". El enlace es válido 24 horas.")}
     End Function
 
     ''' <summary>Courriel « changer votre mot de passe » (MailService, best-effort), même gabarit que Mot de passe oublié.</summary>
@@ -650,10 +697,13 @@ Public Class wbfCabTechniciens
             .creerBoiteAide = T("La boîte reçoit les courriels ; son mot de passe sera celui que le membre choisit en activant son compte.",
                                 "The mailbox receives emails; its password will be the one the member chooses when activating their account.",
                                 "El buzón recibe correos; su contraseña será la que el miembro elija al activar su cuenta."),
-            .courrielPerso = T("Courriel personnel (facultatif)", "Personal email (optional)", "Correo personal (opcional)"),
-            .courrielPersoAide = T("L'invitation y est envoyée, puisque la nouvelle boîte n'est pas encore accessible. Sans courriel personnel, copiez le lien d'activation et remettez-le au membre.",
-                                   "The invitation is sent there, since the new mailbox is not accessible yet. Without a personal email, copy the activation link and give it to the member.",
-                                   "La invitación se envía allí, ya que el nuevo buzón aún no es accesible. Sin correo personal, copie el enlace de activación y entrégueselo al miembro."),
+            .courrielPerso = T("Courriel de récupération", "Recovery email", "Correo de recuperación"),
+            .courrielPersoAide = T("Obligatoire. Adresse externe (personnelle) du membre : elle reçoit l'invitation et les liens de mot de passe, puisque la boîte @60sec.ca partage son mot de passe.",
+                                   "Required. The member's external (personal) address: it receives the invitation and password links, since the @60sec.ca mailbox shares their password.",
+                                   "Obligatorio. Dirección externa (personal) del miembro: recibe la invitación y los enlaces de contraseña, ya que el buzón @60sec.ca comparte su contraseña."),
+            .recupLab = T("Récupération", "Recovery", "Recuperación"),
+            .sansRecup = T("sans courriel de récupération", "no recovery email", "sin correo de recuperación"),
+            .kSansRecup = T("Sans courriel de récupération", "No recovery email", "Sin correo de recuperación"),
             .invEnvoyee = T("Invitation envoyée à {0}.", "Invitation sent to {0}.", "Invitación enviada a {0}."),
             .boiteCreee = T("Boîte {0} créée.", "Mailbox {0} created.", "Buzón {0} creado."),
             .prenom = T("Prénom", "First name", "Nombre"),

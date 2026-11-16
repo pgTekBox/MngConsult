@@ -42,7 +42,14 @@ Public Class wbfForgotPassword
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
                 Dim token As Guid = CType(ds.Tables(0).Rows(0)("Token"), Guid)
                 Dim firstName As String = If(IsDBNull(ds.Tables(0).Rows(0)("FirstName")), "", ds.Tables(0).Rows(0)("FirstName").ToString())
-                SendResetEmail(email, firstName, token)
+                ' T389 : le lien part au courriel de récupération quand il existe (une boîte
+                ' @60sec.ca partage le mot de passe oublié et n'est donc pas lisible).
+                Dim dest As String = email
+                If ds.Tables(0).Columns.Contains("RecoveryEmail") AndAlso Not IsDBNull(ds.Tables(0).Rows(0)("RecoveryEmail")) Then
+                    Dim recup As String = ds.Tables(0).Rows(0)("RecoveryEmail").ToString().Trim()
+                    If recup <> "" Then dest = recup
+                End If
+                SendResetEmail(dest, firstName, token)
             End If
 
         Catch ex As Exception

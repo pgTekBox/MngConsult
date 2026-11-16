@@ -14,7 +14,7 @@
     #tec .tete .ico { width: 46px; height: 46px; border-radius: 50%; flex: 0 0 46px; background: #E8EDF5; color: #1B4F9C; display: flex; align-items: center; justify-content: center }
     #tec .tete h1 { font-size: 21px; font-weight: 800; margin: 0 }
     #tec .tete .sous { font-size: 13px; color: #44536E; margin-top: 2px }
-    #tec .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px }
+    #tec .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px }
     #tec .kpi { background: #fff; border-radius: 22px; padding: 14px 16px }
     #tec .kpi .lab { font-size: 13px; font-weight: 700; color: #44536E }
     #tec .kpi .val { font-size: 24px; font-weight: 800 }
@@ -58,6 +58,7 @@
     #tec .crayon:hover { background: #E3EBF7 }
     #tec .carte.off { opacity: .6 }
     #tec .tag.off { background: #ECEFF3; color: #44536E }
+    #tec .tag.sansrecup { margin-left: 0; background: #FDECEA; color: #A3261C }
     #tec .fen .grille { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px }
     #tec .fen .grille .large { grid-column: 1 / -1 }
     #tec .fen .grille label { display: block; font-weight: 700; font-size: 12.5px; margin-bottom: 5px }
@@ -163,6 +164,7 @@
              (x.attente ? '<span class="tag">' + tEsc(TL.attente) + '</span>' : '') +
              (x.inactif ? '<span class="tag off">' + tEsc(TL.inactif) + '</span>' : '') + '</div>' +
              '<div class="em">' + tEsc(x.email) + '</div>' +
+             '<div class="pt">' + (x.recup ? tEsc(TL.recupLab) + ' : ' + tEsc(x.recup) : '<span class="tag sansrecup">' + tEsc(TL.sansRecup) + '</span>') + '</div>' +
              '<div class="pt">' + tEsc(TL.connexion) + ' : ' + tEsc(x.connexion || TL.jamais) + '</div></div>' +
              '<div><div class="lab2">' + tEsc(TL.role) + '</div><div>' + tEsc(x.role === 'solo' ? TL.rSolo : (x.roleNom || tRoleNom(x.role))) + '</div>' + second + '</div>' +
              '<div><div class="lab2">' + tEsc(TL.dossiers) + ' (' + x.nbDossiers + ')</div>' +
@@ -193,6 +195,8 @@
             '<div><label for="tecEdNom">' + tEsc(TL.nom) + '</label><input type="text" id="tecEdNom" value="' + tEsc(x.nomFam) + '" /></div>' +
             '<div class="large"><label for="tecEdEmail">' + tEsc(TL.courriel) + '</label><input type="email" id="tecEdEmail" value="' + tEsc(x.email) + '"' + (x.moi ? ' disabled' : '') + ' />' +
                 (x.moi ? '<div class="aide">' + tEsc(TL.emailMoi) + '</div>' : '') + '</div>' +
+            '<div class="large"><label for="tecEdRecup">' + tEsc(TL.courrielPerso) + ' *</label><input type="email" id="tecEdRecup" value="' + tEsc(x.recup) + '" />' +
+                '<div class="aide">' + tEsc(TL.courrielPersoAide) + '</div></div>' +
             '<div><label for="tecEdRole">' + tEsc(TL.role) + '</label>' + (solo
                 ? '<select id="tecEdRole" disabled><option value="solo">' + tEsc(TL.rSolo) + '</option></select>'
                 : '<select id="tecEdRole" onchange="tecEdRoleChange()">' + tRoleOptions(x.roleId) + '</select>') +
@@ -219,7 +223,7 @@
         var b = document.getElementById('tecEdOk'); b.disabled = true;
         var d = await tPost({ op: 'modifier', id: tecEditId,
             prenom: document.getElementById('tecEdPrenom').value, nom: document.getElementById('tecEdNom').value,
-            email: document.getElementById('tecEdEmail').value, roleId: document.getElementById('tecEdRole').value,
+            email: document.getElementById('tecEdEmail').value, recup: document.getElementById('tecEdRecup').value, roleId: document.getElementById('tecEdRole').value,
             sup: document.getElementById('tecEdSup').value, actif: document.getElementById('tecEdActif').checked ? '1' : '0' });
         b.disabled = false;
         if (!d.ok) { document.getElementById('tecEdMsg').innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
@@ -247,8 +251,9 @@
         var att = tous.filter(function (x) { return x.attente; }).length;
         var tac = tous.reduce(function (s, x) { return s + x.taches; }, 0);
         var ret = tous.reduce(function (s, x) { return s + x.retard; }, 0);
+        var sansRecup = tous.filter(function (x) { return !x.recup; }).length;
         document.getElementById('tecKpis').innerHTML =
-            [[TL.kComptables, cpt.length, ''], [TL.kTech, t.length, ''], [TL.kAttente, att, ''], [TL.kTaches, tac, ''], [TL.kRetard, ret, ret > 0 ? 'rouge' : '']]
+            [[TL.kComptables, cpt.length, ''], [TL.kTech, t.length, ''], [TL.kAttente, att, ''], [TL.kTaches, tac, ''], [TL.kRetard, ret, ret > 0 ? 'rouge' : ''], [TL.kSansRecup, sansRecup, sansRecup > 0 ? 'rouge' : '']]
             .map(function (k) { return '<div class="kpi ' + k[2] + '"><div class="lab">' + tEsc(k[0]) + '</div><div class="val">' + k[1] + '</div></div>'; }).join('');
 
         var inv = document.getElementById('tecInvite');
@@ -281,7 +286,7 @@
                 '<div class="aide">' + tEsc(TL.courriel60Aide) + '</div></div>' +
             '<div class="large"><label class="coche"><input type="checkbox" id="tecBoite" checked /> ' + tEsc(TL.creerBoite) + '</label>' +
                 '<div class="aide">' + tEsc(TL.creerBoiteAide) + '</div></div>' +
-            '<div class="large"><label for="tecPerso">' + tEsc(TL.courrielPerso) + '</label><input type="email" id="tecPerso" />' +
+            '<div class="large"><label for="tecPerso">' + tEsc(TL.courrielPerso) + ' *</label><input type="email" id="tecPerso" />' +
                 '<div class="aide">' + tEsc(TL.courrielPersoAide) + '</div></div>' +
             '<div><label for="tecRoleInv">' + tEsc(TL.role) + '</label><select id="tecRoleInv" onchange="tecRoleInvChange()">' + tRoleOptions(tRoleDefaut()) + '</select></div>' +
             '<div><label for="tecSup">' + tEsc(TL.superviseur) + '</label><select id="tecSup" disabled>' + tSupOptions('') + '</select></div>' +
