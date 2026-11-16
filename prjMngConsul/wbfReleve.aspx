@@ -479,7 +479,7 @@
       }
 
       async function rbRetirer(lienId, btn) {
-          if (!confirm(RB.mConfRetirer)) return;
+          if (!(await appConfirm(RB.mConfRetirer))) return;
           rbOccupe(btn, true); rbMessage('');
           var d = await rbAppel({ action: 'retirer', lienId: lienId });
           if (!d.ok) { rbOccupe(btn, false); rbMessage(d.erreur); return; }
@@ -488,7 +488,7 @@
       }
 
       async function rbAction(action, id) {
-          if (action === 'delier' && !confirm(RB.mConfDelier)) return;
+          if (action === 'delier' && !(await appConfirm(RB.mConfDelier))) return;
           var corps = { action: action === 'retablir' ? 'ignorer' : action, id: id };
           if (action === 'ignorer') corps.ignorer = true;
           if (action === 'retablir') corps.ignorer = false;

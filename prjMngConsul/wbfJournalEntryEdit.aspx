@@ -326,7 +326,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
     <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
-    <script src="js/appPopup.js?v=2026111602"></script>
+    <script src="js/appPopup.js?v=2026111603"></script>
 </head>
 <body class="f60">
     <form id="form1" runat="server">
@@ -667,7 +667,7 @@
 
             /* Confirmation de suppression de ligne (RadImageButton OnClientClicking) */
             function confirmDeleteLine(s, e) {
-                if (!confirm(LNG.confirmDelete)) e.set_cancel(true);
+                appConfirmRad(s, e, LNG.confirmDelete);
             }
 
             /* Applique les libellés localisés aux éléments HTML non-serveur */
@@ -881,7 +881,7 @@
                 if (overlay) overlay.style.display = "none";
             }
 
-            function selectTemplate(templateId) {
+            async function selectTemplate(templateId) {
                 document.getElementById("<%= hidSelectedTemplateId.ClientID %>").value = templateId;
 
                 /* Si des montants sont déjà saisis, demander confirmation */
@@ -892,7 +892,7 @@
                     });
 
                 if (hasContent) {
-                    if (!confirm(LNG.confirmTemplate)) return;
+                    if (!(await appConfirm(LNG.confirmTemplate))) return;
                 }
 
                 closeTemplatePicker();

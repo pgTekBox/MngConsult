@@ -143,7 +143,7 @@ Partial Public Class wbfAIPaiement
             Dim safeArg = categorieNom.Replace("\", "\\").Replace("'", "\'")
             Dim safeMontant = FormatMontant(totalMontant).Replace("'", "\'")
             Dim confirmJs = String.Format(
-                "if (confirmPayerTout('{0}')) {{ dispatchAction('PayerTout','{1}'); }} return false;",
+                "confirmPayerTout('{0}', function () {{ dispatchAction('PayerTout','{1}'); }}); return false;",
                 safeMontant, safeArg)
             sb.AppendFormat("<button type='button' class='pay-all-btn cat-{0}' onclick=""{1}"">",
                             catKey, confirmJs)

@@ -124,7 +124,7 @@
     <div class="barre">
         <asp:Button ID="btnRattacher" runat="server" CssClass="btn primaire" CausesValidation="false"
             Text="Rattacher aux fiches clients et fournisseurs"
-            OnClientClick="if (!confirm('Copier sur la fiche de chaque client ou fournisseur retrouvé les fichiers qui lui appartiennent ? Les pièces déjà rattachées ne sont pas dupliquées.')) { return false; }" />
+            OnClientClick="if (!appConfirmClic(this, 'Copier sur la fiche de chaque client ou fournisseur retrouvé les fichiers qui lui appartiennent ? Les pièces déjà rattachées ne sont pas dupliquées.')) { return false; }" />
         <span class="aide">Les pièces des autres entités (factures, articles…) restent en préparation.</span>
     </div>
 

@@ -232,7 +232,7 @@
     function tecEdFermer() { document.getElementById('tecEdit').classList.remove('ouvert'); }
     async function tecEdMotDePasse() {
         var x = tMembre(tecEditId); if (!x) return;
-        if (!confirm(tFmt(TL.mdpConf, x.email))) return;
+        if (!(await appConfirm(tFmt(TL.mdpConf, x.email)))) return;
         var b = document.getElementById('tecEdMdp'), m = document.getElementById('tecEdMdpMsg');
         b.disabled = true; m.innerHTML = '';
         var d = await tPost({ op: 'motdepasse', id: tecEditId });
@@ -334,7 +334,7 @@
     async function tecRole(id, sel) {
         var x = tMembre(id);
         if (!x) return;
-        if (!confirm(tFmt(TL.confRole, x.nom))) { sel.value = x.role; return; }
+        if (!(await appConfirm(tFmt(TL.confRole, x.nom)))) { sel.value = x.role; return; }
         sel.disabled = true;
         var d = await tPost({ op: 'role', id: id, role: sel.value });
         sel.disabled = false;
@@ -352,7 +352,7 @@
 
     async function tecRetirer(id) {
         var x = tMembre(id);
-        if (!x || !confirm(tFmt(TL.confRetirer, x.nom))) return;
+        if (!x || !(await appConfirm(tFmt(TL.confRetirer, x.nom), { danger: true }))) return;
         var d = await tPost({ op: 'retirer', id: id });
         if (!d.ok) { showAppMessage(d.erreur); return; }
         location.reload();

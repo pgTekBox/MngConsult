@@ -899,7 +899,7 @@ Public Class ImportDonnees
         btnCreer.Visible = nouveaux > 0
         If nouveaux > 0 Then
             btnCreer.Text = "✅ Créer " & If(nouveaux = 1, "le nouveau " & Def.Un, "les " & nouveaux & " " & Def.Nouveaux)
-            btnCreer.OnClientClick = "if (!confirm('Créer " & nouveaux & " " & Def.Nouveaux &
+            btnCreer.OnClientClick = "if (!appConfirmClic(this, 'Créer " & nouveaux & " " & Def.Nouveaux &
                                      " dans l\'application ? Ce qui existe déjà ne sera pas touché.')) { return false; }"
         End If
 

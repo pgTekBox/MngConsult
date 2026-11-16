@@ -196,7 +196,7 @@
                                     CommandName="Disconnect"
                                     CommandArgument='<%# Eval("ItemId") %>'
                                     Visible='<%# CBool(Eval("Active")) %>'
-                                    OnClientClick="if (!confirm(L_CONFIRM_DISCONNECT)) { return false; }"
+                                    OnClientClick="if (!appConfirmClic(this, L_CONFIRM_DISCONNECT)) { return false; }"
                                     CausesValidation="false" />
                             </div>
                         </div>

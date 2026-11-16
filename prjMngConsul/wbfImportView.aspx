@@ -89,7 +89,7 @@
         }
         .iv-btn:hover { background: var(--mc-bg); }
     </style>
-    <script src="js/appPopup.js?v=2026111602"></script>
+    <script src="js/appPopup.js?v=2026111603"></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -194,7 +194,7 @@
                     <asp:Button ID="btnMigrate" runat="server" Text="Pousser vers production"
                                 CssClass="iv-btn"
                                 style="background:var(--mc-blue); color:#fff; border-color:var(--mc-blue);"
-                                OnClientClick="return confirm('Pousser les lignes en attente vers la production ? Cette action est irréversible.');"
+                                OnClientClick="if (!appConfirmClic(this, 'Pousser les lignes en attente vers la production ? Cette action est irréversible.')) { return false; }"
                                 CausesValidation="false" />
                     <button type="button" class="iv-btn" onclick="closeWindow();">✕ Fermer</button>
                 </div>

@@ -395,7 +395,7 @@ Public Class wbfCabMembres
 
     Protected Function ConfirmJs() As String
         Dim msg As String = T("Changer l'accès de ce membre ?", "Change this member's access?", "¿Cambiar el acceso de este miembro?")
-        Return "if(!confirm('" & HttpUtility.JavaScriptStringEncode(msg) & "')){return false;}"
+        Return "if (!appConfirmClic(this, '" & HttpUtility.JavaScriptStringEncode(msg) & "')){return false;}"
     End Function
 
     Protected ReadOnly Property LblModifier As String

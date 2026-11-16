@@ -155,7 +155,7 @@
             .nr-coche { margin-top: 0 !important; }
         }
     </style>
-    <script src="js/appPopup.js?v=2026111602"></script>
+    <script src="js/appPopup.js?v=2026111603"></script>
 </head>
 
 <body class="f60">
@@ -397,7 +397,7 @@
                             ToolTip="Sauvegarder le rendez-vous et créer une facture" />
                         <asp:Button ID="btnDelete" runat="server" Text="Supprimer"
                             CssClass="nr-lien danger" Visible="false"
-                            OnClientClick="return confirm('Supprimer ce rendez-vous ?');" />
+                            OnClientClick="if (!appConfirmClic(this, 'Supprimer ce rendez-vous ?')) { return false; }" />
                     </div>
                 </aside>
             </div>

@@ -152,7 +152,7 @@ Public Class wbfApprobations
     ''' commence par « return » avale le __doPostBack et le bouton ne fait rien.
     ''' </summary>
     Protected Function ConfirmJs(question As String) As String
-        Return "if (!confirm('" & question.Replace("'", "\'") & "')) { return false; }"
+        Return "if (!appConfirmClic(this, '" & question.Replace("'", "\'") & "')) { return false; }"
     End Function
 
 #End Region

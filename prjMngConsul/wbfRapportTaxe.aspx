@@ -386,7 +386,7 @@
         }
         // Déclaration en remboursement ou à solde nul : confirmation, puis s0994 côté serveur.
         function confirmProduite(sender, args) {
-            if (!confirm(sender.get_commandArgument())) { args.set_cancel(true); }
+            appConfirmRad(sender, args, sender.get_commandArgument());
         }
         function confirmRemise(sender, args) {
             args.set_cancel(true);

@@ -207,7 +207,7 @@
                                             CssClass="up-btn up-btn-danger"
                                             CommandName="DeleteImport"
                                             CommandArgument='<%# Eval("Id") %>'
-                                            OnClientClick='<%# String.Format("return confirm(""Supprimer définitivement le fichier #{0} ({1}) et toutes les lignes staging associées ?"");", Eval("Id"), System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(Eval("OriginalName")))) %>'
+                                            OnClientClick='<%# String.Format("if (!appConfirmClic(this, ""Supprimer définitivement le fichier #{0} ({1}) et toutes les lignes staging associées ?"")) {{ return false; }}", Eval("Id"), System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(Eval("OriginalName")))) %>'
                                             CausesValidation="false" />
                             </ItemTemplate>
                         </asp:TemplateField>

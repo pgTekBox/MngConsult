@@ -102,7 +102,7 @@
             <asp:Button ID="btnPlusTard" runat="server" CssClass="asc-btn" Text="Plus tard" CausesValidation="false" />
             <div class="droite">
                 <asp:Button ID="btnCabinet" runat="server" CssClass="asc-btn" Text="Demander à mon cabinet certifié" CausesValidation="false"
-                    OnClientClick="if (!confirm('Envoyer ce compte à votre cabinet certifié par courriel, avec le solde et les comptes proposés ? Le compte reste à décider ici.')) { return false; }" />
+                    OnClientClick="if (!appConfirmClic(this, 'Envoyer ce compte à votre cabinet certifié par courriel, avec le solde et les comptes proposés ? Le compte reste à décider ici.')) { return false; }" />
                 <asp:Button ID="btnAssocier" runat="server" CssClass="asc-btn primaire" Text="Associer le compte"
                     OnClientClick="if (!ascVerifier()) { return false; }" />
             </div>

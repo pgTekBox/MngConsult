@@ -107,7 +107,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
     <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
-    <script src="js/appPopup.js?v=2026111602"></script>
+    <script src="js/appPopup.js?v=2026111603"></script>
 </head>
 
 <body class="f60">
@@ -129,7 +129,7 @@
                 <div class="bar">
                     <asp:Button ID="btnDelete" runat="server" Text="Supprimer"
                         CssClass="btn danger" Visible="false"
-                        OnClientClick="return confirm('Supprimer cet utilisateur ?');" />
+                        OnClientClick="if (!appConfirmClic(this, 'Supprimer cet utilisateur ?')) { return false; }" />
                     <asp:HyperLink ID="lnkBack" runat="server" CssClass="btn"
                         onclick="closeWin();">← Annuler</asp:HyperLink>
                     <asp:Button ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary" />

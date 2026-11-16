@@ -217,7 +217,7 @@
                 <asp:Button ID="btnControle" runat="server" Text="Incohérences avec le plan comptable" CssClass="imp-btn imp-btn-primary" CausesValidation="false" />
                 <asp:Button ID="btnReset" runat="server" Text="Nouvel import" CssClass="imp-btn imp-btn-secondary" />
                 <asp:Button ID="btnTruncateTable" runat="server" Text="Supprimer la balance importée" CssClass="imp-btn imp-btn-danger"
-                    OnClientClick="if (!confirm('Supprimer la balance importée de votre compagnie ?')) { return false; }" />
+                    OnClientClick="if (!appConfirmClic(this, 'Supprimer la balance importée de votre compagnie ?')) { return false; }" />
             </div>
         </div>
     </asp:Panel>

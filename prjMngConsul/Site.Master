@@ -223,7 +223,7 @@ a{
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <%-- Menu masqué par ☰ (choix gardé par navigateur) : appliqué avant l'affichage, sans clignement --%>
 <script>try { if (window.localStorage.getItem('60s-menu') === '0') document.documentElement.classList.add('menu-ferme'); } catch (e) { }</script>
-<script src="js/appPopup.js?v=2026111602"></script>
+<script src="js/appPopup.js?v=2026111603"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
@@ -546,8 +546,11 @@ a{
         envoyer.addEventListener('click', function () { demander(false); });
         zone.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); demander(); } });
         document.getElementById('iaNouvelle').addEventListener('click', function (e) {
-            e.preventDefault(); if (!confirm(txt('confirmer'))) return;
-            fetch(url, { method: 'DELETE', credentials: 'same-origin' }).then(function () { messages.innerHTML = ''; charge = false; ouvrir(); });
+            e.preventDefault();
+            appConfirm(txt('confirmer')).then(function (ok) {
+                if (!ok) return;
+                fetch(url, { method: 'DELETE', credentials: 'same-origin' }).then(function () { messages.innerHTML = ''; charge = false; ouvrir(); });
+            });
         });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panneau.hidden) fermer(); });
 

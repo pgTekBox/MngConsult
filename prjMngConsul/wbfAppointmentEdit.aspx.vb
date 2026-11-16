@@ -177,8 +177,8 @@ Public Class wbfAppointmentEdit
     ''' <summary>Localisation fr/en/es des contrôles serveur (Telerik + boutons).</summary>
     Private Sub ApplyLocalization()
         btnDelete.Text = T("Supprimer", "Delete", "Eliminar")
-        btnDelete.OnClientClick = "return confirm('" &
-            T("Supprimer ce rendez-vous ?", "Delete this appointment?", "¿Eliminar esta cita?").Replace("'", "\'") & "');"
+        btnDelete.OnClientClick = "if (!appConfirmClic(this, '" &
+            T("Supprimer ce rendez-vous ?", "Delete this appointment?", "¿Eliminar esta cita?").Replace("'", "\'") & "')) { return false; }"
         lnkBack.Text = "×"
         lnkBack.ToolTip = T("Annuler", "Cancel", "Cancelar")
         btnInvoice.Text = T("Enregistrer et facturer", "Save and invoice", "Guardar y facturar")

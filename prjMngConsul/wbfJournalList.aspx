@@ -181,7 +181,7 @@
        
 
     </style>
-    <script src="js/appPopup.js?v=2026111602"></script>
+    <script src="js/appPopup.js?v=2026111603"></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -300,7 +300,7 @@
                                             CssClass="btn-icon-delete"
                                             CommandName="DeleteEcriture"
                                             CommandArgument='<%# Eval("Id") %>'
-                                            OnClientClick="return confirm('Supprimer cette écriture ?');"
+                                            OnClientClick="if (!appConfirmClic(this, 'Supprimer cette écriture ?')) { return false; }"
                                             Visible='<%# CanDelete(Eval("Statut")) %>'
                                             ToolTip="Supprimer">&nbsp;</asp:LinkButton>
                                     </div>

@@ -357,7 +357,7 @@ Public Class ValiderTaxes
             sb.Append("<td style='white-space:nowrap'>")
             sb.Append("<button type='submit' class='btn petit' name='act' value='edit:").Append(id).Append("'>Corriger</button> ")
             sb.Append("<button type='submit' class='btn petit danger' name='act' value='del:").Append(id)
-            sb.Append("' onclick=""if (!confirm('Retirer ce taux ?')) { return false; }"">Retirer</button>")
+            sb.Append("' onclick=""if (!appConfirmClic(this, 'Retirer ce taux ?')) { return false; }"">Retirer</button>")
             sb.Append("</td></tr>")
         Next
 

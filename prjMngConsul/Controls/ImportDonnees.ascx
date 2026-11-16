@@ -166,7 +166,7 @@
                 <asp:HyperLink ID="hlListe" runat="server" CssClass="idn-btn s" Visible="false" />
                 <asp:Button ID="btnAbandonner" runat="server" CssClass="idn-btn d" CausesValidation="false"
                     Text="Abandonner ce fichier"
-                    OnClientClick="if (!confirm('Abandonner ce fichier et ses lignes en préparation ? Ce qui a déjà été créé dans l\'application reste en place.')) { return false; }" />
+                    OnClientClick="if (!appConfirmClic(this, 'Abandonner ce fichier et ses lignes en préparation ? Ce qui a déjà été créé dans l\'application reste en place.')) { return false; }" />
             </div>
         </div>
     </asp:Panel>

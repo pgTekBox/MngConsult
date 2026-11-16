@@ -333,7 +333,7 @@
                                      CssClass="btn-icon-delete"
                                      CommandName="DeleteEcriture"
                                      CommandArgument='<%# Eval("Id") %>'
-                                     OnClientClick='<%# "return confirm(" & Chr(39) & L("confirmDelete") & Chr(39) & ");" %>'
+                                     OnClientClick='<%# "if (!appConfirmClic(this, " & Chr(39) & L("confirmDelete") & Chr(39) & ")) { return false; }" %>'
                                      Visible='<%# CanDelete(Eval("Statut")) %>'
                                      ToolTip='<%# L("delete") %>'>&nbsp;</asp:LinkButton>
                              </div>

@@ -144,7 +144,7 @@
 
     async function rolSupprimer(id) {
         var r = ROL.roles.find(function (x) { return x.id === id; });
-        if (!r || !confirm(rFmt(RL.confSupprimer, r.nom))) return;
+        if (!r || !(await appConfirm(rFmt(RL.confSupprimer, r.nom), { danger: true }))) return;
         var d = await rPost({ op: 'delete', id: id });
         if (!d.ok) { showAppMessage(d.erreur); return; }
         location.reload();

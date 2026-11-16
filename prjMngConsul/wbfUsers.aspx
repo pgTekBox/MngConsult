@@ -219,7 +219,7 @@
                                 Text="" ToolTip="Supprimer"
                                 CommandName="DeleteUser"
                                 CommandArgument='<%# Eval("Id") %>'
-                                OnClientClick="if (!confirm(L_DEL_CONFIRM)) { return false; }"
+                                OnClientClick="if (!appConfirmClic(this, L_DEL_CONFIRM)) { return false; }"
                                 CausesValidation="false" />
                         </div>
                     </div>

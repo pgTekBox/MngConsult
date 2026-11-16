@@ -145,11 +145,11 @@ Public Class wbfAutoPaySchedule
         Dim cancelBtn As String = ""
         If status = "PLANIFIE" OrElse status = "REQUIRES_3DS" Then
             cancelBtn = "<asp:LinkButton runat='server' CommandName='Cancel' CommandArgument='" & docId &
-                        "' OnClientClick='return confirm(""Annuler ce paiement programmé ?"");'>X</asp:LinkButton>"
+                        "' OnClientClick='if (!appConfirmClic(this, ""Annuler ce paiement programmé ?"")) { return false; }'>X</asp:LinkButton>"
             ' Note: Repeater LinkButton dynamique pas trivial ici, on fait un lien HTML simple
             cancelBtn = "<a href='wbfAutoPaySchedule.aspx?cancel=" & docId & "' " &
-                        "onclick='return confirm(""Annuler ce paiement programmé pour la facture " &
-                        Server.HtmlEncode(docNumber) & " ?"");' " &
+                        "onclick='if (!appConfirmClic(this, ""Annuler ce paiement programmé pour la facture " &
+                        Server.HtmlEncode(docNumber) & " ?"")) { return false; }' " &
                         "class='btn-cancel' style='text-decoration:none;'>🚫 Annuler</a>"
         End If
 

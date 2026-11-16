@@ -193,7 +193,7 @@
 
                             <asp:Button ID="btnDelete" runat="server" CssClass="btn-mini danger" Text='<%# L("delete") %>'
                                 ToolTip='<%# L("delete") %>' CommandName="DeleteEmployee" CommandArgument='<%# Eval("Id") %>'
-                                CausesValidation="false" OnClientClick="if (!confirm(L_DEL_CONFIRM)) { return false; }" />
+                                CausesValidation="false" OnClientClick="if (!appConfirmClic(this, L_DEL_CONFIRM)) { return false; }" />
                         </div>
                     </div>
                 </ItemTemplate>

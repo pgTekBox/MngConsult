@@ -281,7 +281,7 @@ Public Class wbfReleve
                 Dim par As String = If(ligneH Is Nothing, "", String.Format(L("cClotureePar"), FmtJA(ligneH("Created")), Convert.ToString(ligneH("Par")).Trim()))
                 sb.Append("<span class=""note"">" & Server.HtmlEncode(par) & "</span>")
                 If estDerniere Then
-                    sb.Append("<button type=""button"" class=""fc-btn"" onclick=""if (confirm(" & JsStr(L("cConfRouvrir")) & ")) { fcChip('concil','rouvrir:" & idClot & "'); }"">" & Server.HtmlEncode(L("cRouvrir")) & "</button>")
+                    sb.Append("<button type=""button"" class=""fc-btn"" onclick=""appConfirm(" & JsStr(L("cConfRouvrir")) & ").then(function (ok) { if (ok) fcChip('concil','rouvrir:" & idClot & "'); });"">" & Server.HtmlEncode(L("cRouvrir")) & "</button>")
                 End If
             Else
                 Dim raison As String = ""
@@ -297,7 +297,7 @@ Public Class wbfReleve
                 Else
                     sb.Append("<span class=""note"">" & Server.HtmlEncode(If(conciliee, L("cNoteOk"), L("cNoteEcart"))) & "</span>")
                     Dim conf As String = If(conciliee, L("cConfCloturer"), String.Format(L("cConfCloturerEcart"), FormatMontant(ecart)))
-                    sb.Append("<button type=""button"" class=""fc-btn primaire"" onclick=""if (confirm(" & JsStr(conf) & ")) { fcChip('concil','cloturer'); }"">" & Server.HtmlEncode(L("cCloturer")) & "</button>")
+                    sb.Append("<button type=""button"" class=""fc-btn primaire"" onclick=""appConfirm(" & JsStr(conf) & ").then(function (ok) { if (ok) fcChip('concil','cloturer'); });"">" & Server.HtmlEncode(L("cCloturer")) & "</button>")
                 End If
             End If
             sb.Append("</div>")

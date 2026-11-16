@@ -188,10 +188,10 @@
             <div class="acts" style="margin-left:auto">
                 <asp:Button ID="btnIA" runat="server" CssClass="btn btn-ia" CausesValidation="false"
                     Text="Proposer avec l'IA"
-                    OnClientClick="if (!confirm('Soumettre les comptes encore à décider et votre plan comptable à l&#39;IA ?\n\nElle ne fera que proposer : rien ne sera décidé à votre place.')) { return false; }" />
+                    OnClientClick="if (!appConfirmClic(this, 'Soumettre les comptes encore à décider et votre plan comptable à l&#39;IA ?\n\nElle ne fera que proposer : rien ne sera décidé à votre place.')) { return false; }" />
                 <asp:Button ID="btnAccepter" runat="server" CssClass="btn btn-s" CausesValidation="false"
                     Text="Accepter les correspondances par numéro"
-                    OnClientClick="if (!confirm('Retenir toutes les correspondances où le numéro de compte concorde ?')) { return false; }" />
+                    OnClientClick="if (!appConfirmClic(this, 'Retenir toutes les correspondances où le numéro de compte concorde ?')) { return false; }" />
                 <button type="button" class="btn btn-s" onclick="ouvrirFenetre('AssocierCompte.aspx?popup=1', 'Associer un compte du plan comptable')">Associer un par un</button>
                 <span class="seuil-ia" title="Lie d'un coup les comptes encore à décider dont la proposition de l'IA atteint le seuil choisi. Lancez d'abord « Proposer avec l'IA ».">
                     <asp:DropDownList runat="server" ID="ddlSeuilIA" CssClass="act-seuil">
@@ -202,7 +202,7 @@
                     </asp:DropDownList>
                     <asp:Button ID="btnLierIA" runat="server" CssClass="btn btn-s" CausesValidation="false"
                         Text="Lier selon l'IA"
-                        OnClientClick="var sIA = document.querySelector('select.act-seuil'); if (!sIA || !sIA.value) { showAppMessage('Choisissez un seuil : lier à 90, 80 ou 70 % de confiance et plus.'); return false; } if (!confirm('Lier tous les comptes encore à décider dont la proposition de l&#39;IA atteint ' + sIA.value + ' % de confiance ou plus ?\n\nLes comptes déjà décidés et les comptes cibles déjà pris ne bougent pas.')) { return false; }" />
+                        OnClientClick="var sIA = document.querySelector('select.act-seuil'); if (!sIA || !sIA.value) { showAppMessage('Choisissez un seuil : lier à 90, 80 ou 70 % de confiance et plus.'); return false; } if (!appConfirmClic(this, 'Lier tous les comptes encore à décider dont la proposition de l&#39;IA atteint ' + sIA.value + ' % de confiance ou plus ?\n\nLes comptes déjà décidés et les comptes cibles déjà pris ne bougent pas.')) { return false; }" />
                 </span>
             </div>
         </div>

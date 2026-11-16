@@ -109,7 +109,7 @@ Public Class wbfLieux
     ' ── Les cellules de la liste ──
 
     Public Function ConfirmerSuppression() As String
-        Return "return confirm(" & HttpUtility.JavaScriptStringEncode(L("confirmSuppr"), True) & ");"
+        Return "if (!appConfirmClic(this, " & HttpUtility.JavaScriptStringEncode(L("confirmSuppr"), True) & ")) { return false; }"
     End Function
 
     Public Function TypeTexte(t As Object) As String

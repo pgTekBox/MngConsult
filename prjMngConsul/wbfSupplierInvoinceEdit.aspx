@@ -487,7 +487,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" />
     <link rel="stylesheet" href="css/edition-60s.css?v=2026102104" />
-    <script src="js/appPopup.js?v=2026111602"></script>
+    <script src="js/appPopup.js?v=2026111603"></script>
 </head>
 <body class="f60">
     <form id="form1" runat="server">
@@ -698,7 +698,7 @@
                                                         Image-Url="~/Images/del200.png" Image-Sizing="Stretch"
                                                         CommandName="DeleteLine"
                                                         CommandArgument='<%# Eval("Id") %>'
-                                                        OnClientClicking="function(s,e){ if(!confirm(L_CONFIRM_DELLINE)) e.set_cancel(true); }">
+                                                        OnClientClicking="function(s,e){ appConfirmRad(s, e, L_CONFIRM_DELLINE); }">
                                                     </telerik:RadImageButton>
                                                 </div>
 

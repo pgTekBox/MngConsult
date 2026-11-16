@@ -315,7 +315,7 @@
                             CommandArgument='<%# Eval("Id") %>'
                             Enabled='<%# CBool(Eval("IsActive")) %>'
                             CausesValidation="false"
-                            OnClientClick='<%# "if (!confirm(""Confirmer la révocation de cette autorisation ?\n\nLes paiements programmés pour ce fournisseur seront annulés."")) { return false; }" %>' />
+                            OnClientClick='<%# "if (!appConfirmClic(this, ""Confirmer la révocation de cette autorisation ?\n\nLes paiements programmés pour ce fournisseur seront annulés."")) { return false; }" %>' />
                     </div>
                 </div>
             </ItemTemplate>

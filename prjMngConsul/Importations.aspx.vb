@@ -1045,7 +1045,7 @@ Public Class Importations
             "Tout ce qui attend une validation sera effacé et devra être réimporté. " &
             "Ce qui est déjà passé en comptabilité n'est pas touché."
 
-        btnVider.OnClientClick = "if (!confirm('" & question & "')) { return false; }"
+        btnVider.OnClientClick = "if (!appConfirmClic(this, '" & question & "')) { return false; }"
     End Sub
 
     Protected Sub btnVider_Click(sender As Object, e As EventArgs) Handles btnVider.Click

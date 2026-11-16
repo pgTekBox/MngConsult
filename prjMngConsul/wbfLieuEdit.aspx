@@ -34,7 +34,7 @@
         .le-btn.primaire:hover { background: var(--f-blue-d); }
         @media (max-width: 600px) { .le-deux { grid-template-columns: 1fr; } }
     </style>
-    <script src="js/appPopup.js?v=2026111602"></script>
+    <script src="js/appPopup.js?v=2026111603"></script>
 </head>
 <body class="f60">
     <form id="form1" runat="server">

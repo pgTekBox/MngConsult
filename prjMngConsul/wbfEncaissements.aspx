@@ -154,8 +154,8 @@
             w.center();
         }
         // Annuler un paiement saisi par erreur : confirmation, puis le serveur (s0992) et la liste se recharge.
-        function annulerEncaissement(id, question) {
-            if (!confirm(question)) { return; }
+        async function annulerEncaissement(id, question) {
+            if (!(await appConfirm(question, { danger: true }))) { return; }
             var am = $find(RAM_ID);
             if (am) { am.ajaxRequest("annuler:" + id); }
         }

@@ -69,4 +69,96 @@
         if (document.body) afficher();
         else document.addEventListener('DOMContentLoaded', afficher);
     };
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Confirmations — remplacent confirm() natif.
+    //   appConfirm(message, options) → Promise<bool>
+    //       options : { titre, ok, annuler, danger }  (libellés selon <html lang>)
+    //   appConfirmClic(element, message) → pour un OnClientClick / onclick :
+    //       if (!appConfirmClic(this, 'Supprimer ?')) { return false; }
+    //       Le 1er clic est annulé et la boîte s'ouvre ; sur « Confirmer », le
+    //       même élément est recliqué et passe (postback, lien, bouton submit).
+    //   appConfirmRad(sender, args, message) → pour un OnClientClicking Telerik :
+    //       function (s, e) { appConfirmRad(s, e, 'Supprimer cette ligne ?'); }
+    // ─────────────────────────────────────────────────────────────────────
+    function libelles() {
+        var l = (document.documentElement.lang || '').toLowerCase();
+        if (l.indexOf('en') === 0) return { titre: 'Confirmation', ok: 'Confirm', annuler: 'Cancel' };
+        if (l.indexOf('es') === 0) return { titre: 'Confirmación', ok: 'Confirmar', annuler: 'Cancelar' };
+        return { titre: 'Confirmation', ok: 'Confirmer', annuler: 'Annuler' };
+    }
+
+    var confFile = [], confEnCours = null;
+
+    function construireConfirm() {
+        if (document.getElementById('mcConfOverlay')) return;
+        var o = document.createElement('div');
+        o.id = 'mcConfOverlay';
+        o.style.cssText = 'display:none;position:fixed;inset:0;z-index:1000000;background:rgba(15,23,42,.55);' +
+                          'align-items:center;justify-content:center;font-family:inherit';
+        o.innerHTML =
+            '<div role="alertdialog" aria-modal="true" aria-labelledby="mcConfTitre" aria-describedby="mcConfTexte" ' +
+            'style="background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);width:92vw;max-width:480px;padding:24px;box-sizing:border-box">' +
+            '<div id="mcConfTitre" style="font-weight:800;font-size:16px;color:#0E1F3D;margin-bottom:10px"></div>' +
+            '<div id="mcConfTexte" style="color:#44536E;font-size:14px;line-height:1.5;margin-bottom:22px;white-space:pre-wrap"></div>' +
+            '<div style="display:flex;justify-content:flex-end;gap:8px">' +
+            '<button type="button" id="mcConfNon" style="padding:10px 18px;border:1px solid #D5DDE8;background:#fff;color:#143A73;' +
+            'border-radius:10px;font-weight:700;cursor:pointer"></button>' +
+            '<button type="button" id="mcConfOui" style="padding:10px 18px;border:1px solid #1B4F9C;background:#1B4F9C;color:#fff;' +
+            'border-radius:10px;font-weight:700;cursor:pointer"></button></div></div>';
+        document.body.appendChild(o);
+        o.addEventListener('click', function (e) { if (e.target === o) repondre(false); });
+        document.getElementById('mcConfNon').addEventListener('click', function () { repondre(false); });
+        document.getElementById('mcConfOui').addEventListener('click', function () { repondre(true); });
+        document.addEventListener('keydown', function (e) {
+            if (!confEnCours) return;
+            if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); repondre(false); }
+        }, true);
+    }
+
+    function montrer(q) {
+        construireConfirm();
+        var lib = libelles(), opt = q.options || {};
+        document.getElementById('mcConfTitre').textContent = opt.titre || lib.titre;
+        document.getElementById('mcConfTexte').textContent = q.message == null ? '' : String(q.message);
+        document.getElementById('mcConfNon').textContent = opt.annuler || lib.annuler;
+        var oui = document.getElementById('mcConfOui');
+        oui.textContent = opt.ok || lib.ok;
+        oui.style.background = opt.danger ? '#A3261C' : '#1B4F9C';
+        oui.style.borderColor = opt.danger ? '#A3261C' : '#1B4F9C';
+        confEnCours = q;
+        document.getElementById('mcConfOverlay').style.display = 'flex';
+        oui.focus();
+    }
+
+    function repondre(ok) {
+        var q = confEnCours; confEnCours = null;
+        var o = document.getElementById('mcConfOverlay'); if (o) o.style.display = 'none';
+        if (q) { try { q.resoudre(ok); } catch (e) { } }
+        if (confFile.length) montrer(confFile.shift());
+    }
+
+    window.appConfirm = function (message, options) {
+        return new Promise(function (resoudre) {
+            var q = { message: message, options: options, resoudre: resoudre };
+            var go = function () { if (confEnCours) confFile.push(q); else montrer(q); };
+            if (document.body) go(); else document.addEventListener('DOMContentLoaded', go);
+        });
+    };
+
+    window.appConfirmClic = function (el, message, options) {
+        if (el && el.__appConfOk) { el.__appConfOk = false; return true; }
+        window.appConfirm(message, options).then(function (ok) {
+            if (ok && el) { el.__appConfOk = true; el.click(); }
+        });
+        return false;
+    };
+
+    window.appConfirmRad = function (sender, args, message, options) {
+        if (sender && sender.__appConfOk) { sender.__appConfOk = false; return; }
+        if (args && args.set_cancel) args.set_cancel(true);
+        window.appConfirm(message, options).then(function (ok) {
+            if (ok && sender) { sender.__appConfOk = true; sender.click(); }
+        });
+    };
 })();

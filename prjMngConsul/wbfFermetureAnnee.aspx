@@ -282,7 +282,7 @@
             var msg = "<%= L("jsConfirm1") %>\n\n"
                 + "<%= L("jsConfirm2") %>\n\n"
                 + "<%= L("jsConfirm3") %>";
-            args.set_cancel(!confirm(msg));
+            appConfirmRad(sender, args, msg);
         }
     </script>
     </telerik:RadCodeBlock>

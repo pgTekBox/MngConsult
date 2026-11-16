@@ -301,7 +301,7 @@
                                             CssClass="btn-icon-delete"
                                             CommandName="DeleteTemplate"
                                             CommandArgument='<%# Eval("Id") %>'
-                                            OnClientClick="return confirm('Supprimer ce template ?');"
+                                            OnClientClick="if (!appConfirmClic(this, 'Supprimer ce template ?')) { return false; }"
                                             ToolTip="Supprimer">&nbsp;</asp:LinkButton>
                                     </div>
                                 </div>

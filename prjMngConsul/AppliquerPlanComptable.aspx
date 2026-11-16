@@ -259,7 +259,7 @@
         <div class="acts">
             <asp:Button ID="btnCreer" runat="server" CssClass="btn btn-go" CausesValidation="false"
                 Text="Créer les comptes"
-                OnClientClick="if (!confirm('Créer ces comptes dans votre plan comptable ?\n\nC&#39;est une écriture réelle : les comptes existeront pour de bon.')) { return false; }" />
+                OnClientClick="if (!appConfirmClic(this, 'Créer ces comptes dans votre plan comptable ?\n\nC&#39;est une écriture réelle : les comptes existeront pour de bon.')) { return false; }" />
         </div>
     </asp:Panel>
 

@@ -651,9 +651,12 @@
         }
 
         // ─── Confirmation pour "Payer tout" ───
-        function confirmPayerTout(montant) {
-            return confirm('Confirmer le paiement de ' + montant + ' ?\n\n' +
-                'Toutes les transactions de cette catégorie seront marquées payées.');
+        // Boîte de confirmation maison (jamais de confirm() natif) : suite() après « Confirmer ».
+        function confirmPayerTout(montant, suite) {
+            appConfirm('Confirmer le paiement de ' + montant + ' ?\n\n' +
+                'Toutes les transactions de cette catégorie seront marquées payées.')
+                .then(function (ok) { if (ok && typeof suite === 'function') suite(); });
+            return false;
         }
     </script>
 
