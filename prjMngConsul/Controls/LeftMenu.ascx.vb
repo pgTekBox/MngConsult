@@ -274,8 +274,8 @@ Namespace Controls
                     sb.Append(Item("~/wbfCabProfil.aspx", Ico("firm"), "portalProfile"))
                     sb.Append(Item("~/wbfCabTechniciens.aspx", Ico("user-cog"), "portalTechniciens"))
                     sb.Append(Item("~/wbfCabRoles.aspx", Ico("shield"), "portalRoles"))
-                Case "employe"
-                    ' Un employé suit les techniciens qu'il supervise (T379).
+                Case "employe", "technicien"
+                    ' Tout employé peut superviser (T392) : il suit les employés qu'il supervise.
                     sb.Append(Section("portalSecFirm"))
                     sb.Append(Item("~/wbfCabTechniciens.aspx", Ico("user-cog"), "portalTechniciensMiens"))
             End Select

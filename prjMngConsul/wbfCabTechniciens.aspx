@@ -136,8 +136,9 @@
         var r = await fetch(location.pathname, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body, credentials: 'same-origin' });
         try { return await r.json(); } catch (e) { return { ok: false, erreur: TL.erreur }; }
     }
-    function tSupOptions(sel) {
-        return '<option value="">' + tEsc(TL.aucunSup) + '</option>' + TEC.sups.map(function (s) {
+    // Superviseurs possibles (T392 : tout le monde), sans l'employé lui-même
+    function tSupOptions(sel, exclu) {
+        return '<option value="">' + tEsc(TL.aucunSup) + '</option>' + TEC.sups.filter(function (s) { return s.id !== exclu; }).map(function (s) {
             return '<option value="' + s.id + '"' + (s.id === sel ? ' selected' : '') + '>' + tEsc(s.nom) + '</option>';
         }).join('');
     }
@@ -156,7 +157,8 @@
     function tCarte(x) {
         var tech = x.role === 'technicien';
         var second = tech
-            ? '<div class="lab2" style="margin-top:8px">' + tEsc(TL.superviseur) + '</div><div>' + tEsc(x.supNom || '—') + '</div>'
+            ? '<div class="lab2" style="margin-top:8px">' + tEsc(TL.superviseur) + '</div><div>' + tEsc(x.supNom || '—') + '</div>' +
+              (x.nbTechs ? '<div class="lab2" style="margin-top:8px">' + tEsc(TL.supervise) + '</div><div>' + x.nbTechs + '</div>' : '')
             : '<div class="lab2" style="margin-top:8px">' + tEsc(TL.supervise) + '</div><div>' + x.nbTechs + '</div>';
         return '<div class="carte' + (x.inactif ? ' off' : '') + '"><div class="av">' + tEsc(tInit(x.nom)) + '</div>' +
              '<div><div class="nm">' + tEsc(x.nom) + (x.moi ? '<span class="tag moi">' + tEsc(TL.moi) + '</span>' : '') +
@@ -200,7 +202,7 @@
                 ? '<select id="tecEdRole" disabled><option value="solo">' + tEsc(TL.rSolo) + '</option></select>'
                 : '<select id="tecEdRole" onchange="tecEdRoleChange()">' + tRoleOptions(x.roleId) + '</select>') +
                 (dernierAdmin ? '<div class="aide alerte">' + tEsc(TL.dernierAdmin) + '</div>' : '') + '</div>' +
-            '<div><label for="tecEdSup">' + tEsc(TL.superviseur) + '</label><select id="tecEdSup">' + tSupOptions(x.sup) + '</select></div>' +
+            '<div><label for="tecEdSup">' + tEsc(TL.superviseur) + '</label><select id="tecEdSup">' + tSupOptions(x.sup, x.guid) + '</select></div>' +
             '<div class="large"><label class="coche"><input type="checkbox" id="tecEdActif"' + (!x.inactif && !x.attente ? ' checked' : '') +
                 (x.attente || x.moi || dernierAdmin ? ' disabled' : '') + ' /> ' + tEsc(TL.actif) + '</label>' +
                 '<div class="aide">' + tEsc(x.attente ? TL.actifAttente : TL.actifAide) + '</div></div>' +

@@ -31,7 +31,7 @@ Public Class wbfCabTechniciens
             Response.Redirect("~/Default.aspx") : Return
         End If
         _role = RoleCabinet()
-        If _role <> "admin" AndAlso _role <> "solo" AndAlso _role <> "employe" Then
+        If _role <> "admin" AndAlso _role <> "solo" AndAlso _role <> "employe" AndAlso _role <> "technicien" Then
             Response.Redirect("~/wbfCabJournee.aspx") : Return
         End If
         EnPortailComptable = True
@@ -116,6 +116,7 @@ Public Class wbfCabTechniciens
                     Dim nom As String = (Txt(r("FirstName")) & " " & Txt(r("LastName"))).Trim()
                     membres.Add(New With {
                         .id = CInt(r("MembreId")),
+                        .guid = Txt(r("UserGUID")).ToLowerInvariant(),
                         .role = RoleNormal(Txt(r("Role"))),
                         .roleId = If(IsDBNull(r("RoleId")), 0, CInt(r("RoleId"))),
                         .roleNom = Txt(r("RoleNom")),
