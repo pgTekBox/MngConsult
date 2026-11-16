@@ -92,7 +92,14 @@ Public Class wbfUsers
         p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@Id", id))
         p.Add(New SqlParameter("@ModifiedBy", If(Session("UserEmail"), "")))
-        ExecuteSQL("s0205DeleteUser", p)
+        Try
+            ExecuteSQL("s0205DeleteUser", p)
+        Catch ex As SqlException When ex.Number = 51140
+            ' Dernier administrateur actif d'un cabinet comptable (T384)
+            ShowMessageBox(T("Impossible de supprimer cet utilisateur : c'est le seul administrateur de son cabinet comptable. Nommez d'abord un autre administrateur.",
+                             "This user cannot be deleted: they are the only administrator of their accounting firm. Appoint another administrator first.",
+                             "No se puede eliminar a este usuario: es el único administrador de su despacho contable. Nombre primero a otro administrador."))
+        End Try
     End Sub
 
     ' =====================================================================

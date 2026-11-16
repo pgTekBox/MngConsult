@@ -66,6 +66,7 @@
     #tec .fen .grille label.coche { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer }
     #tec .fen .grille label.coche input { width: 18px; height: 18px }
     #tec .fen .aide { font-size: 12px; color: #5B6B86; margin-top: 4px }
+    #tec .fen .aide.alerte { color: #8A4B00; font-weight: 700 }
     #tec .fen .grille .mdp { border-top: 1px solid #E3E9F1; padding-top: 12px }
     #tec .invtete { display: flex; align-items: center; justify-content: space-between; gap: 12px }
     #tec .invtete h2 { margin: 0 }
@@ -180,6 +181,9 @@
         var x = tMembre(id); if (!x) return;
         tecEditId = id;
         var solo = x.role === 'solo';
+        // Seul administrateur actif du cabinet : il ne peut ni changer de niveau ni être désactivé (T384)
+        var dernierAdmin = (x.role === 'admin' || solo) && !x.attente && !x.inactif &&
+            TEC.membres.filter(function (m) { return (m.role === 'admin' || m.role === 'solo') && !m.attente && !m.inactif; }).length <= 1;
         document.getElementById('tecEdTitre').textContent = tFmt(TL.modifierTitre, x.nom);
         document.getElementById('tecEdFermerBtn').textContent = TL.fermer;
         document.getElementById('tecEdOk').textContent = TL.enregistrer;
@@ -191,16 +195,18 @@
                 (x.moi ? '<div class="aide">' + tEsc(TL.emailMoi) + '</div>' : '') + '</div>' +
             '<div><label for="tecEdRole">' + tEsc(TL.role) + '</label>' + (solo
                 ? '<select id="tecEdRole" disabled><option value="solo">' + tEsc(TL.rSolo) + '</option></select>'
-                : '<select id="tecEdRole" onchange="tecEdRoleChange()">' + tRoleOptions(x.roleId) + '</select>') + '</div>' +
+                : '<select id="tecEdRole" onchange="tecEdRoleChange()">' + tRoleOptions(x.roleId) + '</select>') +
+                (dernierAdmin ? '<div class="aide alerte">' + tEsc(TL.dernierAdmin) + '</div>' : '') + '</div>' +
             '<div><label for="tecEdSup">' + tEsc(TL.superviseur) + '</label><select id="tecEdSup">' + tSupOptions(x.sup) + '</select></div>' +
             '<div class="large"><label class="coche"><input type="checkbox" id="tecEdActif"' + (!x.inactif && !x.attente ? ' checked' : '') +
-                (x.attente || x.moi ? ' disabled' : '') + ' /> ' + tEsc(TL.actif) + '</label>' +
+                (x.attente || x.moi || dernierAdmin ? ' disabled' : '') + ' /> ' + tEsc(TL.actif) + '</label>' +
                 '<div class="aide">' + tEsc(x.attente ? TL.actifAttente : TL.actifAide) + '</div></div>' +
             '<div class="large mdp"><label>' + tEsc(TL.mdp) + '</label>' +
                 '<button type="button" class="btn sec" id="tecEdMdp" onclick="tecEdMotDePasse()"' + (x.inactif ? ' disabled' : '') + '>' + tEsc(TL.mdpEnvoyer) + '</button>' +
                 '<div class="aide">' + tEsc(x.attente ? TL.mdpAideAttente : TL.mdpAide) + '</div><div id="tecEdMdpMsg"></div></div>' +
             '</div>';
         document.getElementById('tecEdMsg').innerHTML = '';
+        if (dernierAdmin) Array.prototype.forEach.call(document.querySelectorAll('#tecEdRole option'), function (o) { if (o.getAttribute('data-acces') !== 'admin') o.disabled = true; });
         tecEdRoleChange();
         document.getElementById('tecEdit').classList.add('ouvert');
         document.getElementById('tecEdPrenom').focus();

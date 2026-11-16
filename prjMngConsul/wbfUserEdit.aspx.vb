@@ -136,6 +136,10 @@ Public Class wbfUserEdit
             ScriptManager.RegisterStartupScript(Me, Me.GetType(), "closewin",
                 "if (typeof closeWin === 'function') closeWin();", True)
 
+        Catch ex As SqlException When ex.Number = 51140
+            ' Dernier administrateur actif d'un cabinet comptable (T384)
+            ShowMsg("Impossible de désactiver cet utilisateur : c'est le seul administrateur de son cabinet comptable. Nommez d'abord un autre administrateur.", isError:=True)
+            cbActive.Checked = True
         Catch ex As SqlException When ex.Number = 2601 OrElse ex.Number = 2627
             ' Violation d'index unique = email déjà utilisé
             ShowMsg("Ce courriel est déjà utilisé par un autre utilisateur.", isError:=True)
@@ -159,7 +163,13 @@ Public Class wbfUserEdit
         p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@Id", id))
         p.Add(New SqlParameter("@ModifiedBy", If(Session("UserEmail"), "")))
-        ExecuteSQL("s0205DeleteUser", p)
+        Try
+            ExecuteSQL("s0205DeleteUser", p)
+        Catch ex As SqlException When ex.Number = 51140
+            ' Dernier administrateur actif d'un cabinet comptable (T384)
+            ShowMsg("Impossible de supprimer cet utilisateur : c'est le seul administrateur de son cabinet comptable. Nommez d'abord un autre administrateur.", isError:=True)
+            Return
+        End Try
 
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "closewin",
             "if (typeof closeWin === 'function') closeWin();", True)
