@@ -189,7 +189,8 @@
              '<div><div class="lab2">' + tEsc(TL.dossiers) + ' (' + x.nbDossiers + ')</div>' +
              '<div class="doss" title="' + tEsc(x.dossiers) + '">' + tEsc(x.dossiers || TL.aucunDossier) + '</div>' +
              '<div class="charge">' + x.taches + ' ' + tEsc(TL.taches) + (x.retard ? ' · <b class="r">' + x.retard + ' ' + tEsc(TL.retard) + '</b>' : '') + '</div></div>' +
-             '<div class="acts">' + (TEC.gerer
+             '<div class="acts">' + '<button type="button" class="crayon" data-lecture="1" title="' + tEsc(TL.imprimerUn) + '" aria-label="' + tEsc(TL.imprimerUn) + '" onclick="window.open(\x27wbfCabTechniciens.aspx?imprimer=1&amp;id=' + x.id + '\x27, \x27_blank\x27)">' +
+                '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg></button>' + (TEC.gerer
                 ? '<button type="button" class="btn sec" onclick="tecDossiers(' + x.id + ')">' + tEsc(TL.gererDossiers) + '</button>' +
                   '<button type="button" class="crayon" title="' + tEsc(TL.modifier) + '" aria-label="' + tEsc(TL.modifier) + '" onclick="tecModifier(' + x.id + ')">' +
                   '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'

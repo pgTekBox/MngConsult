@@ -89,14 +89,17 @@ Public Class wbfCabTechniciens
         Try
             Dim ds As DataSet = LireEquipe()
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
-                For Each r As DataRow In ds.Tables(0).Rows : rows.Add(r) : Next
+                Dim seul As Integer = CInt(Val(Convert.ToString(Request.QueryString("id"))))
+                For Each r As DataRow In ds.Tables(0).Rows
+                    If seul = 0 OrElse CInt(r("MembreId")) = seul Then rows.Add(r)   ' ?id= : un seul employé
+                Next
             End If
         Catch
         End Try
 
         Dim sb As New StringBuilder()
         sb.Append("<!DOCTYPE html><html lang=""").Append(CurrentLang).Append("""><head><meta charset=""utf-8"" />")
-        sb.Append("<title>").Append(H(T("Employés et accès par dossier", "Employees and access per file", "Empleados y acceso por expediente"))).Append("</title>")
+        sb.Append("<title>").Append(H(If(Val(Convert.ToString(Request.QueryString("id"))) > 0, T("Fiche de l'employé et accès par dossier", "Employee record and access per file", "Ficha del empleado y acceso por expediente"), T("Employés et accès par dossier", "Employees and access per file", "Empleados y acceso por expediente")))).Append("</title>")
         sb.Append("<style>")
         sb.Append("@page{size:letter landscape;margin:12mm}")
         sb.Append("*{box-sizing:border-box}body{margin:0;padding:24px;font:12.5px/1.45 Arial,Helvetica,sans-serif;color:#0E1F3D;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}")
@@ -118,7 +121,7 @@ Public Class wbfCabTechniciens
         sb.Append("<div class=""barre""><button type=""button"" class=""sec"" onclick=""window.close()"">").Append(H(T("Fermer", "Close", "Cerrar"))).Append("</button>")
         sb.Append("<button type=""button"" onclick=""window.print()"">&#128424; ").Append(H(T("Imprimer", "Print", "Imprimir"))).Append("</button></div>")
 
-        sb.Append("<header><div><h1>").Append(H(T("Employés et accès par dossier", "Employees and access per file", "Empleados y acceso por expediente"))).Append("</h1>")
+        sb.Append("<header><div><h1>").Append(H(If(Val(Convert.ToString(Request.QueryString("id"))) > 0, T("Fiche de l'employé et accès par dossier", "Employee record and access per file", "Ficha del empleado y acceso por expediente"), T("Employés et accès par dossier", "Employees and access per file", "Empleados y acceso por expediente")))).Append("</h1>")
         If cabNom <> "" Then sb.Append("<div class=""cab"">").Append(H(cabNom)).Append("</div>")
         sb.Append("</div><div class=""date"">").Append(H(DateTime.Now.ToString("d MMMM yyyy · HH:mm", ci))).Append("<br />")
         sb.Append(H(T("Imprimé par ", "Printed by ", "Impreso por ") & UserEmail)).Append("<br />")
@@ -939,6 +942,7 @@ Public Class wbfCabTechniciens
         Return New With {
             .titre = T("Employés", "Employees", "Empleados"),
             .imprimer = T("Imprimer", "Print", "Imprimir"),
+            .imprimerUn = T("Imprimer la fiche de cet employé et ses accès par dossier", "Print this employee's record and access per file", "Imprimir la ficha de este empleado y sus accesos por expediente"),
             .imprimerTip = T("Imprimer la liste des employés avec leurs détails et leurs accès par dossier", "Print the list of employees with their details and their access per file", "Imprimir la lista de empleados con sus datos y sus accesos por expediente"),
             .sous = If(PeutGerer,
                        T("Les employés du cabinet. Le rôle de chacun décide des dossiers qu'il voit et de ce qu'il peut faire.",
