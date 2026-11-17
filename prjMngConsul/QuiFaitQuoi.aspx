@@ -24,7 +24,7 @@
 .qfq-bandeau a { color: #1B4F9C; font-weight: 800; }
 .voir-tout { border: 0; background: none; padding: 0; font: inherit; font-weight: 800; color: #1B4F9C; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 </style>
-    <script src="js/appPopup.js?v=2026111603"></script>
+    <script src="js/appPopup.js?v=2026111701"></script>
 </head>
 <body>
 

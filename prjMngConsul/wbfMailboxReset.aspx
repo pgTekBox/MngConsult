@@ -29,7 +29,7 @@
         .msg.ok  { background:rgba(16,185,129,.12); color:#059669; border:1px solid rgba(16,185,129,.3); }
         .hint { font-size:12px; color:var(--muted); margin-top:8px; }
     </style>
-    <script src="js/appPopup.js?v=2026111603"></script>
+    <script src="js/appPopup.js?v=2026111701"></script>
 </head>
 <body>
     <form id="form1" runat="server">

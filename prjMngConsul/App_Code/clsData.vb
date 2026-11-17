@@ -371,6 +371,7 @@ Public Class clsData
     End Function
 
     Public Sub ExecuteSQL(ByVal SQLStatement As String)
+        GarderLectureSeule(SQLStatement, True)    ' T395
         Dim oCom As New SqlClient.SqlCommand
         oCom.CommandText = SQLStatement
         oCom.Connection = New SqlClient.SqlConnection(ConnectionString)
@@ -380,6 +381,7 @@ Public Class clsData
         oCom.Connection.Close()
     End Sub
     Public Sub ExecuteSQL(ByVal SQLStatement As String, AllParameters As Collection)
+        GarderLectureSeule(SQLStatement, True)    ' T395 : accès restreint = lecture seule
         Dim DRconn As SqlClient.SqlConnection
         DRconn = New SqlClient.SqlConnection(ConnectionString)
 
@@ -472,6 +474,7 @@ Public Class clsData
     End Sub
 
     Public Function ExecuteSQLds(ByVal SQLStatement As String) As DataSet
+        GarderLectureSeule(SQLStatement, False)   ' T395
         Dim oDa As New SqlClient.SqlDataAdapter(SQLStatement, ConnectionString)
         Dim oDs As New DataSet
         oDa.Fill(oDs)
@@ -479,6 +482,7 @@ Public Class clsData
     End Function
 
     Public Function ExecuteSQLds(ByVal SQLStatement As String, AllParameters As Collection) As DataSet
+        GarderLectureSeule(SQLStatement, False)   ' T395 : accès restreint = lecture seule
         Dim DRconn As SqlClient.SqlConnection
         DRconn = New SqlClient.SqlConnection(ConnectionString)
         Dim MyDA As New SqlClient.SqlDataAdapter
@@ -1075,6 +1079,118 @@ Public Class clsData
         End Try
 
         MyBase.OnLoad(e)
+    End Sub
+
+
+    ' ══════════════════════════════════════════════════════════════════════
+    '  Accès restreint = lecture seule (T395)
+    '  Dans une zone dont le niveau est « restreint » pour l'employé du
+    '  cabinet, la page se consulte mais aucune écriture n'atteint la base :
+    '  ExecuteSQL (écritures) et ExecuteSQLds sur une procédure qui écrit
+    '  lèvent LectureSeuleException ; OnError la transforme en message.
+    ' ══════════════════════════════════════════════════════════════════════
+    Private _lectureSeule As Boolean? = Nothing
+
+    ''' <summary>Vrai si la page courante est en lecture seule pour l'utilisateur (niveau « restreint »).</summary>
+    Public ReadOnly Property LectureSeule As Boolean
+        Get
+            If _lectureSeule.HasValue Then Return _lectureSeule.Value
+            ' Garde anti-récursion : lire le courriel ou la compagnie peut interroger la
+            ' base (ExecuteSQLds → GarderLectureSeule → LectureSeule) pendant le calcul.
+            _lectureSeule = False
+            Dim r As Boolean = False
+            Try
+                If Session IsNot Nothing AndAlso Session("UserId") IsNot Nothing AndAlso IsAccountant AndAlso Company <> Guid.Empty Then
+                    Dim action As String = clsActionsDossier.ActionDePage(Me.AppRelativeVirtualPath)
+                    If action <> "" Then r = (clsActionsDossier.NiveauDe(UserEmail, Company, action) = "restreint")
+                End If
+            Catch
+                r = False
+            End Try
+            _lectureSeule = r
+            Return r
+        End Get
+    End Property
+
+    ' Procédures qui ne font que lire, même appelées par ExecuteSQL
+    Private Shared ReadOnly VerbesLecture As String() = {"Get", "List", "Count", "Valid", "Check", "Find", "Search", "Read", "Lire", "Is", "Exists", "Load"}
+    ' Verbes d'écriture (ExecuteSQLds sert surtout à lire, sauf ces procédures)
+    Private Shared ReadOnly VerbesEcriture As String() = {"Insert", "Update", "Delete", "Save", "Set", "Create", "Assign", "Add", "Remove",
+        "Annuler", "Lier", "Delier", "Comptabiliser", "Marquer", "Regler", "Generer", "Supprimer", "Creer", "Enregistrer", "Import",
+        "Push", "Apply", "Applique", "Approve", "Reject", "Cancel", "Close", "Cloturer", "Rouvrir", "Inscrire", "Ignorer", "Simuler", "Reset", "Restore", "Accept"}
+
+    ''' <summary>Le nom de la procédure sans le préfixe « sNNNN » / « sp_ » / « dbo. ».</summary>
+    Private Shared Function VerbeDe(proc As String) As String
+        Dim n As String = If(proc, "").Trim()
+        If n.StartsWith("dbo.", StringComparison.OrdinalIgnoreCase) Then n = n.Substring(4)
+        If n.StartsWith("sp_", StringComparison.OrdinalIgnoreCase) Then Return n.Substring(3)
+        If n.Length > 5 AndAlso (n(0) = "s"c OrElse n(0) = "S"c) AndAlso Char.IsDigit(n(1)) Then
+            Dim i As Integer = 1
+            While i < n.Length AndAlso Char.IsDigit(n(i)) : i += 1 : End While
+            Return n.Substring(i)
+        End If
+        Return n
+    End Function
+
+    Private Shared Function CommencePar(nom As String, verbes As String()) As Boolean
+        For Each v As String In verbes
+            If nom.StartsWith(v, StringComparison.OrdinalIgnoreCase) Then Return True
+        Next
+        Return False
+    End Function
+
+    ''' <summary>Refuse une écriture en lecture seule. nonQuery = appel par ExecuteSQL (écriture sauf verbe de lecture).</summary>
+    Private Sub GarderLectureSeule(proc As String, nonQuery As Boolean)
+        If Not LectureSeule Then Return
+        Dim nom As String = VerbeDe(proc)
+        Dim ecrit As Boolean = If(nonQuery, Not CommencePar(nom, VerbesLecture), CommencePar(nom, VerbesEcriture))
+        If ecrit Then Throw New LectureSeuleException(MessageLectureSeule())
+    End Sub
+
+    Private Function MessageLectureSeule() As String
+        Select Case CurrentLang
+            Case "en" : Return "Read-only access: your firm lets you view this area of the file, but not change it. Nothing was saved."
+            Case "es" : Return "Acceso de solo lectura: su despacho le permite consultar esta zona del expediente, pero no modificarla. No se guardó nada."
+            Case Else : Return "Accès en lecture seule : votre cabinet vous permet de consulter cette zone du dossier, mais pas de la modifier. Rien n'a été enregistré."
+        End Select
+    End Function
+
+    ''' <summary>Une écriture refusée et non interceptée par la page : message, puis retour à la même page.</summary>
+    Protected Overrides Sub OnError(e As EventArgs)
+        Dim ex As Exception = Server.GetLastError()
+        While ex IsNot Nothing AndAlso Not TypeOf ex Is LectureSeuleException
+            ex = ex.InnerException
+        End While
+        If ex IsNot Nothing Then
+            Server.ClearError()
+            Session("LectureSeuleMsg") = ex.Message
+            ' Fin nette de la requête : la page interrompue ne doit pas se rendre
+            Response.Clear()
+            Response.Redirect(Request.RawUrl, True)
+            Return
+        End If
+        MyBase.OnError(e)
+    End Sub
+
+    ''' <summary>Bandeau « Lecture seule » et boutons de modification grisés (js/appPopup.js : appLectureSeule).</summary>
+    Protected Overrides Sub OnPreRender(e As EventArgs)
+        MyBase.OnPreRender(e)
+        Try
+            If LectureSeule Then
+                Dim l As String = CurrentLang
+                Dim txt As String = If(l = "en", "Read-only — your firm gives you restricted access to this area of the file: you can view it but not change it.",
+                                    If(l = "es", "Solo lectura — su despacho le da un acceso restringido a esta zona del expediente: puede consultarla pero no modificarla.",
+                                       "Lecture seule — votre cabinet vous donne un accès restreint à cette zone du dossier : vous pouvez la consulter, mais pas la modifier."))
+                ScriptManager.RegisterStartupScript(Me, Me.GetType(), "lectureSeule",
+                    "if (window.appLectureSeule) appLectureSeule('" & HttpUtility.JavaScriptStringEncode(txt) & "');", True)
+            End If
+            If Session IsNot Nothing AndAlso Session("LectureSeuleMsg") IsNot Nothing Then
+                Dim m As String = Convert.ToString(Session("LectureSeuleMsg"))
+                Session.Remove("LectureSeuleMsg")
+                ShowMessageBox(m, If(CurrentLang = "en", "Read-only", If(CurrentLang = "es", "Solo lectura", "Lecture seule")))
+            End If
+        Catch
+        End Try
     End Sub
 
 End Class

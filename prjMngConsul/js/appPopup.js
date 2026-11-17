@@ -161,4 +161,56 @@
             if (ok && sender) { sender.__appConfOk = true; sender.click(); }
         });
     };
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Lecture seule (T395) : zone d'un dossier en « Accès restreint ».
+    // appLectureSeule(texte) pose un bandeau en haut de la page et grise les
+    // boutons de modification (repérés par leur libellé / titre), y compris
+    // après les mises à jour Ajax. Le vrai verrou est côté serveur (clsData).
+    // ─────────────────────────────────────────────────────────────────────
+    var MOTS_MODIF = /(enregistr|sauvegard|supprim|retirer|nouveau|nouvelle|ajout|cr[ée]er|comptabilis|payer|r[ée]gler|import|envoyer|factur|approuv|refuser|valider|modifier|^lier|d[ée]lier|cl[ôo]tur|rouvrir|inscrire|associer|save|delete|remove|\bnew\b|\badd\b|create|post\b|\bpay\b|send|invoice|approve|reject|\bedit\b|guardar|eliminar|nuev|agregar|crear|pagar|importar|enviar|facturar|aprobar|modificar|^\+)/i;
+    var lsTexte = null;
+
+    function libelleDe(el) {
+        return ((el.value || '') + ' ' + (el.textContent || '') + ' ' + (el.getAttribute('title') || '') + ' ' + (el.getAttribute('aria-label') || '')).trim();
+    }
+    function griser() {
+        var sel = 'button, input[type=submit], input[type=button], input[type=image], a[href^="javascript:__doPostBack"], a[onclick], .rbButton, .RadButton';
+        Array.prototype.forEach.call(document.querySelectorAll(sel), function (el) {
+            if (el.closest('#mcMsgOverlay, #mcConfOverlay, #appLectureSeule, nav, .nav-group, header, #iaPanneau')) return;
+            if (el.__lsVu) return;
+            el.__lsVu = true;
+            var lib = libelleDe(el);
+            if (!lib || !MOTS_MODIF.test(lib)) return;
+            el.setAttribute('disabled', 'disabled');
+            el.setAttribute('aria-disabled', 'true');
+            el.setAttribute('title', lsTexte);
+            el.style.opacity = '.45';
+            el.style.pointerEvents = 'none';
+            el.style.cursor = 'not-allowed';
+        });
+    }
+    window.appLectureSeule = function (texte) {
+        lsTexte = texte || 'Lecture seule';
+        var go = function () {
+            if (!document.getElementById('appLectureSeule')) {
+                var b = document.createElement('div');
+                b.id = 'appLectureSeule';
+                b.setAttribute('role', 'status');
+                b.style.cssText = 'position:sticky;top:0;z-index:9000;margin:0 0 12px;padding:10px 16px;border-radius:12px;' +
+                                  'background:#FBF1DC;color:#7A5200;font-weight:700;font-size:13.5px;display:flex;gap:10px;align-items:center';
+                b.innerHTML = '<span aria-hidden="true">🔒</span><span></span>';
+                b.lastChild.textContent = lsTexte;
+                var cible = document.querySelector('main, .main-content, #MainContent, form') || document.body;
+                cible.insertBefore(b, cible.firstChild);
+            }
+            griser();
+            // Après chaque mise à jour Ajax (RadAjax / UpdatePanel) : regriser
+            try { if (window.Sys && Sys.WebForms && Sys.WebForms.PageRequestManager) Sys.WebForms.PageRequestManager.getInstance().add_endRequest(griser); } catch (e) { }
+            var t = null;
+            new MutationObserver(function () { clearTimeout(t); t = setTimeout(griser, 150); })
+                .observe(document.body, { childList: true, subtree: true });
+        };
+        if (document.body) go(); else document.addEventListener('DOMContentLoaded', go);
+    };
 })();

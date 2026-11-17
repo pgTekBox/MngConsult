@@ -144,3 +144,11 @@ Public NotInheritable Class clsActionsDossier
         Return "aucun"
     End Function
 End Class
+
+''' <summary>Écriture refusée : la zone du dossier est en accès restreint (lecture seule, T395).</summary>
+Public Class LectureSeuleException
+    Inherits ApplicationException
+    Public Sub New(message As String)
+        MyBase.New(message)
+    End Sub
+End Class
