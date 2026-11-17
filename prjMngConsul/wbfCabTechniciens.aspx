@@ -97,7 +97,7 @@
         <div class="tete">
             <div class="ico"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M17 11l1.5 1.5L22 9"/></svg></div>
             <div><h1 id="tecTitre"></h1><div class="sous" id="tecSous"></div></div>
-            <button type="button" class="btn sec imprimer" id="tecImprimer" onclick="tecImprimer(0)" data-lecture="1"></button>
+            <button type="button" class="btn sec imprimer" id="tecImprimer" onclick="tecLancerImpression(0)" data-lecture="1"></button>
         </div>
     </section>
     <div class="kpis" id="tecKpis"></div>
@@ -189,7 +189,7 @@
              '<div><div class="lab2">' + tEsc(TL.dossiers) + ' (' + x.nbDossiers + ')</div>' +
              '<div class="doss" title="' + tEsc(x.dossiers) + '">' + tEsc(x.dossiers || TL.aucunDossier) + '</div>' +
              '<div class="charge">' + x.taches + ' ' + tEsc(TL.taches) + (x.retard ? ' · <b class="r">' + x.retard + ' ' + tEsc(TL.retard) + '</b>' : '') + '</div></div>' +
-             '<div class="acts">' + '<button type="button" class="crayon" data-lecture="1" title="' + tEsc(TL.imprimerUn) + '" aria-label="' + tEsc(TL.imprimerUn) + '" onclick="tecImprimer(' + x.id + ')">' +
+             '<div class="acts">' + '<button type="button" class="crayon" data-lecture="1" title="' + tEsc(TL.imprimerUn) + '" aria-label="' + tEsc(TL.imprimerUn) + '" onclick="tecLancerImpression(' + x.id + ')">' +
                 '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg></button>' + (TEC.gerer
                 ? '<button type="button" class="btn sec" onclick="tecDossiers(' + x.id + ')">' + tEsc(TL.gererDossiers) + '</button>' +
                   '<button type="button" class="crayon" title="' + tEsc(TL.modifier) + '" aria-label="' + tEsc(TL.modifier) + '" onclick="tecModifier(' + x.id + ')">' +
@@ -200,7 +200,7 @@
     // Impression directe : le rapport est chargé dans un cadre caché de la page,
     // puis le dialogue d'impression du navigateur s'ouvre (pas de nouvel onglet).
     var tecImpEnCours = false;
-    function tecImprimer(id) {
+    function tecLancerImpression(id) {   // pas « tecImprimer » : c'est l'id du bouton (le <form> le masquerait dans onclick)
         if (tecImpEnCours) return;
         tecImpEnCours = true;
         var ancien = document.getElementById('tecCadreImp');
