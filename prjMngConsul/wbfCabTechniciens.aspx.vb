@@ -292,7 +292,8 @@ Public Class wbfCabTechniciens
         End If
 
         If rows.Count = 0 Then sb.Append("<div class=""note"">").Append(H(T("Aucun employé.", "No employees.", "Ningún empleado."))).Append("</div>")
-        sb.Append("<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},300);});</script>")
+        ' Ouvert seul (onglet) : impression automatique ; dans le cadre caché de la page Employés (cadre=1), c'est la page qui lance l'impression
+        If Request.QueryString("cadre") <> "1" Then sb.Append("<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},300);});</script>")
         sb.Append("</body></html>")
 
         Response.Clear()
