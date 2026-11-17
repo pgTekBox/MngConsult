@@ -161,6 +161,23 @@ Public NotInheritable Class clsActionsDossier
         End Try
     End Function
 
+    ''' <summary>
+    ''' Pour un handler .ashx qui écrit dans une zone : "" si l'utilisateur de la
+    ''' session a l'accès complet à cette action dans le dossier courant, sinon le
+    ''' message du refus (lecture seule ou aucun accès), dans la langue de la session.
+    ''' </summary>
+    Public Shared Function RefusHandler(ctx As HttpContext, action As String) As String
+        Dim niveau As String = NiveauSession(ctx, action)
+        If niveau = "complet" Then Return ""
+        Dim lang As String = "fr"
+        Try
+            If ctx.Session("Lang") IsNot Nothing Then lang = Convert.ToString(ctx.Session("Lang"))
+        Catch
+        End Try
+        Return MessageRefus(niveau, action, lang) &
+               If(lang = "en", " Nothing was saved.", If(lang = "es", " No se guardó nada.", " Rien n'a été enregistré."))
+    End Function
+
     ''' <summary>Message du refus d'une écriture selon le niveau (« aucun » ou lecture seule), dans la langue.</summary>
     Public Shared Function MessageRefus(niveau As String, action As String, lang As String) As String
         Dim zone As String = Libelle(action, lang)

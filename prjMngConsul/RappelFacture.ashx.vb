@@ -111,6 +111,11 @@ Public Class RappelFactureHandler
         Catch
         End Try
 
+        ' Actions permises dans le dossier (T393-T395) : un rappel écrit dans Revenus (« sync » ne fait que recalculer)
+        If canal <> "sync" Then
+            Dim refus As String = clsActionsDossier.RefusHandler(context, "revenus")
+            If refus <> "" Then Repondre(context, js, 403, New With {.ok = False, .lectureSeule = True, .erreur = refus}) : Return
+        End If
         Try
             Select Case canal
                 Case "sync"

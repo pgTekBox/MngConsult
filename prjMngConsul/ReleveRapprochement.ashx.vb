@@ -103,6 +103,11 @@ Public Class ReleveRapprochementHandler
             Return
         End If
 
+        ' Actions permises dans le dossier (T393-T395) : en lecture seule ou sans accès à Comptabilité, rien ne s'écrit
+        If action <> "candidats" Then
+            Dim refus As String = clsActionsDossier.RefusHandler(context, "comptabilite")
+            If refus <> "" Then Repondre(context, js, 403, New With {.ok = False, .lectureSeule = True, .erreur = refus}) : Return
+        End If
         Try
             Select Case action
                 Case "candidats"

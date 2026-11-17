@@ -43,6 +43,9 @@ Public Class RemiseDASHandler
             Repondre(context, js, 400, New With {.ok = False, .erreur = "400"})
             Return
         End If
+        ' Actions permises dans le dossier (T393-T395) : la remise des DAS relève de la paie (Employés)
+        Dim refus As String = clsActionsDossier.RefusHandler(context, "employes")
+        If refus <> "" Then Repondre(context, js, 403, New With {.ok = False, .lectureSeule = True, .erreur = refus}) : Return
 
         Dim debut As Date, montant As Decimal = 0D, reference As String = ""
         Try
