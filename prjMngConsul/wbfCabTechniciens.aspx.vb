@@ -620,9 +620,17 @@ Public Class wbfCabTechniciens
         Dim m As DataRow = LireMembre(membreId)
         If m Is Nothing Then Return New With {.ok = False, .erreur = MessageErreur(5)}
         Dim email As String = Txt(m("Email"))
-        ' T389 : les liens partent au courriel de récupération (la boîte @60sec.ca partage le mot de passe)
-        Dim dest As String = Txt(m("RecoveryEmail"))
-        If dest = "" Then dest = email
+        ' Le lien part TOUJOURS au courriel de récupération (jamais au courriel de
+        ' connexion : la boîte @60sec.ca partage le mot de passe qu'on veut changer).
+        ' On prend celui de la fenêtre (même pas encore enregistré), sinon celui du membre.
+        Dim enregistre As String = Txt(m("RecoveryEmail")).ToLowerInvariant()
+        Dim dest As String = Txt(Request.Form("recup")).ToLowerInvariant()
+        If dest = "" Then dest = enregistre
+        Dim errRecup As String = ValiderRecuperation(dest, email)
+        If errRecup <> "" Then Return New With {.ok = False, .erreur = errRecup}
+        If dest <> enregistre AndAlso PoserRecuperation(membreId, dest) <> 0 Then
+            Return New With {.ok = False, .erreur = T("Le courriel de récupération n'a pas pu être enregistré.", "The recovery email could not be saved.", "No se pudo guardar el correo de recuperación.")}
+        End If
 
         If CBool(m("Inactif")) Then
             Return New With {.ok = False, .erreur = T("Ce compte est inactif : cochez « Compte actif » et enregistrez avant d'envoyer le courriel.",
@@ -814,9 +822,10 @@ Public Class wbfCabTechniciens
                               "Único administrador activo del despacho: conserva un rol de nivel Administrador y sigue activo. Nombre primero a otro administrador."),
             .mdp = T("Mot de passe", "Password", "Contraseña"),
             .mdpEnvoyer = T("Envoyer un courriel de changement de mot de passe", "Send a password change email", "Enviar un correo de cambio de contraseña"),
-            .mdpAide = T("Le membre reçoit un lien valide 24 heures pour choisir un nouveau mot de passe ; l'actuel reste valable d'ici là.", "The member receives a link valid for 24 hours to choose a new password; the current one keeps working until then.", "El miembro recibe un enlace válido 24 horas para elegir una nueva contraseña; la actual sigue siendo válida hasta entonces."),
+            .mdpAide = T("Le lien est envoyé au courriel de récupération (jamais à l'adresse @60sec.ca) ; il est valide 24 heures, et le mot de passe actuel reste valable d'ici là.", "The link is sent to the recovery email (never to the @60sec.ca address); it is valid for 24 hours, and the current password still works until then.", "El enlace se envía al correo de recuperación (nunca a la dirección @60sec.ca); es válido 24 horas y la contraseña actual sigue siendo válida hasta entonces."),
             .mdpAideAttente = T("Compte en attente d'activation : une nouvelle invitation sera envoyée pour choisir son mot de passe.", "Account awaiting activation: a new invitation will be sent to choose a password.", "Cuenta pendiente de activación: se enviará una nueva invitación para elegir su contraseña."),
-            .mdpConf = T("Envoyer à {0} un courriel pour changer son mot de passe ?", "Send {0} an email to change their password?", "¿Enviar a {0} un correo para cambiar su contraseña?"),
+            .mdpConf = T("Envoyer le lien de changement de mot de passe au courriel de récupération {0} ?", "Send the password change link to the recovery email {0}?", "¿Enviar el enlace de cambio de contraseña al correo de recuperación {0}?"),
+            .mdpSansRecup = T("Saisissez d'abord le courriel de récupération : le lien y est envoyé.", "First enter the recovery email: the link is sent there.", "Introduzca primero el correo de recuperación: el enlace se envía allí."),
             .actifAttente = T("En attente d'activation : le compte s'active quand le membre ouvre son lien d'invitation.",
                               "Awaiting activation: the account becomes active when the member opens their invitation link.",
                               "Pendiente de activación: la cuenta se activa cuando el miembro abre su enlace de invitación."),

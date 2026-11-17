@@ -249,10 +249,15 @@
     function tecEdFermer() { document.getElementById('tecEdit').classList.remove('ouvert'); }
     async function tecEdMotDePasse() {
         var x = tMembre(tecEditId); if (!x) return;
-        if (!(await appConfirm(tFmt(TL.mdpConf, x.email)))) return;
-        var b = document.getElementById('tecEdMdp'), m = document.getElementById('tecEdMdpMsg');
-        b.disabled = true; m.innerHTML = '';
-        var d = await tPost({ op: 'motdepasse', id: tecEditId });
+        var m = document.getElementById('tecEdMdpMsg'); m.innerHTML = '';
+        // Le lien part au courriel de récupération : celui de la fenêtre (même pas encore enregistré)
+        var champ = document.getElementById('tecEdRecup');
+        var recup = (champ && champ.value.trim()) || x.recup || '';
+        if (!recup) { m.innerHTML = '<div class="msg err">' + tEsc(TL.mdpSansRecup) + '</div>'; if (champ) champ.focus(); return; }
+        if (!(await appConfirm(tFmt(TL.mdpConf, recup)))) return;
+        var b = document.getElementById('tecEdMdp');
+        b.disabled = true;
+        var d = await tPost({ op: 'motdepasse', id: tecEditId, recup: recup });
         b.disabled = false;
         if (!d.ok) { m.innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
         m.innerHTML = '<div class="msg ok">' + tEsc(d.message) + '<div class="lien"><input type="text" readonly value="' + tEsc(d.lien) + '" onclick="this.select()" />' +
