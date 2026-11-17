@@ -85,6 +85,9 @@ Public Class wbfCabTechniciens
         Catch
         End Try
 
+        Dim rapportComplet As Boolean = Val(Convert.ToString(Request.QueryString("id"))) = 0
+        Dim accesParDossier As New Dictionary(Of String, List(Of String))(StringComparer.OrdinalIgnoreCase)
+        Dim admins As New List(Of String)
         Dim rows As New List(Of DataRow)
         Try
             Dim ds As DataSet = LireEquipe()
@@ -115,6 +118,7 @@ Public Class wbfCabTechniciens
         sb.Append(".det{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 18px;margin-bottom:10px}.det span{display:block;font-size:10px;color:#6B7A90;text-transform:uppercase;letter-spacing:.03em}")
         sb.Append("table{width:100%;border-collapse:collapse;font-size:11.5px}th,td{border:1px solid #E1E7F0;padding:4px 6px;text-align:center}th{background:#F2F5FB;font-size:10.5px}td.dos,th.dos{text-align:left;font-weight:700}")
         sb.Append(".note{font-size:12px;color:#44536E;background:#F2F5FB;border-radius:8px;padding:8px 10px}")
+        sb.Append(".dossiers{margin:0 0 16px;page-break-after:always;break-after:page}h2.sec{font-size:16px;margin:0 0 8px}h2.sec .nb{color:#6B7A90;font-weight:400}table.liste td.txt{text-align:left}")
         sb.Append("@media print{body{padding:0}.barre{display:none}}")
         sb.Append("</style></head><body>")
 
@@ -127,6 +131,7 @@ Public Class wbfCabTechniciens
         sb.Append(H(T("Imprimé par ", "Printed by ", "Impreso por ") & UserEmail)).Append("<br />")
         sb.Append(rows.Count).Append(" ").Append(H(T("employé(s)", "employee(s)", "empleado(s)"))).Append("</div></header>")
 
+        Dim posDossiers As Integer = sb.Length   ' la liste des dossiers (rapport complet) est insérée ici à la fin
         sb.Append("<div class=""legende"">")
         For Each k As String In {"complet", "restreint", "aucun"}
             sb.Append("<span><span class=""n ").Append(k).Append(""">").Append(Symbole(k)).Append("</span> ").Append(H(nomsNiveaux(k))).Append("</span>")
@@ -156,6 +161,7 @@ Public Class wbfCabTechniciens
             sb.Append("</div>")
 
             If role = "admin" OrElse role = "solo" Then
+                admins.Add(nom)
                 sb.Append("<div class=""note"">").Append(H(T("Administrateur du cabinet : accès complet à toutes les actions, dans tous les dossiers (jamais restreint).",
                                                              "Firm administrator: full access to every action, in every file (never restricted).",
                                                              "Administrador del despacho: acceso completo a todas las acciones, en todos los expedientes (nunca restringido).")))
@@ -203,6 +209,20 @@ Public Class wbfCabTechniciens
             For Each d As DossierMembre In dossiers
                 Dim acts As Dictionary(Of String, String) = Nothing
                 parDossier.TryGetValue(d.id, acts)
+                Dim nbL As Integer = 0, nbA As Integer = 0
+                If acts IsNot Nothing Then
+                    For Each a As String In actions
+                        If Not acts.ContainsKey(a) OrElse acts(a) = "aucun" Then
+                            nbA += 1
+                        ElseIf acts(a) <> "complet" Then
+                            nbL += 1
+                        End If
+                    Next
+                End If
+                Dim etiq As String = nom
+                If nbL + nbA > 0 Then etiq &= " (" & If(nbL > 0, nbL & " " & T("lecture seule", "read-only", "solo lectura"), "") & If(nbL > 0 AndAlso nbA > 0, " · ", "") & If(nbA > 0, nbA & " " & T("aucun accès", "no access", "sin acceso"), "") & ")"
+                If Not accesParDossier.ContainsKey(d.id) Then accesParDossier(d.id) = New List(Of String)
+                accesParDossier(d.id).Add(etiq)
                 sb.Append("<tr><td class=""dos"">").Append(H(d.nom)).Append("</td>")
                 For Each a As String In actions
                     Dim n As String = "complet"
@@ -215,6 +235,53 @@ Public Class wbfCabTechniciens
             Next
             sb.Append("</tbody></table></section>")
         Next
+
+        ' Rapport complet : la liste des dossiers (clients) du cabinet, en tête
+        If rapportComplet Then
+            Dim sd As New StringBuilder()
+            Dim lst As New List(Of DataRow)
+            Try
+                Dim pd As New Collection
+                pd.Add(New SqlParameter("@UserId", UserEmail))
+                Dim dsd As DataSet = ExecuteSQLds("s0957GetJourneeClients", pd)
+                If dsd IsNot Nothing AndAlso dsd.Tables.Count > 0 Then
+                    For Each rd As DataRow In dsd.Tables(0).Rows : lst.Add(rd) : Next
+                End If
+            Catch
+            End Try
+            Dim col = Function(rd As DataRow, c As String) If(rd.Table.Columns.Contains(c), Txt(rd(c)), "")
+            sd.Append("<section class=""dossiers""><h2 class=""sec"">").Append(H(T("Dossiers (clients)", "Files (clients)", "Expedientes (clientes)")))
+            sd.Append(" <span class=""nb"">(").Append(lst.Count).Append(")</span></h2>")
+            If lst.Count = 0 Then
+                sd.Append("<div class=""note"">").Append(H(T("Aucun dossier.", "No files.", "Ningún expediente."))).Append("</div>")
+            Else
+                sd.Append("<table class=""liste""><thead><tr><th>#</th><th class=""dos"">").Append(H(T("Client", "Client", "Cliente"))).Append("</th>")
+                sd.Append("<th class=""dos"">").Append(H(T("Code", "Code", "Código"))).Append("</th>")
+                sd.Append("<th class=""dos"">").Append(H(T("Secteur", "Sector", "Sector"))).Append("</th>")
+                sd.Append("<th class=""dos"">").Append(H(T("Responsable", "Responsible", "Responsable"))).Append("</th>")
+                sd.Append("<th class=""dos"">").Append(H(T("Employés affectés (accès limités)", "Assigned employees (limited access)", "Empleados asignados (accesos limitados)"))).Append("</th></tr></thead><tbody>")
+                Dim i As Integer = 0
+                For Each rd As DataRow In lst
+                    i += 1
+                    Dim g As String = col(rd, "CompanyGUID").ToLowerInvariant()
+                    Dim qui As List(Of String) = Nothing
+                    accesParDossier.TryGetValue(g, qui)
+                    sd.Append("<tr><td>").Append(i).Append("</td><td class=""dos"">").Append(H(col(rd, "Nom"))).Append("</td>")
+                    sd.Append("<td class=""txt"">").Append(If(col(rd, "CompanyCode") = "", "—", H(col(rd, "CompanyCode")))).Append("</td>")
+                    sd.Append("<td class=""txt"">").Append(If(col(rd, "Secteur") = "", "—", H(col(rd, "Secteur")))).Append("</td>")
+                    sd.Append("<td class=""txt"">").Append(If(col(rd, "AssignedNom") = "", "—", H(col(rd, "AssignedNom")))).Append("</td>")
+                    sd.Append("<td class=""txt"">").Append(If(qui Is Nothing OrElse qui.Count = 0, "—", H(String.Join(", ", qui)))).Append("</td></tr>")
+                Next
+                sd.Append("</tbody></table>")
+            End If
+            If admins.Count > 0 Then
+                sd.Append("<div class=""note"" style=""margin-top:8px"">").Append(H(T("Les administrateurs du cabinet ont accès complet à tous les dossiers : ",
+                                                                                         "The firm's administrators have full access to every file: ",
+                                                                                         "Los administradores del despacho tienen acceso completo a todos los expedientes: ") & String.Join(", ", admins) & ".")).Append("</div>")
+            End If
+            sd.Append("</section>")
+            sb.Insert(posDossiers, sd.ToString())
+        End If
 
         If rows.Count = 0 Then sb.Append("<div class=""note"">").Append(H(T("Aucun employé.", "No employees.", "Ningún empleado."))).Append("</div>")
         sb.Append("<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},300);});</script>")
