@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Web
+Imports System.Text.RegularExpressions
 
 ''' <summary>
 ''' Actions permises à un employé du cabinet dans un dossier (T393).
@@ -75,12 +76,37 @@ Public NotInheritable Class clsActionsDossier
     Public Shared Function ActionDePage(url As String) As String
         If String.IsNullOrEmpty(url) Then Return ""
         Dim chemin As String = url
+        Dim requete As String = ""
         Dim q As Integer = chemin.IndexOf("?"c)
-        If q >= 0 Then chemin = chemin.Substring(0, q)
+        If q >= 0 Then requete = chemin.Substring(q) : chemin = chemin.Substring(0, q)
         Dim nom As String = IO.Path.GetFileNameWithoutExtension(chemin)
+        ' La fenêtre de règlement sert aux deux sens : un encaissement relève des Revenus
+        If (nom.Equals("wbfreceipteditpopup", StringComparison.OrdinalIgnoreCase) OrElse nom.Equals("wbfreceiptedit", StringComparison.OrdinalIgnoreCase)) AndAlso
+           Regex.IsMatch(requete, "[?&]sens=\s*encaissement", RegexOptions.IgnoreCase) Then Return "revenus"
         Dim a As String = Nothing
         If PageAction.TryGetValue(nom, a) Then Return a
         Return ""
+    End Function
+
+    ''' <summary>
+    ''' Pages qui demandent l'accès complet à leur zone : les encaissements et
+    ''' décaissements (règlements, liens et paiements fournisseurs) et les
+    ''' synchronisations. En accès restreint (lecture seule), elles sont fermées :
+    ''' absentes du menu et refusées à l'ouverture.
+    ''' </summary>
+    Private Shared ReadOnly PagesAccesComplet As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {
+        "wbfencaissements", "wbfreceiptedit", "wbfreceipteditpopup", "wbfcustomerpaymentlink",
+        "wbfsupplierpaymentchoice", "wbfsupplierpaymentdream", "wbfsupplierpaymentinterac",
+        "wbfsupplierpaymentsync", "wbfscheduleautopay", "plaidaccounts"
+    }
+
+    ''' <summary>Vrai si la page n'existe qu'en accès complet (règlements, synchronisations).</summary>
+    Public Shared Function PageAccesComplet(url As String) As Boolean
+        If String.IsNullOrEmpty(url) Then Return False
+        Dim chemin As String = url
+        Dim q As Integer = chemin.IndexOf("?"c)
+        If q >= 0 Then chemin = chemin.Substring(0, q)
+        Return PagesAccesComplet.Contains(IO.Path.GetFileNameWithoutExtension(chemin))
     End Function
 
     ''' <summary>
@@ -127,7 +153,40 @@ Public NotInheritable Class clsActionsDossier
         Dim a As String = ActionDePage(url)
         If a = "" Then Return True
         Dim p As Dictionary(Of String, String) = Permises(email, company)
-        Return p Is Nothing OrElse p.ContainsKey(a)
+        If p Is Nothing Then Return True
+        Dim n As String = Nothing
+        If Not p.TryGetValue(a, n) Then Return False
+        ' Règlements et synchronisations : accès complet seulement
+        If PageAccesComplet(url) AndAlso n <> "complet" Then Return False
+        Return True
+    End Function
+
+    ''' <summary>
+    ''' Message du refus d'ouverture d'une page (zone fermée, ou page de règlement /
+    ''' de synchronisation en accès restreint), dans la langue.
+    ''' </summary>
+    Public Shared Function MessageRefusPage(email As String, company As Guid, url As String, lang As String) As String
+        Dim a As String = ActionDePage(url)
+        Dim niveau As String = NiveauDe(email, company, a)
+        Dim l As String = If(lang, "fr").ToLowerInvariant()
+        If niveau <> "aucun" AndAlso PageAccesComplet(url) Then
+            Dim zone As String = Libelle(a, l)
+            If l = "en" Then Return "Your access to """ & zone & """ in this file is restricted (read-only): cash receipts, payments and synchronizations require full access."
+            If l = "es" Then Return "Su acceso a «" & zone & "» en este expediente es restringido (solo lectura): los cobros, los pagos y las sincronizaciones requieren el acceso completo."
+            Return "Votre accès à « " & zone & " » dans ce dossier est restreint (lecture seule) : les encaissements, les décaissements et les synchronisations demandent l'accès complet."
+        End If
+        Return MessageRefus("aucun", a, l)
+    End Function
+
+    ''' <summary>
+    ''' Pour le tableau de bord et les grilles : "" si l'utilisateur peut encaisser
+    ''' (sens ENCAISSEMENT, zone Revenus) ou décaisser (DECAISSEMENT, zone Paiements)
+    ''' dans le dossier, sinon le message du refus.
+    ''' </summary>
+    Public Shared Function MessageReglementBloque(email As String, company As Guid, sens As String, lang As String) As String
+        Dim url As String = "~/wbfReceiptEditPopup.aspx?sens=" & If(sens, "ENCAISSEMENT")
+        If PagePermise(email, company, url) Then Return ""
+        Return MessageRefusPage(email, company, url, lang)
     End Function
 
     ''' <summary>

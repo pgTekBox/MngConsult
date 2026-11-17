@@ -174,12 +174,21 @@
     function libelleDe(el) {
         return ((el.value || '') + ' ' + (el.textContent || '') + ' ' + (el.getAttribute('title') || '') + ' ' + (el.getAttribute('aria-label') || '')).trim();
     }
+    // Masqués (pas seulement grisés) en accès restreint : les encaissements /
+    // décaissements et les synchronisations demandent l'accès complet.
+    var MOTS_CACHER = /(square|synchro|\bsync|plaid|quickbooks|apideck|encaiss|d[ée]caiss|cash.?in|cobro|rwEncaissement|ReceiptEditPopup|PaymentLink|lien de paiement|payment link|enlace de pago|paiement d[ée]j[àa] re[çc]u|payment received|pago recibido)/i;
+    function signatureDe(el) {
+        return libelleDe(el) + ' ' + (el.id || '') + ' ' + (el.className && el.className.baseVal === undefined ? el.className : '') + ' ' +
+               (el.getAttribute('onclick') || '') + ' ' + (el.getAttribute('href') || '');
+    }
     function griser() {
         var sel = 'button, input[type=submit], input[type=button], input[type=image], a[href^="javascript:__doPostBack"], a[onclick], .rbButton, .RadButton';
         Array.prototype.forEach.call(document.querySelectorAll(sel), function (el) {
             if (el.closest('#mcMsgOverlay, #mcConfOverlay, #appLectureSeule, nav, .nav-group, header, #iaPanneau')) return;
             if (el.__lsVu) return;
             el.__lsVu = true;
+            if (el.hasAttribute('data-lecture')) return;   // consultation : toujours permise
+            if (MOTS_CACHER.test(signatureDe(el))) { el.style.display = 'none'; el.setAttribute('aria-hidden', 'true'); return; }
             var lib = libelleDe(el);
             if (!lib || !MOTS_MODIF.test(lib)) return;
             el.setAttribute('disabled', 'disabled');
@@ -187,6 +196,12 @@
             el.style.opacity = '.45';
             el.style.pointerEvents = 'none';
             el.style.cursor = 'not-allowed';
+        });
+        // Liens vers les pages réservées à l'accès complet : masqués aussi
+        Array.prototype.forEach.call(document.querySelectorAll('a[href]'), function (a) {
+            if (a.__lsLien || a.closest('nav, .nav-group, header')) return;
+            a.__lsLien = true;
+            if (/(PlaidAccounts|wbfEncaissements|wbfSupplierPayment|wbfCustomerPaymentLink|wbfScheduleAutoPay|wbfReceiptEdit)/i.test(a.getAttribute('href') || '')) a.style.display = 'none';
         });
     }
     window.appLectureSeule = function (texte) {

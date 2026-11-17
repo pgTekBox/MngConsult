@@ -72,6 +72,10 @@
     .fc-liste .sort-link:hover { text-decoration: underline }
     .fc-liste .adroite { text-align: right }
     .fc-liste .c-num { white-space: nowrap }
+    .fc-liste .c-num .num-lien { color: #1B4F9C; font-weight: 700; text-decoration: none; border-bottom: 1px dashed rgba(27,79,156,.45) }
+    .fc-liste .c-num .num-lien:hover { border-bottom-style: solid }
+    .fc-liste .c-num .num-pdf { margin-left: 8px; padding: 1px 7px; border: 1px solid #D6DEEA; border-radius: 6px; background: #fff; color: #6B7A90; font: 700 10.5px Arial, sans-serif; cursor: pointer; vertical-align: 1px }
+    .fc-liste .c-num .num-pdf:hover { color: #1B4F9C; border-color: #1B4F9C }
     .fc-liste .lien { font-weight: 800 }
     .fc-liste .c-ech { display: flex; flex-direction: column; line-height: 1.3 }
     .fc-liste .c-ech b { font-weight: 700 }
@@ -232,7 +236,7 @@
                             <%-- Numéro (lien vers le reçu s'il y en a un), échéance avec la date de
                                  facture dessous, fournisseur et adresse, paiement en pastille (en retard
                                  si l'échéance est passée), reste (avec le payé), total, état, puis les actions. --%>
-                            <div class="c-num"><%# Eval("DocumentNumber") %></div>
+                            <div class="c-num"><%# NumeroFactureLien(Eval("Id"), Eval("DocumentNumber"), "rwSupplierInvoices", "wbfSupplierInvoinceEdit.aspx") %></div>
                             <div class="c-ech"><%# EcheanceCell(Eval("DueDate"), Eval("DocumentDate")) %></div>
                             <div class="c-client"><%# Eval("Name") %></div>
                             <div><%# PayPill(Eval("StatutPaiement"), Eval("DueDate"), Eval("ComptabilisationStatus")) %></div>
@@ -423,6 +427,7 @@
         // (MoveUpdatePanel -> AddAt). Variables referencees par les OnClientClick de la grille.
         var L_ADD_INVOICE = "<%= L("addInvoiceWin") %>";
         var L_EDIT_INVOICE = "<%= L("editInvoiceWin") %>";
+        var L_VIEW_INVOICE = "<%= L("viewInvoiceWin") %>";
         var L_ADD_DECAISS = "<%= L("addDecaissWin") %>";
         var L_EDIT_DECAISS = "<%= L("editDecaissWin") %>";
         var L_PAY_SUPPLIER = "<%= L("payWin") %>";

@@ -72,6 +72,10 @@
     .fc-liste .sort-link:hover { text-decoration: underline }
     .fc-liste .adroite { text-align: right }
     .fc-liste .c-num { white-space: nowrap }
+    .fc-liste .c-num .num-lien { color: #1B4F9C; font-weight: 700; text-decoration: none; border-bottom: 1px dashed rgba(27,79,156,.45) }
+    .fc-liste .c-num .num-lien:hover { border-bottom-style: solid }
+    .fc-liste .c-num .num-pdf { margin-left: 8px; padding: 1px 7px; border: 1px solid #D6DEEA; border-radius: 6px; background: #fff; color: #6B7A90; font: 700 10.5px Arial, sans-serif; cursor: pointer; vertical-align: 1px }
+    .fc-liste .c-num .num-pdf:hover { color: #1B4F9C; border-color: #1B4F9C }
     .fc-liste .lien { font-weight: 800 }
     .fc-liste .c-ech { display: flex; flex-direction: column; line-height: 1.3 }
     .fc-liste .c-ech b { font-weight: 700 }
@@ -327,7 +331,7 @@
                             <%-- Numéro (lien vers le PDF), échéance avec la date d'émission dessous,
                                  client avec son courriel, paiement en pastille, reste (avec le reçu),
                                  total, état (cadenas si comptabilisée), puis les actions. --%>
-                            <div class="c-num"><%# Eval("DocumentNumber") %></div>
+                            <div class="c-num"><%# NumeroFactureLien(Eval("Id"), Eval("DocumentNumber"), "rwInvoice", "wbfInvoiceEdit.aspx") %></div>
                             <div class="c-ech"><%# EcheanceCell(Eval("DueDate"), Eval("DocumentDate")) %></div>
                             <div class="c-client"><%# Eval("Name") %><%# RenderMediaBadges(Eval("Id"), Eval("PhotoCount"), Eval("Latitude"), Eval("Longitude")) %></div>
                             <div><%# PayPill(Eval("StatutPaiement")) %></div>
@@ -470,6 +474,7 @@
         <script type="text/javascript">
             // Titres localisés des fenêtres modales (RadWindow)
             var L_EDIT_INVOICE = "<%= L("winEditInvoice") %>";
+            var L_VIEW_INVOICE = "<%= L("winViewInvoice") %>";
             var L_ADD_INVOICE = "<%= L("winAddInvoice") %>";
             var L_EDIT_CASHIN = "<%= L("winEditCashIn") %>";
             var L_ADD_CASHIN = "<%= L("winAddCashIn") %>";

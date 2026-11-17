@@ -97,27 +97,12 @@ Public Class wbfForgotPassword
     End Function
 
     Private Function BuildEmailBody(greeting As String, resetLink As String) As String
-        Dim sb As New System.Text.StringBuilder()
-        sb.AppendLine("<!DOCTYPE html>")
-        sb.AppendLine("<html><body style=""font-family: Arial, sans-serif; background:#f6f7fb; margin:0; padding:20px;"">")
-        sb.AppendLine("<div style=""max-width:560px; margin:0 auto; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.06);"">")
-        sb.AppendLine("<div style=""background: linear-gradient(135deg,#2563eb,#06b6d4); padding:32px; text-align:center;"">")
-        sb.AppendLine("<h1 style=""color:#fff; margin:0; font-size:22px;"">60Sec-AI</h1>")
-        sb.AppendLine("</div>")
-        sb.AppendLine("<div style=""padding:32px; color:#0f172a;"">")
-        sb.AppendLine("<p style=""font-size:16px;"">" & greeting & "</p>")
-        sb.AppendLine("<p>" & L("mailIntro") & "</p>")
-        sb.AppendLine("<div style=""text-align:center; margin:28px 0;"">")
-        sb.AppendLine("<a href=""" & resetLink & """ target=""_blank"" style=""display:inline-block; background: linear-gradient(135deg,#2563eb,#06b6d4); color:#fff; padding:14px 32px; border-radius:12px; text-decoration:none; font-weight:800; font-size:15px;"">" & L("mailButton") & "</a>")
-        sb.AppendLine("</div>")
-        sb.AppendLine("<p style=""font-size:13px; color:#64748b;"">" & L("mailExpiry") & "</p>")
-        sb.AppendLine("<p style=""font-size:13px; color:#64748b;"">" & L("mailFallback") & "<br/>")
-        sb.AppendLine("<span style=""word-break:break-all; color:#2563eb;"">" & resetLink & "</span></p>")
-        sb.AppendLine("<hr style=""border:none; border-top:1px solid #e2e8f0; margin:24px 0;"" />")
-        sb.AppendLine("<p style=""font-size:12px; color:#94a3b8;"">" & L("mailIgnore") & "</p>")
-        sb.AppendLine("</div>")
-        sb.AppendLine("</div></body></html>")
-        Return sb.ToString()
+        ' Gabarit commun des courriels de compte (App_Code/clsCourrielModele.vb)
+        Return clsCourrielModele.Construire(CurrentLang, L("mailIntro"),
+                                            Choose3(CurrentLang, "Réinitialisation de votre mot de passe", "Reset your password", "Restablecimiento de su contraseña"),
+                                            greeting, {L("mailIntro")}, L("mailButton"), resetLink,
+                                            L("mailExpiry") & " " & Choose3(CurrentLang, "60Sec-AI ne vous demandera jamais votre mot de passe par courriel.", "60Sec-AI will never ask for your password by email.", "60Sec-AI nunca le pedirá su contraseña por correo."),
+                                            L("mailIgnore"))
     End Function
 
     Private Sub ShowError(msg As String)

@@ -412,6 +412,7 @@ Public Class wbfSuppliersInvoices
             Case "empty" : Return Choose3(lang, "Aucune facture ne correspond à ces filtres.", "No invoice matches these filters.", "Ninguna factura coincide con estos filtros.")
             Case "addInvoiceWin" : Return Choose3(lang, "Ajouter une facture", "Add an invoice", "Agregar una factura")
             Case "editInvoiceWin" : Return Choose3(lang, "Modifier une facture", "Edit an invoice", "Editar una factura")
+            Case "viewInvoiceWin" : Return Choose3(lang, "Consulter la facture (lecture seule)", "View invoice (read-only)", "Ver la factura (solo lectura)")
             Case "addDecaissWin" : Return Choose3(lang, "Ajouter un décaissement", "Add a disbursement", "Agregar un desembolso")
             Case "editDecaissWin" : Return Choose3(lang, "Modifier un décaissement", "Edit a disbursement", "Editar un desembolso")
             Case "payWin" : Return Choose3(lang, "Payer le fournisseur", "Pay the supplier", "Pagar al proveedor")

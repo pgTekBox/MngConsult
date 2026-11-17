@@ -778,6 +778,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Code\clsActionsDossier.vb" />
+    <Compile Include="App_Code\clsCourrielModele.vb" />
     <Compile Include="App_Code\clsDataUC.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

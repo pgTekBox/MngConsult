@@ -363,6 +363,7 @@ Public Class wbfCustomersInvoices
             Case "winInvoiceTitle" : Return Choose3(lang, "Ajouter / Modifier une facture", "Add / Edit invoice", "Agregar / Editar factura")
             Case "winCashInTitle" : Return Choose3(lang, "Ajouter / Modifier un encaissement", "Add / Edit cash receipt", "Agregar / Editar cobro")
             Case "winEditInvoice" : Return Choose3(lang, "Modifier une facture", "Edit invoice", "Editar factura")
+            Case "winViewInvoice" : Return Choose3(lang, "Consulter la facture (lecture seule)", "View invoice (read-only)", "Ver la factura (solo lectura)")
             Case "winAddInvoice" : Return Choose3(lang, "Ajouter une facture", "Add invoice", "Agregar factura")
             Case "winEditCashIn" : Return Choose3(lang, "Modifier un encaissement", "Edit cash receipt", "Editar cobro")
             Case "winAddCashIn" : Return Choose3(lang, "Ajouter un encaissement", "Add cash receipt", "Agregar cobro")

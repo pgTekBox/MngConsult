@@ -776,6 +776,20 @@ Public Class _Default
         End Try
     End Function
 
+    ''' <summary>
+    ''' Encaissement (sens ENCAISSEMENT) ou décaissement (DECAISSEMENT) depuis le
+    ''' tableau de bord : "" si permis, sinon le message du refus (échappé pour
+    ''' JavaScript). En accès restreint, les règlements demandent l'accès complet.
+    ''' </summary>
+    Protected Function MessageReglementBloque(sens As String) As String
+        Try
+            If Not IsAccountant OrElse Company = Guid.Empty Then Return ""
+            Return HttpUtility.JavaScriptStringEncode(clsActionsDossier.MessageReglementBloque(UserEmail, Company, sens, CurrentLang))
+        Catch
+            Return ""
+        End Try
+    End Function
+
     Protected Function L(key As String) As String
         Dim lang As String = CurrentLang
         Select Case key

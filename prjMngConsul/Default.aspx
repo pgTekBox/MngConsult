@@ -232,6 +232,7 @@
     var L_FACT_CONFIRM = "<%= L("factConfirm") %>";
     // Actions permises dans le dossier (T393-T395) : non vide = facturation bloquée (lecture seule / aucun accès)
     var AC_FACT_BLOQUE = "<%= MessageFacturationBloquee() %>";
+    var AC_ENC_BLOQUE = "<%= MessageReglementBloque("ENCAISSEMENT") %>", AC_DEC_BLOQUE = "<%= MessageReglementBloque("DECAISSEMENT") %>";
     var L_FACT_ENCOURS = "<%= L("factEncours") %>";
     var L_FACT_CLIENT = "<%= L("factClient") %>";
     var L_FACT_ERREUR = "<%= L("factErreur") %>";
@@ -312,6 +313,8 @@
     // sens : ENCAISSEMENT (client, par défaut) ou DECAISSEMENT (payer un fournisseur).
     function acPaiementRecu(partyId, titre, sens) {
         sens = sens || 'ENCAISSEMENT';
+        var bloque = sens === 'DECAISSEMENT' ? AC_DEC_BLOQUE : AC_ENC_BLOQUE;
+        if (bloque) { acModal({ message: bloque }); return; }
         if (!partyId || partyId <= 0 || !$find('rwEncaissement')) {
             window.location.href = sens === 'DECAISSEMENT' ? 'wbfSuppliersInvoices.aspx' : 'wbfCustomersInvoices.aspx'; return;
         }

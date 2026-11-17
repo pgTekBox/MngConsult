@@ -676,59 +676,66 @@ Public Class wbfCabTechniciens
                                       "Correo de cambio de contraseña enviado a " & dest & ". El enlace es válido 24 horas.")}
     End Function
 
-    ''' <summary>Courriel « changer votre mot de passe » (MailService, best-effort), même gabarit que Mot de passe oublié.</summary>
+    ''' <summary>Courriel « changer votre mot de passe » (MailService, best-effort), gabarit commun clsCourrielModele.</summary>
     Private Sub EnvoyerCourrielMotDePasse(email As String, prenom As String, lien As String)
         Try
             Dim salut As String = If(prenom = "", T("Bonjour,", "Hello,", "Hola:"), T("Bonjour " & prenom & ",", "Hello " & prenom & ",", "Hola " & prenom & ":"))
             Dim intro As String = T("L'administrateur de votre cabinet vous invite à choisir un nouveau mot de passe pour votre compte 60Sec-AI.",
                                     "Your firm's administrator invites you to choose a new password for your 60Sec-AI account.",
                                     "El administrador de su despacho le invita a elegir una nueva contraseña para su cuenta 60Sec-AI.")
-            Dim bouton As String = T("Changer mon mot de passe", "Change my password", "Cambiar mi contraseña")
-            Dim validite As String = T("Le lien est valide pendant 24 heures. Votre mot de passe actuel reste valable tant que vous ne l'avez pas changé.",
-                                       "The link is valid for 24 hours. Your current password still works until you change it.",
-                                       "El enlace es válido durante 24 horas. Su contraseña actual sigue siendo válida hasta que la cambie.")
-            Dim secours As String = T("Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :", "If the button doesn't work, copy this link into your browser:", "Si el botón no funciona, copie este enlace en su navegador:")
-            Dim sb As New StringBuilder()
-            sb.Append("<!DOCTYPE html><html><body style=""font-family:Arial,sans-serif;background:#f6f7fb;margin:0;padding:20px;"">")
-            sb.Append("<div style=""max-width:560px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;"">")
-            sb.Append("<div style=""background:linear-gradient(135deg,#2563eb,#06b6d4);padding:32px;text-align:center;""><h1 style=""color:#fff;margin:0;font-size:22px;"">60Sec-AI</h1></div>")
-            sb.Append("<div style=""padding:32px;color:#0f172a;"">")
-            sb.Append("<p style=""font-size:16px;"">").Append(Server.HtmlEncode(salut)).Append("</p>")
-            sb.Append("<p>").Append(Server.HtmlEncode(intro)).Append("</p>")
-            sb.Append("<div style=""text-align:center;margin:28px 0;""><a href=""").Append(lien).Append(""" target=""_blank"" style=""display:inline-block;background:linear-gradient(135deg,#2563eb,#06b6d4);color:#fff;padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:800;font-size:15px;"">").Append(Server.HtmlEncode(bouton)).Append("</a></div>")
-            sb.Append("<p style=""font-size:13px;color:#64748b;"">").Append(Server.HtmlEncode(validite)).Append("</p>")
-            sb.Append("<p style=""font-size:13px;color:#64748b;"">").Append(Server.HtmlEncode(secours)).Append("<br/><span style=""word-break:break-all;color:#2563eb;"">").Append(Server.HtmlEncode(lien)).Append("</span></p>")
-            sb.Append("</div></div></body></html>")
+            Dim suite As String = T("Cliquez sur le bouton ci-dessous : vous choisirez votre nouveau mot de passe en quelques secondes.",
+                                    "Click the button below: you will choose your new password in a few seconds.",
+                                    "Haga clic en el botón de abajo: elegirá su nueva contraseña en unos segundos.")
+            Dim bouton As String = T("Choisir mon nouveau mot de passe", "Choose my new password", "Elegir mi nueva contraseña")
+            Dim encadre As String = T("Le lien est valide pendant 24 heures. Votre mot de passe actuel reste valable tant que vous ne l'avez pas changé. 60Sec-AI ne vous demandera jamais votre mot de passe par courriel.",
+                                      "The link is valid for 24 hours. Your current password still works until you change it. 60Sec-AI will never ask for your password by email.",
+                                      "El enlace es válido durante 24 horas. Su contraseña actual sigue siendo válida hasta que la cambie. 60Sec-AI nunca le pedirá su contraseña por correo.")
+            Dim mention As String = T("Vous n'attendiez pas ce courriel ? Ignorez-le simplement : rien ne changera.",
+                                      "Not expecting this email? Simply ignore it: nothing will change.",
+                                      "¿No esperaba este correo? Simplemente ignórelo: nada cambiará.")
+            Dim titre As String = T("Changement de votre mot de passe", "Change your password", "Cambio de su contraseña")
+            Dim html As String = clsCourrielModele.Construire(CurrentLang, intro, titre, salut, {intro, suite}, bouton, lien, encadre, mention)
 
             Dim p As New Collection
             p.Add(New SqlParameter("@To", email))
             p.Add(New SqlParameter("@Subject", T("Changement de votre mot de passe 60Sec-AI", "Change your 60Sec-AI password", "Cambio de su contraseña 60Sec-AI")))
-            p.Add(New SqlParameter("@HTMLBody", sb.ToString()))
-            p.Add(New SqlParameter("@TextBody", salut & vbCrLf & intro & vbCrLf & lien))
+            p.Add(New SqlParameter("@HTMLBody", html))
+            p.Add(New SqlParameter("@TextBody", salut & vbCrLf & vbCrLf & intro & vbCrLf & suite & vbCrLf & vbCrLf & lien & vbCrLf & vbCrLf & encadre))
             ExecuteSQLMail("s0610InsertOutboundMail", p)
         Catch
             ' Le lien copiable reste disponible si le courriel ne part pas.
         End Try
     End Sub
 
-    ''' <summary>Dépose le courriel d'invitation dans MailService (best-effort), comme Membres.</summary>
+    ''' <summary>Dépose le courriel d'invitation dans MailService (best-effort), gabarit commun clsCourrielModele.</summary>
     Private Sub EnvoyerCourrielInvitation(email As String, lien As String, role As String)
         Try
             Dim qui As String
             Select Case role
-                Case "technicien" : qui = T("employé", "an employee", "empleado")
                 Case "admin" : qui = T("administrateur", "an administrator", "administrador")
                 Case Else : qui = T("employé", "an employee", "empleado")
             End Select
             Dim sujet As String = T("Invitation à rejoindre un cabinet sur 60Sec-AI", "Invitation to join a firm on 60Sec-AI", "Invitación para unirse a un despacho en 60Sec-AI")
-            Dim corps As String = T("Vous avez été invité à rejoindre un cabinet comptable sur 60Sec-AI comme " & qui & ". Cliquez sur le lien pour activer votre compte :",
-                                     "You have been invited to join an accounting firm on 60Sec-AI as " & qui & ". Click the link to activate your account:",
-                                     "Se le ha invitado a unirse a un despacho contable en 60Sec-AI como " & qui & ". Haga clic en el enlace para activar su cuenta:")
+            Dim corps As String = T("Vous avez été invité à rejoindre un cabinet comptable sur 60Sec-AI comme " & qui & ".",
+                                     "You have been invited to join an accounting firm on 60Sec-AI as " & qui & ".",
+                                     "Se le ha invitado a unirse a un despacho contable en 60Sec-AI como " & qui & ".")
+            Dim suite As String = T("Activez votre compte et choisissez votre mot de passe : vous retrouverez ensuite les dossiers clients qui vous sont confiés.",
+                                    "Activate your account and choose your password: you will then find the client files assigned to you.",
+                                    "Active su cuenta y elija su contraseña: luego encontrará los expedientes de clientes que se le asignaron.")
+            Dim encadre As String = T("Ce lien d'invitation vous est personnel : ne le transférez pas. 60Sec-AI ne vous demandera jamais votre mot de passe par courriel.",
+                                      "This invitation link is personal: do not forward it. 60Sec-AI will never ask for your password by email.",
+                                      "Este enlace de invitación es personal: no lo reenvíe. 60Sec-AI nunca le pedirá su contraseña por correo.")
+            Dim mention As String = T("Vous ne connaissez pas ce cabinet ? Ignorez simplement ce courriel.",
+                                      "Don't know this firm? Simply ignore this email.",
+                                      "¿No conoce este despacho? Simplemente ignore este correo.")
+            Dim html As String = clsCourrielModele.Construire(CurrentLang, corps, T("Bienvenue dans l'équipe !", "Welcome to the team!", "¡Bienvenido al equipo!"),
+                                                              T("Bonjour,", "Hello,", "Hola:"), {corps, suite},
+                                                              T("Activer mon compte", "Activate my account", "Activar mi cuenta"), lien, encadre, mention)
             Dim p As New Collection
             p.Add(New SqlParameter("@To", email))
             p.Add(New SqlParameter("@Subject", sujet))
-            p.Add(New SqlParameter("@HTMLBody", "<p>" & Server.HtmlEncode(corps) & "</p><p><a href=""" & lien & """>" & Server.HtmlEncode(lien) & "</a></p>"))
-            p.Add(New SqlParameter("@TextBody", corps & vbCrLf & lien))
+            p.Add(New SqlParameter("@HTMLBody", html))
+            p.Add(New SqlParameter("@TextBody", corps & vbCrLf & suite & vbCrLf & vbCrLf & lien))
             ExecuteSQLMail("s0610InsertOutboundMail", p)
         Catch
             ' Le lien copiable reste disponible si le courriel ne part pas.

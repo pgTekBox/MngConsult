@@ -1049,9 +1049,10 @@ Public Class clsData
         Dim refus As String = ""
         Try
             If Session IsNot Nothing AndAlso Session("UserId") IsNot Nothing AndAlso IsAccountant AndAlso Company <> Guid.Empty Then
-                Dim action As String = clsActionsDossier.ActionDePage(Me.AppRelativeVirtualPath)
-                If action <> "" AndAlso Not clsActionsDossier.PagePermise(UserEmail, Company, Me.AppRelativeVirtualPath) Then
-                    refus = clsActionsDossier.Libelle(action, CurrentLang)
+                Dim url As String = PageEtRequete()
+                Dim action As String = clsActionsDossier.ActionDePage(url)
+                If action <> "" AndAlso Not clsActionsDossier.PagePermise(UserEmail, Company, url) Then
+                    refus = clsActionsDossier.MessageRefusPage(UserEmail, Company, url, CurrentLang)
                 End If
             End If
         Catch
@@ -1060,6 +1061,18 @@ Public Class clsData
 
         If refus <> "" Then
             Session("ActionRefusee") = refus
+            ' Fenêtre surgissante (RadWindow) : pas de tableau de bord dans la fenêtre
+            If Me.AppRelativeVirtualPath.IndexOf("popup", StringComparison.OrdinalIgnoreCase) >= 0 Then
+                Session.Remove("ActionRefusee")
+                Response.Clear()
+                Response.ContentType = "text/html; charset=utf-8"
+                Response.Write("<!DOCTYPE html><html><head><meta charset=""utf-8""></head><body style=""margin:0;font-family:Arial,sans-serif;background:#F7F9FC;"">" &
+                               "<div style=""margin:40px auto;max-width:460px;padding:22px 24px;border-radius:14px;background:#FBF1DC;color:#7A5200;font-weight:700;font-size:14px;line-height:1.5;"">&#128274; " &
+                               HttpUtility.HtmlEncode(refus) & "</div></body></html>")
+                Context.ApplicationInstance.CompleteRequest()
+                Response.End()
+                Return
+            End If
             Response.Redirect("~/Default.aspx", True)
             Return
         End If
@@ -1067,19 +1080,77 @@ Public Class clsData
         ' Le message du refus, affiché sur la page d'arrivée
         Try
             If Session IsNot Nothing AndAlso Session("ActionRefusee") IsNot Nothing Then
-                Dim zone As String = Convert.ToString(Session("ActionRefusee"))
+                Dim msg As String = Convert.ToString(Session("ActionRefusee"))
                 Session.Remove("ActionRefusee")
                 Dim l As String = CurrentLang
-                Dim msg As String = If(l = "en", "Your firm has not given you access to """ & zone & """ in this file.",
-                                    If(l = "es", "Su despacho no le dio acceso a «" & zone & "» en este expediente.",
-                                       "Votre cabinet ne vous a pas donné accès à « " & zone & " » dans ce dossier."))
                 ShowMessageBox(msg, If(l = "en", "Access", If(l = "es", "Acceso", "Accès")))
             End If
         Catch
         End Try
 
+        Try
+            If LectureSeule Then MasquerAccesComplet(Me)
+        Catch
+        End Try
+
         MyBase.OnLoad(e)
     End Sub
+
+
+    ' Contrôles de synchronisation et de règlement : retirés de la page en lecture seule
+    Private Shared ReadOnly IdsAccesComplet As New System.Text.RegularExpressions.Regex(
+        "(square|sync|plaid|apideck|quickbooks|encaiss|decaiss|paymentlink)", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+
+    Private Sub MasquerAccesComplet(parent As Control)
+        For Each c As Control In parent.Controls
+            Dim id As String = c.ID
+            If Not String.IsNullOrEmpty(id) AndAlso IdsAccesComplet.IsMatch(id) AndAlso
+               (TypeOf c Is IButtonControl OrElse TypeOf c Is UserControl OrElse TypeOf c Is HyperLink) Then
+                c.Visible = False
+            ElseIf c.HasControls() Then
+                MasquerAccesComplet(c)
+            End If
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Cellule « numéro » des listes de factures : le numéro ouvre la facture en
+    ''' consultation (lecture seule, ?Lecture=1) dans la fenêtre de la page ; le
+    ''' PDF, que la procédure pose sur le numéro, passe sur un petit bouton à côté.
+    ''' </summary>
+    Public Function NumeroFactureLien(id As Object, numeroHtml As Object, fenetre As String, page As String) As String
+        Dim brut As String = If(numeroHtml Is Nothing OrElse IsDBNull(numeroHtml), "", numeroHtml.ToString())
+        Dim texte As String = HttpUtility.HtmlDecode(System.Text.RegularExpressions.Regex.Replace(brut, "<[^>]*>", "")).Trim()
+        Dim n As Integer = 0
+        If id IsNot Nothing AndAlso Not IsDBNull(id) Then Integer.TryParse(id.ToString(), n)
+        If n <= 0 Then Return HttpUtility.HtmlEncode(texte)
+        Dim l As String = CurrentLang
+        Dim tip As String = If(l = "en", "View the invoice (read-only)", If(l = "es", "Ver la factura (solo lectura)", "Voir la facture en lecture seule"))
+        Dim sb As New System.Text.StringBuilder()
+        sb.Append("<a href=""#"" class=""num-lien"" data-lecture=""1"" title=""").Append(HttpUtility.HtmlAttributeEncode(tip)).Append(""" onclick=""")
+        sb.Append(HttpUtility.HtmlAttributeEncode("openRadWindowParam(" & n & ", 'Lecture=1', '" & fenetre & "', '" & page & "', L_VIEW_INVOICE, L_VIEW_INVOICE); return false;"))
+        sb.Append(""">").Append(HttpUtility.HtmlEncode(If(texte = "", "#" & n, texte))).Append("</a>")
+        Dim m = System.Text.RegularExpressions.Regex.Match(brut, "onclick=""(openPdfOverlay\([^""]*)""", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        If m.Success Then
+            sb.Append("<button type=""button"" class=""num-pdf"" data-lecture=""1"" title=""PDF"" onclick=""").Append(m.Groups(1).Value).Append(""">PDF</button>")
+        End If
+        Dim r = System.Text.RegularExpressions.Regex.Match(brut, "openImageViewer\('([^']*)'\)")
+        If r.Success Then
+            Dim recu As String = If(l = "en", "Receipt", If(l = "es", "Recibo", "Reçu"))
+            sb.Append("<button type=""button"" class=""num-pdf"" data-lecture=""1"" title=""").Append(recu).Append(""" onclick=""")
+            sb.Append(HttpUtility.HtmlAttributeEncode("openImageViewer('" & r.Groups(1).Value & "');")).Append(""">").Append(recu).Append("</button>")
+        End If
+        Return sb.ToString()
+    End Function
+    ''' <summary>La page courante avec sa requête (« ~/wbfX.aspx?sens=… ») pour le contrôle d'accès.</summary>
+    Private Function PageEtRequete() As String
+        Dim q As String = ""
+        Try
+            q = Request.Url.Query
+        Catch
+        End Try
+        Return Me.AppRelativeVirtualPath & q
+    End Function
 
 
     ' ══════════════════════════════════════════════════════════════════════
@@ -1091,17 +1162,17 @@ Public Class clsData
     ' ══════════════════════════════════════════════════════════════════════
     Private _lectureSeule As Boolean? = Nothing
 
-    ''' <summary>Vrai si la page courante est en lecture seule pour l'utilisateur (niveau « restreint »).</summary>
+    ''' <summary>Vrai si la page courante est en lecture seule : niveau « restreint » de l'employé, ou consultation (?Lecture=1).</summary>
     Public ReadOnly Property LectureSeule As Boolean
         Get
             If _lectureSeule.HasValue Then Return _lectureSeule.Value
             ' Garde anti-récursion : lire le courriel ou la compagnie peut interroger la
             ' base (ExecuteSQLds → GarderLectureSeule → LectureSeule) pendant le calcul.
             _lectureSeule = False
-            Dim r As Boolean = False
+            Dim r As Boolean = Consultation
             Try
-                If Session IsNot Nothing AndAlso Session("UserId") IsNot Nothing AndAlso IsAccountant AndAlso Company <> Guid.Empty Then
-                    Dim action As String = clsActionsDossier.ActionDePage(Me.AppRelativeVirtualPath)
+                If Not r AndAlso Session IsNot Nothing AndAlso Session("UserId") IsNot Nothing AndAlso IsAccountant AndAlso Company <> Guid.Empty Then
+                    Dim action As String = clsActionsDossier.ActionDePage(PageEtRequete())
                     If action <> "" Then r = (clsActionsDossier.NiveauDe(UserEmail, Company, action) = "restreint")
                 End If
             Catch
@@ -1109,6 +1180,17 @@ Public Class clsData
             End Try
             _lectureSeule = r
             Return r
+        End Get
+    End Property
+
+    ''' <summary>Page ouverte pour consultation seulement (?Lecture=1), ex. le numéro d'une facture dans la liste.</summary>
+    Public ReadOnly Property Consultation As Boolean
+        Get
+            Try
+                Return Request IsNot Nothing AndAlso Request.QueryString("Lecture") = "1"
+            Catch
+                Return False
+            End Try
         End Get
     End Property
 
@@ -1148,6 +1230,13 @@ Public Class clsData
     End Sub
 
     Private Function MessageLectureSeule() As String
+        If Consultation Then
+            Select Case CurrentLang
+                Case "en" : Return "View only: this document is open for viewing. Nothing was saved."
+                Case "es" : Return "Solo consulta: este documento está abierto para consulta. No se guardó nada."
+                Case Else : Return "Consultation seulement : ce document est ouvert en lecture seule. Rien n'a été enregistré."
+            End Select
+        End If
         Select Case CurrentLang
             Case "en" : Return "Read-only access: your firm lets you view this area of the file, but not change it. Nothing was saved."
             Case "es" : Return "Acceso de solo lectura: su despacho le permite consultar esta zona del expediente, pero no modificarla. No se guardó nada."
@@ -1181,6 +1270,7 @@ Public Class clsData
                 Dim txt As String = If(l = "en", "Read-only — your firm gives you restricted access to this area of the file: you can view it but not change it.",
                                     If(l = "es", "Solo lectura — su despacho le da un acceso restringido a esta zona del expediente: puede consultarla pero no modificarla.",
                                        "Lecture seule — votre cabinet vous donne un accès restreint à cette zone du dossier : vous pouvez la consulter, mais pas la modifier."))
+                If Consultation Then txt = If(l = "en", "View only — this document is open read-only.", If(l = "es", "Solo consulta — este documento está abierto en solo lectura.", "Consultation — ce document est ouvert en lecture seule."))
                 ScriptManager.RegisterStartupScript(Me, Me.GetType(), "lectureSeule",
                     "if (window.appLectureSeule) appLectureSeule('" & HttpUtility.JavaScriptStringEncode(txt) & "');", True)
             End If
