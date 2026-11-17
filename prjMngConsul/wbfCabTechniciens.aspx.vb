@@ -37,6 +37,10 @@ Public Class wbfCabTechniciens
         EnPortailComptable = True
         DirectCast(Master, SiteMaster).FondDePage = True
 
+        If Request.QueryString("imprimer") = "1" Then
+            RendreImpression() : Return
+        End If
+
         If String.Equals(Request.HttpMethod, "POST", StringComparison.OrdinalIgnoreCase) Then
             Dim op As String = Convert.ToString(Request.Form("op"))
             If op <> "" Then
@@ -49,6 +53,188 @@ Public Class wbfCabTechniciens
             litData.Text = Json(Charger())
             litLabels.Text = Json(Libelles())
         End If
+    End Sub
+
+    ' ---------------------------------------------------------------------
+    ' Impression : tous les employés visibles, leurs détails et le niveau
+    ' d'accès de chaque action dans chacun de leurs dossiers (?imprimer=1).
+    ' Page autonome, mise en page pour l'impression (paysage), lecture seule.
+    ' ---------------------------------------------------------------------
+    Private Shared Function H(s As String) As String
+        Return HttpUtility.HtmlEncode(If(s, ""))
+    End Function
+
+    Private Sub RendreImpression()
+        Dim ci = Globalization.CultureInfo.GetCultureInfo(If(CurrentLang = "en", "en-CA", If(CurrentLang = "es", "es-ES", "fr-CA")))
+        Dim actions As New List(Of String)(clsActionsDossier.Actions)
+
+        ' Noms des niveaux (repris du catalogue T338 quand il est lu)
+        Dim nomsNiveaux As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase) From {
+            {"complet", T("Accès complet", "Full access", "Acceso completo")},
+            {"restreint", T("Accès restreint (lecture seule)", "Restricted access (read-only)", "Acceso restringido (solo lectura)")},
+            {"aucun", T("Aucun accès", "No access", "Sin acceso")}}
+
+        Dim cabNom As String = ""
+        Try
+            Dim pc As New Collection
+            pc.Add(New SqlParameter("@UserId", UserEmail))
+            Dim dsc As DataSet = ExecuteSQLds("s0919GetUserCabinet", pc)
+            If dsc IsNot Nothing AndAlso dsc.Tables.Count > 0 AndAlso dsc.Tables(0).Rows.Count > 0 AndAlso dsc.Tables(0).Columns.Contains("CabinetNom") Then
+                cabNom = Txt(dsc.Tables(0).Rows(0)("CabinetNom"))
+            End If
+        Catch
+        End Try
+
+        Dim rows As New List(Of DataRow)
+        Try
+            Dim ds As DataSet = LireEquipe()
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                For Each r As DataRow In ds.Tables(0).Rows : rows.Add(r) : Next
+            End If
+        Catch
+        End Try
+
+        Dim sb As New StringBuilder()
+        sb.Append("<!DOCTYPE html><html lang=""").Append(CurrentLang).Append("""><head><meta charset=""utf-8"" />")
+        sb.Append("<title>").Append(H(T("Employés et accès par dossier", "Employees and access per file", "Empleados y acceso por expediente"))).Append("</title>")
+        sb.Append("<style>")
+        sb.Append("@page{size:letter landscape;margin:12mm}")
+        sb.Append("*{box-sizing:border-box}body{margin:0;padding:24px;font:12.5px/1.45 Arial,Helvetica,sans-serif;color:#0E1F3D;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}")
+        sb.Append(".barre{display:flex;gap:10px;justify-content:flex-end;margin-bottom:14px}.barre button{height:36px;padding:0 16px;border:0;border-radius:999px;background:#1B4F9C;color:#fff;font-weight:700;cursor:pointer}.barre button.sec{background:#E3EBF7;color:#143A73}")
+        sb.Append("header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #1B4F9C;padding-bottom:10px;margin-bottom:14px}")
+        sb.Append("h1{margin:0;font-size:20px}.cab{font-size:13px;color:#44536E;margin-top:2px}.date{font-size:11.5px;color:#6B7A90;text-align:right}")
+        sb.Append(".legende{display:flex;gap:18px;flex-wrap:wrap;font-size:11.5px;color:#44536E;margin:0 0 14px}")
+        sb.Append(".n{display:inline-block;min-width:22px;padding:1px 6px;border-radius:6px;font-weight:700;font-size:11px;text-align:center}")
+        sb.Append(".n.complet{background:#E3F4EA;color:#1E7A45}.n.restreint{background:#FBF1DC;color:#8A5A00}.n.aucun{background:#FBE5E3;color:#A3261C}")
+        sb.Append(".emp{border:1px solid #D6DEEA;border-radius:10px;padding:12px 14px;margin:0 0 12px;page-break-inside:avoid;break-inside:avoid}")
+        sb.Append(".emp h2{margin:0 0 8px;font-size:15px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}")
+        sb.Append(".tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:#E8EDF5;color:#1B4F9C}.tag.att{background:#FBF1DC;color:#8A5A00}.tag.ina{background:#FBE5E3;color:#A3261C}")
+        sb.Append(".det{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 18px;margin-bottom:10px}.det span{display:block;font-size:10px;color:#6B7A90;text-transform:uppercase;letter-spacing:.03em}")
+        sb.Append("table{width:100%;border-collapse:collapse;font-size:11.5px}th,td{border:1px solid #E1E7F0;padding:4px 6px;text-align:center}th{background:#F2F5FB;font-size:10.5px}td.dos,th.dos{text-align:left;font-weight:700}")
+        sb.Append(".note{font-size:12px;color:#44536E;background:#F2F5FB;border-radius:8px;padding:8px 10px}")
+        sb.Append("@media print{body{padding:0}.barre{display:none}}")
+        sb.Append("</style></head><body>")
+
+        sb.Append("<div class=""barre""><button type=""button"" class=""sec"" onclick=""window.close()"">").Append(H(T("Fermer", "Close", "Cerrar"))).Append("</button>")
+        sb.Append("<button type=""button"" onclick=""window.print()"">&#128424; ").Append(H(T("Imprimer", "Print", "Imprimir"))).Append("</button></div>")
+
+        sb.Append("<header><div><h1>").Append(H(T("Employés et accès par dossier", "Employees and access per file", "Empleados y acceso por expediente"))).Append("</h1>")
+        If cabNom <> "" Then sb.Append("<div class=""cab"">").Append(H(cabNom)).Append("</div>")
+        sb.Append("</div><div class=""date"">").Append(H(DateTime.Now.ToString("d MMMM yyyy · HH:mm", ci))).Append("<br />")
+        sb.Append(H(T("Imprimé par ", "Printed by ", "Impreso por ") & UserEmail)).Append("<br />")
+        sb.Append(rows.Count).Append(" ").Append(H(T("employé(s)", "employee(s)", "empleado(s)"))).Append("</div></header>")
+
+        sb.Append("<div class=""legende"">")
+        For Each k As String In {"complet", "restreint", "aucun"}
+            sb.Append("<span><span class=""n ").Append(k).Append(""">").Append(Symbole(k)).Append("</span> ").Append(H(nomsNiveaux(k))).Append("</span>")
+        Next
+        sb.Append("</div>")
+
+        For Each r As DataRow In rows
+            Dim membreId As Integer = CInt(r("MembreId"))
+            Dim role As String = RoleNormal(Txt(r("Role")))
+            Dim nom As String = (Txt(r("FirstName")) & " " & Txt(r("LastName"))).Trim()
+            If nom = "" Then nom = Txt(r("Email"))
+            Dim roleNom As String = Txt(r("RoleNom"))
+            If roleNom = "" Then roleNom = If(role = "admin", T("Administrateur", "Administrator", "Administrador"), If(role = "solo", "Solo", T("Employé", "Employee", "Empleado")))
+
+            sb.Append("<section class=""emp""><h2>").Append(H(nom)).Append(" <span class=""tag"">").Append(H(roleNom)).Append("</span>")
+            If CBool(r("Pending")) Then sb.Append("<span class=""tag att"">").Append(H(T("En attente d'activation", "Awaiting activation", "Pendiente de activación"))).Append("</span>")
+            If CBool(r("Inactif")) Then sb.Append("<span class=""tag ina"">").Append(H(T("Inactif", "Inactive", "Inactivo"))).Append("</span>")
+            sb.Append("</h2><div class=""det"">")
+            Champ(sb, T("Courriel de connexion", "Sign-in email", "Correo de conexión"), Txt(r("Email")))
+            Champ(sb, T("Courriel de récupération", "Recovery email", "Correo de recuperación"), Txt(r("RecoveryEmail")))
+            Champ(sb, T("Superviseur", "Supervisor", "Supervisor"), Txt(r("SuperviseurNom")))
+            Champ(sb, T("Dernière connexion", "Last sign-in", "Última conexión"), If(IsDBNull(r("LastLoginOn")), "", CDate(r("LastLoginOn")).ToString("d MMM yyyy", ci)))
+            Champ(sb, T("Dossiers confiés", "Assigned files", "Expedientes asignados"), CInt(r("NbDossiers")).ToString())
+            Champ(sb, T("Tâches ouvertes", "Open tasks", "Tareas abiertas"), CInt(r("NbTaches")).ToString())
+            Champ(sb, T("Tâches en retard", "Overdue tasks", "Tareas atrasadas"), CInt(r("NbRetard")).ToString())
+            Champ(sb, T("Employés supervisés", "Supervised employees", "Empleados supervisados"), CInt(r("NbTechniciens")).ToString())
+            sb.Append("</div>")
+
+            If role = "admin" OrElse role = "solo" Then
+                sb.Append("<div class=""note"">").Append(H(T("Administrateur du cabinet : accès complet à toutes les actions, dans tous les dossiers (jamais restreint).",
+                                                             "Firm administrator: full access to every action, in every file (never restricted).",
+                                                             "Administrador del despacho: acceso completo a todas las acciones, en todos los expedientes (nunca restringido).")))
+                sb.Append("</div></section>")
+                Continue For
+            End If
+
+            ' Niveau de chaque action par dossier (s1014) ; dossiers confiés (s1001)
+            Dim parDossier As New Dictionary(Of String, Dictionary(Of String, String))(StringComparer.OrdinalIgnoreCase)
+            Dim dossiers As New List(Of DossierMembre)
+            Try
+                Dim p As New Collection
+                p.Add(New SqlParameter("@UserId", UserEmail))
+                p.Add(New SqlParameter("@MembreId", membreId))
+                Dim dsa As DataSet = ExecuteSQLds("s1014ListActionsMembre", p)
+                If dsa IsNot Nothing AndAlso dsa.Tables.Count > 0 Then
+                    For Each ra As DataRow In dsa.Tables(0).Rows
+                        Dim g As String = Txt(ra("CompanyGUID")).ToLowerInvariant()
+                        If Not parDossier.ContainsKey(g) Then parDossier(g) = New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase)
+                        parDossier(g)(Txt(ra("Action"))) = Txt(ra("Niveau"))
+                    Next
+                End If
+                If dsa IsNot Nothing AndAlso dsa.Tables.Count > 1 Then
+                    For Each rn As DataRow In dsa.Tables(1).Rows
+                        Dim nn As String = If(CurrentLang = "en", Txt(rn("NomEn")), If(CurrentLang = "es", Txt(rn("NomEs")), Txt(rn("NomFr"))))
+                        If nn <> "" AndAlso Not nomsNiveaux.ContainsKey(Txt(rn("Code"))) Then nomsNiveaux(Txt(rn("Code"))) = nn
+                    Next
+                End If
+                For Each d As DossierMembre In ListeDossiers(membreId)
+                    If d.confie OrElse parDossier.ContainsKey(d.id) Then dossiers.Add(d)   ' confiés, ou dont les accès sont ajustés
+                Next
+            Catch
+            End Try
+
+            If dossiers.Count = 0 Then
+                sb.Append("<div class=""note"">").Append(H(T("Aucun dossier confié.", "No file assigned.", "Ningún expediente asignado."))).Append("</div></section>")
+                Continue For
+            End If
+
+            sb.Append("<table><thead><tr><th class=""dos"">").Append(H(T("Dossier", "File", "Expediente"))).Append("</th>")
+            For Each a As String In actions
+                sb.Append("<th>").Append(H(clsActionsDossier.Libelle(a, CurrentLang))).Append("</th>")
+            Next
+            sb.Append("</tr></thead><tbody>")
+            For Each d As DossierMembre In dossiers
+                Dim acts As Dictionary(Of String, String) = Nothing
+                parDossier.TryGetValue(d.id, acts)
+                sb.Append("<tr><td class=""dos"">").Append(H(d.nom)).Append("</td>")
+                For Each a As String In actions
+                    Dim n As String = "complet"
+                    If acts IsNot Nothing Then n = If(acts.ContainsKey(a), acts(a), "aucun")
+                    Dim cls As String = If(n = "complet" OrElse n = "aucun", n, "restreint")
+                    Dim titre As String = If(nomsNiveaux.ContainsKey(n), nomsNiveaux(n), n)
+                    sb.Append("<td><span class=""n ").Append(cls).Append(""" title=""").Append(H(titre)).Append(""">").Append(Symbole(cls)).Append("</span></td>")
+                Next
+                sb.Append("</tr>")
+            Next
+            sb.Append("</tbody></table></section>")
+        Next
+
+        If rows.Count = 0 Then sb.Append("<div class=""note"">").Append(H(T("Aucun employé.", "No employees.", "Ningún empleado."))).Append("</div>")
+        sb.Append("<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},300);});</script>")
+        sb.Append("</body></html>")
+
+        Response.Clear()
+        Response.ContentType = "text/html"
+        Response.Charset = "utf-8"
+        Response.Write(sb.ToString())
+        Context.ApplicationInstance.CompleteRequest()
+        Response.End()
+    End Sub
+
+    Private Shared Function Symbole(niveau As String) As String
+        Select Case niveau
+            Case "complet" : Return "&#10003;"
+            Case "aucun" : Return "&#10005;"
+            Case Else : Return "&#128065;"
+        End Select
+    End Function
+
+    Private Shared Sub Champ(sb As StringBuilder, libelle As String, valeur As String)
+        sb.Append("<div><span>").Append(H(libelle)).Append("</span>").Append(If(valeur = "", "—", H(valeur))).Append("</div>")
     End Sub
 
     Private ReadOnly Property PeutGerer As Boolean
@@ -752,6 +938,8 @@ Public Class wbfCabTechniciens
     Private Function Libelles() As Object
         Return New With {
             .titre = T("Employés", "Employees", "Empleados"),
+            .imprimer = T("Imprimer", "Print", "Imprimir"),
+            .imprimerTip = T("Imprimer la liste des employés avec leurs détails et leurs accès par dossier", "Print the list of employees with their details and their access per file", "Imprimir la lista de empleados con sus datos y sus accesos por expediente"),
             .sous = If(PeutGerer,
                        T("Les employés du cabinet. Le rôle de chacun décide des dossiers qu'il voit et de ce qu'il peut faire.",
                          "The firm's employees. Each person's role decides which files they see and what they can do.",

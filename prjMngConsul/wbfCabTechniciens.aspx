@@ -26,6 +26,7 @@
     #tec .btn { height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: #1B4F9C; color: #fff; font: inherit; font-weight: 800; font-size: 13.5px; cursor: pointer; white-space: nowrap }
     #tec .btn:hover { background: #143A73 }
     #tec .btn.sec { background: #E3EBF7; color: #143A73 }
+    #tec .tete .imprimer { margin-left: auto; display: inline-flex; align-items: center; gap: 8px }
     #tec .btn.danger { background: #fff; color: #A3261C; border: 1px solid #E8B4AE }
     #tec .btn:disabled { opacity: .55; cursor: default }
     #tec .msg { margin-top: 12px; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; font-weight: 700 }
@@ -96,6 +97,7 @@
         <div class="tete">
             <div class="ico"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M17 11l1.5 1.5L22 9"/></svg></div>
             <div><h1 id="tecTitre"></h1><div class="sous" id="tecSous"></div></div>
+            <button type="button" class="btn sec imprimer" id="tecImprimer" onclick="window.open('wbfCabTechniciens.aspx?imprimer=1', '_blank')" data-lecture="1"></button>
         </div>
     </section>
     <div class="kpis" id="tecKpis"></div>
@@ -266,6 +268,8 @@
 
     function tecPeindre() {
         document.getElementById('tecTitre').textContent = TL.titre;
+        document.getElementById('tecImprimer').textContent = '🖨 ' + TL.imprimer;
+        document.getElementById('tecImprimer').title = TL.imprimerTip;
         document.getElementById('tecSous').textContent = TL.sous;
         // Tout le monde est un employé : une seule liste, triée par nom (le rôle reste affiché sur la fiche)
         var tous = TEC.membres.slice().sort(function (a, b) { return String(a.nom).localeCompare(String(b.nom), 'fr', { sensitivity: 'base' }); });
