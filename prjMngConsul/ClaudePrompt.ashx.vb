@@ -15,6 +15,7 @@ Imports System.Web.Script.Serialization
 '''
 ''' Verbes :
 '''  - GET  : liste des demandes de l'usager (menu déroulant « Demandes précédentes »).
+'''  - GET ?fichier=ID : téléchargement du fichier joint à une de SES demandes (T398).
 '''  - POST multipart/form-data : nouvelle demande (champs page/prompt/url + un
 '''    fichier joint optionnel « fichier »).
 '''  - POST application/json { op:'delete', id } : suppression d'une demande non faite.
@@ -54,6 +55,11 @@ Public Class ClaudePromptHandler
 
         Dim methode As String = context.Request.HttpMethod.ToUpperInvariant()
         If methode = "GET" Then
+            Dim idFichier As Integer = 0
+            If Integer.TryParse(Convert.ToString(context.Request.QueryString("fichier")), idFichier) AndAlso idFichier > 0 Then
+                Telecharger(context, js, userId, idFichier)
+                Return
+            End If
             Lister(context, js, userId)
             Return
         ElseIf methode <> "POST" Then
@@ -220,6 +226,45 @@ Public Class ClaudePromptHandler
         context.Response.Write(js.Serialize(New With {.ok = True, .items = items}))
     End Sub
 
+
+    ''' <summary>
+    ''' GET ?fichier=ID : le fichier joint à une demande DE L'USAGER (s0968 avec
+    ''' @UserId, T398), en téléchargement. 404 si la demande n'est pas la sienne.
+    ''' </summary>
+    Private Shared Sub Telecharger(context As HttpContext, js As JavaScriptSerializer, userId As Integer, id As Integer)
+        Dim nom As String = Nothing, typ As String = Nothing
+        Dim data As Byte() = Nothing
+        Try
+            Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
+                Using cmd As New SqlCommand("s0968GetClaudePromptFichier", conn) With {.CommandType = CommandType.StoredProcedure}
+                    cmd.Parameters.Add(New SqlParameter("@Id", id))
+                    cmd.Parameters.Add(New SqlParameter("@UserId", userId))
+                    conn.Open()
+                    Using rd As SqlDataReader = cmd.ExecuteReader()
+                        If rd.Read() Then
+                            nom = If(IsDBNull(rd("FichierNom")), "fichier", Convert.ToString(rd("FichierNom")))
+                            typ = If(IsDBNull(rd("FichierType")), "", Convert.ToString(rd("FichierType")))
+                            data = DirectCast(rd("FichierData"), Byte())
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch
+            data = Nothing
+        End Try
+        If data Is Nothing Then
+            context.Response.StatusCode = 404
+            context.Response.Write(js.Serialize(New With {.ok = False, .erreur = "Fichier introuvable."}))
+            Return
+        End If
+        context.Response.Clear()
+        context.Response.ContentType = If(String.IsNullOrEmpty(typ), "application/octet-stream", typ)
+        ' Toujours en pièce jointe (jamais affiché dans la page : un .html joint ne doit pas s'exécuter ici)
+        context.Response.AddHeader("Content-Disposition", "attachment; filename=""" & nom.Replace("""", "") & """; filename*=UTF-8''" & Uri.EscapeDataString(nom))
+        context.Response.AddHeader("X-Content-Type-Options", "nosniff")
+        context.Response.AddHeader("Content-Length", data.Length.ToString())
+        context.Response.BinaryWrite(data)
+    End Sub
     ''' <summary>Supprime une demande de l'usager (seulement si non « fait »).</summary>
     Private Shared Sub Supprimer(context As HttpContext, js As JavaScriptSerializer, userId As Integer, d As Dictionary(Of String, Object))
         Dim id As Integer = 0

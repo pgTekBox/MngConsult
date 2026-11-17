@@ -624,6 +624,8 @@ a{
             .cp-msg{font-size:13px;font-weight:700}
             .cp-msg.ok{color:#1E6B3A}.cp-msg.err{color:#B3261E}
             .cp-fichier{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+            .cp-dl{display:inline-flex;align-items:center;gap:4px;margin-left:8px;background:#1B4F9C;color:#fff;border-radius:999px;padding:4px 12px;font-weight:800;font-size:12.5px;text-decoration:none}
+            .cp-dl:hover{background:#143A73;color:#fff}
             .cp-joindre{display:inline-flex;align-items:center;gap:6px;background:#EEF2F8;color:#1B4F9C;border:1px solid #D5DDE8;border-radius:999px;padding:7px 14px;font-weight:800;font-size:13px;cursor:pointer}
             .cp-joindre:hover{background:#E2E9F4}
             .cp-joindre svg{width:16px;height:16px}
@@ -705,7 +707,7 @@ a{
                 if(apercu){ apercu.hidden=false;
                     apercu.innerHTML='<span class="st '+(it.fait?'fait':'non')+'">'+(it.fait?'Fait':'Non fait')+'</span> <b>'+escH(it.page)+'</b> · '+escH(it.quand)+
                         '<div class="cp-texte">'+escH(it.prompt)+'</div>'+
-                        (it.fichier?'<div class="cp-piece">📎 '+escH(it.fichier)+'</div>':'')+
+                        (it.fichier?'<div class="cp-piece">📎 '+escH(it.fichier)+' <a class="cp-dl" href="'+url+(url.indexOf('?')<0?'?':'&')+'fichier='+it.id+'" download title="Télécharger le fichier joint">⬇ Télécharger</a></div>':'')+
                         (it.fait?'':'<div><button type="button" class="cp-suppr" data-id="'+it.id+'">Supprimer cette demande</button></div>'); }
             });
             if(apercu) apercu.addEventListener('click',function(e){
