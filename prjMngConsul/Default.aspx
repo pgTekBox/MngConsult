@@ -20,6 +20,8 @@
     .ac-btn:hover{ background:#143A73; color:#fff; }
     .ac-btn.clair{ background:#FFFFFF; color:#0E1F3D; border-color:#AEBBCD; }
     .ac-btn.clair:hover{ background:#F2F5F9; color:#0E1F3D; }
+    /* Facturer bloqué : lecture seule / aucun accès à « Revenus » dans ce dossier (T395) */
+    .bloque{ opacity:.45; cursor:not-allowed !important; }
     .ac-chev{ flex-shrink:0; width:36px; height:36px; padding:0; border:1px solid #D5DDE8; border-radius:50%; background:#FFFFFF; color:#44536E; font-size:15px; font-weight:800; }
     .ac-chip{ flex-shrink:0; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; }
     .ac-rond{ min-width:24px; height:24px; padding:0 5px; box-sizing:border-box; border:0; border-radius:999px; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; }
@@ -228,6 +230,8 @@
     var L_EDIT_INVOICE = "<%= L("winEditInvoice") %>";
     var L_FACTURER = "<%= L("facturer") %>";
     var L_FACT_CONFIRM = "<%= L("factConfirm") %>";
+    // Actions permises dans le dossier (T393-T395) : non vide = facturation bloquée (lecture seule / aucun accès)
+    var AC_FACT_BLOQUE = "<%= MessageFacturationBloquee() %>";
     var L_FACT_ENCOURS = "<%= L("factEncours") %>";
     var L_FACT_CLIENT = "<%= L("factClient") %>";
     var L_FACT_ERREUR = "<%= L("factErreur") %>";
@@ -274,6 +278,7 @@
     // facture définitive), puis recharge le tableau de bord. Si le brouillon n'a
     // pas de client, on l'ouvre pour le compléter. Aucun alert/confirm natif.
     function acFacturer(docId, btn) {
+        if (AC_FACT_BLOQUE) { acModal({ message: AC_FACT_BLOQUE }); return; }
         if (!docId || docId <= 0) return;
         acModal({
             message: L_FACT_CONFIRM, confirm: true, okText: L_FACTURER, cancelText: L_ANNULER,
@@ -597,7 +602,9 @@
         // masqué quand le RDV est déjà facturé (brouillon comptabilisé).
         if (!r.estFacture && (r.cli || (r.docId && r.docId > 0))) {
             var fa = bouton('fac', T.facturer); fa.setAttribute('aria-label', fmt(T.facturerAria, r.client));
+            if (AC_FACT_BLOQUE) { fa.classList.add('bloque'); fa.title = AC_FACT_BLOQUE; fa.setAttribute('aria-disabled', 'true'); }
             fa.addEventListener('click', function () {
+                if (AC_FACT_BLOQUE) { acModal({ message: AC_FACT_BLOQUE }); return; }
                 if (r.docId && r.docId > 0) acFacturer(r.docId, fa);
                 else acNouvelleFacture();
             });

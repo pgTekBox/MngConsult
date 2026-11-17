@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="css/landing2.css?v=%%V%%" />
-    <script src="js/appPopup.js?v=2026111701"></script>
+    <script src="js/appPopup.js?v=2026111702"></script>
 </head>
 <body>
 

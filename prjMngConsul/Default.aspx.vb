@@ -759,6 +759,23 @@ Public Class _Default
     End Function
 
     ''' <summary>Traductions du tableau de bord (fr/en/es).</summary>
+    ''' <summary>
+    ''' Bouton « Facturer » du tableau de bord (T395) : facturer écrit dans la zone
+    ''' « Revenus ». Pour un employé du cabinet en lecture seule (accès restreint)
+    ''' ou sans accès à « Revenus » dans ce dossier, renvoie le message du refus
+    ''' (échappé pour JavaScript) ; sinon "". Le handler ComptabiliserFacture refuse aussi.
+    ''' </summary>
+    Protected Function MessageFacturationBloquee() As String
+        Try
+            If Not IsAccountant OrElse Company = Guid.Empty Then Return ""
+            Dim niveau As String = clsActionsDossier.NiveauDe(UserEmail, Company, "revenus")
+            If niveau = "complet" Then Return ""
+            Return HttpUtility.JavaScriptStringEncode(clsActionsDossier.MessageRefus(niveau, "revenus", CurrentLang))
+        Catch
+            Return ""
+        End Try
+    End Function
+
     Protected Function L(key As String) As String
         Dim lang As String = CurrentLang
         Select Case key

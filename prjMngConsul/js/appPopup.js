@@ -184,7 +184,6 @@
             if (!lib || !MOTS_MODIF.test(lib)) return;
             el.setAttribute('disabled', 'disabled');
             el.setAttribute('aria-disabled', 'true');
-            el.setAttribute('title', lsTexte);
             el.style.opacity = '.45';
             el.style.pointerEvents = 'none';
             el.style.cursor = 'not-allowed';

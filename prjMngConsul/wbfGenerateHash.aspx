@@ -16,7 +16,7 @@
         pre { background: #0E1F3D; color: #06b6d4; padding: 14px; border-radius: 8px; overflow-x: auto; font-size: 12px; white-space: pre-wrap; word-break: break-all; }
         .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
     </style>
-    <script src="js/appPopup.js?v=2026111701"></script>
+    <script src="js/appPopup.js?v=2026111702"></script>
 </head>
 <body>
     <form runat="server">

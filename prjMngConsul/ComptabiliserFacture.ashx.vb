@@ -60,6 +60,18 @@ Public Class ComptabiliserFactureHandler
             Return
         End If
 
+        ' Actions permises dans le dossier (T393-T395) : facturer = écrire dans « Revenus ».
+        ' En accès restreint (lecture seule) ou sans accès, la facture n'est pas comptabilisée.
+        Dim niveau As String = clsActionsDossier.NiveauSession(context, "revenus")
+        If niveau <> "complet" Then
+            context.Response.StatusCode = 403
+            Dim lang As String = If(context.Session("Lang") IsNot Nothing, Convert.ToString(context.Session("Lang")), "fr")
+            context.Response.Write(js.Serialize(New With {.ok = False, .lectureSeule = True,
+                                                          .erreur = clsActionsDossier.MessageRefus(niveau, "revenus", lang) &
+                                                                    If(lang = "en", " The invoice was not posted.", If(lang = "es", " La factura no se contabilizó.", " La facture n'a pas été comptabilisée."))}))
+            Return
+        End If
+
         ' Corps JSON : { docId }
         Dim docId As Integer = 0
         Try

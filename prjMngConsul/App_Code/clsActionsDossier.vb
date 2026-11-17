@@ -131,6 +131,51 @@ Public NotInheritable Class clsActionsDossier
     End Function
 
     ''' <summary>
+    ''' Le niveau d'une action pour l'utilisateur de la session (handlers .ashx,
+    ''' sans page) : courriel et compagnie lus dans la session. « complet » si
+    ''' rien n'est en session (l'appelant vérifie déjà l'authentification).
+    ''' </summary>
+    Public Shared Function NiveauSession(ctx As HttpContext, action As String) As String
+        Try
+            If ctx Is Nothing OrElse ctx.Session Is Nothing Then Return "complet"
+            Dim company As Guid = Guid.Empty
+            If ctx.Session("Company") IsNot Nothing Then company = CType(ctx.Session("Company"), Guid)
+            Dim email As String = Convert.ToString(ctx.Session("UserEmail"))
+            If String.IsNullOrEmpty(email) AndAlso ctx.Session("UserId") IsNot Nothing Then
+                ' Courriel pas encore en session : le relire (s0314GetUserByUserId)
+                Using cn As New SqlConnection(System.Configuration.ConfigurationManager.AppSettings("ConnectionString"))
+                    Using cmd As New SqlCommand("s0314GetUserByUserId", cn)
+                        cmd.CommandType = CommandType.StoredProcedure
+                        cmd.Parameters.AddWithValue("@Id", Convert.ToInt32(ctx.Session("UserId")))
+                        cn.Open()
+                        Using rd As SqlDataReader = cmd.ExecuteReader()
+                            If rd.Read() Then email = Convert.ToString(rd("Email"))
+                        End Using
+                    End Using
+                End Using
+            End If
+            If String.IsNullOrEmpty(email) OrElse company = Guid.Empty Then Return "complet"
+            Return NiveauDe(email, company, action)
+        Catch
+            Return "complet"
+        End Try
+    End Function
+
+    ''' <summary>Message du refus d'une écriture selon le niveau (« aucun » ou lecture seule), dans la langue.</summary>
+    Public Shared Function MessageRefus(niveau As String, action As String, lang As String) As String
+        Dim zone As String = Libelle(action, lang)
+        Dim l As String = If(lang, "fr").ToLowerInvariant()
+        If niveau = "aucun" Then
+            If l = "en" Then Return "Your firm has not given you access to """ & zone & """ in this file."
+            If l = "es" Then Return "Su despacho no le dio acceso a «" & zone & "» en este expediente."
+            Return "Votre cabinet ne vous a pas donné accès à « " & zone & " » dans ce dossier."
+        End If
+        If l = "en" Then Return "Read-only access to """ & zone & """: your firm lets you view this area of the file, but not change it."
+        If l = "es" Then Return "Acceso de solo lectura a «" & zone & "»: su despacho le permite consultar esta zona del expediente, pero no modificarla."
+        Return "Accès en lecture seule à « " & zone & " » : votre cabinet vous permet de consulter cette zone du dossier, mais pas de la modifier."
+    End Function
+
+    ''' <summary>
     ''' Le niveau d'accès de l'utilisateur pour une action dans la compagnie :
     ''' « complet » s'il n'est pas restreint, « aucun » si la zone est fermée,
     ''' sinon le code du niveau (ex. « restreint »). Pour qu'une page limite ce

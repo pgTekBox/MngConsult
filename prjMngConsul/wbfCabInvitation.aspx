@@ -29,7 +29,7 @@
         .foot { text-align:center; color:var(--muted); font-size:12px; margin-top:16px; }
         a { color:var(--primary); font-weight:700; text-decoration:none; }
     </style>
-    <script src="js/appPopup.js?v=2026111701"></script>
+    <script src="js/appPopup.js?v=2026111702"></script>
 </head>
 <body>
     <form id="form1" runat="server">
