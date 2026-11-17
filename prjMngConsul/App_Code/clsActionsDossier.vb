@@ -84,16 +84,17 @@ Public NotInheritable Class clsActionsDossier
     End Function
 
     ''' <summary>
-    ''' Les actions permises à l'utilisateur dans la compagnie, ou Nothing s'il
-    ''' n'est pas restreint. Mis en cache pour la requête HTTP.
+    ''' Le niveau de chaque action ouverte à l'utilisateur dans la compagnie
+    ''' (action → niveau, seulement les niveaux qui ouvrent la zone), ou Nothing
+    ''' s'il n'est pas restreint. Mis en cache pour la requête HTTP. (T394)
     ''' </summary>
-    Public Shared Function Permises(email As String, company As Guid) As HashSet(Of String)
+    Public Shared Function Permises(email As String, company As Guid) As Dictionary(Of String, String)
         If String.IsNullOrEmpty(email) OrElse company = Guid.Empty Then Return Nothing
         Dim ctx As HttpContext = HttpContext.Current
         Dim cle As String = "ActionsDossier|" & email.ToLowerInvariant() & "|" & company.ToString()
-        If ctx IsNot Nothing AndAlso ctx.Items.Contains(cle) Then Return TryCast(ctx.Items(cle), HashSet(Of String))
+        If ctx IsNot Nothing AndAlso ctx.Items.Contains(cle) Then Return TryCast(ctx.Items(cle), Dictionary(Of String, String))
 
-        Dim res As HashSet(Of String) = Nothing
+        Dim res As Dictionary(Of String, String) = Nothing
         Try
             Using cn As New SqlConnection(System.Configuration.ConfigurationManager.AppSettings("ConnectionString"))
                 Using cmd As New SqlCommand("s1016GetActionsPermises", cn)
@@ -104,8 +105,11 @@ Public NotInheritable Class clsActionsDossier
                     Using rd As SqlDataReader = cmd.ExecuteReader()
                         While rd.Read()
                             If Not rd.IsDBNull(0) AndAlso rd.GetBoolean(0) Then
-                                If res Is Nothing Then res = New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
-                                If Not rd.IsDBNull(1) Then res.Add(rd.GetString(1))
+                                If res Is Nothing Then res = New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase)
+                                ' Seules les actions dont le niveau ouvre la zone (PermetPage) sont gardées
+                                If Not rd.IsDBNull(1) AndAlso Not rd.IsDBNull(3) AndAlso rd.GetBoolean(3) Then
+                                    res(rd.GetString(1)) = If(rd.IsDBNull(2), "complet", rd.GetString(2))
+                                End If
                             End If
                         End While
                     End Using
@@ -122,7 +126,21 @@ Public NotInheritable Class clsActionsDossier
     Public Shared Function PagePermise(email As String, company As Guid, url As String) As Boolean
         Dim a As String = ActionDePage(url)
         If a = "" Then Return True
-        Dim p As HashSet(Of String) = Permises(email, company)
-        Return p Is Nothing OrElse p.Contains(a)
+        Dim p As Dictionary(Of String, String) = Permises(email, company)
+        Return p Is Nothing OrElse p.ContainsKey(a)
+    End Function
+
+    ''' <summary>
+    ''' Le niveau d'accès de l'utilisateur pour une action dans la compagnie :
+    ''' « complet » s'il n'est pas restreint, « aucun » si la zone est fermée,
+    ''' sinon le code du niveau (ex. « restreint »). Pour qu'une page limite ce
+    ''' qu'on y fait selon le niveau.
+    ''' </summary>
+    Public Shared Function NiveauDe(email As String, company As Guid, action As String) As String
+        Dim p As Dictionary(Of String, String) = Permises(email, company)
+        If p Is Nothing Then Return "complet"
+        Dim n As String = Nothing
+        If p.TryGetValue(action, n) Then Return n
+        Return "aucun"
     End Function
 End Class

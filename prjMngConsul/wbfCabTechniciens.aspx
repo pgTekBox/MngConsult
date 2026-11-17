@@ -53,7 +53,7 @@
     #tec .fen .ligne { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-top: 1px solid #E3E9F1; font-size: 14px; cursor: pointer }
     #tec .fen .ligne input { width: 18px; height: 18px }
     #tec .fen .ligne span.autre { margin-left: auto; font-size: 12px; color: #7A5200 }
-    #tec .fen { max-width: 640px }
+    #tec .fen { max-width: 760px }
     #tec .fen .dos { border-top: 1px solid #E3E9F1 }
     #tec .fen .dos .ligne { border-top: 0 }
     #tec .fen .ligne label.nomd { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; min-width: 0 }
@@ -63,6 +63,11 @@
     #tec .fen .actions label.act { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer }
     #tec .fen .actions label.act input { width: 16px; height: 16px }
     #tec .fen .actions[hidden], #tec .fen .actbtn[hidden] { display: none }
+    #tec .fen .actions label.act { justify-content: space-between }
+    #tec .fen .actions label.act select { width: auto; min-width: 150px; flex: 0 0 auto; height: 30px; padding: 0 8px; font-size: 12.5px; border-radius: 8px }
+    #tec .fen .actions select[data-niv="aucun"] { background: #FDECEA; color: #A3261C }
+    #tec .fen .actions select[data-niv="restreint"] { background: #FBF1DC; color: #7A5200 }
+    #tec .fen .actions select[data-niv="complet"] { background: #E3F3EA; color: #0F5A3A }
     #tec .fen > .aide, #tec #tecFenCorps > .aide { font-size: 12px; color: #5B6B86; margin-bottom: 8px }
     #tec .fen .pied { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px }
     #tec .crayon { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #D5DDE8; background: #fff; color: #1B4F9C; cursor: pointer; display: inline-flex; align-items: center; justify-content: center }
@@ -366,15 +371,25 @@
         location.reload();
     }
 
-    // « Gérer les dossiers » : dossiers confiés + actions permises dans chacun (T393)
-    var tecCatalogue = [], tecActionsInit = {};
+    // « Gérer les dossiers » : dossiers confiés + niveau d'accès par action (T393/T394).
+    // Les niveaux viennent du catalogue T338 (Aucun / Restreint / Complet, extensible).
+    var tecCatalogue = [], tecNiveauxCat = [], tecActionsInit = {};
+    function tecLireNiveaux(guid) {
+        return Array.prototype.map.call(document.querySelectorAll('#act-' + guid + ' select'), function (s) {
+            return s.getAttribute('data-action') + ':' + s.value;
+        });
+    }
     function tecResumeActions(guid) {
-        var cases = document.querySelectorAll('#act-' + guid + ' input[type=checkbox]');
-        var n = Array.prototype.filter.call(cases, function (c) { return c.checked; }).length;
-        return n === cases.length ? TL.actionsToutes : (n === 0 ? TL.actionsAucune : tFmt(TL.actionsN, n));
+        var sels = document.querySelectorAll('#act-' + guid + ' select');
+        var compte = {};
+        Array.prototype.forEach.call(sels, function (s) { compte[s.value] = (compte[s.value] || 0) + 1; });
+        if ((compte['complet'] || 0) === sels.length) return TL.actionsToutes;
+        return tecNiveauxCat.filter(function (n) { return compte[n.code]; })
+                            .map(function (n) { return compte[n.code] + ' × ' + n.nom; }).join(' · ');
     }
     function tecMajResume(guid) {
         var r = document.getElementById('res-' + guid); if (r) r.textContent = tecResumeActions(guid);
+        Array.prototype.forEach.call(document.querySelectorAll('#act-' + guid + ' select'), function (s) { s.setAttribute('data-niv', s.value); });
     }
     function tecBasculerActions(guid) {
         var z = document.getElementById('act-' + guid); if (z) z.hidden = !z.hidden;
@@ -395,23 +410,26 @@
         document.getElementById('tecFond').classList.add('ouvert');
         var d = await tPost({ op: 'dossiers', id: id });
         if (!d.ok) { document.getElementById('tecFenMsg').innerHTML = '<div class="msg err">' + tEsc(d.erreur) + '</div>'; return; }
-        tecCatalogue = d.catalogue || []; tecActionsInit = {};
-        // Les actions ne concernent que les employés restreints : un administrateur voit tout
+        tecCatalogue = d.catalogue || []; tecNiveauxCat = d.niveauxCat || []; tecActionsInit = {};
+        var noms = {}; tecCatalogue.forEach(function (c) { noms[c.code] = c.nom; });
+        // Un administrateur du cabinet n'est jamais restreint
         var limitable = !x || x.role !== 'admin';
         document.getElementById('tecFenCorps').innerHTML = (limitable ? '<div class="aide">' + tEsc(TL.actionsAide) + '</div>' : '') +
             (d.dossiers.map(function (o) {
-                var permises = o.restreint ? o.actions : tecCatalogue.map(function (c) { return c.code; });
-                tecActionsInit[o.id] = permises.slice().sort().join(',');
-                var cases = tecCatalogue.map(function (c) {
-                    return '<label class="act"><input type="checkbox" value="' + c.code + '"' + (permises.indexOf(c.code) >= 0 ? ' checked' : '') +
-                           ' onchange="tecMajResume(\'' + o.id + '\')" /> ' + tEsc(c.nom) + '</label>';
+                tecActionsInit[o.id] = o.niveaux.map(function (v) { return v.a + ':' + v.n; }).join(',');
+                var lignes = o.niveaux.map(function (v) {
+                    var opts = tecNiveauxCat.map(function (n) {
+                        return '<option value="' + n.code + '"' + (n.code === v.n ? ' selected' : '') + '>' + tEsc(n.nom) + '</option>';
+                    }).join('');
+                    return '<label class="act"><span>' + tEsc(noms[v.a] || v.a) + '</span>' +
+                           '<select data-action="' + v.a + '" data-niv="' + v.n + '" onchange="tecMajResume(\'' + o.id + '\')">' + opts + '</select></label>';
                 }).join('');
                 return '<div class="dos"><div class="ligne"><label class="nomd"><input type="checkbox" value="' + o.id + '"' + (o.confie ? ' checked' : '') +
                        ' onchange="tecMajLigne(this)" /><span>' + tEsc(o.nom) + '</span></label>' +
                        (o.autre ? '<span class="autre">' + tEsc(tFmt(TL.dejaA, o.autre)) + '</span>' : '') +
                        (limitable ? '<button type="button" class="actbtn" id="btn-' + o.id + '"' + (o.confie ? '' : ' hidden') +
                                     ' onclick="tecBasculerActions(\'' + o.id + '\')"><span id="res-' + o.id + '"></span> ▾</button>' : '') +
-                       '</div>' + (limitable ? '<div class="actions" id="act-' + o.id + '" hidden>' + cases + '</div>' : '') + '</div>';
+                       '</div>' + (limitable ? '<div class="actions" id="act-' + o.id + '" hidden>' + lignes + '</div>' : '') + '</div>';
             }).join('') || '<div class="vide">' + tEsc(TL.aucunDossier) + '</div>');
         if (limitable) d.dossiers.forEach(function (o) { tecMajResume(o.id); });
     }
@@ -421,14 +439,12 @@
         var b = document.getElementById('tecFenOk'); b.disabled = true;
         var d = await tPost({ op: 'assign', id: tecMembre, guids: ids.join(',') });
         if (d.ok) {
-            // Les actions des dossiers confiés qui ont changé
+            // Le niveau des actions des dossiers confiés qui ont changé
             for (var i = 0; i < ids.length && d.ok; i++) {
-                var cases = document.querySelectorAll('#act-' + ids[i] + ' input[type=checkbox]');
-                if (!cases.length) continue;
-                var coches = Array.prototype.filter.call(cases, function (c) { return c.checked; }).map(function (c) { return c.value; });
-                var cle = coches.slice().sort().join(',');
-                if (cle === tecActionsInit[ids[i]]) continue;
-                d = await tPost({ op: 'actions', id: tecMembre, guid: ids[i], actions: coches.length === cases.length ? '*' : coches.join(',') });
+                var niv = tecLireNiveaux(ids[i]);
+                if (!niv.length || niv.join(',') === tecActionsInit[ids[i]]) continue;
+                var toutComplet = niv.every(function (v) { return /:complet$/.test(v); });
+                d = await tPost({ op: 'actions', id: tecMembre, guid: ids[i], actions: toutComplet ? '*' : niv.join(',') });
             }
         }
         b.disabled = false;
