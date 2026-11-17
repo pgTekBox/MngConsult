@@ -190,14 +190,22 @@ Public Class wbfCabTechniciens
                         If nn <> "" AndAlso Not nomsNiveaux.ContainsKey(Txt(rn("Code"))) Then nomsNiveaux(Txt(rn("Code"))) = nn
                     Next
                 End If
-                For Each d As DossierMembre In ListeDossiers(membreId)
-                    If d.confie OrElse parDossier.ContainsKey(d.id) Then dossiers.Add(d)   ' confiés, ou dont les accès sont ajustés
-                Next
+                ' Les dossiers que l'employé peut vraiment ouvrir (s1018, T396) : confiés,
+                ' ou par supervision ; les réglages restés pour un dossier qu'il ne voit plus sont ignorés.
+                Dim pa As New Collection
+                pa.Add(New SqlParameter("@UserId", UserEmail))
+                pa.Add(New SqlParameter("@MembreId", membreId))
+                Dim dsv As DataSet = ExecuteSQLds("s1018ListDossiersAccessibles", pa)
+                If dsv IsNot Nothing AndAlso dsv.Tables.Count > 0 Then
+                    For Each rv As DataRow In dsv.Tables(0).Rows
+                        dossiers.Add(New DossierMembre With {.id = Txt(rv("CompanyGUID")).ToLowerInvariant(), .nom = Txt(rv("Nom")), .confie = CBool(rv("Confie"))})
+                    Next
+                End If
             Catch
             End Try
 
             If dossiers.Count = 0 Then
-                sb.Append("<div class=""note"">").Append(H(T("Aucun dossier confié.", "No file assigned.", "Ningún expediente asignado."))).Append("</div></section>")
+                sb.Append("<div class=""note"">").Append(H(T("Aucun dossier (ni confié, ni par supervision).", "No file (neither assigned nor through supervision).", "Ningún expediente (ni asignado, ni por supervisión)."))).Append("</div></section>")
                 Continue For
             End If
 
@@ -223,7 +231,7 @@ Public Class wbfCabTechniciens
                 If nbL + nbA > 0 Then etiq &= " (" & If(nbL > 0, nbL & " " & T("lecture seule", "read-only", "solo lectura"), "") & If(nbL > 0 AndAlso nbA > 0, " · ", "") & If(nbA > 0, nbA & " " & T("aucun accès", "no access", "sin acceso"), "") & ")"
                 If Not accesParDossier.ContainsKey(d.id) Then accesParDossier(d.id) = New List(Of String)
                 accesParDossier(d.id).Add(etiq)
-                sb.Append("<tr><td class=""dos"">").Append(H(d.nom)).Append("</td>")
+                sb.Append("<tr><td class=""dos"">").Append(H(d.nom)).Append(If(d.confie, "", "<div style=""font-weight:400;font-size:10.5px;color:#6B7A90"">" & H(T("par supervision", "through supervision", "por supervisión")) & "</div>")).Append("</td>")
                 For Each a As String In actions
                     Dim n As String = "complet"
                     If acts IsNot Nothing Then n = If(acts.ContainsKey(a), acts(a), "aucun")
