@@ -241,7 +241,16 @@ Public Class Importation2
     Private Function EtatConnexion() As Object
         If Logiciel Is Nothing OrElse Not ServicesApideck.ContainsKey(Logiciel) Then Return New With {.ok = True, .statut = "attente"}
         Dim api As New clsApideck(Company.ToString())
-        If api.IsConnected(ServicesApideck(Logiciel)) Then
+        Dim relieChez As Boolean
+        Try
+            relieChez = api.IsConnected(ServicesApideck(Logiciel))
+        Catch ex As ApideckHttpException When ex.CodeHttp = 402 OrElse ex.CodeHttp = 401 OrElse ex.CodeHttp = 403
+            Return New With {.ok = False, .erreur = T("La connexion en direct est momentanément indisponible (abonnement du service de connexion à renouveler). Choisissez « Je préfère déposer des fichiers » pour continuer.",
+                                                    "Live connection is temporarily unavailable (the connection service subscription must be renewed). Choose ""I'd rather drop files"" to continue.",
+                                                    "La conexión en directo no está disponible por el momento (la suscripción del servicio de conexión debe renovarse). Elija «Prefiero depositar archivos» para continuar."),
+                          .code = ex.CodeHttp}
+        End Try
+        If relieChez Then
             Relie = True
             Return New With {.ok = True, .statut = "connecte", .etat = Etat()}
         End If

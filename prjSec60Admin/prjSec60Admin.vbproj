@@ -407,6 +407,7 @@
     <Content Include="wbfPlaidDiagnostic.aspx" />
     <Content Include="wbfDemoReset.aspx" />
     <Content Include="wbfClaudePrompts.aspx" />
+    <Content Include="wbfApideckLog.aspx" />
     <Content Include="wbfReservations.aspx" />
     <Content Include="wbfPlanComptableDefaut.aspx" />
     <Content Include="wbfMail.aspx" />
@@ -650,6 +651,10 @@
     </Compile>
     <Compile Include="wbfClaudePrompts.aspx.vb">
       <DependentUpon>wbfClaudePrompts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfApideckLog.aspx.vb">
+      <DependentUpon>wbfApideckLog.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfReservations.aspx.vb">

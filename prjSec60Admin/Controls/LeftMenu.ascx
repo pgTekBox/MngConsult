@@ -146,6 +146,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         Connexions Plaid
                     </a>
+                    <a class="nav-child" href="~/wbfApideckLog.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Journal Apideck
+                    </a>
                 </div>
             </div>
 

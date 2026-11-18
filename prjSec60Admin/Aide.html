@@ -69,6 +69,7 @@ ol.etapes li{margin:6px 0}
   <a href="#metiers">Métiers</a>
   <a href="#webhooks">Webhooks Stripe et Square</a>
   <a href="#plaid">Connexions Plaid</a>
+  <a href="#apideck">Journal Apideck</a>
   <h2>Paie</h2>
   <a href="#taux">Taux de l'année</a>
   <a href="#formulaires">Formulaires T4 et Relevé 1</a>
@@ -97,7 +98,7 @@ ol.etapes li{margin:6px 0}
 <tr><td>Tableau de bord</td><td>Accueil</td><td>Point d'entrée de la console.</td></tr>
 <tr><td>Courriel</td><td>Courriel, Comptes de courriel</td><td>Lire et envoyer le courriel du service 60Sec ; gérer les adresses @60sec.ca.</td></tr>
 <tr><td>Sécurité</td><td>Utilisateurs, Administrateurs</td><td>Comptes des clients (par compagnie) et comptes de la console.</td></tr>
-<tr><td>Abonnements</td><td>Forfaits, LandingPage, Réservations, Compagnies &amp; abonnements, Webhooks Stripe, Webhooks Square, Connexions Plaid</td><td>L'offre commerciale, la page d'accueil publique, les compagnies et leur abonnement, les diagnostics des connexions externes.</td></tr>
+<tr><td>Abonnements</td><td>Forfaits, LandingPage, Réservations, Compagnies &amp; abonnements, Webhooks Stripe, Webhooks Square, Connexions Plaid, Journal Apideck</td><td>L'offre commerciale, la page d'accueil publique, les compagnies et leur abonnement, les diagnostics des connexions externes.</td></tr>
 <tr><td>Paie</td><td>Taux de l'année, Formulaires T4 et Relevé 1</td><td>Ce que 60secPaie ne laisse pas à ses utilisateurs parce que cela vaut pour toutes les compagnies : les taux gouvernementaux de l'année, les formulaires officiels et les instructions T4.</td></tr>
 <tr><td>Tâches</td><td>Tâches, Calendrier, Suivi, Exécution, Tableau des tâches</td><td>Les traitements de fond planifiés (procédures, connecteurs, courriels) et leur historique.</td></tr>
 <tr><td>Outils</td><td>Prompts OpenAI, Plan comptable par défaut, Réinitialiser la démo</td><td>Textes envoyés à l'IA, plan comptable modèle des nouvelles compagnies, remise en état des démos.</td></tr>
@@ -199,6 +200,16 @@ ol.etapes li{margin:6px 0}
 <p><span class="chemin">wbfPlaidDiagnostic.aspx</span>. La santé des connexions bancaires : compteurs (items Plaid actifs, connectées, banques distinctes, erreurs sur la période), liste des connexions (Statut Tous / Actifs / Inactifs, recherche par banque, compte ou itemId) et journal de synchronisation. Une connexion en erreur se répare du côté de la compagnie (reconnexion dans 60Sec-AI) ; la console ne fait que montrer.</p>
 
 <!-- ============================================================ -->
+<h2 id="apideck">Journal Apideck</h2>
+<p><span class="chemin">wbfApideckLog.aspx</span> (Abonnements › Journal Apideck). Chaque appel de l'ERP à Apideck y est inscrit, réussi ou non : sessions Vault (« Se connecter à … » d'Importation 2, « Relier QuickBooks »), vérification des connexions, lectures comptables des importations, passe-plat. La clé d'API n'est jamais inscrite.</p>
+<ul>
+<li><strong>Résumé de la période</strong> : appels, erreurs (et leur part), durée moyenne, compagnies concernées, dernier appel, dernière erreur, puis la répartition par statut HTTP (— = aucune réponse : délai, réseau ou configuration manquante).</li>
+<li><strong>Filtres</strong> : 24 h, 7, 30 ou 90 jours ; Tous les appels ou Erreurs ; la recherche porte sur le chemin, le message d'erreur, la page, la compagnie, le courriel de l'usager ou un statut (ex. 402). Les 300 appels les plus récents sont affichés.</li>
+<li><strong>Une ligne</strong> = date, statut (vert 2xx, rouge erreur), méthode et chemin, compagnie, usager et page de l'ERP, durée, numéro d'essai (les 429, 403 et 5xx sont réessayés jusqu'à 5 fois : chaque essai a sa ligne). Cliquer la ligne déplie le détail : service, message d'erreur, adresse du passe-plat, extraits de la requête et de la réponse (4 000 caractères au plus).</li>
+<li><strong>Effacer les entrées de plus de 90 jours</strong> (après confirmation) garde le journal léger ; rien de plus récent n'est touché.</li>
+<li>Statuts fréquents : <strong>402</strong> = forfait Apideck expiré ou insuffisant (à renouveler chez Apideck) ; <strong>401</strong> = clé d'API ou App ID refusés (Web.config de l'ERP) ; <strong>404</strong> = ressource absente ou compagnie pas encore reliée ; <strong>429</strong> = trop d'appels, réessayé.</li>
+</ul>
+
 <h2 id="taux">Paie › Taux de l'année</h2>
 <p><span class="chemin">wbfPaieAnnees.aspx</span>. Les taux gouvernementaux qu'utilise 60secPaie pour <strong>toutes les compagnies</strong>, une ligne par année : impôt fédéral (T4127), impôt du Québec (TP-1015.F), AE, RRQ, RQAP, FSS, CNESST et CNT, plus l'Ontario, les autres provinces et territoires. Le moteur de paie n'utilise qu'une année <strong>validée</strong> ; un brouillon se prépare et se vérifie sans rien changer aux paies. 60secPaie refuse une paie datée d'une année non validée (« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »).</p>
 <h3>La liste des années</h3>

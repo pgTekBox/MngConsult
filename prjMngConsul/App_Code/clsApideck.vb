@@ -1,5 +1,7 @@
 ﻿Imports System
 Imports System.Configuration
+Imports System.Data
+Imports System.Data.SqlClient
 Imports System.Net
 Imports System.Text
 Imports Newtonsoft.Json.Linq
@@ -261,9 +263,11 @@ Public Class clsApideck
     Private Function SendJson(chemin As String, methode As String, jsonBody As String,
                               Optional aval As String = "") As JObject
         If Not IsConfigured() Then
+            Journaliser(methode, chemin, aval, 1, 0, False, 0, "Apideck : clé d'API ou App ID manquants (Web.config appSettings).", jsonBody, Nothing, 0)
             Throw New Exception("Apideck : clé d'API ou App ID manquants (Web.config appSettings).")
         End If
         If String.IsNullOrEmpty(_consumerId) Then
+            Journaliser(methode, chemin, aval, 1, 0, False, 0, "Apideck : aucun consommateur (la compagnie n'est pas identifiée).", jsonBody, Nothing, 0)
             Throw New Exception("Apideck : aucun consommateur (la compagnie n'est pas identifiée).")
         End If
 
@@ -272,7 +276,7 @@ Public Class clsApideck
 
         For essai As Integer = 1 To ESSAIS
             Try
-                Return Envoyer(chemin, methode, jsonBody, aval)
+                Return Envoyer(chemin, methode, jsonBody, aval, essai)
 
             Catch ex As ApideckHttpException
                 derniere = ex
@@ -292,7 +296,7 @@ Public Class clsApideck
     End Function
 
     Private Function Envoyer(chemin As String, methode As String, jsonBody As String,
-                             Optional aval As String = "") As JObject
+                             Optional aval As String = "", Optional essai As Integer = 1) As JObject
         EnsureTls12()
 
         Dim req As HttpWebRequest = DirectCast(WebRequest.Create(BaseUrl() & chemin), HttpWebRequest)
@@ -316,19 +320,23 @@ Public Class clsApideck
         ' distingue d'un appel ordinaire.
         If aval <> "" Then req.Headers.Add("x-apideck-downstream-url", aval)
 
-        If jsonBody IsNot Nothing Then
-            req.ContentType = "application/json"
-            Dim bytes As Byte() = Encoding.UTF8.GetBytes(jsonBody)
-            req.ContentLength = bytes.Length
-            Using rs As IO.Stream = req.GetRequestStream()
-                rs.Write(bytes, 0, bytes.Length)
-            End Using
-        End If
-
+        ' T399 : chaque appel est inscrit au journal (T027ApideckLog), réussi ou non.
+        Dim chrono As Diagnostics.Stopwatch = Diagnostics.Stopwatch.StartNew()
         Try
+            If jsonBody IsNot Nothing Then
+                req.ContentType = "application/json"
+                Dim bytes As Byte() = Encoding.UTF8.GetBytes(jsonBody)
+                req.ContentLength = bytes.Length
+                Using rs As IO.Stream = req.GetRequestStream()
+                    rs.Write(bytes, 0, bytes.Length)
+                End Using
+            End If
+
             Using resp As HttpWebResponse = DirectCast(req.GetResponse(), HttpWebResponse)
                 Using sr As New IO.StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                     Dim texte As String = sr.ReadToEnd()
+                    Journaliser(methode, chemin, aval, essai, CInt(resp.StatusCode), True, chrono.ElapsedMilliseconds,
+                                Nothing, jsonBody, texte, If(texte, "").Length)
                     If String.IsNullOrWhiteSpace(texte) Then Return New JObject()
                     Return JObject.Parse(texte)
                 End Using
@@ -346,8 +354,86 @@ Public Class clsApideck
                 End Using
             End If
 
-            Throw New ApideckHttpException(MessageErreur(code, corps, ex.Message), code)
+            Dim message As String = MessageErreur(code, corps, ex.Message)
+            Journaliser(methode, chemin, aval, essai, code, False, chrono.ElapsedMilliseconds,
+                        If(code = 0, ex.Status.ToString() & " — " & ex.Message, message), jsonBody, corps, If(corps, "").Length)
+            Throw New ApideckHttpException(message, code)
+
+        Catch ex As Newtonsoft.Json.JsonReaderException
+            ' Réponse 2xx qui n'est pas du JSON : déjà inscrite comme reçue, on note l'échec de lecture
+            Journaliser(methode, chemin, aval, essai, 0, False, chrono.ElapsedMilliseconds,
+                        "Réponse illisible (pas du JSON) : " & ex.Message, jsonBody, Nothing, 0)
+            Throw
         End Try
+    End Function
+
+    ' =========================================================================
+    ' JOURNAL (T399) — consulté dans la console d'admin (wbfApideckLog)
+    ' =========================================================================
+
+    Private Const EXTRAIT_MAX As Integer = 4000
+
+    ''' <summary>
+    ''' Inscrit un appel au journal T027ApideckLog (s1020). Ne lève jamais :
+    ''' un journal en panne ne doit pas empêcher une reprise. Jamais la clé
+    ''' d'API : seuls les corps (extraits) sont gardés, pas les en-têtes.
+    ''' </summary>
+    Private Sub Journaliser(methode As String, chemin As String, aval As String, essai As Integer,
+                            statut As Integer, succes As Boolean, dureeMs As Long,
+                            erreur As String, requete As String, reponse As String, tailleReponse As Integer)
+        Try
+            Dim company As Object = DBNull.Value
+            Dim g As Guid
+            If Guid.TryParse(_consumerId, g) Then company = g
+
+            Dim userId As Object = DBNull.Value
+            Dim page As Object = DBNull.Value
+            Dim ctx As Web.HttpContext = Web.HttpContext.Current
+            If ctx IsNot Nothing Then
+                Try
+                    If ctx.Session IsNot Nothing AndAlso ctx.Session("UserId") IsNot Nothing Then userId = Convert.ToInt32(ctx.Session("UserId"))
+                Catch
+                End Try
+                Try
+                    page = ctx.Request.Path
+                Catch
+                End Try
+            End If
+
+            Dim service As Object = DBNull.Value
+            If chemin.StartsWith("/accounting/", StringComparison.OrdinalIgnoreCase) OrElse
+               chemin.StartsWith("/proxy", StringComparison.OrdinalIgnoreCase) Then service = ServiceId()
+
+            Using cn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
+                Using cmd As New SqlCommand("s1020InsertApideckLog", cn)
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.Parameters.AddWithValue("@CompanyGUID", company)
+                    cmd.Parameters.AddWithValue("@UserId", userId)
+                    cmd.Parameters.AddWithValue("@Page", page)
+                    cmd.Parameters.AddWithValue("@Methode", If(methode, "GET"))
+                    cmd.Parameters.AddWithValue("@Chemin", If(chemin, ""))
+                    cmd.Parameters.AddWithValue("@ServiceId", service)
+                    cmd.Parameters.AddWithValue("@Aval", If(String.IsNullOrEmpty(aval), CObj(DBNull.Value), aval))
+                    cmd.Parameters.AddWithValue("@Essai", essai)
+                    cmd.Parameters.AddWithValue("@StatutHttp", statut)
+                    cmd.Parameters.AddWithValue("@Succes", succes)
+                    cmd.Parameters.AddWithValue("@DureeMs", CInt(Math.Min(dureeMs, Integer.MaxValue)))
+                    cmd.Parameters.AddWithValue("@Erreur", If(String.IsNullOrEmpty(erreur), CObj(DBNull.Value), erreur))
+                    cmd.Parameters.AddWithValue("@Requete", Extrait(requete))
+                    cmd.Parameters.AddWithValue("@Reponse", Extrait(reponse))
+                    cmd.Parameters.AddWithValue("@TailleReponse", tailleReponse)
+                    cn.Open()
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+        Catch
+            ' Le journal ne doit jamais faire échouer l'appel à Apideck.
+        End Try
+    End Sub
+
+    Private Shared Function Extrait(s As String) As Object
+        If String.IsNullOrEmpty(s) Then Return DBNull.Value
+        Return If(s.Length > EXTRAIT_MAX, s.Substring(0, EXTRAIT_MAX - 1) & "…", s)
     End Function
 
     ''' <summary>
