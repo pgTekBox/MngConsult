@@ -82,7 +82,16 @@
                     <li><strong>Étape 1 — Logiciel</strong> : « Quel logiciel comptable quittez-vous ? ». Onze choix : QuickBooks Online, QuickBooks Desktop, Xero, Sage Comptabilité (en ligne), FreshBooks, Wave, Zoho Books et Odoo (pastille verte <strong>En direct</strong> : 60 lira le logiciel lui-même, en lecture seule), puis Sage 50 (Canada), Acomba et « Autre logiciel ou Excel » (pastille <strong>Par fichier</strong> : vous déposerez un export CSV par écran). Vous ne savez pas ? Choisissez « Autre logiciel ou Excel ».</li>
                     <li>Une fois le logiciel choisi, il s’affiche comme <strong>Origine</strong> dans la bande marine et en haut à droite, avec le lien <kbd>Changer</kbd>. L’étape 1 passe au vert et l’étape 2 devient l’étape en cours. Le choix est gardé pendant votre session, pour cette compagnie.</li>
                     <li><kbd>Vider la préparation</kbd> efface, après confirmation, ce qui attend d’être validé, y compris le logiciel choisi ; rien de ce qui est déjà en comptabilité n’est retiré.</li>
-                    <li>La pastille « Démonstration · données fictives » rappelle que les étapes 2 à 7 ne sont pas encore branchées : à ce stade, rien n’est lu ni écrit dans votre comptabilité.</li>
+                    <li><strong>Étape 2 — Connexion (ou Fichiers)</strong> : indiquez d’abord la <strong>date de bascule</strong> (la veille du premier jour tenu dans 60secondes ; la balance est arrêtée à cette date — obligatoire) et la fréquence des <strong>taxes déclarées</strong> (par trimestre, par mois ou par année). Ensuite, selon le logiciel :
+                        <ul>
+                            <li><strong>Logiciels en ligne</strong> (QuickBooks Online, Xero, Sage, FreshBooks, Wave, Zoho) : <kbd>Se connecter à …</kbd> ouvre la fenêtre de l’éditeur (par Apideck) ; vous y entrez vos identifiants — jamais dans 60secondes — et autorisez la <strong>lecture seule</strong>. 60 vérifie la liaison toutes les 2 secondes, jusqu’à 5 minutes. Si le navigateur bloque la fenêtre, autorisez les fenêtres surgissantes pour 60secondes.</li>
+                            <li><strong>QuickBooks Desktop</strong> (Web Connector) et <strong>Odoo</strong> (clé d’API) : les étapes sont décrites, mais la liaison n’est pas encore offerte ; 60 le dit et propose de passer par les fichiers. La clé Odoo n’est jamais conservée.</li>
+                            <li><strong>Par fichiers</strong> (Sage 50, Acomba, Autre, ou le lien <kbd>Je préfère déposer des fichiers</kbd>) : 60 liste les six exports à préparer — plan comptable, balance de vérification, clients, fournisseurs, produits et services, factures — avec, pour QuickBooks Online et Xero, le chemin du menu. Fichiers CSV ou texte de 10 Mo au plus. <kbd>Passer au dépôt des fichiers</kbd> retient les réglages. <kbd>Revenir à la lecture en direct</kbd> annule ce choix.</li>
+                        </ul>
+                    </li>
+                    <li>Si la connexion en direct est indisponible (par exemple « abonnement du service de connexion à renouveler »), passez par les fichiers.</li>
+                    <li>Une fois la source reliée ou les réglages retenus, l’étape 2 passe au vert et l’<strong>étape 3 — Plan comptable</strong> s’affiche avec le rappel de la date de bascule et des taxes ; <kbd>Revenir à l’étape 2</kbd> permet de les modifier.</li>
+                    <li>La pastille « Démonstration · données fictives » rappelle que les étapes  3 à 7 ne sont pas encore branchées : à ce stade, rien n’est lu ni écrit dans votre comptabilité.</li>
                 </ul>
             </section>
 
@@ -827,7 +836,16 @@
                     <li><strong>Step 1 — Software</strong>: “Which accounting software are you leaving?”. Eleven choices: QuickBooks Online, QuickBooks Desktop, Xero, Sage Accounting (online), FreshBooks, Wave, Zoho Books and Odoo (green <strong>Live</strong> badge: 60 will read the software itself, read-only), then Sage 50 (Canada), Acomba and “Other software or Excel” (<strong>By file</strong> badge: you will drop one CSV export per screen). Not sure? Choose “Other software or Excel”.</li>
                     <li>Once the software is chosen, it shows as the <strong>Source</strong> in the navy band and at the top right, with the <kbd>Change</kbd> link. Step 1 turns green and step 2 becomes the current step. The choice is kept during your session, for this company.</li>
                     <li><kbd>Clear the preparation</kbd> clears, after confirmation, what is waiting to be validated, including the chosen software; nothing already in the accounting is removed.</li>
-                    <li>The “Demo · sample data” badge is a reminder that steps 2 to 7 are not connected yet: at this point, nothing is read from or written to your accounting.</li>
+                    <li><strong>Step 2 — Connection (or Files)</strong>: first enter the <strong>switch-over date</strong> (the day before the first day kept in 60secondes; the trial balance is struck at this date — required) and how often <strong>taxes are filed</strong> (quarterly, monthly or yearly). Then, depending on the software:
+                        <ul>
+                            <li><strong>Online software</strong> (QuickBooks Online, Xero, Sage, FreshBooks, Wave, Zoho): <kbd>Sign in to …</kbd> opens the publisher’s window (through Apideck); you enter your credentials there — never in 60secondes — and allow <strong>read-only</strong> access. 60 checks the link every 2 seconds, for up to 5 minutes. If the browser blocks the window, allow pop-ups for 60secondes.</li>
+                            <li><strong>QuickBooks Desktop</strong> (Web Connector) and <strong>Odoo</strong> (API key): the steps are described, but the link is not available yet; 60 says so and suggests going with files. The Odoo key is never kept.</li>
+                            <li><strong>By files</strong> (Sage 50, Acomba, Other, or the <kbd>I’d rather drop files</kbd> link): 60 lists the six exports to prepare — chart of accounts, trial balance, customers, suppliers, products and services, invoices. CSV or text files, 10 MB max. <kbd>Go to file drop</kbd> keeps the settings. <kbd>Back to live reading</kbd> undoes that choice.</li>
+                        </ul>
+                    </li>
+                    <li>If live connection is unavailable (for example “the connection service subscription must be renewed”), go with files.</li>
+                    <li>Once the source is connected or the settings kept, step 2 turns green and <strong>step 3 — Chart of accounts</strong> shows, with a reminder of the switch-over date and taxes; <kbd>Back to step 2</kbd> lets you change them.</li>
+                    <li>The “Demo · sample data” badge is a reminder that steps  3 to 7 are not connected yet: at this point, nothing is read from or written to your accounting.</li>
                 </ul>
             </section>
 
@@ -1572,7 +1590,16 @@
                     <li><strong>Paso 1 — Software</strong>: «¿Qué software contable deja?». Once opciones: QuickBooks Online, QuickBooks Desktop, Xero, Sage Contabilidad (en línea), FreshBooks, Wave, Zoho Books y Odoo (etiqueta verde <strong>En directo</strong>: 60 leerá el propio software, en solo lectura), luego Sage 50 (Canadá), Acomba y «Otro software o Excel» (etiqueta <strong>Por archivo</strong>: depositará una exportación CSV por pantalla). ¿No lo sabe? Elija «Otro software o Excel».</li>
                     <li>Una vez elegido el software, aparece como <strong>Origen</strong> en la franja azul marino y arriba a la derecha, con el enlace <kbd>Cambiar</kbd>. El paso 1 pasa a verde y el paso 2 se vuelve el paso en curso. La elección se conserva durante su sesión, para esta compañía.</li>
                     <li><kbd>Vaciar la preparación</kbd> borra, tras confirmar, lo que espera validación, incluido el software elegido; no se retira nada de lo que ya está en la contabilidad.</li>
-                    <li>La etiqueta «Demostración · datos ficticios» recuerda que los pasos 2 a 7 aún no están conectados: por ahora no se lee ni se escribe nada en su contabilidad.</li>
+                    <li><strong>Paso 2 — Conexión (o Archivos)</strong>: indique primero la <strong>fecha de cambio</strong> (el día anterior al primer día llevado en 60secondes; la balanza se cierra en esa fecha — obligatoria) y la frecuencia de los <strong>impuestos declarados</strong> (por trimestre, por mes o por año). Luego, según el software:
+                        <ul>
+                            <li><strong>Software en línea</strong> (QuickBooks Online, Xero, Sage, FreshBooks, Wave, Zoho): <kbd>Conectarse a …</kbd> abre la ventana del editor (mediante Apideck); allí ingresa sus credenciales — nunca en 60secondes — y autoriza la <strong>solo lectura</strong>. 60 verifica la conexión cada 2 segundos, hasta 5 minutos. Si el navegador bloquea la ventana, permita las ventanas emergentes para 60secondes.</li>
+                            <li><strong>QuickBooks Desktop</strong> (Web Connector) y <strong>Odoo</strong> (clave de API): los pasos se describen, pero la conexión aún no está disponible; 60 lo indica y propone pasar por archivos. La clave de Odoo nunca se conserva.</li>
+                            <li><strong>Por archivos</strong> (Sage 50, Acomba, Otro, o el enlace <kbd>Prefiero depositar archivos</kbd>): 60 enumera las seis exportaciones que preparar — plan contable, balanza de comprobación, clientes, proveedores, productos y servicios, facturas. Archivos CSV o de texto de 10 MB como máximo. <kbd>Pasar al depósito de archivos</kbd> guarda los ajustes. <kbd>Volver a la lectura en directo</kbd> anula esa elección.</li>
+                        </ul>
+                    </li>
+                    <li>Si la conexión en directo no está disponible (por ejemplo «la suscripción del servicio de conexión debe renovarse»), pase por archivos.</li>
+                    <li>Una vez conectado el origen o guardados los ajustes, el paso 2 pasa a verde y aparece el <strong>paso 3 — Plan contable</strong>, con el recordatorio de la fecha de cambio y de los impuestos; <kbd>Volver al paso 2</kbd> permite modificarlos.</li>
+                    <li>La etiqueta «Demostración · datos ficticios» recuerda que los pasos  3 a 7 aún no están conectados: por ahora no se lee ni se escribe nada en su contabilidad.</li>
                 </ul>
             </section>
 

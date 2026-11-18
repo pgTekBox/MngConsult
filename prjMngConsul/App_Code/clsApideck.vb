@@ -110,12 +110,17 @@ Public Class clsApideck
     ''' « state » : seul CALLABLE permet de lire.
     ''' </summary>
     Public Function IsConnected() As Boolean
+        Return IsConnected(ServiceId())
+    End Function
+
+    ''' <summary>Même chose pour un service précis (« quickbooks », « xero »…), sans changer Web.config (Importation 2).</summary>
+    Public Function IsConnected(serviceVoulu As String) As Boolean
         Dim liste As JArray = Connections()
         If liste Is Nothing Then Return False
 
         For Each c As JToken In liste
             Dim service As String = JStr(c("service_id"))
-            If service <> ServiceId() Then Continue For
+            If service <> serviceVoulu Then Continue For
             If String.Equals(JStr(c("state")), "callable", StringComparison.OrdinalIgnoreCase) Then Return True
         Next
         Return False
