@@ -72,7 +72,7 @@ Public NotInheritable Class clsAide
             Case "wbfrapportplancomptable", "wbfetatresultats", "wbfbilan", "wbffluxtresorerie", "wbfbeneficesnonrepartis",
                  "wbfbalanceverification", "wbfaipaiement", "wbfaisale" : Return "rapports"
             Case "correspondancecomptes" : Return "correspondance-comptes"
-            Case "importations", "importapideck", "importplancomptable", "appliquerplancomptable",
+            Case "importations", "importation2", "importapideck", "importplancomptable", "appliquerplancomptable",
                  "importclients", "importfournisseurs", "importproduits", "importbalanceverification", "wbfimport", "wbfimportview" : Return "importation"
             Case "wbfagenda", "wbfappointmentedit" : Return "agenda"
             Case "wbfemployees", "wbfemployeeedit", "wbfmailboxreset" : Return "employes"

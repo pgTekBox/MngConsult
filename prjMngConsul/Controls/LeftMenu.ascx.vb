@@ -240,6 +240,7 @@ Namespace Controls
             ' Une seule porte pour l'importation : la page d'accueil des importations,
             ' qui dit aussi où chacun en est.
             sb.Append(Item("~/Importations.aspx", Ico("import"), "importations"))
+            sb.Append(Item("~/Importation2.aspx", Ico("import"), "importation2"))
             sb.Append(Item("~/wbfLogout.aspx", Ico("logout"), "logout"))
 
             ' T393 : un groupe dont aucune entrée n'est permise disparaît
@@ -394,6 +395,7 @@ Namespace Controls
                 Case "import" : Return Choose3(lang, "Importation", "Import", "Importación")
                 Case "importAll" : Return Choose3(lang, "Import (clients / fournisseurs / produits)", "Import (customers / suppliers / products)", "Importar (clientes / proveedores / productos)")
                 Case "importations" : Return Choose3(lang, "Importation des données", "Data import", "Importación de datos")
+                Case "importation2" : Return Choose3(lang, "Importation 2", "Import 2", "Importación 2")
                 Case "importPlanComptable" : Return Choose3(lang, "Reprise — plan comptable", "Migration — chart of accounts", "Migración — plan contable")
                 Case "appliquerPlanComptable" : Return Choose3(lang, "Reprise — créer les comptes", "Migration — create accounts", "Migración — crear las cuentas")
                 Case "users" : Return Choose3(lang, "Utilisateurs", "Users", "Usuarios")

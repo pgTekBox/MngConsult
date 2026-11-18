@@ -69,7 +69,7 @@ Public NotInheritable Class clsActionsDossier
         {"wbfproducts", "produits"}, {"wbfproductedit", "produits"}, {"wbfproductcategory", "produits"},
         {"wbfproductcategoryedit", "produits"}, {"wbflieux", "produits"}, {"wbflieuedit", "produits"},
         {"wbfsetting", "parametres"}, {"wbfusers", "parametres"}, {"wbfuseredit", "parametres"},
-        {"importations", "parametres"}
+        {"importations", "parametres"}, {"importation2", "parametres"}
     }
 
     ''' <summary>L'action d'une page (« ~/wbfX.aspx?y=1 », « /wbfX »…) ou "" si la page est libre.</summary>
