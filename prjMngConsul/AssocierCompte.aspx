@@ -1,9 +1,9 @@
-﻿<%@ Page Title="Associer un compte du plan comptable" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Title="Décider d'un compte du plan comptable" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="AssocierCompte.aspx.vb" Inherits="MngConsul.AssocierCompte" %>
 <%@ Register Src="~/Controls/EtapesReprise.ascx" TagPrefix="uc" TagName="EtapesReprise" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Associer un compte — 60Sec-AI
+    Décider d'un compte — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -80,7 +80,7 @@
     <div class="asc-head">
         <div class="ico"><i class="ic ic-handshake" aria-hidden="true"></i></div>
         <div>
-            <h1>Associer un compte du plan comptable</h1>
+            <h1>Décider d'un compte du plan comptable</h1>
             <div class="sub">Étape 2, un compte à la fois : l'assistant propose, vous décidez.
                 <a href="CorrespondanceComptes.aspx" target="_top">Voir la grille complète</a></div>
         </div>
@@ -103,7 +103,7 @@
             <div class="droite">
                 <asp:Button ID="btnCabinet" runat="server" CssClass="asc-btn" Text="Demander à mon cabinet certifié" CausesValidation="false"
                     OnClientClick="if (!appConfirmClic(this, 'Envoyer ce compte à votre cabinet certifié par courriel, avec le solde et les comptes proposés ? Le compte reste à décider ici.')) { return false; }" />
-                <asp:Button ID="btnAssocier" runat="server" CssClass="asc-btn primaire" Text="Associer le compte"
+                <asp:Button ID="btnAssocier" runat="server" CssClass="asc-btn primaire asc-valider" Text="Confirmer mon choix"
                     OnClientClick="if (!ascVerifier()) { return false; }" />
             </div>
         </div>
@@ -113,9 +113,7 @@
         <asp:Literal ID="litFin" runat="server" />
         <div class="liens">
             <asp:Button ID="btnReprendre" runat="server" CssClass="asc-btn" Text="Reprendre les comptes reportés" CausesValidation="false" Visible="false" />
-            <a class="asc-btn" href="CorrespondanceComptes.aspx" target="_top">Voir la grille de l'étape 2</a>
-            <a class="asc-btn primaire" href="AppliquerPlanComptable.aspx" target="_top">Créer les comptes au plan →</a>
-            <asp:Button ID="btnFermer" runat="server" CssClass="asc-btn" Text="Fermer" Visible="false" CausesValidation="false" OnClientClick="ascFermer(); return false;" />
+            <asp:HyperLink ID="hlCreer" runat="server" CssClass="asc-btn primaire" Visible="false" />            <asp:Button ID="btnFermer" runat="server" CssClass="asc-btn" Text="Fermer" Visible="false" CausesValidation="false" OnClientClick="ascFermer(); return false;" />
         </div>
     </asp:Panel>
 </div>
@@ -127,6 +125,14 @@
         for (var i = 0; i < opts.length; i++) opts[i].classList.remove('active');
         var opt = input.closest('.asc-opt');
         if (opt) opt.classList.add('active');
+        // Le bouton dit ce qui va se passer : lier à tel compte, créer, ou ignorer.
+        var btn = document.querySelector('.asc-valider');
+        if (btn) {
+            var v = input.value;
+            btn.value = v === 'CREER' ? 'Créer ce compte'
+                      : v === 'IGNORER' ? 'Ignorer ce compte'
+                      : 'Lier au compte ' + v;
+        }
         var enjeu = document.getElementById('ascEnjeu');
         if (!enjeu) return;
         var texte = opt ? (opt.getAttribute('data-enjeu') || '') : '';

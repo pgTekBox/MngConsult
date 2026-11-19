@@ -37,6 +37,8 @@
 #imp2 .btn:hover{background:var(--primary-dark)}
 #imp2 .btn.ghost{background:var(--card);color:var(--text);border:1px solid var(--line)}
 #imp2 .btn.ghost:hover{background:var(--soft)}
+#imp2 .btn.ghost.danger{color:var(--bad);border-color:#f0b4b4}
+#imp2 .btn.ghost.danger:hover{background:var(--bad-soft)}
 #imp2 .btn:focus-visible,#imp2 .tile:focus-visible,#imp2 .link:focus-visible{outline:none;box-shadow:var(--ring)}
 #imp2 .demo-badge{display:inline-block;vertical-align:middle;margin-left:8px;font-size:.7rem;font-weight:900;padding:3px 10px;border-radius:99px;background:#FFF6C2;color:#524000;border:1px solid #f1d66b}
 #imp2 .link{background:none;border:0;padding:0;color:var(--primary);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
@@ -110,6 +112,11 @@
 #imp2 .badge.live{background:var(--ok-soft);color:var(--ok)}
 #imp2 .badge.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok)}
 #imp2 .badge.file{background:var(--soft2);color:var(--primary)}
+/* données déjà en préparation (étapes 1 et 2) */
+#imp2 .prep{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--ok);background:var(--ok-soft);border-radius:14px;padding:12px 16px;margin:0 0 14px}
+#imp2 .prep b{display:block;font-weight:800}
+#imp2 .prep span{font-size:.86rem;color:var(--muted);font-weight:600}
+#imp2 .prep .btn{flex:none}
 #imp2 .note{font-size:.76rem;color:var(--muted);margin:12px 0 0;font-weight:600}
 #imp2 .suite{display:flex;gap:16px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--page);margin-top:6px}
 #imp2 .suite .glyph{width:52px;height:52px;border-radius:14px;font-size:1.05rem}
@@ -140,6 +147,63 @@
 #imp2 .pill.act{background:var(--act-soft);color:#7a5c00}
 #imp2 .pill.run{background:#DDF6FA;color:#0b6b7d}
 
+/* étape 3 : le tableau des sept imports */
+#imp2 .panel.board{background:transparent;border:0;box-shadow:none;padding:0;min-height:0}
+#imp2 .cartes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#imp2 .carte{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 12px 0;display:flex;flex-direction:column;min-height:300px;overflow:hidden}
+#imp2 .carte.suivante{border-color:#7c6ad8;box-shadow:0 0 0 2px rgba(124,106,216,.22)}
+#imp2 .carte .hd{display:flex;align-items:center;gap:8px}
+#imp2 .carte .ico{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--soft2);color:var(--primary);flex:none}
+#imp2 .carte .no{font-weight:800;font-size:.82rem;color:var(--muted)}
+#imp2 .carte .oeil{margin-left:auto;background:none;border:0;padding:4px;color:var(--muted);cursor:pointer;border-radius:8px;display:grid}
+#imp2 .carte .oeil:hover{background:var(--soft)}
+#imp2 .carte .rond{width:22px;height:22px;border-radius:50%;border:2px solid var(--primary);display:grid;place-items:center;font-size:.72rem;font-weight:900;flex:none}
+#imp2 .carte .rond.fait{background:var(--ok);border-color:var(--ok);color:#fff}
+#imp2 .carte .rond.decider{background:#6d5bd0;border-color:#6d5bd0;color:#fff}
+#imp2 .carte h3{font-size:1rem;margin:8px 0 1px}
+#imp2 .carte .src{font-size:.76rem;color:var(--muted);font-weight:600}
+#imp2 .carte ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:3px}
+#imp2 .carte li{display:flex;gap:6px;align-items:flex-start;font-size:.76rem;font-weight:600;line-height:1.3}
+#imp2 .carte li::before{content:"";flex:none;width:12px;height:12px;border-radius:50%;margin-top:1px;border:1.5px solid var(--line2)}
+#imp2 .carte li.ok::before{background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center/100% no-repeat;border-color:var(--ok)}
+#imp2 .carte li.mid::before{background:#E9A800;border-color:#E9A800}
+#imp2 .carte li.todo{color:var(--muted)}
+#imp2 .carte .sp{flex:1;min-height:10px}
+#imp2 .carte .puces{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+#imp2 .carte .puces span{font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:7px;background:var(--soft);color:var(--muted)}
+#imp2 .carte .puces .ok{background:var(--ok-soft);color:var(--ok)}
+#imp2 .carte .puces .act{background:var(--act-soft);color:#7a5c00}
+#imp2 .carte .puces .bad{background:var(--bad-soft);color:var(--bad)}
+#imp2 .carte .puces .dec{background:#ECE8FB;color:#5340b8}
+#imp2 .carte .pied{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+#imp2 .carte .compte b{font-size:1.25rem;font-weight:900}
+#imp2 .carte .compte span{font-size:.76rem;color:var(--muted);font-weight:600;margin-left:4px}
+#imp2 .carte .chiffres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:8px}
+#imp2 .carte .chiffres div{border:1px solid var(--line);border-radius:10px;padding:5px 8px;display:flex;flex-direction:column;min-width:0}
+#imp2 .carte .chiffres b{font-size:1.15rem;font-weight:900;line-height:1.1}
+#imp2 .carte .chiffres span{font-size:.68rem;color:var(--muted);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#imp2 .carte .chiffres .ok b{color:var(--ok)}
+#imp2 .carte .chiffres .dec{border-color:#c9bff3;background:#F4F1FD}
+#imp2 .carte .chiffres .dec b{color:#5340b8}
+#imp2 .carte .btn{padding:6px 11px;font-size:.8rem;border-radius:9px;background:var(--ok)}
+#imp2 .carte .btn:hover{background:#17804a}
+#imp2 .carte .btn.dec{background:#6d5bd0}
+#imp2 .carte .btn.dec:hover{background:#5340b8}
+#imp2 .carte .btn[disabled]{background:#9fd3b6}
+#imp2 .carte .barre3{height:5px;margin:0 -12px;background:var(--soft)}
+#imp2 .carte .barre3 i{display:block;height:100%;background:var(--primary);transition:width .5s}
+#imp2 .carte.fait .barre3 i{background:var(--ok)}
+#imp2 .carte.vide{opacity:.7}
+#imp2 .t3note{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+#imp2 .fen3{position:fixed;inset:0;background:rgba(14,31,61,.45);display:flex;align-items:center;justify-content:center;z-index:2000;padding:16px}
+#imp2 .fen3 .boite{background:#fff;border-radius:18px;width:min(960px,100%);height:min(1000px,100%);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(14,31,61,.35);position:relative}
+#imp2 .fen3 .barre{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
+#imp2 .fen3 .barre .poignee{font-size:12.5px;color:var(--ink-2,#44536E);display:flex;align-items:center;gap:6px}
+#imp2 .fen3.glisse iframe{pointer-events:none}
+#imp2 .fen3 iframe{flex:1;border:0;width:100%}
+@media (max-width:1300px){#imp2 .cartes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:700px){#imp2 .cartes{grid-template-columns:minmax(0,1fr)}}
+
 /* bilan */
 #imp2 .final{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:8px 14px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;box-shadow:var(--shadow)}
 #imp2 .final .hd{display:flex;align-items:center;gap:10px;flex:1;min-width:260px}
@@ -163,6 +227,7 @@
     </div>
     <div class="ctrls">
       <div class="syschip" id="i2Chip" hidden><span class="glyph" id="i2ChipG"></span><span id="i2ChipN"></span><button class="link" type="button" id="i2Changer"></button></div>
+      <button class="btn ghost danger" type="button" id="i2Reinit" hidden></button>
       <button class="btn ghost" type="button" id="i2Vider"></button>
     </div>
   </header>
@@ -171,10 +236,10 @@
     <div class="bridge">
       <div class="end"><div class="glyph" id="i2SrcG" style="background:#3a5a86"><span id="i2SrcGT">?</span><span class="live" id="i2Live"></span></div><div class="txt"><div class="lbl" id="i2LblOrigine"></div><div class="nm" id="i2SrcN"></div><div class="via" id="i2SrcVia"></div></div></div>
       <div class="flow"><canvas id="i2Flow" aria-hidden="true"></canvas><div class="chip" id="i2FlowChip"><span class="dot"></span><span id="i2FlowT"></span></div></div>
-      <div class="end"><div class="ring"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="50"/><circle class="val" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"/></svg><div class="pct">0/8</div></div><div class="txt"><div class="lbl" id="i2LblDest"></div><div class="nm">60secondes</div><div class="via" id="i2DestVia"></div></div></div>
+      <div class="end"><div class="ring"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="50"/><circle class="val" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"/></svg><div class="pct">0/7</div></div><div class="txt"><div class="lbl" id="i2LblDest"></div><div class="nm">60secondes</div><div class="via" id="i2DestVia"></div></div></div>
       <div class="stats">
         <div><b>—</b><span id="i2StRes"></span></div>
-        <div><b>0/8</b><span id="i2StImp"></span></div>
+        <div><b>0/7</b><span id="i2StImp"></span></div>
         <div><b>0</b><span id="i2StEnr"></span></div>
         <div><b class="save">0 h</b><span id="i2StSaisie"></span></div>
       </div>
@@ -208,7 +273,7 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
 </script>
 <script>
 (function () {
-  var L = IMP2L, S = { sys: IMP2.logiciel || null, mode: IMP2.mode || 'direct', bascule: IMP2.bascule || '', freq: IMP2.freq || 'trimestre', relie: !!IMP2.relie };
+  var L = IMP2L, S = { sys: IMP2.logiciel || null, mode: IMP2.mode || 'direct', bascule: IMP2.bascule || '', freq: IMP2.freq || 'trimestre', relie: !!IMP2.relie, viaPrep: !!IMP2.viaPrep, prep: IMP2.prep || null };
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function f(txt, v) { return String(txt).replace(/\{(\w+)\}/g, function (m, k) { return v && v[k] != null ? v[k] : m; }); }
@@ -284,11 +349,12 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
   function etapeN(n) { return f(L.etapeNsur7, { 0: n }); }
 
   /* étapes */
-  function etapes(courante) {
+  function etapes(courante, sous) {
     var noms = [L.e1, how() === 'file' ? L.e2Fichiers : L.e2, L.e3, L.e4, L.e5, L.e6, L.e7];
     $('i2Etapes').innerHTML = noms.map(function (n, i) {
       var cls = i + 1 < courante ? 'done' : (i + 1 === courante ? 'run' : '');
-      return '<li class="' + cls + '"><span class="b">' + (i + 1 < courante ? '✓' : (i + 1)) + '</span><span class="l">' + esc(n) + '</span></li>';
+      var s = sous && sous[i + 1] ? ' <small style="opacity:.75">' + esc(sous[i + 1]) + '</small>' : '';
+      return '<li class="' + cls + '"><span class="b">' + (i + 1 < courante ? '✓' : (i + 1)) + '</span><span class="l">' + esc(n) + s + '</span></li>';
     }).join('');
   }
 
@@ -312,7 +378,30 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     return fetch(location.pathname, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: corps })
       .then(function (r) { return r.json().catch(function () { return { ok: false }; }); });
   }
-  function prendreEtat(e) { if (!e) return; S.sys = e.logiciel || null; S.mode = e.mode || 'direct'; S.bascule = e.bascule || ''; S.freq = e.freq || 'trimestre'; S.relie = !!e.relie; }
+  function prendreEtat(e) { if (!e) return; S.sys = e.logiciel || null; S.mode = e.mode || 'direct'; S.bascule = e.bascule || ''; S.freq = e.freq || 'trimestre'; S.relie = !!e.relie; S.viaPrep = !!e.viaPrep; S.prep = e.prep || null; }
+
+  /* ===== Données déjà en préparation : continuer sans relier la source ===== */
+  function nomLogiciel(k) { for (var i = 0; i < SYS.length; i++) if (SYS[i].k === k) return SYS[i].n; return k || 'QuickBooks'; }
+  function bandeauPrep(k) {
+    var p = S.prep; if (!p || !p.nb) return '';
+    if (k && p.logiciel && k !== p.logiciel) return '';   // étape 2 : seulement pour le logiciel extrait
+    var n = nomLogiciel(p.logiciel);
+    return '<div class="prep"><div><b>' + esc(L.prepTitre) + '</b><span>' + esc(f(L.prepTexte, { nb: p.nb.toLocaleString(), r: p.ressources, n: n, d: dateLisible(p.derniere) })) + '</span></div>' +
+      '<button class="btn" type="button" id="i2Prep" data-lecture="1">' + esc(L.prepContinuer) + '</button></div>';
+  }
+  function brancherPrep() {
+    var b = $('i2Prep'); if (!b) return;
+    b.addEventListener('click', function () {
+      var d = $('i2Date'), fr = $('i2Freq'), donnees = {};
+      if (d && d.value) { donnees.bascule = d.value; donnees.freq = fr ? fr.value : S.freq; }
+      b.disabled = true;
+      poster('continuerPrep', donnees).then(function (j) {
+        b.disabled = false;
+        if (!j || !j.ok) return erreur(j && j.erreur);
+        prendreEtat(j.etat); vueSuivante();
+      }).catch(function () { b.disabled = false; erreur(); });
+    });
+  }
   function erreur(msg, etape) { dire('probleme', etape || L.erreur, msg || L.erreurTexte, L.erreur, 'bad'); }
 
   /* ===== Étape 1 : choisir le logiciel ===== */
@@ -320,7 +409,9 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     var tuiles = SYS.map(function (s) {
       return '<button class="tile" type="button" data-sys="' + s.k + '" data-lecture="1"><span class="glyph" style="background:' + s.col + '">' + esc(s.g) + '</span><span><b>' + esc(s.n) + '</b><span class="how">' + esc(s.line) + '</span><span class="badge ' + (s.live ? 'live' : 'file') + '">' + esc(s.live ? L.enDirect : L.parFichier) + '</span></span></button>';
     }).join('');
-    $('i2Main').innerHTML = '<h2>' + esc(L.question) + '</h2><p class="lead">' + esc(L.lead) + '</p><div class="tiles">' + tuiles + '</div><p class="note">' + esc(L.noteAutre) + '</p>';
+    TAB = null; $('i2Main').className = 'panel';
+    $('i2Main').innerHTML = bandeauPrep(null) + '<h2>' + esc(L.question) + '</h2><p class="lead">' + esc(L.lead) + '</p><div class="tiles">' + tuiles + '</div><p class="note">' + esc(L.noteAutre) + '</p>';
+    brancherPrep();
     Array.prototype.forEach.call($('i2Main').querySelectorAll('[data-sys]'), function (b) { b.addEventListener('click', function () { choisir(b.getAttribute('data-sys')); }); });
     S.sys = null; origine(); etapes(1); flux(false); bilan();
     dire('bonjour', L.bonjour, L.bonjourTexte, etapeN(1), '');
@@ -369,7 +460,9 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     }
     titre = h === 'file' ? f(L.exportsTitre, v) : f(L.relierTitre, v);
     lead = h === 'file' ? L.exportsLead : L.relierLead;
-    $('i2Main').innerHTML = '<div class="conn"><div><h2>' + esc(titre) + '</h2><p class="lead">' + esc(lead) + '</p><ol>' + pas + '</ol></div><div class="box">' + boite + '</div></div>';
+    TAB = null; $('i2Main').className = 'panel';
+    $('i2Main').innerHTML = bandeauPrep(s.k) + '<div class="conn"><div><h2>' + esc(titre) + '</h2><p class="lead">' + esc(lead) + '</p><ol>' + pas + '</ol></div><div class="box">' + boite + '</div></div>';
+    brancherPrep();
     var fr = $('i2Freq'); if (fr) fr.value = S.freq;
     $('i2Date').addEventListener('change', function (e) { S.bascule = e.target.value || ''; bilan(); });
     $('i2Go').addEventListener('click', aller);
@@ -429,30 +522,212 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     }).catch(function () { setTimeout(function () { sonder(debut); }, 2000); });
   }
 
-  /* ===== Étape 3 (à venir) : la suite, une fois la source reliée ===== */
+  /* ===== Étape 3 : le tableau des sept imports, une fois la source reliée ===== */
+  var ICO = {
+    plan: '<path d="M4 5h16M4 12h16M4 19h10"/><circle cx="18" cy="19" r="2"/>',
+    lien: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+    balance: '<path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/>',
+    clients: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    fournisseurs: '<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+    produits: '<path d="M12 3 3 8l9 5 9-5zM3 8v8l9 5 9-5V8"/>',
+    factures: '<path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7"/>',
+    taxes: '<path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/>'
+  };
+  var OEIL = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var GROUPES = { 3: ['plan'], 4: ['balance'], 5: ['clients', 'fournisseurs', 'produits'], 6: ['factures', 'taxes'] };
+  var TAB = null;
+
   function vueSuivante() {
     var s = sysObj(); if (!s) return vueChoix();
-    var h = how(), v = { n: s.n };
-    var freqNom = { trimestre: L.trimestre, mois: L.mois, annee: L.annee }[S.freq] || S.freq;
-    $('i2Main').innerHTML = '<h2>' + esc(L.e3Titre) + '</h2><p class="lead">' + esc(f(h === 'file' ? L.e3LeadFichiers : L.e3LeadDirect, v)) + '</p>' +
-      '<div class="suite"><span class="glyph" style="background:' + s.col + '">' + esc(s.g) + '</span><div><b>' + esc(s.n) + '</b><span>' + esc(h === 'file' ? L.viaFichiers : L.viaRelie) + '</span>' +
-      '<dl class="recap"><dt>' + esc(L.date) + '</dt><dd>' + esc(dateLisible(S.bascule)) + '</dd><dt>' + esc(L.taxes) + '</dt><dd>' + esc(freqNom) + '</dd></dl></div></div>' +
-      '<p class="note">' + esc(L.aVenir) + ' <button class="link" type="button" id="i2Retour" data-lecture="1">' + esc(L.modifierReglages) + '</button></p>';
-    $('i2Retour').addEventListener('click', function () {
-      poster('retour').then(function (j) { if (j && j.ok) { prendreEtat(j.etat); vueConnexion(); } else erreur(j && j.erreur); }).catch(function () { erreur(); });
-    });
-    S.relie = true; origine(); etapes(3); flux(h !== 'file'); bilan();
-    if (h === 'file') dire('regle', L.fichiersOk, L.fichiersTexte, etapeN(3), 'ok');
-    else dire('regle', L.relieOk, f(L.relieTexte, v), etapeN(3), 'ok');
+    S.relie = true; origine(); flux(false); bilan();
+    $('i2Main').className = 'panel board';
+    if (!TAB) { etapes(3); dire('travail', etapeN(3), L.t3Charge, '', 'run'); }
+    poster('tableau').then(function (j) {
+      if (!j || !j.ok) return erreur(j && j.erreur, etapeN(3));
+      TAB = j.tableau; rendreTableau();
+    }).catch(function () { erreur(null, etapeN(3)); });
   }
+
+  function carteHtml(c, suivante) {
+    var rond = c.etat === 'fait' ? '<span class="rond fait">✓</span>' : (c.etat === 'decider' ? '<span class="rond decider">?</span>' : '<span class="rond"></span>');
+    var b = c.bouton || {}, pct = Math.max(0, Math.min(100, c.pct || 0));
+    var bouton = c.etat === 'vide' ? '' :
+      '<button class="btn' + (b.op === 'fenetre' ? ' dec' : '') + '" type="button" data-k="' + esc(c.k) + '"' + (b.actif ? '' : ' disabled') + (b.info ? ' title="' + esc(b.info) + '"' : '') + ' data-lecture="1">' + esc(b.t) + '</button>';
+    return '<article class="carte ' + esc(c.etat) + (suivante ? ' suivante' : '') + '">' +
+      '<div class="hd"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (ICO[c.ico] || '') + '</svg></span>' +
+      '<span class="no">' + c.no + '.</span><button class="oeil" type="button" data-voir="' + esc(c.voir) + '" title="' + esc(L.t3Voir) + '" aria-label="' + esc(L.t3Voir) + '">' + OEIL + '</button>' + rond + '</div>' +
+      '<h3>' + esc(c.titre) + '</h3><div class="src">' + esc(c.src) + '</div>' +
+      '<ul>' + (c.liste || []).map(function (p) { return '<li class="' + esc(p.e) + '">' + esc(p.t) + '</li>'; }).join('') + '</ul>' +
+      '<div class="sp"></div>' +
+      '<div class="puces">' + (c.etat === 'vide' ? '<span>' + esc(L.t3Vide) + '</span>' : (c.puces || []).map(function (p) { return '<span class="' + esc(p.c) + '">' + esc(p.t) + '</span>'; }).join('')) + '</div>' +
+      (c.chiffres && c.etat !== 'vide'
+        ? '<div class="chiffres">' + c.chiffres.map(function (x) { return '<div class="' + esc(x.c) + '"><b>' + (x.n || 0).toLocaleString() + '</b><span>' + esc(x.t) + '</span></div>'; }).join('') + '</div>' +
+          '<div class="pied"><span></span>' + bouton + '</div>'
+        : '<div class="pied"><div class="compte"><b>' + (c.n || 0).toLocaleString() + '</b><span>' + esc(c.unite) + esc(c.extra || '') + '</span></div>' + bouton + '</div>') +
+      '<div class="barre3"><i style="width:' + pct + '%"></i></div></article>';
+  }
+
+  function rendreTableau() {
+    var t = TAB, cartes = t.cartes || [], parK = {};
+    cartes.forEach(function (c) { parK[c.k] = c; });
+    var faites = cartes.filter(function (c) { return c.etat === 'fait'; }).length;
+    var suivante = null;
+    for (var i = 0; i < cartes.length; i++) if (cartes[i].etat !== 'fait' && cartes[i].etat !== 'vide') { suivante = cartes[i]; break; }
+
+    $('i2Main').innerHTML = '<div class="cartes">' + cartes.map(function (c) { return carteHtml(c, c === suivante); }).join('') + '</div>' +
+      '<div class="t3note"><p class="note" style="margin:0">' + esc(L.t3Ordre) + ' <button class="link" type="button" id="i2Retour" data-lecture="1">' + esc(L.modifierReglages) + '</button></p>' +
+      '<button class="btn ghost" type="button" id="i2Recharger">' + esc(L.t3Recharger) + '</button></div>';
+    Array.prototype.forEach.call($('i2Main').querySelectorAll('.carte .btn[data-k]'), function (b) { b.addEventListener('click', function () { agir(parK[b.getAttribute('data-k')], b); }); });
+    Array.prototype.forEach.call($('i2Main').querySelectorAll('[data-voir]'), function (b) { b.addEventListener('click', function () { ouvrirPage(b.getAttribute('data-voir')); }); });
+    $('i2Recharger').addEventListener('click', vueSuivante);
+    $('i2Retour').addEventListener('click', function () {
+      poster('retour').then(function (j) { if (j && j.ok) { TAB = null; $('i2Main').className = 'panel'; prendreEtat(j.etat); vueConnexion(); } else erreur(j && j.erreur); }).catch(function () { erreur(); });
+    });
+
+    /* fil des étapes : chaque groupe avec son compte de cartes faites */
+    var sous = {}, courante = 7;
+    for (var n = 3; n <= 6; n++) {
+      var g = GROUPES[n].map(function (k) { return parK[k]; }).filter(Boolean);
+      var ok = g.filter(function (c) { return c.etat === 'fait'; }).length;
+      sous[n] = ok + '/' + g.length;
+      if (ok < g.length && courante === 7) courante = n;
+    }
+    etapes(courante, sous);
+
+    /* bande marine */
+    var ring = document.querySelector('#imp2 .ring .val');
+    if (ring) ring.setAttribute('stroke-dashoffset', String(314.16 * (1 - faites / Math.max(1, cartes.length))));
+    var pctEl = document.querySelector('#imp2 .ring .pct'); if (pctEl) pctEl.textContent = faites + '/' + cartes.length;
+    $('i2StRes').previousElementSibling.textContent = t.ressources ? String(t.ressources) : '—';
+    $('i2StImp').previousElementSibling.textContent = faites + '/' + cartes.length;
+    $('i2StEnr').previousElementSibling.textContent = (t.enregistrements || 0).toLocaleString();
+    $('i2StSaisie').previousElementSibling.textContent = ((t.enregistrements || 0) * 45 / 3600).toLocaleString(L.lang === 'en' ? 'en-CA' : 'fr-CA', { maximumFractionDigits: 1 }) + ' h';
+    puce(L.t3Lecture, '#4ADE80');
+    $('i2Demo').hidden = true;   // l'étape 3 lit les vraies données en préparation
+
+    /* 60 parle : la prochaine carte */
+    if (!suivante) dire('regle', etapeN(7), L.t3ToutFait, L.t3Fait, 'ok');
+    else dire(suivante.etat === 'decider' ? 'action' : 'info', suivante.no + '. ' + suivante.titre, suivante.dit || L.t3Ordre,
+      (suivante.puces && suivante.puces[0]) ? suivante.puces[0].t : '', suivante.etat === 'decider' ? 'act' : '');
+
+    /* bilan du bas */
+    $('i2FinTitre').textContent = t.aDecider > 0 ? f(L.t3EnCours, { 0: t.aDecider }) : L.t3EnCoursSans;
+    var fa = document.querySelectorAll('#imp2 .fact b');
+    fa[0].textContent = t.comptesTotal ? t.comptesDecides + '/' + t.comptesTotal : '—';
+    fa[1].textContent = t.fichesCreees ? String(t.fichesCreees) : '—';
+    fa[2].textContent = t.facturesBrouillon ? String(t.facturesBrouillon) : '—';
+    fa[3].textContent = t.balanceTotal ? (t.balanceEquilibree ? f(L.t3Equilibree, { 0: t.balanceTotal }) : L.t3Desequilibree) : '—';
+  }
+
+  function agir(c, bouton) {
+    if (!c || !c.bouton) return;
+    var b = c.bouton;
+    if (b.op === 'page') return ouvrirPage(b.url);
+    if (b.op === 'fenetre') return ouvrirFenetre(b.url);
+    if (b.op !== 'creerFiches' && b.op !== 'creerFactures' && b.op !== 'creerOuverture') return;
+    bouton.disabled = true;
+    dire('travail', c.no + '. ' + c.titre, L.t3Travail, '', 'run'); flux(true);
+    poster(b.op, b.type ? { type: b.type } : {}).then(function (j) {
+      flux(false);
+      if (!j || !j.ok) { bouton.disabled = false; return erreur(j && j.erreur, c.no + '. ' + c.titre); }
+      TAB = j.tableau; rendreTableau();
+      dire('regle', c.no + '. ' + c.titre, j.message, L.t3Fait, 'ok');
+    }).catch(function () { flux(false); bouton.disabled = false; erreur(); });
+  }
+
+  /* Les écrans détaillés s'ouvrent dans un onglet ; au retour, le tableau se relit. */
+  function ouvrirPage(url) { if (url) window.open(url, '_blank'); }
+  window.addEventListener('focus', function () { if (TAB && !document.querySelector('#imp2 .fen3')) vueSuivante(); });
+
+  /* « Décider un par un » : AssocierCompte.aspx?popup=1 dans une fenêtre par-dessus.
+     La page appelle window.parent.fermerFenetre() et pose window.parent.fenModifie. */
+  function ouvrirFenetre(url) {
+    var v = document.createElement('div');
+    v.className = 'fen3';
+    v.innerHTML = '<div class="boite" role="dialog" aria-modal="true"><div class="barre"><span class="poignee" aria-hidden="true">⠿ ' + esc(L.t3Deplacer) + '</span><button class="btn ghost" type="button">' + esc(L.t3Fermer) + '</button></div><iframe src="' + esc(url) + '" title="' + esc(url) + '"></iframe></div>';
+    v.addEventListener('click', function (e) { if (e.target === v && !v.dataset.glisse) window.fermerFenetre(); });
+    v.querySelector('.barre button').addEventListener('click', function () { window.fermerFenetre(); });
+    // La fenêtre se déplace en la tenant par sa barre ; l'iframe ne capte pas
+    // la souris pendant le glissement (.glisse), et la fenêtre reste à l'écran.
+    (function () {
+      var boite = v.querySelector('.boite'), barre = v.querySelector('.barre');
+      var dx = 0, dy = 0, x0 = 0, y0 = 0, actif = false;
+      barre.addEventListener('pointerdown', function (e) {
+        if (e.button !== 0 || e.target.closest('button')) return;
+        actif = true; x0 = e.clientX - dx; y0 = e.clientY - dy;
+        v.classList.add('glisse'); barre.setPointerCapture(e.pointerId); e.preventDefault();
+      });
+      barre.addEventListener('pointermove', function (e) {
+        if (!actif) return;
+        var r = boite.getBoundingClientRect(), nx = e.clientX - x0, ny = e.clientY - y0;
+        var bx = r.left - dx, by = r.top - dy;  // position sans déplacement
+        nx = Math.min(Math.max(nx, -bx - r.width + 80), window.innerWidth - bx - 80);
+        ny = Math.min(Math.max(ny, -by), window.innerHeight - by - 40);
+        dx = nx; dy = ny; boite.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      });
+      var fin = function (e) {
+        if (!actif) return; actif = false; v.classList.remove('glisse');
+        try { barre.releasePointerCapture(e.pointerId); } catch (x) { }
+        v.dataset.glisse = '1'; setTimeout(function () { delete v.dataset.glisse; }, 0);
+      };
+      barre.addEventListener('pointerup', fin); barre.addEventListener('pointercancel', fin);
+    })();
+    $('imp2').appendChild(v);
+    document.body.style.overflow = 'hidden';
+  }
+  window.fenModifie = false;
+  window.fermerFenetre = function () {
+    var v = document.querySelector('#imp2 .fen3'); if (v) v.parentNode.removeChild(v);
+    document.body.style.overflow = '';
+    window.fenModifie = false;
+    vueSuivante();
+  };
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.querySelector('#imp2 .fen3')) window.fermerFenetre(); });
 
   /* changer de logiciel / vider la préparation */
   function oublier(apres) {
     poster('vider').then(function (j) { if (!j || !j.ok) return erreur(j && j.erreur); S.bascule = ''; S.freq = 'trimestre'; S.relie = false; apres(); }).catch(function () { erreur(); });
   }
   $('i2Changer').addEventListener('click', function () { oublier(vueChoix); });
+
+  /* OUTIL DE TEST : réinitialiser la compagnie (seulement si Web.config la liste) */
+  (function () {
+    var b = $('i2Reinit'); if (!IMP2.reinit) return;
+    var nom = IMP2.compagnie || '';
+    b.hidden = false; b.textContent = f(L.reinit, { 0: nom }); b.title = L.reinitTip;
+    b.addEventListener('click', function () {
+      var go = function () {
+        b.disabled = true;
+        dire('travail', f(L.reinit, { 0: nom }), L.t3Travail, '', 'run');
+        poster('reinitialiser').then(function (j) {
+          b.disabled = false;
+          if (!j || !j.ok) return erreur(j && j.erreur, f(L.reinit, { 0: nom }));
+          prendreEtat(j.etat);
+          var detail = (j.lignes || []).map(function (l) { return l.quoi + ' : ' + l.nb; }).join('\n');
+          if (sysObj() && S.relie) vueSuivante(); else if (sysObj()) vueConnexion(); else vueChoix();
+          dire('regle', L.reinitOk, f(L.reinitTexte, { 0: nom }), L.reinitOk, 'ok');
+          if (window.showAppMessage) showAppMessage(detail, L.reinitOk); else alert(detail);
+        }).catch(function () { b.disabled = false; erreur(); });
+      };
+      if (window.appConfirm) appConfirm(f(L.reinitConfirme, { 0: nom }), { titre: f(L.reinit, { 0: nom }), ok: f(L.reinit, { 0: nom }), danger: true }).then(function (oui) { if (oui) go(); });
+      else if (confirm(f(L.reinitConfirme, { 0: nom }))) go();
+    });
+  })();
   $('i2Vider').addEventListener('click', function () {
-    var go = function () { oublier(vueChoix); };
+    var b = $('i2Vider');
+    var go = function () {
+      b.disabled = true;
+      dire('travail', L.vider, L.t3Travail, '', 'run');
+      poster('recommencer').then(function (j) {
+        b.disabled = false;
+        if (!j || !j.ok) return erreur(j && j.erreur, L.vider);
+        prendreEtat(j.etat);
+        S.bascule = ''; S.freq = 'trimestre'; S.relie = false;
+        vueChoix();
+        var detail = (j.lignes || []).map(function (l) { return l.quoi + ' : ' + l.nb; }).join('\n');
+        if (detail) { if (window.showAppMessage) showAppMessage(detail, L.viderOk); else alert(detail); }
+      }).catch(function () { b.disabled = false; erreur(); });
+    };
     if (window.appConfirm) appConfirm(L.viderConfirme, { titre: L.vider, ok: L.vider, danger: true }).then(function (oui) { if (oui) go(); });
     else go();
   });

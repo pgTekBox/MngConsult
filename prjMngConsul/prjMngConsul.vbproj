@@ -531,6 +531,7 @@
     <Content Include="Importation2.aspx" />
     <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="AssocierCompte.aspx" />
+    <Content Include="CreerCompte.aspx" />
     <Content Include="CabinetsCertifies.aspx" />
     <Content Include="wbfCabJournee.aspx" />
     <Content Include="wbfCabDossiers.aspx" />
@@ -829,6 +830,13 @@
     <Compile Include="ImportBalanceVerification.aspx.vb">
       <DependentUpon>ImportBalanceVerification.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CreerCompte.aspx.designer.vb">
+      <DependentUpon>CreerCompte.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CreerCompte.aspx.vb">
+      <DependentUpon>CreerCompte.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AssocierCompte.aspx.designer.vb">
       <DependentUpon>AssocierCompte.aspx</DependentUpon>

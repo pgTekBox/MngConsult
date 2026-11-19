@@ -31,6 +31,8 @@ Partial Public Class AssocierCompte
 
     Protected WithEvents btnReprendre As Global.System.Web.UI.WebControls.Button
 
+    Protected WithEvents hlCreer As Global.System.Web.UI.WebControls.HyperLink
+
     Protected WithEvents btnFermer As Global.System.Web.UI.WebControls.Button
 
     Protected WithEvents litPopupCss As Global.System.Web.UI.WebControls.Literal

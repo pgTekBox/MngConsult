@@ -107,14 +107,132 @@ Public Class Importation2
         End Set
     End Property
 
+    ''' <summary>Étape 2 franchie avec les données déjà en préparation, sans relier la source.</summary>
+    Private Property ViaPreparation As Boolean
+        Get
+            Return Session(Cle("viaPrep")) IsNot Nothing AndAlso CBool(Session(Cle("viaPrep")))
+        End Get
+        Set(value As Boolean)
+            Session(Cle("viaPrep")) = value
+        End Set
+    End Property
+
     Private Sub ToutOublier()
-        For Each n As String In {"logiciel", "mode", "bascule", "freq", "relie"}
+        For Each n As String In {"logiciel", "mode", "bascule", "freq", "relie", "viaPrep"}
             Session.Remove(Cle(n))
         Next
     End Sub
 
     Private Function Etat() As Object
-        Return New With {.logiciel = Logiciel, .mode = Mode, .bascule = Bascule, .freq = Frequence, .relie = Relie}
+        Return New With {.logiciel = Logiciel, .mode = Mode, .bascule = Bascule, .freq = Frequence, .relie = Relie,
+                         .viaPrep = ViaPreparation, .prep = Preparation(),
+                         .reinit = Reinitialisable(), .compagnie = CompanyName}
+    End Function
+
+    ''' <summary>
+    ''' OUTIL DE TEST. Le bouton « Réinitialiser » n'est offert qu'aux compagnies
+    ''' listées dans Web.config : &lt;add key="Importation2.Reinitialisables"
+    ''' value="GUID;GUID" /&gt;. Sans la clé, personne ne le voit.
+    ''' </summary>
+    Private Function Reinitialisable() As Boolean
+        Dim liste As String = If(System.Configuration.ConfigurationManager.AppSettings("Importation2.Reinitialisables"), "")
+        For Each g As String In liste.Split({";"c, ","c}, StringSplitOptions.RemoveEmptyEntries)
+            Dim guid As Guid
+            If System.Guid.TryParse(g.Trim(), guid) AndAlso guid = Company Then Return True
+        Next
+        Return False
+    End Function
+
+    ''' <summary>
+    ''' Efface factures, écritures, tiers et produits, ramène le plan comptable au
+    ''' plan par défaut et remet la préparation « à faire » (s1026, T402).
+    ''' </summary>
+    ''' <summary>
+    ''' « Recommencer l'assistant » : défait ce que la reprise a créé (s1027 :
+    ''' factures, écriture d'ouverture, tiers, produits, comptes créés, décisions),
+    ''' sans toucher aux données importées de QuickBooks ni à ce qui a été validé
+    ''' depuis, puis oublie les choix de l'assistant et revient à l'étape 1.
+    ''' </summary>
+    Private Function Recommencer() As Object
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@Confirmation", "RECOMMENCER"))
+        Dim ds As DataSet = ExecuteSQLds("s1027RecommencerReprise", p)
+
+        ToutOublier()
+        Session.Remove(Cle("lienSurs"))
+        Session.Remove("AssocierCompte.Sautes")
+        Session.Remove("CreerCompte.Sautes")
+
+        Dim lignes As New List(Of Object)
+        Dim bilan As DataTable = If(ds Is Nothing OrElse ds.Tables.Count = 0, Nothing, ds.Tables(ds.Tables.Count - 1))
+        If bilan IsNot Nothing Then
+            For Each r As DataRow In bilan.Rows
+                Dim nb As Integer = Convert.ToInt32(r("Nb"))
+                If nb > 0 Then lignes.Add(New With {.quoi = Convert.ToString(r("Quoi")), .nb = nb})
+            Next
+        End If
+        Return New With {.ok = True, .lignes = lignes, .etat = Etat()}
+    End Function
+
+    Private Function Reinitialiser() As Object
+        If Not Reinitialisable() Then
+            Return New With {.ok = False, .erreur = T("La réinitialisation n'est pas permise pour cette compagnie.", "Reset is not allowed for this company.", "El reinicio no está permitido para esta compañía.")}
+        End If
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@Confirmation", "REINITIALISER"))
+        Dim ds As DataSet = ExecuteSQLds("s1026ReinitialiserReprise", p)
+        ' Départ neuf : les propositions sûres se relieront à la prochaine arrivée au tableau.
+        Session.Remove(Cle("lienSurs"))
+
+        Dim lignes As New List(Of Object)
+        Dim bilanReinit As DataTable = If(ds Is Nothing OrElse ds.Tables.Count = 0, Nothing, ds.Tables(ds.Tables.Count - 1))
+        If bilanReinit IsNot Nothing Then
+            For Each r As DataRow In bilanReinit.Rows
+                lignes.Add(New With {.quoi = Convert.ToString(r("Quoi")), .nb = Convert.ToInt32(r("Nb"))})
+            Next
+        End If
+        Return New With {.ok = True, .lignes = lignes, .etat = Etat()}
+    End Function
+
+    ''' <summary>Ce qu'une extraction précédente a laissé en préparation (staging.ConnecteurDonnee).</summary>
+    Public Class DonneesEnPreparation
+        Public Property nb As Integer
+        Public Property ressources As Integer
+        Public Property derniere As String
+        Public Property service As String
+        ''' <summary>La clé du logiciel (« qbo »…), ou Nothing si le service n'est pas reconnu.</summary>
+        Public Property logiciel As String
+    End Class
+
+    ''' <summary>Nothing quand rien n'attend. Une erreur de lecture ne bloque jamais la page.</summary>
+    Private Function Preparation() As DonneesEnPreparation
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s1024GetPreparationConnecteur", p)
+            If ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return Nothing
+
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            Dim nb As Integer = If(IsDBNull(r("NbEnregistrements")), 0, CInt(r("NbEnregistrements")))
+            If nb <= 0 Then Return Nothing
+
+            Dim service As String = If(IsDBNull(r("Service")), "", CStr(r("Service")))
+            Dim cle As String = Nothing
+            For Each kv As KeyValuePair(Of String, String) In ServicesApideck
+                If String.Equals(kv.Value, service, StringComparison.OrdinalIgnoreCase) Then cle = kv.Key : Exit For
+            Next
+
+            Return New DonneesEnPreparation With {
+                .nb = nb,
+                .ressources = If(IsDBNull(r("NbRessources")), 0, CInt(r("NbRessources"))),
+                .derniere = If(IsDBNull(r("Derniere")), "", CDate(r("Derniere")).ToString("yyyy-MM-dd")),
+                .service = service,
+                .logiciel = cle}
+        Catch
+            Return Nothing
+        End Try
     End Function
 
 #End Region
@@ -131,8 +249,15 @@ Public Class Importation2
                 Case "connexion" : res = Connecter()
                 Case "etatConnexion" : res = EtatConnexion()
                 Case "fichiers" : res = PasserAuxFichiers()
-                Case "retour" : Relie = False : res = New With {.ok = True, .etat = Etat()}
+                Case "continuerPrep" : res = ContinuerAvecPreparation()
+                Case "tableau" : res = New With {.ok = True, .tableau = Tableau()}
+                Case "creerFiches" : res = CreerFiches(Convert.ToString(Request.Form("type")))
+                Case "creerFactures" : res = CreerFactures()
+                Case "creerOuverture" : res = CreerOuverture()
+                Case "reinitialiser" : res = Reinitialiser()
+                Case "retour" : Relie = False : ViaPreparation = False : res = New With {.ok = True, .etat = Etat()}
                 Case "vider" : ToutOublier() : res = New With {.ok = True}
+                Case "recommencer" : res = Recommencer()
                 Case Else : res = New With {.ok = False, .erreur = T("Action inconnue.", "Unknown action.", "Acción desconocida.")}
             End Select
         Catch ex As Exception
@@ -154,6 +279,7 @@ Public Class Importation2
         Logiciel = k
         Mode = If(Array.IndexOf(ParFichierSeulement, k) >= 0, "fichier", "direct")
         Relie = False
+        ViaPreparation = False
         Return New With {.ok = True, .etat = Etat()}
     End Function
 
@@ -161,6 +287,32 @@ Public Class Importation2
         If Logiciel Is Nothing Then Return SansLogiciel()
         Mode = If(m = "fichier", "fichier", "direct")
         Relie = False
+        ViaPreparation = False
+        Return New With {.ok = True, .etat = Etat()}
+    End Function
+
+    ''' <summary>
+    ''' Continuer avec les données déjà en préparation, sans relier la source :
+    ''' l'extraction a déjà eu lieu. La date de bascule, si elle est saisie
+    ''' (étape 2), est retenue ; sinon elle se donne plus tard.
+    ''' </summary>
+    Private Function ContinuerAvecPreparation() As Object
+        Dim prep As DonneesEnPreparation = Preparation()
+        If prep Is Nothing Then
+            Return New With {.ok = False, .erreur = T("Aucune donnée n'attend en préparation.", "No data is waiting in preparation.", "No hay datos esperando en preparación.")}
+        End If
+
+        ' Étape 1 : aucune date n'est envoyée — Request.Form rend Nothing.
+        If If(Request.Form("bascule"), "").Trim() <> "" Then
+            Dim err As String = ""
+            If Not LireReglages(err) Then Return New With {.ok = False, .erreur = err}
+        End If
+
+        If prep.logiciel IsNot Nothing Then Logiciel = prep.logiciel
+        If Logiciel Is Nothing Then Logiciel = "qbo"
+        Mode = "direct"
+        Relie = True
+        ViaPreparation = True
         Return New With {.ok = True, .etat = Etat()}
     End Function
 
@@ -269,6 +421,498 @@ Public Class Importation2
 
 #End Region
 
+#Region "Étape 3 : le tableau des sept imports"
+
+    ' Chaque carte lit les procédures des écrans d'import existants : rien n'est
+    ' recalculé ici, et les boutons appellent les mêmes procédures de création.
+    '   1 Plan comptable        s0758 + s0766       → AssocierCompte.aspx?popup=1 (décider), puis AppliquerPlanComptable.aspx (créer)
+    '   2 Balance               s0770 + s0771       → s1025 (écriture d'ouverture en brouillon)
+    '   3-5 Clients, fournisseurs, produits  s0772 + s0773 → s0774
+    '   6 Factures              s0782               → s0785 (brouillons)
+    '   7 Taxes                 s0871               → ValiderTaxes.aspx
+
+    Private Function Lire(proc As String, ParamArray extra As SqlClient.SqlParameter()) As DataSet
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        For Each x As SqlClient.SqlParameter In extra
+            p.Add(x)
+        Next
+        Return ExecuteSQLds(proc, p)
+    End Function
+
+    Private Shared Function Table(ds As DataSet, i As Integer) As DataTable
+        If ds Is Nothing OrElse ds.Tables.Count <= i Then Return Nothing
+        Return ds.Tables(i)
+    End Function
+
+    Private Shared Function Rang0(t As DataTable) As DataRow
+        If t Is Nothing OrElse t.Rows.Count = 0 Then Return Nothing
+        Return t.Rows(0)
+    End Function
+
+    Private Shared Function Ent(r As DataRow, col As String) As Integer
+        If r Is Nothing OrElse Not r.Table.Columns.Contains(col) OrElse IsDBNull(r(col)) Then Return 0
+        Return Convert.ToInt32(r(col))
+    End Function
+
+    Private Shared Function Dec(r As DataRow, col As String) As Decimal
+        If r Is Nothing OrElse Not r.Table.Columns.Contains(col) OrElse IsDBNull(r(col)) Then Return 0D
+        Return Convert.ToDecimal(r(col))
+    End Function
+
+    Private Shared Function Txt(r As DataRow, col As String) As String
+        If r Is Nothing OrElse Not r.Table.Columns.Contains(col) OrElse IsDBNull(r(col)) Then Return ""
+        Return Convert.ToString(r(col))
+    End Function
+
+    Private Function Montant(m As Decimal) As String
+        Dim c As CultureInfo = If(CurrentLang = "en", CultureInfo.GetCultureInfo("en-CA"), CultureInfo.GetCultureInfo("fr-CA"))
+        Return m.ToString("N2", c) & " $"
+    End Function
+
+    ''' <summary>Une ligne de la liste de contrôle d'une carte : ok, mid (en cours) ou todo.</summary>
+    Private Shared Function Point(texte As String, etat As String) As Object
+        Return New With {.t = texte, .e = etat}
+    End Function
+
+    Private Shared Function Puce(texte As String, cls As String) As Object
+        Return New With {.t = texte, .c = cls}
+    End Function
+
+    Private Shared Function EtatDe(fait As Boolean, enCours As Boolean) As String
+        Return If(fait, "ok", If(enCours, "mid", "todo"))
+    End Function
+
+    ''' <summary>Le fichier d'import le plus récent d'un type, et ses compteurs (s0772 → s0773).</summary>
+    Private Function FichierImport(typeImport As String, ByRef fichierId As Integer) As DataRow
+        fichierId = 0
+        Dim f As DataRow = Rang0(Table(Lire("s0772GetImportFichiers", New SqlClient.SqlParameter("@TypeImport", typeImport)), 0))
+        If f Is Nothing Then Return Nothing
+        fichierId = Ent(f, "Id")
+        Return Rang0(Table(Lire("s0773GetImportLignes", New SqlClient.SqlParameter("@ImportFileId", fichierId)), 0))
+    End Function
+
+    ''' <summary>
+    ''' À l'arrivée au tableau, une fois par session (et de nouveau après
+    ''' Réinitialiser ou Recommencer), tout ce qui ne demande aucune décision :
+    '''   · lier les comptes dont la proposition est sûre — même numéro, même nom,
+    '''     alias QuickBooks (s0760) ; il ne reste à décider un par un que les autres ;
+    '''   · créer les nouveaux clients et fournisseurs (s0774) : ils ne dépendent
+    '''     d'aucun compte, et les factures en ont besoin pour trouver leur tiers ;
+    '''   · répartir TPS et TVQ des factures en préparation selon les codes et taux
+    '''     de taxe rapatriés (s0794).
+    ''' Les produits attendent : leurs comptes de vente et d'achat doivent d'abord
+    ''' exister au plan. Une fois par session, pour qu'une liaison défaite à la main
+    ''' ne revienne pas à chaque rechargement du tableau.
+    ''' Chaque étape est indépendante : un échec n'empêche pas les autres.
+    ''' </summary>
+    Private Sub ArriveeAuTableau()
+        Try
+            Lire("s0760AccepterPropositions", New SqlClient.SqlParameter("@UserId", UserId))
+        Catch
+        End Try
+        For Each typeImport As String In {"Client", "Fournisseur"}
+            Try
+                Dim fid As Integer = 0
+                Dim r As DataRow = FichierImport(typeImport, fid)
+                If fid > 0 AndAlso Ent(r, "Nouveaux") > 0 Then
+                    Lire("s0774AppliquerImportFichier", New SqlClient.SqlParameter("@ImportFileId", fid))
+                End If
+            Catch
+            End Try
+        Next
+        Try
+            Lire("s0794RepartirTaxesImport")
+        Catch
+        End Try
+    End Sub
+
+    Private Function Tableau() As Object
+        Dim cartes As New List(Of Object)
+        Dim nomSrc As String = NomSource()
+
+        ' En arrivant au tableau, ce qui ne demande aucune décision se fait tout seul.
+        If Session(Cle("lienSurs")) Is Nothing Then
+            Session(Cle("lienSurs")) = True
+            ArriveeAuTableau()
+        End If
+
+        ' ---- 1 : plan comptable et correspondance, une seule carte ---------------
+        Dim st As DataRow = Nothing, resteACreer As Integer = 0, dejaCrees As Integer = 0
+        Try
+            st = Rang0(Table(Lire("s0758StatsCorrespondance"), 0))
+            Dim app As DataSet = Lire("s0766GetAAppliquer")
+            Dim t0 As DataTable = Table(app, 0)
+            resteACreer = If(t0 Is Nothing, 0, t0.Rows.Count)
+            dejaCrees = Ent(Rang0(Table(app, 1)), "DejaCrees")
+        Catch
+        End Try
+        Dim total As Integer = Ent(st, "Total"), decides As Integer = Ent(st, "Decides"), aDecider As Integer = Ent(st, "ADecider")
+        Dim lies As Integer = Ent(st, "Lies"), aCreer As Integer = Ent(st, "ACreer"), ignores As Integer = Ent(st, "Ignores")
+        Dim planFait As Boolean = total > 0 AndAlso aDecider = 0 AndAlso resteACreer = 0
+
+        ' Le plan terminé (tout décidé, tout créé), les comptes de vente et d'achat
+        ' des produits existent : les nouveaux produits se créent d'eux-mêmes.
+        ' Après la fenêtre « Créer un compte », le tableau se recharge et passe ici.
+        If planFait Then
+            Try
+                Dim fid As Integer = 0
+                Dim rp As DataRow = FichierImport("Produit", fid)
+                If fid > 0 AndAlso Ent(rp, "Nouveaux") > 0 Then
+                    Lire("s0774AppliquerImportFichier", New SqlClient.SqlParameter("@ImportFileId", fid))
+                End If
+            Catch
+            End Try
+        End If
+
+        ' Une seule carte : lire le plan, décider chaque compte un par un (60
+        ' propose, vous décidez), puis créer au plan les comptes marqués « Créer ».
+        ' Associés, importés et à décider ont leurs propres chiffres (.chiffres) :
+        ' les pastilles ne gardent que le reste.
+        Dim p1 As New List(Of Object)
+        If resteACreer > 0 Then p1.Add(Puce(resteACreer & " " & T("à créer", "to create", "por crear"), "act"))
+        If ignores > 0 Then p1.Add(Puce(ignores & " " & T("ignorés", "ignored", "ignoradas"), ""))
+
+        ' Le bouton suit l'étape : décider tant qu'il reste des comptes à décider,
+        ' puis créer ceux marqués « Créer » (leur classe se choisit à l'écran dédié).
+        Dim bouton1 As Object
+        If aDecider > 0 OrElse resteACreer = 0 Then
+            bouton1 = New With {.t = T("Décider un par un", "Decide one by one", "Decidir una por una"), .op = "fenetre", .url = "AssocierCompte.aspx?popup=1", .actif = aDecider > 0}
+        Else
+            bouton1 = New With {.t = String.Format(T("Créer {0} comptes", "Create {0} accounts", "Crear {0} cuentas"), resteACreer), .op = "fenetre", .url = "CreerCompte.aspx?popup=1", .actif = True}
+        End If
+
+        cartes.Add(New With {
+            .k = "plan", .no = 1, .ico = "plan", .titre = T("Plan comptable", "Chart of accounts", "Plan contable"),
+            .src = nomSrc & " · " & T("60 propose, vous décidez", "60 suggests, you decide", "60 propone, usted decide"),
+            .etat = If(total = 0, "vide", If(planFait, "fait", If(aDecider > 0, "decider", "afaire"))),
+            .liste = New Object() {
+                Point(T("Lire et contrôler : doublons, lignes invalides, déjà au plan", "Read and check: duplicates, invalid lines, already in the chart", "Leer y controlar: duplicados, líneas inválidas, ya en el plan"), EtatDe(total > 0, False)),
+                Point(T("Correspondance par numéro, par nom en quatre langues et par IA", "Matching by number, by name in four languages and by AI", "Correspondencia por número, por nombre en cuatro idiomas y por IA"), EtatDe(total > 0, False)),
+                Point(T("Décider un par un : la recommandation de 60, l'enjeu, puis Associer · Plus tard · Demander au cabinet", "Decide one by one: 60's recommendation, what's at stake, then Match · Later · Ask the firm", "Decidir una por una: la recomendación de 60, lo que está en juego, luego Asociar · Más tarde · Preguntar al despacho"), EtatDe(total > 0 AndAlso aDecider = 0, decides > 0)),
+                Point(T("Créer au plan les comptes marqués « Créer »", "Create the accounts marked ""Create""", "Crear en el plan las cuentas marcadas «Crear»"), EtatDe(total > 0 AndAlso aDecider = 0 AndAlso resteACreer = 0, dejaCrees > 0))},
+            .puces = p1, .n = decides, .unite = String.Format(T("sur {0} décidés", "of {0} decided", "de {0} decididas"), total), .extra = "",
+            .chiffres = New Object() {
+                New With {.n = lies, .t = T("déjà associés", "already matched", "ya asociadas"), .c = "ok"},
+                New With {.n = total, .t = T("importés", "imported", "importadas"), .c = ""},
+                New With {.n = aDecider, .t = T("à décider", "to decide", "por decidir"), .c = If(aDecider > 0, "dec", "ok")}},
+            .bouton = bouton1,
+            .voir = "CorrespondanceComptes.aspx",
+            .pct = If(total = 0, 0, CInt(100 * Math.Max(0, decides - resteACreer) / Math.Max(1, total))),
+            .dit = If(aDecider > 0,
+                      String.Format(T("{0} comptes liés d'eux-mêmes. {1} comptes attendent votre décision : cliquez sur « Décider un par un ».", "{0} accounts linked by themselves. {1} accounts await your decision: click ""Decide one by one"".", "{0} cuentas vinculadas solas. {1} cuentas esperan su decisión: haga clic en «Decidir una por una»."), lies, aDecider),
+                      String.Format(T("{0} comptes à créer : choisissez leur classe.", "{0} accounts to create: choose their class.", "{0} cuentas por crear: elija su clase."), resteACreer))})
+
+        ' ---- 2 : balance de vérification ---------------------------------------
+        Dim nbBal As Integer = 0, debit As Decimal = 0D, credit As Decimal = 0D, erreurs As Integer = 0, aVerifier As Integer = 0
+        Try
+            Dim bal As DataTable = Table(Lire("s0770GetBalanceVerification"), 0)
+            If bal IsNot Nothing Then
+                nbBal = bal.Rows.Count
+                For Each r As DataRow In bal.Rows
+                    debit += Dec(r, "Debit") : credit += Dec(r, "Credit")
+                Next
+            End If
+            If nbBal > 0 Then
+                Dim ctl As DataRow = Rang0(Table(Lire("s0771ControleBalancePlan"), 0))
+                erreurs = Ent(ctl, "Erreurs") : aVerifier = Ent(ctl, "AVerifier")
+            End If
+        Catch
+        End Try
+        Dim equilibree As Boolean = nbBal > 0 AndAlso Math.Abs(debit - credit) < 0.005D
+
+        ' Soldes d'ouverture (s1025, vérification seulement) : VIDE | BLOQUE | PRET | CREE | EXISTE
+        Dim ouv As DataRow = Nothing, ouvStatut As String = "", ouvBloquees As Integer = 0
+        If nbBal > 0 Then
+            Try
+                Dim dsO As DataSet = SoldesOuverture(False)
+                ouv = Rang0(Table(dsO, dsO.Tables.Count - 1))
+                ouvStatut = Txt(ouv, "Statut") : ouvBloquees = Ent(ouv, "NbBloquees")
+            Catch
+            End Try
+        End If
+        Dim ouvFaite As Boolean = ouvStatut = "EXISTE"
+        ' Prête seulement une fois le plan comptable terminé : chaque solde doit
+        ' tomber sur le compte DÉCIDÉ, pas sur une proposition en attente.
+        Dim ouvPrete As Boolean = ouvStatut = "PRET" AndAlso planFait
+        Dim msgPlan As String = T("Les soldes d'ouverture attendent la fin du plan comptable : chaque solde doit tomber sur le compte décidé.", "Opening balances wait for the chart of accounts to be finished: each balance must land on the decided account.", "Los saldos de apertura esperan a que termine el plan contable: cada saldo debe caer en la cuenta decidida.")
+
+        Dim p3 As New List(Of Object)
+        If nbBal > 0 Then p3.Add(If(equilibree, Puce(T("Équilibrée", "Balanced", "Equilibrada"), "ok"), Puce(T("Déséquilibrée", "Unbalanced", "Desequilibrada"), "bad")))
+        If erreurs > 0 Then p3.Add(Puce(erreurs & " " & T("erreurs", "errors", "errores"), "bad"))
+        If aVerifier > 0 Then p3.Add(Puce(aVerifier & " " & T("à vérifier", "to check", "por verificar"), "act"))
+        If nbBal > 0 AndAlso erreurs = 0 Then p3.Add(Puce(T("Concorde avec le plan", "Matches the chart", "Concuerda con el plan"), "ok"))
+        If ouvFaite Then p3.Add(Puce(String.Format(T("Ouverture {0}", "Opening {0}", "Apertura {0}"), Txt(ouv, "EcritureStatut").ToLowerInvariant()), "ok"))
+        If ouvBloquees > 0 Then p3.Add(Puce(ouvBloquees & " " & T("sans compte", "without account", "sin cuenta"), "dec"))
+
+        ' Ce que dit 60 et l'info-bulle du bouton : le message de s1025 quand il bloque.
+        Dim dit3 As String
+        If erreurs > 0 Then
+            dit3 = String.Format(T("La balance a {0} erreurs à corriger face au plan comptable.", "The trial balance has {0} errors against the chart of accounts.", "La balanza tiene {0} errores frente al plan contable."), erreurs)
+        ElseIf Not equilibree Then
+            dit3 = T("La balance n'est pas équilibrée : vérifiez l'export.", "The trial balance does not balance: check the export.", "La balanza no está equilibrada: verifique la exportación.")
+        ElseIf ouvPrete Then
+            dit3 = T("La balance est prête : créez l'écriture d'ouverture en brouillon.", "The trial balance is ready: create the opening entry as a draft.", "La balanza está lista: cree el asiento de apertura en borrador.")
+        ElseIf Not ouvFaite AndAlso Not planFait Then
+            dit3 = msgPlan
+        Else
+            dit3 = Txt(ouv, "Message")
+        End If
+
+        cartes.Add(New With {
+            .k = "balance", .no = 2, .ico = "balance", .titre = T("Balance de vérification", "Trial balance", "Balanza de comprobación"), .src = nomSrc,
+            .etat = If(nbBal = 0, "vide", If(ouvFaite, "fait", "afaire")),
+            .liste = New Object() {
+                Point(T("Lire l'export, écarter titres, total et pied de page", "Read the export, drop titles, total and footer", "Leer la exportación, descartar títulos, total y pie"), EtatDe(nbBal > 0, False)),
+                Point(T("Contrôler l'équilibre et le total", "Check the balance and the total", "Controlar el equilibrio y el total"), EtatDe(equilibree, nbBal > 0)),
+                Point(T("Confronter chaque ligne au plan comptable", "Compare each line with the chart of accounts", "Confrontar cada línea con el plan contable"), EtatDe(nbBal > 0 AndAlso erreurs = 0 AndAlso ouvBloquees = 0, nbBal > 0)),
+                Point(T("Créer les soldes d'ouverture, en brouillon", "Create the opening balances, as a draft", "Crear los saldos de apertura, en borrador"), EtatDe(ouvFaite, ouvPrete))},
+            .puces = p3, .n = nbBal, .unite = T("lignes", "lines", "líneas"), .extra = If(nbBal > 0, " · " & Montant(debit), ""),
+            .bouton = If(ouvFaite,
+                New With {.t = T("Voir l'écriture", "See the entry", "Ver el asiento"), .op = "page", .url = "wbfJournalEntryEdit.aspx?Id=" & Ent(ouv, "EcritureId"), .actif = True, .info = Txt(ouv, "Message")},
+                New With {.t = T("Créer les soldes d'ouverture", "Create opening balances", "Crear los saldos de apertura"), .op = "creerOuverture", .url = "", .actif = ouvPrete, .info = If(ouvPrete, "", If(planFait, Txt(ouv, "Message"), msgPlan))}),
+            .voir = "ImportBalanceVerification.aspx",
+            .pct = If(nbBal = 0, 0, If(ouvFaite, 100, If(ouvPrete, 75, 40))),
+            .dit = dit3})
+
+        ' ---- 3, 4, 5 : clients, fournisseurs, produits ------------------------
+        Dim fichesCreees As Integer = 0, produitsAFaire As Integer = 0
+        For Each def As String() In {
+                New String() {"clients", "3", "Client", "client", T("Clients", "Customers", "Clientes"), "ImportClients.aspx"},
+                New String() {"fournisseurs", "4", "Fournisseur", "fournisseur", T("Fournisseurs", "Suppliers", "Proveedores"), "ImportFournisseurs.aspx"},
+                New String() {"produits", "5", "Produit", "produit", T("Produits et services", "Products and services", "Productos y servicios"), "ImportProduits.aspx"}}
+            Dim fid As Integer = 0, r As DataRow = Nothing
+            Try
+                r = FichierImport(def(2), fid)
+            Catch
+            End Try
+            Dim lignes As Integer = Ent(r, "Lignes"), nouveaux As Integer = Ent(r, "Nouveaux"), existants As Integer = Ent(r, "Existants")
+            Dim doublons As Integer = Ent(r, "Doublons"), crees As Integer = Ent(r, "Crees"), errs As Integer = Ent(r, "Erreurs")
+            fichesCreees += crees
+            If def(0) = "produits" Then produitsAFaire = nouveaux
+            Dim fait As Boolean = lignes > 0 AndAlso nouveaux = 0
+            Dim pp As New List(Of Object)
+            If nouveaux > 0 Then pp.Add(Puce(nouveaux & " " & T("nouveaux", "new", "nuevos"), "ok"))
+            If crees > 0 Then pp.Add(Puce(crees & " " & T("créés", "created", "creados"), "ok"))
+            If existants > 0 Then pp.Add(Puce(existants & " " & T("déjà là", "already there", "ya existen"), ""))
+            If doublons > 0 Then pp.Add(Puce(doublons & " " & T("répété", "repeated", "repetido") & If(doublons > 1, "s", ""), "act"))
+            If errs > 0 Then pp.Add(Puce(errs & " " & T("erreurs", "errors", "errores"), "bad"))
+            Dim nomBouton As String
+            Select Case def(0)
+                Case "clients" : nomBouton = T("Créer {0} clients", "Create {0} customers", "Crear {0} clientes")
+                Case "fournisseurs" : nomBouton = T("Créer {0} fournisseurs", "Create {0} suppliers", "Crear {0} proveedores")
+                Case Else : nomBouton = T("Créer {0} produits", "Create {0} products", "Crear {0} productos")
+            End Select
+            Dim liste As Object()
+            If def(0) = "produits" Then
+                liste = New Object() {
+                    Point(T("Reprendre nom, description, prix de vente et taxabilité", "Bring name, description, sale price and taxability", "Retomar nombre, descripción, precio de venta e imponibilidad"), EtatDe(lignes > 0, False)),
+                    Point(T("N'en créer aucun en double", "Create none twice", "No crear ninguno en duplicado"), EtatDe(lignes > 0, False)),
+                    Point(T("Créer les nouveaux produits et services", "Create the new products and services", "Crear los nuevos productos y servicios"), EtatDe(fait, crees > 0))}
+            Else
+                liste = New Object() {
+                    Point(T("Lire l'export et découper l'adresse", "Read the export and split the address", "Leer la exportación y separar la dirección"), EtatDe(lignes > 0, False)),
+                    Point(T("Signaler ce qui existe déjà et ce qui se répète", "Flag what already exists and what repeats", "Señalar lo que ya existe y lo que se repite"), EtatDe(lignes > 0, False)),
+                    Point(If(def(0) = "clients", T("Créer les nouveaux clients et leur adresse", "Create the new customers and their address", "Crear los nuevos clientes y su dirección"),
+                                                 T("Créer les nouveaux fournisseurs et leur adresse", "Create the new suppliers and their address", "Crear los nuevos proveedores y su dirección")), EtatDe(fait, crees > 0))}
+            End If
+            cartes.Add(New With {
+                .k = def(0), .no = CInt(def(1)), .ico = def(0), .titre = def(4), .src = nomSrc,
+                .etat = If(lignes = 0, "vide", If(fait, "fait", "afaire")),
+                .liste = liste, .puces = pp, .n = lignes, .unite = T("lignes lues", "lines read", "líneas leídas"), .extra = "",
+                .bouton = New With {.t = String.Format(nomBouton, nouveaux), .op = "creerFiches", .type = def(2), .actif = nouveaux > 0 AndAlso (def(0) <> "produits" OrElse planFait)},
+                .voir = def(5),
+                .pct = If(lignes = 0, 0, CInt(100 * (lignes - nouveaux) / lignes)),
+                .dit = If(def(0) = "produits" AndAlso nouveaux > 0 AndAlso Not planFait,
+                          T("Les produits attendent la fin du plan comptable : leurs comptes de vente et d'achat doivent d'abord exister. Ils se créeront d'eux-mêmes.", "Products wait for the chart of accounts to be finished: their sales and purchase accounts must exist first. They will be created automatically.", "Los productos esperan a que termine el plan contable: sus cuentas de venta y compra deben existir primero. Se crearán solos."),
+                          String.Format(T("{0} nouvelles fiches prêtes à créer.", "{0} new records ready to create.", "{0} fichas nuevas listas para crear."), nouveaux))})
+        Next
+
+        ' ---- 6 : factures ------------------------------------------------------
+        Dim nbDoc As Integer = 0, prets As Integer = 0, sansTiers As Integer = 0, aCorriger As Integer = 0, docCrees As Integer = 0, ouvertes As Integer = 0, deja As Integer = 0
+        Try
+            Dim docs As DataTable = Table(Lire("s0782GetDocumentsImport"), 0)
+            If docs IsNot Nothing Then
+                nbDoc = docs.Rows.Count
+                For Each r As DataRow In docs.Rows
+                    Dim statut As String = Txt(r, "Statut")
+                    Dim cree As Boolean = Not IsDBNull(r("DocumentId"))
+                    If Dec(r, "Solde") > 0D Then ouvertes += 1
+                    If cree Then
+                        docCrees += 1
+                    ElseIf statut = "OK" AndAlso Not IsDBNull(r("PartyGUID")) Then
+                        prets += 1
+                    ElseIf statut = "OK" Then
+                        sansTiers += 1
+                    ElseIf statut = "EXISTE" OrElse statut = "DOUBLON_FICHIER" Then
+                        deja += 1
+                    Else
+                        aCorriger += 1
+                    End If
+                Next
+            End If
+        Catch
+        End Try
+        Dim p7 As New List(Of Object)
+        If prets > 0 Then p7.Add(Puce(prets & " " & T("prêtes", "ready", "listas"), "ok"))
+        If docCrees > 0 Then p7.Add(Puce(docCrees & " " & T("en brouillon", "in draft", "en borrador"), "ok"))
+        If ouvertes > 0 Then p7.Add(Puce(ouvertes & " " & T("ouvertes", "open", "abiertas"), ""))
+        If aCorriger > 0 Then p7.Add(Puce(aCorriger & " " & T("à corriger", "to fix", "por corregir"), "act"))
+        If sansTiers > 0 Then p7.Add(Puce(sansTiers & " " & T("sans tiers : créez les tiers d'abord", "no party: create parties first", "sin tercero: cree los terceros primero"), "act"))
+        cartes.Add(New With {
+            .k = "factures", .no = 6, .ico = "factures", .titre = T("Factures clients et fournisseurs", "Customer and supplier invoices", "Facturas de clientes y proveedores"), .src = nomSrc,
+            .etat = If(nbDoc = 0, "vide", If(prets = 0 AndAlso sansTiers = 0 AndAlso aCorriger = 0, "fait", "afaire")),
+            .liste = New Object() {
+                Point(T("Un verdict par facture : nouvelle ou à corriger", "One verdict per invoice: new or to fix", "Un veredicto por factura: nueva o por corregir"), EtatDe(nbDoc > 0, False)),
+                Point(T("Trier ouvertes et fermées", "Sort open and closed", "Ordenar abiertas y cerradas"), EtatDe(nbDoc > 0, False)),
+                Point(T("Rapprocher le tiers que la source n'a pas retrouvé", "Match the party the source didn't find", "Conciliar el tercero que el origen no encontró"), EtatDe(nbDoc > 0 AndAlso sansTiers = 0, sansTiers > 0)),
+                Point(T("Répartir TPS et TVQ, puis créer en brouillon", "Split GST and QST, then create as draft", "Repartir TPS y TVQ, luego crear en borrador"), EtatDe(nbDoc > 0 AndAlso prets = 0 AndAlso sansTiers = 0 AndAlso aCorriger = 0, docCrees > 0))},
+            .puces = p7, .n = nbDoc, .unite = T("factures lues", "invoices read", "facturas leídas"), .extra = "",
+            .bouton = New With {.t = String.Format(T("Créer {0} en brouillon", "Create {0} as draft", "Crear {0} en borrador"), prets), .op = "creerFactures", .actif = prets > 0 AndAlso planFait AndAlso produitsAFaire = 0},
+            .voir = "ValiderFactures.aspx",
+            .pct = If(nbDoc = 0, 0, CInt(100 * (docCrees + deja) / nbDoc)),
+            .dit = If(prets > 0 AndAlso Not (planFait AndAlso produitsAFaire = 0),
+                      T("Les factures attendent la fin du plan comptable et la création des produits : chaque ligne doit trouver son compte et son produit.", "Invoices wait for the chart of accounts to be finished and the products to be created: each line must find its account and product.", "Las facturas esperan a que termine el plan contable y se creen los productos: cada línea debe encontrar su cuenta y su producto."),
+                  If(prets > 0, String.Format(T("{0} factures sont prêtes à créer en brouillon.", "{0} invoices are ready to create as draft.", "{0} facturas están listas para crear en borrador."), prets),
+                      T("Créez d'abord les clients et les fournisseurs : certaines factures n'ont pas encore de tiers.", "Create customers and suppliers first: some invoices have no party yet.", "Cree primero los clientes y proveedores: algunas facturas aún no tienen tercero.")))})
+
+        ' ---- 7 : taxes ---------------------------------------------------------
+        Dim tx As DataRow = Nothing
+        Try
+            tx = Rang0(Table(Lire("s0871GetTaxesImportEcran"), 0))
+        Catch
+        End Try
+        Dim nbTaux As Integer = Ent(tx, "NbTaux"), reconnues As Integer = Ent(tx, "NbReconnues"), aVerif As Integer = Ent(tx, "NbAVerifier"), inconnus As Integer = Ent(tx, "NbCodesInconnus")
+        Dim p8 As New List(Of Object)
+        If reconnues > 0 Then p8.Add(Puce(reconnues & " " & T("reconnus", "recognized", "reconocidos"), "ok"))
+        If aVerif > 0 Then p8.Add(Puce(aVerif & " " & T("à vérifier", "to check", "por verificar"), "act"))
+        If inconnus > 0 Then p8.Add(Puce(inconnus & " " & T("codes inconnus", "unknown codes", "códigos desconocidos"), "bad"))
+        cartes.Add(New With {
+            .k = "taxes", .no = 7, .ico = "taxes", .titre = T("Codes et taux de taxe", "Tax codes and rates", "Códigos y tasas de impuesto"), .src = nomSrc,
+            .etat = If(nbTaux = 0, "vide", If(aVerif = 0 AndAlso inconnus = 0, "fait", "afaire")),
+            .liste = New Object() {
+                Point(T("Lire chaque code et ses composantes", "Read each code and its components", "Leer cada código y sus componentes"), EtatDe(nbTaux > 0, False)),
+                Point(T("Classer au québécois : 14,975 % → TPS 5 % + TVQ 9,975 %", "Classify Quebec-style: 14.975% → GST 5% + QST 9.975%", "Clasificar a la quebequense: 14,975 % → TPS 5 % + TVQ 9,975 %"), EtatDe(nbTaux > 0, False)),
+                Point(T("Signaler les codes sans taux, avec leur motif", "Flag codes without a rate, with the reason", "Señalar los códigos sin tasa, con su motivo"), EtatDe(nbTaux > 0 AndAlso aVerif = 0, aVerif > 0)),
+                Point(T("Ajouter ou corriger un taux à la main", "Add or fix a rate by hand", "Agregar o corregir una tasa a mano"), EtatDe(nbTaux > 0 AndAlso aVerif = 0 AndAlso inconnus = 0, False))},
+            .puces = p8, .n = nbTaux, .unite = T("codes de taxe", "tax codes", "códigos de impuesto"), .extra = "",
+            .bouton = New With {.t = T("Vérifier les taux", "Check the rates", "Verificar las tasas"), .op = "page", .url = "ValiderTaxes.aspx", .actif = aVerif > 0 OrElse inconnus > 0},
+            .voir = "ValiderTaxes.aspx",
+            .pct = If(nbTaux = 0, 0, CInt(100 * reconnues / nbTaux)),
+            .dit = String.Format(T("{0} taux de taxe sont à vérifier.", "{0} tax rates need checking.", "{0} tasas de impuesto por verificar."), aVerif + inconnus)})
+
+        Dim prep As DonneesEnPreparation = Preparation()
+        Return New With {
+            .cartes = cartes,
+            .comptesDecides = decides, .comptesTotal = total, .aDecider = aDecider,
+            .fichesCreees = fichesCreees, .facturesBrouillon = docCrees,
+            .balanceEquilibree = equilibree, .balanceTotal = If(nbBal > 0, Montant(debit), ""),
+            .ressources = If(prep Is Nothing, 0, prep.ressources), .enregistrements = If(prep Is Nothing, 0, prep.nb)}
+    End Function
+
+    Private Function NomSource() As String
+        Dim nom As String
+        Select Case Logiciel
+            Case "qbo" : nom = "QuickBooks Online"
+            Case "xero" : nom = "Xero"
+            Case "sagebca" : nom = "Sage"
+            Case "fresh" : nom = "FreshBooks"
+            Case "wave" : nom = "Wave"
+            Case "zoho" : nom = "Zoho Books"
+            Case Else : nom = T("Votre logiciel", "Your software", "Su software")
+        End Select
+        Return nom & ", " & If(Mode = "fichier", T("par fichiers", "by files", "por archivos"), T("en direct", "live", "en directo"))
+    End Function
+
+    ''' <summary>Le plan comptable est-il terminé : tout décidé (s0758), plus rien à créer (s0766) ?</summary>
+    Private Function PlanTermine() As Boolean
+        Try
+            Dim st As DataRow = Rang0(Table(Lire("s0758StatsCorrespondance"), 0))
+            Dim t0 As DataTable = Table(Lire("s0766GetAAppliquer"), 0)
+            Return Ent(st, "Total") > 0 AndAlso Ent(st, "ADecider") = 0 AndAlso (t0 Is Nothing OrElse t0.Rows.Count = 0)
+        Catch
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>Cartes 3 à 5 : crée les nouvelles fiches du dernier fichier (s0774, comme ImportDonnees.ascx).</summary>
+    Private Function CreerFiches(typeImport As String) As Object
+        If Array.IndexOf({"Client", "Fournisseur", "Produit"}, typeImport) < 0 Then
+            Return New With {.ok = False, .erreur = T("Type inconnu.", "Unknown type.", "Tipo desconocido.")}
+        End If
+        If typeImport = "Produit" AndAlso Not PlanTermine() Then
+            Return New With {.ok = False, .erreur = T("Terminez d'abord le plan comptable : les comptes de vente et d'achat des produits doivent exister.", "Finish the chart of accounts first: the products' sales and purchase accounts must exist.", "Termine primero el plan contable: las cuentas de venta y compra de los productos deben existir.")}
+        End If
+        Dim fid As Integer = 0
+        FichierImport(typeImport, fid)
+        If fid = 0 Then Return New With {.ok = False, .erreur = T("Rien en préparation pour ce type.", "Nothing in preparation for this type.", "Nada en preparación para este tipo.")}
+
+        Dim r As DataRow = Rang0(Table(Lire("s0774AppliquerImportFichier", New SqlClient.SqlParameter("@ImportFileId", fid)), 0))
+        Dim msg As String = String.Format(T("{0} créés, {1} écartés, {2} erreurs.", "{0} created, {1} skipped, {2} errors.", "{0} creados, {1} descartados, {2} errores."),
+                                          Ent(r, "Migrated"), Ent(r, "Skipped"), Ent(r, "Errors"))
+        Return New With {.ok = True, .message = msg, .tableau = Tableau()}
+    End Function
+
+    ''' <summary>
+    ''' Carte 2 : l'écriture d'ouverture tirée de la balance (s1025, T401), au
+    ''' journal OD, datée de la date de bascule, en brouillon. Le dernier jeu de
+    ''' résultats est le statut ; l'avant-dernier, les lignes qui bloquent.
+    ''' </summary>
+    Private Function SoldesOuverture(creer As Boolean) As DataSet
+        Dim d As Date
+        Dim bascule As Object = DBNull.Value
+        If Date.TryParseExact(Bascule, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, d) Then bascule = d
+        Return Lire("s1025SoldesOuverture",
+                    New SqlClient.SqlParameter("@DateBascule", bascule),
+                    New SqlClient.SqlParameter("@UserId", UserId),
+                    New SqlClient.SqlParameter("@Creer", creer))
+    End Function
+
+    Private Function CreerOuverture() As Object
+        If Not PlanTermine() Then
+            Return New With {.ok = False, .erreur = T("Terminez d'abord le plan comptable : chaque solde d'ouverture doit tomber sur le compte décidé.", "Finish the chart of accounts first: each opening balance must land on the decided account.", "Termine primero el plan contable: cada saldo de apertura debe caer en la cuenta decidida.")}
+        End If
+        Dim ds As DataSet = SoldesOuverture(True)
+        Dim r As DataRow = Rang0(Table(ds, ds.Tables.Count - 1))
+        Dim statut As String = Txt(r, "Statut")
+        If statut <> "CREE" Then
+            Return New With {.ok = False, .erreur = If(Txt(r, "Message") <> "", Txt(r, "Message"), T("L'écriture d'ouverture n'a pas pu être créée.", "The opening entry could not be created.", "No se pudo crear el asiento de apertura."))}
+        End If
+        Return New With {.ok = True, .message = Txt(r, "Message"), .tableau = Tableau()}
+    End Function
+
+    ''' <summary>Carte 6 : crée en brouillon les factures prêtes (s0785, comme ValiderFactures.aspx).</summary>
+    Private Function CreerFactures() As Object
+        ' Chaque ligne doit trouver son compte (plan terminé) et son produit (produits créés).
+        If Not PlanTermine() Then
+            Return New With {.ok = False, .erreur = T("Terminez d'abord le plan comptable : chaque ligne de facture doit trouver son compte.", "Finish the chart of accounts first: each invoice line must find its account.", "Termine primero el plan contable: cada línea de factura debe encontrar su cuenta.")}
+        End If
+        Dim fidProd As Integer = 0
+        Dim rp As DataRow = FichierImport("Produit", fidProd)
+        If fidProd > 0 AndAlso Ent(rp, "Nouveaux") > 0 Then
+            Return New With {.ok = False, .erreur = T("Créez d'abord les produits : chaque ligne de facture doit trouver son produit.", "Create the products first: each invoice line must find its product.", "Cree primero los productos: cada línea de factura debe encontrar su producto.")}
+        End If
+        Dim ids As New List(Of String)
+        Dim docs As DataTable = Table(Lire("s0782GetDocumentsImport"), 0)
+        If docs IsNot Nothing Then
+            For Each r As DataRow In docs.Rows
+                If IsDBNull(r("DocumentId")) AndAlso Txt(r, "Statut") = "OK" AndAlso Not IsDBNull(r("PartyGUID")) Then ids.Add(Txt(r, "Id"))
+            Next
+        End If
+        If ids.Count = 0 Then Return New With {.ok = False, .erreur = T("Aucune facture n'est prête.", "No invoice is ready.", "Ninguna factura está lista.")}
+
+        Dim r0 As DataRow = Rang0(Table(Lire("s0785CreerDocumentsDepuisImport",
+                                             New SqlClient.SqlParameter("@Ids", String.Join(",", ids)),
+                                             New SqlClient.SqlParameter("@UserId", UserId)), 0))
+        Dim msg As String = String.Format(T("{0} factures créées en brouillon. {1} sans tiers, {2} écartées, {3} déséquilibrées.",
+                                            "{0} invoices created as draft. {1} without party, {2} skipped, {3} unbalanced.",
+                                            "{0} facturas creadas en borrador. {1} sin tercero, {2} descartadas, {3} desequilibradas."),
+                                          Ent(r0, "NbCrees"), Ent(r0, "NbSansTiers"), Ent(r0, "NbEcartes"), Ent(r0, "NbDesequilibres"))
+        Return New With {.ok = True, .message = msg, .tableau = Tableau()}
+    End Function
+
+#End Region
+
     Private Shared Function Json(o As Object) As String
         Return New JavaScriptSerializer().Serialize(o)
     End Function
@@ -287,9 +931,10 @@ Public Class Importation2
             .sousTitre = T("Reprendre une comptabilité tenue ailleurs, dans 60secondes", "Bring accounting kept elsewhere into 60secondes", "Traer a 60secondes una contabilidad llevada en otro lugar"),
             .demo = T("Démonstration · données fictives", "Demo · sample data", "Demostración · datos ficticios"),
             .demoTip = T("Les étapes 3 à 7 ne sont pas encore branchées : rien n'est écrit dans votre comptabilité.", "Steps 3 to 7 are not connected yet: nothing is written to your accounting.", "Los pasos 3 a 7 aún no están conectados: no se escribe nada en su contabilidad."),
-            .vider = T("Vider la préparation", "Clear the preparation", "Vaciar la preparación"),
-            .viderTip = T("Efface ce qui attend d'être validé ; rien de ce qui est déjà passé en comptabilité n'est retiré", "Clears what is waiting to be validated; nothing already in the accounting is removed", "Borra lo que espera validación; no se retira nada de lo que ya está en la contabilidad"),
-            .viderConfirme = T("Tout ce qui attend d'être validé sera effacé, y compris le logiciel choisi et la date de bascule. Rien de ce qui est déjà passé en comptabilité n'est retiré.", "Everything waiting to be validated will be cleared, including the chosen software and the switch-over date. Nothing already in the accounting is removed.", "Se borrará todo lo que espera validación, incluidos el software elegido y la fecha de cambio. No se retira nada de lo que ya está en la contabilidad."),
+            .vider = T("Recommencer l'assistant", "Restart the wizard", "Reiniciar el asistente"),
+            .viderTip = T("Défait ce que l'importation a créé et revient à l'étape 1 ; les données importées de QuickBooks restent", "Undoes what the import created and goes back to step 1; the data imported from QuickBooks stays", "Deshace lo que creó la importación y vuelve al paso 1; los datos importados de QuickBooks se quedan"),
+            .viderConfirme = T("Tout ce que l'importation a créé sera retiré : les comptes créés au plan, les clients, fournisseurs et produits créés, les factures en brouillon et l'écriture d'ouverture. Chaque compte redevient « à décider » et l'assistant revient à l'étape 1. Les données importées de QuickBooks restent, prêtes à être reprises. Ce qui a été validé depuis, ou utilisé ailleurs, est gardé.", "Everything the import created will be removed: the accounts created in the chart, the customers, suppliers and products created, the draft invoices and the opening entry. Every account goes back to ""to decide"" and the wizard returns to step 1. The data imported from QuickBooks stays, ready to be imported again. Anything validated since, or used elsewhere, is kept.", "Se retirará todo lo que creó la importación: las cuentas creadas en el plan, los clientes, proveedores y productos creados, las facturas en borrador y el asiento de apertura. Cada cuenta vuelve a «por decidir» y el asistente vuelve al paso 1. Los datos importados de QuickBooks se quedan, listos para importarse de nuevo. Lo validado desde entonces, o usado en otro lugar, se conserva."),
+            .viderOk = T("Assistant recommencé", "Wizard restarted", "Asistente reiniciado"),
             .changer = T("Changer", "Change", "Cambiar"),
             .origine = T("Origine", "Source", "Origen"),
             .aChoisir = T("À choisir", "To choose", "Por elegir"),
@@ -400,6 +1045,38 @@ Public Class Importation2
             .relieOk = T("Source reliée", "Source connected", "Origen conectado"),
             .relieTexte = T("{n} est relié en lecture seule. Prochaine étape : le plan comptable.", "{n} is connected read-only. Next step: the chart of accounts.", "{n} está conectado en solo lectura. Próximo paso: el plan contable."),
             .fichiersOk = T("Fichiers", "Files", "Archivos"),
+            .t3Voir = T("Voir le détail", "See the details", "Ver el detalle"),
+            .t3Vide = T("Rien en préparation", "Nothing in preparation", "Nada en preparación"),
+            .t3Fait = T("Terminé", "Done", "Terminado"),
+            .t3Charge = T("Lecture du tableau…", "Loading the board…", "Cargando el tablero…"),
+            .t3Travail = T("60 s'en occupe…", "60 is on it…", "60 se encarga…"),
+            .t3ToutFait = T("Tous les imports sont faits. Prochaine étape : le contrôle.", "All imports are done. Next step: the review.", "Todas las importaciones están hechas. Próximo paso: el control."),
+            .t3Ordre = T("Suivez l'ordre des numéros : chaque import s'appuie sur les précédents.", "Follow the numbers: each import builds on the previous ones.", "Siga el orden de los números: cada importación se apoya en las anteriores."),
+            .t3Lecture = T("Lecture terminée", "Reading done", "Lectura terminada"),
+            .t3EnCours = T("Reprise en cours · {0} compte(s) à décider", "Migration in progress · {0} account(s) to decide", "Migración en curso · {0} cuenta(s) por decidir"),
+            .t3EnCoursSans = T("Reprise en cours", "Migration in progress", "Migración en curso"),
+            .t3Equilibree = T("Équilibrée · {0}", "Balanced · {0}", "Equilibrada · {0}"),
+            .t3Desequilibree = T("Déséquilibrée", "Unbalanced", "Desequilibrada"),
+            .t3Fermer = T("Fermer ✕", "Close ✕", "Cerrar ✕"),
+            .t3Deplacer = T("Déplacer", "Move", "Mover"),
+            .reinit = T("Réinitialiser {0}", "Reset {0}", "Reiniciar {0}"),
+            .reinitTip = T("Outil de test : efface la comptabilité de cette compagnie pour rejouer la reprise", "Test tool: clears this company's accounting to replay the migration", "Herramienta de prueba: borra la contabilidad de esta compañía para repetir la migración"),
+            .reinitConfirme = T("Outil de test. Pour {0}, seront EFFACÉS : toutes les factures et tous les documents, les règlements, toutes les écritures, tous les rendez-vous, tous les clients et fournisseurs, tous les produits, et toutes les décisions de correspondance des comptes. Le plan comptable revient au plan par défaut. La préparation est gardée et redevient « à faire ». C'est irréversible.",
+                                "Test tool. For {0}, these will be DELETED: all invoices and documents, payments, all journal entries, all appointments, all customers and suppliers, all products, and all account matching decisions. The chart of accounts returns to the default chart. The preparation is kept and becomes ""to do"" again. This cannot be undone.",
+                                "Herramienta de prueba. Para {0}, se BORRARÁN: todas las facturas y documentos, los pagos, todos los asientos, todas las citas, todos los clientes y proveedores, todos los productos y todas las decisiones de correspondencia de cuentas. El plan contable vuelve al plan por defecto. La preparación se conserva y vuelve a «por hacer». Es irreversible."),
+            .reinitOk = T("Réinitialisation faite", "Reset done", "Reinicio hecho"),
+            .reinitTexte = T("{0} est vidée : la reprise peut repartir des données en préparation.", "{0} is cleared: the migration can start again from the prepared data.", "{0} está vacía: la migración puede repetirse con los datos en preparación."),
+            .t3Recharger = T("Actualiser", "Refresh", "Actualizar"),
+            .prepTitre = T("Des données sont déjà en préparation", "Data is already in preparation", "Ya hay datos en preparación"),
+            .prepTexte = T("{nb} enregistrements ({r} types) extraits de {n} le {d} attendent d'être validés. Vous pouvez continuer avec eux, sans relier {n} de nouveau.",
+                           "{nb} records ({r} types) extracted from {n} on {d} are waiting to be validated. You can continue with them, without connecting {n} again.",
+                           "{nb} registros ({r} tipos) extraídos de {n} el {d} esperan validación. Puede continuar con ellos, sin volver a conectar {n}."),
+            .prepContinuer = T("Continuer avec ces données", "Continue with this data", "Continuar con estos datos"),
+            .prepOk = T("Données en préparation", "Data in preparation", "Datos en preparación"),
+            .prepOkTexte = T("On continue avec les données de {n} déjà extraites, sans nouvelle connexion. Prochaine étape : le plan comptable.",
+                             "Continuing with the {n} data already extracted, without a new connection. Next step: the chart of accounts.",
+                             "Se continúa con los datos de {n} ya extraídos, sin nueva conexión. Próximo paso: el plan contable."),
+            .viaPrep = T("Données déjà en préparation", "Data already in preparation", "Datos ya en preparación"),
             .fichiersTexte = T("Réglages retenus. Prochaine étape : déposer le plan comptable.", "Settings kept. Next step: drop the chart of accounts.", "Ajustes guardados. Próximo paso: depositar el plan contable."),
             .e3Titre = T("Étape 3 — Plan comptable", "Step 3 — Chart of accounts", "Paso 3 — Plan contable"),
             .e3LeadDirect = T("{n} est relié. 60 rapatriera le plan comptable, puis vous aidera à associer chaque compte.", "{n} is connected. 60 will bring back the chart of accounts, then help you match each account.", "{n} está conectado. 60 traerá el plan contable y luego le ayudará a asociar cada cuenta."),

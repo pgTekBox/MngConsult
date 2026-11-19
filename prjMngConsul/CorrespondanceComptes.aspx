@@ -192,7 +192,7 @@
                 <asp:Button ID="btnAccepter" runat="server" CssClass="btn btn-s" CausesValidation="false"
                     Text="Accepter les correspondances par numéro"
                     OnClientClick="if (!appConfirmClic(this, 'Retenir toutes les correspondances où le numéro de compte concorde ?')) { return false; }" />
-                <button type="button" class="btn btn-s" onclick="ouvrirFenetre('AssocierCompte.aspx?popup=1', 'Associer un compte du plan comptable')">Associer un par un</button>
+                <button type="button" class="btn btn-s" onclick="ouvrirFenetre('AssocierCompte.aspx?popup=1', 'Décider d’un compte du plan comptable')">Décider un par un</button>
                 <span class="seuil-ia" title="Lie d'un coup les comptes encore à décider dont la proposition de l'IA atteint le seuil choisi. Lancez d'abord « Proposer avec l'IA ».">
                     <asp:DropDownList runat="server" ID="ddlSeuilIA" CssClass="act-seuil">
                         <asp:ListItem Value="" Text="Aucun" />
@@ -640,7 +640,7 @@
     })();
 
 </script>
-    <!-- La fenêtre par-dessus la grille : « Associer un par un », un compte à la fois. -->
+    <!-- La fenêtre par-dessus la grille : « Décider un par un », un compte à la fois. -->
     <style>
         .fen-voile { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9000; display: none; align-items: center; justify-content: center; padding: 20px }
         .fen-voile.ouvert { display: flex }

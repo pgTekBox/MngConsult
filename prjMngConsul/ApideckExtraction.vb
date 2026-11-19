@@ -471,6 +471,9 @@ Public Class ApideckExtraction
     ''' lectures particulières, qui ne passent pas par une adresse de liste.
     ''' </summary>
     Private Function LireRessource(api As clsApideck, r As Ressource) As JArray
+        ' FAKE APIDECK — à retirer : rejoue une extraction réelle enregistrée.
+        If clsApideckFake.Actif() Then Return clsApideckFake.Lire(r.Cle)
+
         Select Case r.Mode
             Case "PAR_DOCUMENT" : Return LirePiecesJointes(api)
             Case "PASSERELLE"
@@ -1510,6 +1513,9 @@ Public Class ApideckExtraction
     ''' pour rien — c'est le seul appel de tout le moteur qui ne passe pas par lui.
     ''' </summary>
     Private Shared Function Telecharger(url As String) As Byte()
+        ' FAKE APIDECK — à retirer : les adresses signées d'Intuit ont expiré.
+        If clsApideckFake.Actif() Then Return Encoding.UTF8.GetBytes("Pièce jointe simulée (Apideck.Fake) — " & url)
+
         Dim req As Net.HttpWebRequest = CType(Net.WebRequest.Create(url), Net.HttpWebRequest)
         req.Method = "GET"
         req.Timeout = 120000

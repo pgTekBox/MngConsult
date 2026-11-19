@@ -77,6 +77,7 @@ Public Class clsApideck
 
     ''' <summary>True si la clé d'API et l'App ID sont présents dans Web.config.</summary>
     Public Shared Function IsConfigured() As Boolean
+        If clsApideckFake.Actif() Then Return True ' FAKE APIDECK — à retirer
         Return Not String.IsNullOrEmpty(ApiKey()) AndAlso Not String.IsNullOrEmpty(AppId())
     End Function
 
@@ -90,6 +91,9 @@ Public Class clsApideck
     ''' plutôt que de la conserver.
     ''' </summary>
     Public Function CreateVaultSession(companyName As String) As String
+        ' FAKE APIDECK — à retirer : pas de Vault, on reste dans l'application.
+        If clsApideckFake.Actif() Then Return Web.VirtualPathUtility.ToAbsolute("~/ImportApideck.aspx")
+
         Dim body As New JObject()
         body("consumer_metadata") = New JObject(New JProperty("account_name", If(companyName, "")))
         body("settings") = New JObject(New JProperty("unified_apis", New JArray("accounting")))
@@ -117,6 +121,7 @@ Public Class clsApideck
 
     ''' <summary>Même chose pour un service précis (« quickbooks », « xero »…), sans changer Web.config (Importation 2).</summary>
     Public Function IsConnected(serviceVoulu As String) As Boolean
+        If clsApideckFake.Actif() Then Return True ' FAKE APIDECK — à retirer
         Dim liste As JArray = Connections()
         If liste Is Nothing Then Return False
 
@@ -206,6 +211,7 @@ Public Class clsApideck
     ''' natives d'Intuit le portent.
     ''' </summary>
     Public Function RealmId() As String
+        If clsApideckFake.Actif() Then Return "fake-realm" ' FAKE APIDECK — à retirer
         Dim r As JObject = SendJson("/vault/connections/accounting/" & ServiceId(), "GET", Nothing)
         Dim d As JToken = r("data")
         If d Is Nothing Then Return ""
@@ -262,6 +268,12 @@ Public Class clsApideck
     ''' </summary>
     Private Function SendJson(chemin As String, methode As String, jsonBody As String,
                               Optional aval As String = "") As JObject
+        ' FAKE APIDECK — à retirer. Garde-fou : en mode simulé, rien ne part
+        ' chez Apideck. Un appel qui arrive ici n'a pas de réponse simulée.
+        If clsApideckFake.Actif() Then
+            Throw New Exception("Apideck simulé (Apideck.Fake) : aucune réponse simulée pour " & methode & " " & chemin & If(aval <> "", " → " & aval, "") & ".")
+        End If
+
         If Not IsConfigured() Then
             Journaliser(methode, chemin, aval, 1, 0, False, 0, "Apideck : clé d'API ou App ID manquants (Web.config appSettings).", jsonBody, Nothing, 0)
             Throw New Exception("Apideck : clé d'API ou App ID manquants (Web.config appSettings).")
@@ -498,4 +510,64 @@ Public Class ApideckHttpException
         MyBase.New(message)
         Me.CodeHttp = codeHttp
     End Sub
+End Class
+
+' =============================================================================
+' FAKE APIDECK — TEMPORAIRE, À RETIRER quand l'essai Apideck sera renouvelé.
+'
+' Pour retirer : supprimer cette classe, les lignes marquées « FAKE APIDECK »
+' (clsApideck.vb, ApideckExtraction.vb), la clé Apideck.Fake de Web.config,
+' le dossier App_Data\ApideckFake et Database\Outils\ExporterApideckFake.ps1.
+' =============================================================================
+
+''' <summary>
+''' Apideck simulé. Activé par &lt;add key="Apideck.Fake" value="true" /&gt;.
+'''
+''' Rejoue une extraction réelle déjà faite : chaque ressource est lue dans
+''' App_Data\ApideckFake\{ressource}.json — le même JArray que l'extraction
+''' avait déposé dans staging.ConnecteurDonnee. Le versement (Verser…) reçoit
+''' donc exactement ce qu'il recevait d'Apideck. Les fichiers se produisent avec
+''' Database\Outils\ExporterApideckFake.ps1.
+'''
+''' Une ressource sans fichier rend une liste vide. Aucun appel ne sort.
+''' </summary>
+Public NotInheritable Class clsApideckFake
+
+    Private Sub New()
+    End Sub
+
+    Public Shared Function Actif() As Boolean
+        Return String.Equals(If(ConfigurationManager.AppSettings("Apideck.Fake"), "").Trim(), "true",
+                             StringComparison.OrdinalIgnoreCase)
+    End Function
+
+    ''' <summary>Apideck.FakeDossier, ou ~/App_Data/ApideckFake par défaut.</summary>
+    Public Shared Function Dossier() As String
+        Dim v As String = If(ConfigurationManager.AppSettings("Apideck.FakeDossier"), "").Trim()
+        If v = "" Then v = "~/App_Data/ApideckFake"
+        If Not v.StartsWith("~") Then Return v
+
+        ' MapPath fonctionne aussi hors requête (extraction en fond).
+        Dim chemin As String = Web.Hosting.HostingEnvironment.MapPath(v)
+        If String.IsNullOrEmpty(chemin) Then
+            chemin = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, v.TrimStart("~"c, "/"c).Replace("/"c, IO.Path.DirectorySeparatorChar))
+        End If
+        Return chemin
+    End Function
+
+    ''' <summary>Les enregistrements simulés d'une ressource (« customers », « invoices »…).</summary>
+    Public Shared Function Lire(ressource As String) As JArray
+        Dim fichier As String = IO.Path.Combine(Dossier(), ressource & ".json")
+        If Not IO.File.Exists(fichier) Then Return New JArray()
+
+        Dim t As JToken = JToken.Parse(IO.File.ReadAllText(fichier, Encoding.UTF8))
+        If t.Type = JTokenType.Array Then Return DirectCast(t, JArray)
+
+        ' Tolère une réponse Apideck copiée telle quelle : { "data": [...] }.
+        Dim d As JToken = If(t.Type = JTokenType.Object, t("data"), Nothing)
+        If d IsNot Nothing AndAlso d.Type = JTokenType.Array Then Return DirectCast(d, JArray)
+        If d IsNot Nothing AndAlso d.Type = JTokenType.Object Then Return New JArray(d)
+        Return New JArray(t)
+    End Function
+
 End Class

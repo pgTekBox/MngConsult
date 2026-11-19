@@ -120,11 +120,29 @@ Public Class AssocierCompte
         If message IsNot Nothing Then
             litFin.Text = "<h2>Rien à associer</h2><p>" & HttpUtility.HtmlEncode(message) & "</p>"
         ElseIf total = 0 Then
-            litFin.Text = "<h2>Tout est décidé</h2><p>Chaque compte de l'ancien logiciel est lié, à créer ou ignoré. " &
-                          "Faites relire la correspondance dans la grille, puis créez au plan les comptes qui manquent à l'étape 3.</p>"
+            ' Tout est décidé : l'étape suivante est la création des comptes marqués « Créer ».
+            Dim aCreer As Integer = 0
+            Try
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", Company))
+                Dim ds As DataSet = ExecuteSQLds("s0766GetAAppliquer", p)
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then aCreer = ds.Tables(0).Rows.Count
+            Catch
+            End Try
+            If aCreer > 0 Then
+                litFin.Text = "<h2>Tout est décidé</h2><p>Chaque compte de " & HttpUtility.HtmlEncode(NomLogiciel()) & " est lié, à créer ou ignoré. " &
+                              "Vous êtes rendu à la création des comptes : <b>" & aCreer.ToString() & " compte(s)</b> marqué(s) « Créer » " &
+                              "attendent leur classe, leur sous-classe et leur nom avant d'exister dans votre plan comptable.</p>"
+                hlCreer.Visible = True
+                hlCreer.Text = "Créer les " & aCreer.ToString() & " compte(s) →"
+                hlCreer.NavigateUrl = If(EnFenetre, "~/CreerCompte.aspx?popup=1", "~/CreerCompte.aspx")
+            Else
+                litFin.Text = "<h2>Tout est décidé</h2><p>Chaque compte de " & HttpUtility.HtmlEncode(NomLogiciel()) & " est lié ou ignoré, " &
+                              "et les comptes à créer existent déjà dans votre plan comptable. Le plan comptable est terminé.</p>"
+            End If
         Else
             litFin.Text = "<h2>" & reportes.ToString() & " compte(s) reporté(s) à plus tard</h2><p>Il ne reste que les comptes que vous avez " &
-                          "mis de côté. Reprenez-les ici, ou décidez-les dans la grille de l'étape 2.</p>"
+                          "mis de côté. Reprenez-les ici quand vous serez prêt.</p>"
         End If
     End Sub
 
@@ -158,7 +176,16 @@ Public Class AssocierCompte
         p.Add(New SqlParameter("@CompanyGUID", Company))
         Dim ds As DataSet = ExecuteSQLds("s0759GetPlanCompagnie", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return l
+        ' Un compte d'ici déjà lié à un autre compte source n'est plus un choix (T405).
+        Dim pris As New HashSet(Of Integer)()
+        Dim dsPris As DataSet = ExecuteSQLds("s1029GetComptesDejaLies", New Collection From {New SqlParameter("@CompanyGUID", Company)})
+        If dsPris IsNot Nothing AndAlso dsPris.Tables.Count > 0 Then
+            For Each x As DataRow In dsPris.Tables(0).Rows
+                pris.Add(Convert.ToInt32(x("PlanComptableId")))
+            Next
+        End If
         For Each r As DataRow In ds.Tables(0).Rows
+            If pris.Contains(Convert.ToInt32(r("Id"))) Then Continue For
             l.Add(New Cible With {.Id = Convert.ToInt32(r("Id")), .Compte = Texte(r("Compte")), .Nom = Texte(r("Nom")), .TypeBilan = Texte(r("TypeBilan"))})
         Next
         Return l
@@ -262,7 +289,7 @@ Public Class AssocierCompte
 
         ' ── Le rendu ────────────────────────────────────────────────────────
         Dim sb As New StringBuilder()
-        sb.Append("<div class='asc-corps'><h2>Associer un compte du plan comptable</h2><div class='asc-deux'>")
+        sb.Append("<div class='asc-corps'><h2>Décider d'un compte</h2><div class='asc-deux'>")
         ' le compte source
         sb.Append("<div class='asc-source'><div class='asc-titre'>Compte dans ").Append(HttpUtility.HtmlEncode(logiciel)).Append("</div>")
         sb.Append("<div class='num'>").Append(If(numSrc <> "", HttpUtility.HtmlEncode(numSrc), "<i>sans numéro</i>")).Append("</div>")
@@ -303,6 +330,15 @@ Public Class AssocierCompte
             premier = False
         Next
         Option_(sb, "CREER", creer, premier)
+        ' Un compte à 0 n'a rien à reprendre : on peut l'ignorer. s0757 refuse
+        ' encore s'il sert à une donnée importée (T304), et le dit en clair.
+        ' Un compte dont se servent des produits ne peut pas être ignoré : leurs
+        ' comptes de vente ou d'achat n'auraient plus de compte où tomber.
+        If solde.HasValue AndAlso solde.Value = 0D AndAlso usage(1) = 0 Then
+            Dim ignorer As New Cible With {.Compte = "IGNORER", .Nom = "Ignorer ce compte",
+                .Raison = "Solde à 0 : rien à reprendre. Le compte ne sera pas créé dans 60secondes."}
+            Option_(sb, "IGNORER", ignorer, False)
+        End If
         sb.Append("</div></div></div>")
         sb.Append("<div class='asc-enjeu' id='ascEnjeu' hidden><span class='pic'><i class='ic ic-alert' aria-hidden='true'></i></span><div id='ascEnjeuTexte'></div></div>")
         sb.Append("</div>")
@@ -314,7 +350,7 @@ Public Class AssocierCompte
         sb.Append("<div class='ligne'><input type='radio' name='cible' value='").Append(HttpUtility.HtmlAttributeEncode(valeur)).Append("'")
         If coche Then sb.Append(" checked='checked'")
         sb.Append(" onclick='ascChoisir(this)' />")
-        If valeur <> "CREER" Then sb.Append("<span class='num'>").Append(HttpUtility.HtmlEncode(c.Compte)).Append("</span>")
+        If valeur <> "CREER" AndAlso valeur <> "IGNORER" Then sb.Append("<span class='num'>").Append(HttpUtility.HtmlEncode(c.Compte)).Append("</span>")
         sb.Append("<span class='nom'>").Append(HttpUtility.HtmlEncode(c.Nom)).Append("</span></div>")
         If c.Badge <> "" Then sb.Append("<span class='reco'>").Append(HttpUtility.HtmlEncode(c.Badge)).Append("</span>")
         If c.Raison <> "" Then sb.Append("<div class='raison").Append(If(c.RaisonMal, " mal", "")).Append("'>").Append(HttpUtility.HtmlEncode(c.Raison)).Append("</div>")
@@ -364,13 +400,27 @@ Public Class AssocierCompte
             End If
             Dim nomSrc As String = Texte(r("NomSource"))
             Dim creer As Boolean = (choix = "CREER")
+            Dim ignorer As Boolean = (choix = "IGNORER")
+            If ignorer AndAlso (IsDBNull(r("Solde")) OrElse Convert.ToDecimal(r("Solde")) <> 0D) Then
+                Alerte("Attention", "Seul un compte à 0 peut être ignoré : ce compte a un solde à reprendre.")
+                Charger()
+                Return
+            End If
+            If ignorer Then
+                Dim nbProduits As Integer = Usages(cle)(1)
+                If nbProduits > 0 Then
+                    Alerte("Attention", "Ce compte ne peut pas être ignoré : " & nbProduits.ToString() & " produit(s) en préparation s'en servent comme compte de vente ou d'achat. Liez-le à un compte de 60secondes, ou créez-le.")
+                    Charger()
+                    Return
+                End If
+            End If
             Dim decision = New With {
                 .CleSource = cle,
                 .TypeCle = Texte(r("TypeCle")),
                 .CompteSource = Texte(r("CompteSource")),
                 .NomSource = nomSrc,
-                .Action = If(creer, "CREER", "LIER"),
-                .CompteCible = If(creer, Texte(r("CompteSource")), choix),
+                .Action = If(ignorer, "IGNORER", If(creer, "CREER", "LIER")),
+                .CompteCible = If(ignorer, "", If(creer, Texte(r("CompteSource")), choix)),
                 .NomCible = nomSrc,
                 .TypeCible = Texte(r("TypeSource")),
                 .Note = "Associé un par un"
@@ -381,7 +431,8 @@ Public Class AssocierCompte
             p.Add(New SqlParameter("@Decisions", Newtonsoft.Json.JsonConvert.SerializeObject(New Object() {decision})))
             Dim stats = PremiereLigne(ExecuteSQLds("s0757SaveCorrespondances", p))
             Dim reste As String = If(stats Is Nothing, "", " Il reste " & Convert.ToString(stats("ADecider")) & " compte(s) à décider.")
-            Alerte("Fait", If(creer, "« " & nomSrc & " » sera créé au plan à l'étape 3.", "« " & nomSrc & " » est lié au compte " & choix & " de 60secondes.") & reste)
+            Alerte("Fait", If(ignorer, "« " & nomSrc & " » est ignoré : il ne sera pas repris.",
+                           If(creer, "« " & nomSrc & " » sera créé au plan à l'étape 3.", "« " & nomSrc & " » est lié au compte " & choix & " de 60secondes.")) & reste)
             ClientScript.RegisterStartupScript(Me.GetType(), "fenModifie", "try { if (window.parent && window.parent !== window) window.parent.fenModifie = true; } catch (e) { }", True)
             Charger()
         Catch ex As SqlException
