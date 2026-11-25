@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- T401 — Soldes d'ouverture de la reprise (Importation 2, carte 3)
 --
 -- La balance de vérification en préparation (staging.BalanceVerification)
@@ -12,10 +12,11 @@
 -- compte créé par s0767). Plusieurs lignes qui aboutissent au même compte sont
 -- additionnées ; un solde net nul ne fait pas de ligne.
 --
--- L'écriture est passée EN BROUILLON par sp_SaveEcriture (même chemin que le
--- Journal général) : rien n'entre au grand livre avant qu'on la valide.
--- Pièce OUV-REPRISE : une seule par compagnie. Tant qu'elle existe, rien
--- n'est recréé ; pour recommencer, supprimer le brouillon au journal.
+-- L'écriture est passée VALIDÉE par sp_SaveEcriture (@ToValider = 1, même chemin
+-- que le Journal général) : elle entre aussitôt au grand livre (T404 : plus de
+-- brouillon, demande du 2026-11-20). Pièce OUV-REPRISE : une seule par compagnie.
+-- Tant qu'elle existe, rien n'est recréé ; pour recommencer, « Recommencer
+-- l'assistant » (s1027) la retire.
 --
 --   s1025SoldesOuverture @CompanyGUID, @DateBascule, @UserId, @Creer
 --     @Creer = 0 : vérifie seulement (état de la carte)
@@ -129,7 +130,7 @@ BEGIN
     IF @ExId IS NOT NULL
     BEGIN
         INSERT INTO @Resultat VALUES ('EXISTE',
-            N'L''écriture d''ouverture ' + @Piece + N' existe déjà (' + LOWER(@ExStatut) + N'). Pour la refaire, supprimez le brouillon au Journal général.',
+            N'L''écriture d''ouverture ' + @Piece + N' existe déjà (' + LOWER(@ExStatut) + N'). Pour la refaire, utilisez « Recommencer l''assistant ».',
             @ExId, @Piece, @ExStatut, @NbLignes, @NbBloquees, @TD, @TC);
         GOTO Fin;
     END
@@ -152,7 +153,7 @@ BEGIN
 
     IF @DateBascule IS NULL
     BEGIN
-        INSERT INTO @Resultat VALUES ('BLOQUE', N'Indiquez la date de bascule (étape 2) : l''écriture d''ouverture est datée de ce jour-là.',
+        INSERT INTO @Resultat VALUES ('BLOQUE', N'Indiquez la date de début de la comptabilité (étape 2) : l''écriture d''ouverture est datée de ce jour-là.',
             NULL, NULL, NULL, @NbLignes, 0, @TD, @TC);
         GOTO Fin;
     END
@@ -175,7 +176,7 @@ BEGIN
     IF @Periode IS NULL
     BEGIN
         INSERT INTO @Resultat VALUES ('BLOQUE',
-            N'Aucune période ouverte au ' + CONVERT(NVARCHAR(10), @DateBascule, 23) + N' : ouvrez l''exercice qui contient la date de bascule.',
+            N'Aucune période ouverte au ' + CONVERT(NVARCHAR(10), @DateBascule, 23) + N' : ouvrez l''exercice qui contient la date de début de la comptabilité.',
             NULL, NULL, NULL, @NbLignes, 0, @TD, @TC);
         GOTO Fin;
     END
@@ -188,12 +189,12 @@ BEGIN
         GOTO Fin;
     END
 
-    -- ── Création, en brouillon ─────────────────────────────────────────────
+    -- ── Création, validée au Journal général ───────────────────────────────
     EXEC dbo.sp_SaveEcriture
          @EcritureId = 0, @CompanyGUID = @CompanyGUID, @JournauxId = @Journal, @PeriodeId = @Periode,
          @DateEcriture = @DateBascule, @NumeroPiece = @Piece,
          @Libelle = 'Soldes d''ouverture - reprise de la balance de vérification',
-         @ToValider = 0, @UserId = @UserId, @Lignes = @Lignes;
+         @ToValider = 1, @UserId = @UserId, @Lignes = @Lignes;
 
     SELECT TOP 1 @ExId = [Id], @ExStatut = [Statut]
       FROM dbo.T135Ecritures
@@ -204,8 +205,8 @@ BEGIN
         THROW 51060, N'L''écriture d''ouverture n''a pas été enregistrée.', 1;
 
     INSERT INTO @Resultat VALUES ('CREE',
-        N'Écriture d''ouverture ' + @Piece + N' créée en brouillon au journal OD : ' + CAST(@NbLignes AS NVARCHAR(10)) +
-        N' comptes, ' + FORMAT(@TD, 'N2', 'fr-CA') + N' $. Validez-la au Journal général pour la passer au grand livre.',
+        N'Écriture d''ouverture ' + @Piece + N' créée et validée au journal OD : ' + CAST(@NbLignes AS NVARCHAR(10)) +
+        N' comptes, ' + FORMAT(@TD, 'N2', 'fr-CA') + N' $. Les soldes d''ouverture sont au grand livre.',
         @ExId, @Piece, @ExStatut, @NbLignes, 0, @TD, @TC);
 
 Fin:

@@ -42,6 +42,26 @@ Public Class CreerCompte
         End Get
     End Property
 
+    ''' <summary>Venu de « Décider d'un compte » (?retour=associer&amp;cle=…) : ce compte-là, puis retour.</summary>
+    Private ReadOnly Property RetourAssocier As Boolean
+        Get
+            Return Request.QueryString("retour") = "associer" AndAlso CleDemandee <> ""
+        End Get
+    End Property
+
+    Private ReadOnly Property CleDemandee As String
+        Get
+            Return If(Request.QueryString("cle"), "").Trim()
+        End Get
+    End Property
+
+    ''' <summary>Revient à « Décider d'un compte » avec un message, dans la même fenêtre.</summary>
+    Private Sub RevenirAssocier(message As String)
+        If Not String.IsNullOrEmpty(message) Then Session(AssocierCompte.CleMessageRetour) = message
+        Response.Redirect(If(EnFenetre, "~/AssocierCompte.aspx?popup=1", "~/AssocierCompte.aspx"), False)
+        Context.ApplicationInstance.CompleteRequest()
+    End Sub
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         DirectCast(Master, SiteMaster).FondDePage = True
         If Not isAuthenticated Then
@@ -67,7 +87,18 @@ Public Class CreerCompte
             Dim total As Integer = If(lignes Is Nothing, 0, lignes.Rows.Count)
             Dim courant As DataRow = Nothing
             Dim reportes As Integer = 0
-            If lignes IsNot Nothing Then
+            If RetourAssocier Then
+                ' Seulement le compte demandé ; s'il n'est plus à créer, on revient.
+                If lignes IsNot Nothing Then
+                    For Each x As DataRow In lignes.Rows
+                        If Convert.ToString(x("CleSource")) = CleDemandee Then courant = x : Exit For
+                    Next
+                End If
+                If courant Is Nothing Then
+                    RevenirAssocier(Nothing)
+                    Return
+                End If
+            ElseIf lignes IsNot Nothing Then
                 For Each x As DataRow In lignes.Rows
                     If Sautes.Contains(Convert.ToString(x("CleSource"))) Then
                         reportes += 1
@@ -83,8 +114,10 @@ Public Class CreerCompte
             pnlCarte.Visible = True
             pnlFin.Visible = False
             hfCle.Value = Convert.ToString(courant("CleSource"))
-            litProgres.Text = "<p class='asc-progres'>" & total.ToString() & " compte(s) encore à créer" &
-                              If(reportes > 0, ", dont " & reportes.ToString() & " reporté(s) à plus tard", "") & ".</p>"
+            litProgres.Text = If(RetourAssocier,
+                "<p class='asc-progres'>Création immédiate ; vous reviendrez ensuite aux comptes à décider.</p>",
+                "<p class='asc-progres'>" & total.ToString() & " compte(s) encore à créer" &
+                              If(reportes > 0, ", dont " & reportes.ToString() & " reporté(s) à plus tard", "") & ".</p>")
             litCarte.Text = Carte(courant)
         Catch ex As Exception
             Alerte("Erreur", "Lecture des comptes à créer : " & ex.Message)
@@ -98,6 +131,12 @@ Public Class CreerCompte
         btnReprendre.Visible = (reportes > 0)
         If total = 0 Then
             litFin.Text = "<h2>Tous les comptes sont créés</h2><p>Chaque compte marqué « Créer » existe maintenant dans votre plan comptable.</p>"
+            ' Dans la fenêtre par-dessus le tableau : plus rien à faire ici, elle se
+            ' ferme et le tableau se recharge (les produits suivent le plan terminé).
+            If EnFenetre Then
+                ClientScript.RegisterStartupScript(Me.GetType(), "fermer",
+                    "try { if (window.parent && window.parent !== window && window.parent.fermerFenetre) { window.parent.fermerFenetre(); } } catch (e) { }", True)
+            End If
         Else
             litFin.Text = "<h2>" & reportes.ToString() & " compte(s) reporté(s) à plus tard</h2><p>Il ne reste que les comptes que vous avez " &
                           "mis de côté. Reprenez-les ici quand vous serez prêt.</p>"
@@ -272,7 +311,12 @@ Public Class CreerCompte
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
                 numero = Convert.ToString(ds.Tables(0).Rows(0)("Compte"))
             End If
-            Alerte("Fait", "Le compte " & If(numero <> "", numero & " ", "") & "« " & nom & " » est créé dans votre plan comptable.")
+            Dim fait As String = "Le compte " & If(numero <> "", numero & " ", "") & "« " & nom & " » est créé dans votre plan comptable."
+            If RetourAssocier Then
+                RevenirAssocier(fait)
+                Return
+            End If
+            Alerte("Fait", fait)
             ClientScript.RegisterStartupScript(Me.GetType(), "fenModifie", "try { if (window.parent && window.parent !== window) window.parent.fenModifie = true; } catch (e) { }", True)
             Charger()
         Catch ex As SqlException
@@ -287,6 +331,11 @@ Public Class CreerCompte
 
     ''' <summary>Plus tard : le compte est mis de côté pour la session, rien n'est créé.</summary>
     Protected Sub btnPlusTard_Click(sender As Object, e As EventArgs) Handles btnPlusTard.Click
+        If RetourAssocier Then
+            ' Il reste marqué « Créer » : il sera repris à la fin, avec les autres comptes à créer.
+            RevenirAssocier("Le compte reste marqué « Créer » : vous le créerez une fois tous les comptes décidés.")
+            Return
+        End If
         If hfCle.Value <> "" AndAlso Not Sautes.Contains(hfCle.Value) Then Sautes.Add(hfCle.Value)
         Charger()
     End Sub

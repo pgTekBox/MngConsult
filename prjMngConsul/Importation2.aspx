@@ -139,6 +139,11 @@
 #imp2 .box .btn{justify-content:flex-start}
 #imp2 .box .link{align-self:center}
 #imp2 .btn[disabled]{opacity:.55;cursor:default}
+#imp2 .vault{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:4px 0 10px}
+#imp2 .vault[hidden]{display:none}
+#imp2 .vault iframe{display:block;width:100%;height:620px;border:0}
+#imp2 .dateauto{margin:0 0 10px;font-size:.85rem;color:var(--muted)}
+#imp2 .dateauto[hidden],#imp2 #i2DateBloc[hidden]{display:none}
 #imp2 .safe{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--muted);font-weight:600}
 #imp2 .safe svg{flex:none;color:var(--ok);margin-top:1px}
 #imp2 .recap{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:.88rem;margin:12px 0 0}
@@ -147,7 +152,7 @@
 #imp2 .pill.act{background:var(--act-soft);color:#7a5c00}
 #imp2 .pill.run{background:#DDF6FA;color:#0b6b7d}
 
-/* étape 3 : le tableau des sept imports */
+/* étape 3 : le tableau des imports */
 #imp2 .panel.board{background:transparent;border:0;box-shadow:none;padding:0;min-height:0}
 #imp2 .cartes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 #imp2 .carte{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 12px 0;display:flex;flex-direction:column;min-height:300px;overflow:hidden}
@@ -178,7 +183,8 @@
 #imp2 .carte .pied{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
 #imp2 .carte .compte b{font-size:1.25rem;font-weight:900}
 #imp2 .carte .compte span{font-size:.76rem;color:var(--muted);font-weight:600;margin-left:4px}
-#imp2 .carte .chiffres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:8px}
+#imp2 .carte .pied.haut{margin-bottom:8px;justify-content:flex-end}
+#imp2 .carte .chiffres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px}
 #imp2 .carte .chiffres div{border:1px solid var(--line);border-radius:10px;padding:5px 8px;display:flex;flex-direction:column;min-width:0}
 #imp2 .carte .chiffres b{font-size:1.15rem;font-weight:900;line-height:1.1}
 #imp2 .carte .chiffres span{font-size:.68rem;color:var(--muted);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -194,6 +200,8 @@
 #imp2 .carte .barre3 i{display:block;height:100%;background:var(--primary);transition:width .5s}
 #imp2 .carte.fait .barre3 i{background:var(--ok)}
 #imp2 .carte.vide{opacity:.7}
+#imp2 .t3date{margin:0 0 10px;font-size:.88rem;color:var(--muted)}
+#imp2 .t3date b{color:var(--ink,#0E1F3D);font-weight:800}
 #imp2 .t3note{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
 #imp2 .fen3{position:fixed;inset:0;background:rgba(14,31,61,.45);display:flex;align-items:center;justify-content:center;z-index:2000;padding:16px}
 #imp2 .fen3 .boite{background:#fff;border-radius:18px;width:min(960px,100%);height:min(1000px,100%);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(14,31,61,.35);position:relative}
@@ -236,10 +244,10 @@
     <div class="bridge">
       <div class="end"><div class="glyph" id="i2SrcG" style="background:#3a5a86"><span id="i2SrcGT">?</span><span class="live" id="i2Live"></span></div><div class="txt"><div class="lbl" id="i2LblOrigine"></div><div class="nm" id="i2SrcN"></div><div class="via" id="i2SrcVia"></div></div></div>
       <div class="flow"><canvas id="i2Flow" aria-hidden="true"></canvas><div class="chip" id="i2FlowChip"><span class="dot"></span><span id="i2FlowT"></span></div></div>
-      <div class="end"><div class="ring"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="50"/><circle class="val" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"/></svg><div class="pct">0/7</div></div><div class="txt"><div class="lbl" id="i2LblDest"></div><div class="nm">60secondes</div><div class="via" id="i2DestVia"></div></div></div>
+      <div class="end"><div class="ring"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="50"/><circle class="val" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"/></svg><div class="pct">0/11</div></div><div class="txt"><div class="lbl" id="i2LblDest"></div><div class="nm">60secondes</div><div class="via" id="i2DestVia"></div></div></div>
       <div class="stats">
         <div><b>—</b><span id="i2StRes"></span></div>
-        <div><b>0/7</b><span id="i2StImp"></span></div>
+        <div><b>0/11</b><span id="i2StImp"></span></div>
         <div><b>0</b><span id="i2StEnr"></span></div>
         <div><b class="save">0 h</b><span id="i2StSaisie"></span></div>
       </div>
@@ -273,7 +281,7 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
 </script>
 <script>
 (function () {
-  var L = IMP2L, S = { sys: IMP2.logiciel || null, mode: IMP2.mode || 'direct', bascule: IMP2.bascule || '', freq: IMP2.freq || 'trimestre', relie: !!IMP2.relie, viaPrep: !!IMP2.viaPrep, prep: IMP2.prep || null };
+  var L = IMP2L, S = { sys: IMP2.logiciel || null, mode: IMP2.mode || 'direct', bascule: IMP2.bascule || '', freq: IMP2.freq || 'trimestre', relie: !!IMP2.relie, viaPrep: !!IMP2.viaPrep, prep: IMP2.prep || null, debutLivres: IMP2.debutLivres || '', dateProposee: IMP2.dateProposee || '', exercice: IMP2.exercice || '', exerciceProposee: IMP2.exerciceProposee || '' };
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function f(txt, v) { return String(txt).replace(/\{(\w+)\}/g, function (m, k) { return v && v[k] != null ? v[k] : m; }); }
@@ -298,7 +306,7 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
 
   /* chemins d'export connus (menus en français) ; sinon une consigne générale */
   var EXP = {
-    qbo: { plan: 'Comptabilité ▸ Plan comptable ▸ Exécuter le rapport ▸ Exporter vers Excel', bal: "Rapports ▸ Balance de vérification ▸ période jusqu'à la date de bascule ▸ Exporter vers Excel", clients: 'Ventes ▸ Clients ▸ icône Exporter vers Excel', fourn: 'Dépenses ▸ Fournisseurs ▸ icône Exporter vers Excel', prod: 'Ventes ▸ Produits et services ▸ icône Exporter vers Excel', fv: 'Rapports ▸ Liste des transactions (factures et factures fournisseurs) ▸ Exporter vers Excel' },
+    qbo: { plan: 'Comptabilité ▸ Plan comptable ▸ Exécuter le rapport ▸ Exporter vers Excel', bal: "Rapports ▸ Balance de vérification ▸ période jusqu'à la date de début de la comptabilité ▸ Exporter vers Excel", clients: 'Ventes ▸ Clients ▸ icône Exporter vers Excel', fourn: 'Dépenses ▸ Fournisseurs ▸ icône Exporter vers Excel', prod: 'Ventes ▸ Produits et services ▸ icône Exporter vers Excel', fv: 'Rapports ▸ Liste des transactions (factures et factures fournisseurs) ▸ Exporter vers Excel' },
     xero: { plan: 'Comptabilité ▸ Plan comptable ▸ Exporter', bal: 'Rapports ▸ Balance de vérification ▸ Exporter ▸ Excel' }
   };
   var MODS = ['plan', 'bal', 'clients', 'fourn', 'prod', 'fv'];
@@ -378,7 +386,7 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     return fetch(location.pathname, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: corps })
       .then(function (r) { return r.json().catch(function () { return { ok: false }; }); });
   }
-  function prendreEtat(e) { if (!e) return; S.sys = e.logiciel || null; S.mode = e.mode || 'direct'; S.bascule = e.bascule || ''; S.freq = e.freq || 'trimestre'; S.relie = !!e.relie; S.viaPrep = !!e.viaPrep; S.prep = e.prep || null; }
+  function prendreEtat(e) { if (!e) return; S.sys = e.logiciel || null; S.mode = e.mode || 'direct'; S.bascule = e.bascule || ''; S.freq = e.freq || 'trimestre'; S.relie = !!e.relie; S.viaPrep = !!e.viaPrep; S.prep = e.prep || null; S.debutLivres = e.debutLivres || ''; S.dateProposee = e.dateProposee || ''; S.exercice = e.exercice || ''; S.exerciceProposee = e.exerciceProposee || ''; }
 
   /* ===== Données déjà en préparation : continuer sans relier la source ===== */
   function nomLogiciel(k) { for (var i = 0; i < SYS.length; i++) if (SYS[i].k === k) return SYS[i].n; return k || 'QuickBooks'; }
@@ -392,8 +400,8 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
   function brancherPrep() {
     var b = $('i2Prep'); if (!b) return;
     b.addEventListener('click', function () {
-      var d = $('i2Date'), fr = $('i2Freq'), donnees = {};
-      if (d && d.value) { donnees.bascule = d.value; donnees.freq = fr ? fr.value : S.freq; }
+      var ex = $('i2Exercice'), fr = $('i2Freq'), donnees = {};
+      if (ex && ex.value) { donnees.exercice = ex.value; donnees.freq = fr ? fr.value : S.freq; }
       b.disabled = true;
       poster('continuerPrep', donnees).then(function (j) {
         b.disabled = false;
@@ -432,18 +440,21 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
   function vueConnexion(ditChoix) {
     var s = sysObj(); if (!s) return vueChoix();
     var h = how(), v = { n: s.n, w: s.who || s.n };
-    var date = '<div class="field"><label for="i2Date">' + esc(L.date) + '</label><input type="date" id="i2Date" value="' + esc(S.bascule) + '" required data-lecture="1" /><small>' + esc(L.dateAide) + '</small></div>';
     var freq = '<div class="field"><label for="i2Freq">' + esc(L.taxes) + '</label><select id="i2Freq" data-lecture="1"><option value="trimestre">' + esc(L.trimestre) + '</option><option value="mois">' + esc(L.mois) + '</option><option value="annee">' + esc(L.annee) + '</option></select></div>';
+    // La date de début de l'exercice : QuickBooks n'en a pas (seulement un mois) ;
+    // demandée ici, mémorisée pour la compagnie (T411), proposée ensuite.
+    var exo = '<div class="field"><label for="i2Exercice">' + esc(L.exercice) + '</label><input type="date" id="i2Exercice" value="' + esc(S.exercice || S.exerciceProposee || '') + '" required data-lecture="1" /><small>' + esc(L.exerciceAide) + '</small></div>';
     var alt = s.how !== 'file'
       ? '<button class="link" type="button" id="i2Alt" data-lecture="1">' + esc(h === 'file' ? L.preferDirect : L.preferFichiers) + '</button>' : '';
     var pas = '', boite = '', titre, lead, dit, expr = 'action';
     if (h === 'oauth') {
       pas = li(f(L.oa1, v), f(L.oa1d, v)) + li(L.oa2, f(L.oa2d, v)) + li(L.oa3, L.oa3d);
-      boite = date + freq + '<button class="btn" type="button" id="i2Go" data-lecture="1">' + esc(f(L.seConnecter, v)) + '</button>' + sur(f(L.securiteOauth, v)) + alt;
+      boite = exo + freq + '<button class="btn" type="button" id="i2Go" data-lecture="1">' + esc(f(L.seConnecter, v)) + '</button>' +
+        '<div class="vault" id="i2Vault" hidden></div>' + sur(f(L.securiteOauth, v)) + alt;
       dit = f(L.ditOauth, v);
     } else if (h === 'agent') {
       pas = li(L.qb1, L.qb1d) + li(L.qb2, L.qb2d) + li(L.qb3, L.qb3d) + li(L.qb4, L.qb4d);
-      boite = date + freq + '<button class="btn" type="button" id="i2Go" data-lecture="1">' + esc(L.preparerLiaison) + '</button>' + sur(L.securiteQbd) + alt;
+      boite = exo + freq + '<button class="btn" type="button" id="i2Go" data-lecture="1">' + esc(L.preparerLiaison) + '</button>' + sur(L.securiteQbd) + alt;
       dit = L.ditQbd;
     } else if (h === 'apikey') {
       pas = li(L.od1, L.od1d) + li(L.od2, L.od2d) + li(L.od3, L.od3d);
@@ -451,11 +462,11 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
         '<div class="field"><label for="i2Db">' + esc(L.base) + '</label><input id="i2Db" data-lecture="1" /></div>' +
         '<div class="field"><label for="i2User">' + esc(L.utilisateur) + '</label><input id="i2User" autocomplete="username" data-lecture="1" /></div>' +
         '<div class="field"><label for="i2Key">' + esc(L.cleApi) + '</label><input id="i2Key" type="password" autocomplete="off" data-lecture="1" /></div>' +
-        date + freq + '<button class="btn" type="button" id="i2Go" data-lecture="1">' + esc(L.verifier) + '</button>' + sur(L.securiteOdoo) + alt;
+        exo + freq + '<button class="btn" type="button" id="i2Go" data-lecture="1">' + esc(L.verifier) + '</button>' + sur(L.securiteOdoo) + alt;
       dit = L.ditOdoo;
     } else {
       pas = MODS.map(function (k) { return li(L['nom_' + k], consigneExport(s, k)); }).join('');
-      boite = date + '<div class="field"><label>' + esc(L.accepte) + '</label><small>' + esc(L.accepteAide) + '</small></div><button class="btn" type="button" id="i2Go" data-lecture="1">' + esc(L.passerFichiers) + '</button>' + sur(L.securiteFichiers) + alt;
+      boite = exo + '<div class="field"><label>' + esc(L.accepte) + '</label><small>' + esc(L.accepteAide) + '</small></div><button class="btn" type="button" id="i2Go" data-lecture="1">' + esc(L.passerFichiers) + '</button>' + sur(L.securiteFichiers) + alt;
       dit = ditChoix ? L.ditFichiersChoix : f(L.ditFichiers, v); expr = 'info';
     }
     titre = h === 'file' ? f(L.exportsTitre, v) : f(L.relierTitre, v);
@@ -464,16 +475,19 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     $('i2Main').innerHTML = bandeauPrep(s.k) + '<div class="conn"><div><h2>' + esc(titre) + '</h2><p class="lead">' + esc(lead) + '</p><ol>' + pas + '</ol></div><div class="box">' + boite + '</div></div>';
     brancherPrep();
     var fr = $('i2Freq'); if (fr) fr.value = S.freq;
-    $('i2Date').addEventListener('change', function (e) { S.bascule = e.target.value || ''; bilan(); });
+    var exi = $('i2Exercice'); if (exi) exi.addEventListener('change', function (e) { S.exercice = S.bascule = e.target.value || ''; bilan(); });
     $('i2Go').addEventListener('click', aller);
     var a = $('i2Alt'); if (a) a.addEventListener('click', basculerMode);
     S.relie = false; origine(); etapes(2); flux(false); bilan();
     dire(expr, h === 'file' ? L.etape2Fichiers : L.etape2Connexion, dit, etapeN(2), '');
   }
   function reglages() {
-    S.bascule = $('i2Date').value || ''; var fr = $('i2Freq'); if (fr) S.freq = fr.value; bilan();
-    if (!S.bascule) { dire('action', L.date, L.dateAide, L.aCompleter, 'act'); $('i2Date').focus(); return null; }
-    return { bascule: S.bascule, freq: S.freq };
+    var fr = $('i2Freq'); if (fr) S.freq = fr.value;
+    // La date de début de l'exercice est obligatoire : QuickBooks n'en donne que le mois.
+    var ex = $('i2Exercice'); S.exercice = ex ? (ex.value || '') : S.exercice;
+    S.bascule = S.exercice; bilan();
+    if (!S.exercice) { dire('action', L.exercice, L.exerciceAide, L.aCompleter, 'act'); if (ex) ex.focus(); return null; }
+    return { freq: S.freq, exercice: S.exercice };
   }
   function basculerMode() {
     var vers = how() === 'file' ? 'direct' : 'fichier';
@@ -502,27 +516,65 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
       if (!ok) return dire('probleme', L.etape2Connexion, L.odooManque, L.aCompleter, 'bad');
       $('i2Key').value = '';   // la clé n'est jamais envoyée tant que la liaison Odoo n'existe pas
     }
-    // OAuth : la fenêtre s'ouvre au clic (sinon le bloqueur la retient), puis reçoit l'adresse
-    var fen = h === 'oauth' ? window.open('', 'connexion60', 'width=560,height=760') : null;
+    // Chaque import repart d'une comptabilité vide (T412) : on le dit et on
+    // demande l'accord AVANT d'aller chez la source. Sans accord, rien ne part.
+    if (!S.reinitOk) {
+      var nomC = IMP2.compagnie || '';
+      if (window.appConfirm) appConfirm(f(L.importEfface, { 0: nomC, n: v.n }), { titre: L.importEffaceTitre, ok: L.importEffaceOk, danger: true })
+        .then(function (oui) { if (oui) { S.reinitOk = true; aller(); } });
+      return;
+    }
+    // OAuth : plus de fenêtre à part. La page de connexion s'ouvre DANS la boîte
+    // « Relier », sous le bouton ; quand la liaison est faite, on passe à la suite.
     occupe(true);
     dire('travail', L.etape2Connexion, L.enregistrement, L.connexion, 'run');
     poster('connexion', r).then(function (j) {
-      if (!j || !j.ok || !j.url) { occupe(false); if (fen) fen.close(); return erreur(j && j.erreur, L.etape2Connexion); }
-      if (fen && !fen.closed) fen.location = j.url; else window.open(j.url, 'connexion60', 'width=560,height=760');
+      if (!j || !j.ok || (!j.url && !j.direct)) { occupe(false); return erreur(j && j.erreur, L.etape2Connexion); }
+      if (j.url && !j.direct) {
+        var zone = $('i2Vault');
+        if (zone) { zone.innerHTML = '<iframe src="' + esc(j.url) + '" title="' + esc(f(L.seConnecter, v)) + '"></iframe>'; zone.hidden = false; }
+      }
       dire('travail', L.etape2Connexion, f(L.attenteAutorisation, v), L.connexion, 'run');
       flux(true); sonder(Date.now());
-    }).catch(function () { occupe(false); if (fen) fen.close(); erreur(); });
+    }).catch(function () { occupe(false); erreur(); });
+  }
+  /* La source reliée : on lit ses données (fil de fond), puis le tableau. */
+  function extraire() {
+    var s = sysObj() || {}, titre = f(L.extraction, { n: s.n || '' });
+    var zone = $('i2Vault'); if (zone) { zone.innerHTML = ''; zone.hidden = true; }
+    occupe(true); flux(true);
+    dire('travail', titre, L.enregistrement, L.connexion, 'run');
+    poster('extraire', { reinit: S.reinitOk ? '1' : '' }).then(function (j) {
+      S.reinitOk = false;
+      if (!j || !j.ok || !j.run) { occupe(false); flux(false); return erreur(j && j.erreur, titre); }
+      suivreExtraction(j.run, titre);
+    }).catch(function () { occupe(false); flux(false); erreur(); });
+  }
+  function suivreExtraction(run, titre) {
+    fetch('ApideckEtat.ashx?run=' + encodeURIComponent(run), { credentials: 'same-origin', cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (e) {
+        if (!e || e.erreur) { occupe(false); flux(false); return erreur(e && e.erreur, titre); }
+        if (e.statut === 'EN_COURS') {
+          dire('travail', titre, f(L.extractionProgres, { 0: e.lues, 1: e.demandees, 2: e.progression || '' }), L.connexion, 'run');
+          return setTimeout(function () { suivreExtraction(run, titre); }, 2000);
+        }
+        occupe(false); flux(false);
+        vueSuivante();
+        dire(e.echecs > 0 ? 'info' : 'regle', titre, f(L.extractionFin, { 0: (e.total || 0).toLocaleString(), 1: e.echecs || 0 }) + (e.note ? ' ' + e.note : ''), L.t3Fait, e.echecs > 0 ? '' : 'ok');
+      })
+      .catch(function () { setTimeout(function () { suivreExtraction(run, titre); }, 3000); });
   }
   function sonder(debut) {
     if (Date.now() - debut > 300000) { occupe(false); flux(false); return dire('pause', L.etape2Connexion, L.pasRecu, L.enAttente, ''); }
     poster('etatConnexion').then(function (j) {
-      if (j && j.ok && j.statut === 'connecte') { occupe(false); prendreEtat(j.etat); return vueSuivante(); }
+      if (j && j.ok && j.statut === 'connecte') { prendreEtat(j.etat); return extraire(); }
       if (j && !j.ok) { occupe(false); flux(false); return erreur(j.erreur, L.etape2Connexion); }
       setTimeout(function () { sonder(debut); }, 2000);
     }).catch(function () { setTimeout(function () { sonder(debut); }, 2000); });
   }
 
-  /* ===== Étape 3 : le tableau des sept imports, une fois la source reliée ===== */
+  /* ===== Étape 3 : le tableau des imports, une fois la source reliée ===== */
   var ICO = {
     plan: '<path d="M4 5h16M4 12h16M4 19h10"/><circle cx="18" cy="19" r="2"/>',
     lien: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
@@ -531,10 +583,17 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     fournisseurs: '<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
     produits: '<path d="M12 3 3 8l9 5 9-5zM3 8v8l9 5 9-5V8"/>',
     factures: '<path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7"/>',
-    taxes: '<path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/>'
+    taxes: '<path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/>',
+    reglements: '<path d="M7 7h13l-3-3M17 17H4l3 3"/>',
+    rapprochement: '<path d="M3 10h18M5 10v8M9 10v8M15 10v8M19 10v8M3 21h18M12 3l9 5H3z"/>',
+    comptesbanque: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>',
+    rapportstaxes: '<path d="M6 3h9l4 4v14H6z"/><path d="M9 17l6-6"/><circle cx="9.5" cy="11.5" r="1"/><circle cx="14.5" cy="16.5" r="1"/>',
+    paie: '<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .8-3 2s1.3 1.7 3 2 3 .8 3 2-1.3 2-3 2c-1.4 0-2.5-.5-3-1.5M12 6v2M12 16v2"/>',
+    tiers: '<path d="M4 21V5l8-3v19M12 9h8v12M7 8h2M7 12h2M7 16h2M2 21h20"/><circle cx="17" cy="13" r="2"/><path d="M14 19a3 3 0 0 1 6 0"/>',
+    societe: '<path d="M4 21V5l8-3v19M12 9h8v12M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2M2 21h20"/>'
   };
   var OEIL = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
-  var GROUPES = { 3: ['plan'], 4: ['balance'], 5: ['clients', 'fournisseurs', 'produits'], 6: ['factures', 'taxes'] };
+  var GROUPES = { 3: ['tiers'], 4: ['plan'], 5: ['produits', 'factures'], 6: ['balance', 'comptesbanque', 'reglements', 'rapprochement', 'taxes', 'rapportstaxes', 'paie'] };
   var TAB = null;
 
   function vueSuivante() {
@@ -551,7 +610,7 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
   function carteHtml(c, suivante) {
     var rond = c.etat === 'fait' ? '<span class="rond fait">✓</span>' : (c.etat === 'decider' ? '<span class="rond decider">?</span>' : '<span class="rond"></span>');
     var b = c.bouton || {}, pct = Math.max(0, Math.min(100, c.pct || 0));
-    var bouton = c.etat === 'vide' ? '' :
+    var bouton = (c.etat === 'vide' || b.cache) ? '' :
       '<button class="btn' + (b.op === 'fenetre' ? ' dec' : '') + '" type="button" data-k="' + esc(c.k) + '"' + (b.actif ? '' : ' disabled') + (b.info ? ' title="' + esc(b.info) + '"' : '') + ' data-lecture="1">' + esc(b.t) + '</button>';
     return '<article class="carte ' + esc(c.etat) + (suivante ? ' suivante' : '') + '">' +
       '<div class="hd"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (ICO[c.ico] || '') + '</svg></span>' +
@@ -561,8 +620,8 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
       '<div class="sp"></div>' +
       '<div class="puces">' + (c.etat === 'vide' ? '<span>' + esc(L.t3Vide) + '</span>' : (c.puces || []).map(function (p) { return '<span class="' + esc(p.c) + '">' + esc(p.t) + '</span>'; }).join('')) + '</div>' +
       (c.chiffres && c.etat !== 'vide'
-        ? '<div class="chiffres">' + c.chiffres.map(function (x) { return '<div class="' + esc(x.c) + '"><b>' + (x.n || 0).toLocaleString() + '</b><span>' + esc(x.t) + '</span></div>'; }).join('') + '</div>' +
-          '<div class="pied"><span></span>' + bouton + '</div>'
+        ? (bouton ? '<div class="pied haut">' + bouton + '</div>' : '') +
+          '<div class="chiffres">' + c.chiffres.map(function (x) { return '<div class="' + esc(x.c) + '"><b>' + (x.n || 0).toLocaleString() + '</b><span>' + esc(x.t) + '</span></div>'; }).join('') + '</div>'
         : '<div class="pied"><div class="compte"><b>' + (c.n || 0).toLocaleString() + '</b><span>' + esc(c.unite) + esc(c.extra || '') + '</span></div>' + bouton + '</div>') +
       '<div class="barre3"><i style="width:' + pct + '%"></i></div></article>';
   }
@@ -574,7 +633,11 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     var suivante = null;
     for (var i = 0; i < cartes.length; i++) if (cartes[i].etat !== 'fait' && cartes[i].etat !== 'vide') { suivante = cartes[i]; break; }
 
-    $('i2Main').innerHTML = '<div class="cartes">' + cartes.map(function (c) { return carteHtml(c, c === suivante); }).join('') + '</div>' +
+    // La date de début de la comptabilité retenue — lue dans la source, ou choisie à la main.
+    var dateDebut = t.bascule
+      ? '<div class="t3date">' + esc(L.exercice) + ' : <b>' + esc(t.bascule) + '</b></div>'
+      : '';
+    $('i2Main').innerHTML = dateDebut + '<div class="cartes">' + cartes.map(function (c) { return carteHtml(c, c === suivante); }).join('') + '</div>' +
       '<div class="t3note"><p class="note" style="margin:0">' + esc(L.t3Ordre) + ' <button class="link" type="button" id="i2Retour" data-lecture="1">' + esc(L.modifierReglages) + '</button></p>' +
       '<button class="btn ghost" type="button" id="i2Recharger">' + esc(L.t3Recharger) + '</button></div>';
     Array.prototype.forEach.call($('i2Main').querySelectorAll('.carte .btn[data-k]'), function (b) { b.addEventListener('click', function () { agir(parK[b.getAttribute('data-k')], b); }); });
@@ -624,7 +687,7 @@ var IMP2L = <asp:Literal ID="litLabels" runat="server" />;
     var b = c.bouton;
     if (b.op === 'page') return ouvrirPage(b.url);
     if (b.op === 'fenetre') return ouvrirFenetre(b.url);
-    if (b.op !== 'creerFiches' && b.op !== 'creerFactures' && b.op !== 'creerOuverture') return;
+    if (b.op !== 'creerFiches' && b.op !== 'creerTiers' && b.op !== 'creerFactures' && b.op !== 'creerOuverture') return;
     bouton.disabled = true;
     dire('travail', c.no + '. ' + c.titre, L.t3Travail, '', 'run'); flux(true);
     poster(b.op, b.type ? { type: b.type } : {}).then(function (j) {

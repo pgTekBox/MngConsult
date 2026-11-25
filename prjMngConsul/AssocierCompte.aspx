@@ -63,6 +63,9 @@
     .asc-btn.primaire:hover { background: #143A73 }
 
     .asc-progres { font-size: 12.5px; color: #44536E; margin: 0 0 10px }
+    .asc-test { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; padding: 8px 12px; border: 2px dashed #f59e0b; border-radius: 12px; background: #fffbeb }
+    .asc-test .boutons { display: flex; flex-direction: column; align-items: flex-start; gap: 8px }
+    .asc-test .etiq { font-size: 11px; font-weight: 900; letter-spacing: .08em; color: #fff; background: #d97706; border-radius: 6px; padding: 3px 8px }
     .asc-fin { background: #fff; border: 0; border-radius: 24px; padding: 22px 24px }
     .asc-fin h2 { font-size: 18px; font-weight: 800; margin: 0 0 8px; color: #0E1F3D }
     .asc-fin p { font-size: 13.5px; color: #44536E; margin: 0 0 12px; line-height: 1.6 }
@@ -95,6 +98,18 @@
 
     <asp:HiddenField ID="hfCle" runat="server" />
     <asp:Literal ID="litProgres" runat="server" />
+
+    <%-- POUR FIN DE TEST : lie d'un coup tous les comptes admissibles (propositions
+         sûres + propositions de l'IA d'au moins 70 %). À retirer avant la production. --%>
+    <asp:Panel ID="pnlTest" runat="server" CssClass="asc-test">
+        <span class="etiq">TEST</span>
+        <div class="boutons">
+            <asp:Button ID="btnLierTout" runat="server" CssClass="asc-btn" Text="Lier automatiquement tous les comptes admissibles" CausesValidation="false"
+                OnClientClick="if (!appConfirmClic(this, 'Pour fin de test : lier d’un coup chaque compte qui a une proposition (même numéro, même nom, alias QuickBooks, recommandation de l’IA, ou compte le plus proche de même nature) ? Ceux sans proposition restent à décider.')) { return false; }" />
+            <asp:Button ID="btnIgnorerZero" runat="server" CssClass="asc-btn" Text="Ignorer automatiquement les comptes à solde 0" CausesValidation="false"
+                OnClientClick="if (!appConfirmClic(this, 'Pour fin de test : ignorer d’un coup chaque compte encore à décider dont le solde est 0 et dont aucune donnée importée (ligne de facture, produit) ne se sert ?')) { return false; }" />
+        </div>
+    </asp:Panel>
 
     <asp:Panel ID="pnlCarte" runat="server" CssClass="asc-carte">
         <asp:Literal ID="litCarte" runat="server" />

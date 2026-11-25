@@ -77,8 +77,20 @@ Public Class AssocierCompte
                 ".asc-page { max-width: none; padding: 10px 16px 16px }" &
                 "</style>"
         End If
-        If Not IsPostBack Then Charger()
+        If Not IsPostBack Then
+            ' Au retour de la création immédiate d'un compte (CreerCompte.aspx?retour=associer).
+            Dim msg = TryCast(Session(CleMessageRetour), String)
+            If Not String.IsNullOrEmpty(msg) Then
+                Session.Remove(CleMessageRetour)
+                Alerte("Fait", msg)
+                ClientScript.RegisterStartupScript(Me.GetType(), "fenModifie", "try { if (window.parent && window.parent !== window) window.parent.fenModifie = true; } catch (e) { }", True)
+            End If
+            Charger()
+        End If
     End Sub
+
+    ''' <summary>Le message à afficher au retour de CreerCompte.aspx (création immédiate).</summary>
+    Public Const CleMessageRetour As String = "AssocierCompte.MessageRetour"
 
     ''' <summary>Le prochain compte à décider qui n'a pas été reporté ; sinon la fin.</summary>
     Private Sub Charger()
@@ -101,6 +113,7 @@ Public Class AssocierCompte
                 Return
             End If
             pnlCarte.Visible = True
+            pnlTest.Visible = True
             pnlFin.Visible = False
             hfCle.Value = Convert.ToString(courant("CleSource"))
             litProgres.Text = "<p class='asc-progres'>" & total.ToString() & " compte(s) encore à décider" &
@@ -115,6 +128,7 @@ Public Class AssocierCompte
 
     Private Sub Fin(total As Integer, reportes As Integer, Optional message As String = Nothing)
         pnlCarte.Visible = False
+        pnlTest.Visible = False
         pnlFin.Visible = True
         btnReprendre.Visible = (reportes > 0)
         If message IsNot Nothing Then
@@ -130,15 +144,20 @@ Public Class AssocierCompte
             Catch
             End Try
             If aCreer > 0 Then
-                litFin.Text = "<h2>Tout est décidé</h2><p>Chaque compte de " & HttpUtility.HtmlEncode(NomLogiciel()) & " est lié, à créer ou ignoré. " &
-                              "Vous êtes rendu à la création des comptes : <b>" & aCreer.ToString() & " compte(s)</b> marqué(s) « Créer » " &
-                              "attendent leur classe, leur sous-classe et leur nom avant d'exister dans votre plan comptable.</p>"
-                hlCreer.Visible = True
-                hlCreer.Text = "Créer les " & aCreer.ToString() & " compte(s) →"
-                hlCreer.NavigateUrl = If(EnFenetre, "~/CreerCompte.aspx?popup=1", "~/CreerCompte.aspx")
+                ' Tout est décidé et des comptes attendent leur création : on y passe
+                ' tout de suite, dans la même fenêtre, sans écran intermédiaire.
+                Response.Redirect(If(EnFenetre, "~/CreerCompte.aspx?popup=1", "~/CreerCompte.aspx"), False)
+                Context.ApplicationInstance.CompleteRequest()
+                Return
             Else
                 litFin.Text = "<h2>Tout est décidé</h2><p>Chaque compte de " & HttpUtility.HtmlEncode(NomLogiciel()) & " est lié ou ignoré, " &
                               "et les comptes à créer existent déjà dans votre plan comptable. Le plan comptable est terminé.</p>"
+                ' Dans la fenêtre par-dessus le tableau : plus rien à décider ni à
+                ' créer, elle se ferme et le tableau se recharge.
+                If EnFenetre Then
+                    ClientScript.RegisterStartupScript(Me.GetType(), "fermer",
+                        "try { if (window.parent && window.parent !== window) { window.parent.fenModifie = true; if (window.parent.fermerFenetre) window.parent.fermerFenetre(); } } catch (e) { }", True)
+                End If
             End If
         Else
             litFin.Text = "<h2>" & reportes.ToString() & " compte(s) reporté(s) à plus tard</h2><p>Il ne reste que les comptes que vous avez " &
@@ -285,7 +304,7 @@ Public Class AssocierCompte
         Next
         Dim creer As New Cible With {.Compte = "CREER", .Nom = "Créer un nouveau compte",
             .Raison = If(numSrc <> "", numSrc & " · ", "") & nomSrc & ", " & NatureLibelle(natureSrc, True) &
-                      If(numSrc = "", " ; le numéro sera attribué à l'étape 3, dans la classe choisie", " ; la classe se choisit à l'étape 3")}
+                      " ; créé tout de suite : vous choisirez sa classe, sa sous-classe et son nom"}
 
         ' ── Le rendu ────────────────────────────────────────────────────────
         Dim sb As New StringBuilder()
@@ -334,7 +353,9 @@ Public Class AssocierCompte
         ' encore s'il sert à une donnée importée (T304), et le dit en clair.
         ' Un compte dont se servent des produits ne peut pas être ignoré : leurs
         ' comptes de vente ou d'achat n'auraient plus de compte où tomber.
-        If solde.HasValue AndAlso solde.Value = 0D AndAlso usage(1) = 0 Then
+        ' Ni s'il sert à quoi que ce soit d'importé : ligne d'écriture, de facture,
+        ' du grand livre, de la balance… (NbUsages, T317).
+        If solde.HasValue AndAlso solde.Value = 0D AndAlso usage(1) = 0 AndAlso NbUsages(r) = 0 Then
             Dim ignorer As New Cible With {.Compte = "IGNORER", .Nom = "Ignorer ce compte",
                 .Raison = "Solde à 0 : rien à reprendre. Le compte ne sera pas créé dans 60secondes."}
             Option_(sb, "IGNORER", ignorer, False)
@@ -406,6 +427,13 @@ Public Class AssocierCompte
                 Charger()
                 Return
             End If
+            If ignorer AndAlso NbUsages(r) > 0 Then
+                Dim usagesTexte As String = CorrespondanceComptes.TexteUsages(r)
+                Alerte("Attention", "Ce compte ne peut pas être ignoré : des données importées s'en servent" &
+                       If(usagesTexte <> "", " (" & usagesTexte & ")", "") & ". Liez-le à un compte de 60secondes, ou créez-le.")
+                Charger()
+                Return
+            End If
             If ignorer Then
                 Dim nbProduits As Integer = Usages(cle)(1)
                 If nbProduits > 0 Then
@@ -430,6 +458,13 @@ Public Class AssocierCompte
             p.Add(New SqlParameter("@UserId", UserId))
             p.Add(New SqlParameter("@Decisions", Newtonsoft.Json.JsonConvert.SerializeObject(New Object() {decision})))
             Dim stats = PremiereLigne(ExecuteSQLds("s0757SaveCorrespondances", p))
+            If creer Then
+                ' Créer : on le fait tout de suite, dans la même fenêtre — classe,
+                ' sous-classe et nom —, puis on revient au compte suivant à décider.
+                Response.Redirect("~/CreerCompte.aspx?retour=associer&cle=" & HttpUtility.UrlEncode(cle) & If(EnFenetre, "&popup=1", ""), False)
+                Context.ApplicationInstance.CompleteRequest()
+                Return
+            End If
             Dim reste As String = If(stats Is Nothing, "", " Il reste " & Convert.ToString(stats("ADecider")) & " compte(s) à décider.")
             Alerte("Fait", If(ignorer, "« " & nomSrc & " » est ignoré : il ne sera pas repris.",
                            If(creer, "« " & nomSrc & " » sera créé au plan à l'étape 3.", "« " & nomSrc & " » est lié au compte " & choix & " de 60secondes.")) & reste)
@@ -441,6 +476,182 @@ Public Class AssocierCompte
             Alerte("Erreur", "Enregistrement : " & ex.Message)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' POUR FIN DE TEST : lie d'un coup tous les comptes admissibles — les propositions
+    ''' sûres (même numéro, même nom, alias QuickBooks : s0760) puis celles de l'IA
+    ''' d'au moins 70 % (s0899). Mêmes garde-fous que la grille ; le reste reste à décider.
+    ''' </summary>
+    Protected Sub btnLierTout_Click(sender As Object, e As EventArgs) Handles btnLierTout.Click
+        Dim refus As New List(Of String)()
+        Try
+            Dim avant As Integer = ADecider()
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@UserId", UserId))
+            ExecuteSQLds("s0760AccepterPropositions", p)
+
+            Dim p2 As New Collection
+            p2.Add(New SqlParameter("@CompanyGUID", Company))
+            p2.Add(New SqlParameter("@UserId", UserId))
+            p2.Add(New SqlParameter("@Seuil", CByte(70)))
+            ExecuteSQLds("s0899LierParConfianceIA", p2)
+
+            ' Puis chaque compte encore à décider qui a une proposition dans cette
+            ' fenêtre — la recommandation de l'IA, le compte proposé, sinon le plus
+            ' proche de même nature — est lié à cette proposition. Un compte d'ici
+            ' n'est jamais pris deux fois.
+            Dim lignes As DataTable = LignesADecider()
+            If lignes IsNot Nothing AndAlso lignes.Rows.Count > 0 Then
+                Dim plan As List(Of Cible) = PlanCompagnie()
+                Dim pris As New HashSet(Of Integer)()
+                Dim decisions As New List(Of Object)()
+                For Each r As DataRow In lignes.Rows
+                    Dim c As Cible = CibleProposee(r, plan, pris)
+                    If c Is Nothing Then Continue For
+                    pris.Add(c.Id)
+                    decisions.Add(New With {
+                        .CleSource = Convert.ToString(r("CleSource")),
+                        .TypeCle = Texte(r("TypeCle")),
+                        .CompteSource = Texte(r("CompteSource")),
+                        .NomSource = Texte(r("NomSource")),
+                        .Action = "LIER",
+                        .CompteCible = c.Compte,
+                        .NomCible = Texte(r("NomSource")),
+                        .TypeCible = Texte(r("TypeSource")),
+                        .Note = "Lié automatiquement (test) : proposition de la fenêtre"})
+                Next
+                If decisions.Count > 0 Then
+                    Try
+                        EnregistrerDecisions(decisions)
+                    Catch ex As SqlException
+                        ' Un seul refus de s0757 annule tout le lot : on reprend alors
+                        ' compte par compte, et seuls les refusés restent à décider.
+                        For Each d In decisions
+                            Try
+                                EnregistrerDecisions(New List(Of Object) From {d})
+                            Catch ex2 As SqlException
+                                refus.Add(ex2.Message)
+                            End Try
+                        Next
+                    End Try
+                End If
+            End If
+
+            Dim apres As Integer = ADecider()
+            Alerte("Fait", (avant - apres).ToString() & " compte(s) lié(s) automatiquement. Il reste " & apres.ToString() & " compte(s) à décider." &
+                   If(refus.Count > 0, " " & refus.Count.ToString() & " liaison(s) refusée(s) : " & String.Join(" ", refus), ""))
+            ClientScript.RegisterStartupScript(Me.GetType(), "fenModifie", "try { if (window.parent && window.parent !== window) window.parent.fenModifie = true; } catch (e) { }", True)
+        Catch ex As Exception
+            Alerte("Erreur", "Liaison automatique : " & ex.Message)
+        End Try
+        Charger()
+    End Sub
+
+    ''' <summary>
+    ''' La proposition que la fenêtre mettrait en tête pour ce compte : la
+    ''' recommandation de l'IA, sinon le compte proposé (numéro, nom, alias), sinon
+    ''' le compte le plus proche de même nature (nom ressemblant à 34 % au moins).
+    ''' Nothing s'il n'y en a pas, ou si elle est déjà prise.
+    ''' </summary>
+    Private Function CibleProposee(r As DataRow, plan As List(Of Cible), pris As HashSet(Of Integer)) As Cible
+        Dim ia As Cible = Trouver(plan, Texte(r("IACompte")))
+        If ia IsNot Nothing AndAlso Not pris.Contains(ia.Id) Then Return ia
+        Dim prop As Cible = Trouver(plan, Texte(r("ProposeCompte")))
+        If prop IsNot Nothing AndAlso Not pris.Contains(prop.Id) Then Return prop
+
+        Dim nomSrc As String = Texte(r("NomComplet"))
+        If nomSrc = "" Then nomSrc = Texte(r("Nom"))
+        If nomSrc = "" Then nomSrc = Texte(r("NomSource"))
+        Dim lettreSrc As String = NatureLettre(Texte(r("TypeNormalise")))
+        Return plan.Where(Function(c) c.TypeBilan = lettreSrc AndAlso Not pris.Contains(c.Id)).
+                    Select(Function(c) New With {.C = c, .S = Similarite(nomSrc, c.Nom)}).
+                    Where(Function(x) x.S >= 0.34).
+                    OrderByDescending(Function(x) x.S).
+                    Select(Function(x) x.C).FirstOrDefault()
+    End Function
+
+    ''' <summary>
+    ''' POUR FIN DE TEST : ignore d'un coup chaque compte encore à décider dont le
+    ''' solde est 0 et dont aucune donnée importée ne se sert (lignes de facture,
+    ''' produits : s0885). Les autres restent à décider.
+    ''' </summary>
+    Protected Sub btnIgnorerZero_Click(sender As Object, e As EventArgs) Handles btnIgnorerZero.Click
+        Try
+            Dim avant As Integer = ADecider()
+            ' Les comptes source dont se servent des données importées.
+            Dim utilises As New HashSet(Of String)(StringComparer.Ordinal)
+            Dim pu As New Collection
+            pu.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim dsU As DataSet = ExecuteSQLds("s0885GetComptesSourceUtilises", pu)
+            If dsU IsNot Nothing AndAlso dsU.Tables.Count > 0 Then
+                For Each u As DataRow In dsU.Tables(0).Rows
+                    utilises.Add(Convert.ToString(u("CleSource")))
+                Next
+            End If
+
+            Dim decisions As New List(Of Object)()
+            Dim lignes As DataTable = LignesADecider()
+            If lignes IsNot Nothing Then
+                For Each r As DataRow In lignes.Rows
+                    If IsDBNull(r("Solde")) OrElse Convert.ToDecimal(r("Solde")) <> 0D Then Continue For
+                    Dim cle As String = Convert.ToString(r("CleSource"))
+                    If utilises.Contains(cle) Then Continue For
+                    ' QuickBooks rend 0 pour tout compte de revenus ou de dépenses, même
+                    ' utilisé : on s'appuie aussi sur « Inutilisé » (T317 : solde 0 ET
+                    ' aucune donnée importée ne s'en sert — écritures, dépenses, etc.).
+                    If r.Table.Columns.Contains("Inutilise") AndAlso (IsDBNull(r("Inutilise")) OrElse Convert.ToInt32(r("Inutilise")) <> 1) Then Continue For
+                    decisions.Add(New With {
+                        .CleSource = cle,
+                        .TypeCle = Texte(r("TypeCle")),
+                        .CompteSource = Texte(r("CompteSource")),
+                        .NomSource = Texte(r("NomSource")),
+                        .Action = "IGNORER",
+                        .CompteCible = "",
+                        .NomCible = Texte(r("NomSource")),
+                        .TypeCible = Texte(r("TypeSource")),
+                        .Note = "Ignoré automatiquement (test) : solde 0, inutilisé"})
+                Next
+            End If
+            If decisions.Count > 0 Then
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", Company))
+                p.Add(New SqlParameter("@UserId", UserId))
+                p.Add(New SqlParameter("@Decisions", Newtonsoft.Json.JsonConvert.SerializeObject(decisions)))
+                ExecuteSQLds("s0757SaveCorrespondances", p)
+            End If
+
+            Dim apres As Integer = ADecider()
+            Alerte("Fait", (avant - apres).ToString() & " compte(s) à solde 0 ignoré(s) automatiquement. Il reste " & apres.ToString() & " compte(s) à décider.")
+            ClientScript.RegisterStartupScript(Me.GetType(), "fenModifie", "try { if (window.parent && window.parent !== window) window.parent.fenModifie = true; } catch (e) { }", True)
+        Catch ex As SqlException
+            Alerte("Enregistrement impossible", ex.Message)
+        Catch ex As Exception
+            Alerte("Erreur", "Ignorer les comptes à 0 : " & ex.Message)
+        End Try
+        Charger()
+    End Sub
+
+    ''' <summary>Combien de données importées se servent du compte (T317 : écritures, factures, grand livre, balance…).</summary>
+    Private Shared Function NbUsages(r As DataRow) As Integer
+        If Not r.Table.Columns.Contains("NbUsages") OrElse IsDBNull(r("NbUsages")) Then Return 0
+        Return Convert.ToInt32(r("NbUsages"))
+    End Function
+
+    Private Sub EnregistrerDecisions(decisions As List(Of Object))
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@UserId", UserId))
+        p.Add(New SqlParameter("@Decisions", Newtonsoft.Json.JsonConvert.SerializeObject(decisions)))
+        ExecuteSQLds("s0757SaveCorrespondances", p)
+    End Sub
+
+    Private Function ADecider() As Integer
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        Dim r = PremiereLigne(ExecuteSQLds("s0758StatsCorrespondance", p))
+        Return If(r Is Nothing OrElse IsDBNull(r("ADecider")), 0, Convert.ToInt32(r("ADecider")))
+    End Function
 
     ''' <summary>Plus tard : le compte est mis de côté pour la session, rien n'est enregistré.</summary>
     Protected Sub btnPlusTard_Click(sender As Object, e As EventArgs) Handles btnPlusTard.Click

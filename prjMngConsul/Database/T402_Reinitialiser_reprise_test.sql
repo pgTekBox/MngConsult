@@ -169,7 +169,7 @@ BEGIN
 
     UPDATE di
        SET di.[DocumentId] = NULL, di.[MigratedDate] = NULL,
-           di.[Statut] = CASE WHEN di.[Statut] = 'EXISTE' THEN 'OK' ELSE di.[Statut] END,
+           di.[Statut] = CASE WHEN di.[Statut] IN ('EXISTE', 'MIGRE') THEN 'OK' ELSE di.[Statut] END,  -- MIGRE : la facture créée a été retirée
            di.[PartyGUID] = CASE WHEN EXISTS (SELECT 1 FROM dbo.T050Party p WHERE p.[PartyGUID] = di.[PartyGUID]) THEN di.[PartyGUID] ELSE NULL END
       FROM staging.DocumentImport di
      WHERE di.[CompanyGUID] = @c;

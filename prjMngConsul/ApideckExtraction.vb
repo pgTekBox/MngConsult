@@ -139,6 +139,45 @@ Public Class ApideckExtraction
     ''' </summary>
     Public Property DateArret As Date?
 
+    ''' <summary>
+    ''' Le début de tout l'historique : seule la balance de vérification dépend de
+    ''' la date de début (avec le grand livre, son détail) ; le pointage et les remises se lisent
+    ''' d'ici jusqu'à aujourd'hui, comme les factures, clients et fournisseurs.
+    ''' </summary>
+    Private Shared ReadOnly DebutHistorique As New Date(2000, 1, 1)
+
+    ''' <summary>
+    ''' Le jour où commence l'exercice (mois et jour comptent, l'année non). QuickBooks
+    ''' n'a pas de date de début d'exercice, seulement un mois : le jour exact est
+    ''' demandé à l'import et mémorisé (T411). Sans lui, la balance part du 1er janvier.
+    ''' </summary>
+    Public Property DebutExercice As Date?
+
+    ''' <summary>
+    ''' Importation 2 (DebutExercice posé) : la balance de vérification et le grand
+    ''' livre vont de la date de début de l'exercice jusqu'à aujourd'hui. Faux sans
+    ''' DebutExercice : les autres écrans gardent leur date d'arrêt.
+    ''' </summary>
+    Private Function PeriodeExercice(ByRef debut As String, ByRef fin As String) As Boolean
+        If Not DebutExercice.HasValue Then Return False
+        debut = DebutExercice.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+        fin = Date.Today.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+        Return True
+    End Function
+
+    ''' <summary>Le début de l'exercice qui contient <paramref name="jour"/>, d'après <see cref="DebutExercice"/> ; le 1er janvier à défaut.</summary>
+    Public Function DebutExerciceDe(jour As Date) As Date
+        If Not DebutExercice.HasValue Then Return New Date(jour.Year, 1, 1)
+        Dim m As Integer = DebutExercice.Value.Month
+        Dim j As Integer = Math.Min(DebutExercice.Value.Day, Date.DaysInMonth(jour.Year, m))
+        Dim d As New Date(jour.Year, m, j)
+        If d > jour Then
+            j = Math.Min(DebutExercice.Value.Day, Date.DaysInMonth(jour.Year - 1, m))
+            d = New Date(jour.Year - 1, m, j)
+        End If
+        Return d
+    End Function
+
     ''' <summary>Le nombre de mois d'une déclaration de taxes : 1, 3 ou 12.</summary>
     Public Property MoisParPeriode As Integer = 3
 
@@ -152,6 +191,9 @@ Public Class ApideckExtraction
 
     ''' <summary>L'extraction en cours, pour les signes de vie (s0898).</summary>
     Private runCourant As Integer
+
+    ''' <summary>Le client Apideck de l'extraction en cours : la fiche de la société y lit aussi les préférences.</summary>
+    Private apiCourant As clsApideck
 
     ''' <summary>
     ''' Ce que le moteur demande à qui l'héberge : la compagnie, l'utilisateur
@@ -372,6 +414,7 @@ Public Class ApideckExtraction
         End If
 
         Dim api As New clsApideck(hote.Company.ToString())
+        apiCourant = api
         Dim res As New Resultat With {.RunId = If(runId > 0, runId, OuvrirRun())}
         runCourant = res.RunId
         Dim total As Integer = 0
@@ -446,6 +489,7 @@ Public Class ApideckExtraction
         Dim liste As List(Of Ressource) = choisies.ToList()
         Dim fond As New ApideckExtraction(New HoteFond(hote.Company, hote.UserId)) With {
             .DateArret = DateArret,
+            .DebutExercice = DebutExercice,
             .MoisParPeriode = MoisParPeriode
         }
 
@@ -471,9 +515,6 @@ Public Class ApideckExtraction
     ''' lectures particulières, qui ne passent pas par une adresse de liste.
     ''' </summary>
     Private Function LireRessource(api As clsApideck, r As Ressource) As JArray
-        ' FAKE APIDECK — à retirer : rejoue une extraction réelle enregistrée.
-        If clsApideckFake.Actif() Then Return clsApideckFake.Lire(r.Cle)
-
         Select Case r.Mode
             Case "PAR_DOCUMENT" : Return LirePiecesJointes(api)
             Case "PASSERELLE"
@@ -1061,6 +1102,9 @@ Public Class ApideckExtraction
         Ajouter(champs, "", "Méthode comptable (source)", Valeur(fiche, "accounting_method"))
         Ajouter(champs, "", "Mois de début d'exercice (source)", Valeur(fiche, "fiscal_year_start_month"))
         Ajouter(champs, "", "Début des livres (source)", Valeur(fiche, "company_start_date"))
+        ' La date de clôture des livres (« Fermer les livres au… ») : la dernière période
+        ' fermée par le comptable — sert à proposer la date de début de la comptabilité.
+        Ajouter(champs, "", "Clôture des livres (source)", DateClotureLivres())
         Ajouter(champs, "", "Taxes à la vente activées (source)", Valeur(fiche, "sales_tax_enabled"))
         Ajouter(champs, "", "Identifiant chez la source", Valeur(fiche, "id"))
 
@@ -1513,9 +1557,6 @@ Public Class ApideckExtraction
     ''' pour rien — c'est le seul appel de tout le moteur qui ne passe pas par lui.
     ''' </summary>
     Private Shared Function Telecharger(url As String) As Byte()
-        ' FAKE APIDECK — à retirer : les adresses signées d'Intuit ont expiré.
-        If clsApideckFake.Actif() Then Return Encoding.UTF8.GetBytes("Pièce jointe simulée (Apideck.Fake) — " & url)
-
         Dim req As Net.HttpWebRequest = CType(Net.WebRequest.Create(url), Net.HttpWebRequest)
         req.Method = "GET"
         req.Timeout = 120000
@@ -2053,16 +2094,20 @@ Public Class ApideckExtraction
     '''
     ''' LES DEUX DATES SONT OBLIGATOIRES : essayé, QuickBooks ignore purement et
     ''' simplement une end_date seule et retourne « ce mois-ci à ce jour ». La
-    ''' période va donc du 1er janvier de l'année choisie à la date d'arrêt.
+    ''' période va donc du début de l'exercice qui contient la date d'arrêt
+    ''' (DebutExercice, demandé et mémorisé — QuickBooks n'a qu'un mois) à la
+    ''' date d'arrêt ; à défaut, du 1er janvier.
     ''' </summary>
     Private Function LireBalanceVerification(api As clsApideck) As JArray
-        Dim arrete As Date? = DateArret
-        If Not arrete.HasValue Then
-            Throw New Exception("Indiquez la date à laquelle la balance de vérification est arrêtée.")
+        Dim debut As String = "", fin As String = ""
+        If Not PeriodeExercice(debut, fin) Then
+            Dim arrete As Date? = DateArret
+            If Not arrete.HasValue Then
+                Throw New Exception("Indiquez la date à laquelle la balance de vérification est arrêtée.")
+            End If
+            fin = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+            debut = DebutExerciceDe(arrete.Value).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
         End If
-
-        Dim fin As String = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
-        Dim debut As String = New Date(arrete.Value.Year, 1, 1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
 
         Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & api.RealmId() &
                             "/reports/TrialBalance?start_date=" & debut &
@@ -2146,13 +2191,18 @@ Public Class ApideckExtraction
     ''' vérification : du 1er janvier de l'année à la date choisie.
     ''' </summary>
     Private Function LireGrandLivre(api As clsApideck) As JArray
-        Dim arrete As Date? = DateArret
-        If Not arrete.HasValue Then
-            Throw New Exception("Indiquez la date d'arrêt : le grand livre est lu sur une période.")
+        ' Les mêmes dates que la balance de vérification, dont il est le détail : du
+        ' début de l'exercice qui contient la date d'arrêt jusqu'à la date d'arrêt
+        ' (Importation 2 : du début de l'exercice à aujourd'hui, voir PeriodeExercice).
+        Dim debut As String = "", fin As String = ""
+        If Not PeriodeExercice(debut, fin) Then
+            Dim arrete As Date? = DateArret
+            If Not arrete.HasValue Then
+                Throw New Exception("Indiquez la date d'arrêt : le grand livre est lu sur une période.")
+            End If
+            fin = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+            debut = DebutExerciceDe(arrete.Value).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
         End If
-
-        Dim fin As String = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
-        Dim debut As String = New Date(arrete.Value.Year, 1, 1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
 
         Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & api.RealmId() &
                             "/reports/GeneralLedger?start_date=" & debut & "&end_date=" & fin &
@@ -2527,7 +2577,7 @@ Public Class ApideckExtraction
         ' D'AUJOURD'HUI, pas celle d'une date passée. On note donc la date
         ' demandée quand il y en a une, et celle du jour sinon — pour que
         ' personne ne prenne ce stock pour celui de la bascule.
-        Dim arrete As Date? = DateArret
+        Dim arrete As Date? = Nothing   ' la quantité d'aujourd'hui : seule la balance dépend de la date de début
         Dim quand As String = If(arrete.HasValue, arrete.Value, Date.Today).ToString(
             "yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
 
@@ -2646,13 +2696,15 @@ Public Class ApideckExtraction
     ''' « Crédit », et le reste dû serait faux d'autant.
     ''' </summary>
     Private Function LireRemisesDas(api As clsApideck) As JArray
-        Dim arrete As Date? = DateArret
+        ' Seule la balance de vérification dépend de la date de début : ce rapport-ci
+        ' se lit sur tout l'historique, jusqu'à aujourd'hui.
+        Dim arrete As Date? = Date.Today
         If Not arrete.HasValue Then
             Throw New Exception("Indiquez la date d'arrêt : les remises se lisent sur une période.")
         End If
 
         Dim fin As String = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
-        Dim debut As String = New Date(arrete.Value.Year, 1, 1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+        Dim debut As String = DebutHistorique.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
 
         Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & api.RealmId() &
                             "/reports/GeneralLedger?start_date=" & debut & "&end_date=" & fin &
@@ -2811,13 +2863,15 @@ Public Class ApideckExtraction
     ''' booléen : les deux états ne se valent pas.
     ''' </summary>
     Private Function LireOperationsRapprochement(api As clsApideck) As JArray
-        Dim arrete As Date? = DateArret
+        ' Seule la balance de vérification dépend de la date de début : ce rapport-ci
+        ' se lit sur tout l'historique, jusqu'à aujourd'hui.
+        Dim arrete As Date? = Date.Today
         If Not arrete.HasValue Then
             Throw New Exception("Indiquez la date d'arrêt : le pointage se lit sur une période.")
         End If
 
         Dim fin As String = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
-        Dim debut As String = New Date(arrete.Value.Year, 1, 1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+        Dim debut As String = DebutHistorique.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
 
         Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & api.RealmId() &
                             "/reports/TransactionList?start_date=" & debut & "&end_date=" & fin &
@@ -3087,7 +3141,8 @@ Public Class ApideckExtraction
     ''' les emporte avec chaque valeur, plutôt que de compter sur un ordre.
     ''' </summary>
     Private Function LireRapportTaxes(api As clsApideck) As JArray
-        Dim arrete As Date? = DateArret
+        ' Les périodes de déclaration jusqu'à aujourd'hui : seule la balance dépend de la date de début.
+        Dim arrete As Date? = Date.Today
         If Not arrete.HasValue Then
             Throw New Exception("Indiquez la date d'arrêt : les rapports de taxes portent sur des périodes.")
         End If
@@ -3130,6 +3185,22 @@ Public Class ApideckExtraction
     ''' défaut : c'est le cas de la très grande majorité, et une année civile
     ''' mal devinée se voit tout de suite sur les dates du rapport.
     ''' </summary>
+    ''' <summary>
+    ''' La date de clôture des livres chez QuickBooks (AccountingInfoPrefs.BookCloseDate),
+    ''' AAAA-MM-JJ, ou "" si aucune ou illisible. Un confort : jamais un échec.
+    ''' </summary>
+    Private Function DateClotureLivres() As String
+        If apiCourant Is Nothing Then Return ""
+        Try
+            Dim prefs As JObject = apiCourant.Proxy("https://quickbooks.api.intuit.com/v3/company/" &
+                                                    apiCourant.RealmId() & "/preferences?minorversion=75")
+            Dim v As String = Valeur(prefs, "Preferences.AccountingInfoPrefs.BookCloseDate")
+            Dim d As Date
+            If Date.TryParse(v, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, d) Then Return d.ToString("yyyy-MM-dd")
+        Catch
+        End Try
+        Return ""
+    End Function
     Private Shared Function PremierMoisExercice(api As clsApideck) As Integer
         Try
             Dim prefs As JObject = api.Proxy("https://quickbooks.api.intuit.com/v3/company/" &

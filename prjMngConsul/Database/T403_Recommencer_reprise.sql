@@ -18,7 +18,7 @@
 --     décider » (les propositions par numéro, nom et IA restent).
 --
 -- Garde-fous — rien de ce qui a été VALIDÉ ou réutilisé depuis n'est retiré :
---   · une écriture validée (VALIDEE, EXTOURNEE) reste, et la facture qui y
+--   · une écriture validée (VALIDEE, EXTOURNEE) reste — sauf l'ouverture OUV-REPRISE, validée d'office par la reprise, et la facture qui y
 --     mène aussi ; une écriture liée à un règlement reste ;
 --   · un tiers resté utilisé (facture, règlement, écriture, rendez-vous) reste ;
 --   · un produit resté sur une ligne de facture reste ;
@@ -73,7 +73,10 @@ BEGIN
     DECLARE @ecr TABLE (Id INT PRIMARY KEY);
     INSERT INTO @ecr
     SELECT x.Id FROM @ecrCand x JOIN dbo.T135Ecritures e ON e.[Id] = x.Id
-     WHERE ISNULL(e.[Statut], '') NOT IN ('VALIDEE', 'EXTOURNEE')
+     WHERE (ISNULL(e.[Statut], '') NOT IN ('VALIDEE', 'EXTOURNEE')
+            -- L'ouverture OUV-REPRISE est l'écriture de la reprise elle-même : validée
+            -- d'office par s1025, elle se retire quand même (sinon on ne recommence jamais).
+            OR (e.[NumeroPiece] = 'OUV-REPRISE' AND ISNULL(e.[Statut], '') <> 'EXTOURNEE'))
        AND NOT EXISTS (SELECT 1 FROM dbo.T140Reglement r WHERE r.[EcrituresId] = x.Id);
     INSERT INTO @n SELECT N'Écritures validées gardées', COUNT(*) FROM @ecrCand WHERE Id NOT IN (SELECT Id FROM @ecr);
 
@@ -210,7 +213,7 @@ BEGIN
 
     UPDATE di
        SET di.[DocumentId] = NULL, di.[MigratedDate] = NULL,
-           di.[Statut] = CASE WHEN di.[Statut] = 'EXISTE' THEN 'OK' ELSE di.[Statut] END,
+           di.[Statut] = CASE WHEN di.[Statut] IN ('EXISTE', 'MIGRE') THEN 'OK' ELSE di.[Statut] END,  -- MIGRE : la facture créée a été retirée
            di.[PartyGUID] = CASE WHEN EXISTS (SELECT 1 FROM dbo.T050Party p WHERE p.[PartyGUID] = di.[PartyGUID]) THEN di.[PartyGUID] ELSE NULL END
       FROM staging.DocumentImport di
      WHERE di.[CompanyGUID] = @c
