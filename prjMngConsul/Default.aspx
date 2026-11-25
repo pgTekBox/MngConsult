@@ -383,12 +383,6 @@
     var auj = dJ(A.aujourdhui || cle(new Date()));
     var finRdv = new Date(auj.getFullYear(), auj.getMonth() + 2, 1);
 
-    // Exemples fictifs pour la boîte « Aujourd'hui » quand la compagnie n'a aucun RDV
-    // ce jour-là : deux RDV terminés, prêts à facturer — comme la maquette.
-    var DEMO_AUJ = [
-        { id: 'demo-a1', jour: A.aujourdhui, deb: 570, fin: 660, h: fH(570), client: 'Lise Ouellet', court: 'Massage thérapeutique', cli: '0', emp: '', etat: 'termine', lieu: 'À votre place', doc: 'BROUILLON-7858', docT: 'soumission', montant: '142,50 $', plage: fH(570) + ' – ' + fH(660), duree: '1 h 30', typ: 'Massage thérapeutique', empNom: '', desc: 'Suivi de la cliente — séance de 60 minutes.' },
-        { id: 'demo-a2', jour: A.aujourdhui, deb: 675, fin: 735, h: fH(675), client: 'Isabelle Côté', court: 'Drainage lymphatique', cli: '0', emp: '', etat: 'termine', lieu: 'À votre place', doc: 'BROUILLON-7859', docT: 'soumission', montant: '95,00 $', plage: fH(675) + ' – ' + fH(735), duree: '1 h', typ: 'Drainage lymphatique', empNom: '', desc: 'Première visite.' }
-    ];
 
     // --- l'état de la page ---
     var acts = (M.activites || []).filter(function (a) { return a.u === 'r' || a.u === 'y'; })
@@ -666,17 +660,13 @@
         var sec = el('section', 'ac-carte');
         // --- Aujourd'hui ---
         var bj = el('div', 'ac-bloc'), tete = el('div', 'ac-btete');
-        // Pas de RDV aujourd'hui → on illustre la boîte avec des exemples fictifs,
-        // exactement comme la maquette (ligne de RDV : document, montant, lieu, état).
-        var reelJ = rdvDu(A.aujourdhui);
-        var simuleJ = reelJ.length === 0;
-        var liste = simuleJ ? DEMO_AUJ : reelJ;
+        var liste = rdvDu(A.aujourdhui);
         var tt = el('div', 'titre');
         tt.appendChild(el('b', '', T.agAuj + ' · ' + jLong(auj)));
         // Comme la maquette : le compteur ne retient que les employés AYANT un RDV aujourd'hui.
         var nbEmpRdv = A.emps.filter(function (e) { return liste.some(function (r) { return r.emp === e.v; }); }).length;
         tt.appendChild(el('span', '', fmt(T.agRdvH, liste.length, nbH(liste.reduce(function (t, r) { return t + (r.fin - r.deb); }, 0))) +
-                                      (aEquipe && !s.agEmp && !simuleJ ? ' · ' + fmt(T.agEmployes, nbEmpRdv) : '')));
+                                      (aEquipe && !s.agEmp ? ' · ' + fmt(T.agEmployes, nbEmpRdv) : '')));
         tete.appendChild(tt);
         var lib = el('div', 'ac-libres');
         if (aEquipe) {
@@ -710,8 +700,7 @@
             // pastille d'initiales colorée (nom de l'employé en info-bulle) distingue
             // les ressources sans afficher leur nom.
             if (!liste.length) bj.appendChild(el('div', 'ac-vide', T.agVide));
-            liste.forEach(function (r) { bj.appendChild(ligneRdv(r, aEquipe && !s.agEmp && !simuleJ)); });
-            if (simuleJ) bj.appendChild(el('div', 'ac-note', T.exFictifs));
+            liste.forEach(function (r) { bj.appendChild(ligneRdv(r, aEquipe && !s.agEmp)); });
         }
         sec.appendChild(bj);
 
