@@ -96,6 +96,24 @@ Public Class wbfResetPassword
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Liens FR · EN · ES du sélecteur de langue : rechargent la page avec ?lang=
+    ''' (mémorisé en session par CurrentLang) en gardant le jeton (?token=), que le
+    ''' chargement ne fait que vérifier (s0680, lecture seule). Langue courante « on ».
+    ''' </summary>
+    Protected Function LiensLangues() As String
+        Dim jeton As String = If(Request.QueryString("token"), "").Trim()
+        Dim suite As String = If(jeton.Length > 0, "&token=" & Uri.EscapeDataString(jeton), "")
+        Dim sb As New System.Text.StringBuilder()
+        For Each lg As String In New String() {"fr", "en", "es"}
+            sb.Append("<a href=""wbfResetPassword.aspx?lang=").Append(lg).Append(HttpUtility.HtmlAttributeEncode(suite)).Append("""")
+            sb.Append(" hreflang=""").Append(lg).Append(""" lang=""").Append(lg).Append("""")
+            If lg = CurrentLang Then sb.Append(" class=""on"" aria-current=""true""")
+            sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
+        Next
+        Return sb.ToString()
+    End Function
+
     Private Sub ShowError(msg As String)
         pnlError.Visible = True
         litError.Text = msg
@@ -116,6 +134,8 @@ Public Class wbfResetPassword
         Select Case key
             Case "pageTitle"
                 Return Choose3(lang, "Réinitialiser le mot de passe — 60Sec-AI", "Reset password — 60Sec-AI", "Restablecer contraseña — 60Sec-AI")
+            Case "langLabel"
+                Return Choose3(lang, "Langue", "Language", "Idioma")
             Case "heading"
                 Return Choose3(lang, "Nouveau mot de passe", "New password", "Nueva contraseña")
             Case "subtitle"

@@ -181,12 +181,24 @@
             background: #fafbfc;
             border-top: 1px solid var(--line);
         }
+
+        /* Sélecteur de langue FR · EN · ES (en haut à droite de la carte) */
+        .login-card { position: relative; }
+        .login-card > .lang-switch + .login-header { padding-top: 52px; }
+        .lang-switch { position: absolute; top: 16px; right: 16px; display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: #fff; border: 1px solid var(--line); }
+        .lang-switch a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; color: var(--muted); text-decoration: none; letter-spacing: .03em; }
+        .lang-switch a:hover { background: #f1f5f9; }
+        .lang-switch a.on { background: var(--primary); color: #fff; }
     </style>
     <script src="js/appPopup.js?v=2026111704"></script>
 </head>
 <body>
     <form id="form1" runat="server">
         <div class="login-card">
+
+            <%-- Langue de la page : FR · EN · ES (garde le jeton, simplement relu au chargement).
+                 Masqué une fois le mot de passe changé : le jeton n'est alors plus valide. --%>
+            <%= If(pnlSuccess.Visible, "", "<nav class=""lang-switch"" aria-label=""" & L("langLabel") & """>" & LiensLangues() & "</nav>") %>
 
             <div class="login-header">
                 <div class="login-brand">
