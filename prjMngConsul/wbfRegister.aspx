@@ -29,7 +29,7 @@
             color: var(--slate-800);
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;   /* + .card margin auto : centré, mais jamais coupé en haut si la carte dépasse l'écran */
             justify-content: center;
             padding: 20px;
             background:
@@ -45,6 +45,7 @@
             border-radius: 24px;
             box-shadow: 0 20px 50px rgba(15,23,42,.15);
             overflow: hidden;
+            margin: auto 0;
         }
 
         .card-header {
@@ -93,6 +94,7 @@
             margin: 0;
         }
 
+        .success-card .abo-recap { margin-top: 20px; }
         .card-body { padding: 24px 32px 16px 32px; }
 
         .field { margin-bottom: 14px; }
@@ -251,6 +253,7 @@
             display: inline-block;
         }
     </style>
+    <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
     <script src="js/appPopup.js?v=2026111704"></script>
 </head>
 
@@ -266,7 +269,8 @@
                     <span class="brand-name">60Sec-AI</span>
                 </a>
                 <h1><%= L("heading") %></h1>
-                <p><%= L("subtitle") %></p>
+                <p><%= SousTitre() %></p>
+                <%= PlanChoisiHtml() %>
             </div>
 
             <div class="card-body">
@@ -346,6 +350,7 @@
                 <p style="margin-top: 18px;">
                     <%= L("successBody") %>
                 </p>
+                <%= PlanChoisiHtml() %>
                 <p style="font-size: 12px; color: var(--slate-500);">
                     <%= L("resendPrompt") %>
                     <asp:LinkButton ID="lnkResend" runat="server" Style="color: var(--blue-600); font-weight: 700;" />.

@@ -526,6 +526,7 @@
     <Content Include="js\landing2-6.js" />
     <Content Include="js\landing2-7.js" />
     <Content Include="js\landing2-prix.js" />
+    <Content Include="css\abo-recap.css" />
     <Content Include="LandingPagesNEW.html" />
     <Content Include="AppliquerPlanComptable.aspx" />
     <Content Include="Importations.aspx" />
@@ -773,6 +774,7 @@
     <Compile Include="App_Code\clsQrCode.vb" />
     <Compile Include="App_Code\clsAutoPayEngine.vb" />
     <Compile Include="App_Code\clsMime.vb" />
+    <Compile Include="MyClass\clsAbonnementResume.vb" />
     <Compile Include="MyClass\clsAide.vb" />
     <Compile Include="MyClass\clsExecuteurTaches.vb" />
     <Compile Include="MyClass\clsAssistantIA.vb" />

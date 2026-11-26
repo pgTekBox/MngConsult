@@ -81,6 +81,82 @@ Public Class wbfRegister
         End Select
     End Function
 
+    ''' <summary>
+    ''' Forfait choisi sur la page d'accueil (?ab=code), lu une fois par requête dans
+    ''' T021Plan (s0631GetPlanByCode, anciens codes acceptés). Nothing si aucun forfait.
+    ''' </summary>
+    Private _planLu As Boolean
+    Private _plan As DataRow
+    Protected ReadOnly Property PlanChoisi As DataRow
+        Get
+            If Not _planLu Then
+                _planLu = True
+                Try
+                    _plan = clsAbonnementResume.LirePlan(Me, If(Request.QueryString("ab"), ""), CurrentLang)
+                Catch
+                    _plan = Nothing
+                End Try
+            End If
+            Return _plan
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Récapitulatif complet de l'abonnement choisi (forfait, prix, taxes, essai,
+    ''' premier prélèvement, fonctions incluses) sous le titre et dans la vue de
+    ''' confirmation. Vide si aucun forfait n'est transmis ou s'il est introuvable.
+    ''' </summary>
+    Protected Function PlanChoisiHtml() As String
+        Return clsAbonnementResume.Html(PlanChoisi, CurrentLang)
+    End Function
+
+    ''' <summary>
+    ''' Rappel du forfait dans le courriel d'activation (styles en ligne : les
+    ''' clients de courriel ignorent les feuilles de style). Vide sans forfait.
+    ''' </summary>
+    Private Function PlanCourrielHtml() As String
+        Dim row As DataRow = PlanChoisi
+        If row Is Nothing Then Return ""
+        Dim essai As Integer = clsAbonnementResume.JoursEssai(row)
+        Dim sb As New System.Text.StringBuilder()
+        sb.Append("<div style=""margin:20px 0; padding:14px 16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fafc; font-size:14px;"">")
+        sb.Append("<div style=""font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:.05em;"">")
+        sb.Append(Server.HtmlEncode(Choose3(CurrentLang, "Votre abonnement", "Your subscription", "Su suscripción"))).Append("</div>")
+        sb.Append("<div style=""font-size:16px; font-weight:800; margin-top:4px;"">").Append(Server.HtmlEncode(row("Name").ToString())).Append("</div>")
+        sb.Append("<div style=""margin-top:4px;"">").Append(Server.HtmlEncode(clsAbonnementResume.PrixParPeriode(row, CurrentLang) & " " &
+            Choose3(CurrentLang, "avant taxes, renouvelé automatiquement", "before tax, renews automatically", "antes de impuestos, se renueva automáticamente"))).Append("</div>")
+        If essai > 0 Then
+            sb.Append("<div style=""margin-top:4px; color:#047857; font-weight:700;"">").Append(Server.HtmlEncode(String.Format(Choose3(CurrentLang,
+                "{0} jours gratuits : aucun prélèvement pendant l'essai.",
+                "{0} days free: no charge during the trial.",
+                "{0} días gratis: sin cargo durante la prueba."), essai))).Append("</div>")
+        End If
+        sb.Append("<div style=""margin-top:6px; font-size:12px; color:#64748b;"">").Append(Server.HtmlEncode(Choose3(CurrentLang,
+            "Après l'activation, vous paierez votre abonnement de façon sécurisée par Stripe.",
+            "After activation, you'll pay for your subscription securely through Stripe.",
+            "Tras la activación, pagará su suscripción de forma segura mediante Stripe."))).Append("</div>")
+        sb.Append("</div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Sous-titre : rappelle l'essai et le prix quand un forfait est choisi.</summary>
+    Protected Function SousTitre() As String
+        Dim row As DataRow = PlanChoisi
+        If row Is Nothing Then Return L("subtitle")
+        Dim prix As String = clsAbonnementResume.PrixParPeriode(row, CurrentLang)
+        Dim essai As Integer = clsAbonnementResume.JoursEssai(row)
+        If essai > 0 Then
+            Return String.Format(Choose3(CurrentLang,
+                "Créez votre compte, puis payez : {0} jours gratuits, ensuite {1} avant taxes.",
+                "Create your account, then pay: {0} days free, then {1} before tax.",
+                "Cree su cuenta y luego pague: {0} días gratis, después {1} antes de impuestos."), essai, prix)
+        End If
+        Return String.Format(Choose3(CurrentLang,
+            "Créez votre compte, puis payez votre abonnement : {0} avant taxes.",
+            "Create your account, then pay for your subscription: {0} before tax.",
+            "Cree su cuenta y luego pague su suscripción: {0} antes de impuestos."), prix)
+    End Function
+
     Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
         Select Case lang
             Case "en" : Return en
@@ -134,8 +210,11 @@ Public Class wbfRegister
             End If
 
         End If
-        Dim planSuffix As String = If(Abonnement = "solo", " Solo", If(Abonnement = "comsolo", " ComSolo", If(Abonnement = "com119", " COM119", "")))
-        btnRegister.Text = L("createAccount") & planSuffix
+        ' Le nom du forfait choisi est affiché en clair sous le titre (PlanChoisiHtml).
+        btnRegister.Text = L("createAccount")
+        ' Avec le récapitulatif de l'abonnement, le champ courriel est plus bas : sans
+        ' ce retrait, l'autofocus ferait défiler la page et cacherait le récapitulatif.
+        If PlanChoisi IsNot Nothing Then tbEmail.Attributes.Remove("autofocus")
 
         If Not IsPostBack AndAlso UserId <> 0 Then
             Response.Redirect("~/Default.aspx")
@@ -345,6 +424,7 @@ Public Class wbfRegister
         sb.AppendLine("<div style=""padding:32px; color:#0f172a;"">")
         sb.AppendLine("<p style=""font-size:16px;"">" & greeting & "</p>")
         sb.AppendLine("<p>" & L("mailIntro") & "</p>")
+        sb.AppendLine(PlanCourrielHtml())
         sb.AppendLine("<div style=""text-align:center; margin:28px 0;"">")
         sb.AppendLine("<a href=""" & activationLink & """  target=""_blank""   style=""display:inline-block; background: linear-gradient(135deg,#2563eb,#06b6d4); color:#fff; padding:14px 32px; border-radius:12px; text-decoration:none; font-weight:800; font-size:15px;"">" & L("mailButton") & "</a>")
         sb.AppendLine("</div>")

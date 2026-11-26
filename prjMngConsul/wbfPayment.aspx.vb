@@ -126,6 +126,34 @@ Public Class wbfPayment
     End Function
 
     ''' <summary>
+    ''' Trouve le forfait mensuel à payer : 1) le code enregistré pour l'usager ;
+    ''' 2) l'équivalent d'un ancien code (solo/comsolo/com119, avant le renommage
+    ''' TA / CIE 0 / CIE 1-50 du 2026-11-25) ; 3) sinon le premier forfait actif
+    ''' (DisplayOrder) lu dans T021Plan via s0630GetPlansForLanding.
+    ''' </summary>
+    Private Function ResoudrePlan(planCode As String) As DataRow
+        If planCode.Length > 0 Then
+            Dim row As DataRow = GetPlan(planCode, "monthly")
+            If row IsNot Nothing Then Return row
+            Dim nouveau As String = ""
+            Select Case planCode.ToLowerInvariant()
+                Case "solo" : nouveau = "TA"
+                Case "comsolo" : nouveau = "CIE 0"
+                Case "com119" : nouveau = "CIE 1-50"
+            End Select
+            If nouveau.Length > 0 Then
+                row = GetPlan(nouveau, "monthly")
+                If row IsNot Nothing Then Return row
+            End If
+        End If
+        Dim p As New Collection
+        p.Add(New SqlParameter("@Lang", CurrentLang))
+        Dim ds As DataSet = ExecuteSQLds("s0630GetPlansForLanding", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return Nothing
+        Return GetPlan(ds.Tables(0).Rows(0)("Code").ToString(), "monthly")
+    End Function
+
+    ''' <summary>
     ''' Charge les détails du forfait choisi par le user et affiche le résumé.
     ''' </summary>
     Private Sub LoadPlanDetails()
@@ -137,10 +165,11 @@ Public Class wbfPayment
         End If
 
         Company = CType(userRow("CompanyGUID"), Guid)
-        Dim planCode As String = If(userRow("Abonnement") Is DBNull.Value, "solo", userRow("Abonnement").ToString())
+        Dim planCode As String = If(userRow("Abonnement") Is DBNull.Value, "", userRow("Abonnement").ToString().Trim())
 
         ' Lookup dans T021Plan (BD = source de vérité, plus de hardcode)
-        Dim planRow As DataRow = GetPlan(planCode, "monthly")
+        Dim planRow As DataRow = ResoudrePlan(planCode)
+        If planRow IsNot Nothing Then planCode = planRow("Code").ToString()
         If planRow Is Nothing Then
             ShowError(L("errPlanUnavailable"))
             Return
@@ -182,6 +211,10 @@ Public Class wbfPayment
 
         ' === Liste des features (depuis T021Plan.Features, une ligne = une feature) ===
         litFeatures.Text = RenderFeaturesHtml(features)
+
+        ' === Conditions : facturation, essai, premier prélèvement, employés, limites ===
+        litConditions.Text = clsAbonnementResume.Html(planRow, CurrentLang,
+            New clsAbonnementResume.Options With {.Entete = False, .Prix = False, .Fonctions = False})
     End Sub
 
     ''' <summary>

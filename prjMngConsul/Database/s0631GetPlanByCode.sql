@@ -55,7 +55,13 @@ BEGIN
                    WHEN 'es' THEN COALESCE(NULLIF(Features_es, ''), Features)
                    ELSE Features END,
         IsRecommended,
-        DisplayOrder
+        DisplayOrder,
+        -- Limites du forfait (NULL = aucune limite affichée) : récapitulatif
+        -- d'abonnement de l'inscription (clsAbonnementResume), 2026-11-26.
+        MaxUsers,
+        MaxClients,
+        MaxDocuments,
+        MaxStorageMB
     FROM dbo.T021Plan
     WHERE Code = @Code
       AND BillingCycle = @BillingCycle

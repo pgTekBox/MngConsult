@@ -176,6 +176,12 @@ Public Class wbfPaymentSuccess
             litAmount.Text = displayAmount.ToString("N2", culture) & " " & currency
         End If
 
+        ' Détail complet de l'abonnement souscrit (T021Plan, d'après le code transmis à Stripe)
+        Dim codeForfait As String = Nothing
+        If session.Metadata IsNot Nothing Then session.Metadata.TryGetValue("MngConsul_PlanCode", codeForfait)
+        Dim premier As Date = If(isTrial AndAlso trialEnd <> Date.MinValue, trialEnd, Date.Today)
+        AfficherAbonnement(codeForfait, premier)
+
         ' Statut warning si paiement pas confirme
         If Not isPaymentOk Then
             ' Note : Stripe peut prendre quelques secondes a finaliser. On affiche quand meme
@@ -189,6 +195,17 @@ Public Class wbfPaymentSuccess
     ''' Fallback : metadata MngConsul_PlanCode.
     ''' </summary>
     Private Function ExtractPlanName(session As Session) As String
+        ' 1) Nom du forfait tiré de T021Plan (source de vérité, traduit fr/en/es),
+        '    d'après le code transmis à Stripe dans la metadata MngConsul_PlanCode.
+        '    Le nom du produit Stripe n'est qu'un repli : il peut porter un ancien code.
+        If session.Metadata IsNot Nothing Then
+            Dim code As String = Nothing
+            If session.Metadata.TryGetValue("MngConsul_PlanCode", code) AndAlso Not String.IsNullOrEmpty(code) Then
+                Dim nom As String = LireNomForfait(code)
+                If nom.Length > 0 Then Return nom
+            End If
+        End If
+
         Try
             If session.LineItems IsNot Nothing AndAlso
                session.LineItems.Data IsNot Nothing AndAlso
@@ -216,6 +233,35 @@ Public Class wbfPaymentSuccess
         Return L("yourPlan")
     End Function
 
+    ''' <summary>
+    ''' Nom du forfait mensuel dans la langue courante (s0631GetPlanByCode) ; accepte
+    ''' aussi les anciens codes solo/comsolo/com119 (renommés TA / CIE 0 / CIE 1-50
+    ''' le 2026-11-25). Chaîne vide si introuvable.
+    ''' </summary>
+    Private Function LireNomForfait(code As String) As String
+        Dim codes As New List(Of String) From {code.Trim()}
+        Select Case code.Trim().ToLowerInvariant()
+            Case "solo" : codes.Add("TA")
+            Case "comsolo" : codes.Add("CIE 0")
+            Case "com119" : codes.Add("CIE 1-50")
+        End Select
+        Try
+            For Each c As String In codes
+                Dim p As New Collection
+                p.Add(New SqlParameter("@Code", c))
+                p.Add(New SqlParameter("@BillingCycle", "monthly"))
+                p.Add(New SqlParameter("@Lang", CurrentLang))
+                Dim ds As DataSet = ExecuteSQLds("s0631GetPlanByCode", p)
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                    Dim nom As String = ds.Tables(0).Rows(0)("Name").ToString().Trim()
+                    If nom.Length > 0 Then Return nom
+                End If
+            Next
+        Catch
+        End Try
+        Return ""
+    End Function
+
     Private Function CapitalizeFirst(s As String) As String
         If String.IsNullOrEmpty(s) Then Return s
         Return Char.ToUpper(s(0)) & s.Substring(1)
@@ -234,6 +280,31 @@ Public Class wbfPaymentSuccess
         litCard.Text = L("cardValue")
         litNextBilling.Text = "—"
         litAmount.Text = "—"
+        AfficherAbonnement(Nothing, Date.MinValue)
+    End Sub
+
+    ''' <summary>
+    ''' Récapitulatif de l'abonnement (clsAbonnementResume) sous le reçu. Le forfait
+    ''' vient du code transmis à Stripe, sinon de l'abonnement enregistré pour l'usager.
+    ''' premier = date du premier prélèvement lue dans Stripe (MinValue = estimée).
+    ''' </summary>
+    Private Sub AfficherAbonnement(code As String, premier As Date)
+        Try
+            If String.IsNullOrWhiteSpace(code) Then
+                Dim p As New Collection
+                p.Add(New SqlParameter("@UserId", UserId))
+                Dim ds As DataSet = ExecuteSQLds("s0230GetUserAndCompanyInfo", p)
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 AndAlso
+                   Not IsDBNull(ds.Tables(0).Rows(0)("Abonnement")) Then
+                    code = ds.Tables(0).Rows(0)("Abonnement").ToString()
+                End If
+            End If
+            Dim row As DataRow = clsAbonnementResume.LirePlan(Me, code, CurrentLang)
+            litAbonnement.Text = clsAbonnementResume.Html(row, CurrentLang,
+                New clsAbonnementResume.Options With {.Entete = False, .PremierPrelevement = premier})
+        Catch
+            litAbonnement.Text = ""
+        End Try
     End Sub
 
 End Class

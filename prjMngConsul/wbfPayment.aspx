@@ -433,7 +433,9 @@
             color: var(--green-500);
             flex-shrink: 0;
         }
+        .summary .abo-recap { margin: 0 0 20px; background: #fff; }
     </style>
+    <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
     <script src="js/appPopup.js?v=2026111704"></script>
 </head>
 
@@ -491,6 +493,9 @@
                     </div>
 
                     <p style="font-size:11px; color:var(--slate-500); margin:0 0 20px 0;"><%= L("taxNote") %></p>
+
+                    <%-- Conditions de l'abonnement : facturation, essai, premier prélèvement, employés, limites --%>
+                    <asp:Literal ID="litConditions" runat="server" />
 
                     <ul class="features">
                         <asp:Literal ID="litFeatures" runat="server" />

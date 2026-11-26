@@ -25,7 +25,7 @@
             color: var(--slate-800);
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;   /* + .card margin auto : jamais coupée en haut */
             justify-content: center;
             padding: 20px;
             background:
@@ -42,6 +42,7 @@
             box-shadow: 0 20px 50px rgba(15,23,42,.15);
             overflow: hidden;
             text-align: center;
+            margin: auto 0;
         }
 
         .card-top {
@@ -163,7 +164,9 @@
             font-size: 12px;
             color: var(--slate-500);
         }
+        .card-top .abo-recap { margin: 0 0 24px; }
     </style>
+    <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
     <script src="js/appPopup.js?v=2026111704"></script>
 </head>
 <body>
@@ -231,6 +234,9 @@
                         </span>
                     </div>
                 </div>
+
+                <%-- Détail de l'abonnement souscrit (prix, taxes, essai, fonctions incluses) --%>
+                <asp:Literal ID="litAbonnement" runat="server" />
 
             </div>
 

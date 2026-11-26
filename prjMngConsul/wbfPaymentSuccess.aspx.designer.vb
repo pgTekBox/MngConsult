@@ -93,4 +93,9 @@ Partial Public Class wbfPaymentSuccess
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lnkDashboard As Global.System.Web.UI.WebControls.HyperLink
+
+    '''<summary>
+    '''litAbonnement control.
+    '''</summary>
+    Protected WithEvents litAbonnement As Global.System.Web.UI.WebControls.Literal
 End Class

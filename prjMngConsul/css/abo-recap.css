@@ -1,0 +1,29 @@
+/* Récapitulatif d'abonnement (clsAbonnementResume) : wbfRegister, wbfPayment, wbfPaymentSuccess */
+.abo-recap {
+    margin: 16px 0 4px; padding: 16px 18px;
+    border: 1px solid #e2e8f0; border-radius: 14px; background: #f8fafc;
+    font-size: 13px; color: #0f172a; text-align: left; line-height: 1.45;
+}
+.abo-recap .abo-lbl {
+    display: block; color: #64748b; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px;
+}
+.abo-recap .abo-head { margin-bottom: 10px; }
+.abo-recap .abo-nom { font-size: 17px; font-weight: 800; }
+.abo-recap .abo-accroche { color: #475569; margin-top: 2px; }
+.abo-recap .abo-tab { width: 100%; border-collapse: collapse; margin-top: 6px; }
+.abo-recap .abo-tab td { padding: 5px 0; vertical-align: top; border-top: 1px solid #e9eef5; }
+.abo-recap .abo-tab tr:first-child td { border-top: 0; }
+.abo-recap .abo-tab td:first-child { color: #475569; padding-right: 12px; white-space: nowrap; }
+.abo-recap .abo-tab td:last-child { text-align: right; font-weight: 600; }
+.abo-recap .abo-prix .abo-total td { border-top: 1px solid #cbd5e1; font-weight: 800; color: #0f172a; font-size: 14px; }
+.abo-recap .abo-note { color: #64748b; font-size: 11px; margin: 4px 0 8px; }
+.abo-recap .abo-cond { margin-top: 10px; }
+.abo-recap .abo-cond td:last-child { font-weight: 600; }
+.abo-recap .abo-inclus { margin-top: 12px; }
+.abo-recap .abo-inclus ul { margin: 4px 0 0; padding: 0; list-style: none; }
+.abo-recap .abo-inclus li { position: relative; padding: 2px 0 2px 20px; }
+.abo-recap .abo-inclus li::before {
+    content: "✓"; position: absolute; left: 2px; top: 2px;
+    color: #10b981; font-weight: 800;
+}

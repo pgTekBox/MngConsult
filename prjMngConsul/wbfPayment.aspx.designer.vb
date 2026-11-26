@@ -138,4 +138,9 @@ Partial Public Class wbfPayment
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnPay As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''litConditions control.
+    '''</summary>
+    Protected WithEvents litConditions As Global.System.Web.UI.WebControls.Literal
 End Class
