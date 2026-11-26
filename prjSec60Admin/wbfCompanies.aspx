@@ -11,14 +11,14 @@
     <style>
         .listview-list-head {
             display: grid;
-            grid-template-columns: 50px minmax(220px, 1fr) 110px minmax(160px,1fr) 110px 80px;
+            grid-template-columns: 50px minmax(220px, 1fr) minmax(200px, 1fr) 110px minmax(160px,1fr) 110px 80px;
             gap: 16px; padding: 14px 16px; font-weight: 800; font-size: 13px; color: #0f172a;
             background: #f8fafc; border-bottom: 1px solid var(--mc-stroke);
             position: sticky; top: 0; z-index: 0; box-sizing: border-box;
         }
         .listview-row {
             display: grid;
-            grid-template-columns: 50px minmax(220px, 1fr) 110px minmax(160px,1fr) 110px 80px;
+            grid-template-columns: 50px minmax(220px, 1fr) minmax(200px, 1fr) 110px minmax(160px,1fr) 110px 80px;
             gap: 16px; align-items: center; padding: 14px 16px;
             border-bottom: 1px solid #eef2f7; background: #fff; box-sizing: border-box;
         }
@@ -30,6 +30,8 @@
         }
         .co-name { font-weight: 700; }
         .co-meta { font-size: 12px; color: #64748b; }
+        .co-admin a { display: block; color: #1B4F9C; text-decoration: none; overflow-wrap: anywhere; }
+        .co-admin a:hover { text-decoration: underline; }
         .badge {
             display: inline-flex; align-items: center; padding: 4px 10px;
             border-radius: 8px; font-size: 11px; font-weight: 800; white-space: nowrap;
@@ -40,7 +42,7 @@
         .badge.none     { background: rgba(100,116,139,.10);color: #64748b; border: 1px solid rgba(100,116,139,.25); }
         @media (max-width: 1024px) {
             .listview-list-head, .listview-row { grid-template-columns: 40px 1fr 110px 70px; gap: 10px; padding: 12px 14px; }
-            .col-struct, .col-plan { display: none; }
+            .col-struct, .col-plan, .col-admin { display: none; }
         }
     </style>
 </asp:Content>
@@ -74,7 +76,7 @@
         </div>
         <div class="searchbox">
             <div class="search-group">
-                <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, code)…" />
+                <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, code, courriel admin)…" />
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
                 <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" ToolTip="Effacer" CausesValidation="false" />
             </div>
@@ -91,6 +93,7 @@
                         <div class="listview-list-head">
                             <div></div>
                             <div>Compagnie</div>
+                            <div class="col-admin">Administrateur(s)</div>
                             <div class="col-struct">Structure</div>
                             <div class="col-plan">Forfait</div>
                             <div>Abonnement</div>
@@ -108,6 +111,9 @@
                         <div>
                             <div class="co-name"><%# Eval("Name") %></div>
                             <div class="co-meta">Code : <%# IIf(Eval("CompanyCode") Is DBNull.Value OrElse Eval("CompanyCode").ToString()="", "—", Eval("CompanyCode")) %></div>
+                        </div>
+                        <div class="co-meta co-admin col-admin">
+                            <%# GetAdminEmailsHtml(Eval("AdminEmails")) %>
                         </div>
                         <div class="co-meta col-struct">
                             <%# IIf(Eval("Structure") Is DBNull.Value OrElse Eval("Structure").ToString()="", "—", Eval("Structure")) %>

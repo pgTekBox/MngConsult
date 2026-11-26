@@ -42,6 +42,23 @@ Public Class wbfCompanies
         Return "?"
     End Function
 
+    ''' <summary>
+    ''' Courriels des administrateurs de la compagnie (AdminEmails de s0653, séparés
+    ''' par « ; ») : un lien mailto par ligne ; « — » s'il n'y en a aucun.
+    ''' </summary>
+    Public Function GetAdminEmailsHtml(emails As Object) As String
+        Dim txt As String = If(emails Is Nothing OrElse emails Is DBNull.Value, "", emails.ToString())
+        Dim sb As New System.Text.StringBuilder()
+        For Each courriel As String In txt.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
+            Dim c As String = courriel.Trim()
+            If c.Length = 0 Then Continue For
+            Dim enc As String = Server.HtmlEncode(c)
+            sb.Append("<a href=""mailto:").Append(Server.HtmlEncode(Uri.EscapeDataString(c).Replace("%40", "@"))).Append(""" title=""").Append(enc).Append(""">").Append(enc).Append("</a>")
+        Next
+        If sb.Length = 0 Then Return "—"
+        Return sb.ToString()
+    End Function
+
     Public Function GetStatusClass(status As Object) As String
         Dim s As String = If(status Is Nothing OrElse status Is DBNull.Value, "", status.ToString().ToLower())
         Select Case s
