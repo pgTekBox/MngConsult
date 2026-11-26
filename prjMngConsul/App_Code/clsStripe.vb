@@ -405,6 +405,25 @@ Public Class clsStripe
     End Function
 
     ''' <summary>
+    ''' Langue des courriels que Stripe envoie au client (reçu de paiement, factures,
+    ''' rappels de renouvellement) : Customer.preferred_locales. locale = « fr-CA »,
+    ''' « en » ou « es ». Best-effort : une erreur Stripe n'empêche jamais le parcours.
+    ''' </summary>
+    Public Shared Sub SetCustomerLocale(stripeCustomerId As String, locale As String)
+        If String.IsNullOrEmpty(stripeCustomerId) OrElse Not stripeCustomerId.StartsWith("cus_") Then Return
+        If String.IsNullOrEmpty(locale) Then Return
+        Try
+            EnsureInitialized()
+            Dim service As New CustomerService()
+            service.Update(stripeCustomerId, New CustomerUpdateOptions With {
+                .PreferredLocales = New List(Of String) From {locale}
+            })
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Stripe preferred_locales (" & stripeCustomerId & ") : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>
     ''' Retourne la fin de la periode courante d'une subscription.
     '''
     ''' L'API Stripe (a partir de v2024) a deplace CurrentPeriodEnd de Subscription

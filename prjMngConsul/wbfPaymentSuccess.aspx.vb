@@ -130,6 +130,11 @@ Public Class wbfPaymentSuccess
             Return
         End If
 
+        ' Le courriel de confirmation (reçu) et les factures sont envoyés par Stripe,
+        ' dans la langue préférée du client Stripe : on y met la langue courante (créé
+        ' par Checkout, le client n'en a pas encore ; refait si l'usager change de langue ici).
+        clsStripe.SetCustomerLocale(session.CustomerId, Choose3(CurrentLang, "fr-CA", "en", "es"))
+
         ' Verifier le statut de paiement
         ' "paid"               = paiement reussi (cas normal)
         ' "no_payment_required"= essai gratuit (pas de paiement immediat)

@@ -293,6 +293,9 @@ Public Class wbfPayment
             ' Récupérer email et stripe customer id existant pour le user
             Dim customerEmail As String = UserEmail
             Dim stripeCustomerId As String = GetUserStripeCustomerId(UserId)
+            ' Client Stripe existant : ses courriels (reçu, factures) dans la langue courante.
+            ' Un nouveau client reçoit sa langue au retour, sur wbfPaymentSuccess.
+            clsStripe.SetCustomerLocale(stripeCustomerId, StripeLocale())
 
             ' Forfait peut inclure essai gratuit (T021Plan.TrialDays)
             Dim trialDays As Integer = GetPlanTrialDays(planCode, billingCycle)
