@@ -214,7 +214,7 @@
                         <div class="field">
                             <label>Montant *</label>
                             <telerik:RadTextBox ID="txtAmount" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">Prix affiché avant taxes (ex. : 49.00), sur la page d&#8217;accueil (dans les 3 langues, calculateurs compris) et la page de paiement ; TPS et TVQ sont calculées en plus sur la page de paiement. <b>Ce n&#8217;est pas le montant facturé</b> : Stripe facture le montant du Price Id. Garder les deux identiques.</div>
+                            <div class="hint">Prix affiché avant taxes (ex. : 49.00), sur la page d&#8217;accueil (dans les 3 langues, calculateurs compris) et la page de paiement ; TPS et TVQ sont calculées en plus sur la page de paiement. <b>Ce n&#8217;est pas le montant facturé</b> : Stripe facture le montant du Price Id. Garder les deux identiques : le bouton « Synchroniser avec Stripe » de la liste des forfaits reprend le montant de Stripe.</div>
                         </div>
                         <div class="field">
                             <label>Devise</label>
@@ -263,7 +263,7 @@
                         <div class="field">
                             <label>Stripe Product Id</label>
                             <telerik:RadTextBox ID="txtStripeProductId" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">prod_… : le produit Stripe (le <i>quoi</i> : nom du forfait). Même valeur pour les lignes mensuelle et annuelle d’un même forfait. Référence seulement, non utilisé au paiement.<br />Où : Stripe › Catalogue de produits › ouvrir le produit › id en haut de la fiche.</div>
+                            <div class="hint">prod_… : le produit Stripe (le <i>quoi</i> : nom du forfait). Même valeur pour les lignes mensuelle et annuelle d’un même forfait. Référence seulement, non utilisé au paiement ; rempli automatiquement par « Synchroniser avec Stripe ».<br />Où : Stripe › Catalogue de produits › ouvrir le produit › id en haut de la fiche.</div>
                         </div>
                         <div class="field">
                             <label>Stripe Price Id</label>

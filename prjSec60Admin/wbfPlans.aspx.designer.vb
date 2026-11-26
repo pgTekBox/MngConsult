@@ -34,6 +34,21 @@ Partial Public Class wbfPlans
     Protected WithEvents Ram1 As Global.Telerik.Web.UI.RadAjaxManager
 
     '''<summary>
+    '''btnSyncStripe control.
+    '''</summary>
+    Protected WithEvents btnSyncStripe As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''pnlSync control.
+    '''</summary>
+    Protected WithEvents pnlSync As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litSync control.
+    '''</summary>
+    Protected WithEvents litSync As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''btnAddPlan control.
     '''</summary>
     Protected WithEvents btnAddPlan As Global.System.Web.UI.WebControls.Button

@@ -54,6 +54,22 @@
         .badge.inactive { background: rgba(220,38,38,.10);  color: #dc2626; border: 1px solid rgba(220,38,38,.25); }
         .badge.cycle    { background: rgba(37,99,235,.10);  color: #2563eb; border: 1px solid rgba(37,99,235,.25); }
 
+        .sync-report {
+            margin: 0 0 14px; padding: 12px 16px;
+            border: 1px solid var(--mc-stroke, #e2e8f0); border-radius: 12px; background: #fff;
+            font-size: 13px; color: #0f172a;
+        }
+        .sync-report .sync-h { font-weight: 800; margin-bottom: 8px; }
+        .sync-report ul { margin: 0; padding: 0; list-style: none; }
+        .sync-report li { display: grid; grid-template-columns: 110px minmax(160px, 260px) 1fr; gap: 12px; padding: 6px 0; border-top: 1px solid #eef2f7; align-items: baseline; }
+        .sync-report li b { font-weight: 700; }
+        .sync-report .st { font-size: 11px; font-weight: 800; border-radius: 8px; padding: 2px 8px; justify-self: start; white-space: nowrap; }
+        .sync-report .st.maj  { background: rgba(37,99,235,.10); color: #2563eb; }
+        .sync-report .st.ok   { background: rgba(22,163,74,.10); color: #16a34a; }
+        .sync-report .st.warn { background: rgba(217,119,6,.12); color: #b45309; }
+        .sync-report .st.err  { background: rgba(220,38,38,.10); color: #dc2626; }
+        .sync-report .st.skip { background: #f1f5f9; color: #64748b; }
+        .sync-report .note { margin-top: 8px; color: #64748b; font-size: 12px; }
         @media (max-width: 1024px) {
             .listview-list-head, .listview-row {
                 grid-template-columns: 40px 1fr 110px 80px 90px;
@@ -103,6 +119,11 @@
         </div>
 
         <div class="searchbox">
+            <asp:Button ID="btnSyncStripe" runat="server"
+                CssClass="btn"
+                Text="⟳ Synchroniser avec Stripe"
+                ToolTip="Relit dans Stripe le prix de chaque forfait (par son Price Id) et met à jour le montant et la devise ici."
+                CausesValidation="false" />
             <asp:Button ID="btnAddPlan" runat="server"
                 CssClass="btn btnAddRow"
                 Text="+ Ajouter un forfait"
@@ -124,6 +145,10 @@
             </div>
         </div>
     </div>
+
+    <asp:Panel ID="pnlSync" runat="server" Visible="false" CssClass="sync-report">
+        <asp:Literal ID="litSync" runat="server" />
+    </asp:Panel>
 
     <div class="full-grid">
         <div class="list-shell">
