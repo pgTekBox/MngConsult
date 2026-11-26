@@ -137,7 +137,7 @@
                     <div class="title">
                         <asp:Literal ID="litTitle" runat="server" Text="Nouveau forfait" />
                     </div>
-                    <div class="sub">Configurez le forfait, sa tarification et ses limites.</div>
+                    <div class="sub">Configurez le forfait, sa tarification et ses limites.<br />« Carte du forfait » = l&#8217;ancienne page d&#8217;accueil (LandingPageV1) ; la nouvelle page d&#8217;accueil a ses prix écrits en dur et ne lit pas ces forfaits. La page de paiement, elle, les lit.</div>
                 </div>
                 <div class="bar">
                     <asp:Button ID="btnDelete" runat="server" Text="Supprimer"
@@ -163,11 +163,12 @@
                         <div class="field">
                             <label>Code *</label>
                             <telerik:RadTextBox ID="txtCode" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">Identifiant court (ex. : solo, comsolo). Peut être partagé entre cycles.</div>
+                            <div class="hint">Identifiant court (ex. : solo, comsolo, com119), en minuscules. C&#8217;est la valeur du lien d&#8217;inscription <code>wbfRegister.aspx?ab=…</code>, gardée comme abonnement de la compagnie ; le paiement retrouve le forfait par Code + cycle. Ne pas le changer une fois des abonnés inscrits.</div>
                         </div>
                         <div class="field">
                             <label>Nom *</label>
                             <telerik:RadTextBox ID="txtName" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">Nom affiché au client : carte du forfait et page de paiement (« Forfait … »). Ce nom ne remonte pas dans Stripe : le reçu Stripe affiche le nom du produit Stripe.</div>
                         </div>
                     </div>
 
@@ -175,6 +176,7 @@
                         <div class="field">
                             <label>Accroche (tagline)</label>
                             <telerik:RadTextBox ID="txtTagline" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">Courte phrase sous le nom, sur la carte et la page de paiement (ex. : Pour le travailleur autonome).</div>
                         </div>
                     </div>
 
@@ -182,6 +184,7 @@
                         <div class="field">
                             <label>Description courte</label>
                             <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" CssClass="ta" />
+                            <div class="hint">Un ou deux paragraphes en texte simple, affichés sur la carte du forfait.</div>
                         </div>
                     </div>
 
@@ -197,7 +200,7 @@
                                 ToolbarMode="ShowOnFocus">
                                 <Content></Content>
                             </telerik:RadEditor>
-                            <div class="hint">Mise en forme riche (gras, listes, liens…) du forfait, affichée sur la LandingPage.</div>
+                            <div class="hint">Mise en forme riche (gras, listes, liens…) du forfait. Enregistrée en base, mais aucune page ne l&#8217;affiche encore.</div>
                         </div>
                     </div>
                 </div>
@@ -211,6 +214,7 @@
                         <div class="field">
                             <label>Montant *</label>
                             <telerik:RadTextBox ID="txtAmount" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">Prix affiché avant taxes (ex. : 49.00) ; TPS et TVQ sont calculées en plus sur la page de paiement. <b>Ce n&#8217;est pas le montant facturé</b> : Stripe facture le montant du Price Id. Garder les deux identiques.</div>
                         </div>
                         <div class="field">
                             <label>Devise</label>
@@ -219,6 +223,7 @@
                                 <asp:ListItem Text="USD" Value="USD" />
                                 <asp:ListItem Text="EUR" Value="EUR" />
                             </asp:DropDownList>
+                            <div class="hint">Informatif : les montants s&#8217;affichent toujours en $ CA et la devise réellement facturée est celle du prix Stripe.</div>
                         </div>
                         <div class="field">
                             <label>Cycle de facturation</label>
@@ -226,6 +231,7 @@
                                 <asp:ListItem Text="Mensuel" Value="monthly" />
                                 <asp:ListItem Text="Annuel" Value="annual" />
                             </asp:DropDownList>
+                            <div class="hint">Crée une ligne par cycle (même Code). Aujourd&#8217;hui la page d&#8217;accueil et le paiement n&#8217;utilisent que la ligne <b>Mensuel</b> ; une ligne Annuel reste en réserve.</div>
                         </div>
                     </div>
 
@@ -233,10 +239,12 @@
                         <div class="field">
                             <label>Jours d'essai</label>
                             <telerik:RadTextBox ID="txtTrialDays" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">Jours gratuits avant le 1er prélèvement (0 = aucun). Envoyé à Stripe à la création de l&#8217;abonnement et annoncé par un bandeau sur la page de paiement. Ne touche pas les abonnés déjà inscrits.</div>
                         </div>
                         <div class="field">
                             <label>Ordre d'affichage</label>
                             <telerik:RadTextBox ID="txtDisplayOrder" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">Position de la carte sur la page d&#8217;accueil (1, 2, 3… de gauche à droite) ; ordre de tri de la liste des forfaits.</div>
                         </div>
                     </div>
                 </div>
@@ -250,7 +258,7 @@
                         <div class="field">
                             <label>Processeur</label>
                             <telerik:RadTextBox ID="txtProcessorName" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">ex. : stripe</div>
+                            <div class="hint">Informatif (ex. : stripe) : seul Stripe est branché aujourd&#8217;hui, le paiement passe par Stripe quelle que soit la valeur.</div>
                         </div>
                         <div class="field">
                             <label>Stripe Product Id</label>
@@ -274,26 +282,29 @@
                         <div class="field">
                             <label>Utilisateurs max</label>
                             <telerik:RadTextBox ID="txtMaxUsers" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">Laisser vide = illimité.</div>
+                            <div class="hint">Laisser vide = illimité. Enregistrée seulement : aucune limite n&#8217;est encore appliquée dans l&#8217;ERP.</div>
                         </div>
                         <div class="field">
                             <label>Clients max</label>
                             <telerik:RadTextBox ID="txtMaxClients" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">Laisser vide = illimité. Enregistrée seulement : aucune limite n&#8217;est encore appliquée dans l&#8217;ERP.</div>
                         </div>
                         <div class="field">
                             <label>Documents max</label>
                             <telerik:RadTextBox ID="txtMaxDocuments" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">Laisser vide = illimité. Enregistrée seulement : aucune limite n&#8217;est encore appliquée dans l&#8217;ERP.</div>
                         </div>
                     </div>
                     <div class="grid mt12">
                         <div class="field">
                             <label>Stockage max (Mo)</label>
                             <telerik:RadTextBox ID="txtMaxStorageMB" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">En mégaoctets (1024 = 1 Go). Laisser vide = illimité. Pas encore appliqué dans l&#8217;ERP.</div>
                         </div>
                         <div class="field">
                             <label>Tranche d'employés</label>
                             <telerik:RadTextBox ID="txtEmployeeRange" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">ex. : 1-19</div>
+                            <div class="hint">Texte libre (ex. : 1-19, Solo) affiché en pastille sur la carte pour dire à qui s&#8217;adresse le forfait. Rien ne vérifie le nombre réel d&#8217;employés.</div>
                         </div>
                     </div>
                 </div>
@@ -307,7 +318,7 @@
                         <div class="field">
                             <label>Texte du badge</label>
                             <telerik:RadTextBox ID="txtBadgeText" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">ex. : Le plus populaire</div>
+                            <div class="hint">Ruban en haut de la carte (ex. : Le plus populaire). Laisser vide = pas de ruban.</div>
                         </div>
                         <div class="field">
                             <label>Permissions / options</label>
@@ -321,6 +332,7 @@
                                     <span>Actif</span>
                                 </label>
                             </div>
+                            <div class="hint"><b>Recommandé</b> : carte mise en avant (fond foncé, bordure bleue) ; n&#8217;en cocher qu&#8217;un (rien ne l&#8217;impose).<br /><b>Actif</b> : décoché, le forfait disparaît de la page d&#8217;accueil et ne peut plus être payé ; les abonnés déjà inscrits ne sont pas touchés.</div>
                         </div>
                     </div>
 
@@ -328,7 +340,7 @@
                         <div class="field">
                             <label>Caractéristiques (Features)</label>
                             <asp:TextBox ID="txtFeatures" runat="server" TextMode="MultiLine" CssClass="ta" />
-                            <div class="hint">Texte ou JSON listant les fonctionnalités incluses.</div>
+                            <div class="hint"><b>Une fonctionnalité par ligne</b> : chaque ligne devient une puce cochée sur la carte et la page de paiement. Pas de JSON ni de HTML (le texte est affiché tel quel).</div>
                         </div>
                     </div>
                 </div>
