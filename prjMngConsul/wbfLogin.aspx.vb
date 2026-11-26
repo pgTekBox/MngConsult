@@ -53,6 +53,27 @@ Public Class wbfLogin
     End Sub
 
     ''' <summary>
+    ''' Liens FR · EN · ES du sélecteur de langue : rechargent la page avec ?lang=
+    ''' (mémorisé en session par CurrentLang) en gardant les autres paramètres
+    ''' (popup=1 quand la page est en fenêtre, email). La langue courante est « on ».
+    ''' </summary>
+    Protected Function LiensLangues() As String
+        Dim autres As New System.Text.StringBuilder()
+        For Each k As String In Request.QueryString.AllKeys
+            If k Is Nothing OrElse String.Equals(k, "lang", StringComparison.OrdinalIgnoreCase) Then Continue For
+            autres.Append("&").Append(HttpUtility.UrlEncode(k)).Append("=").Append(HttpUtility.UrlEncode(Request.QueryString(k)))
+        Next
+        Dim sb As New System.Text.StringBuilder()
+        For Each lg As String In New String() {"fr", "en", "es"}
+            sb.Append("<a href=""wbfLogin.aspx?lang=").Append(lg).Append(HttpUtility.HtmlAttributeEncode(autres.ToString())).Append("""")
+            sb.Append(" hreflang=""").Append(lg).Append(""" lang=""").Append(lg).Append("""")
+            If lg = CurrentLang Then sb.Append(" class=""on"" aria-current=""true""")
+            sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
+        Next
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
     ''' Applique la langue courante aux contrôles serveur (titre, bouton, champs).
     ''' Les textes statiques (titres, libellés, pied de page) sont localisés
     ''' directement dans le markup via &lt;%= L("clé") %&gt;.
@@ -72,6 +93,8 @@ Public Class wbfLogin
         Select Case key
             Case "pageTitle"
                 Return Choose3(lang, "Connexion — 60Sec-AI", "Sign in — 60Sec-AI", "Iniciar sesión — 60Sec-AI")
+            Case "langLabel"
+                Return Choose3(lang, "Langue", "Language", "Idioma")
             Case "welcome"
                 Return Choose3(lang, "Bienvenue", "Welcome", "Bienvenido")
             Case "subtitle"
