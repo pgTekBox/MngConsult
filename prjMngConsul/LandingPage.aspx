@@ -86,6 +86,7 @@
       <ul class="hchips"><li><b>14</b> fonctions</li><li><b>1</b> seul abonnement</li><li>dès <b>79,99&nbsp;$</b>/mois</li></ul>
       <div class="ctas">
         <a class="btn btn-primary" href="#membres">Réserver ma place</a>
+        <a class="btn btn-ghost" href="#profils" data-signup>Créer mon compte avec mon abonnement</a>
         <a class="btn btn-ghost" href="#profils">Voir les prix</a>
       </div>
     </div>
@@ -185,7 +186,7 @@
       <li><span class="how3-n">2</span><h3>On transfère vos données</h3><p>Gratuitement et en quelques minutes, depuis votre logiciel actuel : vous-même, votre comptable ou un cabinet certifié.</p></li>
       <li><span class="how3-n">3</span><h3>Cortex s'occupe du reste</h3><p>Il lit, classe, calcule et prépare. Vous répondez seulement aux questions qui méritent votre avis.</p></li>
     </ol>
-    <div class="how3-cta"><a class="btn btn-primary" href="#membres">Réserver ma place</a></div>
+    <div class="how3-cta"><a class="btn btn-primary" href="#membres">Réserver ma place</a><a class="btn btn-ghost" href="#profils" data-signup>Créer mon compte avec mon abonnement</a></div>
   </div>
 </section>
 
@@ -220,7 +221,7 @@
         <button type="button" class="k-flip k-cmp0" id="k-flip" aria-label="Système comptable complet : voir la concurrence"><span id="k-flip-t">Voir la concurrence ›</span></button>
       </div>
       <p class="k-cap" id="k-cap" aria-live="polite"></p>
-      <p class="k-cta"><a class="btn btn-gold" href="#membres" data-pick-calc>Réserver ma place</a></p>
+      <p class="k-cta"><a class="btn btn-gold" href="#membres" data-pick-calc>Réserver ma place</a><a class="btn btn-ghost" href="#profils" data-signup>Créer mon compte avec mon abonnement</a></p>
       <details class="k-src"><summary>Sources et méthode des prix</summary><p class="bk2-fine">Prix publics consultés en septembre 2026, avant taxes, pour une société de 4 employés et un professionnel au calendrier ; couverture des fonctions selon ce que chaque éditeur offre dans le produit retenu ; gammes de prix : du forfait le moins cher au plus cher des grilles publiées, par année (Momenteo : 14,90 $ US convertis au taux du 16 septembre 2026 ; Nethris : 22,46 $ par période de paie aux deux semaines) ; Mailchimp + Twilio : forfait Mailchimp gratuit ou Standard (0 à 20 $ US par mois, 500 contacts) plus 200 textos par mois à 0,0083 $ US chacun, frais des opérateurs de 0,0047 à 0,0087 $ US et numéro à 1,15 $ US par mois, convertis au même taux ; seuls les produits dont le prix est publié sont retenus. Drapeau : pays de l'éditeur. Marques citées à titre de comparaison, sans affiliation (<a href="#note-1">note 1</a>, <a href="#note-2">note 2</a>).</p></details>
       <div class="k-scrim" id="k-scrim" hidden></div><div class="k-pick" id="k-pick" role="dialog" aria-modal="false" aria-label="Choix d'un produit" hidden></div>
       <h3 class="k-bag-h" hidden>Votre panier</h3>
@@ -241,6 +242,7 @@
           <li class="kfl" id="k-fl"></li>
         </ul>
         <a class="btn btn-gold" href="#membres" data-pick-calc>Réserver ma place</a>
+        <a class="btn btn-ghost" href="#profils" data-signup>Créer mon compte avec mon abonnement</a>
         <p class="bk2-fine">Prix publics consultés en septembre 2026, avant taxes, pour une société de 4 employés et un professionnel au calendrier ; couverture des fonctions selon ce que chaque éditeur offre dans le produit retenu ; gammes de prix : du forfait le moins cher au plus cher des grilles publiées, par année (Momenteo : 14,90 $ US convertis au taux du 16 septembre 2026 ; Nethris : 22,46 $ par période de paie aux deux semaines) ; Mailchimp + Twilio : forfait Mailchimp gratuit ou Standard (0 à 20 $ US par mois, 500 contacts) plus 200 textos par mois à 0,0083 $ US chacun, frais des opérateurs de 0,0047 à 0,0087 $ US et numéro à 1,15 $ US par mois, convertis au même taux ; seuls les produits dont le prix est publié sont retenus. Drapeau : pays de l'éditeur. Marques citées à titre de comparaison, sans affiliation (<a href="#note-1">note 1</a>, <a href="#note-2">note 2</a>).</p>
       </aside>
     </div>
@@ -269,6 +271,7 @@
         <p class="pinc">Inclus : les 14 fonctions, dont Cortex et le lien avec votre comptable.</p>
         <div class="pact">
           <a class="btn btn-primary" href="#membres" data-pick="ta">Réserver ma place</a>
+          <a class="btn btn-ghost" href="wbfRegister.aspx" data-signup="ta">Créer mon compte avec mon abonnement</a>
           <a class="plink" href="#cortex" data-see="ta">Ce que Cortex fait pour moi →</a>
         </div>
       </article>
@@ -285,6 +288,7 @@
         <p class="pinc">Inclus : tout le profil 1, plus la comptabilité de société et la fin d'exercice.</p>
         <div class="pact">
           <a class="btn btn-primary" href="#membres" data-pick="c0">Réserver ma place</a>
+          <a class="btn btn-ghost" href="wbfRegister.aspx" data-signup="c0">Créer mon compte avec mon abonnement</a>
           <a class="plink" href="#cortex" data-see="c0">Ce que Cortex fait pour moi →</a>
         </div>
       </article>
@@ -301,6 +305,7 @@
         <p class="pinc">Inclus : tout le profil 2, plus paie, DAS, relevés et application employé. 4 employés inclus, puis 2&nbsp;$/mois par employé.</p>
         <div class="pact">
           <a class="btn btn-primary" href="#membres" data-pick="c4">Réserver ma place</a>
+          <a class="btn btn-ghost" href="wbfRegister.aspx" data-signup="c4">Créer mon compte avec mon abonnement</a>
           <a class="plink" href="#cortex" data-see="c4">Ce que Cortex fait pour moi →</a>
         </div>
       </article>
@@ -340,6 +345,7 @@
 
     <div class="ctas mig-ctas">
       <a class="btn btn-gold" href="#membres">Réserver ma place</a>
+      <a class="btn btn-ghost" href="#profils" data-signup>Créer mon compte avec mon abonnement</a>
     </div>
   </div>
 </section>

@@ -1806,3 +1806,6 @@ button.hl{font:inherit;text-align:left;cursor:pointer;width:100%;box-sizing:bord
 .gd-f{margin:0;font-size:12.5px;color:#9FB2CC}.gd-f a{color:#C9D6EA}
 .hero-launch{cursor:pointer}.hero-launch:focus-visible{outline:2px solid #F2B830;outline-offset:2px}
 @media (max-width:420px){.gd-cd{gap:6px}.gd-cd span{font-size:10px;letter-spacing:.02em}.gd-a .gd-go{flex:1;text-align:center}}
+/* Second bouton « Créer mon compte avec mon abonnement » à côté de « Réserver ma place » */
+.how3-cta{flex-wrap:wrap;gap:12px}
+.k-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
