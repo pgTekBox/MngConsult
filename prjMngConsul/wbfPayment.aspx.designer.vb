@@ -143,4 +143,14 @@ Partial Public Class wbfPayment
     '''litConditions control.
     '''</summary>
     Protected WithEvents litConditions As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''pnlActivated control.
+    '''</summary>
+    Protected WithEvents pnlActivated As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litActEmail control.
+    '''</summary>
+    Protected WithEvents litActEmail As Global.System.Web.UI.WebControls.Literal
 End Class

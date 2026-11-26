@@ -434,6 +434,37 @@
             flex-shrink: 0;
         }
         .summary .abo-recap { margin: 0 0 20px; background: #fff; }
+
+        /* Popup « Compte activé ! » par-dessus la page de paiement */
+        .act-overlay {
+            position: fixed; inset: 0; z-index: 1000;
+            display: flex; align-items: center; justify-content: center; padding: 20px;
+            background: rgba(14,31,61,.55); backdrop-filter: blur(2px);
+            animation: actFond .2s ease-out;
+        }
+        .act-card {
+            width: 100%; max-width: 440px; background: #fff; border-radius: 24px;
+            box-shadow: 0 30px 70px rgba(15,23,42,.35); text-align: center; padding: 40px 32px 32px;
+            animation: actCarte .25s ease-out;
+        }
+        .act-icon {
+            width: 76px; height: 76px; border-radius: 50%; margin-bottom: 18px;
+            display: inline-flex; align-items: center; justify-content: center; color: #fff;
+            background: linear-gradient(135deg, var(--green-500), var(--green-600));
+            box-shadow: 0 12px 24px rgba(16,185,129,.3);
+        }
+        .act-card h2 { font-size: 24px; font-weight: 800; margin: 0 0 10px; color: var(--slate-900); }
+        .act-card p { color: var(--slate-600); line-height: 1.6; margin: 0 0 12px; }
+        .act-card strong { color: var(--slate-800); overflow-wrap: anywhere; }
+        .act-card .act-next { font-size: 14px; margin-bottom: 24px; }
+        .act-btn {
+            display: inline-block; padding: 13px 28px; border: none; border-radius: 12px; cursor: pointer;
+            background: linear-gradient(135deg, var(--blue-600), var(--cyan-500)); color: #fff;
+            font: 800 15px var(--font);
+        }
+        .act-btn:hover { box-shadow: 0 12px 24px rgba(37,99,235,.3); }
+        @keyframes actFond { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes actCarte { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
     </style>
     <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
     <script src="js/appPopup.js?v=2026111704"></script>
@@ -566,6 +597,40 @@
             </div>
 
         </div>
+
+        <%-- Popup « Compte activé ! » : affiché une seule fois, à l'arrivée depuis le lien
+             d'activation (wbfActivate pose Session("ActivationReussie") puis redirige ici). --%>
+        <asp:Panel ID="pnlActivated" runat="server" Visible="false" CssClass="act-overlay" ClientIDMode="Static">
+            <div class="act-card" role="dialog" aria-modal="true" aria-labelledby="actTitle">
+                <div class="act-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h2 id="actTitle"><%= L("actTitle") %></h2>
+                <p>
+                    <%= L("actBefore") %><strong><asp:Literal ID="litActEmail" runat="server" /></strong><%= L("actAfter") %>
+                </p>
+                <p class="act-next"><%= L("actNext") %></p>
+                <button type="button" class="act-btn" onclick="fermerActivation60()"><%= L("actContinue") %></button>
+            </div>
+        </asp:Panel>
+        <script>
+            function fermerActivation60() {
+                var o = document.getElementById('pnlActivated');
+                if (o) o.parentNode.removeChild(o);
+                document.removeEventListener('keydown', toucheActivation60);
+            }
+            function toucheActivation60(e) { if (e.key === 'Escape') fermerActivation60(); }
+            (function () {
+                var o = document.getElementById('pnlActivated');
+                if (!o) return;
+                document.addEventListener('keydown', toucheActivation60);
+                o.addEventListener('click', function (e) { if (e.target === o) fermerActivation60(); });
+                var b = o.querySelector('.act-btn'); if (b) b.focus();
+            })();
+        </script>
 
     </form>
 </body>

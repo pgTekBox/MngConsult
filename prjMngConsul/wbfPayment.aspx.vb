@@ -31,7 +31,21 @@ Public Class wbfPayment
 
         If Not IsPostBack Then
             LoadPlanDetails()
+            AfficherPopupActivation()
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Popup « Compte activé ! » par-dessus la page : wbfActivate active le compte,
+    ''' connecte l'usager, pose Session("ActivationReussie") (son courriel) et redirige
+    ''' ici. Affiché une seule fois (la clé est retirée), donc pas au rafraîchissement.
+    ''' </summary>
+    Private Sub AfficherPopupActivation()
+        Dim courriel As String = TryCast(Session("ActivationReussie"), String)
+        If courriel Is Nothing Then Return
+        Session.Remove("ActivationReussie")
+        litActEmail.Text = HttpUtility.HtmlEncode(courriel)
+        pnlActivated.Visible = True
     End Sub
 
     ''' <summary>Applique la langue aux contrôles serveur (titre, bouton).</summary>
@@ -78,6 +92,11 @@ Public Class wbfPayment
             Case "featNoCard" : Return Choose3(lang, "Aucune carte stockée chez 60Sec-AI", "No card stored by 60Sec-AI", "Ninguna tarjeta almacenada por 60Sec-AI")
             Case "payBtn" : Return Choose3(lang, "Payer avec Stripe →", "Pay with Stripe →", "Pagar con Stripe →")
             Case "redirectInfo" : Return Choose3(lang, "Vous serez redirigé vers checkout.stripe.com", "You'll be redirected to checkout.stripe.com", "Será redirigido a checkout.stripe.com")
+            Case "actTitle" : Return Choose3(lang, "Compte activé !", "Account activated!", "¡Cuenta activada!")
+            Case "actBefore" : Return Choose3(lang, "Votre compte est maintenant actif. Bienvenue chez 60Sec-AI, ", "Your account is now active. Welcome to 60Sec-AI, ", "Su cuenta ya está activa. Bienvenido a 60Sec-AI, ")
+            Case "actAfter" : Return Choose3(lang, " !", "!", ".")
+            Case "actNext" : Return Choose3(lang, "Dernière étape : vérifiez votre abonnement ci-dessous, puis payez-le de façon sécurisée avec Stripe.", "Last step: review your subscription below, then pay for it securely with Stripe.", "Último paso: revise su suscripción a continuación y págela de forma segura con Stripe.")
+            Case "actContinue" : Return Choose3(lang, "Continuer →", "Continue →", "Continuar →")
             Case "errAccount" : Return Choose3(lang, "Impossible de récupérer vos informations de compte.", "Unable to retrieve your account information.", "No se pudo recuperar la información de su cuenta.")
             Case "errPlanUnavailable" : Return Choose3(lang, "Ce forfait n'est pas disponible. Veuillez contacter le support.", "This plan is not available. Please contact support.", "Este plan no está disponible. Contacte con soporte.")
             Case "errStripeConfig" : Return Choose3(lang, "La configuration de paiement pour ce forfait est incomplète. Veuillez contacter le support.", "The payment configuration for this plan is incomplete. Please contact support.", "La configuración de pago para este plan está incompleta. Contacte con soporte.")

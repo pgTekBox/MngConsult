@@ -91,8 +91,12 @@ Public Class wbfActivate
 
                     LoadUserSession(UserId)
 
-                    litEmail.Text = UserEmail
-                    ShowSuccess()
+                    ' La confirmation « Compte activé ! » s'affiche en popup par-dessus
+                    ' la page de paiement (wbfPayment lit puis retire cette clé).
+                    Session("ActivationReussie") = UserEmail
+                    Response.Redirect("~/wbfPayment.aspx?lang=" & CurrentLang, False)
+                    Context.ApplicationInstance.CompleteRequest()
+                    Return
 
                 Case -1
                     ShowExpired()
