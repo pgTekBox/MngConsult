@@ -24,6 +24,7 @@ Public Class wbfActivate
         Dim lang As String = CurrentLang
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Activation — 60Sec-AI", "Activation — 60Sec-AI", "Activación — 60Sec-AI")
+            Case "langLabel" : Return Choose3(lang, "Langue", "Language", "Idioma")
             Case "successTitle" : Return Choose3(lang, "Compte activé !", "Account activated!", "¡Cuenta activada!")
             Case "successBefore" : Return Choose3(lang, "Votre compte est maintenant actif. Bienvenue chez 60Sec-AI, ", "Your account is now active. Welcome to 60Sec-AI, ", "Su cuenta ya está activa. Bienvenido a 60Sec-AI, ")
             Case "successAfter" : Return Choose3(lang, " !", "!", ".")
@@ -39,6 +40,25 @@ Public Class wbfActivate
             Case "alreadyMsg" : Return Choose3(lang, "Votre compte est déjà actif. Vous pouvez vous connecter dès maintenant.", "Your account is already active. You can sign in right now.", "Su cuenta ya está activa. Puede iniciar sesión ahora mismo.")
             Case Else : Return ""
         End Select
+    End Function
+
+    ''' <summary>
+    ''' Liens FR · EN · ES du sélecteur de langue : rechargent la page avec ?lang=
+    ''' (mémorisé en session par CurrentLang) en gardant le jeton (?token=). Sans
+    ''' risque : une activation réussie redirige aussitôt vers wbfPayment, et
+    ''' s0221ActivateUser ne modifie rien pour un jeton expiré, invalide ou déjà utilisé.
+    ''' </summary>
+    Protected Function LiensLangues() As String
+        Dim jeton As String = If(Request.QueryString("token"), "").Trim()
+        Dim suite As String = If(jeton.Length > 0, "&token=" & Uri.EscapeDataString(jeton), "")
+        Dim sb As New System.Text.StringBuilder()
+        For Each lg As String In New String() {"fr", "en", "es"}
+            sb.Append("<a href=""wbfActivate.aspx?lang=").Append(lg).Append(Server.HtmlEncode(suite)).Append("""")
+            sb.Append(" hreflang=""").Append(lg).Append(""" lang=""").Append(lg).Append("""")
+            If lg = CurrentLang Then sb.Append(" class=""on"" aria-current=""true""")
+            sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
+        Next
+        Return sb.ToString()
     End Function
 
     Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String

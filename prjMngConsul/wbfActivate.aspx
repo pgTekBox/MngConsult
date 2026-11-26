@@ -98,6 +98,13 @@
         }
 
         .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+        /* Sélecteur de langue FR · EN · ES (en haut à droite de la carte) */
+        .card { position: relative; }
+        .lang-switch { position: absolute; top: 16px; right: 16px; display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: #fff; border: 1px solid var(--slate-200); }
+        .lang-switch a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; color: var(--slate-600); text-decoration: none; letter-spacing: .03em; }
+        .lang-switch a:hover { background: #f1f5f9; }
+        .lang-switch a.on { background: var(--blue-600); color: #fff; }
     </style>
     <script src="js/appPopup.js?v=2026111704"></script>
 </head>
@@ -105,6 +112,10 @@
     <form id="form1" runat="server">
 
         <div class="card">
+
+            <%-- Langue de la page : FR · EN · ES (garde le jeton ; un lien expiré,
+                 invalide ou déjà utilisé redonne le même message, sans rien modifier) --%>
+            <nav class="lang-switch" aria-label="<%= L("langLabel") %>"><%= LiensLangues() %></nav>
 
             <!-- VUE : Activation réussie -->
             <asp:Panel ID="pnlSuccess" runat="server" Visible="false">
