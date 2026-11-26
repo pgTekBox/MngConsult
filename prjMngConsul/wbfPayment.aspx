@@ -435,6 +435,12 @@
         }
         .summary .abo-recap { margin: 0 0 20px; background: #fff; }
 
+        /* Sélecteur de langue FR · EN · ES (en haut à droite) */
+        .lang-switch { margin-left: auto; display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: #fff; border: 1px solid var(--slate-200); }
+        .lang-switch a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; color: var(--slate-600); text-decoration: none; letter-spacing: .03em; }
+        .lang-switch a:hover { background: var(--slate-100); }
+        .lang-switch a.on { background: var(--blue-600); color: #fff; }
+
         /* Popup « Compte activé ! » par-dessus la page de paiement */
         .act-overlay {
             position: fixed; inset: 0; z-index: 1000;
@@ -478,6 +484,8 @@
             <div class="brand">
                 <img src="Images/logo.svg" alt="60Sec-AI" style="width:40px; height:40px;" />
                 <h1>60Sec-AI</h1>
+                <%-- Langue de la page (et de Stripe Checkout) : FR · EN · ES, mémorisée en session --%>
+                <nav class="lang-switch" aria-label="<%= L("langLabel") %>"><%= LiensLangues() %></nav>
             </div>
 
             <!-- =====================================================

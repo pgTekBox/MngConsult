@@ -92,6 +92,7 @@ Public Class wbfPayment
             Case "featNoCard" : Return Choose3(lang, "Aucune carte stockée chez 60Sec-AI", "No card stored by 60Sec-AI", "Ninguna tarjeta almacenada por 60Sec-AI")
             Case "payBtn" : Return Choose3(lang, "Payer avec Stripe →", "Pay with Stripe →", "Pagar con Stripe →")
             Case "redirectInfo" : Return Choose3(lang, "Vous serez redirigé vers checkout.stripe.com", "You'll be redirected to checkout.stripe.com", "Será redirigido a checkout.stripe.com")
+            Case "langLabel" : Return Choose3(lang, "Langue", "Language", "Idioma")
             Case "actTitle" : Return Choose3(lang, "Compte activé !", "Account activated!", "¡Cuenta activada!")
             Case "actBefore" : Return Choose3(lang, "Votre compte est maintenant actif. Bienvenue chez 60Sec-AI, ", "Your account is now active. Welcome to 60Sec-AI, ", "Su cuenta ya está activa. Bienvenido a 60Sec-AI, ")
             Case "actAfter" : Return Choose3(lang, " !", "!", ".")
@@ -103,6 +104,22 @@ Public Class wbfPayment
             Case "errCheckout" : Return Choose3(lang, "Une erreur est survenue lors de la création de la session de paiement : ", "An error occurred while creating the payment session: ", "Se produjo un error al crear la sesión de pago: ")
             Case Else : Return ""
         End Select
+    End Function
+
+    ''' <summary>
+    ''' Liens FR · EN · ES du sélecteur de langue : rechargent la page avec ?lang=,
+    ''' que clsData.CurrentLang mémorise en session (forfait, textes et Stripe
+    ''' Checkout suivent). La langue courante est marquée « on ».
+    ''' </summary>
+    Protected Function LiensLangues() As String
+        Dim sb As New StringBuilder()
+        For Each lg As String In New String() {"fr", "en", "es"}
+            sb.Append("<a href=""wbfPayment.aspx?lang=").Append(lg).Append("""")
+            sb.Append(" hreflang=""").Append(lg).Append(""" lang=""").Append(lg).Append("""")
+            If lg = CurrentLang Then sb.Append(" class=""on"" aria-current=""true""")
+            sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
+        Next
+        Return sb.ToString()
     End Function
 
     Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
