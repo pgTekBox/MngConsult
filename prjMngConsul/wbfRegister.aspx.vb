@@ -29,6 +29,7 @@ Public Class wbfRegister
         Dim lang As String = CurrentLang
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Inscription — 60Sec-AI", "Sign up — 60Sec-AI", "Registro — 60Sec-AI")
+            Case "langLabel" : Return Choose3(lang, "Langue", "Language", "Idioma")
             Case "heading" : Return Choose3(lang, "Créer votre compte", "Create your account", "Cree su cuenta")
             Case "subtitle" : Return Choose3(lang, "Commencez en quelques secondes — gratuit, aucune carte requise", "Get started in seconds — free, no card required", "Comience en segundos — gratis, sin tarjeta")
             Case "firstName" : Return Choose3(lang, "Prénom", "First name", "Nombre")
@@ -155,6 +156,25 @@ Public Class wbfRegister
             "Créez votre compte, puis payez votre abonnement : {0} avant taxes.",
             "Create your account, then pay for your subscription: {0} before tax.",
             "Cree su cuenta y luego pague su suscripción: {0} antes de impuestos."), prix)
+    End Function
+
+    ''' <summary>
+    ''' Liens FR · EN · ES du sélecteur de langue (formulaire d'inscription) :
+    ''' rechargent la page avec ?lang= (mémorisé en session par CurrentLang) en
+    ''' gardant le forfait choisi (?ab=), pour que le récapitulatif suive la langue.
+    ''' La langue courante est marquée « on ».
+    ''' </summary>
+    Protected Function LiensLangues() As String
+        Dim ab As String = If(Request.QueryString("ab"), "").Trim()
+        Dim suite As String = If(ab.Length > 0, "&ab=" & Uri.EscapeDataString(ab), "")
+        Dim sb As New System.Text.StringBuilder()
+        For Each lg As String In New String() {"fr", "en", "es"}
+            sb.Append("<a href=""wbfRegister.aspx?lang=").Append(lg).Append(Server.HtmlEncode(suite)).Append("""")
+            sb.Append(" hreflang=""").Append(lg).Append(""" lang=""").Append(lg).Append("""")
+            If lg = CurrentLang Then sb.Append(" class=""on"" aria-current=""true""")
+            sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
+        Next
+        Return sb.ToString()
     End Function
 
     Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String

@@ -252,6 +252,14 @@
             border-radius: 8px;
             display: inline-block;
         }
+
+        /* Sélecteur de langue FR · EN · ES (en haut à droite de la carte) */
+        .card { position: relative; }
+        .card > .lang-switch + .card-header { padding-top: 60px; }   /* le logo passe sous le sélecteur */
+        .lang-switch { position: absolute; top: 16px; right: 16px; display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: #fff; border: 1px solid var(--slate-200); }
+        .lang-switch a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; color: var(--slate-600); text-decoration: none; letter-spacing: .03em; }
+        .lang-switch a:hover { background: var(--slate-100); }
+        .lang-switch a.on { background: var(--blue-600); color: #fff; }
     </style>
     <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
     <script src="js/appPopup.js?v=2026111704"></script>
@@ -262,6 +270,9 @@
 
         <!-- VUE 1 : Formulaire d'inscription -->
         <asp:Panel ID="pnlForm" runat="server" CssClass="card">
+
+            <%-- Langue de la page : FR · EN · ES (garde le forfait choisi ?ab=) --%>
+            <nav class="lang-switch" aria-label="<%= L("langLabel") %>"><%= LiensLangues() %></nav>
 
             <div class="card-header">
                 <a class="brand" href="LandingPage.aspx?lang=<%= CurrentLang %>">
