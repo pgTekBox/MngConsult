@@ -255,10 +255,12 @@
                         <div class="field">
                             <label>Stripe Product Id</label>
                             <telerik:RadTextBox ID="txtStripeProductId" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint">prod_… : le produit Stripe (le <i>quoi</i> : nom du forfait). Même valeur pour les lignes mensuelle et annuelle d’un même forfait. Référence seulement, non utilisé au paiement.<br />Où : Stripe › Catalogue de produits › ouvrir le produit › id en haut de la fiche.</div>
                         </div>
                         <div class="field">
                             <label>Stripe Price Id</label>
                             <telerik:RadTextBox ID="txtStripePriceId" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <div class="hint"><b>Obligatoire pour encaisser.</b> price_… : le prix récurrent (montant, devise, cycle). Envoyé à Stripe Checkout et sert au webhook pour retrouver le forfait : unique par ligne, et du même cycle que cette ligne. Sans lui, l’abonnement est refusé.<br />Où : Stripe › Catalogue de produits › ouvrir le produit › section « Tarifs » › cliquer le prix › id en haut (ou menu ⋯ › Copier l’ID du tarif). Les id test ≠ live.</div>
                         </div>
                     </div>
                 </div>
