@@ -105,6 +105,27 @@ Public Class wbfForgotPassword
                                             L("mailIgnore"))
     End Function
 
+    ''' <summary>
+    ''' Liens FR · EN · ES du sélecteur de langue : rechargent la page avec ?lang=
+    ''' (mémorisé en session par CurrentLang) en gardant les autres paramètres.
+    ''' La langue courante est marquée « on ».
+    ''' </summary>
+    Protected Function LiensLangues() As String
+        Dim autres As New System.Text.StringBuilder()
+        For Each k As String In Request.QueryString.AllKeys
+            If k Is Nothing OrElse String.Equals(k, "lang", StringComparison.OrdinalIgnoreCase) Then Continue For
+            autres.Append("&").Append(HttpUtility.UrlEncode(k)).Append("=").Append(HttpUtility.UrlEncode(Request.QueryString(k)))
+        Next
+        Dim sb As New System.Text.StringBuilder()
+        For Each lg As String In New String() {"fr", "en", "es"}
+            sb.Append("<a href=""wbfForgotPassword.aspx?lang=").Append(lg).Append(HttpUtility.HtmlAttributeEncode(autres.ToString())).Append("""")
+            sb.Append(" hreflang=""").Append(lg).Append(""" lang=""").Append(lg).Append("""")
+            If lg = CurrentLang Then sb.Append(" class=""on"" aria-current=""true""")
+            sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
+        Next
+        Return sb.ToString()
+    End Function
+
     Private Sub ShowError(msg As String)
         pnlError.Visible = True
         litError.Text = msg
@@ -118,6 +139,8 @@ Public Class wbfForgotPassword
         Select Case key
             Case "pageTitle"
                 Return Choose3(lang, "Mot de passe oublié — 60Sec-AI", "Forgot password — 60Sec-AI", "Contraseña olvidada — 60Sec-AI")
+            Case "langLabel"
+                Return Choose3(lang, "Langue", "Language", "Idioma")
             Case "heading"
                 Return Choose3(lang, "Mot de passe oublié ?", "Forgot your password?", "¿Olvidó su contraseña?")
             Case "subtitle"
