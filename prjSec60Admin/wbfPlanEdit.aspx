@@ -74,6 +74,11 @@
             border-color: rgba(37,99,235,.5) !important;
             box-shadow: 0 0 0 4px rgba(37,99,235,.12) !important;
         }
+        .field .rtbLike.ro .riTextBox,
+        .field .rtbLike.ro input.riTextBox {
+            background: #f1f5f9 !important; color: #64748b; cursor: default;
+            box-shadow: none !important;
+        }
 
         /* champs natifs (select + textarea) stylés comme les RadTextBox */
         .inp, .ta, .sel {
@@ -261,9 +266,9 @@
                             <div class="hint">Informatif (ex. : stripe) : seul Stripe est branché aujourd&#8217;hui, le paiement passe par Stripe quelle que soit la valeur.</div>
                         </div>
                         <div class="field">
-                            <label>Stripe Product Id</label>
-                            <telerik:RadTextBox ID="txtStripeProductId" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">prod_… : le produit Stripe (le <i>quoi</i> : nom du forfait). Même valeur pour les lignes mensuelle et annuelle d’un même forfait. Référence seulement, non utilisé au paiement ; rempli automatiquement par « Synchroniser avec Stripe ».<br />Où : Stripe › Catalogue de produits › ouvrir le produit › id en haut de la fiche.</div>
+                            <label>Stripe Product Id <span style="font-weight:600;color:#64748b;">(lecture seule)</span></label>
+                            <telerik:RadTextBox ID="txtStripeProductId" runat="server" RenderMode="Lightweight" CssClass="rtbLike ro" ReadOnly="true" TabIndex="-1" />
+                            <div class="hint">prod_… : le produit Stripe auquel appartient le Price Id ci-dessous. <b>Rien à saisir</b> : il est rempli automatiquement par « Synchroniser avec Stripe » (liste des forfaits), à partir du Price Id. Non utilisé au paiement ; sert de repère et servira à créer un nouveau prix sous le même produit (un prix Stripe ne se modifie pas).</div>
                         </div>
                         <div class="field">
                             <label>Stripe Price Id</label>
