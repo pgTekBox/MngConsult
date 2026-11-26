@@ -66,6 +66,9 @@ Public Class wbfPaymentSuccess
             Case "amountLabel" : Return Choose3(lang, "Montant payé", "Amount paid", "Importe pagado")
             Case "goDashboard" : Return Choose3(lang, "Accéder à mon tableau de bord →", "Go to my dashboard →", "Ir a mi panel →")
             Case "footer" : Return Choose3(lang, "Un courriel de confirmation a été envoyé à votre adresse.", "A confirmation email has been sent to your address.", "Se ha enviado un correo de confirmación a su dirección.")
+            Case "footerTrial" : Return Choose3(lang, "Rien n'a été prélevé aujourd'hui. Stripe vous enverra votre reçu par courriel à chaque prélèvement, le premier le {0}.", "Nothing was charged today. Stripe will email you a receipt for each charge, the first on {0}.", "Hoy no se ha cobrado nada. Stripe le enviará un recibo por correo en cada cargo, el primero el {0}.")
+            Case "footerTrialNoDate" : Return Choose3(lang, "Rien n'a été prélevé aujourd'hui. Stripe vous enverra votre reçu par courriel à chaque prélèvement, à partir de la fin de l'essai.", "Nothing was charged today. Stripe will email you a receipt for each charge, starting at the end of the trial.", "Hoy no se ha cobrado nada. Stripe le enviará un recibo por correo en cada cargo, a partir del final de la prueba.")
+            Case "footerGeneric" : Return Choose3(lang, "Stripe vous enverra votre reçu par courriel à chaque prélèvement.", "Stripe will email you a receipt for each charge.", "Stripe le enviará un recibo por correo en cada cargo.")
             Case "cardValue" : Return Choose3(lang, "Carte de crédit · via Stripe", "Credit card · via Stripe", "Tarjeta de crédito · vía Stripe")
             Case "trialEndSuffix" : Return Choose3(lang, " (fin de l'essai gratuit)", " (end of free trial)", " (fin del período de prueba)")
             Case "freeTrial" : Return Choose3(lang, "Gratuit (essai)", "Free (trial)", "Gratis (prueba)")
@@ -92,6 +95,16 @@ Public Class wbfPaymentSuccess
             sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
         Next
         Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' Phrase du bas de page sur le courriel de Stripe : « … a été envoyé » après un
+    ''' vrai paiement ; pendant l'essai, rien n'est prélevé et le premier reçu part à
+    ''' la fin de l'essai ; sans détails Stripe, une phrase neutre.
+    ''' </summary>
+    Private _basPage As String
+    Protected Function TexteBasPage() As String
+        Return If(String.IsNullOrEmpty(_basPage), L("footerGeneric"), _basPage)
     End Function
 
     Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
@@ -199,6 +212,16 @@ Public Class wbfPaymentSuccess
             litAmount.Text = L("freeTrial")
         Else
             litAmount.Text = displayAmount.ToString("N2", culture) & " " & currency
+        End If
+
+        ' Bas de page : pendant l'essai, rien n'est encaissé, donc Stripe n'envoie pas
+        ' encore de reçu (le premier part à la fin de l'essai).
+        If isTrial AndAlso trialEnd <> Date.MinValue Then
+            _basPage = String.Format(L("footerTrial"), clsAbonnementResume.DateLongue(trialEnd, CurrentLang))
+        ElseIf isTrial Then
+            _basPage = L("footerTrialNoDate")
+        Else
+            _basPage = L("footer")
         End If
 
         ' Détail complet de l'abonnement souscrit (T021Plan, d'après le code transmis à Stripe)

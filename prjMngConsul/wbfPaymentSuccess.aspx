@@ -256,7 +256,7 @@
             </div>
 
             <div class="footer-info">
-                <%= L("footer") %>
+                <%= TexteBasPage() %>
             </div>
 
         </div>
