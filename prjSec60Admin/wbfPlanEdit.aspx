@@ -137,7 +137,7 @@
                     <div class="title">
                         <asp:Literal ID="litTitle" runat="server" Text="Nouveau forfait" />
                     </div>
-                    <div class="sub">Configurez le forfait, sa tarification et ses limites.<br />« Carte du forfait » = l&#8217;ancienne page d&#8217;accueil (LandingPageV1) ; la nouvelle page d&#8217;accueil a ses prix écrits en dur et ne lit pas ces forfaits. La page de paiement, elle, les lit.</div>
+                    <div class="sub">Configurez le forfait, sa tarification et ses limites.<br />La nouvelle page d&#8217;accueil lit seulement le <b>montant</b> des 3 premiers forfaits mensuels actifs (voir Ordre d&#8217;affichage) ; ses textes (noms, descriptions, puces) restent ceux de la page. « Carte du forfait » = l&#8217;ancienne page d&#8217;accueil (LandingPageV1), qui affiche tout. La page de paiement lit aussi ces forfaits.</div>
                 </div>
                 <div class="bar">
                     <asp:Button ID="btnDelete" runat="server" Text="Supprimer"
@@ -214,7 +214,7 @@
                         <div class="field">
                             <label>Montant *</label>
                             <telerik:RadTextBox ID="txtAmount" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">Prix affiché avant taxes (ex. : 49.00) ; TPS et TVQ sont calculées en plus sur la page de paiement. <b>Ce n&#8217;est pas le montant facturé</b> : Stripe facture le montant du Price Id. Garder les deux identiques.</div>
+                            <div class="hint">Prix affiché avant taxes (ex. : 49.00), sur la page d&#8217;accueil (dans les 3 langues, calculateurs compris) et la page de paiement ; TPS et TVQ sont calculées en plus sur la page de paiement. <b>Ce n&#8217;est pas le montant facturé</b> : Stripe facture le montant du Price Id. Garder les deux identiques.</div>
                         </div>
                         <div class="field">
                             <label>Devise</label>
@@ -244,7 +244,7 @@
                         <div class="field">
                             <label>Ordre d'affichage</label>
                             <telerik:RadTextBox ID="txtDisplayOrder" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">Position de la carte sur la page d&#8217;accueil (1, 2, 3… de gauche à droite) ; ordre de tri de la liste des forfaits.</div>
+                            <div class="hint"><b>Décide quel profil de la page d&#8217;accueil prend ce prix</b> : parmi les forfaits mensuels actifs, le 1er = Travailleur autonome, le 2e = Société sans employé, le 3e = Société avec employés (les suivants sont ignorés ; un profil sans forfait garde le prix écrit dans la page). Sert aussi d&#8217;ordre des cartes de l&#8217;ancienne page et de la liste des forfaits.</div>
                         </div>
                     </div>
                 </div>

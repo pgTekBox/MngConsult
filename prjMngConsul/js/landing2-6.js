@@ -9,7 +9,9 @@ window.I18N=(function(){
   var WD={en:{lundi:'Monday',mardi:'Tuesday',mercredi:'Wednesday',jeudi:'Thursday',vendredi:'Friday',samedi:'Saturday',dimanche:'Sunday','lun.':'Mon.','mar.':'Tue.','mer.':'Wed.','jeu.':'Thu.','ven.':'Fri.','sam.':'Sat.','dim.':'Sun.',janvier:'January',février:'February',mars:'March',avril:'April',mai:'May',juin:'June',juillet:'July',août:'August',septembre:'September',octobre:'October',novembre:'November',décembre:'December','janv.':'Jan.','févr.':'Feb.','avr.':'Apr.','juil.':'Jul.','sept.':'Sept.','oct.':'Oct.','nov.':'Nov.','déc.':'Dec.',' au ':' to ','Du ':'From ',' à ':' to '},
            es:{lundi:'lunes',mardi:'martes',mercredi:'miércoles',jeudi:'jueves',vendredi:'viernes',samedi:'sábado',dimanche:'domingo','lun.':'lun.','mar.':'mar.','mer.':'mié.','jeu.':'jue.','ven.':'vie.','sam.':'sáb.','dim.':'dom.',janvier:'enero',février:'febrero',mars:'marzo',avril:'abril',mai:'mayo',juin:'junio',juillet:'julio',août:'agosto',septembre:'septiembre',octobre:'octubre',novembre:'noviembre',décembre:'diciembre','janv.':'ene.','févr.':'feb.','avr.':'abr.','juil.':'jul.','sept.':'sept.','oct.':'oct.','nov.':'nov.','déc.':'dic.',' au ':' al ','Du ':'Del ',' à ':' a '}};
   function norm(h){return h.replace(/<svg[\s\S]*?<\/svg>/g,'<svg/>').replace(/\s+/g,' ').trim();}
-  function t(k){var d=D[cur];return d&&Object.prototype.hasOwnProperty.call(d,k)?d[k]:null;}
+  function t(k){var d=D[cur];if(!d)return null;if(Object.prototype.hasOwnProperty.call(d,k))return d[k];
+    // Prix lus en base (landing2-prix.js) : on cherche la phrase avec le prix d'origine, puis on remet le prix actuel.
+    var P=window.Prix60;if(P&&P.changed){var k0=P.back(k);if(k0!==k&&Object.prototype.hasOwnProperty.call(d,k0))return P.fwd(d[k0]);}return null;}
   function isLeaf(el){var a=el.getElementsByTagName('*');for(var i=0;i<a.length;i++){if(!INL[a[i].tagName.toUpperCase()])return false;}return true;}
   function hasText(el){return /[A-Za-zÀ-ÿ]|\d[\s\u00a0\u202f]?\$/.test(el.textContent);}
   function attrs(el){['aria-label','placeholder','title','alt'].forEach(function(a){var v=el.getAttribute(a);if(!v)return;var m=SA.get(el),rec=m&&m[a];if(rec&&rec.out===v)return;var r=t(norm(v));if(r!==null&&r!==v){el.setAttribute(a,r);if(!m){m={};SA.set(el,m);}m[a]={fr:v,out:r};}});}
@@ -87,6 +89,7 @@ window.I18N=(function(){
     fr:{t:"60secondes — administration financière automatisée pour travailleurs autonomes et PME",d:"14 fonctions intégrées, 1 seul abonnement, dès 79,99 $/mois : tenue de livres, taxes, paie et paiements pour les travailleurs autonomes et les PME de 0 à 49 employés. Données au Québec et au Canada."},
     en:{t:"60secondes — automated financial administration for self-employed workers and SMBs",d:"14 integrated features, 1 subscription, from $79.99/month: bookkeeping, sales taxes, payroll and payments for self-employed workers and businesses with 0 to 49 employees. Data kept in Quebec and Canada."},
     es:{t:"60secondes — administración financiera automatizada para autónomos y pymes",d:"14 funciones integradas, 1 sola suscripción, desde 79,99 $/mes: contabilidad, impuestos, nómina y pagos para autónomos y pymes de 0 a 49 empleados. Datos alojados en Quebec y Canadá."}};
+  if(window.Prix60)Object.keys(META).forEach(function(l){META[l].d=window.Prix60.fwd(META[l].d);});
   var NOTICE={
     en:"English version coming soon. The content is shown in French for now; the French version prevails.",
     es:"Versión en español próximamente. Por ahora, el contenido se muestra en francés; la versión francesa prevalece."
@@ -161,10 +164,11 @@ window.I18N=(function(){
     function current(){return (radios.filter(function(r){return r.checked})[0]||{}).value;}
     function estimate(){
       var p=current(), out=$('s-est');
-      if(p==='ta') out.textContent=S.money(79.99)+S.perMonth;
-      else if(p==='c0') out.textContent=S.money(99.99)+S.perMonth;
+      var PX=window.Prix60?window.Prix60.v:{ta:79.99,c0:99.99,c4:149.99};
+      if(p==='ta') out.textContent=S.money(PX.ta)+S.perMonth;
+      else if(p==='c0') out.textContent=S.money(PX.c0)+S.perMonth;
       else if(p==='c4'){var n=parseInt($('s-c4-n').value,10)||1;
-        out.textContent = n>49 ? S.notServed : S.money(149.99+Math.max(0,n-4)*2)+S.perMonth;}
+        out.textContent = n>49 ? S.notServed : S.money(PX.c4+Math.max(0,n-4)*2)+S.perMonth;}
       else out.textContent=S.firmFree;
     }
     function setProfile(p,save){
@@ -319,7 +323,7 @@ window.I18N=(function(){
         c0:{low:['qbo','zinv','dext','gorv','mailtw','bill','qboa'],qc:['momenteo','gorv']},
         c4:{low:['qbo','zinv','dext','wagepoint','agendrix','evolia','gorv','mailtw','bill','qboa'],qc:['momenteo','wagepoint','agendrix','evolia','gorv']}
       };
-      var PRICE={ta:79.99,c0:99.99,c4:149.99};
+      var PRICE=window.Prix60?window.Prix60.v:{ta:79.99,c0:99.99,c4:149.99};
       var st={p:'ta',g:'high',bag:{},fn:null,focus:null,view:'60',mode:'why'},shown=0,raf=null;
 
       function flag(c,w){
