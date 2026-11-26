@@ -70,8 +70,28 @@ Public Class wbfPaymentSuccess
             Case "trialEndSuffix" : Return Choose3(lang, " (fin de l'essai gratuit)", " (end of free trial)", " (fin del período de prueba)")
             Case "freeTrial" : Return Choose3(lang, "Gratuit (essai)", "Free (trial)", "Gratis (prueba)")
             Case "yourPlan" : Return Choose3(lang, "Votre forfait", "Your plan", "Su plan")
+            Case "langLabel" : Return Choose3(lang, "Langue", "Language", "Idioma")
             Case Else : Return ""
         End Select
+    End Function
+
+    ''' <summary>
+    ''' Liens FR · EN · ES du sélecteur de langue : rechargent la page avec ?lang=
+    ''' (mémorisé en session par clsData.CurrentLang) en gardant le session_id de
+    ''' Stripe, pour que le reçu et le récapitulatif restent affichés. La langue
+    ''' courante est marquée « on ».
+    ''' </summary>
+    Protected Function LiensLangues() As String
+        Dim sessionId As String = If(Request.QueryString("session_id"), "").Trim()
+        Dim suite As String = If(sessionId.StartsWith("cs_"), "&session_id=" & Uri.EscapeDataString(sessionId), "")
+        Dim sb As New Text.StringBuilder()
+        For Each lg As String In New String() {"fr", "en", "es"}
+            sb.Append("<a href=""wbfPaymentSuccess.aspx?lang=").Append(lg).Append(Server.HtmlEncode(suite)).Append("""")
+            sb.Append(" hreflang=""").Append(lg).Append(""" lang=""").Append(lg).Append("""")
+            If lg = CurrentLang Then sb.Append(" class=""on"" aria-current=""true""")
+            sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
+        Next
+        Return sb.ToString()
     End Function
 
     Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
