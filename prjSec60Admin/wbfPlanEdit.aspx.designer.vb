@@ -55,8 +55,14 @@ Partial Public Class wbfPlanEdit
     '''<summary>reDescriptionLong control.</summary>
     Protected WithEvents reDescriptionLong As Global.Telerik.Web.UI.RadEditor
 
+    '''<summary>litAmountRo control.</summary>
+    Protected WithEvents litAmountRo As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>txtAmount control.</summary>
     Protected WithEvents txtAmount As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>litCurrencyRo control.</summary>
+    Protected WithEvents litCurrencyRo As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>ddlCurrency control.</summary>
     Protected WithEvents ddlCurrency As Global.System.Web.UI.WebControls.DropDownList

@@ -126,6 +126,19 @@
         .msg.ok { border-color: rgba(22,163,74,.35); background: rgba(22,163,74,.08); color: var(--ok); }
 
         .hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+        .sel:disabled { background: #f1f5f9; color: #64748b; opacity: 1; cursor: default; }
+        .lbl-ro { font-weight: 600; color: #64748b; }
+
+        .howto {
+            margin-top: 14px; padding: 12px 14px;
+            border: 1px solid rgba(37,99,235,.25); border-radius: 12px;
+            background: rgba(37,99,235,.05);
+            font-size: 12px; color: var(--text);
+        }
+        .howto .h { font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+        .howto ol { margin: 6px 0 0 18px; padding: 0; }
+        .howto li { margin: 3px 0; }
+        .howto .pied { margin-top: 6px; color: var(--muted); }
     </style>
 </head>
 
@@ -217,18 +230,18 @@
                 <div class="cardBody">
                     <div class="grid3">
                         <div class="field">
-                            <label>Montant *</label>
+                            <label>Montant *<asp:Literal ID="litAmountRo" runat="server" Visible="false" Text=" <span class='lbl-ro'>(lecture seule)</span>" /></label>
                             <telerik:RadTextBox ID="txtAmount" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                            <div class="hint">Prix affiché avant taxes (ex. : 49.00), sur la page d&#8217;accueil (dans les 3 langues, calculateurs compris) et la page de paiement ; TPS et TVQ sont calculées en plus sur la page de paiement. <b>Ce n&#8217;est pas le montant facturé</b> : Stripe facture le montant du Price Id. Garder les deux identiques : le bouton « Synchroniser avec Stripe » de la liste des forfaits reprend le montant de Stripe.</div>
+                            <div class="hint">Prix affiché avant taxes, sur la page d&#8217;accueil (3 langues, calculateurs compris) et la page de paiement ; TPS et TVQ s&#8217;ajoutent au paiement. <b>Vient de Stripe</b> : dès qu&#8217;un Stripe Price Id est enregistré, le montant n&#8217;est plus modifiable ici, il est repris du prix Stripe par « Synchroniser avec Stripe ». Sans Price Id, il est saisi à la main, à titre provisoire. Pour le changer : voir l&#8217;encadré ci-dessous.</div>
                         </div>
                         <div class="field">
-                            <label>Devise</label>
+                            <label>Devise<asp:Literal ID="litCurrencyRo" runat="server" Visible="false" Text=" <span class='lbl-ro'>(lecture seule)</span>" /></label>
                             <asp:DropDownList ID="ddlCurrency" runat="server" CssClass="sel">
                                 <asp:ListItem Text="CAD" Value="CAD" />
                                 <asp:ListItem Text="USD" Value="USD" />
                                 <asp:ListItem Text="EUR" Value="EUR" />
                             </asp:DropDownList>
-                            <div class="hint">Informatif : les montants s&#8217;affichent toujours en $ CA et la devise réellement facturée est celle du prix Stripe.</div>
+                            <div class="hint">Vient de Stripe, comme le montant (lecture seule dès qu&#8217;un Price Id est enregistré). Informatif : les montants s&#8217;affichent toujours en $ CA.</div>
                         </div>
                         <div class="field">
                             <label>Cycle de facturation</label>
@@ -251,6 +264,19 @@
                             <telerik:RadTextBox ID="txtDisplayOrder" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
                             <div class="hint"><b>Décide quel profil de la page d&#8217;accueil prend ce prix</b> : parmi les forfaits mensuels actifs, le 1er = Travailleur autonome, le 2e = Société sans employé, le 3e = Société avec employés (les suivants sont ignorés ; un profil sans forfait garde le prix écrit dans la page). Sert aussi d&#8217;ordre des cartes de l&#8217;ancienne page et de la liste des forfaits.</div>
                         </div>
+                    </div>
+
+                    <div class="howto">
+                        <div class="h">Comment changer le prix de ce forfait</div>
+                        Un prix Stripe ne se modifie pas : on en crée un nouveau sous le même produit, puis on le branche ici.
+                        <ol>
+                            <li>Dans Stripe (même mode, test ou live, que la clé de l&#8217;application) › <b>Catalogue de produits</b> › ouvrir le produit de ce forfait (son id est le Stripe Product Id plus bas) › <b>Ajouter un autre tarif</b>.</li>
+                            <li>Saisir le nouveau montant, la même devise, <b>Récurrent</b> avec la même période que cette ligne (mensuel ou annuel) et, dans les options de taxes, <b>taxes en sus (exclusive)</b> ; enregistrer.</li>
+                            <li>Copier l&#8217;id du nouveau tarif (<code>price_…</code>, menu ⋯ › Copier l&#8217;ID du tarif), le coller dans <b>Stripe Price Id</b> plus bas, puis <b>Enregistrer</b>.</li>
+                            <li>Dans la liste des forfaits, cliquer <b>⟳ Synchroniser avec Stripe</b> : le montant et la devise sont repris ici, sur la page d&#8217;accueil et sur la page de paiement.</li>
+                            <li>Facultatif : dans Stripe, archiver l&#8217;ancien tarif pour qu&#8217;il ne soit plus choisi par erreur.</li>
+                        </ol>
+                        <div class="pied">Les nouveaux abonnés paient le nouveau prix dès l&#8217;étape 3. Les abonnés déjà inscrits gardent l&#8217;ancien prix : pour les faire passer au nouveau, il faut modifier leur abonnement dans Stripe (Clients › abonnement › Mettre à jour l&#8217;abonnement).</div>
                     </div>
                 </div>
             </div>

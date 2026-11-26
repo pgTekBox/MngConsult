@@ -151,12 +151,14 @@ ol.etapes li{margin:6px 0}
 <table>
 <tr><th>Champ</th><th>Sens</th></tr>
 <tr><td>Code *, Nom *, Accroche (tagline), Description courte, Contenu mis en forme</td><td>Ce que voit le visiteur ; le contenu mis en forme est affiché sur la page d'accueil.</td></tr>
-<tr><td>Montant *, Devise (CAD, USD, EUR), Cycle de facturation (Mensuel, Annuel), Jours d'essai</td><td>Le prix et l'essai gratuit.</td></tr>
+<tr><td>Montant *, Devise (CAD, USD, EUR), Cycle de facturation (Mensuel, Annuel), Jours d'essai</td><td>Le prix et l'essai gratuit. Le montant et la devise viennent de Stripe : dès qu'un Stripe Price Id est enregistré, ils sont en lecture seule et repris par <kbd>⟳ Synchroniser avec Stripe</kbd>. Sans Price Id, ils se saisissent à la main, à titre provisoire.</td></tr>
 <tr><td>Ordre d'affichage, Texte du badge</td><td>Position et étiquette (« Populaire »…) sur la page d'accueil.</td></tr>
-<tr><td>Processeur, Stripe Product Id, Stripe Price Id</td><td>Le lien avec le produit et le prix créés chez Stripe : indispensable pour que le paiement de l'abonnement fonctionne.</td></tr>
+<tr><td>Processeur, Stripe Product Id, Stripe Price Id</td><td>Le lien avec le prix créé chez Stripe : le Price Id est indispensable pour que le paiement de l'abonnement fonctionne. Le Product Id est en lecture seule, rempli par la synchronisation.</td></tr>
 <tr><td>Utilisateurs max, Clients max, Documents max, Stockage max (Mo), Tranche d'employés</td><td>Les limites du forfait.</td></tr>
 <tr><td>Permissions / options</td><td>Les fonctions ouvertes par le forfait.</td></tr>
 </table>
+<p><kbd>⟳ Synchroniser avec Stripe</kbd> (liste des forfaits) relit dans Stripe le prix de chaque forfait qui a un Price Id et reporte ici le montant, la devise et le Product Id ; Stripe n'est jamais modifié. Un rapport indique, forfait par forfait : mis à jour, à jour, à vérifier (prix archivé, taxes non précisées) ou erreur (cycle différent, Price Id introuvable). Il faut la clé <code>Stripe.SecretKey</code> dans le Web.config de Sec60Admin.</p>
+<p><strong>Changer le prix d'un forfait.</strong> Un prix Stripe ne se modifie pas. Dans Stripe › Catalogue de produits, ouvrez le produit du forfait, <em>Ajouter un autre tarif</em> (nouveau montant, même devise, récurrent avec la même période, taxes en sus). Copiez son id <code>price_…</code> dans « Stripe Price Id » de la fiche, enregistrez, puis cliquez <kbd>⟳ Synchroniser avec Stripe</kbd>. Les nouveaux abonnés paient le nouveau prix ; les abonnés déjà inscrits gardent l'ancien tant que leur abonnement n'est pas mis à jour dans Stripe. Archivez ensuite l'ancien tarif dans Stripe.</p>
 
 <h2 id="landing">LandingPage</h2>
 <p><span class="chemin">wbfLanding.aspx</span>. Le contenu de la page d'accueil publique de 60secondes, section par section et langue par langue : choisissez « Page », « Section », « Langue » (Français, English, Español), modifiez le HTML, <kbd>Enregistrer</kbd>. Le rendu retombe sur le français quand une langue n'est pas remplie. La section « Forfaits » de la page se remplit d'elle-même depuis la page Forfaits.</p>

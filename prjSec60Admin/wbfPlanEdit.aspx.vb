@@ -56,6 +56,20 @@ Public Class wbfPlanEdit
         txtStripeProductId.Text = S(r("StripeProductId"))
         ViewState("StripeProductId") = S(r("StripeProductId"))
         txtStripePriceId.Text = S(r("StripePriceId"))
+        ' Le prix vient de Stripe : dès qu'un Price Id est enregistré, montant et devise
+        ' sont en lecture seule (repris par « Synchroniser avec Stripe ») ; on garde les
+        ' valeurs en base à l'enregistrement.
+        If S(r("StripePriceId")).Trim() <> "" Then
+            ViewState("PrixStripe") = True
+            ViewState("Amount") = If(r("Amount") Is DBNull.Value, 0D, CDec(r("Amount")))
+            ViewState("Currency") = S(r("Currency"))
+            txtAmount.ReadOnly = True
+            txtAmount.CssClass = "rtbLike ro"
+            txtAmount.TabIndex = -1
+            ddlCurrency.Enabled = False
+            litAmountRo.Visible = True
+            litCurrencyRo.Visible = True
+        End If
         txtEmployeeRange.Text = S(r("EmployeeRange"))
         txtBadgeText.Text = S(r("BadgeText"))
         cbRecommended.Checked = (Not r("IsRecommended") Is DBNull.Value) AndAlso CBool(r("IsRecommended"))
@@ -79,10 +93,18 @@ Public Class wbfPlanEdit
             Return
         End If
 
+        Dim prixStripe As Boolean = CBool(If(ViewState("PrixStripe"), False))
         Dim amount As Decimal
-        If Not TryParseDecimal(txtAmount.Text, amount) Then
-            ShowMsg("Le montant n'est pas valide.", isError:=True)
-            Return
+        Dim currency As String
+        If prixStripe Then
+            amount = CDec(ViewState("Amount"))
+            currency = CStr(ViewState("Currency"))
+        Else
+            If Not TryParseDecimal(txtAmount.Text, amount) Then
+                ShowMsg("Le montant n'est pas valide.", isError:=True)
+                Return
+            End If
+            currency = ddlCurrency.SelectedValue
         End If
 
         ' === Sauvegarde ===
@@ -94,7 +116,7 @@ Public Class wbfPlanEdit
             p.Add(New SqlParameter("@Description", Nz(txtDescription.Text)))
             p.Add(New SqlParameter("@DescriptionLong", Nz(reDescriptionLong.Content)))
             p.Add(New SqlParameter("@Amount", amount))
-            p.Add(New SqlParameter("@Currency", ddlCurrency.SelectedValue))
+            p.Add(New SqlParameter("@Currency", currency))
             p.Add(New SqlParameter("@BillingCycle", ddlBillingCycle.SelectedValue))
             p.Add(New SqlParameter("@ProcessorName", Nz(txtProcessorName.Text)))
             p.Add(New SqlParameter("@StripeProductId", Nz(CStr(If(ViewState("StripeProductId"), "")))))
