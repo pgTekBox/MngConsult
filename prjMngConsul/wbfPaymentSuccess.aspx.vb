@@ -169,7 +169,7 @@ Public Class wbfPaymentSuccess
         litTransactionId.Text = displayTxn
 
         ' Date du paiement (maintenant)
-        litDate.Text = Date.Now.ToString("dd MMMM yyyy", culture)
+        litDate.Text = clsAbonnementResume.DateLongue(Date.Now, CurrentLang)
 
         ' Carte : on n'a pas le brand/last4 sans appel supplementaire, on affiche generique
         ' (sera enrichi plus tard si besoin via session.PaymentIntent ou Customer.default_payment_method)
@@ -178,9 +178,9 @@ Public Class wbfPaymentSuccess
         ' Prochaine facturation
         If nextBilling <> Date.MinValue Then
             If isTrial AndAlso trialEnd <> Date.MinValue Then
-                litNextBilling.Text = trialEnd.ToString("dd MMMM yyyy", culture) & L("trialEndSuffix")
+                litNextBilling.Text = clsAbonnementResume.DateLongue(trialEnd, CurrentLang) & L("trialEndSuffix")
             Else
-                litNextBilling.Text = nextBilling.ToString("dd MMMM yyyy", culture)
+                litNextBilling.Text = clsAbonnementResume.DateLongue(nextBilling, CurrentLang)
             End If
         Else
             litNextBilling.Text = "—"
@@ -304,7 +304,7 @@ Public Class wbfPaymentSuccess
         litPlanName.Text = L("yourPlan")
         litPlanName2.Text = L("yourPlan")
         litTransactionId.Text = "—"
-        litDate.Text = Date.Now.ToString("dd MMMM yyyy", culture)
+        litDate.Text = clsAbonnementResume.DateLongue(Date.Now, CurrentLang)
         litCard.Text = L("cardValue")
         litNextBilling.Text = "—"
         litAmount.Text = "—"

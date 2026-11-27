@@ -90,7 +90,9 @@ Public NotInheritable Class clsAbonnementResume
 
     ''' <summary>Date au format de la langue (« 10 décembre 2026 », « December 10, 2026 »).</summary>
     Public Shared Function DateLongue(d As Date, lang As String) As String
-        Return d.ToString(If(lang = "en", "MMMM d, yyyy", "d MMMM yyyy"), Culture(lang))
+        ' en : « December 11, 2026 » ; es : « 11 de diciembre de 2026 » ; fr : « 11 décembre 2026 »
+        Dim motif As String = If(lang = "en", "MMMM d, yyyy", If(lang = "es", "d 'de' MMMM 'de' yyyy", "d MMMM yyyy"))
+        Return d.ToString(motif, Culture(lang))
     End Function
 
     ''' <summary>
