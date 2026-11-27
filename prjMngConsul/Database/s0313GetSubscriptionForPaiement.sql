@@ -10,6 +10,9 @@ GO
 -- actif ou en essai (Status IN 'active','trialing'). Sinon un utilisateur
 -- ayant déjà payé restait bloqué sur la page de paiement à cause d'une
 -- ancienne ligne 'Paiement' résiduelle.
+-- 2026-11-27 : 'trial' compte aussi — le webhook Stripe enregistre l'essai
+-- sous 'trial' (StripeWebhook.MapStatus : trialing → trial) ; sans cela, un
+-- abonné en essai était renvoyé vers le paiement à chaque connexion.
 -- =============================================================
 CREATE OR ALTER PROCEDURE dbo.s0313GetSubscriptionForPaiement
     @CompanyGUID UNIQUEIDENTIFIER
@@ -30,7 +33,7 @@ BEGIN
           SELECT 1
           FROM dbo.T020Subscription a
           WHERE a.CompanyGUID = @CompanyGUID
-            AND a.Status IN ('active', 'trialing')
+            AND a.Status IN ('active', 'trialing', 'trial')
             AND ISNULL(a.IsDeleted, 0) = 0
       );
 END
