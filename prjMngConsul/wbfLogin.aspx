@@ -184,6 +184,8 @@
         .lang-switch a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; color: var(--muted); text-decoration: none; letter-spacing: .03em; }
         .lang-switch a:hover { background: #f1f5f9; }
         .lang-switch a.on { background: var(--primary); color: #fff; }
+        /* En fenêtre, le bouton × de la page d'accueil (landing2-6.js) occupe le coin haut droit */
+        html.en-fenetre .lang-switch { right: auto; left: 16px; }
 
         .login-footer {
             padding: 16px;
