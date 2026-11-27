@@ -234,7 +234,12 @@ Public Class wbfRegister
         btnRegister.Text = L("createAccount")
         ' Avec le récapitulatif de l'abonnement, le champ courriel est plus bas : sans
         ' ce retrait, l'autofocus ferait défiler la page et cacherait le récapitulatif.
-        If PlanChoisi IsNot Nothing Then tbEmail.Attributes.Remove("autofocus")
+        If PlanChoisi IsNot Nothing Then
+            tbEmail.Attributes.Remove("autofocus")
+            ' Carte large : formulaire à gauche, récapitulatif à droite (moins haute).
+            pnlForm.CssClass = "card card-large"
+            pnlSuccess.CssClass = "card card-large"
+        End If
 
         If Not IsPostBack AndAlso UserId <> 0 Then
             Response.Redirect("~/Default.aspx")

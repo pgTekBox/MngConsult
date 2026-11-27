@@ -260,6 +260,27 @@
         .lang-switch a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; color: var(--slate-600); text-decoration: none; letter-spacing: .03em; }
         .lang-switch a:hover { background: var(--slate-100); }
         .lang-switch a.on { background: var(--blue-600); color: #fff; }
+
+        /* Forfait choisi : carte large, formulaire à gauche et récapitulatif à droite,
+           pour que la page tienne en hauteur. */
+        .card.card-large { max-width: 980px; }
+        .card-large > .lang-switch + .card-header { padding-top: 28px; }
+        .card-large .card-header { padding-bottom: 8px; }
+        .card-large .brand { margin-bottom: 10px; }
+        .card-large .reg-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+        .card-large .reg-recap { padding: 24px 32px 16px 0; }
+        .card-large .reg-recap .abo-recap { margin: 0; padding: 14px 18px; }
+        .card-large .reg-recap .abo-tab td { padding: 4px 0; }
+        .card-large .reg-recap .abo-inclus ul { columns: 2; column-gap: 16px; }
+        .card-large .reg-recap .abo-inclus li { break-inside: avoid; }
+        /* Vue « Vérifiez votre courriel » : message à gauche, récapitulatif à droite */
+        .card-large .success-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: center; padding: 40px 32px; }
+        .card-large .success-card .reg-recap { padding: 0; }
+        @media (max-width: 860px) {
+            .card-large .reg-cols, .card-large .success-card { grid-template-columns: minmax(0, 1fr); }
+            .card-large .reg-cols .reg-recap { order: -1; padding: 16px 32px 0; }
+            .card-large > .lang-switch + .card-header { padding-top: 60px; }   /* le logo sous le sélecteur */
+        }
     </style>
     <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
     <script src="js/appPopup.js?v=2026111704"></script>
@@ -281,9 +302,11 @@
                 </a>
                 <h1><%= L("heading") %></h1>
                 <p><%= SousTitre() %></p>
-                <%= PlanChoisiHtml() %>
             </div>
 
+            <%-- Avec un forfait choisi : formulaire à gauche, récapitulatif de l'abonnement
+                 à droite (une seule colonne, récapitulatif en premier, sur écran étroit). --%>
+            <div class="reg-cols">
             <div class="card-body">
 
                 <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="alert error">
@@ -333,6 +356,8 @@
                     Text="Créer mon compte" CssClass="btn-submit" />
 
             </div>
+            <%= If(PlanChoisi Is Nothing, "", "<aside class=""reg-recap"">" & PlanChoisiHtml() & "</aside>") %>
+            </div>
 
             <div class="card-footer">
                 <%= L("already") %>
@@ -345,6 +370,7 @@
         <!-- VUE 2 : Confirmation après inscription -->
         <asp:Panel ID="pnlSuccess" runat="server" Visible="false" CssClass="card">
             <div class="success-card">
+              <div class="success-main">
                 <div class="success-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -361,7 +387,6 @@
                 <p style="margin-top: 18px;">
                     <%= L("successBody") %>
                 </p>
-                <%= PlanChoisiHtml() %>
                 <p style="font-size: 12px; color: var(--slate-500);">
                     <%= L("resendPrompt") %>
                     <asp:LinkButton ID="lnkResend" runat="server" Style="color: var(--blue-600); font-weight: 700;" />.
@@ -371,8 +396,8 @@
                   <asp:Button ID="btnFerme" runat="server"  
       Text="Vous pouvez fermer cette page." CssClass="btn-submit" CausesValidation="false" />
    </p>
-
-
+              </div>
+              <%= If(PlanChoisi Is Nothing, "", "<aside class=""reg-recap"">" & PlanChoisiHtml() & "</aside>") %>
             </div>
         </asp:Panel>
 
