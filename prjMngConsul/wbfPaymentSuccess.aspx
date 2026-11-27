@@ -1,266 +1,127 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false"
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="wbfPaymentSuccess.aspx.vb" Inherits="MngConsul.wbfPaymentSuccess" %>
 
-<!DOCTYPE html>
-<html lang="<%= CurrentLang %>">
-<head runat="server">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Paiement réussi — 60Sec-AI</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        html, body { margin: 0; height: 100%; }
+<%-- Confirmation de paiement, dans le portail (en-tête, menu et sélecteur de langue
+     de l'ERP ; ce sélecteur garde le session_id de Stripe). Deux colonnes : à gauche
+     le reçu et l'accès au tableau de bord, à droite le détail de l'abonnement. --%>
 
-        :root {
-            --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-            --slate-50: #f8fafc;  --slate-200: #D5DDE8;
-            --slate-500: #44536E; --slate-600: #44536E;
-            --slate-700: #334155; --slate-800: #1e293b;
-            --blue-600: #1B4F9C;  --cyan-500: #06b6d4;
-            --green-500: #10b981; --green-600: #059669;
-        }
+<asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
+    <%= L("pageTitle") %>
+</asp:Content>
 
-        body {
-            font-family: var(--font);
-            color: var(--slate-800);
-            min-height: 100vh;
-            display: flex;
-            align-items: flex-start;   /* + .card margin auto : jamais coupée en haut */
-            justify-content: center;
-            padding: 20px;
-            background:
-                radial-gradient(900px 500px at 20% 10%, #ecfdf5 0%, transparent 60%),
-                radial-gradient(900px 500px at 80% 90%, #ecfeff 0%, transparent 60%),
-                #f6f7fb;
-        }
-
-        .card {
-            width: 100%;
-            max-width: 520px;
-            background: #fff;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(15,23,42,.15);
-            overflow: hidden;
-            text-align: center;
-            margin: auto 0;
-        }
-
-        .card-top {
-            padding: 48px 32px 32px 32px;
-        }
-
-        .check-icon {
-            width: 96px; height: 96px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--green-500), var(--green-600));
-            color: white;
-            display: inline-flex;
-            align-items: center; justify-content: center;
-            margin-bottom: 24px;
-            box-shadow: 0 16px 32px rgba(16,185,129,.35);
-            animation: pop .5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes pop {
-            0%   { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: 800;
-            margin: 0 0 8px 0;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: var(--slate-600);
-            font-size: 15px;
-            margin: 0 0 28px 0;
-            line-height: 1.5;
-        }
-
-        .receipt {
-            background: var(--slate-50);
-            border-radius: 14px;
-            padding: 18px 22px;
-            text-align: left;
-            margin-bottom: 24px;
-        }
-
-        .receipt h3 {
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--slate-500);
-            text-transform: uppercase;
-            letter-spacing: .1em;
-            margin: 0 0 12px 0;
-        }
-
-        .receipt-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            font-size: 14px;
-        }
-        .receipt-row .lbl { color: var(--slate-500); }
-        .receipt-row .val { font-weight: 700; color: var(--slate-800); }
-        .receipt-row.total {
-            border-top: 1px solid var(--slate-200);
-            padding-top: 12px;
-            margin-top: 4px;
-        }
-        .receipt-row.total .val {
-            background: linear-gradient(135deg, var(--blue-600), var(--cyan-500));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 18px;
-            font-weight: 900;
-        }
-
-        .actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 0 32px 36px 32px;
-        }
-
-        .btn {
-            padding: 13px 28px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 800;
-            font-family: var(--font);
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: transform .12s, box-shadow .12s;
-        }
-        .btn:hover { transform: translateY(-1px); }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--blue-600), var(--cyan-500));
-            color: white;
-        }
-        .btn-primary:hover { box-shadow: 0 12px 24px rgba(37,99,235,.3); }
-
-        .btn-secondary {
-            background: var(--slate-50);
-            color: var(--slate-700);
-            border: 1px solid var(--slate-200);
-        }
-        .btn-secondary:hover { background: #fff; box-shadow: 0 4px 12px rgba(15,23,42,.06); }
-
-        .footer-info {
-            background: var(--slate-50);
-            border-top: 1px solid var(--slate-200);
-            padding: 16px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--slate-500);
-        }
-        .card-top .abo-recap { margin: 0 0 24px; }
-
-        /* Sélecteur de langue FR · EN · ES (en haut à droite de la carte) */
-        .card { position: relative; }
-        .lang-switch { position: absolute; top: 16px; right: 16px; display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: #fff; border: 1px solid var(--slate-200); }
-        .lang-switch a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; color: var(--slate-600); text-decoration: none; letter-spacing: .03em; }
-        .lang-switch a:hover { background: var(--slate-50); }
-        .lang-switch a.on { background: var(--blue-600); color: #fff; }
-    </style>
+<asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
-    <script src="js/appPopup.js?v=2026111704"></script>
-</head>
-<body>
-    <form id="form1" runat="server">
+    <style>
+        .ps-wrap { padding: 24px; }
+        .ps-card {
+            max-width: 1100px; margin: 0 auto; background: #fff;
+            border: 1px solid #D5DDE8; border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(2,6,23,.06); overflow: hidden;
+        }
+        .ps-head { display: flex; align-items: center; gap: 18px; padding: 24px 28px; border-bottom: 1px solid #E6ECF3; }
+        .ps-check {
+            flex: 0 0 auto; width: 60px; height: 60px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center; color: #fff;
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 10px 22px rgba(16,185,129,.30);
+            animation: psPop .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes psPop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        .ps-head h1 { font-size: 24px; font-weight: 800; margin: 0 0 4px; color: #0E1F3D; }
+        .ps-head p { margin: 0; color: #44536E; font-size: 14px; line-height: 1.5; }
 
-        <div class="card">
+        .ps-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; padding: 24px 28px; align-items: start; }
 
-            <%-- Langue de la page : FR · EN · ES (garde le session_id de Stripe) --%>
-            <nav class="lang-switch" aria-label="<%= L("langLabel") %>"><%= LiensLangues() %></nav>
+        .ps-receipt { background: #f8fafc; border-radius: 14px; padding: 18px 22px; }
+        .ps-receipt h3 { font-size: 11px; font-weight: 800; color: #44536E; text-transform: uppercase; letter-spacing: .1em; margin: 0 0 10px; }
+        .ps-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 14px; border-top: 1px solid #E9EEF5; }
+        .ps-row:first-of-type { border-top: 0; }
+        .ps-row .lbl { color: #44536E; }
+        .ps-row .val { font-weight: 700; color: #1e293b; text-align: right; overflow-wrap: anywhere; }
+        .ps-row.total { border-top: 1px solid #D5DDE8; padding-top: 12px; margin-top: 4px; }
+        .ps-row.total .lbl { font-weight: 800; color: #1e293b; }
+        .ps-row.total .val { font-size: 18px; font-weight: 900; color: #1B4F9C; }
 
-            <div class="card-top">
+        .ps-note { margin: 14px 2px 0; font-size: 13px; color: #44536E; line-height: 1.5; }
+        .ps-actions { margin-top: 18px; }
+        .ps-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 12px;
+            font-size: 14px; font-weight: 800; text-decoration: none; color: #fff;
+            background: linear-gradient(135deg, #1B4F9C, #06b6d4);
+        }
+        .ps-btn:hover { box-shadow: 0 12px 24px rgba(37,99,235,.3); }
 
-                <div class="check-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+        .ps-cols .abo-recap { margin: 0; }
+        .ps-cols .abo-inclus ul { columns: 2; column-gap: 16px; }
+        .ps-cols .abo-inclus li { break-inside: avoid; }
+    </style>
+</asp:Content>
+
+<asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="ps-wrap">
+        <div class="ps-card">
+
+            <div class="ps-head">
+                <div class="ps-check">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
+                <div>
+                    <h1><%= L("title") %></h1>
+                    <p>
+                        <%= L("thanksLine") %>
+                        <%= L("subBefore") %><strong><asp:Literal ID="litPlanName" runat="server" /></strong><%= L("subAfter") %>
+                    </p>
+                </div>
+            </div>
 
-                <h1><%= L("title") %></h1>
-                <p class="subtitle">
-                    <%= L("thanksLine") %><br/>
-                    <%= L("subBefore") %><strong><asp:Literal ID="litPlanName" runat="server" /></strong><%= L("subAfter") %>
-                </p>
+            <div class="ps-cols">
 
-                <div class="receipt">
-                    <h3><%= L("receiptTitle") %></h3>
-
-                    <div class="receipt-row">
-                        <span class="lbl"><%= L("txnLabel") %></span>
-                        <span class="val" style="font-family: monospace; font-size: 12px;">
-                            <asp:Literal ID="litTransactionId" runat="server" />
-                        </span>
+                <%-- Gauche : reçu, courriel de Stripe, accès au tableau de bord --%>
+                <div>
+                    <div class="ps-receipt">
+                        <h3><%= L("receiptTitle") %></h3>
+                        <div class="ps-row">
+                            <span class="lbl"><%= L("txnLabel") %></span>
+                            <span class="val" style="font-family: monospace; font-size: 12px;"><asp:Literal ID="litTransactionId" runat="server" /></span>
+                        </div>
+                        <div class="ps-row">
+                            <span class="lbl"><%= L("dateLabel") %></span>
+                            <span class="val"><asp:Literal ID="litDate" runat="server" /></span>
+                        </div>
+                        <div class="ps-row">
+                            <span class="lbl"><%= L("cardLabel") %></span>
+                            <span class="val"><asp:Literal ID="litCard" runat="server" /></span>
+                        </div>
+                        <div class="ps-row">
+                            <span class="lbl"><%= L("planLabel") %></span>
+                            <span class="val"><asp:Literal ID="litPlanName2" runat="server" /></span>
+                        </div>
+                        <div class="ps-row">
+                            <span class="lbl"><%= L("nextBillingLabel") %></span>
+                            <span class="val"><asp:Literal ID="litNextBilling" runat="server" /></span>
+                        </div>
+                        <div class="ps-row total">
+                            <span class="lbl"><%= L("amountLabel") %></span>
+                            <span class="val"><asp:Literal ID="litAmount" runat="server" /></span>
+                        </div>
                     </div>
 
-                    <div class="receipt-row">
-                        <span class="lbl"><%= L("dateLabel") %></span>
-                        <span class="val">
-                            <asp:Literal ID="litDate" runat="server" />
-                        </span>
-                    </div>
+                    <p class="ps-note"><%= TexteBasPage() %></p>
 
-                    <div class="receipt-row">
-                        <span class="lbl"><%= L("cardLabel") %></span>
-                        <span class="val">
-                            <asp:Literal ID="litCard" runat="server" />
-                        </span>
-                    </div>
-
-                    <div class="receipt-row">
-                        <span class="lbl"><%= L("planLabel") %></span>
-                        <span class="val">
-                            <asp:Literal ID="litPlanName2" runat="server" />
-                        </span>
-                    </div>
-
-                    <div class="receipt-row">
-                        <span class="lbl"><%= L("nextBillingLabel") %></span>
-                        <span class="val">
-                            <asp:Literal ID="litNextBilling" runat="server" />
-                        </span>
-                    </div>
-
-                    <div class="receipt-row total">
-                        <span class="lbl" style="font-weight: 800; color: var(--slate-800);"><%= L("amountLabel") %></span>
-                        <span class="val">
-                            <asp:Literal ID="litAmount" runat="server" />
-                        </span>
+                    <div class="ps-actions">
+                        <asp:HyperLink ID="lnkDashboard" runat="server" NavigateUrl="~/Default.aspx" CssClass="ps-btn" />
                     </div>
                 </div>
 
-                <%-- Détail de l'abonnement souscrit (prix, taxes, essai, fonctions incluses) --%>
-                <asp:Literal ID="litAbonnement" runat="server" />
+                <%-- Droite : détail de l'abonnement souscrit (prix, taxes, essai, fonctions incluses) --%>
+                <div>
+                    <asp:Literal ID="litAbonnement" runat="server" />
+                </div>
 
             </div>
-
-            <div class="actions">
-                <asp:HyperLink ID="lnkDashboard" runat="server"
-                    NavigateUrl="~/Default.aspx" CssClass="btn btn-primary" />
-            </div>
-
-            <div class="footer-info">
-                <%= TexteBasPage() %>
-            </div>
-
         </div>
-
-    </form>
-</body>
-</html>
+    </div>
+</asp:Content>
