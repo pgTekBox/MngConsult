@@ -851,6 +851,9 @@
     <div class="members">
       <form class="form" id="signup" novalidate aria-labelledby="h-signup" aria-describedby="signup-notice">
         <h3 id="h-signup" style="font-size:21px">Réserver ma place</h3>
+        <%-- Dans la fenêtre : les quatre profils sur toute la largeur, puis deux colonnes : identité,
+             secteur, renseignements du profil et « Champ obligatoire » à gauche ; langue, forfait estimé,
+             consentements, envoi et avis de collecte à droite (css/landing2.css, .sg-cols) --%>
         <fieldset class="pick">
           <legend>Je suis</legend>
           <div class="pick-g">
@@ -860,6 +863,7 @@
             <label class="pk pk-firm"><input type="radio" name="prof" value="cab"><span><b>Cabinet comptable</b><small>certification 60secondes</small></span></label>
           </div>
         </fieldset>
+        <div class="sg-cols"><div class="sg-col">
 
         <div class="row2">
           <div class="field"><label for="s-name">Nom et prénom</label><input id="s-name" autocomplete="name" placeholder="Marie Tremblay"></div>
@@ -901,6 +905,8 @@
           </div>
         </div>
 
+        <p class="fine" style="margin-top:8px">* Champ obligatoire. Aucune réservation ne crée de contrat ni ne fixe de prix ; aucun paiement n'est demandé<sup class="n"><a href="#note-3" aria-label="Note 3">3</a></sup>.</p>
+        </div><div class="sg-col">
         <div class="row2">
           <div class="field"><label for="s-lang">Langue de travail</label><select id="s-lang"><option>Français</option><option lang="en">English</option><option lang="es">Español</option></select></div>
           <div class="field est"><span class="lbl">Forfait estimé<sup class="n"><a href="#note-2" aria-label="Note 2">2</a></sup></span><output id="s-est" class="num" for="s-c4-n">79,99 $ / mois</output></div>
@@ -912,7 +918,7 @@
         <button class="btn btn-gold" type="submit" id="s-submit">Réserver ma place</button>
         <p class="msg" id="signup-msg" role="status" hidden></p>
         <p class="notice" id="signup-notice"><strong>Avis de collecte.</strong> Responsable : 9567-0048 Québec inc. Fins : traiter votre demande et, si vous l'acceptez, vous informer du lancement. Seuls le courriel et le premier consentement sont obligatoires. Ces renseignements sont conservés au Québec, ne sont ni vendus ni communiqués à des tiers, et sont détruits au plus tard 24 mois après le lancement ou dès le retrait de votre consentement. Accès, correction ou retrait : vieprivee@60secondes.ca. <a href="#doc-confidentialite">Politique de confidentialité</a>.</p>
-        <p class="fine" style="margin-top:8px">* Champ obligatoire. Aucune réservation ne crée de contrat ni ne fixe de prix ; aucun paiement n'est demandé<sup class="n"><a href="#note-3" aria-label="Note 3">3</a></sup>.</p>
+        </div></div>
       </form>
     </div>
 

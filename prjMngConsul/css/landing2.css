@@ -1759,7 +1759,17 @@ button.hl{font:inherit;text-align:left;cursor:pointer;width:100%;box-sizing:bord
 @media (max-width:560px){.hero .pv2{grid-template-columns:minmax(0,1fr)}.pv2-i{display:none}}
 
 /* Fenêtre « Le grand départ » */
-.gd-dlg.wide{width:min(860px,calc(100vw - 24px))}
+.gd-dlg.wide{width:min(1140px,calc(100vw - 24px))}
+/* Réservation en fenêtre : deux colonnes (profil et identité, puis langue, consentements et envoi) */
+.sg-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 28px;align-items:start}
+.gd-dlg .pick-g{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:820px){.sg-cols{grid-template-columns:minmax(0,1fr)}.gd-dlg .pick-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gd-step2{gap:8px;padding-top:14px;padding-bottom:12px}
+.gd-step2 .form{padding-top:12px;padding-bottom:10px}
+.gd-dlg .form .field{margin-top:10px}
+.gd-dlg fieldset.pick{margin-top:2px}
+/* Le titre du formulaire répète l'en-tête de la fenêtre : masqué à l'écran, gardé pour les lecteurs d'écran */
+.gd-dlg #h-signup{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .gd-p2{font-size:15px}
 .gd-form{background:var(--surface);color:var(--ink);border-radius:16px;padding:4px}
 .gd-form .form{margin:0;box-shadow:none;border:0}
