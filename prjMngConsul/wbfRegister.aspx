@@ -2,7 +2,7 @@
     CodeBehind="wbfRegister.aspx.vb" Inherits="MngConsul.wbfRegister" %>
 
 <!DOCTYPE html>
-<html lang="<%= CurrentLang %>">
+<html lang="<%= CurrentLang %>" class="<%= If(EnFenetre, "en-fenetre", "") %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -280,7 +280,15 @@
             .card-large .reg-cols, .card-large .success-card { grid-template-columns: minmax(0, 1fr); }
             .card-large .reg-cols .reg-recap { order: -1; padding: 16px 32px 0; }
             .card-large > .lang-switch + .card-header { padding-top: 60px; }   /* le logo sous le sélecteur */
+            .card-large .reg-recap .abo-inclus ul { columns: 1; }
         }
+        /* En fenêtre (cadre par-dessus la page d'accueil, ?popup=1) : seule la carte, sans fond
+           ni ombre ; le cadre porte l'arrondi et l'ombre. Le × de la page d'accueil occupe le
+           coin haut droit : le sélecteur de langue passe à gauche. */
+        html.en-fenetre, html.en-fenetre body { height: auto; min-height: 0; background: #fff; }
+        html.en-fenetre body { display: block; padding: 0; }
+        html.en-fenetre .card { max-width: none; border-radius: 0; box-shadow: none; margin: 0; }
+        html.en-fenetre .lang-switch { right: auto; left: 16px; }
     </style>
     <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
     <script src="js/appPopup.js?v=2026111704"></script>
@@ -296,7 +304,7 @@
             <nav class="lang-switch" aria-label="<%= L("langLabel") %>"><%= LiensLangues() %></nav>
 
             <div class="card-header">
-                <a class="brand" href="LandingPage.aspx?lang=<%= CurrentLang %>">
+                <a class="brand" href="LandingPage.aspx?lang=<%= CurrentLang %>" target="<%= If(EnFenetre, "_top", "_self") %>">
                     <img src="Images/logo.svg" alt="60Sec-AI" />
                     <span class="brand-name">60Sec-AI</span>
                 </a>

@@ -22,6 +22,8 @@ Public Class wbfRegister
         lnkResend.Text = L("resendLink")
         lnkLogin.Text = L("signin")
         lnkLogin.NavigateUrl = "~/Default.aspx?lang=" & CurrentLang
+        ' En fenêtre, « Se connecter » remplace la page entière, pas seulement le cadre.
+        If EnFenetre Then lnkLogin.Target = "_top"
     End Sub
 
     ''' <summary>Traductions de la page d'inscription (fr/en/es).</summary>
@@ -167,6 +169,7 @@ Public Class wbfRegister
     Protected Function LiensLangues() As String
         Dim ab As String = If(Request.QueryString("ab"), "").Trim()
         Dim suite As String = If(ab.Length > 0, "&ab=" & Uri.EscapeDataString(ab), "")
+        If EnFenetre Then suite &= "&popup=1"
         Dim sb As New System.Text.StringBuilder()
         For Each lg As String In New String() {"fr", "en", "es"}
             sb.Append("<a href=""wbfRegister.aspx?lang=").Append(lg).Append(Server.HtmlEncode(suite)).Append("""")
@@ -474,6 +477,27 @@ Public Class wbfRegister
         Session.Clear()
         Session.Abandon()
 
+        If EnFenetre Then
+            ' En fenêtre : on ferme la fenêtre de la page d'accueil (landing2-6.js), qui reste affichée.
+            Response.Clear()
+            Response.ContentType = "text/html"
+            Response.Write("<!DOCTYPE html><html><head><meta charset=""utf-8"" /></head><body><script>" &
+                           "try{ if(window.parent && window.parent.fermerInscription60){ window.parent.fermerInscription60(); } " &
+                           "else { window.top.location.replace('LandingPage.aspx'); } }catch(e){ window.top.location.replace('LandingPage.aspx'); }" &
+                           "</script></body></html>")
+            Context.ApplicationInstance.CompleteRequest()
+            Return
+        End If
         Response.Redirect("~/LandingPage.aspx")
     End Sub
+
+    ''' <summary>
+    ''' Vrai quand la page s'ouvre en fenêtre par-dessus la page d'accueil
+    ''' (landing2-6.js, ouvrirInscription60 : wbfRegister.aspx?popup=1&amp;ab=…).
+    ''' </summary>
+    Protected ReadOnly Property EnFenetre As Boolean
+        Get
+            Return Request.QueryString("popup") = "1"
+        End Get
+    End Property
 End Class

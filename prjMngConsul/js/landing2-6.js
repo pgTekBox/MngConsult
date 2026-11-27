@@ -822,7 +822,8 @@ function ouvrirConnexion60(lang, email){
     document.removeEventListener('keydown',touche); window.removeEventListener('resize',ajuster);
   }
   function touche(e){ if(e.key==='Escape') fermer(); }
-  cadre.addEventListener('load',function(){ ajuster(); try{cadre.contentWindow.focus();}catch(x){} });
+  // Échap ferme aussi quand le curseur est dans le cadre (les touches y vont, pas à la page)
+  cadre.addEventListener('load',function(){ ajuster(); try{cadre.contentWindow.document.addEventListener('keydown',touche); cadre.contentWindow.focus();}catch(x){} });
   btn.addEventListener('click',fermer);
   fond.addEventListener('click',function(e){ if(e.target===fond) fermer(); });
   document.addEventListener('keydown',touche);
@@ -846,5 +847,59 @@ document.addEventListener('click',function(e){
   var l=(document.documentElement.lang||'fr').slice(0,2).toLowerCase();
   if(['fr','en','es'].indexOf(l)<0) l='fr';
   e.preventDefault();
-  location.href='wbfRegister.aspx?ab='+encodeURIComponent(CODE[p])+'&lang='+l;
+  ouvrirInscription60(l, CODE[p]);
 });
+
+/* Fenêtre d'inscription par-dessus la page d'accueil : un cadre vers
+   wbfRegister.aspx?popup=1&ab=<forfait>, fermable (×, Échap ou clic sur le fond).
+   Le cadre prend la hauteur de la carte (plafonnée à l'écran ; au-delà, il défile)
+   et se réajuste à chaque rechargement (erreur, « Vérifiez votre courriel », langue).
+   wbfRegister appelle window.parent.fermerInscription60() pour se fermer. */
+function ouvrirInscription60(lang, code){
+  var ancien=document.getElementById('ix60'); if(ancien) ancien.parentNode.removeChild(ancien);
+  if(!document.getElementById('ix60-style')){
+    var st=document.createElement('style'); st.id='ix60-style';
+    st.textContent=
+      '#ix60{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;'+
+      'background:rgba(14,31,61,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}'+
+      '#ix60 .ix60-boite{position:relative;width:980px;max-width:100%}'+
+      '#ix60 iframe{display:block;width:100%;height:600px;max-height:calc(100vh - 32px);border:0;border-radius:24px;background:#fff;box-shadow:0 20px 50px rgba(15,23,42,.30)}'+
+      '#ix60 .ix60-fermer{position:absolute;top:10px;right:10px;z-index:1;width:36px;height:36px;border:0;border-radius:999px;'+
+      'background:rgba(14,31,61,.06);color:#0E1F3D;font-size:22px;line-height:36px;cursor:pointer}'+
+      '#ix60 .ix60-fermer:hover{background:rgba(14,31,61,.12)}';
+    document.head.appendChild(st);
+  }
+  var url='wbfRegister.aspx?popup=1&ab='+encodeURIComponent(code||'')+'&lang='+encodeURIComponent(lang||'fr');
+  var libelle=(lang==='en')?'Create my account':(lang==='es')?'Crear mi cuenta':'Créer mon compte';
+  var fermerTxt=(lang==='en')?'Close':(lang==='es')?'Cerrar':'Fermer';
+
+  var fond=document.createElement('div'); fond.id='ix60';
+  fond.setAttribute('role','dialog'); fond.setAttribute('aria-modal','true'); fond.setAttribute('aria-label',libelle);
+  var boite=document.createElement('div'); boite.className='ix60-boite';
+  var btn=document.createElement('button'); btn.type='button'; btn.className='ix60-fermer';
+  btn.setAttribute('aria-label',fermerTxt); btn.title=fermerTxt; btn.textContent='×';
+  var cadre=document.createElement('iframe'); cadre.title=libelle; cadre.src=url;
+  boite.appendChild(btn); boite.appendChild(cadre); fond.appendChild(boite);
+  document.body.appendChild(fond);
+
+  var debordement=document.documentElement.style.overflow;
+  document.documentElement.style.overflow='hidden';
+  function ajuster(){
+    try{ var d=cadre.contentWindow.document, c=d.querySelector('.card');
+         cadre.style.height=(c?c.offsetHeight:d.documentElement.scrollHeight)+'px'; }catch(x){}
+  }
+  function fermer(){
+    if(fond.parentNode) fond.parentNode.removeChild(fond);
+    document.documentElement.style.overflow=debordement;
+    document.removeEventListener('keydown',touche); window.removeEventListener('resize',ajuster);
+    if(window.fermerInscription60===fermer) window.fermerInscription60=null;
+  }
+  function touche(e){ if(e.key==='Escape') fermer(); }
+  window.fermerInscription60=fermer;
+  // Échap ferme aussi quand le curseur est dans le cadre (les touches y vont, pas à la page)
+  cadre.addEventListener('load',function(){ ajuster(); try{cadre.contentWindow.document.addEventListener('keydown',touche); cadre.contentWindow.focus();}catch(x){} });
+  btn.addEventListener('click',fermer);
+  fond.addEventListener('click',function(e){ if(e.target===fond) fermer(); });
+  document.addEventListener('keydown',touche);
+  window.addEventListener('resize',ajuster);
+}
