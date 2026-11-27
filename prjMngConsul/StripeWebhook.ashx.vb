@@ -241,6 +241,65 @@ Public Class StripeWebhook
     End Sub
 
     ''' <summary>
+    ''' Le reçu du paiement, en HTML pour courriel (tableau, styles en ligne, valeurs
+    ''' encodées) : n° de facture Stripe (sinon n° d'abonnement), date, moyen de
+    ''' paiement, forfait, sous-total, taxes, total payé (« essai gratuit » à 0 $),
+    ''' prochaine facturation et liens vers la facture Stripe (en ligne et PDF).
+    ''' Les montants viennent de la session Stripe Checkout (cents → dollars).
+    ''' </summary>
+    Private Function RecuHtml(session As Checkout.Session, lang As String, T As Func(Of String, String, String, String),
+                              nomForfait As String, finEssai As Date, prochaine As Date, facture As Invoice) As String
+        Dim E = Function(s As String) HttpUtility.HtmlEncode(If(s, ""))
+        Dim argent = Function(cents As Long?) clsAbonnementResume.Argent(If(cents.HasValue, CDec(cents.Value) / 100D, 0D), lang)
+        Dim devise As String = If(session.Currency, "cad").ToUpperInvariant()
+        Dim taxes As Long = 0
+        If session.TotalDetails IsNot Nothing Then taxes = session.TotalDetails.AmountTax
+        Dim total As Long = If(session.AmountTotal.HasValue, session.AmountTotal.Value, 0)
+        Dim numero As String = If(facture IsNot Nothing AndAlso Not String.IsNullOrEmpty(facture.Number), facture.Number, If(session.SubscriptionId, ""))
+
+        Dim sb As New StringBuilder()
+        Dim ligne = Sub(libelle As String, valeur As String, fort As Boolean)
+                        sb.Append("<tr><td style=""padding:7px 0;border-top:1px solid #E3E8F0;font:14px Arial,Helvetica,sans-serif;color:#5B6B82;"">").Append(E(libelle)).Append("</td>")
+                        sb.Append("<td align=""right"" style=""padding:7px 0;border-top:1px solid #E3E8F0;font:").Append(If(fort, "800 16px", "700 14px")).Append(" Arial,Helvetica,sans-serif;color:#0E1F3D;"">").Append(E(valeur)).Append("</td></tr>")
+                    End Sub
+
+        sb.Append("<table role=""presentation"" width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""margin:6px 0 16px;background:#F6F8FC;border-radius:14px;"">")
+        sb.Append("<tr><td style=""padding:16px 20px 10px;"">")
+        sb.Append("<div style=""font:800 11px Arial,Helvetica,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5B6B82;margin-bottom:6px;"">")
+        sb.Append(E(T("Reçu de paiement", "Payment receipt", "Recibo de pago"))).Append("</div>")
+        sb.Append("<table role=""presentation"" width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"">")
+        If numero <> "" Then ligne(T("N° de facture", "Invoice no.", "N.º de factura"), numero, False)
+        ligne(T("Date", "Date", "Fecha"), clsAbonnementResume.DateLongue(session.Created.ToLocalTime(), lang), False)
+        ligne(T("Paiement", "Payment", "Pago"), T("Carte de crédit, par Stripe", "Credit card, through Stripe", "Tarjeta de crédito, mediante Stripe"), False)
+        ligne(T("Forfait", "Plan", "Plan"), nomForfait, False)
+        If session.AmountSubtotal.HasValue Then ligne(T("Sous-total", "Subtotal", "Subtotal"), argent(session.AmountSubtotal), False)
+        ligne(T("Taxes", "Taxes", "Impuestos"), argent(taxes), False)
+        Dim totalTxt As String = argent(total) & " " & devise
+        If total = 0 AndAlso finEssai <> Date.MinValue Then totalTxt &= " " & T("(essai gratuit)", "(free trial)", "(prueba gratuita)")
+        ligne(T("Total payé", "Total paid", "Total pagado"), totalTxt, True)
+        If prochaine <> Date.MinValue Then
+            ligne(T("Prochaine facturation", "Next billing", "Próxima facturación"), clsAbonnementResume.DateLongue(prochaine, lang), False)
+        End If
+        sb.Append("</table>")
+
+        If facture IsNot Nothing AndAlso (Not String.IsNullOrEmpty(facture.HostedInvoiceUrl) OrElse Not String.IsNullOrEmpty(facture.InvoicePdf)) Then
+            sb.Append("<div style=""padding:10px 0 4px;font:13px Arial,Helvetica,sans-serif;"">")
+            If Not String.IsNullOrEmpty(facture.HostedInvoiceUrl) Then
+                sb.Append("<a href=""").Append(E(facture.HostedInvoiceUrl)).Append(""" target=""_blank"" style=""color:#1B4F9C;font-weight:700;"">")
+                sb.Append(E(T("Voir la facture", "View the invoice", "Ver la factura"))).Append("</a>")
+            End If
+            If Not String.IsNullOrEmpty(facture.InvoicePdf) Then
+                If Not String.IsNullOrEmpty(facture.HostedInvoiceUrl) Then sb.Append(" &nbsp;·&nbsp; ")
+                sb.Append("<a href=""").Append(E(facture.InvoicePdf)).Append(""" target=""_blank"" style=""color:#1B4F9C;font-weight:700;"">")
+                sb.Append(E(T("Télécharger le PDF", "Download the PDF", "Descargar el PDF"))).Append("</a>")
+            End If
+            sb.Append("</div>")
+        End If
+        sb.Append("</td></tr></table>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
     ''' Courriel de confirmation à l'usager après le paiement de l'abonnement dans
     ''' Stripe Checkout : forfait, prix, renouvellement, essai et premier prélèvement,
     ''' lien vers le tableau de bord. Langue = celle de la page Checkout (session.Locale :
@@ -274,9 +333,20 @@ Public Class StripeWebhook
 
         ' Essai : lu dans l'abonnement Stripe (statut trialing + fin d'essai)
         Dim finEssai As Date = Date.MinValue
+        Dim prochaine As Date = Date.MinValue
         Try
             Dim abo As Subscription = clsStripe.GetSubscription(session.SubscriptionId)
-            If abo IsNot Nothing AndAlso abo.Status = "trialing" AndAlso abo.TrialEnd.HasValue Then finEssai = abo.TrialEnd.Value.ToLocalTime()
+            If abo IsNot Nothing Then
+                If abo.Status = "trialing" AndAlso abo.TrialEnd.HasValue Then finEssai = abo.TrialEnd.Value.ToLocalTime()
+                prochaine = If(finEssai <> Date.MinValue, finEssai, clsStripe.GetSubscriptionPeriodEnd(abo))
+            End If
+        Catch
+        End Try
+
+        ' Facture Stripe du paiement (numéro + lien de la facture en ligne), si Stripe en a créé une
+        Dim facture As Invoice = Nothing
+        Try
+            facture = clsStripe.GetInvoice(session.InvoiceId)
         Catch
         End Try
 
@@ -301,9 +371,11 @@ Public Class StripeWebhook
                               "Your first payment has been received.",
                               "Hemos recibido su primer pago."))
         End If
-        paragraphes.Add(T("Vous recevrez votre reçu et vos factures par courriel, de la part de Stripe, à chaque prélèvement.",
-                          "You will receive your receipt and invoices by email from Stripe with each charge.",
-                          "Recibirá su recibo y sus facturas por correo, de parte de Stripe, en cada cargo."))
+        paragraphes.Add(T("Votre reçu est ci-dessous. Les prochains reçus et factures vous seront envoyés par Stripe à chaque prélèvement.",
+                          "Your receipt is below. Stripe will email the next receipts and invoices with each charge.",
+                          "Su recibo está a continuación. Stripe le enviará los próximos recibos y facturas en cada cargo."))
+
+        Dim recu As String = RecuHtml(session, lang, T, nomForfait, finEssai, prochaine, facture)
 
         Dim req As HttpRequest = HttpContext.Current.Request
         Dim lien As String = req.Url.GetLeftPart(UriPartial.Authority) & VirtualPathUtility.ToAbsolute("~/Default.aspx") & "?lang=" & lang
@@ -312,7 +384,7 @@ Public Class StripeWebhook
         Dim titre As String = T("Votre abonnement est activé", "Your subscription is active", "Su suscripción está activada")
         Dim html As String = clsCourrielModele.Construire(lang, String.Format(titre & " — {0}", nomForfait), titre, salut, paragraphes,
                                                           T("Accéder à mon tableau de bord", "Go to my dashboard", "Ir a mi panel"), lien,
-                                                          "", "")
+                                                          "", "", recu)
         Dim sujet As String = T("Votre abonnement 60Sec-AI est activé", "Your 60Sec-AI subscription is active", "Su suscripción a 60Sec-AI está activada")
 
         Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionStringMail"))

@@ -405,6 +405,15 @@ Public Class clsStripe
     End Function
 
     ''' <summary>
+    ''' Lit une facture Stripe (in_…) : numéro, lien de la facture en ligne et PDF. Nothing si l'id est vide.
+    ''' </summary>
+    Public Shared Function GetInvoice(invoiceId As String) As Invoice
+        If String.IsNullOrEmpty(invoiceId) Then Return Nothing
+        EnsureInitialized()
+        Return New InvoiceService().Get(invoiceId)
+    End Function
+
+    ''' <summary>
     ''' Lit un abonnement Stripe (sub_…), pour son statut et sa fin d'essai. Nothing si l'id est vide.
     ''' </summary>
     Public Shared Function GetSubscription(subscriptionId As String) As Subscription

@@ -29,9 +29,12 @@ Public NotInheritable Class clsCourrielModele
     ''' <param name="lien">adresse du bouton</param>
     ''' <param name="encadre">texte de l'encadré « Bon à savoir » (sécurité, validité) ; vide = aucun</param>
     ''' <param name="mention">dernière ligne grise (ex. « Si vous n'avez rien demandé… ») ; vide = aucune</param>
+    ''' <param name="blocHtml">bloc HTML DÉJÀ ENCODÉ par l'appelant (ex. le reçu de paiement), inséré
+    ''' après les paragraphes et avant le bouton ; vide = aucun</param>
     Public Shared Function Construire(lang As String, apercu As String, titre As String, salut As String,
                                       paragraphes As IEnumerable(Of String), bouton As String, lien As String,
-                                      encadre As String, mention As String) As String
+                                      encadre As String, mention As String,
+                                      Optional blocHtml As String = "") As String
         Dim l As String = If(lang, "fr").ToLowerInvariant()
         Dim T = Function(fr As String, en As String, es As String) If(l = "en", en, If(l = "es", es, fr))
         Dim lienE As String = E(lien)
@@ -75,6 +78,7 @@ Public NotInheritable Class clsCourrielModele
                 End If
             Next
         End If
+        If Not String.IsNullOrEmpty(blocHtml) Then sb.Append(blocHtml)
         sb.Append("</td></tr>")
 
         ' Le bouton (tableau : rendu fiable dans Outlook)
