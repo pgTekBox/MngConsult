@@ -841,14 +841,14 @@
 <section class="s" id="membres" aria-labelledby="h-mem">
   <div class="wrap">
     <div class="s-head">
-      <p class="eyebrow">Inscription et connexion</p>
+      <p class="eyebrow">Accès anticipé</p>
       <h2 id="h-mem">Votre espace, selon votre profil.</h2>
-      <p class="lead">Réservez votre accès anticipé ; nous ouvrons les dossiers par vagues à compter du lancement<sup class="n"><a href="#note-3" aria-label="Note 3">3</a></sup>. Déjà inscrit ? La connexion s'ouvrira au même moment.</p>
+      <p class="lead">Réservez votre accès anticipé ; nous ouvrons les dossiers par vagues à compter du lancement<sup class="n"><a href="#note-3" aria-label="Note 3">3</a></sup>.</p>
     </div>
 
     <div class="members">
       <form class="form" id="signup" novalidate aria-labelledby="h-signup" aria-describedby="signup-notice">
-        <h3 id="h-signup" style="font-size:21px">Créer mon compte</h3>
+        <h3 id="h-signup" style="font-size:21px">Réserver ma place</h3>
         <fieldset class="pick">
           <legend>Je suis</legend>
           <div class="pick-g">
@@ -912,33 +912,6 @@
         <p class="notice" id="signup-notice"><strong>Avis de collecte.</strong> Responsable : 9567-0048 Québec inc. Fins : traiter votre demande et, si vous l'acceptez, vous informer du lancement. Seuls le courriel et le premier consentement sont obligatoires. Ces renseignements sont conservés au Québec, ne sont ni vendus ni communiqués à des tiers, et sont détruits au plus tard 24 mois après le lancement ou dès le retrait de votre consentement. Accès, correction ou retrait : vieprivee@60secondes.ca. <a href="#doc-confidentialite">Politique de confidentialité</a>.</p>
         <p class="fine" style="margin-top:8px">* Champ obligatoire. Aucune réservation ne crée de contrat ni ne fixe de prix ; aucun paiement n'est demandé<sup class="n"><a href="#note-3" aria-label="Note 3">3</a></sup>.</p>
       </form>
-
-      <aside class="portal" id="connexion" aria-labelledby="h-login">
-        <div class="ph">
-          <h3 id="h-login">Se connecter</h3>
-          <span class="chip gold">Au lancement</span>
-        </div>
-        <div class="seg roles" role="group" aria-label="Type d'accès">
-          <button type="button" data-role="ent" aria-pressed="true">Entreprise</button>
-          <button type="button" data-role="cab" aria-pressed="false">Cabinet</button>
-          <button type="button" data-role="emp" aria-pressed="false">Employé</button>
-        </div>
-        <p class="sub" id="role-desc">Travailleurs autonomes et sociétés : votre dossier, vos questions Cortex et vos paiements à approuver.</p>
-        <form id="login">
-          <fieldset class="locked" disabled>
-            <legend class="fine" style="margin:0">Connexion — disponible au lancement</legend>
-            <div class="field"><label for="f-email">Courriel</label><input id="f-email" type="email" autocomplete="off" placeholder="vous@exemple.ca"></div>
-            <div class="field"><label for="f-pass">Mot de passe</label><input id="f-pass" type="password" autocomplete="off" placeholder="••••••••"></div>
-            <button class="btn btn-primary" type="submit">Se connecter</button>
-          </fieldset>
-        </form>
-        <p class="soon" role="note">La connexion n'est pas encore active : aucun identifiant n'est demandé ni recueilli ici. À l'ouverture, chaque personne inscrite reçoit par courriel son lien d'activation et active la double authentification.</p>
-        <ul class="roles-list">
-          <li><b>Entreprise</b> — le titulaire du compte : il invite son comptable et ses employés, déclenche ses paiements ou autorise son cabinet à le faire<sup class="n"><a href="#note-4" aria-label="Note 4">4</a></sup>.</li>
-          <li><b>Cabinet</b> — accède aux dossiers des clients qui l'ont invité, dans les limites des permissions accordées.</li>
-          <li><b>Employé</b> — ne s'inscrit pas lui-même : il reçoit une invitation de son employeur pour l'application mobile.</li>
-        </ul>
-      </aside>
     </div>
 
     <div class="faq" style="margin-top:40px">
