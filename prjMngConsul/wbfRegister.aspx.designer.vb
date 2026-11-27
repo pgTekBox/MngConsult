@@ -165,4 +165,9 @@ Partial Public Class wbfRegister
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnFerme As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''tbCompany control.
+    '''</summary>
+    Protected WithEvents tbCompany As Global.System.Web.UI.WebControls.TextBox
 End Class

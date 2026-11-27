@@ -332,11 +332,18 @@
                     </div>
                 </div>
 
-                <div class="field">
-                    <label for="<%= tbEmail.ClientID %>"><%= L("email") %></label>
-                    <asp:TextBox ID="tbEmail" runat="server" TextMode="Email"
-                        autofocus="autofocus" />
+                <div class="field-row">
+                    <div class="field">
+                        <label for="<%= tbCompany.ClientID %>"><%= L("company") %></label>
+                        <asp:TextBox ID="tbCompany" runat="server" MaxLength="100" autocomplete="organization" />
+                    </div>
+                    <div class="field">
+                        <label for="<%= tbEmail.ClientID %>"><%= L("email") %></label>
+                        <asp:TextBox ID="tbEmail" runat="server" TextMode="Email"
+                            autofocus="autofocus" />
+                    </div>
                 </div>
+                <div class="strength-text" style="color: var(--slate-500); margin: -8px 0 12px;"><%= L("companyHint") %></div>
 
                 <div class="field">
                     <label for="<%= tbPassword.ClientID %>"><%= L("password") %></label>

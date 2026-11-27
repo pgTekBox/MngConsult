@@ -16,14 +16,21 @@ Public Class wbfRegister
         tbFirstName.Attributes("placeholder") = L("phFirstName")
         tbLastName.Attributes("placeholder") = L("phLastName")
         tbEmail.Attributes("placeholder") = L("phEmail")
+        tbCompany.Attributes("placeholder") = L("phCompany")
         tbPassword.Attributes("placeholder") = "••••••••"
         tbPasswordConfirm.Attributes("placeholder") = "••••••••"
         btnFerme.Text = L("closeBtn")
         lnkResend.Text = L("resendLink")
         lnkLogin.Text = L("signin")
         lnkLogin.NavigateUrl = "~/Default.aspx?lang=" & CurrentLang
-        ' En fenêtre, « Se connecter » remplace la page entière, pas seulement le cadre.
-        If EnFenetre Then lnkLogin.Target = "_top"
+        ' En fenêtre sur la page d'accueil, « Se connecter » ferme l'inscription et ouvre la
+        ' fenêtre de connexion de la page d'accueil (landing2-6.js) ; à défaut, la page entière.
+        If EnFenetre Then
+            lnkLogin.Target = "_top"
+            lnkLogin.Attributes("onclick") =
+                "try{var p=window.parent;if(p&&p!==window&&p.ouvrirConnexion60){" &
+                "if(p.fermerInscription60)p.fermerInscription60();p.ouvrirConnexion60('" & CurrentLang & "','');return false;}}catch(e){}return true;"
+        End If
     End Sub
 
     ''' <summary>Traductions de la page d'inscription (fr/en/es).</summary>
@@ -40,6 +47,10 @@ Public Class wbfRegister
             Case "phLastName" : Return Choose3(lang, "Tremblay", "Smith", "García")
             Case "phEmail" : Return Choose3(lang, "vous@exemple.com", "you@example.com", "usted@ejemplo.com")
             Case "email" : Return Choose3(lang, "Adresse courriel *", "Email address *", "Correo electrónico *")
+            Case "company" : Return Choose3(lang, "Nom de l'entreprise *", "Business name *", "Nombre de la empresa *")
+            Case "phCompany" : Return Choose3(lang, "Services Tremblay inc.", "Smith Services Inc.", "Servicios García S.A.")
+            Case "companyHint" : Return Choose3(lang, "Travailleur autonome : votre nom ou votre nom commercial.", "Self-employed: your name or your business name.", "Trabajador autónomo: su nombre o su nombre comercial.")
+            Case "errCompanyReq" : Return Choose3(lang, "Le nom de l'entreprise est obligatoire.", "Business name is required.", "El nombre de la empresa es obligatorio.")
             Case "password" : Return Choose3(lang, "Mot de passe *", "Password *", "Contraseña *")
             Case "passwordConfirm" : Return Choose3(lang, "Confirmer le mot de passe *", "Confirm password *", "Confirmar contraseña *")
             Case "pwHint" : Return Choose3(lang, "Minimum 8 caractères", "Minimum 8 characters", "Mínimo 8 caracteres")
@@ -256,8 +267,14 @@ Public Class wbfRegister
         Dim passwordConfirm As String = If(tbPasswordConfirm.Text, "")
         Dim firstName As String = If(tbFirstName.Text, "").Trim()
         Dim lastName As String = If(tbLastName.Text, "").Trim()
+        Dim companyName As String = If(tbCompany.Text, "").Trim()
+        If companyName.Length > 100 Then companyName = companyName.Substring(0, 100)
 
         ' === Validations ===
+        If String.IsNullOrEmpty(companyName) Then
+            ShowError(L("errCompanyReq"))
+            Return
+        End If
         If String.IsNullOrEmpty(email) Then
             ShowError(L("errEmailReq"))
             Return
@@ -292,7 +309,9 @@ Public Class wbfRegister
             p.Add(New SqlClient.SqlParameter("@PasswordHash", passwordHash))
             p.Add(New SqlClient.SqlParameter("@FirstName", If(String.IsNullOrEmpty(firstName), CObj(DBNull.Value), firstName)))
             p.Add(New SqlClient.SqlParameter("@LastName", If(String.IsNullOrEmpty(lastName), CObj(DBNull.Value), lastName)))
-            p.Add(New SqlClient.SqlParameter("@CompanyName", DBNull.Value))
+            ' Nom de l'entreprise : s0220 l'écrit dans LEGAL_NAME et TRADE_NAME (T101) ;
+            ' s0712AssignMailbox en tire l'adresse @60sec.ca de la compagnie.
+            p.Add(New SqlClient.SqlParameter("@CompanyName", companyName))
             p.Add(New SqlClient.SqlParameter("@Abonnement", Abonnement))
             Dim ds As DataSet = ExecuteSQLds("s0220RegisterUser", p)
 
