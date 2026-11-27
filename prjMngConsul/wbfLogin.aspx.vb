@@ -196,7 +196,7 @@ Public Class wbfLogin
         pa.Add(New SqlParameter("@CompanyGUID", CType(userRow("CompanyGUID"), Guid)))
         Dim dsa As DataSet = ExecuteSQLds("s0313GetSubscriptionForPaiement", pa)
         If dsa.Tables(0).Rows.Count = 1 Then
-            Aller("~/wbfPayment.aspx?lang=" & CurrentLang)
+            Aller("~/LandingPage.aspx?paiement=1&lang=" & CurrentLang)
             Return
         End If
 

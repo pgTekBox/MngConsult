@@ -2,7 +2,7 @@
     CodeBehind="wbfPayment.aspx.vb" Inherits="MngConsul.wbfPayment" %>
 
 <!DOCTYPE html>
-<html lang="<%= CurrentLang %>">
+<html lang="<%= CurrentLang %>" class="<%= If(EnFenetre, "en-fenetre", "") %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -471,6 +471,10 @@
         .act-btn:hover { box-shadow: 0 12px 24px rgba(37,99,235,.3); }
         @keyframes actFond { from { opacity: 0; } to { opacity: 1; } }
         @keyframes actCarte { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+        /* En fenêtre (cadre par-dessus la page d'accueil, ?popup=1) : fond blanc, et le
+           sélecteur de langue laisse le coin haut droit au × de la page d'accueil. */
+        html.en-fenetre body { min-height: 0; background: #fff; padding: 20px 24px 24px; }
+        html.en-fenetre .lang-switch { margin-right: 44px; }
     </style>
     <link href="css/abo-recap.css?v=2026112601" rel="stylesheet" />
     <script src="js/appPopup.js?v=2026111704"></script>

@@ -23,6 +23,11 @@ Public Class wbfPayment
 
         ' Vérifier que l'utilisateur est connecté
         If UserId = 0 Then
+            If EnFenetre Then
+                ' En fenêtre sur la page d'accueil : on remplace le paiement par la fenêtre de connexion.
+                EcrireScriptParent("if(p.fermerPaiement60)p.fermerPaiement60();if(p.ouvrirConnexion60){p.ouvrirConnexion60('" & CurrentLang & "','');}else{window.top.location.replace('Default.aspx?lang=" & CurrentLang & "');}")
+                Return
+            End If
             Response.Redirect("~/Default.aspx?lang=" & CurrentLang)
             Return
         End If
@@ -114,13 +119,36 @@ Public Class wbfPayment
     Protected Function LiensLangues() As String
         Dim sb As New StringBuilder()
         For Each lg As String In New String() {"fr", "en", "es"}
-            sb.Append("<a href=""wbfPayment.aspx?lang=").Append(lg).Append("""")
+            sb.Append("<a href=""wbfPayment.aspx?lang=").Append(lg).Append(If(EnFenetre, "&amp;popup=1", "")).Append("""")
             sb.Append(" hreflang=""").Append(lg).Append(""" lang=""").Append(lg).Append("""")
             If lg = CurrentLang Then sb.Append(" class=""on"" aria-current=""true""")
             sb.Append(">").Append(lg.ToUpperInvariant()).Append("</a>")
         Next
         Return sb.ToString()
     End Function
+
+    ''' <summary>
+    ''' Vrai quand la page s'ouvre en fenêtre par-dessus la page d'accueil
+    ''' (landing2-6.js, ouvrirPaiement60 : wbfPayment.aspx?popup=1).
+    ''' </summary>
+    Protected ReadOnly Property EnFenetre As Boolean
+        Get
+            Return Request.QueryString("popup") = "1"
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Termine la requête par une page qui exécute js avec p = la page d'accueil
+    ''' (window.parent) ; sert à changer de fenêtre ou à quitter le cadre.
+    ''' </summary>
+    Private Sub EcrireScriptParent(js As String)
+        Response.Clear()
+        Response.ContentType = "text/html"
+        Response.Write("<!DOCTYPE html><html><head><meta charset=""utf-8"" /></head><body><script>" &
+                       "try{var p=window.parent;" & js & "}catch(e){window.top.location.replace('LandingPage.aspx');}" &
+                       "</script></body></html>")
+        Context.ApplicationInstance.CompleteRequest()
+    End Sub
 
     Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
         Select Case lang
@@ -304,7 +332,9 @@ Public Class wbfPayment
             Dim baseUrl As String = Request.Url.GetLeftPart(UriPartial.Authority)
             Dim langQs As String = "?lang=" & CurrentLang
             Dim successUrl As String = baseUrl & ResolveUrl(ConfigurationManager.AppSettings("Stripe.SuccessUrlPath")) & langQs
-            Dim cancelUrl As String = baseUrl & ResolveUrl(ConfigurationManager.AppSettings("Stripe.CancelUrlPath")) & langQs
+            ' Annulation chez Stripe : retour à la page d'accueil, fenêtre de paiement rouverte
+            ' (le paiement n'est pas fait, il n'a pas sa place dans le portail).
+            Dim cancelUrl As String = baseUrl & ResolveUrl("~/LandingPage.aspx") & "?paiement=1&lang=" & CurrentLang
 
             ' Metadata pour traçabilité dans webhook Stripe
             Dim meta As New Dictionary(Of String, String) From {
@@ -327,6 +357,11 @@ Public Class wbfPayment
             )
 
             ' Redirection vers Stripe (URL de type https://checkout.stripe.com/c/pay/cs_xxx)
+            If EnFenetre Then
+                ' Stripe Checkout refuse de s'afficher dans un cadre : on y va en pleine page.
+                EcrireScriptParent("window.top.location.href=" & HttpUtility.JavaScriptStringEncode(checkoutUrl, True) & ";")
+                Return
+            End If
             Response.Redirect(checkoutUrl, endResponse:=True)
 
         Catch ex As Threading.ThreadAbortException

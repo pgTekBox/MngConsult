@@ -903,3 +903,73 @@ function ouvrirInscription60(lang, code){
   document.addEventListener('keydown',touche);
   window.addEventListener('resize',ajuster);
 }
+
+/* Fenêtre de paiement par-dessus la page d'accueil : un cadre vers
+   wbfPayment.aspx?popup=1. On y arrive après l'activation du compte, après une
+   connexion dont l'abonnement n'est pas encore payé, ou au retour d'une annulation
+   chez Stripe : LandingPage.aspx?paiement=1&lang=… ouvre la fenêtre au chargement.
+   Le paiement lui-même (Stripe Checkout) s'ouvre en pleine page ; il ne peut pas
+   s'afficher dans un cadre. wbfPayment appelle window.parent.fermerPaiement60(). */
+function ouvrirPaiement60(lang){
+  var ancien=document.getElementById('px60'); if(ancien) ancien.parentNode.removeChild(ancien);
+  if(!document.getElementById('px60-style')){
+    var st=document.createElement('style'); st.id='px60-style';
+    st.textContent=
+      '#px60{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;'+
+      'background:rgba(14,31,61,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}'+
+      '#px60 .px60-boite{position:relative;width:980px;max-width:100%}'+
+      '#px60 iframe{display:block;width:100%;height:640px;max-height:calc(100vh - 32px);border:0;border-radius:24px;background:#fff;box-shadow:0 20px 50px rgba(15,23,42,.30)}'+
+      '#px60 .px60-fermer{position:absolute;top:10px;right:10px;z-index:1;width:36px;height:36px;border:0;border-radius:999px;'+
+      'background:rgba(14,31,61,.06);color:#0E1F3D;font-size:22px;line-height:36px;cursor:pointer}'+
+      '#px60 .px60-fermer:hover{background:rgba(14,31,61,.12)}';
+    document.head.appendChild(st);
+  }
+  var url='wbfPayment.aspx?popup=1&lang='+encodeURIComponent(lang||'fr');
+  var libelle=(lang==='en')?'Payment':(lang==='es')?'Pago':'Paiement';
+  var fermerTxt=(lang==='en')?'Close':(lang==='es')?'Cerrar':'Fermer';
+
+  var fond=document.createElement('div'); fond.id='px60';
+  fond.setAttribute('role','dialog'); fond.setAttribute('aria-modal','true'); fond.setAttribute('aria-label',libelle);
+  var boite=document.createElement('div'); boite.className='px60-boite';
+  var btn=document.createElement('button'); btn.type='button'; btn.className='px60-fermer';
+  btn.setAttribute('aria-label',fermerTxt); btn.title=fermerTxt; btn.textContent='×';
+  var cadre=document.createElement('iframe'); cadre.title=libelle; cadre.src=url;
+  boite.appendChild(btn); boite.appendChild(cadre); fond.appendChild(boite);
+  document.body.appendChild(fond);
+
+  var debordement=document.documentElement.style.overflow;
+  document.documentElement.style.overflow='hidden';
+  function ajuster(){
+    try{ var d=cadre.contentWindow.document;
+         cadre.style.height=d.documentElement.scrollHeight+'px'; }catch(x){}
+  }
+  function fermer(){
+    if(fond.parentNode) fond.parentNode.removeChild(fond);
+    document.documentElement.style.overflow=debordement;
+    document.removeEventListener('keydown',touche); window.removeEventListener('resize',ajuster);
+    if(window.fermerPaiement60===fermer) window.fermerPaiement60=null;
+  }
+  function touche(e){ if(e.key==='Escape') fermer(); }
+  window.fermerPaiement60=fermer;
+  // Échap ferme aussi quand le curseur est dans le cadre (les touches y vont, pas à la page)
+  cadre.addEventListener('load',function(){ ajuster(); try{cadre.contentWindow.document.addEventListener('keydown',touche); cadre.contentWindow.focus();}catch(x){} });
+  btn.addEventListener('click',fermer);
+  fond.addEventListener('click',function(e){ if(e.target===fond) fermer(); });
+  document.addEventListener('keydown',touche);
+  window.addEventListener('resize',ajuster);
+}
+
+/* ?paiement=1 : ouvrir la fenêtre de paiement dès le chargement, puis retirer le
+   paramètre de l'adresse (un rafraîchissement ne la rouvre pas). */
+(function(){
+  try{
+    var q=new URLSearchParams(location.search); if(q.get('paiement')!=='1') return;
+    var l=(q.get('lang')||document.documentElement.lang||'fr').slice(0,2).toLowerCase();
+    if(['fr','en','es'].indexOf(l)<0) l='fr';
+    q.delete('paiement');
+    var reste=q.toString();
+    history.replaceState(null,'',location.pathname+(reste?'?'+reste:'')+location.hash);
+    var go=function(){ ouvrirPaiement60(l); };
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+  }catch(x){}
+})();

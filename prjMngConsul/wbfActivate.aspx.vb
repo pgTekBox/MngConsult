@@ -8,7 +8,7 @@ Public Class wbfActivate
     Private Sub ApplyLocalization()
         Page.Title = L("pageTitle")
         lnkContinue.Text = L("continueBtn")
-        lnkContinue.NavigateUrl = "~/wbfPayment.aspx?lang=" & CurrentLang
+        lnkContinue.NavigateUrl = "~/LandingPage.aspx?paiement=1&lang=" & CurrentLang
         lnkResend.Text = L("restartBtn")
         lnkResend.NavigateUrl = "~/wbfRegister.aspx?lang=" & CurrentLang
         lnkLoginInvalid.Text = L("signinBtn")
@@ -112,9 +112,10 @@ Public Class wbfActivate
                     LoadUserSession(UserId)
 
                     ' La confirmation « Compte activé ! » s'affiche en popup par-dessus
-                    ' la page de paiement (wbfPayment lit puis retire cette clé).
+                    ' la page de paiement, elle-même en fenêtre sur la page d'accueil
+                    ' (LandingPage.aspx?paiement=1 ; wbfPayment lit puis retire cette clé).
                     Session("ActivationReussie") = UserEmail
-                    Response.Redirect("~/wbfPayment.aspx?lang=" & CurrentLang, False)
+                    Response.Redirect("~/LandingPage.aspx?paiement=1&lang=" & CurrentLang, False)
                     Context.ApplicationInstance.CompleteRequest()
                     Return
 

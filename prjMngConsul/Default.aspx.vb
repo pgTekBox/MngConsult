@@ -400,7 +400,7 @@ Public Class _Default
         If jours < 0 OrElse jours > 30 Then Return Nothing
         Return Activite(If(jours <= 3, "r", "y"), String.Format(L("aEssai"), jours),
                         L("catAbonnement") & " · " & String.Format(L("avantLe"), JourMois(fin.Value)) & " · " & L("aEssaiSous"),
-                        L("aEssaiDet"), L("btnForfait"), "wbfPayment.aspx")
+                        L("aEssaiDet"), L("btnForfait"), "LandingPage.aspx?paiement=1&lang=" & CurrentLang)
     End Function
 
     ''' <summary>

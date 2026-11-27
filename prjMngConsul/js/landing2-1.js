@@ -27,5 +27,6 @@
   document.addEventListener('click',hit);document.addEventListener('keydown',hit);
   window.GrandDepart={open:open};
   var seen=false;try{seen=sessionStorage.getItem('60s-gd')==='1';}catch(e){}
-  if(!seen&&Date.now()<T)setTimeout(function(){if(!document.querySelector('dialog[open]'))open();},1200);
+  // Pas par-dessus une fenêtre déjà ouverte (paiement, inscription, connexion : landing2-6.js)
+  if(!seen&&Date.now()<T)setTimeout(function(){if(!document.querySelector('dialog[open],#px60,#ix60,#cx60'))open();},1200);
 })();
