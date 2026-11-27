@@ -25,7 +25,23 @@
   d.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href^="#note-"]');if(a)close();});
   function hit(e){var b=e.target.closest&&e.target.closest('.hero-launch');if(!b)return;if(e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ')return;e.preventDefault();open();}
   document.addEventListener('click',hit);document.addEventListener('keydown',hit);
-  window.GrandDepart={open:open};
+  // « Réserver ma place » : le formulaire de réservation en fenêtre, directement à
+  // l'étape 2 (sans le compte à rebours ni le bouton « Retour »).
+  var back=document.getElementById('gd-back');
+  function reserve(){
+    if(!d.open){tick();clearInterval(tm);tm=setInterval(tick,1000);d.showModal();}
+    formIn();step(2);if(back)back.hidden=true;
+    var f=document.getElementById('s-name');if(f)setTimeout(function(){try{f.focus();}catch(e){}},50);
+  }
+  d.addEventListener('close',function(){if(back)back.hidden=false;});
+  // Tous les liens vers #membres (en-tête, héros, cartes de forfait, calculateurs, client-fondateur)
+  // ouvrent la fenêtre au lieu de défiler. Les gestionnaires propres à chaque bouton (profil
+  // choisi, case client-fondateur) s'exécutent avant, sur le bouton lui-même.
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href="#membres"]');if(!a)return;
+    e.preventDefault();reserve();
+  });
+  window.GrandDepart={open:open,reserve:reserve};
   var seen=false;try{seen=sessionStorage.getItem('60s-gd')==='1';}catch(e){}
   // Pas par-dessus une fenêtre déjà ouverte (paiement, inscription, connexion : landing2-6.js)
   if(!seen&&Date.now()<T)setTimeout(function(){if(!document.querySelector('dialog[open],#px60,#ix60,#cx60'))open();},1200);

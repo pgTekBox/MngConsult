@@ -844,6 +844,8 @@
       <p class="eyebrow">Accès anticipé</p>
       <h2 id="h-mem">Votre espace, selon votre profil.</h2>
       <p class="lead">Réservez votre accès anticipé ; nous ouvrons les dossiers par vagues à compter du lancement<sup class="n"><a href="#note-3" aria-label="Note 3">3</a></sup>.</p>
+      <%-- Le formulaire ci-dessous ne s'affiche qu'en fenêtre (landing2-1.js, GrandDepart.reserve) --%>
+      <p class="mem-cta"><a class="btn btn-gold" href="#membres">Réserver ma place</a></p>
     </div>
 
     <div class="members">

@@ -377,7 +377,10 @@ footer .meta{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);d
 .firm-strip:hover{border-color:var(--ink)}
 .firm-strip .go{font-weight:600;color:var(--ink)}
 .hero .alt-link{display:inline-block;margin-top:14px;font-size:14px;color:var(--ink-2)}
-.members{display:grid;grid-template-columns:minmax(0,820px);justify-content:center;gap:clamp(20px,3vw,36px);align-items:start} /* réservation seule (la boîte « Se connecter » est retirée) */
+.members{display:grid;grid-template-columns:minmax(0,820px);justify-content:center;gap:clamp(20px,3vw,36px);align-items:start}
+/* Le formulaire de réservation ne s'affiche qu'en fenêtre (#gd-dlg, « Réserver ma place ») */
+#membres .members{display:none}
+.mem-cta{margin-top:18px}
 @media (max-width:900px){.members{grid-template-columns:1fr}}
 fieldset.pick{border:0;padding:0;margin:16px 0 4px}
 fieldset.pick legend{font-size:13px;font-weight:600;margin-bottom:8px}
