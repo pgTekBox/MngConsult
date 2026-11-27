@@ -125,31 +125,20 @@ Public Class wbfRegister
     End Function
 
     ''' <summary>
-    ''' Rappel du forfait dans le courriel d'activation (styles en ligne : les
-    ''' clients de courriel ignorent les feuilles de style). Vide sans forfait.
+    ''' Récapitulatif complet de l'abonnement dans le courriel d'activation (forfait,
+    ''' prix, taxes, total, facturation, essai, premier prélèvement, employés, fonctions
+    ''' incluses), en version courriel (clsAbonnementResume.HtmlCourriel : styles en
+    ''' ligne), puis le rappel que le paiement se fait après l'activation. Vide sans forfait.
     ''' </summary>
     Private Function PlanCourrielHtml() As String
         Dim row As DataRow = PlanChoisi
         If row Is Nothing Then Return ""
-        Dim essai As Integer = clsAbonnementResume.JoursEssai(row)
         Dim sb As New System.Text.StringBuilder()
-        sb.Append("<div style=""margin:20px 0; padding:14px 16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fafc; font-size:14px;"">")
-        sb.Append("<div style=""font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:.05em;"">")
-        sb.Append(Server.HtmlEncode(Choose3(CurrentLang, "Votre abonnement", "Your subscription", "Su suscripción"))).Append("</div>")
-        sb.Append("<div style=""font-size:16px; font-weight:800; margin-top:4px;"">").Append(Server.HtmlEncode(row("Name").ToString())).Append("</div>")
-        sb.Append("<div style=""margin-top:4px;"">").Append(Server.HtmlEncode(clsAbonnementResume.PrixParPeriode(row, CurrentLang) & " " &
-            Choose3(CurrentLang, "avant taxes, renouvelé automatiquement", "before tax, renews automatically", "antes de impuestos, se renueva automáticamente"))).Append("</div>")
-        If essai > 0 Then
-            sb.Append("<div style=""margin-top:4px; color:#047857; font-weight:700;"">").Append(Server.HtmlEncode(String.Format(Choose3(CurrentLang,
-                "{0} jours gratuits : aucun prélèvement pendant l'essai.",
-                "{0} days free: no charge during the trial.",
-                "{0} días gratis: sin cargo durante la prueba."), essai))).Append("</div>")
-        End If
-        sb.Append("<div style=""margin-top:6px; font-size:12px; color:#64748b;"">").Append(Server.HtmlEncode(Choose3(CurrentLang,
+        sb.Append(clsAbonnementResume.HtmlCourriel(row, CurrentLang))
+        sb.Append("<p style=""margin:-8px 0 20px; font-size:12px; color:#64748b;"">").Append(Server.HtmlEncode(Choose3(CurrentLang,
             "Après l'activation, vous paierez votre abonnement de façon sécurisée par Stripe.",
             "After activation, you'll pay for your subscription securely through Stripe.",
-            "Tras la activación, pagará su suscripción de forma segura mediante Stripe."))).Append("</div>")
-        sb.Append("</div>")
+            "Tras la activación, pagará su suscripción de forma segura mediante Stripe."))).Append("</p>")
         Return sb.ToString()
     End Function
 
