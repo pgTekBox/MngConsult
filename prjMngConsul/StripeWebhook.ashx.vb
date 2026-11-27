@@ -230,6 +230,101 @@ Public Class StripeWebhook
                 {"@StripeCustomerId", session.CustomerId}
             })
         End If
+
+        ' Courriel « Votre abonnement est activé » (une fois : l'événement n'est traité
+        ' qu'une fois, voir s0640). Un échec d'envoi ne doit pas faire rejouer l'événement.
+        Try
+            EnvoyerConfirmationAbonnement(session, userId)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Courriel de confirmation d'abonnement non envoyé : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Courriel de confirmation à l'usager après le paiement de l'abonnement dans
+    ''' Stripe Checkout : forfait, prix, renouvellement, essai et premier prélèvement,
+    ''' lien vers le tableau de bord. Langue = celle de la page Checkout (session.Locale :
+    ''' fr-CA / en / es), donc celle que l'usager avait choisie. Gabarit commun des
+    ''' courriels de compte (clsCourrielModele) ; envoi par la BD MailService (s0610).
+    ''' Le reçu et les factures restent envoyés par Stripe.
+    ''' </summary>
+    Private Sub EnvoyerConfirmationAbonnement(session As Checkout.Session, userId As Integer)
+        Dim lang As String = "fr"
+        Dim loc As String = If(session.Locale, "").ToLowerInvariant()
+        If loc.StartsWith("en") Then lang = "en" Else If loc.StartsWith("es") Then lang = "es"
+
+        ' Usager : courriel et prénom
+        Dim dsU As DataSet = ExecuteProcDs("s0314GetUserByUserId", New Dictionary(Of String, Object) From {{"@Id", userId}})
+        If dsU Is Nothing OrElse dsU.Tables.Count = 0 OrElse dsU.Tables(0).Rows.Count = 0 Then Return
+        Dim u As DataRow = dsU.Tables(0).Rows(0)
+        Dim courriel As String = If(IsDBNull(u("Email")), "", u("Email").ToString().Trim())
+        If courriel = "" Then Return
+        Dim prenom As String = If(IsDBNull(u("FirstName")), "", u("FirstName").ToString().Trim())
+
+        ' Forfait (T021Plan, dans la langue de l'usager)
+        Dim code As String = GetMetadataValue(session.Metadata, "MngConsul_PlanCode", "")
+        Dim cycle As String = GetMetadataValue(session.Metadata, "MngConsul_BillingCycle", "monthly")
+        Dim plan As DataRow = Nothing
+        If code <> "" Then
+            Dim dsP As DataSet = ExecuteProcDs("s0631GetPlanByCode", New Dictionary(Of String, Object) From {
+                {"@Code", code}, {"@BillingCycle", cycle}, {"@Lang", lang}})
+            If dsP IsNot Nothing AndAlso dsP.Tables.Count > 0 AndAlso dsP.Tables(0).Rows.Count > 0 Then plan = dsP.Tables(0).Rows(0)
+        End If
+        Dim nomForfait As String = If(plan Is Nothing, code, plan("Name").ToString())
+
+        ' Essai : lu dans l'abonnement Stripe (statut trialing + fin d'essai)
+        Dim finEssai As Date = Date.MinValue
+        Try
+            Dim abo As Subscription = clsStripe.GetSubscription(session.SubscriptionId)
+            If abo IsNot Nothing AndAlso abo.Status = "trialing" AndAlso abo.TrialEnd.HasValue Then finEssai = abo.TrialEnd.Value.ToLocalTime()
+        Catch
+        End Try
+
+        Dim T = Function(fr As String, en As String, es As String) If(lang = "en", en, If(lang = "es", es, fr))
+        Dim paragraphes As New List(Of String)
+        paragraphes.Add(String.Format(T("Merci ! Votre abonnement « {0} » à 60Sec-AI est maintenant actif.",
+                                        "Thank you! Your ""{0}"" subscription to 60Sec-AI is now active.",
+                                        "¡Gracias! Su suscripción «{0}» a 60Sec-AI ya está activa."), nomForfait))
+        If plan IsNot Nothing AndAlso Not IsDBNull(plan("Amount")) Then
+            paragraphes.Add(String.Format(T("Prix : {0} avant taxes, renouvelé automatiquement.",
+                                            "Price: {0} before tax, renews automatically.",
+                                            "Precio: {0} antes de impuestos, se renueva automáticamente."),
+                                          clsAbonnementResume.PrixParPeriode(plan, lang)))
+        End If
+        If finEssai <> Date.MinValue Then
+            paragraphes.Add(String.Format(T("Votre essai gratuit est commencé : aucun prélèvement avant le {0}.",
+                                            "Your free trial has started: no charge before {0}.",
+                                            "Su prueba gratuita ha comenzado: ningún cargo antes del {0}."),
+                                          clsAbonnementResume.DateLongue(finEssai, lang)))
+        Else
+            paragraphes.Add(T("Votre premier paiement a bien été reçu.",
+                              "Your first payment has been received.",
+                              "Hemos recibido su primer pago."))
+        End If
+        paragraphes.Add(T("Vous recevrez votre reçu et vos factures par courriel, de la part de Stripe, à chaque prélèvement.",
+                          "You will receive your receipt and invoices by email from Stripe with each charge.",
+                          "Recibirá su recibo y sus facturas por correo, de parte de Stripe, en cada cargo."))
+
+        Dim req As HttpRequest = HttpContext.Current.Request
+        Dim lien As String = req.Url.GetLeftPart(UriPartial.Authority) & VirtualPathUtility.ToAbsolute("~/Default.aspx") & "?lang=" & lang
+        Dim salut As String = If(prenom = "", T("Bonjour,", "Hello,", "Hola:"),
+                                 String.Format(T("Bonjour {0},", "Hello {0},", "Hola {0}:"), prenom))
+        Dim titre As String = T("Votre abonnement est activé", "Your subscription is active", "Su suscripción está activada")
+        Dim html As String = clsCourrielModele.Construire(lang, String.Format(titre & " — {0}", nomForfait), titre, salut, paragraphes,
+                                                          T("Accéder à mon tableau de bord", "Go to my dashboard", "Ir a mi panel"), lien,
+                                                          "", "")
+        Dim sujet As String = T("Votre abonnement 60Sec-AI est activé", "Your 60Sec-AI subscription is active", "Su suscripción a 60Sec-AI está activada")
+
+        Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionStringMail"))
+            Using cmd As New SqlCommand("s0610InsertOutboundMail", conn) With {.CommandType = CommandType.StoredProcedure}
+                cmd.Parameters.Add(New SqlParameter("@To", courriel))
+                cmd.Parameters.Add(New SqlParameter("@Subject", sujet))
+                cmd.Parameters.Add(New SqlParameter("@HTMLBody", html))
+                cmd.Parameters.Add(New SqlParameter("@TextBody", DBNull.Value))
+                conn.Open()
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
     End Sub
 
     ''' <summary>

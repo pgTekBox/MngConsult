@@ -405,6 +405,15 @@ Public Class clsStripe
     End Function
 
     ''' <summary>
+    ''' Lit un abonnement Stripe (sub_…), pour son statut et sa fin d'essai. Nothing si l'id est vide.
+    ''' </summary>
+    Public Shared Function GetSubscription(subscriptionId As String) As Subscription
+        If String.IsNullOrEmpty(subscriptionId) Then Return Nothing
+        EnsureInitialized()
+        Return New SubscriptionService().Get(subscriptionId)
+    End Function
+
+    ''' <summary>
     ''' Langue des courriels que Stripe envoie au client (reçu de paiement, factures,
     ''' rappels de renouvellement) : Customer.preferred_locales. locale = « fr-CA »,
     ''' « en » ou « es ». Best-effort : une erreur Stripe n'empêche jamais le parcours.
