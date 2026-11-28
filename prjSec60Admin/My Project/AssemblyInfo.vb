@@ -27,5 +27,9 @@ Imports System.Runtime.InteropServices
 '      Revision
 '
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+' « 1.0.* » : le compilateur numérote chaque compilation (build = jours depuis le
+' 1er janvier 2000, révision = secondes depuis minuit ÷ 2, heure locale). Le numéro
+' augmente donc à chaque compilation ; il est affiché en haut de la console
+' (LeftMenu : « v1.0.9463.13950 · compilée le … ») pour vérifier quelle version tourne.
+' Pas d'AssemblyFileVersion fixe : la version du fichier suit la même numérotation.
+<Assembly: AssemblyVersion("1.0.*")>

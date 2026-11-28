@@ -15,6 +15,8 @@
             <span class="brand-title">
                 <asp:Literal runat="server" ID="litAppName" Text="Sec60Admin"></asp:Literal></span>
             <span class="brand-sub">Console</span>
+            <%-- Version de l'admin, augmentée à chaque compilation (AssemblyInfo : 1.0.*) --%>
+            <span class="brand-ver" title="Version de la console et date de sa compilation"><asp:Literal runat="server" ID="litVersion" /></span>
         </div>
 
         <%-- Toujours visible en haut à droite : l'administrateur connecté et la déconnexion --%>
@@ -394,6 +396,17 @@
     .brand-title {
         font-weight: 800;
         letter-spacing: .2px;
+    }
+
+    .brand-ver {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 600;
+        padding: 2px 8px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #fff;
+        white-space: nowrap;
     }
 
     .brand-sub {

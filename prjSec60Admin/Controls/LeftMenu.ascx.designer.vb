@@ -40,4 +40,9 @@ Partial Public Class LeftMenu
     '''litAdminEmailHaut control.
     '''</summary>
     Protected WithEvents litAdminEmailHaut As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litVersion control.
+    '''</summary>
+    Protected WithEvents litVersion As Global.System.Web.UI.WebControls.Literal
 End Class
