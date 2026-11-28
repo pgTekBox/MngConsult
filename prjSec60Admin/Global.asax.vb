@@ -13,7 +13,32 @@ Public Class Global_asax
     End Sub
 
     ''' <summary>
-    ''' « Se souvenir de moi » (wbfLogin) : le cookie Forms persistant survit à la
+    ''' « Se souvenir de moi » (wbfLogin, clsAdminRememberMe) : si la requête n'est pas
+    ''' authentifiée (cookie Forms de session disparu à la fermeture du navigateur)
+    ''' mais porte le cookie mémorisé, on le valide en base et on reconnecte
+    ''' l'administrateur : nouveau cookie Forms de session, et Context.User posé pour
+    ''' que cette requête passe le contrôle d'accès (deny users="?"). Seulement pour
+    ''' les pages (pas les .css/.js/images), pour limiter les rotations concurrentes.
+    ''' </summary>
+    Sub Application_PostAuthenticateRequest(sender As Object, e As EventArgs)
+        Dim ctx As HttpContext = HttpContext.Current
+        If ctx Is Nothing Then Return
+        If ctx.User IsNot Nothing AndAlso ctx.User.Identity IsNot Nothing AndAlso ctx.User.Identity.IsAuthenticated Then Return
+        If Not clsAdminRememberMe.HasCookie(ctx) Then Return
+        Dim ext As String = System.IO.Path.GetExtension(ctx.Request.Path).ToLowerInvariant()
+        If ext <> "" AndAlso ext <> ".aspx" AndAlso ext <> ".ashx" Then Return
+
+        Dim adminId As Integer = 0
+        Dim email As String = clsAdminRememberMe.TryRestore(ctx, adminId)
+        If email = "" OrElse adminId = 0 Then Return
+
+        FormsAuthentication.SetAuthCookie(email, False)
+        Dim ticket As New FormsAuthenticationTicket(email, False, CInt(FormsAuthentication.Timeout.TotalMinutes))
+        ctx.User = New System.Security.Principal.GenericPrincipal(New FormsIdentity(ticket), New String() {})
+    End Sub
+
+    ''' <summary>
+    ''' Le cookie Forms (de session, ou reposé par la reprise ci-dessus) survit à la
     ''' session ASP.NET (120 min). Quand la session est vide mais que l'administrateur
     ''' est authentifié par ce cookie, on recharge AdminId / AdminEmail depuis la base
     ''' (s0640GetAdminByEmail). Compte introuvable ou désactivé : déconnexion et retour

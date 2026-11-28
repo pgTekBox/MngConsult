@@ -423,6 +423,7 @@
     <Content Include="wbfJobDashboard.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\clsAdminRememberMe.vb" />
     <Compile Include="App_Code\clsData.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
