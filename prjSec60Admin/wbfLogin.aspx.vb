@@ -7,9 +7,20 @@ Public Class wbfLogin
     Inherits clsData
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        ' Toute ouverture (GET) de la page de login déconnecte la session courante.
-        ' On ne le fait pas sur les postbacks (connexion, mot de passe oublié).
         If Not IsPostBack Then
+            ' « Se souvenir de moi » : avec une connexion mémorisée (ticket Forms
+            ' persistant) encore valide, on entre directement dans la console au lieu
+            ' de l'effacer. Global.asax a déjà rechargé l'administrateur (AdminId).
+            ' Pour changer de compte : « Déconnexion » (wbfLogout).
+            Dim fid As FormsIdentity = TryCast(If(Context.User IsNot Nothing, Context.User.Identity, Nothing), FormsIdentity)
+            If fid IsNot Nothing AndAlso fid.IsAuthenticated AndAlso fid.Ticket IsNot Nothing AndAlso fid.Ticket.IsPersistent _
+               AndAlso Not fid.Ticket.Expired AndAlso AdminId > 0 Then
+                Response.Redirect(ResolveReturnUrl())
+                Return
+            End If
+
+            ' Sinon, toute ouverture (GET) de la page de login déconnecte la session courante.
+            ' On ne le fait pas sur les postbacks (connexion, mot de passe oublié).
             FormsAuthentication.SignOut()
             Session.Clear()
         End If
