@@ -15,12 +15,13 @@
             <span class="brand-title">
                 <asp:Literal runat="server" ID="litAppName" Text="Sec60Admin"></asp:Literal></span>
             <span class="brand-sub">Console</span>
-            <%-- Version de l'admin, augmentée à chaque compilation (AssemblyInfo : 1.0.*) --%>
-            <span class="brand-ver" title="Version de la console et date de sa compilation"><asp:Literal runat="server" ID="litVersion" /></span>
         </div>
 
-        <%-- Toujours visible en haut à droite : l'administrateur connecté et la déconnexion --%>
+        <%-- Toujours visible en haut à droite : version, administrateur connecté et déconnexion.
+             (À gauche, la version passait sous le menu fixe.) --%>
         <div class="topbar-user">
+            <%-- Version de l'admin, augmentée à chaque compilation (AssemblyInfo : 1.0.*) --%>
+            <span class="brand-ver" title="Version de la console et date de sa compilation"><asp:Literal runat="server" ID="litVersion" /></span>
             <span class="tu-email" title="Administrateur connecté">👤 <asp:Literal runat="server" ID="litAdminEmailHaut" /></span>
             <a class="tu-logout" href="~/wbfLogout.aspx" runat="server" title="Se déconnecter de la console">
                 <span aria-hidden="true">🚪</span> Déconnexion

@@ -19,6 +19,62 @@ Public Class clsData
     ' pas une page anonyme (login / reset / logout) redirige vers wbfLogin.aspx
     ' si l'utilisateur n'est pas authentifié.
     ' -------------------------------------------------------------------------
+    ''' <summary>
+    ''' Recharge l'administrateur quand la session est vide (session perdue, ou
+    ''' navigateur rouvert), sans dépendre de Global.asax ni de la session :
+    '''  1. cookie de connexion Forms valide → administrateur relu par son courriel ;
+    '''  2. sinon, jeton « Se souvenir de moi » valide (clsAdminRememberMe) →
+    '''     nouveau cookie de connexion de session + administrateur rechargé.
+    ''' Un compte introuvable ou désactivé est déconnecté. Appelé avant le contrôle
+    ''' d'accès (OnLoad), donc aussi sur wbfLogin (page par défaut de « / » et cible
+    ''' des redirections), qui renvoie alors directement dans la console.
+    ''' </summary>
+    Protected Overrides Sub OnPreInit(e As EventArgs)
+        If AdminId = 0 Then RechargerAdmin()
+        MyBase.OnPreInit(e)
+    End Sub
+
+    Private Sub RechargerAdmin()
+        Try
+            Dim email As String = ""
+            If Context.User IsNot Nothing AndAlso Context.User.Identity IsNot Nothing AndAlso Context.User.Identity.IsAuthenticated Then
+                email = If(Context.User.Identity.Name, "").Trim().ToLowerInvariant()
+            End If
+
+            If email <> "" Then
+                Dim p As New Collection
+                p.Add(New SqlParameter("@Email", email))
+                Dim ds As DataSet = ExecuteSQLds("s0640GetAdminByEmail", p)
+                Dim actif As Boolean = False
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                    Dim r As DataRow = ds.Tables(0).Rows(0)
+                    actif = Not IsDBNull(r("IsActive")) AndAlso CBool(r("IsActive"))
+                    If actif Then
+                        AdminId = CInt(r("Id"))
+                        AdminEmail = r("Email").ToString()
+                        Return
+                    End If
+                End If
+                ' Compte introuvable ou désactivé : on coupe la connexion.
+                System.Web.Security.FormsAuthentication.SignOut()
+                Return
+            End If
+
+            ' Pas de cookie de connexion : « Se souvenir de moi » ?
+            If clsAdminRememberMe.HasCookie(Context) Then
+                Dim id As Integer = 0
+                Dim courriel As String = clsAdminRememberMe.TryRestore(Context, id)
+                If courriel <> "" AndAlso id > 0 Then
+                    System.Web.Security.FormsAuthentication.SetAuthCookie(courriel, False)
+                    AdminId = id
+                    AdminEmail = courriel
+                End If
+            End If
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("RechargerAdmin : " & ex.Message)
+        End Try
+    End Sub
+
     Protected Overrides Sub OnLoad(e As EventArgs)
         If Not IsAnonymousPage() AndAlso Not IsAuthenticated Then
             Dim returnUrl As String = ""

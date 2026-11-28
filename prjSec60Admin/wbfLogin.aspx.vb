@@ -9,10 +9,10 @@ Public Class wbfLogin
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             ' « Se souvenir de moi » : avec une connexion mémorisée encore valide, on
-            ' entre directement dans la console au lieu de l'effacer. Global.asax a déjà
-            ' reconnecté et rechargé l'administrateur (AdminId).
+            ' entre directement dans la console au lieu de l'effacer. clsData.OnPreInit
+            ' a déjà reconnecté et rechargé l'administrateur (AdminId).
             ' Pour changer de compte : « Déconnexion » (wbfLogout).
-            If clsAdminRememberMe.HasCookie(Context) AndAlso Request.IsAuthenticated AndAlso AdminId > 0 Then
+            If clsAdminRememberMe.HasCookie(Context) AndAlso AdminId > 0 Then
                 Response.Redirect(ResolveReturnUrl())
                 Return
             End If
