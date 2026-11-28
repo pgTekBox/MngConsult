@@ -35,4 +35,9 @@ Partial Public Class LeftMenu
     '''litAdminEmail control.
     '''</summary>
     Protected WithEvents litAdminEmail As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litAdminEmailHaut control.
+    '''</summary>
+    Protected WithEvents litAdminEmailHaut As Global.System.Web.UI.WebControls.Literal
 End Class

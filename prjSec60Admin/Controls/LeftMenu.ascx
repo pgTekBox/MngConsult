@@ -16,6 +16,14 @@
                 <asp:Literal runat="server" ID="litAppName" Text="Sec60Admin"></asp:Literal></span>
             <span class="brand-sub">Console</span>
         </div>
+
+        <%-- Toujours visible en haut à droite : l'administrateur connecté et la déconnexion --%>
+        <div class="topbar-user">
+            <span class="tu-email" title="Administrateur connecté">👤 <asp:Literal runat="server" ID="litAdminEmailHaut" /></span>
+            <a class="tu-logout" href="~/wbfLogout.aspx" runat="server" title="Se déconnecter de la console">
+                <span aria-hidden="true">🚪</span> Déconnexion
+            </a>
+        </div>
     </header>
 
     <!-- Backdrop mobile -->
@@ -298,6 +306,54 @@
         background: rgba(255,255,255,.85);
         backdrop-filter: blur(10px);
     }
+
+    /* La barre du haut reste à l'écran quand on fait défiler la page (avant : collante
+       seulement dans .app-shell, elle disparaissait) ; un espace de même hauteur la remplace
+       dans le flux pour que le contenu ne passe pas dessous. */
+    .topbar {
+        position: fixed;
+        left: 0;
+        right: 0;
+    }
+    .app-shell::before {
+        content: "";
+        display: block;
+        height: 60px;
+    }
+
+    /* Administrateur connecté + Déconnexion, à droite de la barre du haut */
+    .topbar-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-left: auto;
+        min-width: 0;
+    }
+    .tu-email {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 260px;
+    }
+    .tu-logout {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(220,38,38,.30);
+        background: rgba(220,38,38,.06);
+        color: #b91c1c;
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+    .tu-logout:hover { background: rgba(220,38,38,.12); }
+    .tu-logout:focus { outline: none; box-shadow: var(--ring); }
 
     .hamburger {
         width: 44px;

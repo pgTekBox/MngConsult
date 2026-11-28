@@ -8,6 +8,7 @@
             email = Context.User.Identity.Name
         End If
         litAdminEmail.Text = Server.HtmlEncode(If(email, ""))
+        litAdminEmailHaut.Text = litAdminEmail.Text
     End Sub
 
 End Class
