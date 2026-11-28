@@ -48,4 +48,9 @@ Partial Public Class wbfLogin
 
     '''<summary>lnkBackToLogin control.</summary>
     Protected WithEvents lnkBackToLogin As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''cbRemember control.
+    '''</summary>
+    Protected WithEvents cbRemember As Global.System.Web.UI.WebControls.CheckBox
 End Class

@@ -59,8 +59,36 @@ Public Class wbfLogin
         Catch
         End Try
 
-        FormsAuthentication.SetAuthCookie(AdminEmail, False)
+        If cbRemember.Checked Then
+            EmettreCookieMemorise(AdminEmail)
+        Else
+            FormsAuthentication.SetAuthCookie(AdminEmail, False)
+        End If
         Response.Redirect(ResolveReturnUrl())
+    End Sub
+
+    ''' <summary>Durée de « Se souvenir de moi » (jours).</summary>
+    Private Const JOURS_MEMORISES As Integer = 30
+
+    ''' <summary>
+    ''' « Se souvenir de moi » : ticket Forms persistant de 30 jours (cookie
+    ''' .SEC60ADMINAUTH avec date d'expiration, HttpOnly, Secure en https). Avec
+    ''' slidingExpiration, chaque visite le renouvelle pour 30 jours. Quand la session
+    ''' ASP.NET expire, Global.asax recharge l'administrateur depuis ce ticket
+    ''' (Application_AcquireRequestState). La déconnexion (wbfLogout) l'efface.
+    ''' </summary>
+    Private Sub EmettreCookieMemorise(email As String)
+        Dim maintenant As DateTime = DateTime.Now
+        Dim ticket As New FormsAuthenticationTicket(1, email, maintenant, maintenant.AddDays(JOURS_MEMORISES),
+                                                    True, "", FormsAuthentication.FormsCookiePath)
+        Dim cookie As New HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket)) With {
+            .Expires = ticket.Expiration,
+            .HttpOnly = True,
+            .Secure = Request.IsSecureConnection OrElse FormsAuthentication.RequireSSL,
+            .Path = FormsAuthentication.FormsCookiePath
+        }
+        If Not String.IsNullOrEmpty(FormsAuthentication.CookieDomain) Then cookie.Domain = FormsAuthentication.CookieDomain
+        Response.Cookies.Add(cookie)
     End Sub
 
     ' ====================== MOT DE PASSE OUBLIÉ ======================

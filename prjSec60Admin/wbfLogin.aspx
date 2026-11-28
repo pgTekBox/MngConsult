@@ -37,6 +37,8 @@
         .btn:hover { filter: brightness(1.05); }
         .msg { margin: 0 0 16px; padding: 10px 12px; border-radius: 12px; font-weight: 700; font-size: 13px; border: 1px solid rgba(220,38,38,.35); background: rgba(220,38,38,.08); color: var(--danger); }
         .msg.ok { border-color: rgba(22,163,74,.35); background: rgba(22,163,74,.08); color: var(--ok); }
+        .remember { display: inline-flex; align-items: center; gap: 8px; margin: 2px 0 12px; font-size: 13px; color: #334155; cursor: pointer; }
+        .remember input { width: 16px; height: 16px; margin: 0; cursor: pointer; }
         .linkrow { margin-top: 14px; text-align: center; }
         .linkrow a { color: var(--primary); font-size: 13px; font-weight: 700; text-decoration: none; cursor: pointer; }
         .linkrow a:hover { text-decoration: underline; }
@@ -70,6 +72,12 @@
                     <label>Mot de passe</label>
                     <asp:TextBox ID="txtPassword" runat="server" CssClass="inp" TextMode="Password" placeholder="••••••••" />
                 </div>
+
+                <%-- Connexion conservée 30 jours sur cet appareil (cookie persistant .SEC60ADMINAUTH) --%>
+                <label class="remember">
+                    <asp:CheckBox ID="cbRemember" runat="server" />
+                    <span>Se souvenir de moi</span>
+                </label>
 
                 <asp:Button ID="btnLogin" runat="server" CssClass="btn" Text="Se connecter" />
 
